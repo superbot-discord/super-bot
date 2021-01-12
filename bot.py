@@ -12,7 +12,7 @@ from math import *
 from cmath import *
 import numpy as np
 import re
-
+from multiprocessing import Process
 hexstring_pattern = re.compile(r'#?([0-9A-F]{2})([0-9A-F]{2})([0-9A-F]{2})', re.IGNORECASE)
 intents = discord.Intents.all()
 bot = commands.Bot(command_prefix=commands.when_mentioned_or("=" or "!"), intents=intents)
@@ -229,14 +229,21 @@ async def calc(ctx,*,arg):
     lcls = globals()
     result=None
     a=0
-    while result==None:
+    def getresults():
+      global arg
+      global result
       exec('result='+arg, globals(), lcls)
+    p = Process(target=f, args=('bob',))
+    p.start()
+    while result==None:
       a=a+1
       if result!=None:
         break
-        breal
+        break
       elif a>=5:
         await ctx.send("Operation timed out")
+        p.terminate()
+        break
         break
         break
       tm.sleep(1)
