@@ -12,7 +12,7 @@ from math import *
 from cmath import *
 import numpy as np
 import re
-from multiprocessing import Process
+from multiprocessing import *
 hexstring_pattern = re.compile(r'#?([0-9A-F]{2})([0-9A-F]{2})([0-9A-F]{2})', re.IGNORECASE)
 intents = discord.Intents.all()
 bot = commands.Bot(command_prefix=commands.when_mentioned_or("=" or "!"), intents=intents)
@@ -20,6 +20,11 @@ client = discord.Client()
 bot.remove_command('help')
 typer=0
 autodel=None
+
+def getresults():
+  global result
+  global arg
+  exec("result = "+arg, globals(), gbs)
 
 class MyClient(discord.Client):
   async def on_ready(self):
@@ -227,22 +232,19 @@ async def calc(ctx,*,arg):
   arg=arg.replace("e",str(e))
   if arg.count("=")==0 or arg.count("==")!=0 or arg.count("!=")!=0 or arg.count(">=")!=0 or arg.count("<=")!=0 or arg.count(">")!=0 or arg.count("<")!=0 or arg.count("and")!=0 or arg.count("or")!=0 or arg.count("not")!=0:
     result=None
+    gbs=globals()
     a=0
-    def getresults(arg):
-      global result
-      exec("result = "+arg, globals(), globals())
-    p = Process(target=getresults, args=(arg))
+    p = Process(target=getresults)
     p.start()
     while result==None:
       a=a+1
-      if a>=5:
+      if a>=1:
         await ctx.send("Operation timed out")
         p.terminate()
         break
         break
         break
       tm.sleep(1)
-    result=globals()["result"]
     if len(str(result))>400:
       number=result
       result=str(number)[0]+"."
@@ -1242,5 +1244,3 @@ async def on_ready():
     
 bot.run('Nzk2Njg2MzYzNjA0NjgwNzU1.X_bh_g.VG7i-1E7WTVjGD0txY1hXrOAvSE')
 client.run('Nzk2Njg2MzYzNjA0NjgwNzU1.X_bh_g.VG7i-1E7WTVjGD0txY1hXrOAvSE')
-
-
