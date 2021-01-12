@@ -11,6 +11,7 @@ import aiohttp
 from math import *
 from cmath import *
 import numpy as np
+import re
 
 hexstring_pattern = re.compile(r'#?([0-9A-F]{2})([0-9A-F]{2})([0-9A-F]{2})', re.IGNORECASE)
 intents = discord.Intents.all()
