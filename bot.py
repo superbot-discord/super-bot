@@ -12,7 +12,9 @@ from cmath import *
 import numpy as np
 import re
 import pytesseract
-import Image
+import requests
+from io import StringIO
+import PIL
 
 hexstring_pattern = re.compile(r'#?([0-9A-F]{2})([0-9A-F]{2})([0-9A-F]{2})', re.IGNORECASE)
 intents = discord.Intents.all()
@@ -266,19 +268,23 @@ async def speedtest(ctx):
   for count in range(1,50):
     now1 = datetime.now()
     mcs = (datetime.now() - now1).microseconds
-    total = total + mcs
     await message.edit(content="Pong! "+str(mcs)+" microseconds  (Test "+str(count)+")")
+    total = total + mcs
   totalsec = str(total//1000000)
   avg = total/50
-  await message.edit(content=f"Pong!\nTotal time: "+totalsec+f" s\nAverage time: "+avg+" mcs")
+  await message.edit(content=f"Pong!\nTotal time: "+totalsec+f" s\nAverage time: "+str(avg)+" mcs")
 
 @bot.command()
-async def guess(ctx, image : discord.Attachment = None):
-  if image==None:
-    images = ctx.message.attachments
-    im = Image.open(requests.get(images[0].url, stream=True).raw)
-    desc=pytesseract.image_to_string(Image.open(im), lang='eng'))
-    await ctx.send(desc)
+async def guess(ctx):
+  images = ctx.message.attachments
+  r = requests.get(images[0].url, stream=True)
+  r.raise_for_status()
+  r.raw.decode_content = True
+  with PIL.Image.open(r.raw) as img:
+    desc=pytesseract.image_to_string(img)
+  r.close()
+  
+  await ctx.send(desc)
 
 @bot.command()
 async def purgereactions(ctx, messages, emoji: discord.Emoji = None):
