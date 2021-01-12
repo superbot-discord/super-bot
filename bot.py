@@ -217,7 +217,6 @@ async def define(ctx, function, definition, *, argumentsraw = ""):
   await ctx.message.add_reaction("👍")
 
 @bot.command()
-import signal
 async def calc(ctx,*,arg):
   arg=arg.replace("^","**")
   arg=arg.replace("÷","/")
@@ -229,9 +228,9 @@ async def calc(ctx,*,arg):
   if arg.count("=")==0 or arg.count("==")!=0 or arg.count("!=")!=0 or arg.count(">=")!=0 or arg.count("<=")!=0 or arg.count(">")!=0 or arg.count("<")!=0 or arg.count("and")!=0 or arg.count("or")!=0 or arg.count("not")!=0:
     lcls = globals()
     result=None
+    a=0
     while result==None:
       exec('result='+arg, globals(), lcls)
-      time.sleep(1)
       a=a+1
       if result!=None:
         break
@@ -240,6 +239,7 @@ async def calc(ctx,*,arg):
         await ctx.send("Operation timed out")
         break
         break
+      time.sleep(1)
     result=lcls["result"]
     if len(str(result))>400:
       number=result
