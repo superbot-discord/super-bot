@@ -12,7 +12,6 @@ from math import *
 from cmath import *
 import numpy as np
 import re
-from multiprocessing import *
 
 hexstring_pattern = re.compile(r'#?([0-9A-F]{2})([0-9A-F]{2})([0-9A-F]{2})', re.IGNORECASE)
 intents = discord.Intents.all()
@@ -230,6 +229,8 @@ async def calc(ctx,*,arg):
     lcls = locals()
     exec("result = "+arg, globals(), lcls)
     result = lcls["result"]
+    if result.real=result:
+      result=result.real
     if len(str(result))>400:
       number=result
       result=str(number)[0]+"."
