@@ -233,7 +233,7 @@ async def calc(ctx,*,arg):
       global arg
       global result
       exec('result='+arg, globals(), lcls)
-    p = Process(target=f, args=('bob',))
+    p = Process(target=getresults)
     p.start()
     while result==None:
       a=a+1
