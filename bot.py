@@ -229,18 +229,14 @@ async def calc(ctx,*,arg):
     lcls = globals()
     result=None
     a=0
-    def getresults():
-      global arg
+    def getresults(arg):
       global result
-      exec('result='+arg, globals(), lcls)
-    p = Process(target=getresults)
+      exec("result = "+arg, globals())
+    p = Process(target=getresults, args=(arg))
     p.start()
     while result==None:
       a=a+1
-      if result!=None:
-        break
-        break
-      elif a>=5:
+      if a>=5:
         await ctx.send("Operation timed out")
         p.terminate()
         break
