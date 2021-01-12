@@ -13,6 +13,7 @@ from cmath import *
 import numpy as np
 import re
 from multiprocessing import *
+
 hexstring_pattern = re.compile(r'#?([0-9A-F]{2})([0-9A-F]{2})([0-9A-F]{2})', re.IGNORECASE)
 intents = discord.Intents.all()
 bot = commands.Bot(command_prefix=commands.when_mentioned_or("=" or "!"), intents=intents)
@@ -20,11 +21,6 @@ client = discord.Client()
 bot.remove_command('help')
 typer=0
 autodel=None
-
-def getresults():
-  global result
-  global arg
-  exec("result = "+arg, globals(), gbs)
 
 class MyClient(discord.Client):
   async def on_ready(self):
@@ -231,20 +227,9 @@ async def calc(ctx,*,arg):
   arg=arg.replace("pi",str(pi))
   arg=arg.replace("e",str(e))
   if arg.count("=")==0 or arg.count("==")!=0 or arg.count("!=")!=0 or arg.count(">=")!=0 or arg.count("<=")!=0 or arg.count(">")!=0 or arg.count("<")!=0 or arg.count("and")!=0 or arg.count("or")!=0 or arg.count("not")!=0:
-    result=None
-    gbs=globals()
-    a=0
-    p = Process(target=getresults)
-    p.start()
-    while result==None:
-      a=a+1
-      if a>=1:
-        await ctx.send("Operation timed out")
-        p.terminate()
-        break
-        break
-        break
-      tm.sleep(1)
+    lcls = locals()
+    exec("result = "+arg, globals(), lcls)
+    result = lcls["result"]
     if len(str(result))>400:
       number=result
       result=str(number)[0]+"."
@@ -257,7 +242,6 @@ async def calc(ctx,*,arg):
     await ctx.send(disp)
   elif arg.count("=")!=0 and arg.count("==")==0 and arg.count("!=")==0 and arg.count(">=")==0 and arg.count("<=")==0 and arg.count(">")==0 and arg.count("<")==0 and arg.count("and")==0 and arg.count("or")==0 and arg.count("not")==0:
     splitted=arg.split("=")
-    #if splitted[len(splitted)-1].isnumeric()==True:
     for count in splitted:
       if count.isalpha()==True:
         lcls = globals()
@@ -1238,9 +1222,9 @@ By April, and besieged by a mountain of passenger complaints, the decision was t
 
 @bot.event
 async def on_ready():
-    activity = discord.Game(name="with TA members", type=3)
-    await bot.change_presence(status=discord.Status.idle, activity=activity)
-    print("Bot is ready!")
+  activity = discord.Game(name="with TA members", type=3)
+  await bot.change_presence(status=discord.Status.idle, activity=activity)
+  print("Bot is ready!")
     
 bot.run('Nzk2Njg2MzYzNjA0NjgwNzU1.X_bh_g.VG7i-1E7WTVjGD0txY1hXrOAvSE')
 client.run('Nzk2Njg2MzYzNjA0NjgwNzU1.X_bh_g.VG7i-1E7WTVjGD0txY1hXrOAvSE')
