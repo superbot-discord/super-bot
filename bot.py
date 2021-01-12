@@ -239,7 +239,7 @@ async def calc(ctx,*,arg):
         await ctx.send("Operation timed out")
         break
         break
-      time.sleep(1)
+      tm.sleep(1)
     result=lcls["result"]
     if len(str(result))>400:
       number=result
