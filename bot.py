@@ -226,12 +226,11 @@ async def calc(ctx,*,arg):
   arg=arg.replace("pi",str(pi))
   arg=arg.replace("e",str(e))
   if arg.count("=")==0 or arg.count("==")!=0 or arg.count("!=")!=0 or arg.count(">=")!=0 or arg.count("<=")!=0 or arg.count(">")!=0 or arg.count("<")!=0 or arg.count("and")!=0 or arg.count("or")!=0 or arg.count("not")!=0:
-    lcls = globals()
     result=None
     a=0
     def getresults(arg):
       global result
-      exec("result = "+arg, globals())
+      exec("result = "+arg, globals(), globals())
     p = Process(target=getresults, args=(arg))
     p.start()
     while result==None:
@@ -243,7 +242,7 @@ async def calc(ctx,*,arg):
         break
         break
       tm.sleep(1)
-    result=lcls["result"]
+    result=globals()["result"]
     if len(str(result))>400:
       number=result
       result=str(number)[0]+"."
