@@ -2,16 +2,17 @@ import discord
 from discord.ext import commands
 import random as ra
 import time as tm
-from datetime import datetime, date
-from datetime import timedelta
+from datetime import datetime, date, timedelta
 from discord_webhook import DiscordWebhook
 from discord.ext.commands import *
-from discord import Webhook, AsyncWebhookAdapter, RequestsWebhookAdapter
+from discord import Webhook, RequestsWebhookAdapter
 import aiohttp
 from math import *
 from cmath import *
 import numpy as np
 import re
+import pytesseract
+import Image
 
 hexstring_pattern = re.compile(r'#?([0-9A-F]{2})([0-9A-F]{2})([0-9A-F]{2})', re.IGNORECASE)
 intents = discord.Intents.all()
@@ -261,9 +262,9 @@ async def ping(ctx):
 @bot.command()
 async def speedtest(ctx):
   total=0
+  message = await ctx.send("Pong!")
   for count in range(1,50):
     now1 = datetime.now()
-    message = await ctx.send("Pong!")
     mcs = (datetime.now() - now1).microseconds
     total = total + mcs
     await message.edit(content="Pong! "+str(mcs)+" microseconds  (Test "+str(count)+")")
@@ -275,18 +276,9 @@ async def speedtest(ctx):
 async def guess(ctx, image : discord.Attachment = None):
   if image==None:
     images = ctx.message.attachments
-  if len(images)==0:
-    await ctx.send("Please upload an image")
-  else:
-    image = images[0]
-    r = requests.get("https://www.google.com/searchbyimage?&image_url="+image.url)
-    page_source = r.text#.decode()
-    page_sourceraw = page_source.splitlines()
-    match = re.search('title="Search" value="(.*?)" aria-label="Search"', page_sourceraw)
-    if match:
-      await ctx.send(f'I guess it is {match.group(1)!r}?')
-    else:
-      await ctx.send('I have no idea what that is.')
+    im = Image.open(requests.get(images[0].url, stream=True).raw)
+    desc=pytesseract.image_to_string(Image.open(im), lang='eng'))
+    await ctx.send(desc)
 
 @bot.command()
 async def purgereactions(ctx, messages, emoji: discord.Emoji = None):
