@@ -217,39 +217,50 @@ async def define(ctx, function, definition, *, argumentsraw = ""):
   await ctx.message.add_reaction("👍")
 
 @bot.command()
+import signal
 async def calc(ctx,*,arg):
-  async with ctx.channel.typing():
-    arg=arg.replace("^","**")
-    arg=arg.replace("÷","/")
-    arg=arg.replace("×","*")
-    arg=arg.replace("mod","%")
-    arg=arg.replace("√(","sqrt(")
-    arg=arg.replace("pi",str(pi))
-    arg=arg.replace("e",str(e))
-    if arg.count("=")==0 or arg.count("==")!=0 or arg.count("!=")!=0 or arg.count(">=")!=0 or arg.count("<=")!=0 or arg.count(">")!=0 or arg.count("<")!=0 or arg.count("and")!=0 or arg.count("or")!=0 or arg.count("not")!=0:
-      lcls = globals()
+  arg=arg.replace("^","**")
+  arg=arg.replace("÷","/")
+  arg=arg.replace("×","*")
+  arg=arg.replace("mod","%")
+  arg=arg.replace("√(","sqrt(")
+  arg=arg.replace("pi",str(pi))
+  arg=arg.replace("e",str(e))
+  if arg.count("=")==0 or arg.count("==")!=0 or arg.count("!=")!=0 or arg.count(">=")!=0 or arg.count("<=")!=0 or arg.count(">")!=0 or arg.count("<")!=0 or arg.count("and")!=0 or arg.count("or")!=0 or arg.count("not")!=0:
+    lcls = globals()
+    result=None
+    while result==None:
       exec('result='+arg, globals(), lcls)
-      result=lcls["result"]
-      if len(str(result))>400:
-        number=result
-        result=str(number)[0]+"."
-        for count in range(1,60):
-          result=result+str(number)[count]
-        result=result+"e+"+str(len(str(number))-1)
-      elif len(str(result))>100:
-        result="{0:.3E}".format(float(result))
-      disp = "Result: "+str(result)
-      await ctx.send(disp)
-    elif arg.count("=")!=0 and arg.count("==")==0 and arg.count("!=")==0 and arg.count(">=")==0 and arg.count("<=")==0 and arg.count(">")==0 and arg.count("<")==0 and arg.count("and")==0 and arg.count("or")==0 and arg.count("not")==0:
-      splitted=arg.split("=")
-      #if splitted[len(splitted)-1].isnumeric()==True:
-      for count in splitted:
-        if count.isalpha()==True:
-          lcls = globals()
-          exec(count+'='+splitted[len(splitted)-1], globals(), lcls)
-      await ctx.message.add_reaction("👍")
-    else:
-      await ctx.send("Invalid input, please try again.")
+      time.sleep(1)
+      a=a+1
+      if result!=None:
+        break
+        breal
+      elif a>=5:
+        await ctx.send("Operation timed out")
+        break
+        break
+    result=lcls["result"]
+    if len(str(result))>400:
+      number=result
+      result=str(number)[0]+"."
+      for count in range(1,60):
+        result=result+str(number)[count]
+      result=result+"e+"+str(len(str(number))-1)
+    elif len(str(result))>100:
+      result="{0:.3E}".format(float(result))
+    disp = "Result: "+str(result)
+    await ctx.send(disp)
+  elif arg.count("=")!=0 and arg.count("==")==0 and arg.count("!=")==0 and arg.count(">=")==0 and arg.count("<=")==0 and arg.count(">")==0 and arg.count("<")==0 and arg.count("and")==0 and arg.count("or")==0 and arg.count("not")==0:
+    splitted=arg.split("=")
+    #if splitted[len(splitted)-1].isnumeric()==True:
+    for count in splitted:
+      if count.isalpha()==True:
+        lcls = globals()
+        exec(count+'='+splitted[len(splitted)-1], globals(), lcls)
+    await ctx.message.add_reaction("👍")
+  else:
+    await ctx.send("Invalid input, please try again.")
 
 @bot.command()
 async def ping(ctx):
