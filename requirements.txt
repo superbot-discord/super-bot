@@ -20,4 +20,4 @@ itertools
 async_timeout
 math
 cmath
-import numpy as np
+numpy
