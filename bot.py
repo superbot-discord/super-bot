@@ -229,7 +229,7 @@ async def calc(ctx,*,arg):
     lcls = locals()
     exec("result = "+arg, globals(), lcls)
     result = lcls["result"]
-    if result.real=result:
+    if result.real==result:
       result=result.real
     if len(str(result))>400:
       number=result
@@ -255,9 +255,21 @@ async def calc(ctx,*,arg):
 async def ping(ctx):
   now1 = datetime.now()
   message = await ctx.send("Pong!")
-  sec = str((datetime.now() - now1).seconds)
   mcs = str((datetime.now() - now1).microseconds)
-  await message.edit(content="Pong! "+sec+" seconds  "+mcs+" microseconds")
+  await message.edit(content="Pong! "+mcs+" microseconds")
+
+@bot.command()
+async def speedtest(ctx):
+  total=0
+  for count in range(1,50):
+    now1 = datetime.now()
+    message = await ctx.send("Pong!")
+    mcs = (datetime.now() - now1).microseconds
+    total = total + mcs
+    await message.edit(content="Pong! "+str(mcs)+" microseconds  (Test "+count+")")
+  totalsec = str(total//1000000)
+  avg = total/50
+  await message.edit(content=f"Pong!\nTotal time: "+totalsec+f" s\nAverage time: "+avg+" mcs")
 
 @bot.command()
 async def guess(ctx, image : discord.Attachment = None):
