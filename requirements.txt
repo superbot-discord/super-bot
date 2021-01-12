@@ -1,0 +1,23 @@
+discord
+discord.ext
+random
+time
+datetime
+discord_webhook
+json
+os
+aiohttp
+requests
+bs4
+urllib.request
+urllib3
+re
+youtube_dl
+asyncio
+ffmpeg
+functools
+itertools
+async_timeout
+math
+cmath
+import numpy as np
