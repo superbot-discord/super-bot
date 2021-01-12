@@ -7,13 +7,9 @@ from datetime import timedelta
 from discord_webhook import DiscordWebhook
 from discord.ext.commands import *
 from discord import Webhook, AsyncWebhookAdapter, RequestsWebhookAdapter
-import json
-import os
 import aiohttp
-import requests
 from math import *
 from cmath import *
-import random
 import numpy as np
 
 hexstring_pattern = re.compile(r'#?([0-9A-F]{2})([0-9A-F]{2})([0-9A-F]{2})', re.IGNORECASE)
