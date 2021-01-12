@@ -11,16 +11,6 @@ import json
 import os
 import aiohttp
 import requests
-from bs4 import BeautifulSoup
-from urllib.request import urlopen
-import urllib3
-import re
-import youtube_dl
-import asyncio
-from ffmpeg import *
-import functools
-import itertools
-from async_timeout import timeout
 from math import *
 from cmath import *
 import random
