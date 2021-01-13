@@ -275,7 +275,7 @@ async def speedtest(ctx):
     await message.edit(content="Pong! "+str(mcs)+" microseconds  (Test "+str(count)+")")
     mcs = (datetime.now() - now1).microseconds
     total = total + mcs
-  avg = total/6
+  avg = int(total/6)
   await message.edit(content=f"Pong!\nTotal time: "+str(total)+f" mcs\nAverage time: "+str(avg)+" mcs")
 
 @bot.command()
