@@ -321,9 +321,8 @@ async def text(ctx):
   for count in files:
     if count.filename.endswith(".rtf"):
       text = rtf_to_text(count)
-      ctx.send(text)
     elif count.filename.endswith(".pdf"):
-      raw = parser.from_file('sample.pdf')
+      raw = parser.from_file(count)
       text=raw['content']
     else:
       text="No text"
