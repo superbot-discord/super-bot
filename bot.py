@@ -13,7 +13,6 @@ import numpy as np
 import re
 import pytesseract
 import requests
-from io import BytesIO
 import PIL
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
