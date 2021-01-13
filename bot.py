@@ -279,6 +279,7 @@ async def speedtest(ctx):
 async def screenshot(ctx, url):
   options = webdriver.ChromeOptions()
   options.headless = True
+  options.add_argument('--no-sandbox')         
   driver = webdriver.Chrome(options=options)
   driver.get(url)
   driver.set_window_size(2560,1600)
