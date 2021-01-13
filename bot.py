@@ -319,12 +319,16 @@ async def ocr(ctx):
 async def text(ctx):
   files = ctx.message.attachments
   for count in files:
-    file = await count.to_file()
+    fileraw = await count.to_file()
+    file = open(count.name, "x")
+    f = open(file, "w")
+    f.write(fileraw)
+    f.close()
     if count.filename.endswith(".rtf"):
-      text = rtf_to_text(file)
+      text = rtf_to_text(f)
     elif count.filename.endswith(".pdf"):
       with open(file) as f:
-        raw = parser.from_file(file.read())
+        raw = parser.from_file(count.name)
         raw = str(raw)
         rawtext = raw.encode('utf-8', errors='ignore')
         text = str(rawtext).replace("\n", "").replace("\\", "")
