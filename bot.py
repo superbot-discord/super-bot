@@ -283,7 +283,7 @@ async def screenshot(ctx, url):
     options.headless = True
     driver = webdriver.Chrome(options=options)
     driver.get(url)
-    driver.set_window-size=2560,1600
+    driver.set_window_size=2560,1600
     driver.get_screenshot_as_file('web_screenshot1.png')
     S = lambda X: driver.execute_script('return document.body.parentNode.scroll'+X)
     driver.set_window_size(S('Width'),S('Height'))
@@ -1261,4 +1261,5 @@ async def on_ready():
     
 bot.run('Nzk2Njg2MzYzNjA0NjgwNzU1.X_bh_g.VG7i-1E7WTVjGD0txY1hXrOAvSE')
 client.run('Nzk2Njg2MzYzNjA0NjgwNzU1.X_bh_g.VG7i-1E7WTVjGD0txY1hXrOAvSE')
+
 
