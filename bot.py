@@ -322,8 +322,6 @@ async def text(ctx):
     f = open("demofile.txt", "r")
     text = f.read()
     f.close()
-    else:
-      text="No text"
     await ctx.send(str(text))
 
 @bot.command()
