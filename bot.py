@@ -283,7 +283,7 @@ async def screenshot(ctx, url):
   options.add_argument('--disable-dev-shm-usage')        
   driver = webdriver.Chrome(options=options)
   driver.get(url)
-  driver.set_window_size(2560,1600)
+  driver.set_window_size(1440,900)
   driver.get_screenshot_as_file('web_screenshot1.png')
   S = lambda X: driver.execute_script('return document.body.parentNode.scroll'+X)
   driver.set_window_size(S('Width'),S('Height'))
