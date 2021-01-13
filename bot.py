@@ -279,9 +279,12 @@ async def speedtest(ctx):
 @bot.command()
 async def screenshot(ctx, url):
     #try:
+    GOOGLE_CHROME_PATH = '/app/.apt/usr/bin/google_chrome'
+    CHROMEDRIVER_PATH = '/app/.chromedriver/bin/chromedriver'
     options = webdriver.ChromeOptions()
     options.headless = True
-    driver = webdriver.Chrome(options=options)
+    options.binary_location = GOOGLE_CHROME_PATH
+    driver = webdriver.Chrome(execution_path=CHROMEDRIVER_PATH, options=options)
     driver.get(url)
     driver.get_screenshot_as_file('web_screenshot1.png')
     S = lambda X: driver.execute_script('return document.body.parentNode.scroll'+X)
