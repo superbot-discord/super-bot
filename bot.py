@@ -278,13 +278,12 @@ async def speedtest(ctx):
 
 @bot.command()
 async def screenshot(ctx, url):
-    #try:
-    GOOGLE_CHROME_PATH = '/app/.apt/usr/bin/google_chrome'
-    CHROMEDRIVER_PATH = '/app/.chromedriver/bin/chromedriver'
+  try:
     options = webdriver.ChromeOptions()
     options.headless = True
     driver = webdriver.Chrome(options=options)
     driver.get(url)
+    driver.set_window-size=2560,1600
     driver.get_screenshot_as_file('web_screenshot1.png')
     S = lambda X: driver.execute_script('return document.body.parentNode.scroll'+X)
     driver.set_window_size(S('Width'),S('Height'))
@@ -294,8 +293,8 @@ async def screenshot(ctx, url):
     await ctx.send(file=discord.File('web_screenshot2.png'))
     os.remove('web_screenshot1.png')
     os.remove('web_screenshot2.png')
-    #except:
-    #await ctx.send("We encountered an error. Please try again.")
+  except:
+    await ctx.send("We encountered an error. Please try again.")
 
 @bot.command()
 async def guess(ctx):
