@@ -280,23 +280,25 @@ async def speedtest(ctx):
 
 @bot.command()
 async def screenshot(ctx, url):
-  options = webdriver.ChromeOptions()
-  options.headless = True
-  options.add_argument('--no-sandbox')
-  options.add_argument('--disable-dev-shm-usage')        
-  driver = webdriver.Chrome(options=options)
-  driver.set_page_load_timeout(30)
-  driver.get(url)
-  driver.set_window_size(1440,900)
-  driver.get_screenshot_as_file('web_screenshot1.png')
-  await ctx.send(file=discord.File('web_screenshot1.png'))
-  S = lambda X: driver.execute_script('return document.body.parentNode.scroll'+X)
-  driver.set_window_size(S('Width'),S('Height'))
-  driver.find_element_by_tag_name('body').screenshot('web_screenshot2.png')
-  driver.quit()
-  await ctx.send(file=discord.File('web_screenshot2.png'))
-  os.remove('web_screenshot1.png')
-  os.remove('web_screenshot2.png')
+  try:
+    options = webdriver.ChromeOptions()
+    options.headless = True
+    options.add_argument('--no-sandbox')
+    options.add_argument('--disable-dev-shm-usage')        
+    driver = webdriver.Chrome(options=options)
+    driver.get(url)
+    driver.set_window_size(1440,900)
+    driver.get_screenshot_as_file('web_screenshot1.png')
+    await ctx.send(file=discord.File('web_screenshot1.png'))
+    S = lambda X: driver.execute_script('return document.body.parentNode.scroll'+X)
+    driver.set_window_size(S('Width'),S('Height'))
+    driver.find_element_by_tag_name('body').screenshot('web_screenshot2.png')
+    driver.quit()
+    await ctx.send(file=discord.File('web_screenshot2.png'))
+    os.remove('web_screenshot1.png')
+    os.remove('web_screenshot2.png')
+   except:
+    await ctx.send("The URL was invalid, or the webpage is too long.")
 
 @bot.command()
 async def ocr(ctx):
@@ -307,7 +309,8 @@ async def ocr(ctx):
   with PIL.Image.open(r.raw) as img:
     desc=pytesseract.image_to_string(img)
   r.close()
-  
+  if desc=="":
+    desc="There was no text."
   await ctx.send(desc)
 
 @bot.command()
