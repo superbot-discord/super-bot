@@ -269,8 +269,8 @@ async def speedtest(ctx):
   message = await ctx.send("Pong!")
   for count in range(1,6):
     now1 = datetime.now()
-    mcs = (datetime.now() - now1).microseconds
     await message.edit(content="Pong! "+str(mcs)+" microseconds  (Test "+str(count)+")")
+    mcs = (datetime.now() - now1).microseconds
     total = total + mcs
   avg = total/5
   await message.edit(content=f"Pong!\nTotal time: "+str(total)+f" mcs\nAverage time: "+str(avg)+" mcs")
@@ -281,7 +281,7 @@ async def screenshot(ctx, url):
     options.headless = True
     driver = webdriver.Chrome(options=options)
     driver.get(url)
-    driver.set_window_size=2560,1600
+    driver.set_window_size(2560,1600)
     driver.get_screenshot_as_file('web_screenshot1.png')
     S = lambda X: driver.execute_script('return document.body.parentNode.scroll'+X)
     driver.set_window_size(S('Width'),S('Height'))
