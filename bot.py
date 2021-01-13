@@ -268,11 +268,11 @@ async def speedtest(ctx):
   total=0
   now1 = datetime.now()
   message = await ctx.send("Pong!")
-  mcs = (datetime.now() - now1).microseconds
+  mcs = (datetime.now() - now1).microseconds+(datetime.now() - now1).seconds*1000000
   for count in range(1,6):
     now1 = datetime.now()
     await message.edit(content="Pong! "+str(mcs)+" microseconds  (Test "+str(count)+")")
-    mcs = (datetime.now() - now1).microseconds
+    mcs = (datetime.now() - now1).microseconds+(datetime.now() - now1).seconds*1000000
     total = total + mcs
   avg = total/5
   await message.edit(content=f"Pong!\nTotal time: "+str(total)+f" mcs\nAverage time: "+str(avg)+" mcs")
