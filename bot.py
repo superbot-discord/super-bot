@@ -323,7 +323,7 @@ async def text(ctx):
     if count.filename.endswith(".rtf"):
       text = rtf_to_text(file)
     elif count.filename.endswith(".pdf"):
-      raw = parser.from_file(".pdf")
+      raw = parser.from_file(file.read())
       raw = str(raw)
       rawtext = raw.encode('utf-8', errors='ignore')
       text = str(rawtext).replace("\n", "").replace("\\", "")
