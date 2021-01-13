@@ -9,6 +9,4 @@ discord-webhook==0.11.0
 async-timeout==3.0.1
 six==1.15.0
 striprtf==0.0.12
-pdfminer==20191010
-pdfminer3==2018.12.3.0
-pdfminer2==20151206
+tika==1.24
