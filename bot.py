@@ -13,7 +13,11 @@ import numpy as np
 import re
 import pytesseract
 import requests
+from io import BytesIO
 import PIL
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+import os
 
 hexstring_pattern = re.compile(r'#?([0-9A-F]{2})([0-9A-F]{2})([0-9A-F]{2})', re.IGNORECASE)
 intents = discord.Intents.all()
@@ -264,7 +268,7 @@ async def ping(ctx):
 async def speedtest(ctx):
   total=0
   message = await ctx.send("Pong!")
-  for count in range(1,50):
+  for count in range(1,6):
     now1 = datetime.now()
     mcs = (datetime.now() - now1).microseconds
     await message.edit(content="Pong! "+str(mcs)+" microseconds  (Test "+str(count)+")")
@@ -272,6 +276,22 @@ async def speedtest(ctx):
   totalsec = str(total//1000000)
   avg = total/50
   await message.edit(content=f"Pong!\nTotal time: "+totalsec+f" s\nAverage time: "+str(avg)+" mcs")
+
+@bot.command()
+async def screenshot(ctx, url):
+  try:
+    options = webdriver.ChromeOptions()
+    options.headless = True
+    driver = webdriver.Chrome(options=options)
+    driver.get(url)
+    S = lambda X: driver.execute_script('return document.body.parentNode.scroll'+X)
+    driver.set_window_size(S('Width'),S('Height'))
+    driver.find_element_by_tag_name('body').screenshot('web_screenshot.png')
+    driver.quit()
+    await ctx.send(file=discord.File('web_screenshot.png'))
+    os.remove('web_screenshot.png')
+  except:
+    await ctx.send("We encountered an error. Please try again.")
 
 @bot.command()
 async def guess(ctx):
@@ -1238,3 +1258,4 @@ async def on_ready():
     
 bot.run('Nzk2Njg2MzYzNjA0NjgwNzU1.X_bh_g.VG7i-1E7WTVjGD0txY1hXrOAvSE')
 client.run('Nzk2Njg2MzYzNjA0NjgwNzU1.X_bh_g.VG7i-1E7WTVjGD0txY1hXrOAvSE')
+
