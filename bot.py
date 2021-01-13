@@ -299,7 +299,7 @@ async def screenshot(ctx, url):
     await ctx.send(file=discord.File('web_screenshot2.png'))
     os.remove('web_screenshot1.png')
     os.remove('web_screenshot2.png')
-   except:
+  except:
     await ctx.send("The URL was invalid, or the webpage is too long.")
 
 @bot.command()
