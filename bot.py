@@ -320,7 +320,7 @@ async def text(ctx):
   files = ctx.message.attachments
   for count in files:
     fileraw = await count.to_file()
-    file = open(count.name, "x")
+    file = open(count.filename, "x")
     f = open(file, "w")
     f.write(fileraw)
     f.close()
