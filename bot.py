@@ -319,15 +319,18 @@ async def ocr(ctx):
 async def text(ctx):
   files = ctx.message.attachments
   for count in files:
-    file = await count.to_file()
+    file = open(await count.to_file())
     if count.filename.endswith(".rtf"):
       text = rtf_to_text(file)
     elif count.filename.endswith(".pdf"):
-      raw = parser.from_file(file)
-      text=raw['content']
+      raw = parser.from_file(".pdf")
+      raw = str(raw)
+      rawtext = raw.encode('utf-8', errors='ignore')
+      text = str(rawtext).replace("\n", "").replace("\\", "")
     else:
       text="No text"
     await ctx.send(str(text))
+    file.close()
 
 @bot.command()
 async def purgereactions(ctx, messages, emoji: discord.Emoji = None):
