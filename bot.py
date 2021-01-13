@@ -278,7 +278,6 @@ async def speedtest(ctx):
 
 @bot.command()
 async def screenshot(ctx, url):
-  try:
     options = webdriver.ChromeOptions()
     options.headless = True
     driver = webdriver.Chrome(options=options)
@@ -293,8 +292,7 @@ async def screenshot(ctx, url):
     await ctx.send(file=discord.File('web_screenshot2.png'))
     os.remove('web_screenshot1.png')
     os.remove('web_screenshot2.png')
-  except:
-    await ctx.send("We encountered an error. Please try again.")
+    #await ctx.send("We encountered an error. Please try again.")
 
 @bot.command()
 async def guess(ctx):
