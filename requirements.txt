@@ -1,8 +1,9 @@
-selenium==4.0.0a7
 git+https://github.com/Rapptz/discord.py
 git+https://github.com/aio-libs/aiohttp
-git+https://github.com/numpy/numpy
 git+https://github.com/psf/requests
 git+https://github.com/python-pillow/Pillow
+numpy==1.19.5
+pytesseract==0.3.7
+selenium==4.0.0a7
 discord-webhook==0.11.0
 async-timeout==3.0.1
