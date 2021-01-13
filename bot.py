@@ -276,17 +276,16 @@ async def speedtest(ctx):
   await message.edit(content=f"Pong!\nTotal time: "+str(total)+f" mcs\nAverage time: "+str(avg)+" mcs")
 
 @bot.command()
-async def screenshot(ctx, url):
+  async def screenshot(ctx, url):
     options = webdriver.ChromeOptions()
     options.headless = True
     driver = webdriver.Chrome(options=options)
-    
     driver.get(url)
-    #driver.set_window_size(2560,1600)
-    driver.save_screenshot('web_screenshot1.png')
+    driver.set_window_size(2560,1600)
+    driver.get_screenshot_as_file('web_screenshot1.png')
     S = lambda X: driver.execute_script('return document.body.parentNode.scroll'+X)
     driver.set_window_size(S('Width'),S('Height'))
-    driver.save_screenshot('web_screenshot2.png')
+    driver.find_element_by_tag_name('body').screenshot('web_screenshot2.png')
     driver.quit()
     await ctx.send(file=discord.File('web_screenshot1.png'))
     await ctx.send(file=discord.File('web_screenshot2.png'))
