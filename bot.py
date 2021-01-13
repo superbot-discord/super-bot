@@ -17,6 +17,8 @@ import PIL
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 import os
+from striprtf.striprtf import rtf_to_text
+from pdfminer.high_level import extract_text
 
 hexstring_pattern = re.compile(r'#?([0-9A-F]{2})([0-9A-F]{2})([0-9A-F]{2})', re.IGNORECASE)
 intents = discord.Intents.all()
@@ -312,6 +314,19 @@ async def ocr(ctx):
   if desc=="":
     desc="There was no text."
   await ctx.send(desc)
+
+@bot.command()
+async def text(ctx):
+  files = ctx.message.attachments
+  for count in files:
+    if count.filename.endswith(".rtf"):
+       text = rtf_to_text(count)
+       ctx.send(text)
+     elif count.filename.endswith(".pdf"):
+       text = extract_text(count)
+     else:
+       text="No text"
+     ctx.send(text)
 
 @bot.command()
 async def purgereactions(ctx, messages, emoji: discord.Emoji = None):
