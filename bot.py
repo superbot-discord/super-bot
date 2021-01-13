@@ -13,7 +13,6 @@ import numpy as np
 import re
 import pytesseract
 import requests
-from io import StringIO
 import PIL
 
 hexstring_pattern = re.compile(r'#?([0-9A-F]{2})([0-9A-F]{2})([0-9A-F]{2})', re.IGNORECASE)
