@@ -286,7 +286,7 @@ async def screenshot(ctx, url):
     driver.save_screenshot('web_screenshot1.png')
     S = lambda X: driver.execute_script('return document.body.parentNode.scroll'+X)
     driver.set_window_size(S('Width'),S('Height'))
-    driver.find_element_by_tag_name('body').screenshot('web_screenshot2.png')
+    driver.save_screenshot('web_screenshot2.png')
     driver.quit()
     await ctx.send(file=discord.File('web_screenshot1.png'))
     await ctx.send(file=discord.File('web_screenshot2.png'))
