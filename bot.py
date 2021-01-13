@@ -326,7 +326,7 @@ async def text(ctx):
       text = extract_text(count)
     else:
       text="No text"
-     ctx.send(text)
+    ctx.send(text)
 
 @bot.command()
 async def purgereactions(ctx, messages, emoji: discord.Emoji = None):
