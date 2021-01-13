@@ -285,6 +285,7 @@ async def screenshot(ctx, url):
   options.add_argument('--no-sandbox')
   options.add_argument('--disable-dev-shm-usage')        
   driver = webdriver.Chrome(options=options)
+  driver.set_page_load_timeout(30)
   driver.get(url)
   driver.set_window_size(1440,900)
   driver.get_screenshot_as_file('web_screenshot1.png')
