@@ -267,11 +267,14 @@ async def ping(ctx):
 async def speedtest(ctx):
   total=0
   message = await ctx.send("Pong!")
+  mcs = 0
   for count in range(1,6):
     now1 = datetime.now()
     await message.edit(content="Pong! "+str(mcs)+" microseconds  (Test "+str(count)+")")
     mcs = (datetime.now() - now1).microseconds
     total = total + mcs
+  await message.edit(content="Pong! "+str(mcs)+" microseconds  (Test "+str(count)+")")
+  tm.sleep(2)
   avg = total/5
   await message.edit(content=f"Pong!\nTotal time: "+str(total)+f" mcs\nAverage time: "+str(avg)+" mcs")
 
