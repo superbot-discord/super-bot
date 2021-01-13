@@ -320,12 +320,12 @@ async def text(ctx):
   files = ctx.message.attachments
   for count in files:
     if count.filename.endswith(".rtf"):
-       text = rtf_to_text(count)
-       ctx.send(text)
-     elif count.filename.endswith(".pdf"):
-       text = extract_text(count)
-     else:
-       text="No text"
+      text = rtf_to_text(count)
+      ctx.send(text)
+    elif count.filename.endswith(".pdf"):
+      text = extract_text(count)
+    else:
+      text="No text"
      ctx.send(text)
 
 @bot.command()
