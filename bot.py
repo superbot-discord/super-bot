@@ -330,7 +330,6 @@ async def text(ctx):
     else:
       text="No text"
     await ctx.send(str(text))
-    file.close()
 
 @bot.command()
 async def purgereactions(ctx, messages, emoji: discord.Emoji = None):
