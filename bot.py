@@ -19,7 +19,7 @@ from selenium.webdriver.chrome.options import Options
 import os
 from pdf2image import convert_from_path
 import imgkit
-
+import pytube
 
 hexstring_pattern = re.compile(r'#?([0-9A-F]{2})([0-9A-F]{2})([0-9A-F]{2})', re.IGNORECASE)
 intents = discord.Intents.all()
@@ -349,8 +349,18 @@ async def html(ctx, *, code = None):
     r.raw.decode_content = True
     code = r.content
   imgkit.from_string(code, 'output.jpg')
-  await channel.send(file=discord.File('output.jpg'))
+  await ctx.send(file=discord.File('output.jpg'))
   os.remove('output.jpg')
+
+@bot.command()
+async def youtube(ctx, *, url):
+  os.mkdir("/Video")
+  youtube = pytube.YouTube(url)
+  video = youtube.streams.get_highest_resolution()
+  video.download("/Video")
+  shutil.make_archive("Video.zip", 'zip', "Video")
+  await ctx.send(file=discord.File('Video.zip')
+  shutil.rmtree("Video")
 
 @bot.command()
 async def purgereactions(ctx, messages, emoji: discord.Emoji = None):
