@@ -367,7 +367,7 @@ async def youtube(ctx, *, url):
     await ctx.send(file=discord.File('YTVideo.mp4'))
   except:
     await ctx.send("We are sorry, the video is too large to upload. We will still give you the audio file.")
-  Video = youtube.streams.filter(only_audio=True).order_by('mime_type').desc()[0]
+  Video = youtube.streams.filter(only_audio=True, mime_type='webm').order_by('abr').desc()[0]
   video.download(filename='YTAudio')
   await ctx.send(file=discord.File('YTAudio.webm'))
   os.remove('YTVideo.mp4')
