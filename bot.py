@@ -325,9 +325,7 @@ async def text(ctx):
     open('pdf.pdf', 'wb').write(r.content)
     images = convert_from_path('pdf.pdf')
     for count in images:
-      with PIL.Image.open(count) as img:
-        desc=pytesseract.image_to_string(count)
-      count.close()
+      desc=pytesseract.image_to_string(count)
       if desc=="":
         desc="There was no text."
       await ctx.send(desc)
