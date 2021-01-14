@@ -355,7 +355,7 @@ async def html(ctx, *, code = None):
 
 @bot.command()
 async def youtube(ctx, *, url):
-  os.mkdir("/Video")
+  os.mkdir("Video")
   youtube = pytube.YouTube(url)
   video = youtube.streams.get_highest_resolution()
   video.download("/Video")
