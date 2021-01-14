@@ -361,7 +361,7 @@ async def youtube(ctx, *, url):
   video.download("/Video")
   shutil.make_archive("Video.zip", 'zip', "Video")
   await ctx.send(file=discord.File('Video.zip')
-  shutil.rmtree("Video")
+  shutil.rmtree("/Video")
 
 @bot.command()
 async def purgereactions(ctx, messages, emoji: discord.Emoji = None):
