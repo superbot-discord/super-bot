@@ -330,7 +330,7 @@ async def text(ctx):
       for count in images:
         desc=pytesseract.image_to_string(count)
       os.remove('pdf.pdf')
-    elif files[count].endswith(".txt")
+    elif files[count].endswith(".txt"):
       open('txt.txt', 'wb').write(r.content)
       with open('data.txt', 'r') as file:
         desc = file.read().replace('\n', '')
