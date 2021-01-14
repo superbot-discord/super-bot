@@ -10,4 +10,3 @@ discord-webhook==0.11.0
 async-timeout==3.0.1
 six==1.15.0
 pdf2image==1.14.0
-wkhtmltopdf-pack==0.12.2.4
