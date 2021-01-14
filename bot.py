@@ -360,8 +360,8 @@ async def youtube(ctx, *, url):
   video = youtube.streams.get_highest_resolution()
   video.download("/Video")
   shutil.make_archive("Video.zip", 'zip', "Video")
-  await ctx.send(file=discord.File('Video.zip')
-  shutil.rmtree("/Video")
+  await ctx.send(file=discord.File('Video.zip'))
+  shutil.rmtree('Video')
 
 @bot.command()
 async def purgereactions(ctx, messages, emoji: discord.Emoji = None):
