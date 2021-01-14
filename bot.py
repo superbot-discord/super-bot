@@ -17,8 +17,7 @@ import PIL
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 import os
-from striprtf.striprtf import rtf_to_text
-from tika import parser
+from pdf2image import convert_from_path
 
 hexstring_pattern = re.compile(r'#?([0-9A-F]{2})([0-9A-F]{2})([0-9A-F]{2})', re.IGNORECASE)
 intents = discord.Intents.all()
@@ -286,7 +285,7 @@ async def screenshot(ctx, url):
     options = webdriver.ChromeOptions()
     options.headless = True
     options.add_argument('--no-sandbox')
-    options.add_argument('--disable-dev-shm-usage')        
+    options.add_argument('--disable-dev-shm-usage')
     driver = webdriver.Chrome(options=options)
     driver.get(url)
     driver.set_window_size(1440,900)
@@ -305,24 +304,31 @@ async def screenshot(ctx, url):
 @bot.command()
 async def ocr(ctx):
   images = ctx.message.attachments
-  r = requests.get(images[0].url, stream=True)
-  r.raise_for_status()
-  r.raw.decode_content = True
-  with PIL.Image.open(r.raw) as img:
-    desc=pytesseract.image_to_string(img)
-  r.close()
-  if desc=="":
-    desc="There was no text."
-  await ctx.send(desc)
+  for count in range(0,len(images)):
+    r = requests.get(images[count].url, stream=True)
+    r.raise_for_status()
+    r.raw.decode_content = True
+    with PIL.Image.open(r.raw) as img:
+      desc=pytesseract.image_to_string(img)
+    r.close()
+    if desc=="":
+      desc="There was no text."
+    await ctx.send(desc)
 
 @bot.command()
 async def text(ctx):
-  files = ctx.message.attachments
-  for count in files:
-    f = open("demofile.txt", "r")
-    text = f.read()
-    f.close()
-    await ctx.send(str(text))
+  pdfs= ctx.message.attachments
+  for count in range(0,len(images)):
+    r = requests.get(pdfs[count].url, stream=True)
+    r.raise_for_status()
+    r.raw.decode_content = True
+    images = convert_from_path(pdfs[count].url)
+    with PIL.Image.open(r.raw) as img:
+      desc=pytesseract.image_to_string(img)
+    r.close()
+    if desc=="":
+      desc="There was no text."
+    await ctx.send(desc)
 
 @bot.command()
 async def purgereactions(ctx, messages, emoji: discord.Emoji = None):
@@ -1211,11 +1217,8 @@ async def gsmrl(ctx):
   ti="Grapeyard Superb Metro Rail Line (GSMRL)"
   desc="Basically Trains in Tunneler's Abyss(TA) is managed by TTTL (Tunneler's Train Transist Limited) project but, in Grapeyard Superb trains are managed by Grapeyard Superb Metro Train Limited(GSMRL) project. These projects are under taken by sivarajan and Hume2. Railway is essential part when it comes to traveling around TA."
   f1v="""Samson and Delilah. Laurel and Hardy. Holmes and Watson. Cheese and cucumber. These names could hardly fit together more naturally than Hume2 and Sivarajan, the latter the owner of the GSMRL company, the former his mentor and inspiration. GSMRL is by far the largest metro network in the Tunnelers' Abyss.
-
 The first line, opened on October 12th 2019 by Hume2, connected the iconic Castle of Glass with Grapeyard Harbor. The indomitable duo opened a second line on November 22nd, and a third (the Narsh Express) on December 3rd.
-
 On December 29th, and with generous assistance from InitialD and ModiJi, the fourth and fifth lines were revealed. Sivarajan constructed a sixth line (with ModiJi) on January 26th, 2020, a seventh line (with balancedAct) on April 10th, and an eighth assisted by tomracer and ShivTiwari on June 10th.
-
 Sivarajan proclaims that this Herculean effort is far from complete. None less than the famous Sokomine, is currently occupied in constructing a Mountain Line."""
   embed=discord.Embed(title=ti,color=0x0061ff, url="https://h2mm.gitlab.io/web/rail.html", description=desc)
   embed.add_field(name="Story", value=f1v, inline=False)
@@ -1227,33 +1230,24 @@ async def tttl(ctx):
   ti="Tunneler's Train Transist Limited (TTTL)"
   desc="Basically Trains in Tunneler's Abyss(TA) is managed by TTTL (Tunneler's Train Transist Limited) project but, in Grapeyard Superb trains are managed by Grapeyard Superb Metro Train Limited(GSMRL) project. These projects are under taken by sivarajan and Hume2. Railway is essential part when it comes to traveling around TA."
   f1v="""It was a bright spring morning when three weary travellers, refugees fleeing persecution in a faraway land, arrived at the dazzling natural spectacle we now know as Spawn, and decided to call it home.
-
 These intrepid explorers - let us drink a toast to their names! Hume2, hip hip hurrah! CalebJ, hip hip hurrah! Coram, hip hip hurrah! - these intrepid explorers cared little for the basic comforts of life. Whereas lesser men would have occupied themselves in a search for food or shelter, it is said that our heroes spent the famous morning constructing the first railway platform.
-
 Hume2 was quickly distracted by some bushes which produced berries exclusively in prime numbers, but CalebJ and Coram pressed on, hewing a tunnel through the mountains with their bare hands."""
 
   f2v="""Dreaming of a mighty train line stretching all the way to the far north, they discovered (to their dismay) that Spawn was surrounded by ocean in most directions. After tossing a coin, the track was extended to the west, where they found that Hume2, having decided that the prime number bushes were just a miraculous coincidence, had built a little wooden house. Thus, the town of Fractal Plains was born.
-
 History does not record the names of the passengers on the first train journey to Fractal Plains, but it appears that on departure from Spawn, they all received a complimentary box of bananas."""
 
   f3v="""We are so used to modern technology, and trains that effortlessly pilot themselves from destination to destination, that it is difficult to imagine how primitive the early train network was. Stories abound of how CalebJ would trot in front of the moving train, waving a big red flag and yelling raucously, while Coram would wander up and down the line, sweeping away fallen apples and leaves with a big broom. This ad-hoc system was known as "Apple Tree Curtailment", or ATC (Automatic Train Control)for short. (In yet another coincidence, the modern system is also called ATC.)
-
 It wasn't long before the competition was heating up. The existing line was extended as far as Red Erosion, while Hume2 began building a new line to the south(dragon Forest)
-
 Hume2 was even more fiercely dedicated to Pure Logic than the original, and soon interlocking technology had been discovered, allowing trains to use the full length of the existing line, and effectively merging the two double tracks into one (the current S2 line)."""
 
   f4v="""Work soon began on new lines: a second line to Red Erosion, passing through Lava Oasis (S4), and another to the slightly mysterious Thorviss Farm, stopping at several even more mysterious locations (S5).
-
 Around this date, the first train map appeared. Josselin has frequently claimed that a crack team of cartographers work long into the night to keep it updated, but occasional reports suggest the whole thing has been put together in MS Paint.
-
 As news arrived of an idyllic settlement in the east, Grapeyard Superb, work on the celebrated Abyssal Express (S1) line commenced almost immediately. The area attracted an eclectic mix of builders, and soon the town (later re-classified as a city) was expanding rapidly. Meanwhile, the S2 line was extended all the way to Cody Island, this work apparently motivated by a desire for easier access to coconuts."""
 
   f5v="""With passenger numbers rising ever higher, a third line from Red Erosion was built, this time extending to the far north and stopping at Desert Trap (S3). In the opposite direction, the S1 line was re-routed to the far south, terminating at the world-famous invisible cliffs at Southern Cliff.
-
 October 12th, 2019 was the date of the founding of the Grapeyard Superb metro (GSMRL). Its visionary chief engineer, Sivarajan, dreamed of uniting the disparate settlements along the Sakura Plains into one grand metropolis. Today his vision stands enacted as a metro system encompassing nearly thirty stations. Not content with that feat, Sivarajan and Hume2 established a settlement even further to the east. Narsh, or Legendria, can today be reached via the Narsh Express (R1) line."""
 
   f6v="""The existing line to Southern Cliff hugged the eastern side of the Poisson Mountains. An additional line (S6) was established along the western side. To help coordinate the construction efforts, Hume2 and Sivarajan built the TA Train transit office in Grapeyard. Around March 2020, the Abyssal Express was extended to Exfactor. Soon afterwards, the brand new S15 line connected little-explored territories between Coram Beach and Green Shore.
-
 By April, and besieged by a mountain of passenger complaints, the decision was taken to re-name and re-number several lines. The trains themselves were modernised to more clearly show their line numbers and destinations. Alas, thrill-seeking passengers were still not entirely satisfied, so in July the average train speed across the network was greatly increased. R1 had been extended to Crystal Farm by Hume2, and the new R2 line was built to connect the charming seaside town of Will Beach with the rest of civilisation, later terminating at End of File station near Narsh."""
 
   f7v="""The newest line in the Tunnelers' Abyss is the S8, whose grand opening was the 28th September, 2020.Basically Trains in Tunneler's Abyss(TA) is managed by TTTL (Tunneler's Train Transist Limited) project but, in Grapeyard Superb trains are managed by Grapeyard Superb Metro Train Limited(GSMRL) project. These projects are under taken by sivarajan and Hume2. Railway is essential part when it comes to traveling around TA."""
@@ -1277,5 +1271,3 @@ async def on_ready():
     
 bot.run('Nzk2Njg2MzYzNjA0NjgwNzU1.X_bh_g.VG7i-1E7WTVjGD0txY1hXrOAvSE')
 client.run('Nzk2Njg2MzYzNjA0NjgwNzU1.X_bh_g.VG7i-1E7WTVjGD0txY1hXrOAvSE')
-
-
