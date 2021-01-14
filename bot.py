@@ -324,12 +324,13 @@ async def text(ctx):
     r.raw.decode_content = True
     open('pdf.pdf', 'wb').write(r.content)
     images = convert_from_path('pdf.pdf')
-    with PIL.Image.open(r.raw) as img:
-      desc=pytesseract.image_to_string(img)
-    r.close()
-    if desc=="":
-      desc="There was no text."
-    await ctx.send(desc)
+    for count in images:
+      with PIL.Image.open(count) as img:
+        desc=pytesseract.image_to_string(count)
+      count.close()
+      if desc=="":
+        desc="There was no text."
+      await ctx.send(desc)
     os.remove('pdf.pdf')
 
 @bot.command()
