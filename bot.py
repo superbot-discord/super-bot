@@ -20,8 +20,6 @@ import os
 from pdf2image import convert_from_path
 import imgkit
 import pytube
-import shutil
-from zipfile import ZipFile
 
 hexstring_pattern = re.compile(r'#?([0-9A-F]{2})([0-9A-F]{2})([0-9A-F]{2})', re.IGNORECASE)
 intents = discord.Intents.all()
@@ -356,24 +354,24 @@ async def html(ctx, *, code = None):
 
 @bot.command()
 async def youtube(ctx, *, url):
-  os.mkdir("Video")
   youtube = pytube.YouTube(url)
   video = youtube.streams.get_highest_resolution()
   if video.filesize<8000000:
     video.download(filename='YTVideo')
   else:
-    for count in youtube.streams.filter(subtype='mp4').order_by('resolution').desc().all():
+    for count in youtube.streams.filter(subtype='mp4').order_by('resolution').desc():
       if count.filesize<8000000:
         video.download(filename='YTVideo')
         break
-  zip = ZipFile('Video.zip', 'w')
-  zip.write('YTVideo.mp4')
-  zip.close()
   try:
-    await ctx.send(file=discord.File('Video.zip'))
+    await ctx.send(file=discord.File('YTVideo.mp4'))
   except:
-    await ctx.send("We are sorry, the video is too large to upload.")
-  shutil.rmtree('Video')
+    await ctx.send("We are sorry, the video is too large to upload. We will still give you the audio file.")
+  Video = youtube.streams.filter(only_audio=True).order_by('mime_type').desc()[0]
+  video.download(filename='YTAudio')
+  await ctx.send(file=discord.File('YTAudio.mp3'))
+  os.remove('YTVideo.mp4')
+  os.remove('YTAudio.mp3')
 
 @bot.command()
 async def purgereactions(ctx, messages, emoji: discord.Emoji = None):
