@@ -359,17 +359,20 @@ async def youtube(ctx, *, url):
   os.mkdir("Video")
   youtube = pytube.YouTube(url)
   video = youtube.streams.get_highest_resolution()
-  if video.filesize<8388119:
+  if video.filesize<8000000:
     video.download(filename='YTVideo')
   else:
     for count in youtube.streams.filter(subtype='mp4').order_by('resolution').desc().all():
-      if count.filesize<8388119:
+      if count.filesize<8000000:
         video.download(filename='YTVideo')
         break
   zip = ZipFile('Video.zip', 'w')
   zip.write('YTVideo.mp4')
   zip.close()
-  await ctx.send(file=discord.File('Video.zip'))
+  try:
+    await ctx.send(file=discord.File('Video.zip'))
+  except:
+    await ctx.send("We are sorry, the video is too large to upload.")
   shutil.rmtree('Video')
 
 @bot.command()
