@@ -369,9 +369,9 @@ async def youtube(ctx, *, url):
     await ctx.send("We are sorry, the video is too large to upload. We will still give you the audio file.")
   Video = youtube.streams.filter(only_audio=True).order_by('mime_type').desc()[0]
   video.download(filename='YTAudio')
-  await ctx.send(file=discord.File('YTAudio.mp3'))
+  await ctx.send(file=discord.File('YTAudio.webm'))
   os.remove('YTVideo.mp4')
-  os.remove('YTAudio.mp3')
+  os.remove('YTAudio.webm')
 
 @bot.command()
 async def purgereactions(ctx, messages, emoji: discord.Emoji = None):
