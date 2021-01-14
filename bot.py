@@ -330,7 +330,7 @@ async def text(ctx):
       for count in images:
         desc=pytesseract.image_to_string(count)
       os.remove('pdf.pdf')
-    elif files[count].endswith(".txt"):
+    elif files[count].endswith(".txt")
       open('txt.txt', 'wb').write(r.content)
       with open('data.txt', 'r') as file:
         desc = file.read().replace('\n', '')
@@ -342,18 +342,15 @@ async def text(ctx):
     await ctx.send(desc)
 
 @bot.command()
-async def html(ctx, *, code = None):
+async def html(ctx, *, code = None)
   if code == None:
     r = requests.get(ctx.message.attachments[0].url, stream=True)
     r.raise_for_status()
+    r.raw.decode_content = True
     code = r.content
-  pdf = pdfkit.from_string(html,False,options, configuration=pdfkit_config)
-  open('pdf.pdf', 'wb').write(pdf)
-  image = convert_from_path('pdf.pdf')
-  open('png.png', 'wb').write(image)
-  await channel.send(file=discord.File('png.png'))
-  os.remove('png.png')
-  os.remove('pdf.pdf')
+  imgkit.from_string(code, 'output.jpg')
+  await channel.send(file=discord.File('output.jpg'))
+  os.remove('output.jpg')
 
 @bot.command()
 async def purgereactions(ctx, messages, emoji: discord.Emoji = None):
