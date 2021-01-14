@@ -359,7 +359,13 @@ async def youtube(ctx, *, url):
   os.mkdir("Video")
   youtube = pytube.YouTube(url)
   video = youtube.streams.get_highest_resolution()
-  video.download(filename='YTVideo')
+  if video.filesize<8388119:
+    video.download(filename='YTVideo')
+  else:
+    for count in youtube.streams.filter(subtype='mp4').order_by('resolution').desc().all():
+      if count.filesize<8388119:
+        video.download(filename='YTVideo')
+        break
   zip = ZipFile('Video.zip', 'w')
   zip.write('YTVideo.mp4')
   zip.close()
