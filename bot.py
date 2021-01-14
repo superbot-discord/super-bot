@@ -342,7 +342,7 @@ async def text(ctx):
     await ctx.send(desc)
 
 @bot.command()
-async def html(ctx, *, code = None)
+async def html(ctx, *, code = None):
   if code == None:
     r = requests.get(ctx.message.attachments[0].url, stream=True)
     r.raise_for_status()
