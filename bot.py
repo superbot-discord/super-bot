@@ -317,19 +317,27 @@ async def ocr(ctx):
 
 @bot.command()
 async def text(ctx):
-  pdfs= ctx.message.attachments
-  for count in range(0,len(pdfs)):
-    r = requests.get(pdfs[count].url, stream=True)
-    r.raise_for_status()
-    r.raw.decode_content = True
-    open('pdf.pdf', 'wb').write(r.content)
-    images = convert_from_path('pdf.pdf')
-    for count in images:
-      desc=pytesseract.image_to_string(count)
+  files = ctx.message.attachments
+    for count in range(0,len(files)):
+      r = requests.get(files[count].url, stream=True)
+      r.raise_for_status()
+      r.raw.decode_content = True
+      if files[count].filename.endswith(".pdf"):
+        open('pdf.pdf', 'wb').write(r.content)
+        images = convert_from_path('pdf.pdf')
+        for count in images:
+          desc=pytesseract.image_to_string(count)
+        os.remove('pdf.pdf')
+      elif files[count].endswith(".txt")
+        open('txt.txt', 'wb').write(r.content)
+        with open('data.txt', 'r') as file:
+          desc = file.read().replace('\n', '')
+        os.remove('txt.txt')
+      else:
+        desc = "Unsupported format. Please use .pdf or .txt."
       if desc=="":
         desc="There was no text."
       await ctx.send(desc)
-    os.remove('pdf.pdf')
 
 @bot.command()
 async def purgereactions(ctx, messages, emoji: discord.Emoji = None):
