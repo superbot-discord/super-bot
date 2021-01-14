@@ -348,9 +348,13 @@ async def html(ctx, *, code = None):
     r.raise_for_status()
     r.raw.decode_content = True
     code = r.content
-  imgkit.from_string(code, 'output.jpg')
-  await channel.send(file=discord.File('output.jpg'))
-  os.remove('output.jpg')
+  pdf = pdfkit.from_string(html,False,options, configuration=pdfkit_config)
+  open('pdf.pdf', 'wb').write(pdf)
+  image = convert_from_path('pdf.pdf')
+  open('png.png', 'wb').write(image)
+  await channel.send(file=discord.File('png.png'))
+  os.remove('png.png')
+  os.remove('pdf.pdf')
 
 @bot.command()
 async def purgereactions(ctx, messages, emoji: discord.Emoji = None):
