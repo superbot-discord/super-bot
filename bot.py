@@ -346,7 +346,6 @@ async def html(ctx, *, code = None):
   if code == None:
     r = requests.get(ctx.message.attachments[0].url, stream=True)
     r.raise_for_status()
-    r.raw.decode_content = True
     code = r.content
   pdf = pdfkit.from_string(html,False,options, configuration=pdfkit_config)
   open('pdf.pdf', 'wb').write(pdf)
