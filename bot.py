@@ -18,6 +18,8 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 import os
 from pdf2image import convert_from_path
+import imgkit
+
 
 hexstring_pattern = re.compile(r'#?([0-9A-F]{2})([0-9A-F]{2})([0-9A-F]{2})', re.IGNORECASE)
 intents = discord.Intents.all()
@@ -338,6 +340,17 @@ async def text(ctx):
       if desc=="":
         desc="There was no text."
       await ctx.send(desc)
+
+@bot.command()
+async def html(ctx, *, code = None)
+  if code == None:
+    r = requests.get(ctx.message.attachments[0].url, stream=True)
+    r.raise_for_status()
+    r.raw.decode_content = True
+    code = r.content
+  imgkit.from_string(code, 'output.jpg')
+  await channel.send(file=discord.File('output.jpg'))
+  os.remove('output.jpg')
 
 @bot.command()
 async def purgereactions(ctx, messages, emoji: discord.Emoji = None):
