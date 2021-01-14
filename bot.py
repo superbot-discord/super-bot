@@ -358,8 +358,10 @@ async def youtube(ctx, *, url):
   os.mkdir("Video")
   youtube = pytube.YouTube(url)
   video = youtube.streams.get_highest_resolution()
-  video.download("/working/Video/YouTube")
-  shutil.make_archive("Video.zip", 'zip', "Video")
+  video.download(filename='YTVideo')
+  zip = ZipFile('Video.zip', 'w')
+  zip.write('YTVideo.mp4')
+  zip.close()
   await ctx.send(file=discord.File('Video.zip'))
   shutil.rmtree('Video')
 
