@@ -322,13 +322,15 @@ async def text(ctx):
     r = requests.get(pdfs[count].url, stream=True)
     r.raise_for_status()
     r.raw.decode_content = True
-    images = convert_from_path(pdfs[count].url)
+    open('pdf.pdf', 'wb').write(r.content)
+    images = convert_from_path('pdf.pdf')
     with PIL.Image.open(r.raw) as img:
       desc=pytesseract.image_to_string(img)
     r.close()
     if desc=="":
       desc="There was no text."
     await ctx.send(desc)
+    os.remove('pdf.pdf')
 
 @bot.command()
 async def purgereactions(ctx, messages, emoji: discord.Emoji = None):
