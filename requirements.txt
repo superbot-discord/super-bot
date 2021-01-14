@@ -1,3 +1,4 @@
+git+https://github.com/johnfraney/wkhtmltopdf-pack.git
 discord.py==1.6.0
 aiohttp==3.7.3
 requests==2.25.1
