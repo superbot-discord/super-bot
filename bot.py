@@ -318,7 +318,7 @@ async def ocr(ctx):
 @bot.command()
 async def text(ctx):
   pdfs= ctx.message.attachments
-  for count in range(0,len(images)):
+  for count in range(0,len(pdfs)):
     r = requests.get(pdfs[count].url, stream=True)
     r.raise_for_status()
     r.raw.decode_content = True
