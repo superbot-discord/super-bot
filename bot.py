@@ -364,7 +364,10 @@ async def youtube(ctx, *, url):
       if count.filesize<=8388119:
         count.download(filename='YTVideo')
         break
-  msg = await ctx.send(file=discord.File('YTVideo.mp4'))
+  try:
+    msg = await ctx.send(file=discord.File('YTVideo.mp4'))
+  except:
+    await ctx.send("The video is too large to upload.")
   try:
     captions = youtube.captions.get_by_language_code('en').generate_srt_captions()
     actualcaptions = ""
@@ -377,7 +380,7 @@ async def youtube(ctx, *, url):
     await ctx.send(file=discord.File('captions.txt'))
     os.remove('captions.txt')
   except:
-    await edit("No captions available for the video.")
+    await edit(msg, "No captions available for the video.")
   os.remove('YTVideo.mp4')
 
 @bot.command()
