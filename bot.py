@@ -378,34 +378,34 @@ async def youtube(ctx, *, url):
     await ctx.send(file=discord.File('captions.txt'))
   #except:
   #  await ctx.send("We are sorry, the video is too large to upload.")
-  useless = """clip = VideoFileClip("YTVideo.mp4")
-  clip_list = []
-  for count in captions.splitlines():
-    if count.isnumeric or count=="":
-      1
-    elif count.count("-->")==1:
-      times = count.partition(" --> ")
-      hmsm1 = re.split(':|,',times[0])
-      h1 = hmsm1[0]
-      m1 = hsms1[1]
-      s1 = hsms1[2]
-      ms1= hsms1[3]
-      hmsm2 = re.split(':|,',times[2])
-      h2 = hmsm2[0]
-      m2 = hsms2[1]
-      s2 = hsms2[2]
-      ms2= hsms2[3]
-      duration = (h2*3600 + m2*60 + s2 + ms2/1000) - (h1*3600 + m1*60 + s1 + ms1/1000)
-    else:
-      clip = clip.subclip(h1*3600 + m1*60 + s1 + ms1/1000, h2*3600 + m2*60 + s2 + ms2/1000)
-      txt_clip = TextClip(count, fontsize = 30, color = 'black')
-      txt_clip = txt_clip.set_pos('bottom').set_duration(duration)
-      #video = CompositeVideoClip([clip, txt_clip])
-      clip_list.append(txt_clip)
-  final_clip = CompositeVideoClip(clip, clip_list)
+  #clip = VideoFileClip("YTVideo.mp4")
+  #clip_list = []
+  #for count in captions.splitlines():
+  #  if count.isnumeric or count=="":
+  #    1
+  #  elif count.count("-->")==1:
+  #    times = count.partition(" --> ")
+  #    hmsm1 = re.split(':|,',times[0])
+  #    h1 = hmsm1[0]
+  #    m1 = hsms1[1]
+  #    s1 = hsms1[2]
+  #    ms1= hsms1[3]
+  #    hmsm2 = re.split(':|,',times[2])
+  #    h2 = hmsm2[0]
+  #    m2 = hsms2[1]
+  #    s2 = hsms2[2]
+  #    ms2= hsms2[3]
+  #    duration = (h2*3600 + m2*60 + s2 + ms2/1000) - (h1*3600 + m1*60 + s1 + ms1/1000)
+  #  else:
+  #    clip = clip.subclip(h1*3600 + m1*60 + s1 + ms1/1000, h2*3600 + m2*60 + s2 + ms2/1000)
+  #    txt_clip = TextClip(count, fontsize = 30, color = 'black')
+  #    txt_clip = txt_clip.set_pos('bottom').set_duration(duration)
+  #    #video = CompositeVideoClip([clip, txt_clip])
+  #    clip_list.append(txt_clip)
+  #final_clip = CompositeVideoClip(clip, clip_list)
   #final_clip = concatenate(clip_list)
-  final_clip.write_videofile("YTNewVideo.mp4", fps = 30, codec = 'mpeg4')
-  await ctx.send(file=discord.File('YTNewVideo.mp4'))"""
+  #final_clip.write_videofile("YTNewVideo.mp4", fps = 30, codec = 'mpeg4')
+  #await ctx.send(file=discord.File('YTNewVideo.mp4'))"""
   os.remove('YTVideo.mp4')
   os.remove('captions.txt')
   #os.remove('YTNewVideo.mp4')
