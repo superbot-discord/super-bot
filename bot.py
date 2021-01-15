@@ -370,7 +370,7 @@ async def youtube(ctx, *, url):
     actualcaptions = ""
     for count in captions.splitlines():
       if count.isnumeric()==False and (count.count(" --> ")!=1 or count.count(":")!=4 or count.count(",")!=2):
-        actualcaptions = actualcaptions + count
+        actualcaptions = actualcaptions + count + f"\n"
     file = open("captions.txt", "w")
     file.write(actualcaptions)
     file.close()
