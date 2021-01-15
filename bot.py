@@ -362,7 +362,7 @@ async def youtube(ctx, *, url):
   else:
     for count in youtube.streams.filter(subtype='mp4').order_by('resolution').desc():
       if count.filesize<8388119:
-        count.download(filename='YTVideo.mp4')
+        count.download(filename='YTVideo')
         break
   msg = await ctx.send(file=discord.File('YTVideo.mp4'))
   try:
