@@ -366,7 +366,7 @@ async def youtube(ctx, *, url):
         break
   captions = youtube.captions.get_by_language_code('en').generate_srt_captions()
   #try:
-  await ctx.send(captions, file=discord.File('YTVideo.mp4'))
+  await ctx.send(file=discord.File('YTVideo.mp4'))
   #except:
   #  await ctx.send("We are sorry, the video is too large to upload.")
   clip = VideoFileClip("YTVideo.mp4")
