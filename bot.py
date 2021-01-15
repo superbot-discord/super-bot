@@ -378,7 +378,7 @@ async def youtube(ctx, *, url):
     await ctx.send(file=discord.File('captions.txt'))
   #except:
   #  await ctx.send("We are sorry, the video is too large to upload.")
-  """clip = VideoFileClip("YTVideo.mp4")
+  useless = """clip = VideoFileClip("YTVideo.mp4")
   clip_list = []
   for count in captions.splitlines():
     if count.isnumeric or count=="":
