@@ -367,9 +367,11 @@ async def youtube(ctx, *, url):
   captions = youtube.captions.get_by_language_code('en').generate_srt_captions()
   #try:
   await ctx.send(file=discord.File('YTVideo.mp4'))
+  os.remove('YTVideo.mp4')
   #except:
   #  await ctx.send("We are sorry, the video is too large to upload.")
   clip = VideoFileClip("YTVideo.mp4")
+  clip_list = []
   for count in captions.splitlines():
     if count.isnumeric or count=="":
       1
@@ -386,12 +388,16 @@ async def youtube(ctx, *, url):
       s2 = hsms2[2]
       ms2= hsms2[3]
       duration = (h2*3600 + m2*60 + s2 + ms2/1000) - (h1*3600 + m1*60 + s1 + ms1/1000)
+      clip = clip.subclip(h1*3600 + m1*60 + s1 + ms1/1000, h2*3600 + m2*60 + s2 + ms2/1000)
     else:
       txt_clip = TextClip(count, fontsize = 30, color = 'black')
       txt_clip = txt_clip.set_pos('bottom').set_duration(duration)
+      clip_list.append(txt_clip)
       video = CompositeVideoClip([clip, txt_clip])
-  await ctx.send(file=video)
-  os.remove('YTVideo.mp4')
+  final_clip = concatenate(clip_list, method = "compose")
+  final_clip.write_videofile("YTNewVideo.mp4", fps = 30, codec = 'mpeg4')
+  await ctx.send(file=discord.File('YTNewVideo.mp4'))
+  os.remove('YTNewVideo.mp4')
 
 @bot.command()
 async def purgereactions(ctx, messages, emoji: discord.Emoji = None):
