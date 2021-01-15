@@ -357,12 +357,12 @@ async def html(ctx, *, code = None):
 async def youtube(ctx, *, url):
   youtube = pytube.YouTube(url)
   video = youtube.streams.get_highest_resolution()
-  if video.filesize<8000000:
+  if video.filesize<8388119:
     video.download(filename='YTVideo')
   else:
     for count in youtube.streams.filter(subtype='mp4').order_by('resolution').desc():
-      if count.filesize<8000000:
-        count.download(filename='YTVideo')
+      if count.filesize<8388119:
+        count.download(filename='YTVideo.mp4')
         break
   msg = await ctx.send(file=discord.File('YTVideo.mp4'))
   try:
@@ -377,7 +377,7 @@ async def youtube(ctx, *, url):
     await ctx.send(file=discord.File('captions.txt'))
     os.remove('captions.txt')
   except:
-    msg = await edit("No captions available for the video.")
+    await msg.edit("No captions available for the video.")
   os.remove('YTVideo.mp4')
 
 @bot.command()
