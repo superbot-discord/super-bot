@@ -363,15 +363,34 @@ async def youtube(ctx, *, url):
       if count.filesize<8000000:
         video.download(filename='YTVideo')
         break
+  captions = youtube.captions.get_by_language_code('en').generate_srt_captions()
   try:
-    await ctx.send(file=discord.File('YTVideo.mp4'))
+    await ctx.send(captions, file=discord.File('YTVideo.mp4'))
   except:
-    await ctx.send("We are sorry, the video is too large to upload. We will still give you the audio file.")
-  Video = youtube.streams.filter(only_audio=True, mime_type='mp3').order_by('abr').desc()[0]
-  video.download(filename='YTAudio')
-  await ctx.send(file=discord.File('YTAudio'))
+    await ctx.send("We are sorry, the video is too large to upload.")
+  clip = VideoFileClip("YTVideo.mp4")
+  for count in captions.splitlines():
+    if count.isnum or count=="":
+      1
+    elif count.count("-->")==1:
+      times = count.partition(" --> ")
+      hmsm1 = re.split(':|,',times[0])
+      h1 = hmsm1[0]
+      m1 = hsms1[1]
+      s1 = hsms1[2]
+      ms1= hsms1[3]
+      hmsm2 = re.split(':|,',times[2])
+      h2 = hmsm2[0]
+      m2 = hsms2[1]
+      s2 = hsms2[2]
+      ms2= hsms2[3]
+      duration = (h2*3600 + m2*60 + s2 + ms2/1000) - (h1*3600 + m1*60 + s1 + ms1/1000)
+    else:
+      txt_clip = TextClip(count, fontsize = 30, color = 'black')
+      txt_clip = txt_clip.set_pos('bottom').set_duration(duration)
+      video = CompositeVideoClip([clip, txt_clip])
+  awaut ctx.send(file=video)
   os.remove('YTVideo.mp4')
-  os.remove('YTAudio.mp3')
 
 @bot.command()
 async def purgereactions(ctx, messages, emoji: discord.Emoji = None):
