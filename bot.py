@@ -389,7 +389,7 @@ async def youtube(ctx, *, url):
       txt_clip = TextClip(count, fontsize = 30, color = 'black')
       txt_clip = txt_clip.set_pos('bottom').set_duration(duration)
       video = CompositeVideoClip([clip, txt_clip])
-  awaut ctx.send(file=video)
+  await ctx.send(file=video)
   os.remove('YTVideo.mp4')
 
 @bot.command()
