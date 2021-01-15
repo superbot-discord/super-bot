@@ -367,7 +367,6 @@ async def youtube(ctx, *, url):
   captions = youtube.captions.get_by_language_code('en').generate_srt_captions()
   #try:
   await ctx.send(file=discord.File('YTVideo.mp4'))
-  os.remove('YTVideo.mp4')
   #except:
   #  await ctx.send("We are sorry, the video is too large to upload.")
   clip = VideoFileClip("YTVideo.mp4")
@@ -397,6 +396,7 @@ async def youtube(ctx, *, url):
   final_clip = concatenate(clip_list, method = "compose")
   final_clip.write_videofile("YTNewVideo.mp4", fps = 30, codec = 'mpeg4')
   await ctx.send(file=discord.File('YTNewVideo.mp4'))
+  os.remove('YTVideo.mp4')
   os.remove('YTNewVideo.mp4')
 
 @bot.command()
