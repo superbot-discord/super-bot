@@ -364,23 +364,21 @@ async def youtube(ctx, *, url):
       if count.filesize<8000000:
         count.download(filename='YTVideo')
         break
-  captions = youtube.captions.get_by_language_code('en').generate_srt_captions()
-  actualcaptions = ""
-  for count in captions.splitlines():
-    if count.isnumeric()==False and (count.count(" --> ")!=1 or count.count(":")!=4 or count.count(",")!=2):
-      actualcaptions = actualcaptions + count
-  file = open("captions.txt", "w")
-  file.write(actualcaptions)
-  file.close()
-  #try:
   msg = await ctx.send(file=discord.File('YTVideo.mp4'))
   try:
+    captions = youtube.captions.get_by_language_code('en').generate_srt_captions()
+    actualcaptions = ""
+    for count in captions.splitlines():
+      if count.isnumeric()==False and (count.count(" --> ")!=1 or count.count(":")!=4 or count.count(",")!=2):
+        actualcaptions = actualcaptions + count
+    file = open("captions.txt", "w")
+    file.write(actualcaptions)
+    file.close()
     await ctx.send(file=discord.File('captions.txt'))
+    os.remove('captions.txt')
   except:
     await msg.edit("No captions available for the video.")
   os.remove('YTVideo.mp4')
-  os.remove('captions.txt')
-  #os.remove('YTNewVideo.mp4')
 
 @bot.command()
 async def purgereactions(ctx, messages, emoji: discord.Emoji = None):
