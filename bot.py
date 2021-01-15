@@ -393,7 +393,7 @@ async def youtube(ctx, *, url):
       txt_clip = txt_clip.set_pos('bottom').set_duration(duration)
       video = CompositeVideoClip([clip, txt_clip])
       clip_list.append(video)
-  final_clip = concatenate(clip_list, method = "compose")
+  final_clip = concatenate(clip_list)
   final_clip.write_videofile("YTNewVideo.mp4", fps = 30, codec = 'mpeg4')
   await ctx.send(file=discord.File('YTNewVideo.mp4'))
   os.remove('YTVideo.mp4')
