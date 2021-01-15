@@ -377,7 +377,7 @@ async def youtube(ctx, *, url):
     await ctx.send(file=discord.File('captions.txt'))
     os.remove('captions.txt')
   except:
-    await msg.edit("No captions available for the video.")
+    msg = await edit("No captions available for the video.")
   os.remove('YTVideo.mp4')
 
 @bot.command()
