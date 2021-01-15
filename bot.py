@@ -362,7 +362,7 @@ async def youtube(ctx, *, url):
   else:
     for count in youtube.streams.filter(subtype='mp4').order_by('resolution').desc():
       if count.filesize<8000000:
-        video.download(filename='YTVideo')
+        count.download(filename='YTVideo')
         break
   captions = youtube.captions.get_by_language_code('en').generate_srt_captions()
   actualcaptions = ""
