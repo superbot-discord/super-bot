@@ -20,6 +20,7 @@ import os
 from pdf2image import convert_from_path
 import imgkit
 import pytube
+from moviepy import *
 
 hexstring_pattern = re.compile(r'#?([0-9A-F]{2})([0-9A-F]{2})([0-9A-F]{2})', re.IGNORECASE)
 intents = discord.Intents.all()
@@ -364,10 +365,10 @@ async def youtube(ctx, *, url):
         video.download(filename='YTVideo')
         break
   captions = youtube.captions.get_by_language_code('en').generate_srt_captions()
-  try:
-    await ctx.send(captions, file=discord.File('YTVideo.mp4'))
-  except:
-    await ctx.send("We are sorry, the video is too large to upload.")
+  #try:
+  await ctx.send(captions, file=discord.File('YTVideo.mp4'))
+  #except:
+  #  await ctx.send("We are sorry, the video is too large to upload.")
   clip = VideoFileClip("YTVideo.mp4")
   for count in captions.splitlines():
     if count.isnum or count=="":
