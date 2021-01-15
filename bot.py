@@ -366,7 +366,7 @@ async def youtube(ctx, *, url):
         break
   captions = youtube.captions.get_by_language_code('en').generate_srt_captions()
   actualcaptions = ""
-  for count in captions:
+  for count in captions.splitlines():
     if count.count(" --> ")!=1 or count.count(":")!=4 or count.count(",")!=2:
       actualcaptions = actualcaptions + count + f"\n"
   file = open("captions.txt", "w")
