@@ -24,7 +24,7 @@ from moviepy.editor import *
 
 hexstring_pattern = re.compile(r'#?([0-9A-F]{2})([0-9A-F]{2})([0-9A-F]{2})', re.IGNORECASE)
 intents = discord.Intents.all()
-bot = commands.Bot(command_prefix=commands.when_mentioned_or("=" or "!"), intents=intents)
+bot = commands.Bot(command_prefix=commands.when_mentioned_or("="), intents=intents)
 client = discord.Client()
 bot.remove_command('help')
 typer=0
