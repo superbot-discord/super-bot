@@ -371,7 +371,7 @@ async def youtube(ctx, *, url):
   #  await ctx.send("We are sorry, the video is too large to upload.")
   clip = VideoFileClip("YTVideo.mp4")
   for count in captions.splitlines():
-    if count.isnum or count=="":
+    if count.isnumeric or count=="":
       1
     elif count.count("-->")==1:
       times = count.partition(" --> ")
