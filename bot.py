@@ -368,6 +368,9 @@ async def youtube(ctx, *, url):
     msg = await ctx.send(file=discord.File('YTVideo.mp4'))
   except:
     await ctx.send("The video is too large to upload.")
+  audio = youtube.streams.filter(only_audio=True, file_extension='mp3')[0]
+  audio.download(filename='YTAudio')
+  await ctx.send(file=discord.File('YTAudio.mp3'))
   try:
     captions = youtube.captions.get_by_language_code('en').generate_srt_captions()
     actualcaptions = ""
