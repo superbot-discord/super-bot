@@ -360,7 +360,7 @@ async def youtube(ctx, *, url):
   if video.filesize<8388119:
     video.download(filename='YTVideo')
   else:
-    for count in youtube.streams.filter(file_extension='mp4', vcodec="vp9").order_by('resolution').desc():
+    for count in youtube.streams.filter(file_extension='mp4', progressive=True).order_by('resolution').desc():
       if count.filesize<8388119:
         count.download(filename='YTVideo')
         break
