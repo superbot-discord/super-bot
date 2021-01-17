@@ -20,7 +20,7 @@ import os
 from pdf2image import convert_from_path
 import imgkit
 import pytube
-from moviepy.editor import *
+from translate import Translator
 
 hexstring_pattern = re.compile(r'#?([0-9A-F]{2})([0-9A-F]{2})([0-9A-F]{2})', re.IGNORECASE)
 intents = discord.Intents.all()
@@ -34,11 +34,15 @@ class MyClient(discord.Client):
   async def on_ready(self):
     print('Connected!')
 
-"""async def on_message(message):
-  global autodel
-  #if autodel!=None: and not(message.content.startswith("=")):
-  await message.delete(autodel)
-  await bot.process_commands(message)"""
+@bot.event
+async def on_reaction_add(reaction, user):
+  lang = reaction.emoji.name.lstrip("flag_")
+  if len(lang)==2:
+    translator = Translator(to_lang=lang)
+    translation = translator.translate(reaction.message.content)
+    await reaction.message.channel.send(translation)
+  
+
 @bot.event
 async def on_member_update(before, after):
   desc="Profile of "+before.mention+" was updated!"
