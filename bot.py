@@ -36,7 +36,7 @@ class MyClient(discord.Client):
 
 @bot.event
 async def on_reaction_add(reaction, user):
-  lang = reaction.emoji.lstrip("flag_")
+  lang = reaction.emoji.replace("flag_","")
   await reaction.message.channel.send(lang)
   if len(lang)==2:
     translator = Translator(to_lang=lang)
