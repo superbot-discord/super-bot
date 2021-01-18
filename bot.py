@@ -181,7 +181,7 @@ async def help(ctx,cat=None):
 
 @bot.command()
 async def translate(ctx, lang, *, text):
-  msg = await ctx.send("**Translating to "+lang+"**")
+  msg = await ctx.send("**Translating** "+text+" **to** "+lang)
   translatorvar = Translator()
   translation = translatorvar.translate(text, dest='en')
   await msg.edit(content = "**Translation to "+lang+f":**\n"+translation)
