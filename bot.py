@@ -560,33 +560,26 @@ async def color(ctx,arg1,arg2=None,arg3=None):
 async def colour(ctx, arg1, arg2=None, arg3=None):
     args = arg1, arg2, arg3
     match = hexstring_pattern.fullmatch(arg1)
-    if match:
-        desc = f'Hex: {arg1}'
-        r, g, b = (int(val, 16) for val in match.groups())
-
-    elif all(arg and arg.isdigit() and 0 <= int(arg) < 256 for arg in args):
-        desc = f'RGB: {arg1},{arg2},{arg3}'
-        r, g, b = map(int, args)
-
+    if all(arg and arg.isdigit() and 0 <= int(arg) < 256 for arg in args):
+      desc = f'RGB: {arg1},{arg2},{arg3}'
+      r, g, b = map(int, args)
     elif arg1.isdigit() and 0 <= int(arg1) < 2 ** 24:
-        # note that the first pattern can match some entries of this type, and and cause a bug.
-        # but the bug is really in the input specification, not my interpretation of your code
-        desc = f'Decimal: {arg1}'
-        n = int(arg1)
-        r, g, b = n >> 16, (n >> 8) & 255, n & 255
-
+      desc = f'Decimal: {arg1}'
+      n = int(arg1)
+      r, g, b = n >> 16, (n >> 8) & 255, n & 255
+    elif match:
+      desc = f'Hex: {arg1}'
+      r, g, b = (int(val, 16) for val in match.groups())
     else:
-        await ctx.send('Please specify a correct colour value.')
-        return
-
+      await ctx.send('Please specify a correct colour value.')
+      return
     deci = (r << 16) + (g << 8) + b
     hex_ = f'{deci:02x}'.upper()
-
     embed = discord.Embed(title='Colour information', description=desc, color=deci)
     embed.add_field(name='RGB', value=f'{r},{g},{b}', inline=True)
     embed.add_field(name='Hex Code', value=f'#{hex_}', inline=True)
     embed.add_field(name='Decimal Value', value=deci, inline=True)
-    embed.set_image(url=f'https://htmlcolors.com/color-image/{hex_}.png')
+    embed.set_thumbnail(url=f'https://htmlcolors.com/color-image/{hex_}.png')
     await ctx.send(embed=embed)
 
 
