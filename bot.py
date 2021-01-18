@@ -180,7 +180,7 @@ async def help(ctx,cat=None):
   await ctx.send(embed=embed)
 
 @bot.command()
-async def translate(lang, *, text):
+async def translate(ctx, lang, *, text):
   msg = await ctx.send("**Translating to "+lang+"**")
   if len(lang)==2:
     translator = Translator(to_lang=lang)
