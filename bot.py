@@ -519,42 +519,6 @@ async def autodelete(ctx,num=None):
   else:
     autodel=None
     await ctx.send("Autodelete has been disabled.")"""
-
-@bot.command()
-async def color(ctx,arg1,arg2=None,arg3=None):
-  arg1=arg1.lower()
-  if arg2==None and arg3==None:
-    arg1=arg1.lstrip("#")
-    if len(arg1)==6 and (arg1.count("1")+arg1.count("2")+arg1.count("3")+arg1.count("4")+arg1.count("5")+arg1.count("6")+arg1.count("7")+arg1.count("8")+arg1.count("9")+arg1.count("a")+arg1.count("b")+arg1.count("c")+arg1.count("d")+arg1.count("e")+arg1.count("f")+arg1.count("0")==6):
-      hexc=(str(arg1))
-      desc="Hex: #"+hexc
-      deci=int(hexc, 16)
-      rgb=tuple(int(hexc[i:i+2], 16) for i in (0, 2, 4))
-      rgb=str(rgb[0])+","+str(rgb[1])+","+str(rgb[2])
-    elif int(arg1)<=16777216:
-      hexc=str(hex(int(arg1))).lstrip("0x")
-      desc="Decimal: "+arg1
-      rgb=tuple(int(hexc[i:i+2], 16) for i in (0, 2, 4))
-      rgb=str(rgb[0])+","+str(rgb[1])+","+str(rgb[2])
-      deci=int(arg1)
-    else:
-      await ctx.send("Please specify a correct color value.")
-  elif int(arg1)>=0 and int(arg1)<=256 and int(arg2)>=0 and int(arg2)<=256 and int(arg3)>=0 and int(arg3)<=256:
-    hexc='#%02x%02x%02x' % (int(arg1), int(arg2), int(arg3))
-    desc="RGB: "+arg1+","+arg2+","+arg3
-    rgb=arg1+","+arg2+","+arg3
-    hexc=(str(hexc))[1:]
-    deci=int(hexc, 16)
-  else:
-    await ctx.send("Please specify a correct color value.")
-    return
-  ti="Color information"
-  embed=discord.Embed(title=ti, description=desc, color=deci)
-  embed.add_field(name="RGB", value=rgb, inline=True)
-  embed.add_field(name="Hex Code", value="#"+hexc, inline=True)
-  embed.add_field(name="Decimal Value", value=deci, inline=True)
-  embed.set_thumbnail(url="https://htmlcolors.com/color-image/"+hexc+".png")
-  await ctx.send(embed=embed)
   
 @bot.command()
 async def colour(ctx, arg1, arg2=None, arg3=None):
@@ -585,6 +549,34 @@ async def colour(ctx, arg1, arg2=None, arg3=None):
     embed.set_thumbnail(url=f'https://htmlcolors.com/color-image/{hex_}.png')
     await ctx.send(embed=embed)
 
+@bot.command()
+async def color(ctx, arg1, arg2=None, arg3=None):
+    args = arg1, arg2, arg3
+    match = hexstring_pattern.fullmatch(arg1)
+    if all(arg and arg.isdigit() and 0 <= int(arg) < 256 for arg in args):
+      desc = f'RGB: {arg1},{arg2},{arg3}'
+      r, g, b = map(int, args)
+    elif arg1.isdigit() and 0 <= int(arg1) < 2 ** 24:
+      desc = f'Decimal: {arg1}'
+      n = int(arg1)
+      r, g, b = n >> 16, (n >> 8) & 255, n & 255
+    elif match:
+      desc = f'Hex: {arg1}'
+      r, g, b = (int(val, 16) for val in match.groups())
+    else:
+      await ctx.send('Please specify a correct colour value.')
+      return
+    deci = (r << 16) + (g << 8) + b
+    hex_ = f'{deci:02x}'.upper()
+    if len(hex_)!=6:
+      while len(hex_)<6:
+        hex_="0"+hex_
+    embed = discord.Embed(title='Colour information', description=desc, color=deci)
+    embed.add_field(name='RGB', value=f'{r},{g},{b}', inline=True)
+    embed.add_field(name='Hex Code', value=f'#{hex_}', inline=True)
+    embed.add_field(name='Decimal Value', value=deci, inline=True)
+    embed.set_thumbnail(url=f'https://htmlcolors.com/color-image/{hex_}.png')
+    await ctx.send(embed=embed)
 
 @bot.command()
 async def time(ctx,timezoneinput="0"):
