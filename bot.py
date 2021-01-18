@@ -575,8 +575,9 @@ async def colour(ctx, arg1, arg2=None, arg3=None):
       return
     deci = (r << 16) + (g << 8) + b
     hex_ = f'{deci:02x}'.upper()
-    if len(hex_)==5:
-      hex_="0"+hex_
+    if len(hex_)!=6:
+      while len(hex_)<6:
+        hex_="0"+hex_
     embed = discord.Embed(title='Colour information', description=desc, color=deci)
     embed.add_field(name='RGB', value=f'{r},{g},{b}', inline=True)
     embed.add_field(name='Hex Code', value=f'#{hex_}', inline=True)
