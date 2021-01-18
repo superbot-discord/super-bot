@@ -42,7 +42,6 @@ async def on_reaction_add(reaction, user):
     translator = Translator(to_lang=lang)
     translation = translator.translate(reaction.message.content)
     await reaction.message.channel.send(translation)
-  
 
 @bot.event
 async def on_member_update(before, after):
@@ -179,6 +178,14 @@ async def help(ctx,cat=None):
   """
   embed=discord.Embed(title=ti, description=desc, color=0x0061ff)
   await ctx.send(embed=embed)
+
+@bot.command()
+async def translate(lang, *, text):
+  msg = await ctx.send("**Translating to "+lang+"**")
+  if len(lang)==2:
+    translator = Translator(to_lang=lang)
+    translation = translator.translate(text)
+    await msg.edit(content = "**Translating to "+lang+f":**\n"+translation)
 
 @bot.command()
 async def status(ctx, member : discord.Member = None):
