@@ -563,18 +563,22 @@ async def colour(ctx, arg1, arg2=None, arg3=None):
     if all(arg and arg.isdigit() and 0 <= int(arg) < 256 for arg in args):
       desc = f'RGB: {arg1},{arg2},{arg3}'
       r, g, b = map(int, args)
+      deci = (r << 16) + (g << 8) + b
+      hex_ = f'{deci:02x}'.upper()
     elif arg1.isdigit() and 0 <= int(arg1) < 2 ** 24:
       desc = f'Decimal: {arg1}'
       n = int(arg1)
       r, g, b = n >> 16, (n >> 8) & 255, n & 255
+      deci = arg1
+      hex_ = f'{deci:02x}'.upper()
     elif match:
       desc = f'Hex: {arg1}'
       r, g, b = (int(val, 16) for val in match.groups())
+      deci = (r << 16) + (g << 8) + b
+      hex_ = f'{deci:02x}'.upper()
     else:
       await ctx.send('Please specify a correct colour value.')
       return
-    deci = (r << 16) + (g << 8) + b
-    hex_ = f'{deci:02x}'.upper()
     embed = discord.Embed(title='Colour information', description=desc, color=deci)
     embed.add_field(name='RGB', value=f'{r},{g},{b}', inline=True)
     embed.add_field(name='Hex Code', value=f'#{hex_}', inline=True)
