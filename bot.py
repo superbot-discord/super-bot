@@ -20,7 +20,7 @@ import os
 from pdf2image import convert_from_path
 import imgkit
 import pytube
-from translate import Translator
+from googletrans import Translator
 
 hexstring_pattern = re.compile(r'#?([0-9A-F]{2})([0-9A-F]{2})([0-9A-F]{2})', re.IGNORECASE)
 intents = discord.Intents.all()
