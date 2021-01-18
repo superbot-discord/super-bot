@@ -185,7 +185,7 @@ async def translate(ctx, lang, *, text):
   if len(lang)==2:
     translator = Translator(to_lang=lang)
     translation = translator.translate(text)
-    await msg.edit(content = "**Translating to "+lang+f":**\n"+translation)
+    await msg.edit(content = "**Translation to "+lang+f":**\n"+translation)
 
 @bot.command()
 async def status(ctx, member : discord.Member = None):
