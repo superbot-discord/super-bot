@@ -21,7 +21,6 @@ from pdf2image import convert_from_path
 import imgkit
 import pytube
 from pygoogletranslation import Translator
-import shutil
 import wikipedia
 
 hexstring_pattern = re.compile(r'#?([0-9A-F]{2})([0-9A-F]{2})([0-9A-F]{2})', re.IGNORECASE)
@@ -420,6 +419,10 @@ async def wiki(ctx, *, query):
     file.close()
     await ctx.send(file=discord.File('wiki.html'))
     os.remove('wiki.html')
+    desc = ""
+    for count in page.images:
+      desc = desc + count + " "
+    await ctx.send(desc)
   except:
     results = wikipedia.search(query, results=20, suggestion=False)
     desc = "**Please make one of these searches:**"
