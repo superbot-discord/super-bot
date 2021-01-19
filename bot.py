@@ -406,6 +406,7 @@ async def wiki(ctx, *, query):
     desc = desc[0:2046]+"…"
   embed = discord.Embed(title=query, description=desc)
   page = wikipedia.page(title=query, auto_suggest=True, redirect=True, preload=False)
+  print(str(page.sections))
   for count in page.sections:
     embed.add_field(name=count, value=wikipeida.section(count)[:500], inline=False)
   if len(page.images)!=0:
