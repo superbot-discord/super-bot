@@ -403,16 +403,15 @@ async def wiki(ctx, *, query):
   wikipedia.set_lang("en")
   try:
     desc = wikipedia.summary(query)
+    if len(desc)>2048:
+      desc = desc[0:2046]+"…"
+    page = wikipedia.page(title=query, auto_suggest=True, redirect=True, preload=False)
   except:
     results = wikipedia.search(query, results=20, suggestion=False)
     desc = "**Please make one of these searches:**"
     for count in results:
       desc = desc + "`"+str(count)+"` "
-  if len(desc)>2048:
-    desc = desc[0:2046]+"…"
   embed = discord.Embed(title=query, description=desc)
-  page = wikipedia.page(title=query, auto_suggest=True, redirect=True, preload=False)
-  print(str(page.sections))
   for count in page.sections:
     embed.add_field(name=count, value=wikipeida.section(count)[:500], inline=False)
   if len(page.images)!=0:
