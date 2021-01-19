@@ -403,7 +403,8 @@ async def wiki(ctx, *, query):
   wikipedia.set_lang("en")
   desc = wikipedia.summary(query)
   embed = discord.Embed(title=query, description=desc)
-  desc = desc[:2048]
+  if len(desc)>2048:
+    desc = desc[0:2047]
   page = wikipedia.page(title=query, auto_suggest=True, redirect=True, preload=False)
   for count in page.sections:
     embed.add_field(name=count, value=wikipeida.section(count)[:500], inline=False)
