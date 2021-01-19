@@ -416,6 +416,7 @@ async def wiki(ctx, *, query):
     desc = "**Please make one of these searches:**"
     for count in results:
       desc = desc + "`"+str(count)+"` "
+    embed = discord.Embed(title=query, description=desc)
   await ctx.send(embed = embed)
 
 @bot.command()
