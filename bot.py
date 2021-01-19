@@ -399,7 +399,7 @@ async def youtube(ctx, *, url):
   os.remove('YTVideo.mp4')
 
 @bot.command()
-async def wiki=(ctx, *, query):
+async def wiki(ctx, *, query):
   wikipedia.set_lang("en")
   desc = wikipedia.summary(query)
   embed = discord.Embed(title=ti, description=desc)
