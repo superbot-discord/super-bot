@@ -21,6 +21,7 @@ from pdf2image import convert_from_path
 import imgkit
 import pytube
 from pygoogletranslation import Translator
+import shutil
 import wikipedia
 
 hexstring_pattern = re.compile(r'#?([0-9A-F]{2})([0-9A-F]{2})([0-9A-F]{2})', re.IGNORECASE)
@@ -412,7 +413,7 @@ async def wiki(ctx, *, query):
     if len(page.images)!=0:
       embed.set_thumbnail(url = page.images[0])
     if len(page.images)>=2:
-      embed.set_thumbnail(url = page.images[1])
+      embed.set_image(url = page.images[1])
     await ctx.send(embed = embed)
     file = open("wiki.html", "w")
     file.write(page.html())
