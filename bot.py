@@ -642,6 +642,12 @@ async def spoiler(ctx,*,text):
   text="||"+text+"||"
   await ctx.send(text)
 
+@bot.event
+async def rawspoiler(ctx, *, text):
+  text="\|\|\|\|".join(text)
+  text="\|\|"+text+"\|\|"
+  await ctx.send(text)
+
 @bot.command()
 async def getprefix(bot, message):
     extras = await prefixes_for(message.guild) # returns a list
