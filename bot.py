@@ -421,7 +421,7 @@ async def wiki(ctx, *, query):
     os.remove('wiki.html')
     desc = ""
     for count in page.images:
-      desc = desc + count + " "
+      desc = desc + str(count) + " "
     await ctx.send(desc)
   except:
     results = wikipedia.search(query, results=20, suggestion=False)
