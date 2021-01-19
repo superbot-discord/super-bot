@@ -399,13 +399,11 @@ async def youtube(ctx, *, url):
   os.remove('YTVideo.mp4')
 
 @bot.command()
-async def wiki(ctx, *, query):
+async def wiki=(ctx, *, query):
   wikipedia.set_lang("en")
-  ti = wikipedia.suggest(query)
   desc = wikipedia.summary(query)
-  link = "https://en.wikipedia.org/wiki/"+ti.replace(" ","_")
-  embed = discord.Embed(title=ti, url=link, description=desc)
-  for count in wikipedia.page(title=ti).sections:
+  embed = discord.Embed(title=ti, description=desc)
+  for count in wikipedia.page(title=query).sections:
     embed.add_field(name=count, value=section(count), inline=False)
   await ctx.send(embed = embed)
 
