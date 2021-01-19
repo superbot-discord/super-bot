@@ -402,7 +402,7 @@ async def youtube(ctx, *, url):
 async def wiki(ctx, *, query):
   wikipedia.set_lang("en")
   desc = wikipedia.summary(query)
-  embed = discord.Embed(title=ti, description=desc)
+  embed = discord.Embed(title=query, description=desc)
   for count in wikipedia.page(title=query).sections:
     embed.add_field(name=count, value=section(count), inline=False)
   await ctx.send(embed = embed)
