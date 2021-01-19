@@ -642,7 +642,7 @@ async def spoiler(ctx,*,text):
   text="||"+text+"||"
   await ctx.send(text)
 
-@bot.event
+@bot.command()
 async def rawspoiler(ctx, *, text):
   text="\|\|\|\|".join(text)
   text="\|\|"+text+"\|\|"
