@@ -401,7 +401,13 @@ async def youtube(ctx, *, url):
 @bot.command()
 async def wiki(ctx, *, query):
   wikipedia.set_lang("en")
-  desc = wikipedia.summary(query)
+  try:
+    desc = wikipedia.summary(query)
+  except:
+    results = wikipedia.search(query, results=20, suggestion=False)
+    desc = "**Please make one of these searches:**"
+    for count in results:
+      desc = desc + "`"+str(count)+"` "
   if len(desc)>2048:
     desc = desc[0:2046]+"…"
   embed = discord.Embed(title=query, description=desc)
