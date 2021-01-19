@@ -402,9 +402,9 @@ async def youtube(ctx, *, url):
 async def wiki(ctx, *, query):
   wikipedia.set_lang("en")
   desc = wikipedia.summary(query)
-  embed = discord.Embed(title=query, description=desc)
   if len(desc)>2048:
-    desc = desc[0:2047]
+    desc = desc[0:2046]+"…"
+  embed = discord.Embed(title=query, description=desc)
   page = wikipedia.page(title=query, auto_suggest=True, redirect=True, preload=False)
   for count in page.sections:
     embed.add_field(name=count, value=wikipeida.section(count)[:500], inline=False)
