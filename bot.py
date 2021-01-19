@@ -399,7 +399,7 @@ async def youtube(ctx, *, url):
   os.remove('YTVideo.mp4')
 
 @bot.command()
-async def wikipedia(ctx, *, query):
+async def wiki(ctx, *, query):
   wikipedia.set_lang("en")
   ti = wikipedia.suggest(query)
   desc = wikipedia.summary(query)
