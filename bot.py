@@ -407,18 +407,26 @@ async def wiki(ctx, *, query):
       desc = desc[0:2046]+"…"
     page = wikipedia.page(title=query, auto_suggest=True, redirect=True, preload=False)
     embed = discord.Embed(title=query, description=desc)
-    for count in page.sections:
-      embed.add_field(name=count, value=wikipeida.section(count)[:500], inline=False)
+    #for count in page.sections:
+    #  embed.add_field(name=count, value=wikipeida.section(count)[:500], inline=False)
     if len(page.images)!=0:
       embed.set_thumbnail(url = page.images[0])
+    if len(page.images)>=2:
+      embed.set_thumbnail(url = page.images[1])
+    await ctx.send(embed = embed)
+    file = open("wiki.html", "w")
+    file.write(page.html())
+    file.close()
+    await ctx.send(file=discord.File('wiki.html'))
+    os.remove('wiki.html')
   except:
     results = wikipedia.search(query, results=20, suggestion=False)
     desc = "**Please make one of these searches:**"
     for count in results:
       desc = desc + "`"+str(count)+"` "
     embed = discord.Embed(title=query, description=desc)
-  await ctx.send(embed = embed)
-
+    await ctx.send(embed = embed)
+  
 @bot.command()
 async def purgereactions(ctx, messages, emoji: discord.Emoji = None):
   if emoji == None:
