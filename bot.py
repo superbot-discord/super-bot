@@ -21,6 +21,7 @@ from pdf2image import convert_from_path
 import imgkit
 import pytube
 from pygoogletranslation import Translator
+import wikipedia
 
 hexstring_pattern = re.compile(r'#?([0-9A-F]{2})([0-9A-F]{2})([0-9A-F]{2})', re.IGNORECASE)
 intents = discord.Intents.all()
@@ -396,6 +397,17 @@ async def youtube(ctx, *, url):
   except:
     await edit(msg, "No captions available for the video.")
   os.remove('YTVideo.mp4')
+
+@bot.command()
+async def wikipedia(ctx, *, query):
+  wikipedia.set_lang("en")
+  ti = wikipedia.suggest(query)
+  desc = wikipedia.summary(query)
+  link = "https://en.wikipedia.org/wiki/"+ti.replace(" ","_")
+  embed = discord.Embed(title=ti, url=link, description=desc)
+  for count in wikipedia.page(title=ti).sections:
+    embed.add_field(name=count, value=section(count), inline=False)
+  await ctx.send(embed = embed)
 
 @bot.command()
 async def purgereactions(ctx, messages, emoji: discord.Emoji = None):
