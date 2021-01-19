@@ -408,7 +408,7 @@ async def wiki(ctx, *, query):
   for count in page.sections:
     embed.add_field(name=count, value=wikipeida.section(count)[:500], inline=False)
   if len(page.images)!=0:
-    embed.set_thumbnail(page.images[0])
+    embed.set_thumbnail(url = page.images[0])
   await ctx.send(embed = embed)
 
 @bot.command()
