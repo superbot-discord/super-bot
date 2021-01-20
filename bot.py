@@ -306,6 +306,8 @@ async def screenshot(ctx, url):
     driver.set_window_size(1440,900)
     driver.get_screenshot_as_file('web_screenshot1.png')
     await ctx.send(file=discord.File('web_screenshot1.png'))
+    for count in range(900, 5400, 900):
+      driver.execute_script("window.scrollTo(0, "+count+")")
     S = lambda X: driver.execute_script('return document.body.parentNode.scroll'+X)
     driver.set_window_size(S('Width'),S('Height'))
     driver.find_element_by_tag_name('body').screenshot('web_screenshot2.png')
