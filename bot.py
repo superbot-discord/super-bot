@@ -793,6 +793,9 @@ async def timer(ctx, timetocount,*,Text=None):
       desc=newhrs+" hours "+newmin+" minutes "+newsec+"seconds left"
     message=await ctx.send(desc)
     seconds=str(int(seconds)-1)
+    newsec=str(seconds%60)
+    newmin=str((seconds%3600)//60)
+    newhrs=str(seconds//3600)
     while seconds!="0":
       tm.sleep(0.8)
       newsec=seconds
