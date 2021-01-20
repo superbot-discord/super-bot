@@ -749,14 +749,14 @@ async def emoji(ctx,*,newsec):
   await ctx.send(newsec)
 
 @bot.command()
-async def timer(ctx,seconds, timetocount,*,Text=None):
+async def timer(ctx, timetocount,*,Text=None):
     seconds = int(timedelta(**{
         UNITS.get(m.group('unit').lower(), 'seconds'): int(m.group('val'))
         for m in re.finditer(r'(?P<val>\d+)(?P<unit>[smhdw]?)', timetocount, flags=re.I)
     }).total_seconds())
-    newsec=seconds%60
-    newmin=seconds%3600
-    newhrs=seconds//3600
+    newsec=str(seconds%60)
+    newmin=str(seconds%3600)
+    newhrs=str(seconds//3600)
     newsec=newsec.replace("1",":one: ")
     newsec=newsec.replace("2",":two: ")
     newsec=newsec.replace("3",":three: ")
@@ -1259,7 +1259,7 @@ async def uservoice(ctx,channel: discord.VoiceChannel, user: discord.Member=None
     desc=f"{user.mention} (bot) "
   else:
     desc=f"{user.mention} (human) "
-    embed=discord.Embed(title=ti,color=user.color, description=desc)
+  embed=discord.Embed(title=ti,color=user.color, description=desc)
   embed.set_thumbnail(url=user.avatar_url)
   if user.name==user.display_name:
     f0v=user.name+"#"+user.discriminator
