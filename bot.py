@@ -794,7 +794,7 @@ async def timer(ctx, timetocount,*,Text=None):
     message=await ctx.send(desc)
     while seconds!="0":
       tm.sleep(0.8)
-      seconds=str(int(seconds)-1)
+      seconds=int(seconds)-1
       newsec=str(seconds%60)
       newmin=str((seconds%3600)//60)
       newhrs=str(seconds//3600)
@@ -828,16 +828,16 @@ async def timer(ctx, timetocount,*,Text=None):
       newhrs=newhrs.replace("8",":eight: ")
       newhrs=newhrs.replace("9",":nine: ")
       newhrs=newhrs.replace("0",":zero: ")
-      if seconds=="1":
+      if seconds==1:
         desc=newhrs+"Countdown complete!"
       else:
         desc=newhrs+" hours "+newmin+" minutes "+newsec+"seconds left"
       await message.edit(content=desc)
-      seconds=str(int(seconds)-1)
+      seconds=int(seconds)-1
     if Text==None:
       await message.reply("Countdown complete!")
     else:
-          await message.reply(f"Countdown complete!\n"+Text)
+      await message.reply(f"Countdown complete!\n"+Text)
 
 
 @bot.command()
