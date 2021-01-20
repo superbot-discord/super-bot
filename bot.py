@@ -24,6 +24,7 @@ from pygoogletranslation import Translator
 import wikipedia
 
 hexstring_pattern = re.compile(r'#?([0-9A-F]{2})([0-9A-F]{2})([0-9A-F]{2})', re.IGNORECASE)
+time_pattern = re.compile('(\ds)?(\dm)?(\dh)?(\dD)?(\dW)?(\dM)?(\dY)?')
 intents = discord.Intents.all()
 bot = commands.Bot(command_prefix=commands.when_mentioned_or("="), intents=intents)
 client = discord.Client()
@@ -116,7 +117,8 @@ async def on_guild_role_delete(role):
 """@bot.event
 async def on_typing(channel, user, when):
   desc=user.mention+" started typing in "+channel.mention+" at "+when.strftime("%d %b, %Y (%a) %H:%M:%S")
-  embed = discord.Embed(title="Typing!", description=desc, color=user.color)
+  embed = discord.Embed(title="Typing!", description=desc, color=user.
+  )
   sendto = bot.get_channel(797989308023832607)
   await sendto.send(embed=embed)"""
 
@@ -747,28 +749,14 @@ async def emoji(ctx,*,newsec):
   await ctx.send(newsec)
 
 @bot.command()
-async def timer(ctx,seconds,*,Text=None):
-  newsec=seconds
-  newsec=newsec.replace("1",":one: ")
-  newsec=newsec.replace("2",":two: ")
-  newsec=newsec.replace("3",":three: ")
-  newsec=newsec.replace("4",":four: ")
-  newsec=newsec.replace("5",":five: ")
-  newsec=newsec.replace("6",":six: ")
-  newsec=newsec.replace("7",":seven: ")
-  newsec=newsec.replace("8",":eight: ")
-  newsec=newsec.replace("9",":nine: ")
-  newsec=newsec.replace("0",":zero: ")
-
-  if seconds=="1":
-    desc=newsec+"second left"
-  else:
-    desc=newsec+"seconds left"
-  message=await ctx.send(desc)
-  seconds=str(int(seconds)-1)
-  while seconds!="0":
-    tm.sleep(0.8)
-    newsec=seconds
+async def timer(ctx,seconds, timetocount,*,Text=None):
+    seconds = int(timedelta(**{
+        UNITS.get(m.group('unit').lower(), 'seconds'): int(m.group('val'))
+        for m in re.finditer(r'(?P<val>\d+)(?P<unit>[smhdw]?)', timetocount, flags=re.I)
+    }).total_seconds())
+    newsec=seconds%60
+    newmin=seconds%3600
+    newhrs=seconds//3600
     newsec=newsec.replace("1",":one: ")
     newsec=newsec.replace("2",":two: ")
     newsec=newsec.replace("3",":three: ")
@@ -779,16 +767,75 @@ async def timer(ctx,seconds,*,Text=None):
     newsec=newsec.replace("8",":eight: ")
     newsec=newsec.replace("9",":nine: ")
     newsec=newsec.replace("0",":zero: ")
+    newmin=newmin.replace("1",":one: ")
+    newmin=newmin.replace("2",":two: ")
+    newmin=newmin.replace("3",":three: ")
+    newmin=newmin.replace("4",":four: ")
+    newmin=newmin.replace("5",":five: ")
+    newmin=newmin.replace("6",":six: ")
+    newmin=newmin.replace("7",":seven: ")
+    newmin=newmin.replace("8",":eight: ")
+    newmin=newmin.replace("9",":nine: ")
+    newmin=newmin.replace("0",":zero: ")
+    newhrs=newhrs.replace("1",":one: ")
+    newhrs=newhrs.replace("2",":two: ")
+    newhrs=newhrs.replace("3",":three: ")
+    newhrs=newhrs.replace("4",":four: ")
+    newhrs=newhrs.replace("5",":five: ")
+    newhrs=newhrs.replace("6",":six: ")
+    newhrs=newhrs.replace("7",":seven: ")
+    newhrs=newhrs.replace("8",":eight: ")
+    newhrs=newhrs.replace("9",":nine: ")
+    newhrs=newhrs.replace("0",":zero: ")
     if seconds=="1":
-      desc=newsec+"second left"
+      desc="Countdown complete!"
     else:
-      desc=newsec+"seconds left"
-    await message.edit(content=desc)
+      desc=newhrs+" hours "+newmin+" minutes "+newsec+"seconds left"
+    message=await ctx.send(desc)
     seconds=str(int(seconds)-1)
-  if Text==None:
-    await message.reply("Countdown complete!")
-  else:
-        await message.reply("Countdown complete! "+Text)
+    while seconds!="0":
+      tm.sleep(0.8)
+      newsec=seconds
+      newsec=newsec.replace("1",":one: ")
+      newsec=newsec.replace("2",":two: ")
+      newsec=newsec.replace("3",":three: ")
+      newsec=newsec.replace("4",":four: ")
+      newsec=newsec.replace("5",":five: ")
+      newsec=newsec.replace("6",":six: ")
+      newsec=newsec.replace("7",":seven: ")
+      newsec=newsec.replace("8",":eight: ")
+      newsec=newsec.replace("9",":nine: ")
+      newsec=newsec.replace("0",":zero: ")
+      newmin=newmin.replace("1",":one: ")
+      newmin=newmin.replace("2",":two: ")
+      newmin=newmin.replace("3",":three: ")
+      newmin=newmin.replace("4",":four: ")
+      newmin=newmin.replace("5",":five: ")
+      newmin=newmin.replace("6",":six: ")
+      newmin=newmin.replace("7",":seven: ")
+      newmin=newmin.replace("8",":eight: ")
+      newmin=newmin.replace("9",":nine: ")
+      newmin=newmin.replace("0",":zero: ")
+      newhrs=newhrs.replace("1",":one: ")
+      newhrs=newhrs.replace("2",":two: ")
+      newhrs=newhrs.replace("3",":three: ")
+      newhrs=newhrs.replace("4",":four: ")
+      newhrs=newhrs.replace("5",":five: ")
+      newhrs=newhrs.replace("6",":six: ")
+      newhrs=newhrs.replace("7",":seven: ")
+      newhrs=newhrs.replace("8",":eight: ")
+      newhrs=newhrs.replace("9",":nine: ")
+      newhrs=newhrs.replace("0",":zero: ")
+      if seconds=="1":
+        desc=newhrs+"Countdown complete!"
+      else:
+        desc=newhrs+" hours "+newmin+" minutes "+newsec+"seconds left"
+      await message.edit(content=desc)
+      seconds=str(int(seconds)-1)
+    if Text==None:
+      await message.reply("Countdown complete!")
+    else:
+          await message.reply(f"Countdown complete!\n"+Text)
 
 
 @bot.command()
