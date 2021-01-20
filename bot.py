@@ -24,7 +24,7 @@ from pygoogletranslation import Translator
 import wikipedia
 
 hexstring_pattern = re.compile(r'#?([0-9A-F]{2})([0-9A-F]{2})([0-9A-F]{2})', re.IGNORECASE)
-time_pattern = re.compile('(\ds)?(\dm)?(\dh)?(\dD)?(\dW)?(\dM)?(\dY)?')
+UNITS = {'s':'seconds', 'm':'minutes', 'h':'hours', 'd':'days', 'w':'weeks'}
 intents = discord.Intents.all()
 bot = commands.Bot(command_prefix=commands.when_mentioned_or("="), intents=intents)
 client = discord.Client()
