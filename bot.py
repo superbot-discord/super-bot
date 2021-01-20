@@ -755,7 +755,7 @@ async def timer(ctx, timetocount,*,Text=None):
         for m in re.finditer(r'(?P<val>\d+)(?P<unit>[smhdw]?)', timetocount, flags=re.I)
     }).total_seconds())
     newsec=str(seconds%60)
-    newmin=str(seconds%3600)
+    newmin=str((seconds%3600)//60)
     newhrs=str(seconds//3600)
     newsec=newsec.replace("1",":one: ")
     newsec=newsec.replace("2",":two: ")
