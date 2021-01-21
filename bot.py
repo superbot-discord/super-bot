@@ -22,6 +22,8 @@ import imgkit
 import pytube
 from pygoogletranslation import Translator
 import wikipedia
+from PyDictionary import PyDictionary
+dictionary=PyDictionary()
 allid=[]
 hexstring_pattern = re.compile(r'#?([0-9A-F]{2})([0-9A-F]{2})([0-9A-F]{2})', re.IGNORECASE)
 id_pattern = re.compile(r'([A-Z]{5})', re.IGNORECASE)
@@ -684,6 +686,23 @@ async def youtube(ctx, *, url):
   os.remove('YTVideo.mp4')
 
 @bot.command()
+async def dictionary(ctx, *, word):
+  ti = "Definition of "+word
+  desc = ""
+  definitions = dictionary.meaning(word)
+  for count in list(definitions.keys()):
+    desc = desc + "**"+count+f"**\n"+definitions[count]+f"\n"
+  desc = desc + f"**Synonyms**\n"
+  for count in dictionary.synonym(word):
+    desc = desc + count + ", "
+  desc = desc [:-2]
+  desc = desc + f"\n**Antonyms**\n"
+  for count in dictionary.antonym(word):
+    desc = desc + count + ", "
+  desc = desc [:-2]
+  embed = discord.Embed(title=ti, description=desc)
+
+@bot.command()
 async def wiki(ctx, *, query):
   wikipedia.set_lang("en")
   try:
@@ -827,17 +846,6 @@ async def insert(ctx,emoji,*,text):
 async def purge(ctx,num):
   num=int(num)
   await ctx.channel.purge(limit=num+1)
-
-"""@bot.command()
-async def autodelete(ctx,num=None):
-  global autodel
-  isnum=num.isnumeric()
-  if isnum:
-    autodel=int(num)
-    await ctx.send("Autodelete has been set to "+str(autodel)+" seconds.")
-  else:
-    autodel=None
-    await ctx.send("Autodelete has been disabled.")"""
   
 @bot.command()
 async def colour(ctx, arg1, arg2=None, arg3=None):
