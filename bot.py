@@ -24,7 +24,7 @@ from pygoogletranslation import Translator
 import wikipedia
 allid=[]
 hexstring_pattern = re.compile(r'#?([0-9A-F]{2})([0-9A-F]{2})([0-9A-F]{2})', re.IGNORECASE)
-hexstring_pattern = re.compile(r'([A-Z]{5})', re.IGNORECASE)
+id_pattern = re.compile(r'([A-Z]{5})', re.IGNORECASE)
 UNITS = {'s':'seconds', 'm':'minutes', 'h':'hours', 'd':'days', 'w':'weeks'}
 intents = discord.Intents.all()
 bot = commands.Bot(command_prefix=commands.when_mentioned_or("="), intents=intents)
@@ -754,6 +754,7 @@ async def terminate(ctx, *, idc):
   if id_pattern.fullmatch(idc) and len(idc)==5:
     if allid.count(idc.upper())==1:
       exec("terminate"+idc.lower()+"=1",globals())
+      allid.remove(idc.upper())
       await ctx.send("Timer terminated!")
     else:
       await ctx.send("Please provide a valid timer code. A timer code could be found at the beginning of a running timer.")
