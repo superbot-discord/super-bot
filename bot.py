@@ -22,7 +22,7 @@ import imgkit
 import pytube
 from pygoogletranslation import Translator
 import wikipedia
-
+allid=[]
 hexstring_pattern = re.compile(r'#?([0-9A-F]{2})([0-9A-F]{2})([0-9A-F]{2})', re.IGNORECASE)
 hexstring_pattern = re.compile(r'([A-Z]{5})', re.IGNORECASE)
 UNITS = {'s':'seconds', 'm':'minutes', 'h':'hours', 'd':'days', 'w':'weeks'}
