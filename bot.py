@@ -799,7 +799,7 @@ async def rtimer(ctx, timetocount,*,Text=None):
       newhrs=newhrs.replace("9",":nine: ")
       newhrs=newhrs.replace("0",":zero: ")
       desc=newhrs+" :regional_indicator_h: "+newmin+" :regional_indicator_m: "+newsec+":regional_indicator_s:"
-      message=await ctx.send(desc)
+      await message.edit(desc)
     await message.edit(content="Countdown complete!")
     if Text==None:
       await message.reply("Countdown complete!")
