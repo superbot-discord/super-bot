@@ -161,6 +161,12 @@ Bans a desired user. The Reason is optional.
   elif cat=="information" or cat=="info" or cat=="informative":
     ti="Information Commands"
     desc="""
+**math [Formula]**
+Does boring math for you. Logical comparisons, scientific math, variables and user-defined functions are available. Please check the [documentation](https://github.com/johann-lau/Bot/blob/main/README.md#math-help) for more information.
+
+**define [name] [definition] [arguments separated by spaces]**
+Defines a custom function. Please check the [documentation](https://github.com/johann-lau/Bot/blob/main/README.md#math-help) for more information.
+
 **time {Timezone}**
 Checks the time in your timezone. If Timezone is not specified, you will see the UTC time.
 
@@ -286,6 +292,12 @@ Turns the PDF to plain text.
   elif cat=="ban":
     ti="ban [User Name, Nickname, ID or Mention] {Reason}"
     desc="Bans a desired user. The Reason is optional."
+  elif cat=="math":
+    ti="math [Formula]"
+    desc="Does boring math for you. Logical comparisons, scientific math, variables and user-defined functions are available. Please check the [documentation](https://github.com/johann-lau/Bot/blob/main/README.md#math-help) for more information."
+  elif cat=="define":
+    ti="define [name] [definition] [arguments separated by spaces]"
+    desc="Defines a custom function. Please check the [documentation](https://github.com/johann-lau/Bot/blob/main/README.md#math-help) for more information."
   elif cat=="time":
     ti="time {Timezone}"
     desc="Checks the time in your timezone. If Timezone is not specified, you will see the UTC time."
@@ -337,10 +349,12 @@ Turns the PDF to plain text.
 `insert` `spoiler` `rawspoiler` `reverse` `emoji`
 
 **Moderation & Information Commands**
-`kick` `ban` `time` `rtimer` `terminate` `timer` (Outdated)
+`kick` `ban` `math` `define` `time` `rtimer` `terminate` `timer` (Outdated)
 
 **Web Commands & Developer Tools**
 `screenshot` `youtube` `wiki` `ocr` `text` `html` (BETA)
+
+Need help? check the [documentation](https://github.com/johann-lau/Bot#bot-documentation)!
   """
   embed=discord.Embed(title=ti, description=desc, color=0x0061ff)
   await ctx.send(embed=embed)
@@ -942,32 +956,32 @@ async def reverse(ctx,*,text):
 async def emoji(ctx,*,newsec):
   newsec=newsec.replace(" ","   ")
   newsec=newsec.lower()
-  newsec=newsec.replace("a","$_a: ")
-  newsec=newsec.replace("b","$_b: ")
-  newsec=newsec.replace("c","$_c: ")
-  newsec=newsec.replace("d","$_d: ")
-  newsec=newsec.replace("e","$_e: ")
-  newsec=newsec.replace("f","$_f: ")
-  newsec=newsec.replace("g","$_g: ")
-  newsec=newsec.replace("h","$_h: ")
-  newsec=newsec.replace("i","$_i: ")
-  newsec=newsec.replace("j","$_j: ")
-  newsec=newsec.replace("k","$_k: ")
-  newsec=newsec.replace("l","$_l: ")
-  newsec=newsec.replace("m","$_m: ")
-  newsec=newsec.replace("n","$_n: ")
-  newsec=newsec.replace("o","$_o: ")
-  newsec=newsec.replace("p","$_p: ")
-  newsec=newsec.replace("q","$_q: ")
-  newsec=newsec.replace("r","$_r: ")
-  newsec=newsec.replace("s","$_s: ")
-  newsec=newsec.replace("t","$_t: ")
-  newsec=newsec.replace("u","$_u: ")
-  newsec=newsec.replace("v","$_v: ")
-  newsec=newsec.replace("w","$_w: ")
-  newsec=newsec.replace("x","$_x: ")
-  newsec=newsec.replace("y","$_y: ")
-  newsec=newsec.replace("z","$_z: ")
+  newsec=newsec.replace("a","$_a:")
+  newsec=newsec.replace("b","$_b:")
+  newsec=newsec.replace("c","$_c:")
+  newsec=newsec.replace("d","$_d:")
+  newsec=newsec.replace("e","$_e:")
+  newsec=newsec.replace("f","$_f:")
+  newsec=newsec.replace("g","$_g:")
+  newsec=newsec.replace("h","$_h:")
+  newsec=newsec.replace("i","$_i:")
+  newsec=newsec.replace("j","$_j:")
+  newsec=newsec.replace("k","$_k:")
+  newsec=newsec.replace("l","$_l:")
+  newsec=newsec.replace("m","$_m:")
+  newsec=newsec.replace("n","$_n:")
+  newsec=newsec.replace("o","$_o:")
+  newsec=newsec.replace("p","$_p:")
+  newsec=newsec.replace("q","$_q:")
+  newsec=newsec.replace("r","$_r:")
+  newsec=newsec.replace("s","$_s:")
+  newsec=newsec.replace("t","$_t:")
+  newsec=newsec.replace("u","$_u:")
+  newsec=newsec.replace("v","$_v:")
+  newsec=newsec.replace("w","$_w:")
+  newsec=newsec.replace("x","$_x:")
+  newsec=newsec.replace("y","$_y:")
+  newsec=newsec.replace("z","$_z:")
   newsec=newsec.replace("$_a",":regional_indicator_a")
   newsec=newsec.replace("$_b",":regional_indicator_b")
   newsec=newsec.replace("$_c",":regional_indicator_c")
@@ -994,25 +1008,25 @@ async def emoji(ctx,*,newsec):
   newsec=newsec.replace("$_x",":regional_indicator_x")
   newsec=newsec.replace("$_y",":regional_indicator_y")
   newsec=newsec.replace("$_z",":regional_indicator_z")
-  newsec=newsec.replace("!",":exclamation: ")
-  newsec=newsec.replace("$",":heavy_dollar_sign: ")
-  newsec=newsec.replace("?",":question: ")
-  newsec=newsec.replace("#",":hash: ")
-  newsec=newsec.replace("*",":asterisk: ")
-  newsec=newsec.replace("+",":heavy_plus_sign:" )
-  newsec=newsec.replace("-",":heavy_minus_sign: ")
-  newsec=newsec.replace("×",":heavy_multiplication_x: ")
-  newsec=newsec.replace("÷",":heavy_division_sign: ")
-  newsec=newsec.replace("1",":one: ")
-  newsec=newsec.replace("2",":two: ")
-  newsec=newsec.replace("3",":three: ")
-  newsec=newsec.replace("4",":four: ")
-  newsec=newsec.replace("5",":five: ")
-  newsec=newsec.replace("6",":six: ")
-  newsec=newsec.replace("7",":seven: ")
-  newsec=newsec.replace("8",":eight: ")
-  newsec=newsec.replace("9",":nine: ")
-  newsec=newsec.replace("0",":zero: ")
+  newsec=newsec.replace("!",":exclamation:")
+  newsec=newsec.replace("$",":heavy_dollar_sign:")
+  newsec=newsec.replace("?",":question:")
+  newsec=newsec.replace("#",":hash:")
+  newsec=newsec.replace("*",":asterisk:")
+  newsec=newsec.replace("+",":heavy_plus_sign:")
+  newsec=newsec.replace("-",":heavy_minus_sign:")
+  newsec=newsec.replace("×",":heavy_multiplication_x:")
+  newsec=newsec.replace("÷",":heavy_division_sign:")
+  newsec=newsec.replace("1",":one:")
+  newsec=newsec.replace("2",":two:")
+  newsec=newsec.replace("3",":three:")
+  newsec=newsec.replace("4",":four:")
+  newsec=newsec.replace("5",":five:")
+  newsec=newsec.replace("6",":six:")
+  newsec=newsec.replace("7",":seven:")
+  newsec=newsec.replace("8",":eight:")
+  newsec=newsec.replace("9",":nine:")
+  newsec=newsec.replace("0",":zero:")
   await ctx.send(newsec)
 
 @bot.command()
