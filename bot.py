@@ -756,6 +756,7 @@ async def rtimer(ctx, timetocount,*,Text=None):
     }).total_seconds())
     message = await ctx.send("Starting countdown…")
     end = datetime.now() + timedelta(seconds = sec)
+    seconds = int((end - datetime.now()).total_seconds())
     while seconds>=1:
       seconds = int((end - datetime.now()).total_seconds())
       newsec=str(seconds%60)
