@@ -76,6 +76,48 @@ Does the `ping` command 5 times, thus more accurate.
     desc="""
 **server**
 Shows information about the current server.
+
+**role [Role ID or Mention]**
+Shows information about the desired role.
+
+**channel {Channel Name or ID}**
+Shows information about the desired channel.
+
+**voicechannel [Channel Name or ID]**
+Shows information about the desired Voice Channel.
+
+**user [User Name, Nickname, ID or Mention] [Channel Name, ID or Mention]**
+Shows information about the desired User in a specific channel.
+The arguments are optional.
+
+**uservoice [User Name, Nickname, ID or Mention] [Channel Name or ID]**
+Shows information about the desired User in a specific voice channel.
+
+**avatar {User Name, Nickname, ID or Mention}**
+Shows the avatar of the desired user.
+
+**voicechannel [Invite link or ID]**
+Shows information about the desired invite link.
+
+**template [Template ID]**
+Shows information about the desired server template.\nThis command is still in BETA.
+  """
+  elif cat=="discordinfo" or cat=="discordinformation" or cat=="discordi":
+    desc="""
+**spam [Number of times to spam] [Text to spam]**
+Spams the text.\nIt must be less than 30 times and without any mentions.
+
+**embed [Title] [Description] [Color] [Author] [Author URL] [Author Image URL] [Footer] [Thumbnail Image URL] [Image URL]…**
+Generates an embed.\n**One line for each argument.**\nPlease check the [documentation](https://github.com/johann-lau/Bot#embed-message-help) for more information.
+
+**pretend [User Name, Nickname, ID or Mention] [Text]**
+Pretends as a user and send something, using the magic of webhooks.
+
+**pretendembed [User Name, Nickname, ID or Mention] [Title] [Description] [Color] [Author] [Author URL] [Author Image URL] [Footer] [Thumbnail Image URL] [Image URL]…**
+Pretends as a user and generates an embed.\n**One line for each argument.**\nPlease check the [documentation](https://github.com/johann-lau/Bot#embed-message-help) for more information.
+
+**pretendspam [User Name, Nickname, ID or Mention] [Text]**
+Pretends as a user and spams the text.\nIt must be less than 30 times and without any mentions.
   """
   elif cat=="help":
     ti="help {Command or Category}"
@@ -110,8 +152,8 @@ Shows information about the current server.
   elif cat=="role":
     ti="role [Role ID or Mention]"
     desc="Shows information about the desired role."
-  elif cat=="channel [Channel Name, ID or Mention]":
-    ti="channel"
+  elif cat=="channel":
+    ti="channel {Channel Name, ID or Mention}"
     desc="Shows information about the desired channel."
   elif cat=="voicechannel":
     ti="voicechannel [Channel Name or ID]"
@@ -122,8 +164,8 @@ Shows information about the current server.
   elif cat=="uservoice":
     ti="uservoice [User Name, Nickname, ID or Mention] [Channel Name or ID]"
     desc="Shows information about the desired User in a specific voice channel."
-  elif cat=="avatar [User Name, Nickname, ID or Mention]":
-    ti="avatar "
+  elif cat=="avatar":
+    ti="avatar [User Name, Nickname, ID or Mention]"
     desc="Shows the avatar of the desired user."
   elif cat=="invite":
     ti="voicechannel [Invite link or ID]"
