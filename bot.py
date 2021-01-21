@@ -749,14 +749,61 @@ async def emoji(ctx,*,newsec):
   await ctx.send(newsec)
 
 @bot.command()
-async def timer(ctx, timetocount,*,Text=None):
-    seconds = int(timedelta(**{
+async def rtimer(ctx, timetocount,*,Text=None):
+    sec = int(timedelta(**{
         UNITS.get(m.group('unit').lower(), 'seconds'): int(m.group('val'))
         for m in re.finditer(r'(?P<val>\d+)(?P<unit>[smhdw]?)', timetocount, flags=re.I)
     }).total_seconds())
-    newsec=str(seconds%60)
-    newmin=str((seconds%3600)//60)
-    newhrs=str(seconds//3600)
+    message = await ctx.send("Starting countdown…")
+    end = datetime.now() + timedelta(seconds = sec)
+    while seconds>=1:
+      seconds = int((end - datetime.now()).total_seconds())
+      newsec=str(seconds%60)
+      newmin=str((seconds%3600)//60)
+      newhrs=str(seconds//3600)
+      if int(newsec) <= 9:
+        newsec = "0"+newsec
+      if int(newmin) <= 9:
+        newmin = "0"+newmin
+      if int(newhrs) <= 9:
+        newhrs = "0"+newhrs
+      newsec=newsec.replace("1",":one: ")
+      newsec=newsec.replace("2",":two: ")
+      newsec=newsec.replace("3",":three: ")
+      newsec=newsec.replace("4",":four: ")
+      newsec=newsec.replace("5",":five: ")
+      newsec=newsec.replace("6",":six: ")
+      newsec=newsec.replace("7",":seven: ")
+      newsec=newsec.replace("8",":eight: ")
+      newsec=newsec.replace("9",":nine: ")
+      newsec=newsec.replace("0",":zero: ")
+      newmin=newmin.replace("1",":one: ")
+      newmin=newmin.replace("2",":two: ")
+      newmin=newmin.replace("3",":three: ")
+      newmin=newmin.replace("4",":four: ")
+      newmin=newmin.replace("5",":five: ")
+      newmin=newmin.replace("6",":six: ")
+      newmin=newmin.replace("7",":seven: ")
+      newmin=newmin.replace("8",":eight: ")
+      newmin=newmin.replace("9",":nine: ")
+      newmin=newmin.replace("0",":zero: ")
+      newhrs=newhrs.replace("1",":one: ")
+      newhrs=newhrs.replace("2",":two: ")
+      newhrs=newhrs.replace("3",":three: ")
+      newhrs=newhrs.replace("4",":four: ")
+      newhrs=newhrs.replace("5",":five: ")
+      newhrs=newhrs.replace("6",":six: ")
+      newhrs=newhrs.replace("7",":seven: ")
+      newhrs=newhrs.replace("8",":eight: ")
+      newhrs=newhrs.replace("9",":nine: ")
+      newhrs=newhrs.replace("0",":zero: ")
+      desc=newhrs+" :regional_indicator_h: "+newmin+" :regional_indicator_m: "+newsec+":regional_indicator_s:"
+      message=await ctx.send(desc)
+    await message.edit(content="Countdown complete!")
+    if Text==None:
+      await message.reply("Countdown complete!")
+    else:
+      await message.reply(f"Countdown complete!\n"+Text)
 
 @bot.command()
 async def timer(ctx, timetocount,*,Text=None):
@@ -810,7 +857,6 @@ async def timer(ctx, timetocount,*,Text=None):
       desc=newhrs+" :regional_indicator_h: "+newmin+" :regional_indicator_m: "+newsec+":regional_indicator_s:"
     message=await ctx.send(desc)
     while seconds!=-1:
-      tm.sleep(0.8)
       seconds=int(seconds)-1
       newsec=str(seconds%60)
       newmin=str((seconds%3600)//60)
