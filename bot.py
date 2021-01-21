@@ -753,10 +753,10 @@ async def rtimer(ctx, timetocount,*,Text=None):
     sec = int(timedelta(**{
         UNITS.get(m.group('unit').lower(), 'seconds'): int(m.group('val'))
         for m in re.finditer(r'(?P<val>\d+)(?P<unit>[smhdw]?)', timetocount, flags=re.I)
-    }).total_seconds())
-    message = await ctx.send("Starting countdown…")
     end = datetime.now() + timedelta(seconds = sec)
     seconds = int((end - datetime.now()).total_seconds())
+    }).total_seconds())
+    message = await ctx.send("Initializing countdown…")
     while seconds>=1:
       seconds = int((end - datetime.now()).total_seconds())
       newsec=str(seconds%60)
@@ -799,7 +799,7 @@ async def rtimer(ctx, timetocount,*,Text=None):
       newhrs=newhrs.replace("9",":nine: ")
       newhrs=newhrs.replace("0",":zero: ")
       desc=newhrs+" :regional_indicator_h: "+newmin+" :regional_indicator_m: "+newsec+":regional_indicator_s:"
-      await message.edit(desc)
+      await message.edit(content = desc)
     await message.edit(content="Countdown complete!")
     if Text==None:
       await message.reply("Countdown complete!")
@@ -853,7 +853,7 @@ async def timer(ctx, timetocount,*,Text=None):
     newhrs=newhrs.replace("0",":zero: ")
     if seconds<=0:
       desc="Countdown complete!"
-      await message.edit("Countdown completed for "+str(timetocount))
+      await message.edit(content = "Countdown completed for "+str(timetocount))
     else:
       desc=newhrs+" :regional_indicator_h: "+newmin+" :regional_indicator_m: "+newsec+":regional_indicator_s:"
     message=await ctx.send(desc)
