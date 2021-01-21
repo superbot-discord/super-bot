@@ -787,12 +787,12 @@ async def timer(ctx, timetocount,*,Text=None):
     newhrs=newhrs.replace("8",":eight: ")
     newhrs=newhrs.replace("9",":nine: ")
     newhrs=newhrs.replace("0",":zero: ")
-    if seconds=="1":
+    if seconds==1:
       desc="Countdown complete!"
     else:
       desc=newhrs+" hours "+newmin+" minutes "+newsec+"seconds left"
     message=await ctx.send(desc)
-    while seconds!="0":
+    while seconds!=0:
       tm.sleep(0.8)
       seconds=int(seconds)-1
       newsec=str(seconds%60)
@@ -833,7 +833,6 @@ async def timer(ctx, timetocount,*,Text=None):
       else:
         desc=newhrs+" hours "+newmin+" minutes "+newsec+"seconds left"
       await message.edit(content=desc)
-      seconds=int(seconds)-1
     if Text==None:
       await message.reply("Countdown complete!")
     else:
