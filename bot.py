@@ -751,11 +751,11 @@ async def emoji(ctx,*,newsec):
 @bot.command()
 async def rtimer(ctx, timetocount,*,Text=None):
     sec = int(timedelta(**{
-        UNITS.get(m.group('unit').lower(), 'seconds'): int(m.group('val'))
-        for m in re.finditer(r'(?P<val>\d+)(?P<unit>[smhdw]?)', timetocount, flags=re.I)
+      UNITS.get(m.group('unit').lower(), 'seconds'): int(m.group('val'))
+      for m in re.finditer(r'(?P<val>\d+)(?P<unit>[smhdw]?)', timetocount, flags=re.I)
+    }).total_seconds())
     end = datetime.now() + timedelta(seconds = sec)
     seconds = int((end - datetime.now()).total_seconds())
-    }).total_seconds())
     message = await ctx.send("Initializing countdown…")
     while seconds>=1:
       seconds = int((end - datetime.now()).total_seconds())
