@@ -757,6 +757,12 @@ async def timer(ctx, timetocount,*,Text=None):
     newsec=str(seconds%60)
     newmin=str((seconds%3600)//60)
     newhrs=str(seconds//3600)
+    if newsec <= 9:
+      newsec = "0"+newsec
+    if newmin <= 9:
+      newmin = "0"+newmin
+    if newhrs <= 9:
+      newhrs = "0"+newhrs
     newsec=newsec.replace("1",":one: ")
     newsec=newsec.replace("2",":two: ")
     newsec=newsec.replace("3",":three: ")
@@ -790,14 +796,20 @@ async def timer(ctx, timetocount,*,Text=None):
     if seconds==1:
       desc="Countdown complete!"
     else:
-      desc=newhrs+" hours "+newmin+" minutes "+newsec+"seconds left"
+      desc=newhrs+" :regional_indicator_h: "+newmin+" :regional_indicator_m: "+newsec+":regional_indicator_s: left"
     message=await ctx.send(desc)
-    while seconds!=0:
+    while seconds!=-1:
       tm.sleep(0.8)
       seconds=int(seconds)-1
       newsec=str(seconds%60)
       newmin=str((seconds%3600)//60)
       newhrs=str(seconds//3600)
+      if newsec <= 9:
+        newsec = "0"+newsec
+      if newmin <= 9:
+        newmin = "0"+newmin
+      if newhrs <= 9:
+        newhrs = "0"+newhrs
       newsec=newsec.replace("1",":one: ")
       newsec=newsec.replace("2",":two: ")
       newsec=newsec.replace("3",":three: ")
@@ -828,16 +840,15 @@ async def timer(ctx, timetocount,*,Text=None):
       newhrs=newhrs.replace("8",":eight: ")
       newhrs=newhrs.replace("9",":nine: ")
       newhrs=newhrs.replace("0",":zero: ")
-      if seconds==1:
+      if seconds==0:
         desc=newhrs+"Countdown complete!"
       else:
-        desc=newhrs+" hours "+newmin+" minutes "+newsec+"seconds left"
+        desc=newhrs+" :regional_indicator_h: "+newmin+" :regional_indicator_m: "+newsec+":regional_indicator_s: left"
       await message.edit(content=desc)
     if Text==None:
       await message.reply("Countdown complete!")
     else:
       await message.reply(f"Countdown complete!\n"+Text)
-
 
 @bot.command()
 async def getrole(ctx, member : discord.Member, role : discord.Role):
