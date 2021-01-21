@@ -24,6 +24,7 @@ from pygoogletranslation import Translator
 import wikipedia
 
 hexstring_pattern = re.compile(r'#?([0-9A-F]{2})([0-9A-F]{2})([0-9A-F]{2})', re.IGNORECASE)
+hexstring_pattern = re.compile(r'([A-Z]{5})', re.IGNORECASE)
 UNITS = {'s':'seconds', 'm':'minutes', 'h':'hours', 'd':'days', 'w':'weeks'}
 intents = discord.Intents.all()
 bot = commands.Bot(command_prefix=commands.when_mentioned_or("="), intents=intents)
@@ -749,6 +750,17 @@ async def emoji(ctx,*,newsec):
   await ctx.send(newsec)
 
 @bot.command()
+async def terminate(ctx, *, idc):
+  if id_pattern.fullmatch(idc) and len(idc)==5:
+    if allid.count(idc.upper())==1:
+      exec("terminate"+idc.lower()+"=1",globals())
+      await ctx.send("Timer terminated!")
+    else:
+      await ctx.send("Please provide a valid timer code. A timer code could be found at the beginning of a running timer.")
+  else:
+    await ctx.send("Please provide an 5-alphabet ID code. Example: `ABCDE`")
+
+@bot.command()
 async def rtimer(ctx, timetocount,*,Text=None):
     sec = int(timedelta(**{
       UNITS.get(m.group('unit').lower(), 'seconds'): int(m.group('val'))
@@ -756,9 +768,39 @@ async def rtimer(ctx, timetocount,*,Text=None):
     }).total_seconds())
     end = datetime.now() + timedelta(seconds = sec)
     seconds = int((end - datetime.now()).total_seconds())
+    idcode = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"[ra.randint(0, 25)]+"ABCDEFGHIJKLMNOPQRSTUVWXYZ"[ra.randint(0, 25)]+"ABCDEFGHIJKLMNOPQRSTUVWXYZ"[ra.randint(0, 25)]+"ABCDEFGHIJKLMNOPQRSTUVWXYZ"[ra.randint(0, 25)]+"ABCDEFGHIJKLMNOPQRSTUVWXYZ"[ra.randint(0, 25)]
+    exec("terminate"+idcode.lower()+"=0",globals())
+    newidcode=idcode
+    newidcode=newidcode.replace("A",":regional_indicator_a:")
+    newidcode=newidcode.replace("B",":regional_indicator_b:")
+    newidcode=newidcode.replace("C",":regional_indicator_c:")
+    newidcode=newidcode.replace("D",":regional_indicator_d:")
+    newidcode=newidcode.replace("E",":regional_indicator_e:")
+    newidcode=newidcode.replace("F",":regional_indicator_f:")
+    newidcode=newidcode.replace("G",":regional_indicator_g:")
+    newidcode=newidcode.replace("H",":regional_indicator_h:")
+    newidcode=newidcode.replace("I",":regional_indicator_i:")
+    newidcode=newidcode.replace("J",":regional_indicator_j:")
+    newidcode=newidcode.replace("K",":regional_indicator_k:")
+    newidcode=newidcode.replace("L",":regional_indicator_l:")
+    newidcode=newidcode.replace("M",":regional_indicator_m:")
+    newidcode=newidcode.replace("N",":regional_indicator_n:")
+    newidcode=newidcode.replace("O",":regional_indicator_o:")
+    newidcode=newidcode.replace("P",":regional_indicator_p:")
+    newidcode=newidcode.replace("Q",":regional_indicator_q:")
+    newidcode=newidcode.replace("R",":regional_indicator_r:")
+    newidcode=newidcode.replace("S",":regional_indicator_s:")
+    newidcode=newidcode.replace("T",":regional_indicator_t:")
+    newidcode=newidcode.replace("U",":regional_indicator_u:")
+    newidcode=newidcode.replace("V",":regional_indicator_v:")
+    newidcode=newidcode.replace("W",":regional_indicator_w:")
+    newidcode=newidcode.replace("X",":regional_indicator_x:")
+    newidcode=newidcode.replace("Y",":regional_indicator_y:")
+    newidcode=newidcode.replace("Z",":regional_indicator_z:")
+    allid.append(idcode)
     desc = "Initializing countdown…"
     message = await ctx.send(desc)
-    while seconds>=1:
+    while seconds>=1 and eval(terminate"+idcode.lower())==0:
       seconds = int((end - datetime.now()).total_seconds())
       newsec=str(seconds%60)
       newmin=str((seconds%3600)//60)
@@ -800,7 +842,7 @@ async def rtimer(ctx, timetocount,*,Text=None):
       newhrs=newhrs.replace("9",":nine: ")
       newhrs=newhrs.replace("0",":zero: ")
       prevdesc = desc
-      desc=newhrs+" :regional_indicator_h: "+newmin+" :regional_indicator_m: "+newsec+":regional_indicator_s:"
+      desc=newidcode+"  "+newhrs+" :regional_indicator_h: "+newmin+" :regional_indicator_m: "+newsec+":regional_indicator_s:"
       if desc != prevdesc:
         await message.edit(content = desc)
       if seconds<0:
