@@ -757,6 +757,16 @@ async def timer(ctx, timetocount,*,Text=None):
     newsec=str(seconds%60)
     newmin=str((seconds%3600)//60)
     newhrs=str(seconds//3600)
+
+@bot.command()
+async def timer(ctx, timetocount,*,Text=None):
+    seconds = int(timedelta(**{
+        UNITS.get(m.group('unit').lower(), 'seconds'): int(m.group('val'))
+        for m in re.finditer(r'(?P<val>\d+)(?P<unit>[smhdw]?)', timetocount, flags=re.I)
+    }).total_seconds())
+    newsec=str(seconds%60)
+    newmin=str((seconds%3600)//60)
+    newhrs=str(seconds//3600)
     if int(newsec) <= 9:
       newsec = "0"+newsec
     if int(newmin) <= 9:
@@ -793,10 +803,11 @@ async def timer(ctx, timetocount,*,Text=None):
     newhrs=newhrs.replace("8",":eight: ")
     newhrs=newhrs.replace("9",":nine: ")
     newhrs=newhrs.replace("0",":zero: ")
-    if seconds==1:
+    if seconds<=0:
       desc="Countdown complete!"
+      await message.edit("Countdown completed for "+str(timetocount))
     else:
-      desc=newhrs+" :regional_indicator_h: "+newmin+" :regional_indicator_m: "+newsec+":regional_indicator_s: left"
+      desc=newhrs+" :regional_indicator_h: "+newmin+" :regional_indicator_m: "+newsec+":regional_indicator_s:"
     message=await ctx.send(desc)
     while seconds!=-1:
       tm.sleep(0.8)
@@ -840,11 +851,13 @@ async def timer(ctx, timetocount,*,Text=None):
       newhrs=newhrs.replace("8",":eight: ")
       newhrs=newhrs.replace("9",":nine: ")
       newhrs=newhrs.replace("0",":zero: ")
-      if seconds==0:
+      if seconds<=1:
         desc=newhrs+"Countdown complete!"
+        await message.edit("Countdown completed for "+str(timetocount))
+        break
       else:
-        desc=newhrs+" :regional_indicator_h: "+newmin+" :regional_indicator_m: "+newsec+":regional_indicator_s: left"
-      await message.edit(content=desc)
+        desc=newhrs+" :regional_indicator_h: "+newmin+" :regional_indicator_m: "+newsec+":regional_indicator_s:"
+        await message.edit(content=desc)
     if Text==None:
       await message.reply("Countdown complete!")
     else:
