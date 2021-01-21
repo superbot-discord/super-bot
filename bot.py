@@ -41,8 +41,11 @@ class MyClient(discord.Client):
 async def help(ctx, *, cat=None):
   if cat!=None:
     cat=cat.lower()
-  ti="Commands: Tunnelers' Abyss"
-  if cat=="ta" or cat=="tunnelers abyss" or cat=="tunnelers-abyss" or cat=="tunnelersabyss":
+    cat=cat.replace(" ","")
+    cat=cat.replace("-","")
+    cat=cat.replace("_","")
+  if cat=="ta" or cat=="tunnelersabyss":
+    ti="Commands: Tunnelers' Abyss"
     desc="""
 **admins**
 Show admins of the server.
@@ -69,7 +72,7 @@ Checks the speed of the bot.
 **speedtest**
 Does the `ping` command 5 times, thus more accurate.
   """
-  elif cat=="discordinfo" or cat=="discord info" or cat=="discordinformation" or cat=="discord information" or cat=="discordi":
+  elif cat=="discordinfo" or cat=="discordinformation" or cat=="discordi":
     desc="""
 **server**
 Shows information about the current server.
@@ -139,7 +142,7 @@ Shows information about the current server.
     desc="Pretends as a user and send something, using the magic of webhooks."
   elif cat=="pretendembed":
     ti="pretendembed [User Name, Nickname, ID or Mention] [Title] [Description] [Color]…"
-    desc=f"Pretends as a user and generates an embed.\n**One line for each argument.**\nPlease check the [documentation](https://github.com/johann-lau/Bot#embed-message-help) for more information.""
+    desc=f"Pretends as a user and generates an embed.\n**One line for each argument.**\nPlease check the [documentation](https://github.com/johann-lau/Bot#embed-message-help) for more information."
   elif cat=="pretendspam":
     ti="pretendspam [User Name, Nickname, ID or Mention] [Text]"
     desc=f"Pretends as a user and spams the text.\nIt must be less than 30 times and without any mentions."
@@ -195,7 +198,9 @@ Shows information about the current server.
     ti="Tunnelers' Bot Help"
     desc="""
 Prefix: =
-  
+
+**Categories**
+`ta` `tunnelers abyss`
 
 **Basic Commands**
 `help` `ping` `speedtest`
