@@ -37,6 +37,190 @@ class MyClient(discord.Client):
   async def on_ready(self):
     print('Connected!')
 
+@bot.command()
+async def help(ctx, *, cat=None):
+  if cat!=None:
+    cat=cat.lower()
+  ti="Commands: Tunnelers' Abyss"
+  if cat=="ta" or cat=="tunnelers abyss" or cat=="tunnelers-abyss" or cat=="tunnelersabyss":
+    desc="""
+**admins**
+Show admins of the server.
+**Alias:** `=administrators`
+
+**mods**
+Show mods of the server.
+**Alias:** `=moderators`
+
+**gsmrl**
+Shows information about [Grapeyard Superb Metro Rail Line](https://h2mm.gitlab.io/web/rail.html).
+
+**tttl**
+Shows information about [Tunneler's Train Transist Limited](https://h2mm.gitlab.io/web/rail.html).
+  """
+  elif cat=="basic" or cat=="simple" or cat=="normal" or cat=="regular" or cat=="core":
+    desc="""
+**help {Command or Category}**
+Show the help for a specific command/category. The command/category is optional.
+
+**ping**
+Checks the speed of the bot.
+
+**speedtest**
+Does the `ping` command 5 times, thus more accurate.
+  """
+  elif cat=="discordinfo" or cat=="discord info" or cat=="discordinformation" or cat=="discord information" or cat=="discordi":
+    desc="""
+**server**
+Shows information about the current server.
+  """
+  elif cat=="help":
+    ti="help {Command or Category}"
+    desc=f"Show the help for a specific command/category. The command/category is optional."
+  elif cat=="ping":
+    ti="ping"
+    desc=f"Checks the speed of the bot."
+  elif cat=="speedtest":
+    ti="speedtest"
+    desc=f"Does the `ping` command 5 times, thus more accurate."
+  elif cat=="admins":
+    ti="admins"
+    desc=f"Shows admins of the server.\n**Alias:** `=administrators`"
+  elif cat=="administrators":
+    ti="administrators"
+    desc=f"Shows admins of the server.\n**Alias:** `=admins`"
+  elif cat=="mods":
+    ti="mods"
+    desc=f"Shows mods of the server.\n**Alias:** `=moderators`"
+  elif cat=="moderators":
+    ti="moderators"
+    desc=f"Shows mods of the server.\n**Alias:** `=mods`"
+  elif cat=="gsmrl":
+    ti="gsmrl"
+    desc="Shows information about [Grapeyard Superb Metro Rail Line](https://h2mm.gitlab.io/web/rail.html)."
+  elif cat=="tttl":
+    ti="tttl"
+    desc="Shows information about [Tunneler's Train Transist Limited](https://h2mm.gitlab.io/web/rail.html)."
+  elif cat=="server":
+    ti="server"
+    desc="Shows information about the current server."
+  elif cat=="role":
+    ti="role [Role ID or Mention]"
+    desc="Shows information about the desired role."
+  elif cat=="channel [Channel Name, ID or Mention]":
+    ti="channel"
+    desc="Shows information about the desired channel."
+  elif cat=="voicechannel":
+    ti="voicechannel [Channel Name or ID]"
+    desc="Shows information about the desired Voice Channel."
+  elif cat=="user":
+    ti="user [User Name, Nickname, ID or Mention] [Channel Name, ID or Mention]"
+    desc=f"Shows information about the desired User in a specific channel.\nThe arguments are optional."
+  elif cat=="uservoice":
+    ti="uservoice [User Name, Nickname, ID or Mention] [Channel Name or ID]"
+    desc="Shows information about the desired User in a specific voice channel."
+  elif cat=="avatar [User Name, Nickname, ID or Mention]":
+    ti="avatar "
+    desc="Shows the avatar of the desired user."
+  elif cat=="invite":
+    ti="voicechannel [Invite link or ID]"
+    desc="Shows information about the desired invite link."
+  elif cat=="template":
+    ti="template [Template ID]"
+    desc=f"Shows information about the desired server template.\nThis command is still in BETA."
+  elif cat=="spam":
+    ti="spam [Number of times to spam] [Text to spam]"
+    desc=f"Spams the text.\nIt must be less than 30 times and without any mentions."
+  elif cat=="embed":
+    ti="embed [Title] [Description] [Color]…"
+    desc=f"Generates an embed.\n**One line for each argument.**\nPlease check the [documentation](https://github.com/johann-lau/Bot#embed-message-help) for more information."
+  elif cat=="pretend":
+    ti="pretend [User Name, Nickname, ID or Mention] [Text]"
+    desc="Pretends as a user and send something, using the magic of webhooks."
+  elif cat=="pretendembed":
+    ti="pretendembed [User Name, Nickname, ID or Mention] [Title] [Description] [Color]…"
+    desc=f"Pretends as a user and generates an embed.\n**One line for each argument.**\nPlease check the [documentation](https://github.com/johann-lau/Bot#embed-message-help) for more information.""
+  elif cat=="pretendspam":
+    ti="pretendspam [User Name, Nickname, ID or Mention] [Text]"
+    desc=f"Pretends as a user and spams the text.\nIt must be less than 30 times and without any mentions."
+  elif cat=="insert":
+    ti="insert [Emoji] [Text]"
+    desc=f"Replaces the spaces in the text with emojis.\nProtip: also works with multiple emojis by wrapping all emojis in quotation marks. E.g. `=insert \":thumbsup: :heart:\" I love this bot!`"
+  elif cat=="spoiler":
+    ti="spoiler [Text]"
+    desc="Generates an annoying spoiler."
+  elif cat=="rawspoiler":
+    ti="rawspoiler [Text]"
+    desc="Generates an annoying spoiler for you to copy and paste."
+  elif cat=="reverse":
+    ti="reverse [Text]"
+    desc="sesrever the provided text."
+  elif cat=="emoji":
+    ti="emoji [Text]"
+    desc=f"Generates emoji text.\nSupported characters: A-Z a-z 0-9 ! ? $ # * + - × ÷"
+  elif cat=="kick":
+    ti="kick [User Name, Nickname, ID or Mention] {Reason}"
+    desc="Kicks a desired user. The Reason is optional."
+  elif cat=="ban":
+    ti="ban [User Name, Nickname, ID or Mention] {Reason}"
+    desc="Bans a desired user. The Reason is optional."
+  elif cat=="time":
+    ti="time {Timezone}"
+    desc="Checks the time in your timezone. If Timezone is not specified, you will see the UTC time."
+  elif cat=="rtimer":
+    ti="rtimer [Time to count] {Text}"
+    desc=f"Starts a timer. Use `s` (seconds), `m` (minutes), `h` (hours), `d` (days) and `w` (weeks).\nIf you specify a unit twice (e.g. `10s5s`), the first one will be omitted.\nDefault to seconds if no unit is specified.\nThe Text is optional."
+  elif cat=="terminate":
+    ti="terminate [Timer ID]"
+    desc=f"Properly terminates a running timer generated by `rtime`.\nThe 5-alphabet Timer ID could be found at the beginning of a timer."
+  elif cat=="timer":
+    ti="timer [Seconds] {Text}"
+    desc=f"Starts a timer. The Text is optional.\n**Alert: This command is outdated. Consider using** `rtimer` **instead.**"
+  elif cat=="screenshot":
+    ti="screenshot [URL]"
+    desc=f"Screenshots the desired webpage. A regular-sized screenshot and a whole-webpage-sized screenshot will be shown."
+  elif cat=="youtube":
+    ti="youtube [URL]"
+    desc=f"Downloads a youtube video and the captions. If the video size is larger than 8MB, only the captions will be uploaded."
+  elif cat=="wiki":
+    ti="wiki [Query]"
+    desc=f"Finds a related Wikipedia article."
+  elif cat=="ocr":
+    ti="ocr [Image]"
+    desc=f"Does an OCR scan for the image."
+  elif cat=="text":
+    ti="text [PDF]"
+    desc=f"Turns the PDF to plain text."
+  else:
+    ti="Tunnelers' Bot Help"
+    desc="""
+Prefix: =
+  
+
+**Basic Commands**
+`help` `ping` `speedtest`
+
+**Tunnelers-Abyss Information Commands**
+`admins` `mods` `gsmrl` `tttl`
+
+**Discord Information Commands**
+`server` `role` `channel` `voicechannel` `user` `uservoice` `avatar` `invite` `template` (BETA)
+
+**Discord Commands**
+`spam` `embed` `pretend` `pretendembed` `pretendspam` (BETA)
+
+**Text Manipulation Commands**
+`insert` `spoiler` `rawspoiler` `reverse` `emoji`
+
+**Moderation & Information Commands**
+`kick` `ban` `time` `rtimer` `terminate` `timer` (Use timer instead)
+
+**Web Commands & Developer Tools**
+`screenshot` `youtube` `wiki` `ocr` `text` `html` (BETA)
+  """
+  embed=discord.Embed(title=ti, description=desc, color=0x0061ff)
+  await ctx.send(embed=embed)
+
 @bot.event
 async def on_reaction_add(reaction, user):
   lang = reaction.emoji.replace("flag_","")
@@ -140,48 +324,6 @@ async def on_user_update(before, after):
   embed.set_thumbnail(url=after.avatar_url)
   sendto = bot.get_channel(797989308023832607)
   await sendto.send(embed=embed)
-
-@bot.command()
-async def help(ctx,cat=None):
-  if cat!=None:
-    cat=cat.lower()
-  ti="Commands: Tunnelers' Abyss"
-  if cat=="ta":
-    desc="""
-  **admins**
-  Show admins of the server.
-  **Alias:** `=administrators`
-  
-  **mods**
-  Show mods of the server.
-  **Alias:** `=moderators`
-  
-  **gsmrl**
-  Shows information about GSMRL.
-  
-  **tttl**
-  Shows information about TTTL.
-  """
-  elif cat=="admins":
-    ti="Admins"
-    desc="""**=admins**
-  Show admins of the server.
-  **Alias:** `=administrators`"""
-  elif cat=="admins":
-    ti="Admins"
-    desc="""**=admins**
-  Show admins of the server.
-  **Alias:** `=administrators`"""
-  else:
-    ti="Tunnelers' Bot Help"
-    desc="""
-  Prefix: =
-  
-  Commands available:
-  `admins` `emoji` `gsmrl` `kick` `mods` `random` `reverse` `role` `spam` `spoiler` `time` `timer` `tttl`
-  """
-  embed=discord.Embed(title=ti, description=desc, color=0x0061ff)
-  await ctx.send(embed=embed)
 
 @bot.command()
 async def translate(ctx, lang, *, text):
