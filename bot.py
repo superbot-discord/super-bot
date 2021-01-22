@@ -984,7 +984,7 @@ async def time(ctx, *, timezoneinput="0"):
   elif len(timezoneinput)==2 and timezoneinput.isalpha():
     try:
       tz = pytz.timezone(pytz.country_timezones[timezoneinput][0])
-      current = "Time in " + country_timezones(timezoneinput)[0] + " is " + datetime.now(tz=tz).strftime("%d %b, %Y (%a) %H:%M:%S")
+      current = "Time in " + pytz.country_timezones(timezoneinput)[0] + " is " + datetime.now(tz=tz).strftime("%d %b, %Y (%a) %H:%M:%S")
       await ctx.send(current)
     except:
       await ctx.send("Invalid ISO-3166 Country Code.")
