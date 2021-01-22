@@ -928,9 +928,11 @@ async def time(ctx, *, timezoneinput="0"):
       await ctx.send("Invalid timezone! Timezone must be below 15, above -15 and divisible by 0.25.")
   elif timezoneinput=="all":
     desc = ""
-    for count in pytz.all_timezone:
+    for count in pytz.all_timezones:
       desc = desc + "`" + count + "` "
     embed = discord.Embed(title="All Timezones", description=desc)
+    desc = desc + f"\n\nYou may also provide a timezone (number) or an [ISO-3166 Country Code](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2#Officially_assigned_code_elements)."
+    await ctx.send(embed=embed)
   elif len(timezoneinput)==2 and timezoneinput.isalpha():
     try:
       tz = pytz.timezone(pytz.country_timezones[timezoneinput][0])
@@ -943,7 +945,7 @@ async def time(ctx, *, timezoneinput="0"):
       tz = pytz.timezone(timezoneinput)
       current = "Time in " + timezoneinput + " is " + datetime.now(tz=tz).strftime("%d %b, %Y (%a) %H:%M:%S")
     except:
-      await ctx.send("Timezone not found orWe encountered an error.")
+      await ctx.send("Timezone not found. Please use `=time all` for a list of all timezones.")
     await ctx.send(current)
 
 @bot.command()
