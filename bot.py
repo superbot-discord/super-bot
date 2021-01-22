@@ -650,6 +650,14 @@ async def engrave(ctx, product, *, text):
   await ctx.send(embed=embed)
 
 @bot.command()
+async def transparent(ctx, alpha):
+  await ctx.message.attachments[0].save()
+  img = PIL.Image.open(ctx.message.attachments[0].filename)
+  PIL.newimg.putalpha(int(alpha))
+  PIL.newimg.save('Transparent_'+ctx.message.attachments[0].filename+'.png')
+  await ctx.send(file = discord.File('Transparent_'+ctx.message.attachments[0].filename+'.png'))
+
+@bot.command()
 async def status(ctx, member : discord.Member = None):
   if member==None:
     member=ctx.author
@@ -658,9 +666,7 @@ async def status(ctx, member : discord.Member = None):
   else:
     desc = str(member.status)+" on desktop"
   embed = discord.Embed(title="Status: "+member.name, description=desc)
-  #await ctx.send(str(member.activities))
   for count in member.activities:
-    #await ctx.send(str(count)+"  "+str(count.type))
     if str(count.type)=="ActivityType.custom":
       if count.emoji==None:
         field=count.name
