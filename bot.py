@@ -23,6 +23,9 @@ import pytube
 from pygoogletranslation import Translator
 import wikipedia
 from PyDictionary import PyDictionary
+import pytz
+set(pytz.all_timezones_set)
+
 dictionary=PyDictionary()
 allid=[]
 hexstring_pattern = re.compile(r'#?([0-9A-F]{2})([0-9A-F]{2})([0-9A-F]{2})', re.IGNORECASE)
@@ -686,7 +689,7 @@ async def youtube(ctx, *, url):
   os.remove('YTVideo.mp4')
 
 @bot.command()
-async def dictionary(ctx, *, word):
+async def definition(ctx, *, word):
   ti = "Definition of "+word
   desc = ""
   definitions = dictionary.meaning(word)
@@ -907,27 +910,32 @@ async def color(ctx, arg1, arg2=None, arg3=None):
 
 @bot.command()
 async def time(ctx,timezoneinput="0"):
-  timezone=float(timezoneinput)
-  if 15>timezone>-15 and timezone%0.25==0:
-    now = datetime.now()
-    h = now.strftime("%H")
-    m = now.strftime("%M")
-    h = float(h)+timezone//1-8
-    m = timezone%1*60
-    if h>=24:
-      h=h-24
-    if h<0:
-      h=h+24
-    hdis=str(int(h))
-    if int(h)<10:
-      hdis="0"+hdis
-    mdis=str(int(m))
-    if int(m)<10:
-      mdis="0"+mdis
-    current = "Time in UTC " + timezoneinput + " is `" + now.strftime(hdis+" : "+mdis+" : %S") + "`"
+  try:
+    timezone=float(timezoneinput)
+    if 15>timezone>-15 and timezone%0.25==0:
+      now = datetime.now()
+      h = now.strftime("%H")
+      m = now.strftime("%M")
+      h = float(h)+timezone//1-8
+      m = timezone%1*60
+      if h>=24:
+        h=h-24
+      if h<0:
+        h=h+24
+      hdis=str(int(h))
+      if int(h)<10:
+        hdis="0"+hdis
+      mdis=str(int(m))
+      if int(m)<10:
+        mdis="0"+mdis
+      current = "Time in UTC " + timezoneinput + " is " now.strftime("%d %b, %Y (%a) %H:%M:%S")
+    except:
+      #try:
+      tz = pytz.timezone(timezoneinput)
+      current = "Time in " + timezoneinput + " is " + datetime.datetime.now(tz=tz).strftime("%d %b, %Y (%a) %H:%M:%S")
+      #except:
+      #  await ctx.send("Timezone not found orWe encountered an error.")
     await ctx.send(current)
-  else:
-    await ctx.send("Invalid timezone. Please try again.")
 
 @bot.command()
 async def spoiler(ctx,*,text):
