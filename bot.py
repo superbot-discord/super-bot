@@ -655,7 +655,7 @@ async def transparent(ctx, alpha = 50):
 
 @bot.command()
 async def overlay(ctx, alpha2, url1, url2 = None):
-  img1 = Image.open(requests.get(url1, stream=True).raw)
+  img1 = PIL.Image.open(requests.get(url1, stream=True).raw)
   if url2 == None:
     await ctx.message.attachments[0].save("Secondimage.png")
     img2 = PIL.Image.open("Secondimage.png")
