@@ -929,12 +929,12 @@ async def time(ctx,timezoneinput="0"):
       if int(m)<10:
         mdis="0"+mdis
       current = "Time in UTC " + timezoneinput + " is " + now.strftime("%d %b, %Y (%a) %H:%M:%S")
-    except:
-      #try:
-      tz = pytz.timezone(timezoneinput)
-      current = "Time in " + timezoneinput + " is " + datetime.datetime.now(tz=tz).strftime("%d %b, %Y (%a) %H:%M:%S")
-      #except:
-      #  await ctx.send("Timezone not found orWe encountered an error.")
+  except:
+    #try:
+    tz = pytz.timezone(timezoneinput)
+    current = "Time in " + timezoneinput + " is " + datetime.datetime.now(tz=tz).strftime("%d %b, %Y (%a) %H:%M:%S")
+    #except
+    #  await ctx.send("Timezone not found orWe encountered an error.")
     await ctx.send(current)
 
 @bot.command()
