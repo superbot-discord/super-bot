@@ -908,7 +908,7 @@ async def color(ctx, arg1, arg2=None, arg3=None):
 @bot.command()
 async def time(ctx,timezoneinput="0"):
   timezone=float(timezoneinput)
-  if timezone>-15 and timezone<15:
+  if 15>timezone>-15 and timezone%0.25==0:
     now = datetime.now()
     h = now.strftime("%H")
     m = now.strftime("%M")
@@ -1658,9 +1658,6 @@ async def user(ctx,user: discord.Member=None, channel: discord.TextChannel=None)
   embed.add_field(name="Channel Permissions", value=f3vb, inline=False)
   embed.add_field(name="Activity", value=f3vc, inline=True)
   embed.add_field(name="Roles", value=f4v, inline=True)
-  #embed.add_field(name="Nitro", value=f5v, inline=True)
-  #embed.add_field(name="User", value=f6v, inline=True)
-  #embed.add_field(name="", value=f7v, inline=True)
   await ctx.send(embed=embed)
 
 @bot.command()
