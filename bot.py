@@ -14,7 +14,7 @@ import re
 import pytesseract
 import requests
 import PIL
-from PIL import putalpha
+from PIL import ImageDraw, ImageFilter
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 import os
