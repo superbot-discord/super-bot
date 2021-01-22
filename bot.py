@@ -24,8 +24,8 @@ from pygoogletranslation import Translator
 import wikipedia
 from PyDictionary import PyDictionary
 import pytz
-set(pytz.all_timezones_set)
 
+set(pytz.all_timezones_set)
 dictionary=PyDictionary()
 allid=[]
 hexstring_pattern = re.compile(r'#?([0-9A-F]{2})([0-9A-F]{2})([0-9A-F]{2})', re.IGNORECASE)
@@ -619,6 +619,14 @@ async def ocr(ctx):
     if desc=="":
       desc="There was no text."
     await ctx.send(desc)
+
+@bot.command()
+async def overlay(ctx, linka, linkb):
+  b_h, b_w, b_ch = background.shape
+  W = 800
+  imgScale = W/b_w
+  new_b_h,new_b_w = int(b_h*imgScale), int(b_w*imgScale)
+  new_background = cv2.resize(background,(new_b_w, new_b_h))
 
 @bot.command()
 async def text(ctx):
