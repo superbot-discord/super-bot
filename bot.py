@@ -476,6 +476,54 @@ async def translate(ctx, lang, *, text):
   await msg.edit(content = "**Translation to "+lang+f":**\n"+translation)
 
 @bot.command()
+async def engrave(ctx, product, *, text):
+  product = product.lower()
+  product = product.replace(" ","")
+  product = product.replace("-","")
+  product = product.replace("_","")
+  product = product.replace(".","")
+  product = product.replace(",","")
+  if product == "airpodspro" or product == "airpodpro":
+    embed = discord.Embed(title="Engrave on AirPods Pro")
+    embed.set_image(url="https://www.apple.com/shop/preview/engrave/PWP22AM/A?th="+text+"&s=2&tl=&f=mixed")
+  elif product == "airpodson" or product == "airpodon":
+    embed = discord.Embed(title="Engrave on AirPods (On)")
+    embed.set_image(url="https://www.apple.com/shop/preview/engrave/PRXJ2AM/A?th="+text+"&s=2&tl=&f=mixed")
+  elif product == "airpods" or product == "airpod" or product == "airpodsoff" or product == "airpodoff":
+    embed = discord.Embed(title="Engrave on AirPods")
+    embed.set_image(url="https://www.apple.com/shop/preview/engrave/PV7N2AM/A?th="+text+"&s=2&tl=&f=mixed")
+  elif product == "airpodsmaxgray" or product == "airpodmaxgray" or product == "airpodsmaxgrey" or product == "airpodmaxgrey":
+    embed = discord.Embed(title="Engrave on AirPods Max (Gray)")
+    embed.set_image(url="https://www.apple.com/shop/preview/v2/engrave/PGYH3AM/A?th="+text+"&s=2&tl=&f=mixed")
+  elif product == "airpodsmaxsilver" or product == "airpodmaxsilver":
+    embed = discord.Embed(title="Engrave on AirPods Max (Silver)")
+    embed.set_image(url="https://www.apple.com/shop/preview/v2/engrave/PGYJ3AM/A?th="+text+"&s=2&tl=&f=mixed")
+  elif product == "airpodsmaxgreen" or product == "airpodmaxgreen":
+    embed = discord.Embed(title="Engrave on AirPods Max (Green)")
+    embed.set_image(url="https://www.apple.com/shop/preview/v2/engrave/PGYN3AM/A?th="+text+"&s=2&tl=&f=mixed")
+  elif product == "airpodsmaxblue" or product == "airpodmaxblue" or product == "airpodsmaxskyblue" or product == "airpodmaxskyblue":
+    embed = discord.Embed(title="Engrave on AirPods Max (Sky blue)")
+    embed.set_image(url="https://www.apple.com/shop/preview/v2/engrave/PGYL3AM/A?th="+text+"&s=2&tl=&f=mixed")
+  elif product == "airpodsmaxpink" or product == "airpodmaxpink":
+    embed = discord.Embed(title="Engrave on AirPods Max (Pink)")
+    embed.set_image(url="https://www.apple.com/shop/preview/v2/engrave/PGYM3AM/A?th="+text+"&s=2&tl=&f=mixed")
+  elif product == "ipadprogray" or product == "ipadprogrey":
+    embed = discord.Embed(title="Engrave on iPad Pro (Gray)")
+    split = text.splitlines()
+    if len(split) == 1:
+      embed.set_image(url="https://www.apple.com/shop/preview/engrave/PXAV2LL/A?th="+text+"&tl=&s=2")
+    else:
+      embed.set_image(url="https://www.apple.com/shop/preview/engrave/PXAV2LL/A?th="+split[0]+"&tl="+split[1]+"&s=2")
+  elif product == "ipadprosilver":
+    embed = discord.Embed(title="Engrave on iPad Pro (Silver)")
+    split = text.splitlines()
+    if len(split) == 1:
+      embed.set_image(url="https://www.apple.com/shop/preview/engrave/PXAW2LL/A?th="+text+"&tl=&s=2")
+    else:
+      embed.set_image(url="https://www.apple.com/shop/preview/engrave/PXAW2LL/A?th="+split[0]+"&tl="+split[1]+"&s=2")
+  await ctx.send(embed=embed)
+
+@bot.command()
 async def status(ctx, member : discord.Member = None):
   if member==None:
     member=ctx.author
