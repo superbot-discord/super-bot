@@ -921,26 +921,14 @@ async def time(ctx,timezoneinput="0"):
   try:
     timezone=float(timezoneinput)
     if 15>timezone>-15 and timezone%0.25==0:
-      now = datetime.now()
-      h = now.strftime("%H")
-      m = now.strftime("%M")
-      h = float(h)+timezone//1-8
-      m = timezone%1*60
-      if h>=24:
-        h=h-24
-      if h<0:
-        h=h+24
-      hdis=str(int(h))
-      if int(h)<10:
-        hdis="0"+hdis
-      mdis=str(int(m))
-      if int(m)<10:
-        mdis="0"+mdis
-      current = "Time in UTC " + timezoneinput + " is " + now.strftime("%d %b, %Y (%a) %H:%M:%S")
+      tnow = datetime.now()
+      current = "Time in UTC " + timezoneinput + " is " + tnow.strftime("%d %b, %Y (%a) %H:%M:%S")
+    else:
+      await ctx.send("Invalid timezone! Timezone must be below 15, above -15 and divisible by 0.25.")
   except:
     #try:
     tz = pytz.timezone(timezoneinput)
-    current = "Time in " + timezoneinput + " is " + datetime.datetime.now(tz=tz).strftime("%d %b, %Y (%a) %H:%M:%S")
+    current = "Time in " + timezoneinput + " is " + datetime.now(tz=tz).strftime("%d %b, %Y (%a) %H:%M:%S")
     #except
     #  await ctx.send("Timezone not found orWe encountered an error.")
     await ctx.send(current)
