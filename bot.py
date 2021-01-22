@@ -445,14 +445,6 @@ async def on_guild_role_delete(role):
   sendto = bot.get_channel(797989308023832607)
   await sendto.send(embed=embed)
 
-"""@bot.event
-async def on_typing(channel, user, when):
-  desc=user.mention+" started typing in "+channel.mention+" at "+when.strftime("%d %b, %Y (%a) %H:%M:%S")
-  embed = discord.Embed(title="Typing!", description=desc, color=user.
-  )
-  sendto = bot.get_channel(797989308023832607)
-  await sendto.send(embed=embed)"""
-
 @bot.event
 async def on_user_update(before, after):
   desc="Profile of "+before.mention+" was updated!"
@@ -651,11 +643,11 @@ async def engrave(ctx, product, *, text):
 
 @bot.command()
 async def transparent(ctx, alpha):
-  await ctx.message.attachments[0].save("Transparent.png")
-  img = PIL.Image.open("Transparent.png")
+  await ctx.message.attachments[0].save("Not_Transparent.png")
+  img = PIL.Image.open("Not_Transparent.png")
   PIL.newimg.putalpha(int(alpha))
-  PIL.newimg.save('Transparent_'+ctx.message.attachments[0].filename+'.png')
-  await ctx.send(file = discord.File('Transparent_'+ctx.message.attachments[0].filename+'.png'))
+  PIL.newimg.save('Transparent.png')
+  await ctx.send(file = discord.File('Transparent.png'))
 
 @bot.command()
 async def status(ctx, member : discord.Member = None):
