@@ -918,7 +918,7 @@ async def color(ctx, arg1, arg2=None, arg3=None):
 
 @bot.command()
 async def time(ctx, *, timezoneinput="0"):
-  if timezoneinput.isnum():
+  if timezoneinput.isdigit():
     timezone=float(timezoneinput)
     if 15>timezone>-15 and timezone%0.25==0:
       tnow = datetime.now()
