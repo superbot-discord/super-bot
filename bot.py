@@ -928,7 +928,7 @@ async def time(ctx,timezoneinput="0"):
       mdis=str(int(m))
       if int(m)<10:
         mdis="0"+mdis
-      current = "Time in UTC " + timezoneinput + " is " now.strftime("%d %b, %Y (%a) %H:%M:%S")
+      current = "Time in UTC " + timezoneinput + " is " + now.strftime("%d %b, %Y (%a) %H:%M:%S")
     except:
       #try:
       tz = pytz.timezone(timezoneinput)
