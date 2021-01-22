@@ -917,20 +917,33 @@ async def color(ctx, arg1, arg2=None, arg3=None):
     await ctx.send(embed=embed)
 
 @bot.command()
-async def time(ctx,timezoneinput="0"):
-  try:
+async def time(ctx, *, timezoneinput="0"):
+  if timezoneinput.isnum():
     timezone=float(timezoneinput)
     if 15>timezone>-15 and timezone%0.25==0:
       tnow = datetime.now()
       current = "Time in UTC " + timezoneinput + " is " + tnow.strftime("%d %b, %Y (%a) %H:%M:%S")
+      await ctx.send(current)
     else:
       await ctx.send("Invalid timezone! Timezone must be below 15, above -15 and divisible by 0.25.")
-  except:
-    #try:
-    tz = pytz.timezone(timezoneinput)
-    current = "Time in " + timezoneinput + " is " + datetime.now(tz=tz).strftime("%d %b, %Y (%a) %H:%M:%S")
-    #except
-    #  await ctx.send("Timezone not found orWe encountered an error.")
+  elif timezoneinput=="all":
+    desc = ""
+    for count in pytz.all_timezone:
+      desc = desc + "`" + count + "` "
+    embed = discord.Embed(title="All Timezones", description=desc)
+  elif len(timezoneinput)==2 and timezoneinput.isalpha():
+    try:
+      tz = pytz.timezone(pytz.country_timezones[timezoneinput][0])
+      current = "Time in " + timezoneinput + " is " + datetime.now(tz=tz).strftime("%d %b, %Y (%a) %H:%M:%S")
+      await ctx.send(current)
+    except:
+      await ctx.send("Invalid ISO-3166 Country Code.")
+  else:
+    try:
+      tz = pytz.timezone(timezoneinput)
+      current = "Time in " + timezoneinput + " is " + datetime.now(tz=tz).strftime("%d %b, %Y (%a) %H:%M:%S")
+    except:
+      await ctx.send("Timezone not found orWe encountered an error.")
     await ctx.send(current)
 
 @bot.command()
