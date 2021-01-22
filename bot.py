@@ -645,7 +645,7 @@ async def engrave(ctx, product, *, text):
 async def transparent(ctx, alpha):
   await ctx.message.attachments[0].save("Not_Transparent.png")
   img = PIL.Image.open("Not_Transparent.png")
-  newimg.putalpha(int(alpha))
+  newimg.PIL.putalpha(int(alpha))
   newimg.save('Transparent.png')
   await ctx.send(file = discord.File('Transparent.png'))
 
