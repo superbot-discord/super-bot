@@ -643,12 +643,28 @@ async def engrave(ctx, product, *, text):
   await ctx.send(embed=embed)
 
 @bot.command()
-async def transparent(ctx, alpha):
+async def transparent(ctx, alpha = 50):
   await ctx.message.attachments[0].save("Not_Transparent.png")
   img = PIL.Image.open("Not_Transparent.png")
-  img.putalpha(int(alpha))
+  img2 = img.copy()
+  img2.putalpha(int(alpha))
+  img.paste(img2, img)
   img.save('Transparent.png')
   await ctx.send(file = discord.File('Transparent.png'))
+  os.remove('Transparent.png')
+
+@bot.command()
+async def overlay(ctx, alpha2, url1, url2 = None):
+  img1 = Image.open(requests.get(url1, stream=True).raw)
+  if url2 == None:
+    await ctx.message.attachments[0].save("Secondimage.png")
+    img2 = PIL.Image.open("Secondimage.png")
+  else:
+    img2 = Image.open(requests.get(url2, stream=True).raw)
+  img3 = PIL.Image.blend(img1, img2)
+  img3.save('Blended.png')
+  await ctx.send(file = discord.File('Blended.png'))
+  os.remove('Blended.png')
 
 @bot.command()
 async def status(ctx, member : discord.Member = None):
