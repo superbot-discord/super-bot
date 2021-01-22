@@ -660,7 +660,7 @@ async def overlay(ctx, alpha2, url1, url2 = None):
     await ctx.message.attachments[0].save("Secondimage.png")
     img2 = PIL.Image.open("Secondimage.png")
   else:
-    img2 = Image.open(requests.get(url2, stream=True).raw)
+    img2 = PIL.Image.open(requests.get(url2, stream=True).raw)
   img3 = PIL.Image.blend(img1, img2)
   img3.save('Blended.png')
   await ctx.send(file = discord.File('Blended.png'))
