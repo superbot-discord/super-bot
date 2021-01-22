@@ -14,6 +14,7 @@ import re
 import pytesseract
 import requests
 import PIL
+from PIL import putalpha, Image
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 import os
@@ -644,8 +645,8 @@ async def engrave(ctx, product, *, text):
 @bot.command()
 async def transparent(ctx, alpha):
   await ctx.message.attachments[0].save("Not_Transparent.png")
-  img = PIL.Image.open("Not_Transparent.png")
-  newimg.PIL.putalpha(int(alpha))
+  img = Image.open("Not_Transparent.png")
+  newimg.putalpha(int(alpha))
   newimg.save('Transparent.png')
   await ctx.send(file = discord.File('Transparent.png'))
 
