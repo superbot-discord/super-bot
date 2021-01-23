@@ -643,30 +643,22 @@ async def engrave(ctx, product, *, text):
   await ctx.send(embed=embed)
 
 @bot.command()
-async def transparent(ctx, alpha = 50):
+async def transparent(ctx, alpha = 128):
   await ctx.message.attachments[0].save("Not_Transparent.png")
   img = PIL.Image.open("Not_Transparent.png")
   img2 = img.copy()
-  img2.putalpha(float(alpha))
+  img2.putalpha(round(alpha))
   img.paste(img2, img)
   img.save('Transparent.png')
   await ctx.send(file = discord.File('Transparent.png'))
   os.remove('Transparent.png')
 
 @bot.command()
-async def overlay(ctx, alpha2, url1, url2 = None):
-  img1 = PIL.Image.open(requests.get(url1, stream=True).raw)
-  if url2 == None:
-    await ctx.message.attachments[0].save("Secondimage.png")
-    img2 = PIL.Image.open("Secondimage.png")
-  else:
-    img2 = PIL.Image.open(requests.get(url2, stream=True).raw)
-  img1.putalpha(255)
-  img2.putalpha(255)
-  img3 = PIL.Image.blend(img1, img2, int(alpha2))
-  img3.save('Blended.png')
-  await ctx.send(file = discord.File('Blended.png'))
-  os.remove('Blended.png')
+async def mandelbrot(ctx, size = 1024):
+  img = PIL.Image.effect_mandelbrot((int(size), int(size)), (-1.5, -2.5, 3.5, 2.5), 95)
+  img.save('Mandelbrot.png')
+  await ctx.send(file = discord.File('Mandelbrot.png'))
+  os.remove('Mandelbrot.png')
 
 @bot.command()
 async def status(ctx, member : discord.Member = None):
