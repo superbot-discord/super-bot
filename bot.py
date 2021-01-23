@@ -2021,8 +2021,8 @@ async def kick(ctx, user: discord.Member, *, reason="No reason provided"):
 async def slowmode(ctx, sec, *, channels = None):
   if sec.isdigit() == False:
     sec = 0
-  if int(sec) < 0 or int(sec) > 21600:
-    await ctx.send("Invalid input! Please enter a number below or equal to 21600.")
+  if int(round(sec)) < 0 or int(round(sec)) > 21600 or sec%1 != 0:
+    await ctx.send("Invalid input! Please enter an integer below or equal to 21600.")
     if channels == None or channels == "":
       allchannel = [ctx.channel]
     elif channels == "all":
