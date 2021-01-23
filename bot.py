@@ -2023,6 +2023,7 @@ async def slowmode(ctx, sec, *, channels = None):
     sec = 0
   if int(sec) < 0 or int(sec) > 21600 or int(sec)%1 != 0:
     await ctx.send("Invalid input! Please enter an integer below or equal to 21600.")
+  else:
     if channels == None or channels == "":
       allchannel = [ctx.channel]
     elif channels == "all":
