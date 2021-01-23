@@ -298,6 +298,9 @@ Turns the PDF to plain text.
   elif cat=="ban":
     ti="ban [User Name, Nickname, ID or Mention] {Reason}"
     desc="Bans a desired user. The Reason is optional."
+  elif cat=="slowmode":
+    ti="slowmode [Seconds] {Channel(s)}"
+    desc=f"Sets the slowmode for the channel. Any non-numeric value, or zero, disables it.\nChannels is optional. If Channel(s) is not provided, the current channel will be set.\nYou are allowed to use multiple channels, or use all to set for all channels in the server."
   elif cat=="math":
     ti="math [Formula]"
     desc="Does boring math for you. Logical comparisons, scientific math, variables and user-defined functions are available. Please check the [documentation](https://github.com/johann-lau/Bot/blob/main/README.md#math-help) for more information."
@@ -358,7 +361,7 @@ Turns the PDF to plain text.
 `insert` `spoiler` `rawspoiler` `reverse` `emoji`
 
 **Moderation & Information Commands**
-`kick` `ban` `math` `define` `time` `rtimer` `terminate` `timer` (Outdated)
+`kick` `ban` `slowmode` `math` `define` `time` `rtimer` `terminate` `timer` (Outdated)
 
 **Web Commands & Developer Tools**
 `screenshot` `youtube` `wiki` `engrave` `ocr` `text` `html` (BETA)
@@ -1992,21 +1995,45 @@ async def spam(ctx,times,*,message):
 
 @bot.command()
 async def ban(ctx, user: discord.Member, *, reason="No reason provided"):
-  await user.ban(reason=reason)
-  embed = discord.Embed(title=f"{user.name} was banned.", description=f"Reason: {reason}\nBy: {ctx.author.mention}")
-  sendto = bot.get_channel(796721534676762664)
-  await sendto.send(embed=embed)
-  embed = discord.Embed(title=f"You were banned from the server.", description=f"Reason: {reason}\nBy: {ctx.author.mention}")
-  await user.send(embed=embed)
+  if ctx.author.permissions_in(ctx.channel).ban_members:
+    await user.ban(reason=reason)
+    embed = discord.Embed(title=f"{user.name} was banned.", description=f"Reason: {reason}\nBy: {ctx.author.mention}")
+    sendto = bot.get_channel(796721534676762664)
+    await sendto.send(embed=embed)
+    embed = discord.Embed(title=f"You were banned from the server.", description=f"Reason: {reason}\nBy: {ctx.author.mention}")
+    await user.send(embed=embed)
+  else:
+    await ctx.send("You don't have the required permissions.")
 
 @bot.command()
 async def kick(ctx, user: discord.Member, *, reason="No reason provided"):
-  await user.kick(reason=reason)
-  embed = discord.Embed(title=f"{user.name} was kicked.", description=f"Reason: {reason}\nBy: {ctx.author.mention}")
-  sendto = bot.get_channel(796721534676762664)
-  await sendto.send(embed=embed)
-  embed = discord.Embed(title=f"You were kicked from the server.", description=f"Reason: {reason}\nBy: {ctx.author.mention}")
-  await user.send(embed=embed)
+  if ctx.author.permissions_in(ctx.channel).kick_members:
+    await user.kick(reason=reason)
+    embed = discord.Embed(title=f"{user.name} was kicked.", description=f"Reason: {reason}\nBy: {ctx.author.mention}")
+    sendto = bot.get_channel(796721534676762664)
+    await sendto.send(embed=embed)
+    embed = discord.Embed(title=f"You were kicked from the server.", description=f"Reason: {reason}\nBy: {ctx.author.mention}")
+    await user.send(embed=embed)
+  else:
+    await ctx.send("You don't have the required permissions.")
+
+@bot.command()
+async def slowmode(ctx, sec, *, channels = None):
+  if channels == None or channels == "":
+    allchannel = [ctx.channel]
+  elif channels == "all":
+    allchannel = ctx.guild.text_channels
+  else:
+    allchannel = ctx.message.channel_mentions
+  channellist = []
+  for count in allchannel:
+    if ctx.author.permissions_in(count).manage_channel:
+      await channel.edit(slowmode_delay = sec)
+      channellist.append(count.mention)
+  if len(channellist)==0:
+    await ctx.send("You don't have the manage channel permission in any of the channels.")
+  else:
+    await ctx.send("Set slowmode for these channels: "+channellist.join(" "))
 
 @bot.command()
 async def gsmrl(ctx):
