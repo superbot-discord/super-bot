@@ -2038,9 +2038,9 @@ async def slowmode(ctx, sec, *, channels = None):
     if len(channellist)==0:
       await ctx.send("You don't have the manage channel permission in any of the channels.")
     elif len(channellist)==1:
-      await ctx.send("Set slowmode to "+sec+" second(s) for "+channellist.join(" ")+".")
+      await ctx.send("Set slowmode to "+sec+" second(s) for "+" ".join(channellist)+".")
     else:
-      await ctx.send("Set slowmode to "+sec+" second(s) for these channels: "+channellist.join(" ")+".")
+      await ctx.send("Set slowmode to "+sec+" second(s) for these channels: "+" ".join(channellist)+".")
 
 @bot.command()
 async def gsmrl(ctx):
