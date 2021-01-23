@@ -2032,7 +2032,7 @@ async def slowmode(ctx, sec, *, channels = None):
       allchannel = ctx.message.channel_mentions
     channellist = []
     for count in allchannel:
-      if ctx.author.permissions_in(count).manage_channel:
+      if ctx.author.permissions_in(count).manage_channels:
         await channel.edit(slowmode_delay = sec)
         channellist.append(count.mention)
     if len(channellist)==0:
