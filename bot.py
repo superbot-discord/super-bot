@@ -2033,7 +2033,7 @@ async def slowmode(ctx, sec, *, channels = None):
     channellist = []
     for count in allchannel:
       if ctx.author.permissions_in(count).manage_channels:
-        await channel.edit(slowmode_delay = sec)
+        await count.edit(slowmode_delay = sec)
         channellist.append(count.mention)
     if len(channellist)==0:
       await ctx.send("You don't have the manage channel permission in any of the channels.")
