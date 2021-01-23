@@ -2019,21 +2019,27 @@ async def kick(ctx, user: discord.Member, *, reason="No reason provided"):
 
 @bot.command()
 async def slowmode(ctx, sec, *, channels = None):
-  if channels == None or channels == "":
-    allchannel = [ctx.channel]
-  elif channels == "all":
-    allchannel = ctx.guild.text_channels
-  else:
-    allchannel = ctx.message.channel_mentions
-  channellist = []
-  for count in allchannel:
-    if ctx.author.permissions_in(count).manage_channel:
-      await channel.edit(slowmode_delay = sec)
-      channellist.append(count.mention)
-  if len(channellist)==0:
-    await ctx.send("You don't have the manage channel permission in any of the channels.")
-  else:
-    await ctx.send("Set slowmode for these channels: "+channellist.join(" "))
+  if sec.isdigit() == False:
+    sec = 0
+  if sec < 0 or sec > 21600:
+    await ctx.send("Invalid input! Please enter a number below or equal to 21600.")
+    if channels == None or channels == "":
+      allchannel = [ctx.channel]
+    elif channels == "all":
+      allchannel = ctx.guild.text_channels
+    else:
+      allchannel = ctx.message.channel_mentions
+    channellist = []
+    for count in allchannel:
+      if ctx.author.permissions_in(count).manage_channel:
+        await channel.edit(slowmode_delay = sec)
+        channellist.append(count.mention)
+    if len(channellist)==0:
+      await ctx.send("You don't have the manage channel permission in any of the channels.")
+    elif len(channellist)==1:
+      await ctx.send("Set slowmode to "+sec+" second(s) for "+channellist.join(" ")+".")
+    else:
+      await ctx.send("Set slowmode to "+sec+" second(s) for these channels: "+channellist.join(" ")+".")
 
 @bot.command()
 async def gsmrl(ctx):
