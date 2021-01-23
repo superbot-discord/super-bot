@@ -647,7 +647,7 @@ async def transparent(ctx, alpha = 128):
   await ctx.message.attachments[0].save("Not_Transparent.png")
   img = PIL.Image.open("Not_Transparent.png")
   img2 = img.copy()
-  img2.putalpha(round(alpha))
+  img2.putalpha(int(alpha))
   img.paste(img2, img)
   img.save('Transparent.png')
   await ctx.send(file = discord.File('Transparent.png'))
