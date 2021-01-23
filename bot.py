@@ -1110,11 +1110,8 @@ async def time(ctx, *, timezoneinput="0"):
     else:
       await ctx.send("Invalid timezone! Timezone must be below 15, above -15 and divisible by 0.25.")
   elif timezoneinput=="all":
-    desc = ""
-    for count in pytz.all_timezones:
-      desc = desc + "`" + count + "` "
-    embed = discord.Embed(title="All Timezones", description=desc)
     desc = desc + f"`AD``AE``AF``AG``AI``AL``AM``AO``AQ``AR``AS``AT``AU``AW``AX``AZ``BA``BB``BD``BE``BF``BG``BH``BI``BJ``BL``BM``BN``BO``BQ``BR``BS``BT``BV``BW``BY``BZ``CA``CC``CD``CF``CG``CH``CI``CK``CL``CM``CN``CO``CR``CU``CV``CW``CX``CY``CZ``DE``DJ``DK``DM``DO``DZ``EC``EE``EG``EH``ER``ES``ET``FI``FJ``FK``FM``FO``FR``GA``GB``GD``GE``GF``GG``GH``GI``GL``GM``GN``GP``GQ``GR``GS``GT``GU``GW``GY``HK``HM``HN``HR``HT``HU``ID``IE``IL``IM``IN``IO``IQ``IR``IS``IT``JE``JM``JO``JP``KE``KG``KH``KI``KM``KN``KP``KR``KW``KY``KZ``LA``LB``LC``LI``LK``LR``LS``LT``LU``LV``LY``MA``MC``MD``ME``MF``MG``MH``MK``ML``MM``MN``MO``MP``MQ``MR``MS``MT``MU``MV``MW``MX``MY``MZ``NA``NC``NE``NF``NG``NI``NL``NO``NP``NR``NU``NZ``OM``PA``PE``PF``PG``PH``PK``PL``PM``PN``PR``PS``PT``PW``PY``QA``RE``RO``RS``RU``RW``SA``SB``SC``SD``SE``SG``SH``SI``SJ``SK``SL``SM``SN``SO``SR``SS``ST``SV``SX``SY``SZ``TC``TD``TF``TG``TH``TJ``TK``TLa``TM``TN``TO``TR``TT``TV``TW``TZ``UA``UG``UM``US``UY``UZ``VA``VC``VE``VG``VI``VN``VU``WF``WS``YE``YT``ZA``ZM``ZW`\n[ISO-3166 Country Code](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2#Officially_assigned_code_elements), [TZ Database Names](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#List) and Timezone Numbers are supported."
+    embed = discord.Embed(title="All Timezones", description=desc)
     await ctx.send(embed=embed)
   elif len(timezoneinput)==2 and timezoneinput.isalpha():
     try:
@@ -1301,13 +1298,16 @@ async def rtimer(ctx, timetocount,*,Text=None):
       seconds = int((end - datetime.now()).total_seconds())
       newsec=str(seconds%60)
       newmin=str((seconds%3600)//60)
-      newhrs=str(seconds//3600)
+      newhrs=str(seconds%86400//3600)
+      newday=str(seconds//86400)
       if int(newsec) <= 9:
         newsec = "0"+newsec
       if int(newmin) <= 9:
         newmin = "0"+newmin
       if int(newhrs) <= 9:
         newhrs = "0"+newhrs
+      if int(newday) <= 9:
+        newday = "0"+newday
       newsec=newsec.replace("1",":one: ")
       newsec=newsec.replace("2",":two: ")
       newsec=newsec.replace("3",":three: ")
@@ -1338,13 +1338,39 @@ async def rtimer(ctx, timetocount,*,Text=None):
       newhrs=newhrs.replace("8",":eight: ")
       newhrs=newhrs.replace("9",":nine: ")
       newhrs=newhrs.replace("0",":zero: ")
+      newday=newday.replace("1",":one: ")
+      newday=newday.replace("2",":two: ")
+      newday=newday.replace("3",":three: ")
+      newday=newday.replace("4",":four: ")
+      newday=newday.replace("5",":five: ")
+      newday=newday.replace("6",":six: ")
+      newday=newday.replace("7",":seven: ")
+      newday=newday.replace("8",":eight: ")
+      newday=newday.replace("9",":nine: ")
+      newday=newday.replace("0",":zero: ")
       prevdesc = desc
-      desc=newidcode+"  "+newhrs+":regional_indicator_h:   "+newmin+":regional_indicator_m:   "+newsec+":regional_indicator_s:"
-      if desc != prevdesc:
-        await message.edit(content = desc)
       if seconds<0:
         break
-    await message.edit(content="Countdown complete!")
+      desc=newidcode+"  "+newday+":regional_indicator_d:   "+newhrs+":regional_indicator_h:   "+newmin+":regional_indicator_m:   "+newsec+":regional_indicator_s:"
+      if desc != prevdesc:
+        await message.edit(content = desc)
+    desc = "Countdown for "
+    if sec >= 604800:
+      desc = desc + sec//604800 + " weeks "
+      sec = sec%604800
+    if sec >= 86400:
+      desc = desc + sec//86400 + " days "
+      sec = sec%86400
+    if sec >= 3600:
+      desc = desc + sec//3600 + " hours "
+      sec = sec%3600
+    if sec >= 60:
+      desc = desc + sec//60 + " minutes "
+      sec = sec%60
+    if sec >= 1:
+      desc = desc + sec//1 + " seconds "
+    desc = desc + "completed!"
+    await message.edit(content=desc)
     if Text==None:
       await message.reply("Countdown complete!")
     else:
@@ -1358,13 +1384,16 @@ async def timer(ctx, timetocount,*,Text=None):
     }).total_seconds())
     newsec=str(seconds%60)
     newmin=str((seconds%3600)//60)
-    newhrs=str(seconds//3600)
+    newhrs=str(seconds%86400//3600)
+    newday=str(seconds//86400)
     if int(newsec) <= 9:
       newsec = "0"+newsec
     if int(newmin) <= 9:
       newmin = "0"+newmin
     if int(newhrs) <= 9:
       newhrs = "0"+newhrs
+    if int(newday) <= 9:
+      newday = "0"+newday
     newsec=newsec.replace("1",":one: ")
     newsec=newsec.replace("2",":two: ")
     newsec=newsec.replace("3",":three: ")
@@ -1395,6 +1424,16 @@ async def timer(ctx, timetocount,*,Text=None):
     newhrs=newhrs.replace("8",":eight: ")
     newhrs=newhrs.replace("9",":nine: ")
     newhrs=newhrs.replace("0",":zero: ")
+    newday=newday.replace("1",":one: ")
+    newday=newday.replace("2",":two: ")
+    newday=newday.replace("3",":three: ")
+    newday=newday.replace("4",":four: ")
+    newday=newday.replace("5",":five: ")
+    newday=newday.replace("6",":six: ")
+    newday=newday.replace("7",":seven: ")
+    newday=newday.replace("8",":eight: ")
+    newday=newday.replace("9",":nine: ")
+    newday=newday.replace("0",":zero: ")
     if seconds<=0:
       desc="Countdown complete!"
       await message.edit(content = "Countdown completed for "+str(timetocount))
