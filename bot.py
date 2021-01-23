@@ -1351,24 +1351,24 @@ async def rtimer(ctx, timetocount,*,Text=None):
       prevdesc = desc
       if seconds<0:
         break
-      desc=newidcode+"  "+newday+":regional_indicator_d:   "+newhrs+":regional_indicator_h:   "+newmin+":regional_indicator_m:   "+newsec+":regional_indicator_s:"
+      desc=newidcode+f"\n"+newday+":regional_indicator_d:   "+newhrs+":regional_indicator_h:   "+newmin+":regional_indicator_m:   "+newsec+":regional_indicator_s:"
       if desc != prevdesc:
         await message.edit(content = desc)
     desc = "Countdown for "
     if sec >= 604800:
-      desc = desc + sec//604800 + " weeks "
+      desc = desc + str(sec//604800) + " weeks "
       sec = sec%604800
     if sec >= 86400:
-      desc = desc + sec//86400 + " days "
+      desc = desc + str(sec//86400) + " days "
       sec = sec%86400
     if sec >= 3600:
-      desc = desc + sec//3600 + " hours "
+      desc = desc + str(sec//3600) + " hours "
       sec = sec%3600
     if sec >= 60:
-      desc = desc + sec//60 + " minutes "
+      desc = desc + str(sec//60) + " minutes "
       sec = sec%60
     if sec >= 1:
-      desc = desc + sec//1 + " seconds "
+      desc = desc + str(sec//1) + " seconds "
     desc = desc + "completed!"
     await message.edit(content=desc)
     if Text==None:
