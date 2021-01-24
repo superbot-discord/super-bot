@@ -74,6 +74,9 @@ Shows information about [Tunneler's Train Transist Limited](https://h2mm.gitlab.
 **help {Command or Category}**
 Show the help for a specific command/category. The command/category is optional.
 
+**prefix {New prefix}**
+View or change the prefix of the bot.
+
 **ping**
 Checks the speed of the bot.
 
@@ -212,6 +215,9 @@ Turns the PDF to plain text.
   elif cat=="help":
     ti="help {Command or Category}"
     desc=f"Show the help for a specific command/category. The command/category is optional."
+  elif cat=="prefix":
+    ti="prefix {New prefix}"
+    desc="View or change the prefix of the bot. The New prefix is optional."
   elif cat=="ping":
     ti="ping"
     desc=f"Checks the speed of the bot."
@@ -347,7 +353,7 @@ Turns the PDF to plain text.
 `ta` `tunnelers abyss`
 
 **Basic Commands**
-`help` `ping` `speedtest`
+`help` `prefix` `ping` `speedtest`
 
 **Tunnelers-Abyss Information Commands**
 `admins` `mods` `gsmrl` `tttl`
@@ -1152,6 +1158,7 @@ async def rawrawspoiler(ctx, *, text):
 
 @bot.command()
 async def prefix(ctx, new = None):
+  global prefix
   if new == None:
     await ctx.send("The prefix for the bot is `"+prefix+"`. You may also mention the bot as a prefix.")
   else:
