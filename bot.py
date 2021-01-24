@@ -33,7 +33,8 @@ hexstring_pattern = re.compile(r'#?([0-9A-F]{2})([0-9A-F]{2})([0-9A-F]{2})', re.
 id_pattern = re.compile(r'([A-Z]{5})', re.IGNORECASE)
 UNITS = {'s':'seconds', 'm':'minutes', 'h':'hours', 'd':'days', 'w':'weeks'}
 intents = discord.Intents.all()
-bot = commands.Bot(command_prefix=commands.when_mentioned_or("="), intents=intents)
+prefix = "="
+bot = commands.Bot(command_prefix=commands.when_mentioned_or(prefix), intents=intents)
 client = discord.Client()
 bot.remove_command('help')
 typer=0
@@ -1144,9 +1145,19 @@ async def rawspoiler(ctx, *, text):
   await ctx.send(text)
 
 @bot.command()
-async def getprefix(bot, message):
-    extras = await prefixes_for(message.guild) # returns a list
-    return commands.when_mentioned_or(*extras)(bot, message)
+async def rawrawspoiler(ctx, *, text):
+  text="\\\|\\\|\\\|\\\|".join(text)
+  text="\\\|\\\|"+text+"\\\|\\\|"
+  await ctx.send(text)
+
+@bot.command()
+async def prefix(ctx, new = None):
+  if new == None:
+    await ctx.send("The prefix for the bot is `"+prefix+"`. You may also mention the bot as a prefix.")
+  else:
+    prefix = new
+    bot = commands.Bot(command_prefix=commands.when_mentioned_or(prefix), intents=intents)
+    await ctx.send("The prefix for the bot has been set to `"+prefix+"`. You may also mention the bot as a prefix.")
 
 @bot.command()
 async def emojiinfo(ctx,emojiarg : discord.Emoji):
