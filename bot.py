@@ -31,10 +31,11 @@ dictionary=PyDictionary()
 allid=[]
 hexstring_pattern = re.compile(r'#?([0-9A-F]{2})([0-9A-F]{2})([0-9A-F]{2})', re.IGNORECASE)
 id_pattern = re.compile(r'([A-Z]{5})', re.IGNORECASE)
+alphaend_pattern = re.compile(r'.*[a-z]', re.IGNORECASE)
 UNITS = {'s':'seconds', 'm':'minutes', 'h':'hours', 'd':'days', 'w':'weeks'}
 intents = discord.Intents.all()
-prefix = "="
-bot = commands.Bot(command_prefix=commands.when_mentioned_or(prefix), intents=intents)
+pre = "="
+bot = commands.Bot(command_prefix=commands.when_mentioned_or(pre), intents=intents)
 client = discord.Client()
 bot.remove_command('help')
 typer=0
@@ -1158,13 +1159,16 @@ async def rawrawspoiler(ctx, *, text):
 
 @bot.command()
 async def prefix(ctx, new = None):
-  global prefix
+  global pre
   if new == None:
-    await ctx.send("The prefix for the bot is `"+prefix+"`. You may also mention the bot as a prefix.")
+    await ctx.send("The prefix for the bot is `"+pre+"`. You may also mention the bot as a prefix.")
   else:
-    prefix = new
-    bot = commands.Bot(command_prefix=commands.when_mentioned_or(prefix), intents=intents)
-    await ctx.send("The prefix for the bot has been set to `"+prefix+"`. You may also mention the bot as a prefix.")
+    if alphaend_pattern.fullmatch(new):
+      pre = new + " "
+    else:
+      pre = new
+    bot = commands.Bot(command_prefix=commands.when_mentioned_or(pre), intents=intents)
+    await ctx.send("The prefix for the bot has been set to `"+pre+"`. You may also mention the bot as a prefix.")
 
 @bot.command()
 async def emojiinfo(ctx,emojiarg : discord.Emoji):
