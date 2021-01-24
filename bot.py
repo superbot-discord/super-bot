@@ -1112,7 +1112,7 @@ async def color(ctx, arg1, arg2=None, arg3=None):
 
 @bot.command()
 async def time(ctx, *, timezoneinput="0"):
-  if timezoneinput.isdigit():
+  if timezoneinput.replace(".","").isnumeric():
     timezone=float(timezoneinput)
     if 15>timezone>-15 and timezone%0.25==0:
       tnow = datetime.now() + timedelta(minutes = int(timezoneinput*60))
@@ -1121,7 +1121,7 @@ async def time(ctx, *, timezoneinput="0"):
     else:
       await ctx.send("Invalid timezone! Timezone must be below 15, above -15 and divisible by 0.25.")
   elif timezoneinput=="all":
-    desc = desc + f"`AD``AE``AF``AG``AI``AL``AM``AO``AQ``AR``AS``AT``AU``AW``AX``AZ``BA``BB``BD``BE``BF``BG``BH``BI``BJ``BL``BM``BN``BO``BQ``BR``BS``BT``BV``BW``BY``BZ``CA``CC``CD``CF``CG``CH``CI``CK``CL``CM``CN``CO``CR``CU``CV``CW``CX``CY``CZ``DE``DJ``DK``DM``DO``DZ``EC``EE``EG``EH``ER``ES``ET``FI``FJ``FK``FM``FO``FR``GA``GB``GD``GE``GF``GG``GH``GI``GL``GM``GN``GP``GQ``GR``GS``GT``GU``GW``GY``HK``HM``HN``HR``HT``HU``ID``IE``IL``IM``IN``IO``IQ``IR``IS``IT``JE``JM``JO``JP``KE``KG``KH``KI``KM``KN``KP``KR``KW``KY``KZ``LA``LB``LC``LI``LK``LR``LS``LT``LU``LV``LY``MA``MC``MD``ME``MF``MG``MH``MK``ML``MM``MN``MO``MP``MQ``MR``MS``MT``MU``MV``MW``MX``MY``MZ``NA``NC``NE``NF``NG``NI``NL``NO``NP``NR``NU``NZ``OM``PA``PE``PF``PG``PH``PK``PL``PM``PN``PR``PS``PT``PW``PY``QA``RE``RO``RS``RU``RW``SA``SB``SC``SD``SE``SG``SH``SI``SJ``SK``SL``SM``SN``SO``SR``SS``ST``SV``SX``SY``SZ``TC``TD``TF``TG``TH``TJ``TK``TLa``TM``TN``TO``TR``TT``TV``TW``TZ``UA``UG``UM``US``UY``UZ``VA``VC``VE``VG``VI``VN``VU``WF``WS``YE``YT``ZA``ZM``ZW`\n[ISO-3166 Country Code](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2#Officially_assigned_code_elements), [TZ Database Names](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#List) and Timezone Numbers are supported."
+    desc = f"`AD``AE``AF``AG``AI``AL``AM``AO``AQ``AR``AS``AT``AU``AW``AX``AZ``BA``BB``BD``BE``BF``BG``BH``BI``BJ``BL``BM``BN``BO``BQ``BR``BS``BT``BV``BW``BY``BZ``CA``CC``CD``CF``CG``CH``CI``CK``CL``CM``CN``CO``CR``CU``CV``CW``CX``CY``CZ``DE``DJ``DK``DM``DO``DZ``EC``EE``EG``EH``ER``ES``ET``FI``FJ``FK``FM``FO``FR``GA``GB``GD``GE``GF``GG``GH``GI``GL``GM``GN``GP``GQ``GR``GS``GT``GU``GW``GY``HK``HM``HN``HR``HT``HU``ID``IE``IL``IM``IN``IO``IQ``IR``IS``IT``JE``JM``JO``JP``KE``KG``KH``KI``KM``KN``KP``KR``KW``KY``KZ``LA``LB``LC``LI``LK``LR``LS``LT``LU``LV``LY``MA``MC``MD``ME``MF``MG``MH``MK``ML``MM``MN``MO``MP``MQ``MR``MS``MT``MU``MV``MW``MX``MY``MZ``NA``NC``NE``NF``NG``NI``NL``NO``NP``NR``NU``NZ``OM``PA``PE``PF``PG``PH``PK``PL``PM``PN``PR``PS``PT``PW``PY``QA``RE``RO``RS``RU``RW``SA``SB``SC``SD``SE``SG``SH``SI``SJ``SK``SL``SM``SN``SO``SR``SS``ST``SV``SX``SY``SZ``TC``TD``TF``TG``TH``TJ``TK``TLa``TM``TN``TO``TR``TT``TV``TW``TZ``UA``UG``UM``US``UY``UZ``VA``VC``VE``VG``VI``VN``VU``WF``WS``YE``YT``ZA``ZM``ZW`\n[ISO-3166 Country Code](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2#Officially_assigned_code_elements), [TZ Database Names](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#List) and Timezone Numbers (between -15 and 15, divisible by 0.25) are supported."
     embed = discord.Embed(title="All Timezones", description=desc)
     await ctx.send(embed=embed)
   elif len(timezoneinput)==2 and timezoneinput.isalpha():
