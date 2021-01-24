@@ -1850,55 +1850,55 @@ async def user(ctx,user: discord.Member=None, channel: discord.TextChannel=None)
   f2v=user.joined_at.strftime("%d %b, %Y (%a) %H:%M:%S")
   allroles=user.roles
   f3v=""
-  if user.permissions_in(ctx.channel).administrator:
+  if user.permissions_in(ctx.guild).administrator:
     f3v=f3v+"Admin, "
-  if user.permissions_in(ctx.channel).manage_guild:
+  if user.permissions_in(ctx.guild).manage_guild:
     f3v=f3v+"Manage Server, "
-  if user.permissions_in(ctx.channel).manage_roles:
+  if user.permissions_in(ctx.guild).manage_roles:
     f3v=f3v+"Manage Roles, "
-  if user.permissions_in(ctx.channel).administrator:
+  if user.permissions_in(ctx.guild).administrator:
     f3v=f3v+"Manage Permissions, "
-  if user.permissions_in(ctx.channel).view_audit_log:
+  if user.permissions_in(ctx.guild).view_audit_log:
     f3v=f3v+"View Audit Logs, "
-  if user.permissions_in(ctx.channel).view_guild_insights:
+  if user.permissions_in(ctx.guild).view_guild_insights:
     f3v=f3v+"View Server Insights, "
-  if user.permissions_in(ctx.channel).kick_members:
+  if user.permissions_in(ctx.guild).kick_members:
     f3v=f3v+"Kick Members, "
-  if user.permissions_in(ctx.channel).ban_members:
+  if user.permissions_in(ctx.guild).ban_members:
     f3v=f3v+"Ban Members, "
-  if user.permissions_in(ctx.channel).manage_nicknames:
+  if user.permissions_in(ctx.guild).manage_nicknames:
     f3v=f3v+"Manage Nicknames, "
-  if user.permissions_in(ctx.channel).manage_webhooks:
+  if user.permissions_in(ctx.guild).manage_webhooks:
     f3v=f3v+"Manage Webhooks, "
-  if user.permissions_in(ctx.channel).manage_emojis:
+  if user.permissions_in(ctx.guild).manage_emojis:
     f3v=f3v+"Manage Emojis, "
-  if user.permissions_in(ctx.channel).manage_nicknames:
+  if user.permissions_in(ctx.guild).manage_nicknames:
     f3v=f3v+"Change Nickname, "
-  if user.permissions_in(ctx.channel).mention_everyone:
+  if user.permissions_in(ctx.guild).mention_everyone:
     f3v=f3v+"Mention Everyone, "
-  if user.permissions_in(ctx.channel).create_instant_invite:
+  if user.permissions_in(ctx.guild).create_instant_invite:
     f3v=f3v+"Create Invite, "
   f3v=f3v[:-2]
   if f3v=="":
     f3v="No permissions"
   f3vb=""
-  if user.permissions_in(ctx.channel).view_channel:
+  if user.permissions_in(channel).view_channel:
     f3vb=f3vb+"View Channel, "
-  if user.permissions_in(ctx.channel).read_messages:
+  if user.permissions_in(channel).read_messages:
     f3vb=f3vb+"Read Messages, "
-  if user.permissions_in(ctx.channel).read_message_history:
+  if user.permissions_in(channel).read_message_history:
     f3vb=f3vb+"Read Message History, "
-  if user.permissions_in(ctx.channel).send_messages:
+  if user.permissions_in(channel).send_messages:
     f3vb=f3vb+"Send Messages, "
-  if user.permissions_in(ctx.channel).send_tts_messages:
+  if user.permissions_in(channel).send_tts_messages:
     f3vb=f3vb+"Send TTS Messages, "
-  if user.permissions_in(ctx.channel).add_reactions:
+  if user.permissions_in(channel).add_reactions:
     f3vb=f3vb+"Add Reactions, "
-  if user.permissions_in(ctx.channel).external_emojis:
+  if user.permissions_in(channel).external_emojis:
     f3vb=f3vb+"External Emojis, "
-  if user.permissions_in(ctx.channel).attach_files:
+  if user.permissions_in(channel).attach_files:
     f3vb=f3vb+"Attach Files, "
-  if user.permissions_in(ctx.channel).embed_links:
+  if user.permissions_in(channel).embed_links:
     f3vb=f3vb+"Embed Links, "
   f3vb=f3vb[:-2]
   if f3vb=="":
