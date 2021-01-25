@@ -294,9 +294,6 @@ Turns the PDF to plain text.
   elif cat=="rawspoiler":
     ti="rawspoiler [Text]"
     desc="Generates an annoying spoiler for you to copy and paste."
-  elif cat=="rawrawspoiler":
-    ti="rawrawspoiler [Text]"
-    desc="Generates an annoying spoiler for you to copy and paste twice."
   elif cat=="reverse":
     ti="reverse [Text]"
     desc="sesrever the provided text."
@@ -354,7 +351,7 @@ Turns the PDF to plain text.
 **Prefix: **`=`
 
 **Command Categories**
-`basic` `ta` `discordi` `discord` `text` `moderation` `web` (These categories are aliased as longer names.)
+`ta` `tunnelers abyss`
 
 **Basic Commands**
 `help` `prefix` `ping` `speedtest`
@@ -369,7 +366,7 @@ Turns the PDF to plain text.
 `spam` `embed` `pretend` `pretendembed` `pretendspam` (BETA)
 
 **Text Manipulation Commands**
-`insert` `spoiler` `rawspoiler` `rawrawspoiler` `reverse` `emoji`
+`insert` `spoiler` `rawspoiler` `reverse` `emoji`
 
 **Moderation & Information Commands**
 `kick` `ban` `slowmode` `math` `define` `time` `rtimer` `terminate` `timer` (Outdated)
@@ -1124,7 +1121,7 @@ async def time(ctx, *, timezoneinput="0"):
     else:
       await ctx.send("Invalid timezone! Timezone must be below 15, above -15 and divisible by 0.25.")
   elif timezoneinput=="all":
-    desc = f"**[ISO 3166 Country Codes](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2#Officially_assigned_code_elements)**:\n`AD` `AE` `AF` `AG` `AI` `AL` `AM` `AO` `AQ` `AR` `AS` `AT` `AU` `AW` `AX` `AZ` `BA` `BB` `BD` `BE` `BF` `BG` `BH` `BI` `BJ` `BL` `BM` `BN` `BO` `BQ` `BR` `BS` `BT` `BV` `BW` `BY` `BZ` `CA` `CC` `CD` `CF` `CG` `CH` `CI` `CK` `CL` `CM` `CN` `CO` `CR` `CU` `CV` `CW` `CX` `CY` `CZ` `DE` `DJ` `DK` `DM` `DO` `DZ` `EC` `EE` `EG` `EH` `ER` `ES` `ET` `FI` `FJ` `FK` `FM` `FO` `FR` `GA` `GB` `GD` `GE` `GF` `GG` `GH` `GI` `GL` `GM` `GN` `GP` `GQ` `GR` `GS` `GT` `GU` `GW` `GY` `HK` `HM` `HN` `HR` `HT` `HU` `ID` `IE` `IL` `IM` `IN` `IO` `IQ` `IR` `IS` `IT` `JE` `JM` `JO` `JP` `KE` `KG` `KH` `KI` `KM` `KN` `KP` `KR` `KW` `KY` `KZ` `LA` `LB` `LC` `LI` `LK` `LR` `LS` `LT` `LU` `LV` `LY` `MA` `MC` `MD` `ME` `MF` `MG` `MH` `MK` `ML` `MM` `MN` `MO` `MP` `MQ` `MR` `MS` `MT` `MU` `MV` `MW` `MX` `MY` `MZ` `NA` `NC` `NE` `NF` `NG` `NI` `NL` `NO` `NP` `NR` `NU` `NZ` `OM` `PA` `PE` `PF` `PG` `PH` `PK` `PL` `PM` `PN` `PR` `PS` `PT` `PW` `PY` `QA` `RE` `RO` `RS` `RU` `RW` `SA` `SB` `SC` `SD` `SE` `SG` `SH` `SI` `SJ` `SK` `SL` `SM` `SN` `SO` `SR` `SS` `ST` `SV` `SX` `SY` `SZ` `TC` `TD` `TF` `TG` `TH` `TJ` `TK` `TLa` `TM` `TN` `TO` `TR` `TT` `TV` `TW` `TZ` `UA` `UG` `UM` `US` `UY` `UZ` `VA` `VC` `VE` `VG` `VI` `VN` `VU` `WF` `WS` `YE` `YT` `ZA` `ZM` `ZW`\n\n[TZ Database Names](http://worldtimeapi.org/api/timezone.txt) and Timezone Numbers (between -15 and 15, divisible by 0.25) are supported."
+    desc = f"**[ISO 3166 Country Codes](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2#Officially_assigned_code_elements)**:\n```AD AE AF AG AI AL AM AO AQ AR AS AT AU AW AX AZ BA BB BD BE BF BG BH BI BJ BL BM BN BO BQ BR BS BT BV BW BY BZ CA CC CD CF CG CH CI CK CL CM CN CO CR CU CV CW CX CY CZ DE DJ DK DM DO DZ EC EE EG EH ER ES ET FI FJ FK FM FO FR GA GB GD GE GF GG GH GI GL GM GN GP GQ GR GS GT GU GW GY HK HM HN HR HT HU ID IE IL IM IN IO IQ IR IS IT JE JM JO JP KE KG KH KI KM KN KP KR KW KY KZ LA LB LC LI LK LR LS LT LU LV LY MA MC MD ME MF MG MH MK ML MM MN MO MP MQ MR MS MT MU MV MW MX MY MZ NA NC NE NF NG NI NL NO NP NR NU NZ OM PA PE PF PG PH PK PL PM PN PR PS PT PW PY QA RE RO RS RU RW SA SB SC SD SE SG SH SI SJ SK SL SM SN SO SR SS ST SV SX SY SZ TC TD TF TG TH TJ TK TL TM TN TO TR TT TV TW TZ UA UG UM US UY UZ VA VC VE VG VI VN VU WF WS YE YT ZA ZM ZW```\nIn addition, **[TZ Database Names](http://worldtimeapi.org/api/timezone.txt)** and **UTC Timezone Numbers** (between -15 and 15, divisible by 0.25) are supported."
     embed = discord.Embed(title="All Timezones", description=desc)
     await ctx.send(embed=embed)
   elif len(timezoneinput)==2 and timezoneinput.isalpha():
