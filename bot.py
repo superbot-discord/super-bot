@@ -294,6 +294,9 @@ Turns the PDF to plain text.
   elif cat=="rawspoiler":
     ti="rawspoiler [Text]"
     desc="Generates an annoying spoiler for you to copy and paste."
+  elif cat=="rawrawspoiler":
+    ti="rawrawspoiler [Text]"
+    desc="Generates an annoying spoiler for you to copy and paste twice."
   elif cat=="reverse":
     ti="reverse [Text]"
     desc="sesrever the provided text."
@@ -351,7 +354,7 @@ Turns the PDF to plain text.
 **Prefix: **`=`
 
 **Command Categories**
-`ta` `tunnelers abyss`
+`basic` `ta` `discordi` `discord` `text` `moderation` `web` (These categories are aliased as longer names.)
 
 **Basic Commands**
 `help` `prefix` `ping` `speedtest`
@@ -366,7 +369,7 @@ Turns the PDF to plain text.
 `spam` `embed` `pretend` `pretendembed` `pretendspam` (BETA)
 
 **Text Manipulation Commands**
-`insert` `spoiler` `rawspoiler` `reverse` `emoji`
+`insert` `spoiler` `rawspoiler` `rawrawspoiler` `reverse` `emoji`
 
 **Moderation & Information Commands**
 `kick` `ban` `slowmode` `math` `define` `time` `rtimer` `terminate` `timer` (Outdated)
