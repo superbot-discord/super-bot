@@ -778,7 +778,7 @@ async def speedtest(ctx):
 
 @bot.command()
 async def screenshot(ctx, url):
-  try:
+    #try:
     options = webdriver.ChromeOptions()
     options.headless = True
     options.add_argument('--no-sandbox')
@@ -797,8 +797,8 @@ async def screenshot(ctx, url):
     await ctx.send(file=discord.File('web_screenshot2.png'))
     os.remove('web_screenshot1.png')
     os.remove('web_screenshot2.png')
-  except:
-    await ctx.send("The URL was invalid, or the webpage is too long.")
+    #except:
+    #  await ctx.send("The URL was invalid, or the webpage is too long.")
 
 @bot.command()
 async def ocr(ctx):
