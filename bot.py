@@ -747,8 +747,9 @@ async def calc(ctx,*,arg):
     disp = "Result: "+str(result)
     await ctx.send(disp)
   elif arg.count("=")!=0 and arg.count("==")==0 and arg.count("!=")==0 and arg.count(">=")==0 and arg.count("<=")==0 and arg.count(">")==0 and arg.count("<")==0 and arg.count("and")==0 and arg.count("or")==0 and arg.count("not")==0:
+    lcls = locals()
     exec(arg, globals(), lcls)
-    #await ctx.message.add_reaction("👍")
+    await ctx.message.add_reaction("👍")
   else:
     await ctx.send("Invalid input, please try again.")
 
