@@ -651,6 +651,8 @@ async def engrave(ctx, product, *, text):
   elif product == "pencil" or product == "pencil2":
     embed = discord.Embed(title="Engrave on Apple Pencil (2nd generation)")
     embed.set_image(url="https://www.apple.com/shop/preview/engrave/PU8F2AM/A?th="+text+"&s=2&tl=")
+  else:
+    embed = discord.Embed(title="Invalid product", description="")
   await ctx.send(embed=embed)
 
 @bot.command()
@@ -745,12 +747,8 @@ async def calc(ctx,*,arg):
     disp = "Result: "+str(result)
     await ctx.send(disp)
   elif arg.count("=")!=0 and arg.count("==")==0 and arg.count("!=")==0 and arg.count(">=")==0 and arg.count("<=")==0 and arg.count(">")==0 and arg.count("<")==0 and arg.count("and")==0 and arg.count("or")==0 and arg.count("not")==0:
-    splitted=arg.split("=")
-    for count in splitted:
-      if count.isalpha()==True:
-        lcls = globals()
-        exec(count+'='+splitted[len(splitted)-1], globals(), lcls)
-    await ctx.message.add_reaction("👍")
+    exec(arg, globals(), lcls)
+    #await ctx.message.add_reaction("👍")
   else:
     await ctx.send("Invalid input, please try again.")
 
