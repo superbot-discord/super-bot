@@ -869,7 +869,7 @@ async def pretend(ctx, member : discord.Member, *, message):
   for count in whl:
     if count.name == "Pretender":
       ourweb = True
-  if len(whl) == 0 or ourweb = False:
+  if len(whl) == 0 or ourweb == False:
     wh = await ctx.channel.create_webhook("Pretender")
     wht = wh.token
   async with aiohttp.ClientSession() as session:
@@ -879,13 +879,13 @@ async def pretend(ctx, member : discord.Member, *, message):
 @bot.command(pass_context=True)
 async def pretendembed(ctx, member : discord.Member, *, text):
   whl = await ctx.channel.webhooks()
-  if len(whl) == 0:
-    await ctx.channel.create_webhook("Pretender")
-    whl = await ctx.channel.webhooks()
+  ourweb = False
   for count in whl:
-    if count.name == ("Pretender"):
-      token = count.token
-      break
+    if count.name == "Pretender":
+      ourweb = True
+  if len(whl) == 0 or ourweb == False:
+    wh = await ctx.channel.create_webhook("Pretender")
+    wht = wh.token
   async with aiohttp.ClientSession() as session:
     webhook = Webhook.partial(797029335424434186, token, adapter=RequestsWebhookAdapter())
   textlist=text.splitlines()
