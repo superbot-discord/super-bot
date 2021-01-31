@@ -865,13 +865,13 @@ async def react(ctx, message : discord.Message, emoji : discord.Emoji):
 @bot.command(pass_context=True)
 async def pretend(ctx, member : discord.Member, *, message):
   whl = await ctx.channel.webhooks()
-  if len(whl) == 0:
-    await ctx.channel.create_webhook("Pretender")
-    whl = await ctx.channel.webhooks()
+  ourweb = False
   for count in whl:
-    if count.name == ("Pretender"):
-      token = count.token
-      break
+    if count.name == "Pretender":
+      ourweb = True
+  if len(whl) == 0 or ourweb = False:
+    wh = await ctx.channel.create_webhook("Pretender")
+    wht = wh.token
   async with aiohttp.ClientSession() as session:
     webhook = Webhook.partial(797029335424434186, token, adapter=RequestsWebhookAdapter())
   await webhook.send(message, username=member.name, avatar_url=member.avatar_url)
