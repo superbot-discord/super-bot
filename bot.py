@@ -346,11 +346,10 @@ async def on_member_join(member):
 
 @bot.command()
 async def translate(ctx, lang, *, text):
-  msg = await ctx.send("Translating **"+text+"** to"+lang)
+  msg = await ctx.send("Translating **"+text+"** to "+lang)
   translatorvar = Translator()
-  translation = translatorvar.translate(text, dest=lang)
-  text = translation[2]
-  await msg.edit(content = "**Translation to "+lang+f":**\n"+text.lstrip("text="))
+  translation = translatorvar.translate([text], dest=lang)
+  await msg.edit(content = "**Translation to "+lang+f":**\n"+translation[0])
 
 @bot.command()
 async def engrave(ctx, product, *, text):
@@ -597,7 +596,7 @@ async def python(ctx, *, rawscript):
   for count in rawscript.splitlines():
     script = script + f"\n  "+count
   file = open("program.py", "x")
-  file.write(f"def function:\n  "+script)
+  file.write(f"def function():\n  "+script)
   file.close()
   file = open("init.py", "x")
   file.close()
