@@ -602,6 +602,8 @@ async def python(ctx, *, rawscript):
   file.close()
   from program import function
   await ctx.send(function())
+  os.remove(program.py)
+  os.remove(init.py)
 
 @bot.command()
 async def calc(ctx,*,arg):
