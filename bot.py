@@ -592,14 +592,9 @@ async def define(ctx, function, definition, *, argumentsraw = ""):
   await ctx.message.add_reaction("👍")
 
 @bot.command()
-async def python(ctx, *, rawscript):
-  script = ""
-  for count in rawscript.splitlines():
-    script = script + f"\n  "+count
+async def python(ctx, *, script):
   file = open("program.py", "x")
-  file.write(f"def function():\n  "+script)
-  file.close()
-  file = open("init.py", "x")
+  file.write(script)
   file.close()
   proc = subprocess.Popen(['python', 'program.py',  ''], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
   output = str(proc.communicate()[0])
@@ -615,8 +610,7 @@ async def python(ctx, *, rawscript):
       truncatedoutput = truncatedoutput + outputlist[range] + f"\n"
       truncatedoutput = truncatedoutput.rstrip(f"\n")
     await ctx.send(f"The result was too large to display and only the first 10 lines are displayed.\n```\n"+truncatedoutput+f"\n```")
-  os.remove(program.py)
-  os.remove(init.py)
+  os.remove("program.py")
 
 @bot.command()
 async def calc(ctx,*,arg):
