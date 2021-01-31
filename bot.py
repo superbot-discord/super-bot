@@ -608,7 +608,6 @@ async def python(ctx, *, script):
     truncatedoutput = ""
     for count in range(0,11):
       truncatedoutput = truncatedoutput + outputlist[count] + f"\n"
-      truncatedoutput = truncatedoutput.rstrip(f"\n")
     await ctx.send(f"The result was truncated due to the length of the result.\n```\n"+truncatedoutput+f"\n```")
   os.remove("program.py")
 
