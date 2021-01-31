@@ -848,8 +848,7 @@ async def pretend(ctx, member : discord.Member, *, message):
   if ctx.author.id != 746227806278647928:
     await webhook.send(message, username=member.name, avatar_url=member.avatar_url)
   else:
-    pretendas = await ctx.guild.get_member(746227806278647928)
-    await webhook.send(message, username=pretendas.name, avatar_url=pretendas.avatar_url)
+    await webhook.send(message, username=ctx.author.name, avatar_url=ctx.author.avatar_url)
 
 @bot.command(pass_context=True)
 async def pretendembed(ctx, member : discord.Member, *, text):
