@@ -390,10 +390,10 @@ async def on_reaction_add(reaction, user):
 
 @bot.command()
 async def translate(ctx, lang, *, text):
-  msg = await ctx.send("**Translating** "+text+" **to** "+lang)
+  msg = await ctx.send("Translating **"+text+"** to"+lang)
   translatorvar = Translator()
   translation = translatorvar.translate(text, dest=lang)
-  await msg.edit(content = "**Translation to "+lang+f":**\n"+translation)
+  await msg.edit(content = "**Translation to "+lang+f":**\n"+str(translation))
 
 @bot.command()
 async def engrave(ctx, product, *, text):
