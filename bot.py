@@ -25,6 +25,7 @@ from pygoogletranslation import Translator
 import wikipedia
 from PyDictionary import PyDictionary
 import pytz
+import subprocess
 
 set(pytz.all_timezones_set)
 dictionary=PyDictionary()
@@ -600,8 +601,8 @@ async def python(ctx, *, rawscript):
   file.close()
   file = open("init.py", "x")
   file.close()
-  from program import function
-  await ctx.send(function())
+  proc = subprocess.Popen(['python', 'program.py',  ''], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+  await ctx.send(proc.communicate()[0])
   os.remove(program.py)
   os.remove(init.py)
 
