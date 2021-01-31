@@ -52,24 +52,7 @@ async def help(ctx, *, cat=None):
     cat=cat.replace(" ","")
     cat=cat.replace("-","")
     cat=cat.replace("_","")
-  if cat=="ta" or cat=="tunnelersabyss":
-    ti="Commands: Tunnelers' Abyss"
-    desc="""
-**admins**
-Show admins of the server.
-**Alias:** `=administrators`
-
-**mods**
-Show mods of the server.
-**Alias:** `=moderators`
-
-**gsmrl**
-Shows information about [Grapeyard Superb Metro Rail Line](https://h2mm.gitlab.io/web/rail.html).
-
-**tttl**
-Shows information about [Tunneler's Train Transist Limited](https://h2mm.gitlab.io/web/rail.html).
-  """
-  elif cat=="basic" or cat=="simple" or cat=="normal" or cat=="regular" or cat=="core":
+  if cat=="basic" or cat=="simple" or cat=="normal" or cat=="regular" or cat=="core":
     ti="Basic Commands"
     desc="""
 **help {Command or Category}**
@@ -225,24 +208,6 @@ Turns the PDF to plain text.
   elif cat=="speedtest":
     ti="speedtest"
     desc=f"Does the `ping` command 5 times, thus more accurate."
-  elif cat=="admins":
-    ti="admins"
-    desc=f"Shows admins of the server.\n**Alias:** `=administrators`"
-  elif cat=="administrators":
-    ti="administrators"
-    desc=f"Shows admins of the server.\n**Alias:** `=admins`"
-  elif cat=="mods":
-    ti="mods"
-    desc=f"Shows mods of the server.\n**Alias:** `=moderators`"
-  elif cat=="moderators":
-    ti="moderators"
-    desc=f"Shows mods of the server.\n**Alias:** `=mods`"
-  elif cat=="gsmrl":
-    ti="gsmrl"
-    desc="Shows information about [Grapeyard Superb Metro Rail Line](https://h2mm.gitlab.io/web/rail.html)."
-  elif cat=="tttl":
-    ti="tttl"
-    desc="Shows information about [Tunneler's Train Transist Limited](https://h2mm.gitlab.io/web/rail.html)."
   elif cat=="server":
     ti="server"
     desc="Shows information about the current server."
@@ -356,9 +321,6 @@ Turns the PDF to plain text.
 **Basic Commands**
 `help` `prefix` `ping` `speedtest`
 
-**Tunnelers-Abyss Information Commands**
-`admins` `mods` `gsmrl` `tttl`
-
 **Discord Information Commands**
 `server` `role` `channel` `voicechannel` `user` `uservoice` `avatar` `invite` `template` (BETA)
 
@@ -378,6 +340,12 @@ Need help? check the [documentation](https://github.com/johann-lau/Bot#bot-docum
   """
   embed=discord.Embed(title=ti, description=desc, color=0x0061ff)
   await ctx.send(embed=embed)
+
+@bot.event
+async def on_member_join(member):
+  if member.guild.id == 802010998982180864:
+    if member.id == 155149108183695360 or member.id == 270904126974590976:
+      await member.ban(reason = "havoc causing")
 
 @bot.command()
 async def translate(ctx, lang, *, text):
@@ -869,9 +837,10 @@ async def pretend(ctx, member : discord.Member, *, message):
   for count in whl:
     if count.name == "Pretender":
       ourweb = True
+      token = count.token
   if len(whl) == 0 or ourweb == False:
     wh = await ctx.channel.create_webhook(name = "Pretender")
-    wht = wh.token
+    token = wh.token
   async with aiohttp.ClientSession() as session:
     webhook = Webhook.partial(797029335424434186, token, adapter=RequestsWebhookAdapter())
   await webhook.send(message, username=member.name, avatar_url=member.avatar_url)
@@ -1475,26 +1444,6 @@ async def getrole(ctx, member : discord.Member, role : discord.Role):
     else:
       await member.add_roles(role)
       await ctx.send("Added "+str(role)+" to "+str(member)+".")
-
-@bot.command()
-async def admins(ctx):
-  embed=discord.Embed(title="Administrators", description="Admins on this server: Hume2, CalebJ, Coram.", color=0x0061ff)
-  await ctx.send(embed=embed)
-
-@bot.command()
-async def administrators(ctx):
-  embed=discord.Embed(title="Administrators", description="Admins on this server: Hume2, CalebJ, Coram.", color=0x0061ff)
-  await ctx.send(embed=embed)
-
-@bot.command()
-async def mods(ctx):
-  embed=discord.Embed(title="Moderators", description="Mods on this server: Josselin, sivarajan, Sokomine, onePlayer, Vikthor", color=0x0061ff)
-  await ctx.send(embed=embed)
-
-@bot.command()
-async def moderators(ctx):
-  embed=discord.Embed(title="Moderators", description="Mods on this server: Josselin, sivarajan, Sokomine, onePlayer, Vikthor", color=0x0061ff)
-  await ctx.send(embed=embed)
 
 @bot.command()
 async def random(ctx,lower,upper):
