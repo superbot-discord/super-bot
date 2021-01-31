@@ -602,7 +602,19 @@ async def python(ctx, *, rawscript):
   file = open("init.py", "x")
   file.close()
   proc = subprocess.Popen(['python', 'program.py',  ''], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-  await ctx.send(proc.communicate()[0])
+  output = str(proc.communicate()[0])
+  output = output.lstrip("'b").rstrip("\\n'").replace('\\n', f"\n")
+  outputlist = output.splitlines()
+  if len(outputlist)==0:
+    await ctx.send("There was no result.")
+  elif len(output.splitlines())<10:
+    await ctx.send(f"```\n"+output+f"\n```")
+  else:
+    truncatedoutput = ""
+    for count in range(0,11):
+      truncatedoutput = truncatedoutput + outputlist[range] + f"\n"
+      truncatedoutput = truncatedoutput.rstrip(f"\n")
+    await ctx.send(f"The result was too large to display and only the first 10 lines are displayed.\n```\n"+truncatedoutput+f"\n```")
   os.remove(program.py)
   os.remove(init.py)
 
