@@ -878,7 +878,7 @@ async def pretend(ctx, member : discord.Member, *, message):
     await ctx.channel.create_webhook("Pretender")
     whl = await ctx.channel.webhooks()
   for count in whl:
-    if count.name == ("Pretender")
+    if count.name == ("Pretender"):
       token = count.token
       break
   async with aiohttp.ClientSession() as session:
@@ -892,7 +892,7 @@ async def pretendembed(ctx, member : discord.Member, *, text):
     await ctx.channel.create_webhook("Pretender")
     whl = await ctx.channel.webhooks()
   for count in whl:
-    if count.name == ("Pretender")
+    if count.name == ("Pretender"):
       token = count.token
       break
   async with aiohttp.ClientSession() as session:
