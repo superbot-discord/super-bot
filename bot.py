@@ -388,98 +388,11 @@ async def on_reaction_add(reaction, user):
     translation = translator.translate(reaction.message.content)
     await reaction.message.channel.send(translation)
 
-@bot.event
-async def on_member_update(before, after):
-  desc="Profile of "+before.mention+" was updated!"
-  embed = discord.Embed(title="Profile update", description=desc, color=after.color)
-  if before.status != after.status:
-    embed.add_field(name="Status before", value=before.status, inline=False)
-    embed.add_field(name="Status after", value=after.status, inline=False)
-  """if before.activity != after.activity:
-    embed.add_field(name="Activity before", value=before.activity.name, inline=False)
-    embed.add_field(name="Activity after", value=after.activity.name, inline=False)"""
-    #embed.add_field(name="Activity state", value=after.activity.state, inline=True)
-    #embed.set_thumbnail(url=activity.large_image_url)
-  if before.nick != after.nick:
-    embed.add_field(name="Nickname before", value=before.nick, inline=False)
-    embed.add_field(name="Nickname after", value=after.nick, inline=False)
-  if before.roles != after.roles:
-    br=""
-    ar=""
-    for count in before.roles:
-      br=br+count.mention+" "
-    br=br[:-1]
-    for count in after.roles:
-      ar=ar+count.mention+" "
-    ar=ar[:-1]
-    embed.add_field(name="Roles before", value=br, inline=False)
-    embed.add_field(name="Roles after", value=ar, inline=False)
-  embed.set_thumbnail(url=after.avatar_url)
-  sendto = bot.get_channel(797989308023832607)
-  if after.name!="NQN":
-    await sendto.send(embed=embed)
-
-@bot.event
-async def on_member_join(member):
-  desc="Welcome, "+member.mention+"! Wish you a pleasure time in the server."
-  embed = discord.Embed(title="Welcome", description=desc)
-  sendto = bot.get_channel(796624935606026241)
-  await sendto.send(embed=embed)
-
-@bot.event
-async def on_message_delete(message):
-  desc="Message deleted in "+message.channel.mention+f"\n"+message.content
-  embed = discord.Embed(title="Message Deleted", description=desc)
-  sendto = bot.get_channel(797989308023832607)
-  await sendto.send(embed=embed)
-
-@bot.event
-async def on_message_edit(before, after):
-  desc="Message edited in "+before.channel.mention+f"\n [Jump!]("+after.jump_url+")"
-  embed = discord.Embed(title="Message Edited", description=desc)
-  embed.add_field(name="Before", value=before.content, inline=False)
-  embed.add_field(name="After", value=after.content, inline=False)
-  sendto = bot.get_channel(797989308023832607)
-  if len(before.content)!=0 and len(after.content)!=0:
-    await sendto.send(embed=embed)
-
-@bot.event
-async def on_guild_role_create(role):
-  desc=role.mention+" was created."
-  embed = discord.Embed(title="New role created!", description=desc)
-  sendto = bot.get_channel(797989308023832607)
-  await sendto.send(embed=embed)
-
-@bot.event
-async def on_guild_role_delete(role):
-  desc=role.mention+" was deleted."
-  embed = discord.Embed(title="Role deleted!", description=desc, color=role.color)
-  sendto = bot.get_channel(797989308023832607)
-  await sendto.send(embed=embed)
-
-@bot.event
-async def on_user_update(before, after):
-  desc="Profile of "+before.mention+" was updated!"
-  embed = discord.Embed(title="Profile update", description=desc)
-  if before.avatar != after.avatar:
-    embed.add_field(name="Avatar before", value="[click]("+str(before.avatar_url)+")", inline=False)
-    embed.set_thumbnail(url=before.avatar_url)
-    embed.add_field(name="Avatar after", value="[click]("+str(after.avatar_url)+")", inline=False)
-  """if before.discriminator != after.discriminator:
-    embed.add_field(name="Discriminator before", value="#"+before.discriminator, inline=False)
-    embed.add_field(name="Discriminator after", value="#"+after.discriminator, inline=False)"""
-  if before.name != after.name:
-    embed.add_field(name="Username before", value=before.name, inline=False)
-    embed.add_field(name="Username after", value=after.name, inline=False)
-  embed.set_thumbnail(url=after.avatar_url)
-  sendto = bot.get_channel(797989308023832607)
-  await sendto.send(embed=embed)
-
 @bot.command()
 async def translate(ctx, lang, *, text):
   msg = await ctx.send("**Translating** "+text+" **to** "+lang)
   translatorvar = Translator()
-  translation = translatorvar.translate(text, dest='en')
+  translation = translatorvar.translate(text, dest=lang)
   await msg.edit(content = "**Translation to "+lang+f":**\n"+translation)
 
 @bot.command()
