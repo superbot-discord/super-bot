@@ -597,7 +597,7 @@ async def python(ctx, *, rawscript):
   for count in rawscript.splitlines():
     script = script + f"\n  "+count
   file = open("program.py", "x")
-  file.write(f"def function.py:\n  "+script)
+  file.write(f"def function:\n  "+script)
   file.close()
   file = open("init.py", "x")
   file.close()
