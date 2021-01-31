@@ -845,10 +845,10 @@ async def pretend(ctx, member : discord.Member, *, message):
     identify = wh.id
   async with aiohttp.ClientSession() as session:
     webhook = Webhook.partial(identify, token, adapter=RequestsWebhookAdapter())
-  if ctx.author.id == 746227806278647928:
+  if ctx.author.id != 746227806278647928:
     await webhook.send(message, username=member.name, avatar_url=member.avatar_url)
   else:
-    pretendas = await guild.get_member(746227806278647928)
+    pretendas = await ctx.guild.get_member(746227806278647928)
     await webhook.send(message, username=pretendas.name, avatar_url=pretendas.avatar_url)
 
 @bot.command(pass_context=True)
