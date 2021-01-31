@@ -1453,7 +1453,7 @@ async def timer(ctx, timetocount,*,Text=None):
 
 @bot.command()
 async def getrole(ctx, member : discord.Member, role : discord.Role):
-    
+  if ctx.author.permissions_in(ctx.channel).kick_members:
     roles=member.roles
     if roles.count(role)==1:
       await member.remove_roles(role)
@@ -1461,6 +1461,8 @@ async def getrole(ctx, member : discord.Member, role : discord.Role):
     else:
       await member.add_roles(role)
       await ctx.send("Added "+str(role)+" to "+str(member)+".")
+   else:
+    await ctx.send("You don't have the required permissions.")
 
 @bot.command()
 async def random(ctx,lower,upper):
@@ -1931,24 +1933,22 @@ async def spam(ctx,times,*,message):
 @bot.command()
 async def ban(ctx, user: discord.Member, *, reason="No reason provided"):
   if ctx.author.permissions_in(ctx.channel).ban_members:
-    await user.ban(reason=reason)
     embed = discord.Embed(title=f"{user.name} was banned.", description=f"Reason: {reason}\nBy: {ctx.author.mention}")
-    sendto = bot.get_channel(796721534676762664)
-    await sendto.send(embed=embed)
+    await ctx.send(embed=embed)
     embed = discord.Embed(title=f"You were banned from the server.", description=f"Reason: {reason}\nBy: {ctx.author.mention}")
     await user.send(embed=embed)
+    await user.ban(reason=reason)
   else:
     await ctx.send("You don't have the required permissions.")
 
 @bot.command()
 async def kick(ctx, user: discord.Member, *, reason="No reason provided"):
   if ctx.author.permissions_in(ctx.channel).kick_members:
-    await user.kick(reason=reason)
     embed = discord.Embed(title=f"{user.name} was kicked.", description=f"Reason: {reason}\nBy: {ctx.author.mention}")
-    sendto = bot.get_channel(796721534676762664)
-    await sendto.send(embed=embed)
+    await ctx.send(embed=embed)
     embed = discord.Embed(title=f"You were kicked from the server.", description=f"Reason: {reason}\nBy: {ctx.author.mention}")
     await user.send(embed=embed)
+    await user.kick(reason=reason)
   else:
     await ctx.send("You don't have the required permissions.")
 
