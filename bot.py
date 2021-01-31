@@ -315,9 +315,6 @@ Turns the PDF to plain text.
     desc="""
 **Prefix: **`=`
 
-**Command Categories**
-`ta` `tunnelers abyss`
-
 **Basic Commands**
 `help` `prefix` `ping` `speedtest`
 
@@ -352,7 +349,8 @@ async def translate(ctx, lang, *, text):
   msg = await ctx.send("Translating **"+text+"** to"+lang)
   translatorvar = Translator()
   translation = translatorvar.translate(text, dest=lang)
-  await msg.edit(content = "**Translation to "+lang+f":**\n"+translation[2].lstrip("text="))
+  text = translation[2]
+  await msg.edit(content = "**Translation to "+lang+f":**\n"+text.lstrip("text="))
 
 @bot.command()
 async def engrave(ctx, product, *, text):
