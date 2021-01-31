@@ -16,3 +16,4 @@ pygoogletranslation==2.0.4
 wikipedia==1.4.0
 pydictionary==2.0.1
 pytz==2020.5
+subprocess32==3.5.4
