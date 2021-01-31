@@ -1996,8 +1996,8 @@ async def kick(ctx, user: discord.Member, *, reason="No reason provided"):
     await ctx.send("You don't have the required permissions.")
 
 @bot.command()
-async def slowmode(ctx, sec, *, channels = None):
-  if ctx.author.permissions_in(ctx.channel).manage_channels:
+async def slowmode(ctx, sec = None, *, channels = None):
+  if sec != None:
     if sec.isdigit() == False:
       sec = 0
     if int(sec) < 0 or int(sec) > 21600 or int(sec)%1 != 0:
@@ -2012,16 +2012,17 @@ async def slowmode(ctx, sec, *, channels = None):
       channellist = []
       for count in allchannel:
         if ctx.author.permissions_in(count).manage_channels:
+          orsec = str(count.slowmode_delay)
           await count.edit(slowmode_delay = sec)
           channellist.append(count.mention)
       if len(channellist)==0:
         await ctx.send("You don't have the manage channel permission in any of the channels.")
       elif len(channellist)==1:
-        await ctx.send("Set slowmode to "+sec+" second(s) for "+" ".join(channellist)+".")
+        await ctx.send("Set slowmode from "+orsec+" second(s) to "+sec+" second(s) for "+" ".join(channellist)+".")
       else:
         await ctx.send("Set slowmode to "+sec+" second(s) for these channels: "+" ".join(channellist)+".")
-    else:
-      await ctx.send("You don't have the required permissions.")
+  elif sec == None:
+    await ctx.send("The current slowmode is ")
 
 @bot.event
 async def on_ready():
