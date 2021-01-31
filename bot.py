@@ -832,14 +832,16 @@ async def react(ctx, message : discord.Message, emoji : discord.Emoji):
 
 @bot.command(pass_context=True)
 async def pretend(ctx, member : discord.Member, *, message):
-  token = await ctx.channel.webhooks[0].token
+  whl = await ctx.channel.webhooks
+  token = whl[0].token
   async with aiohttp.ClientSession() as session:
     webhook = Webhook.partial(797029335424434186, token, adapter=RequestsWebhookAdapter())
   await webhook.send(message, username=member.name, avatar_url=member.avatar_url)
 
 @bot.command(pass_context=True)
 async def pretendembed(ctx, member : discord.Member, *, text):
-  token = await ctx.channel.webhooks[0].token
+  whl = await ctx.channel.webhooks
+  token = whl[0].token
   async with aiohttp.ClientSession() as session:
     webhook = Webhook.partial(797029335424434186, token, adapter=RequestsWebhookAdapter())
   textlist=text.splitlines()
