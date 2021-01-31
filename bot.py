@@ -594,6 +594,19 @@ async def define(ctx, function, definition, *, argumentsraw = ""):
   await ctx.message.add_reaction("👍")
 
 @bot.command()
+async def python(ctx, *, rawscript):
+  script = ""
+  for count in rawscript.splitlines():
+    script = script + f"\n  "+count
+  file = open("program.py", "x")
+  file.write(f"def function.py:\n  "+script)
+  file.close()
+  file = open("init.py", "x")
+  file.close()
+  from program import function
+  await ctx.send(function())
+
+@bot.command()
 async def calc(ctx,*,arg):
   arg=arg.replace("^","**")
   arg=arg.replace("÷","/")
