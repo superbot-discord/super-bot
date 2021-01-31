@@ -602,14 +602,14 @@ async def python(ctx, *, script):
   outputlist = output.splitlines()
   if len(outputlist)==0:
     await ctx.send("There was no result.")
-  elif len(output.splitlines())<10:
+  elif len(outputlist)<10:
     await ctx.send(f"```\n"+output+f"\n```")
   else:
     truncatedoutput = ""
     for count in range(0,11):
       truncatedoutput = truncatedoutput + outputlist[range] + f"\n"
       truncatedoutput = truncatedoutput.rstrip(f"\n")
-    await ctx.send(f"The result was too large to display and only the first 10 lines are displayed.\n```\n"+truncatedoutput+f"\n```")
+    await ctx.send(f"The result was truncated due to the length of the result.\n```\n"+truncatedoutput+f"\n```")
   os.remove("program.py")
 
 @bot.command()
