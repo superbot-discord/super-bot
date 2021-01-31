@@ -379,21 +379,12 @@ Need help? check the [documentation](https://github.com/johann-lau/Bot#bot-docum
   embed=discord.Embed(title=ti, description=desc, color=0x0061ff)
   await ctx.send(embed=embed)
 
-@bot.event
-async def on_reaction_add(reaction, user):
-  lang = reaction.emoji.replace("flag_","")
-  await reaction.message.channel.send(lang)
-  if len(lang)==2:
-    translator = Translator(to_lang=lang)
-    translation = translator.translate(reaction.message.content)
-    await reaction.message.channel.send(translation)
-
 @bot.command()
 async def translate(ctx, lang, *, text):
   msg = await ctx.send("Translating **"+text+"** to"+lang)
   translatorvar = Translator()
   translation = translatorvar.translate(text, dest=lang)
-  await msg.edit(content = "**Translation to "+lang+f":**\n"+str(translation))
+  await msg.edit(content = "**Translation to "+lang+f":**\n"+translation[2].lstrip("text="))
 
 @bot.command()
 async def engrave(ctx, product, *, text):
@@ -2022,7 +2013,7 @@ async def slowmode(ctx, sec = None, *, channels = None):
       else:
         await ctx.send("Set slowmode to "+sec+" second(s) for these channels: "+" ".join(channellist)+".")
   elif sec == None:
-    await ctx.send("The current slowmode is ")
+    await ctx.send("The current slowmode is "+str(ctx.channel.slowmode_delay)+" second(s).")
 
 @bot.event
 async def on_ready():
