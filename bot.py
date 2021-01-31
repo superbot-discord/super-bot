@@ -1461,7 +1461,7 @@ async def getrole(ctx, member : discord.Member, role : discord.Role):
     else:
       await member.add_roles(role)
       await ctx.send("Added "+str(role)+" to "+str(member)+".")
-   else:
+  else:
     await ctx.send("You don't have the required permissions.")
 
 @bot.command()
