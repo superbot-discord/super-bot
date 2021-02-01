@@ -594,11 +594,11 @@ async def define(ctx, function, definition, *, argumentsraw = ""):
 
 @bot.command()
 async def python(ctx, *, script):
-  file = open("program.py", "x")
   match = python_pattern.fullmatch(script)
   if match:
     script = script.replace("```py","")
     script = script.replace("```","")
+  file = open("program.py", "w")
   file.write(script)
   file.close()
   proc = subprocess.Popen(['python', 'program.py',  ''], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
@@ -630,7 +630,6 @@ async def python(ctx, *, script):
     await ctx.send(f"```\n"+truncatedoutput+f"\n```")
     truncatedoutputlist = truncatedoutput.splitlines()
     await ctx.send(f"The result was truncated due to the length of the result. It had probably timed out.\n```\n"+truncatedoutput+f"\n```")
-  os.remove("program.py")
 
 @bot.command()
 async def calc(ctx,*,arg):
