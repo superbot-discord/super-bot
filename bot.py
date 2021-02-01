@@ -1452,15 +1452,25 @@ async def timer(ctx, timetocount,*,Text=None):
       await message.reply(f"Countdown complete!\n"+Text)
 
 @bot.command()
-async def getrole(ctx, member : discord.Member, role : discord.Role):
-  if ctx.author.permissions_in(ctx.channel).kick_members:
+async def getrole(ctx, role : discord.Role, member : discord.Member):
+  if ctx.guild.id == 805441351033552916 and member == None:
+    if role.id == 805462470604095539 or role.id == 805462557472194581:
+      roles=member.roles
+      if roles.count(role)==1:
+        await member.remove_roles(role)
+        await ctx.send("Removed "+str(role)+" role from "+str(member)+".")
+      else:
+        await member.add_roles(role)
+        await ctx.send("Added "+str(role)+" role to "+str(member)+".")
+  
+  elif ctx.author.permissions_in(ctx.channel).manage_roles:
     roles=member.roles
     if roles.count(role)==1:
       await member.remove_roles(role)
-      await ctx.send("Removed "+str(role)+" from "+str(member)+".")
+      await ctx.send("Removed "+str(role)+" role from "+str(member)+".")
     else:
       await member.add_roles(role)
-      await ctx.send("Added "+str(role)+" to "+str(member)+".")
+      await ctx.send("Added "+str(role)+" role to "+str(member)+".")
     
   else:
     await ctx.send("You don't have the required permissions.")
