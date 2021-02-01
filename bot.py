@@ -358,6 +358,11 @@ async def on_member_join(member):
       await member.ban(reason = "havoc causing")
 
 @bot.command()
+async def invite(ctx):
+  embed = discord.Embed(title="Invite", description = "Our bot could be invited [here](https://discord.com/oauth2/authorize?client_id=796686363604680755&permissions=805399670&scope=bot).")
+  await ctx.send(embed=embed)
+
+@bot.command()
 async def translate(ctx, lang, *, text):
   msg = await ctx.send("Translating **"+text+"** to "+lang)
   translatorvar = Translator()
