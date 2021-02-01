@@ -598,7 +598,7 @@ async def python(ctx, *, script):
   if match:
     script = script.replace("```py","")
     script = script.replace("```","")
-  file = open("program.py", "w")
+  file = open("program.py", "x")
   file.write(script)
   file.close()
   proc = subprocess.Popen(['python', 'program.py',  ''], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
@@ -628,6 +628,7 @@ async def python(ctx, *, script):
       else:
         truncatedoutput = truncatedoutput + str(count+1) + " | " + outputlist[count] + f"\n"
     await ctx.send(f"The result was truncated due to the length of the result. It had probably timed out.\n```\n"+truncatedoutput+f"\n```")
+  os.remove("program.py")
 
 @bot.command()
 async def calc(ctx,*,arg):
