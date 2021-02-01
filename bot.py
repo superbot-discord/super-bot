@@ -608,7 +608,7 @@ async def python(ctx, *, script):
   except subprocess.TimeoutExpired:
     proc.kill()
     output = str(proc.communicate())
-  outputlist = output.lstrip("'b(").split("\\n")
+  outputlist = output.lstrip("'b(").replace("\\n","\n")
   formatoutput = ""
   if len(outputlist)==0:
     await ctx.send("There was no result.")
