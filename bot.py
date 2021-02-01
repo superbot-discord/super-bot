@@ -33,6 +33,7 @@ allid=[]
 hexstring_pattern = re.compile(r'#?([0-9A-F]{2})([0-9A-F]{2})([0-9A-F]{2})', re.IGNORECASE)
 id_pattern = re.compile(r'([A-Z]{5})', re.IGNORECASE)
 alphaend_pattern = re.compile(r'.*[a-z]', re.IGNORECASE)
+python_pattern = re.compile(r'^\`\`\`(py)?\n[\s\S]*\`\`\`$')
 UNITS = {'s':'seconds', 'm':'minutes', 'h':'hours', 'd':'days', 'w':'weeks'}
 intents = discord.Intents.all()
 pre = "="
@@ -594,24 +595,40 @@ async def define(ctx, function, definition, *, argumentsraw = ""):
 @bot.command()
 async def python(ctx, *, script):
   file = open("program.py", "x")
-  file.write(script.replace("`",""))
+  match = python_pattern.fullmatch(script)
+  if match:
+    script = script.replace("```py","")
+    script = script.replace("```","")
+  file.write(script)
   file.close()
   proc = subprocess.Popen(['python', 'program.py',  ''], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
   try:
     output = str(proc.communicate(timeout = 1)[0])
-    output = output.lstrip("'b").rstrip("\\n'").replace('\\n', f"\n")
+    output = output.lstrip("'b(").rstrip("\\n'").replace('\\n', f"\n")
   except subprocess.TimeoutExpired:
     proc.kill()
     output = str(proc.communicate())
-    outputlist = output.split("\\n")
+    outputlist = output.lstrip("'b(").split("\\n")
+    formatoutput = ""
   if len(outputlist)==0:
     await ctx.send("There was no result.")
-  elif len(outputlist)<10:
-    await ctx.send(f"```\n"+output+f"\n```")
+  elif len(outputlist)<=11:
+    formatoutput = ""
+    for count in range(0, len(outputlist)-1):
+      if count<=9:
+        formatoutput = formatoutput + "0" + str(count+1) + " | " + outputlist[count] + f"\n"
+      else:
+        formatoutput = formatoutput + str(count+1) + " | " + outputlist[count] + f"\n"
+    await ctx.send(f"```\n"+formatoutput+f"\n```")
   else:
     truncatedoutput = ""
     for count in range(0,11):
-      truncatedoutput = truncatedoutput + outputlist[count] + f"\n"
+      if count<=9:
+        truncatedoutput = truncatedoutput + "0" + str(count+1) + " | " + outputlist[count] + f"\n"
+      else:
+        truncatedoutput = truncatedoutput + str(count+1) + " | " + outputlist[count] + f"\n"
+    await ctx.send(f"```\n"+truncatedoutput+f"\n```")
+    truncatedoutputlist = truncatedoutput.splitlines()
     await ctx.send(f"The result was truncated due to the length of the result. It had probably timed out.\n```\n"+truncatedoutput+f"\n```")
   os.remove("program.py")
 
