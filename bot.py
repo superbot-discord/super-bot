@@ -608,7 +608,7 @@ async def python(ctx, *, script):
     proc.kill()
     output = str(proc.communicate())
   output = output.lstrip("'b(").rstrip("\\n'").replace("\n", f"\n")
-  outputlist = output.split("\n")
+  outputlist = output.split("\\n")
   if len(outputlist)==0:
     await ctx.send("There was no result.")
   elif len(outputlist)<=11:
