@@ -598,20 +598,22 @@ async def python(ctx, *, script):
   file.close()
   proc = subprocess.Popen(['python', 'program.py',  ''], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
   try:
-    output = str(proc.communicate(timeout = 5)[0])
+    output = str(proc.communicate(timeout = 1)[0])
     output = output.lstrip("'b").rstrip("\\n'").replace('\\n', f"\n")
-    outputlist = output.splitlines()
-    if len(outputlist)==0:
-      await ctx.send("There was no result.")
-    elif len(outputlist)<10:
-      await ctx.send(f"```\n"+output+f"\n```")
-    else:
-      truncatedoutput = ""
-      for count in range(0,11):
-        truncatedoutput = truncatedoutput + outputlist[count] + f"\n"
-      await ctx.send(f"The result was truncated due to the length of the result.\n```\n"+truncatedoutput+f"\n```")
-  except:
-    await ctx.send("The script timed out.")
+  except subprocess.TimeoutExpired:
+    proc.kill()
+    outs = str(proc.communicate())
+    outlist = outs.split("\\n")
+    truncatedoutput = ""
+  if len(outputlist)==0:
+    await ctx.send("There was no result.")
+  elif len(outputlist)<10:
+    await ctx.send(f"```\n"+output+f"\n```")
+  else:
+    truncatedoutput = ""
+    for count in range(0,11):
+      truncatedoutput = truncatedoutput + outputlist[count] + f"\n"
+    await ctx.send(f"The result was truncated due to the length of the result. It had probably timed out.\n```\n"+truncatedoutput+f"\n```")
   os.remove("program.py")
 
 @bot.command()
