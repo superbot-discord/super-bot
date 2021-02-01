@@ -596,7 +596,7 @@ async def define(ctx, function, definition, *, argumentsraw = ""):
 async def python(ctx, *, script):
   match = python_pattern.fullmatch(script)
   if match:
-    script = script.replace("```py","")
+    script = script.replace("```py","", 1)
     script = script.replace("```","")
   file = open("program.py", "x")
   file.write(script)
@@ -608,7 +608,7 @@ async def python(ctx, *, script):
   except subprocess.TimeoutExpired:
     proc.kill()
     output = str(proc.communicate())
-  outputlist = output.lstrip("'b(").splitlines()
+  outputlist = output.lstrip("'b(").split("\\n")
   formatoutput = ""
   if len(outputlist)==0:
     await ctx.send("There was no result.")
