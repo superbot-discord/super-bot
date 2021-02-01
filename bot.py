@@ -1691,7 +1691,7 @@ async def template(ctx,template: discord.Template):
   await ctx.send(embed=embed)
 
 @bot.command()
-async def invite(ctx,inviteinput: discord.Invite):
+async def invitelink(ctx,inviteinput: discord.Invite):
   ch=inviteinput.channel
   allinvites=await ch.invites()
   for count in allinvites:
