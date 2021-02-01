@@ -615,7 +615,7 @@ async def python(ctx, *, script):
   elif len(outputlist)<=11:
     formatoutput = ""
     for count in range(0, len(outputlist)-1):
-      if count<=9:
+      if count+1<=9:
         formatoutput = formatoutput + "0" + str(count+1) + " | " + outputlist[count] + f"\n"
       else:
         formatoutput = formatoutput + str(count+1) + " | " + outputlist[count] + f"\n"
@@ -623,12 +623,10 @@ async def python(ctx, *, script):
   else:
     truncatedoutput = ""
     for count in range(0,11):
-      if count<=9:
+      if count+1<=9:
         truncatedoutput = truncatedoutput + "0" + str(count+1) + " | " + outputlist[count] + f"\n"
       else:
         truncatedoutput = truncatedoutput + str(count+1) + " | " + outputlist[count] + f"\n"
-    await ctx.send(f"```\n"+truncatedoutput+f"\n```")
-    truncatedoutputlist = truncatedoutput.splitlines()
     await ctx.send(f"The result was truncated due to the length of the result. It had probably timed out.\n```\n"+truncatedoutput+f"\n```")
 
 @bot.command()
