@@ -42,8 +42,6 @@ client = discord.Client()
 bot.remove_command('help')
 typer=0
 autodel=None
-
-class MyClient(discord.Client):
   async def on_ready(self):
     print('Connected!')
 
@@ -605,7 +603,6 @@ async def python(ctx, *, script):
   try:
     output = str(proc.communicate(timeout = 1)[0])
     output = output.lstrip("'b(").rstrip("\\n'").replace("\n", f"\n")
-    await ctx.send(output)
   except subprocess.TimeoutExpired:
     proc.kill()
     output = str(proc.communicate())
@@ -615,7 +612,7 @@ async def python(ctx, *, script):
     await ctx.send("There was no result.")
   elif len(outputlist)<=11:
     formatoutput = ""
-    for count in range(0, len(outputlist)-1):
+    for count in range(0, len(outputlist)):
       if count+1<=9:
         formatoutput = formatoutput + "0" + str(count+1) + " | " + outputlist[count] + f"\n"
       else:
