@@ -59,6 +59,9 @@ async def help(ctx, *, cat=None):
 **help {Command or Category}**
 Show the help for a specific command/category. The command/category is optional.
 
+**invite**
+Invites the bot to your server.
+
 **prefix {New prefix}**
 View or change the prefix of the bot.
 
@@ -191,6 +194,9 @@ Finds a related Wikipedia article.
 **engrave [Product] [Text]**
 Engraves the text on an Apple Product. Airpods, iPad, iPod and Apple Pencil are available. Please check the [documentation](https://github.com/johann-lau/Bot/blob/main/README.md#apple-engrave-help) for more information.
 
+**python [Script]**
+Executes a Python (3.9.1) script.
+
 **ocr [Image]**
 Does an OCR scan for the image.
 
@@ -199,16 +205,19 @@ Turns the PDF to plain text.
   """
   elif cat=="help":
     ti="help {Command or Category}"
-    desc=f"Show the help for a specific command/category. The command/category is optional."
+    desc="Show the help for a specific command/category. The command/category is optional."
+  elif cat=="invite":
+    ti="invite"
+    desc="Invites the bot to your server."
   elif cat=="prefix":
-    ti="prefix {New prefix}"
-    desc="View or change the prefix of the bot. The New prefix is optional."
+    ti="prefix"
+    desc="View the prefix of the bot."
   elif cat=="ping":
     ti="ping"
-    desc=f"Checks the speed of the bot."
+    desc="Checks the speed of the bot."
   elif cat=="speedtest":
     ti="speedtest"
-    desc=f"Does the `ping` command 5 times, thus more accurate."
+    desc="Does the `ping` command 5 times, thus more accurate."
   elif cat=="server":
     ti="server"
     desc="Shows information about the current server."
@@ -305,6 +314,9 @@ Turns the PDF to plain text.
   elif cat=="engrave":
     ti="engrave [Product] [Text]"
     desc="Engraves the text on an Apple Product. Airpods, iPad, iPod and Apple Pencil are available. Please check the [documentation](https://github.com/johann-lau/Bot/blob/main/README.md#apple-engrave-help) for more information."
+  elif cat=="python":
+    ti="python [Python script]"
+    desc="Executes a Python (3.9.1) script."
   elif cat=="ocr":
     ti="ocr [Image]"
     desc=f"Does an OCR scan for the image."
@@ -317,7 +329,7 @@ Turns the PDF to plain text.
 **Prefix: **`=`
 
 **Basic Commands**
-`help` `prefix` `ping` `speedtest`
+`help` `invite` `prefix` `ping` `speedtest`
 
 **Discord Information Commands**
 `server` `role` `channel` `voicechannel` `user` `uservoice` `avatar` `invite` `template` (BETA)
@@ -332,7 +344,7 @@ Turns the PDF to plain text.
 `kick` `ban` `slowmode` `math` `define` `time` `rtimer` `terminate` `timer` (Outdated)
 
 **Web Commands & Developer Tools**
-`screenshot` `youtube` `wiki` `engrave` `ocr` `text` `html` (BETA)
+`screenshot` `youtube` `wiki` `engrave` `python` `ocr` `text` `html` (BETA)
 
 Need help? check the [documentation](https://github.com/johann-lau/Bot#bot-documentation)!
   """
