@@ -42,8 +42,9 @@ client = discord.Client()
 bot.remove_command('help')
 typer=0
 autodel=None
-  async def on_ready(self):
-    print('Connected!')
+
+async def on_ready(self):
+  print('Connected!')
 
 @bot.command()
 async def help(ctx, *, cat=None):
