@@ -594,7 +594,7 @@ async def define(ctx, function, definition, *, argumentsraw = ""):
 @bot.command()
 async def python(ctx, *, script):
   file = open("program.py", "x")
-  file.write(script)
+  file.write(script.replace("`",""))
   file.close()
   proc = subprocess.Popen(['python', 'program.py',  ''], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
   try:
@@ -602,9 +602,8 @@ async def python(ctx, *, script):
     output = output.lstrip("'b").rstrip("\\n'").replace('\\n', f"\n")
   except subprocess.TimeoutExpired:
     proc.kill()
-    outs = str(proc.communicate())
-    outlist = outs.split("\\n")
-    truncatedoutput = ""
+    output = str(proc.communicate())
+    outputlist = output.split("\\n")
   if len(outputlist)==0:
     await ctx.send("There was no result.")
   elif len(outputlist)<10:
