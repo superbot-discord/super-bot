@@ -629,13 +629,13 @@ async def python(ctx, *, script):
   proc = subprocess.Popen(['python', 'program.py',  ''], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
   try:
     output = str(proc.communicate(timeout = 1)[0])
-    output = output.lstrip("'b(").rstrip("\\n')enoN ,").replace("\n", f"\n")
+    output = output.lstrip("'b(").rstrip("\\n'").replace("\n", f"\n")
   except subprocess.TimeoutExpired:
     proc.kill()
     output = str(proc.communicate())
   output = output.lstrip("'b(").rstrip("\\n'").replace("\n", f"\n")
   outputlist = output.split("\\n")
-  if len(outputlist)==1:
+  if len(outputlist)==0:
     await ctx.send("There was no result.")
   elif len(outputlist)<=11:
     formatoutput = ""
