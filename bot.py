@@ -370,7 +370,7 @@ async def translate(ctx, lang, *, text):
   await msg.edit(content = "**Translation to "+lang+f":**\n"+translation[0])
 
 @bot.command()
-async def engrave(ctx, product, *, text):
+async def engrave(ctx, product, *, text = "Your text goes here."):
   product = product.lower()
   product = product.replace(" ","")
   product = product.replace("-","")
