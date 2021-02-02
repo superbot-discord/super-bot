@@ -553,7 +553,7 @@ async def engrave(ctx, product, *, text = "Your text goes here."):
 
 @bot.command()
 async def confirm(ctx, confirminput):
-  if confirminput == confirm:
+  if confirminput == confirmcode:
     confirmreq = 2
   else:
     await ctx.send("Invalid confirmation code.")
@@ -567,7 +567,7 @@ async def cancel(ctx):
 async def destruct(ctx, item = "everything"):
   if ctx.author == ctx.guild.owner:
     if item == "everything":
-      confirm = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"[ra.randint(0, 25)]+"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"[ra.randint(0, 25)]+"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"[ra.randint(0, 25)]+"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"[ra.randint(0, 25)]+"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"[ra.randint(0, 25)]
+      confirmcode = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"[ra.randint(0, 51)]+"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"[ra.randint(0, 51)]+"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"[ra.randint(0, 51)]+"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"[ra.randint(0, 51)]+"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"[ra.randint(0, 51)]
       await ctx.send("You are about to permanently remove all channels, categories, roles, emojis and bans, and kick all members. If you are sure you want to delete everything, type `=confirm "+confirm+"` in 2 seconds.")
       confirmreq = 1
       cancel = 0
