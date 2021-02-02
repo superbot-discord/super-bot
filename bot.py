@@ -609,7 +609,7 @@ async def destruct(ctx, item = "everything"):
           for count in tobekicked:
             if cancel == 0:
              await count.kick()
-         break
+          break
       await ctx.send("Destruction cancelled.")
   else:
     await ctx.send("You are not the server owner.")
