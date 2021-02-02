@@ -568,7 +568,7 @@ async def destruct(ctx, item = "everything"):
   if ctx.author == ctx.guild.owner:
     if item == "everything":
       confirmcode = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"[ra.randint(0, 51)]+"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"[ra.randint(0, 51)]+"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"[ra.randint(0, 51)]+"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"[ra.randint(0, 51)]+"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"[ra.randint(0, 51)]
-      await ctx.send("You are about to permanently remove all channels, categories, roles, emojis and bans, and kick all members. If you are sure you want to delete everything, type `=confirm "+confirm+"` in 2 seconds.")
+      await ctx.send("You are about to permanently remove all channels, categories, roles, emojis and bans, and kick all members. If you are sure you want to delete everything, type `=confirm "+confirmcode+"` in 2 seconds.")
       confirmreq = 1
       cancel = 0
       for count in range(0, 20):
