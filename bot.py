@@ -552,6 +552,43 @@ async def engrave(ctx, product, *, text = "Your text goes here."):
   await ctx.send(embed=embed)
 
 @bot.command()
+async def confirm(ctx, confirminput):
+  if confirminput == confirm:
+    confirmreq = 2
+  else:
+    await ctx.send("Invalid confirmation code.")
+
+@bot.command()
+async def destruct(ctx, item = "everything"):
+  if ctx.author == ctx.guild.owner:
+    if item == "everything":
+      confirm = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"[ra.randint(0, 25)]+"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"[ra.randint(0, 25)]+"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"[ra.randint(0, 25)]+"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"[ra.randint(0, 25)]+"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"[ra.randint(0, 25)]
+      await ctx.send("You are about to permanently remove all channels, roles, emojis and bans, and kick all members. If you are sure you want to delete everything, type `=confirm "+confirm+"` in 3 seconds.")
+      confirmreq = 1
+      for count in range(0, 20):
+        sleep(0.1)
+        if confirmewq = 2:
+          break
+      confirmreq = 0
+      for count in ctx.guild.text_channels:
+        await count.delete()
+      for count in ctx.guild.voice_channels:
+        await count.delete()
+      for count in ctx.guild.roles:
+        await count.delete()
+      for count in ctx.guild.emojis:
+        await count.delete()
+      banned = await ctx.guild.bans()
+      for count in banned:
+        await ctx.guild.unban(count)
+      allmembers = ctx.guild.members
+      tobekicked = allmembers.remove(ctx.guild.owner).remove(ctx.guild.me)
+      for count in tobekicked:
+        await count.kick()
+  else:
+    await ctx.send("You are not the server owner.")
+
+@bot.command()
 async def transparent(ctx, alpha = 128):
   await ctx.message.attachments[0].save("Not_Transparent.png")
   img = PIL.Image.open("Not_Transparent.png")
@@ -1247,9 +1284,9 @@ async def emoji(ctx,*,newsec):
 @bot.command()
 async def terminate(ctx, *, idc):
   if id_pattern.fullmatch(idc) and len(idc)==5:
-    if allid.count(idc.upper())==1:
-      exec("terminate"+idc.lower()+"=1",globals())
-      allid.remove(idc.upper())
+    if allid.count(idc.upper()+ctx.guild.id)==1:
+      exec("terminate"+idc.lower()+ctx.guild.id+"=1",globals())
+      allid.remove(idc.upper()+ctx.guild.id)
       await ctx.send("Timer terminated!")
     else:
       await ctx.send("Please provide a valid timer code. A timer code could be found at the beginning of a running timer.")
@@ -1265,7 +1302,7 @@ async def rtimer(ctx, timetocount,*,Text=None):
     end = datetime.now() + timedelta(seconds = sec)
     seconds = int((end - datetime.now()).total_seconds())
     idcode = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"[ra.randint(0, 25)]+"ABCDEFGHIJKLMNOPQRSTUVWXYZ"[ra.randint(0, 25)]+"ABCDEFGHIJKLMNOPQRSTUVWXYZ"[ra.randint(0, 25)]+"ABCDEFGHIJKLMNOPQRSTUVWXYZ"[ra.randint(0, 25)]+"ABCDEFGHIJKLMNOPQRSTUVWXYZ"[ra.randint(0, 25)]
-    exec("terminate"+idcode.lower()+"=0",globals())
+    exec("terminate"+idcode.lower()+ctx.guild.id+"=0",globals())
     newidcode=idcode
     newidcode=newidcode.replace("A",":regional_indicator_a:")
     newidcode=newidcode.replace("B",":regional_indicator_b:")
@@ -1293,10 +1330,10 @@ async def rtimer(ctx, timetocount,*,Text=None):
     newidcode=newidcode.replace("X",":regional_indicator_x:")
     newidcode=newidcode.replace("Y",":regional_indicator_y:")
     newidcode=newidcode.replace("Z",":regional_indicator_z:")
-    allid.append(idcode)
+    allid.append(idcode+ctx.guild.id)
     desc = "Initializing countdown…"
     message = await ctx.send(desc)
-    while seconds>=1 and eval("terminate"+idcode.lower())==0:
+    while seconds>=1 and eval("terminate"+ctx.guild.id+idcode.lower())==0:
       seconds = int((end - datetime.now()).total_seconds())
       newsec=str(seconds%60)
       newmin=str((seconds%3600)//60)
