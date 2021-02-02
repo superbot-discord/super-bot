@@ -572,7 +572,7 @@ async def destruct(ctx, item = "everything"):
       confirmreq = 1
       cancel = 0
       for count in range(0, 20):
-        sleep(0.1)
+        tm.sleep(0.1)
         if confirmewq == 2:
           break
       confirmreq = 0
