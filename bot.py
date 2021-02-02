@@ -580,37 +580,39 @@ async def destruct(ctx, item = "everything"):
       for counter in range(0, 50):
         tm.sleep(0.1)
         if confirmreq == 2:
-          confirmreq = 0
-          for count in ctx.guild.text_channels:
-            if cancel == 0:
-              await count.delete()
-          for count in ctx.guild.voice_channels:
-            if cancel == 0:
-             await count.delete()
-          for count in ctx.guild.categories:
-            if cancel == 0:
-              await count.delete()
-          for count in ctx.guild.roles:
-            if cancel == 0:
-             await count.delete()
-          for count in ctx.guild.emojis:
-            if cancel == 0:
-              await count.delete()
-          invites = await ctx.guild.invites()
-          for count in invites:
-            if cancel == 0:
-              await count.delete()
-          banned = await ctx.guild.bans()
-          for count in banned:
-            if cancel == 0:
-              await ctx.guild.unban(count)
-          allmembers = ctx.guild.members
-          tobekicked = allmembers.remove(ctx.guild.owner).remove(ctx.guild.me)
-          for count in tobekicked:
-            if cancel == 0:
-             await count.kick()
           break
-      await ctx.send("Destruction cancelled.")
+      if confirmreq == 2:
+        confirmreq = 0
+        for count in ctx.guild.text_channels:
+          if cancel == 0:
+            await count.delete()
+        for count in ctx.guild.voice_channels:
+          if cancel == 0:
+           await count.delete()
+        for count in ctx.guild.categories:
+          if cancel == 0:
+            await count.delete()
+        for count in ctx.guild.roles:
+          if cancel == 0:
+           await count.delete()
+        for count in ctx.guild.emojis:
+          if cancel == 0:
+            await count.delete()
+        invites = await ctx.guild.invites()
+        for count in invites:
+          if cancel == 0:
+            await count.delete()
+        banned = await ctx.guild.bans()
+        for count in banned:
+          if cancel == 0:
+            await ctx.guild.unban(count)
+        allmembers = ctx.guild.members
+        tobekicked = allmembers.remove(ctx.guild.owner).remove(ctx.guild.me)
+        for count in tobekicked:
+          if cancel == 0:
+           await count.kick()
+      else:
+        await ctx.send("Destruction cancelled.")
   else:
     await ctx.send("You are not the server owner.")
 
