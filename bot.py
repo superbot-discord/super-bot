@@ -357,6 +357,12 @@ async def on_member_join(member):
     if member.id == 155149108183695360 or member.id == 270904126974590976:
       await member.ban(reason = "havoc causing")
 
+@bot.event
+async def on_message(message):
+  if message.content.count("**is flexing on you all with their PEPE TROPHY")==1 and message.author.id == 270904126974590976:
+    await message.delete()
+    await message.channel.send("I just prevented some rude people from flexing on you!")
+
 @bot.command()
 async def invite(ctx):
   embed = discord.Embed(title="Invite", description = "Our bot could be invited [here](https://discord.com/oauth2/authorize?client_id=796686363604680755&permissions=805399670&scope=bot).")
