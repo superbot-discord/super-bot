@@ -575,6 +575,7 @@ async def confirm(ctx, confirminput):
   global confirmreq
   if confirminput == confirmcode:
     confirmreq = 2
+    await ctx.send("Destruction started.")
   else:
     await ctx.send("Invalid confirmation code.")
 
@@ -582,7 +583,7 @@ async def confirm(ctx, confirminput):
 async def cancel(ctx):
   global cancel
   cancel = 1
-  await ctx.send("Cancelled destruction.")
+  await ctx.send("Destruction cancelled.")
 
 @bot.command()
 async def destruct(ctx, item = "everything"):
@@ -629,8 +630,7 @@ async def destruct(ctx, item = "everything"):
         for count in tobekicked:
           if cancel == 0:
            await count.kick()
-      else:
-        await ctx.send("Destruction cancelled.")
+      await ctx.send("Destruction cancelled.")
   else:
     await ctx.send("You are not the server owner.")
 
