@@ -596,8 +596,8 @@ async def destruct(ctx, item = "everything"):
       await ctx.send("You are about to permanently remove all channels, categories, roles and emojis, revoke all invites and bans, and kick all members. If you are sure you want to delete everything, type `=confirm "+confirmcode+"` in 5 seconds.")
       confirmreq = 1
       cancel = 0
-      for counter in range(0, 50):
-        tm.sleep(0.1)
+      for counter in range(0, 500):
+        tm.sleep(0.01)
         if confirmreq == 2:
           break
       if confirmreq == 2:
@@ -630,7 +630,8 @@ async def destruct(ctx, item = "everything"):
         for count in tobekicked:
           if cancel == 0:
            await count.kick()
-      await ctx.send("Destruction cancelled.")
+      else:
+        await ctx.send("Destruction cancelled.")
   else:
     await ctx.send("You are not the server owner.")
 
