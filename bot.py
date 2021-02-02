@@ -579,7 +579,7 @@ async def destruct(ctx, item = "everything"):
       cancel = 0
       for count in range(0, 30):
         tm.sleep(0.1)
-        if confirmewq == 2:
+        if confirmreq == 2:
           break
       confirmreq = 0
       for count in ctx.guild.text_channels:
