@@ -34,6 +34,7 @@ hexstring_pattern = re.compile(r'#?([0-9A-F]{2})([0-9A-F]{2})([0-9A-F]{2})', re.
 id_pattern = re.compile(r'([A-Z]{5})', re.IGNORECASE)
 alphaend_pattern = re.compile(r'.*[a-z]', re.IGNORECASE)
 python_pattern = re.compile(r'^\`\`\`(py)?\n[\s\S]*\`\`\`$')
+html_pattern = re.compile(r'^\`\`\`(html)?\n[\s\S]*\`\`\`$')
 UNITS = {'s':'seconds', 'm':'minutes', 'h':'hours', 'd':'days', 'w':'weeks'}
 intents = discord.Intents.all()
 pre = "="
@@ -788,19 +789,19 @@ async def speedtest(ctx):
   await message.edit(content=f"Pong!\nTotal time: "+str(total)+f" mcs\nAverage time: "+str(avg)+" mcs")
 
 @bot.command()
-async def screenshot(ctx, url):
-    #try:
-    options = webdriver.ChromeOptions()
-    options.headless = True
-    options.add_argument('--no-sandbox')
-    options.add_argument('--disable-dev-shm-usage')
-    driver = webdriver.Chrome(options=options)
-    driver.get(url)
+async def screenshot(ctx, url, form = "None"):
+  options = webdriver.ChromeOptions()
+  options.headless = True
+  options.add_argument('--no-sandbox')
+  options.add_argument('--disable-dev-shm-usage')
+  driver = webdriver.Chrome(options=options)
+  driver.get(url)
+  if form == "short" or form == "first" or form == "normal" or form == "regular" or form == "basic" or form == "general" or form == "all":
     driver.set_window_size(1440,900)
     driver.get_screenshot_as_file('web_screenshot1.png')
     await ctx.send(file=discord.File('web_screenshot1.png'))
-    for count in range(900, 5400, 900):
-      driver.execute_script("window.scrollTo(0, "+str(count)+")")
+    os.remove('web_screenshot1.png')
+  if form == "everything" or form == "full" or form == "entire" or form == "whole" or form == "all":
     S = lambda X: driver.execute_script('return document.body.parentNode.scroll'+X)
     driver.set_window_size(S('Width'),S('Height'))
     for count in range(900, 5400, 900):
@@ -808,10 +809,11 @@ async def screenshot(ctx, url):
     driver.find_element_by_tag_name('body').screenshot('web_screenshot2.png')
     driver.quit()
     await ctx.send(file=discord.File('web_screenshot2.png'))
-    os.remove('web_screenshot1.png')
     os.remove('web_screenshot2.png')
-    #except:
-    #  await ctx.send("The URL was invalid, or the webpage is too long.")
+  if form == "pdf" or form == "all":
+    pdfkit.from_url(url, 'screenshot.pdf')
+    await ctx.send(file=discord.File('screenshot.pdf'))
+    os.remove('screenshot.pdf')
 
 @bot.command()
 async def ocr(ctx):
@@ -860,13 +862,17 @@ async def text(ctx):
     await ctx.send(desc)
 
 @bot.command()
-async def html(ctx, *, code = None):
+async def html(ctx, *, code = "You haven't input any code, so we generated this PDF for you."):
+  match = html_pattern.fullmatch(script)
+  if match:
+    script = script.replace("```html","", 1)
+    script = script.replace("```","")
   if code == None:
     r = requests.get(ctx.message.attachments[0].url, stream=True)
     r.raise_for_status()
     r.raw.decode_content = True
     code = r.content
-  imgkit.from_string(code, 'output.jpg')
+  pdfkit.from_string(code, 'out.pdf')
   await ctx.send(file=discord.File('output.jpg'))
   os.remove('output.jpg')
 
