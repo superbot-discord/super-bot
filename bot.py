@@ -19,7 +19,7 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 import os
 from pdf2image import convert_from_path
-import imgkit
+import pdfkit
 import pytube
 from pygoogletranslation import Translator
 import wikipedia
