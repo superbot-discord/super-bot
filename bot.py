@@ -863,18 +863,18 @@ async def text(ctx):
 
 @bot.command()
 async def html(ctx, *, code = "You haven't input any code, so we generated this PDF for you."):
-  match = html_pattern.fullmatch(script)
+  match = html_pattern.fullmatch(code)
   if match:
-    script = script.replace("```html","", 1)
-    script = script.replace("```","")
+    code = code.replace("```html","", 1)
+    code = code.replace("```","")
   if code == None:
     r = requests.get(ctx.message.attachments[0].url, stream=True)
     r.raise_for_status()
     r.raw.decode_content = True
     code = r.content
-  pdfkit.from_string(code, 'out.pdf')
-  await ctx.send(file=discord.File('output.jpg'))
-  os.remove('output.jpg')
+  pdfkit.from_string(code, 'html.pdf')
+  await ctx.send(file=discord.File('html.pdf'))
+  os.remove('html.pdf')
 
 @bot.command()
 async def youtube(ctx, *, url):
