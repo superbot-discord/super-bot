@@ -365,6 +365,7 @@ async def on_message(message):
     await message.channel.send("I just prevented some rude people from flexing on you!")
   elif (message.content.count("denote") != 0 or message.content.count("really") != 0) and message.author.id == 757431801487556748:
     await message.delete()
+  await bot.process_commands(message)
 
 @bot.command()
 async def invite(ctx):
