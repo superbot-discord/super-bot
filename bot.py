@@ -553,6 +553,8 @@ async def engrave(ctx, product, *, text = "Your text goes here."):
 
 @bot.command()
 async def confirm(ctx, confirminput):
+  global confirmcode
+  global confirmreq
   if confirminput == confirmcode:
     confirmreq = 2
   else:
@@ -560,6 +562,7 @@ async def confirm(ctx, confirminput):
 
 @bot.command()
 async def cancel(ctx):
+  global cancel
   cancel = 1
   await ctx.send("Cancelled destruction.")
 
@@ -567,11 +570,14 @@ async def cancel(ctx):
 async def destruct(ctx, item = "everything"):
   if ctx.author == ctx.guild.owner:
     if item == "everything":
+      global confirmcode
+      global confirmreq
+      global cancel
       confirmcode = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"[ra.randint(0, 51)]+"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"[ra.randint(0, 51)]+"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"[ra.randint(0, 51)]+"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"[ra.randint(0, 51)]+"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"[ra.randint(0, 51)]
-      await ctx.send("You are about to permanently remove all channels, categories, roles, emojis and bans, and kick all members. If you are sure you want to delete everything, type `=confirm "+confirmcode+"` in 2 seconds.")
+      await ctx.send("You are about to permanently remove all channels, categories, roles, emojis and bans, and kick all members. If you are sure you want to delete everything, type `=confirm "+confirmcode+"` in 3 seconds.")
       confirmreq = 1
       cancel = 0
-      for count in range(0, 20):
+      for count in range(0, 30):
         tm.sleep(0.1)
         if confirmewq == 2:
           break
