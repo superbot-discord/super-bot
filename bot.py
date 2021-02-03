@@ -392,13 +392,13 @@ async def translate(ctx, lang = "list", *, text = "Sample text"):
       translation = translatorvar.translate(text, dest=lang)
       await msg.edit(content = "**Translation to "+langdict[lang]+f":**\n"+translation.text.replace("u003c", "<").replace("u003e", ">").replace("u0026", "&"))
     except KeyError:
-      try:
-        langnew = langdict.keys()[langdict.values().index(lang)]
-        msg = await ctx.send("Translating **"+text+"** to "+langdict[langnew])
-        translation = translatorvar.translate(text, dest=langnew)
-        await msg.edit(content = "**Translation to "+langdict[langnew]+f":**\n"+translation.text)
-      except:
-        await ctx.send("Language not found! Please use `=translate list` to get a list of languages.")
+      #try:
+      langnew = langdict.keys()[langdict.values().index(lang)]
+      msg = await ctx.send("Translating **"+text+"** to "+langdit[langnew])
+      translation = translatorvar.translate(text, dest=langnew)
+      await msg.edit(content = "**Translation to "+langdict[langnew]+f":**\n"+translation.text)
+      #except:
+      await ctx.send("Language not found! Please use `=translate list` to get a list of languages.")
 
 @bot.command()
 async def engrave(ctx, product, *, text = "Your text goes here."):
