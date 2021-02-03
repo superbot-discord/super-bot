@@ -376,11 +376,11 @@ async def invite(ctx):
 async def translate(ctx, lang = "list", *, text = "Sample text"):
   translatorvar = Translator()
   unsortedlangdict = translatorvar.glanguage().get("tl")
-  langkeys = list(langdict.keys())
+  langkeys = list(unsortedlangdict.keys())
   langkeys.sort()
   langdict = {}
   for count in langkeys:
-    langdict[count] = langdict[count]
+    langdict[count] = unsortedlangdict[count]
   if lang == "list":
     embed = discord.Embed(title="List of language abbreviations", description = "`"+"` `".join(list(langdict.keys()))+"`")
     await ctx.send(embed=embed)
