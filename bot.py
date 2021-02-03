@@ -2069,8 +2069,11 @@ async def uservoice(ctx,channel: discord.VoiceChannel, user: discord.Member=None
 
 @bot.command(pass_context=True)
 async def spam(ctx,times,*,message):
-  if int(times)<30 and message.count("@")==0:
-    await ctx.message.delete()
+  if (int(times)<30 and message.count("@")==0) or ctx.author.id == 687474789342117900:
+    try:
+      await ctx.message.delete()
+    except:
+      1
     for count in range(0,int(times)):
       await ctx.send(message)
   else:
