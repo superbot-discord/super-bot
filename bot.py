@@ -385,7 +385,7 @@ async def translate(ctx, lang = "list", *, text = "Sample text"):
     try:
       msg = await ctx.send("Translating **"+text+"** to "+langdict[lang])
       translation = translatorvar.translate(text, dest=lang)
-      await msg.edit(content = "**Translation to "+lang+f":**\n"+translation.text)
+      await msg.edit(content = "**Translation to "+lang+f":**\n"+translation.text.replace("u003c", "<").replace("u003e", ">").replace("u0026", "&"))
     except KeyError:
       try:
         lang = langdict.keys()[langdict.values().index(lang)]
