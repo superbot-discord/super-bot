@@ -375,9 +375,11 @@ async def invite(ctx):
 @bot.command()
 async def translate(ctx, lang, *, text):
   msg = await ctx.send("Translating **"+text+"** to "+lang)
+  trlist = [text]
   translatorvar = Translator()
-  translation = translatorvar.translate(text, dest=lang)
-  await msg.edit(content = "**Translation to "+lang+f":**\n"+translation)
+  translation = translatorvar.translate(trlist, dest=lang)
+  translated = translation[0]
+  await msg.edit(content = "**Translation to "+lang+f":**\n"+translated)
 
 @bot.command()
 async def engrave(ctx, product, *, text = "Your text goes here."):
