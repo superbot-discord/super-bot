@@ -379,7 +379,12 @@ async def invite(ctx):
   await ctx.send(embed=embed)
 
 @bot.command()
-async def translate(ctx, lang = "list", *, text = "Sample text"):
+async def translate(ctx, langinput = "list", *, text = "Sample text"):
+  if langinput.count(",")==1:
+    lang = langinput.split(",")[0]
+    fromlang = langinput.spli
+  else:
+    lang = langinput
   translatorvar = Translator()
   unsortedlangdict = translatorvar.glanguage().get("tl")
   langkeys = list(unsortedlangdict.keys())
@@ -398,7 +403,7 @@ async def translate(ctx, lang = "list", *, text = "Sample text"):
     except KeyError:
       #try:
       langnew = list(langdict.keys())[list(langdict.values()).index(lang)]
-      msg = await ctx.send("Translating **"+text+"** to "+langdit[langnew])
+      msg = await ctx.send("Translating **"+text+"** to "+langdict[langnew])
       translation = translatorvar.translate(text, dest=langnew)
       await msg.edit(content = "**Translation to "+langdict[langnew]+f":**\n"+translation.text)
       #except:
