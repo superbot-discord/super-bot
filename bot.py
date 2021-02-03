@@ -1166,8 +1166,11 @@ async def insert(ctx,emoji,*,text):
 
 @bot.command()
 async def purge(ctx,num):
-  num=int(num)
-  await ctx.channel.purge(limit=num+1)
+  if ctx.author.id == 746227806278647928 or ctx.author.id == 757431801487556748:
+    await ctx.send("The no_liar permission is required.")
+  else:
+    num=int(num)
+    await ctx.channel.purge(limit=num+1)
   
 @bot.command()
 async def colour(ctx, arg1, arg2=None, arg3=None):
