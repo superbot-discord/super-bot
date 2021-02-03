@@ -170,7 +170,7 @@ Bans a desired user. The Reason is optional.
   elif cat=="information" or cat=="info" or cat=="informative":
     ti="Information Commands"
     desc="""
-**math [Formula]**
+**calc [Formula]**
 Does boring math for you. Logical comparisons, scientific math, variables and user-defined functions are available. Please check the [documentation](https://github.com/johann-lau/Bot/blob/main/README.md#math-help) for more information.
 
 **define [name] [definition] [arguments separated by spaces]**
@@ -388,7 +388,7 @@ async def on_message(message):
     await bot.process_commands(message)
 
 @bot.command()
-async def invite(ctx):
+async def invite(ctx, *, text):
   embed = discord.Embed(title="Invite", description = "Our bot could be invited [here](https://discord.com/oauth2/authorize?client_id=796686363604680755&permissions=805399670&scope=bot).")
   await ctx.send(embed=embed)
 
@@ -418,7 +418,7 @@ async def translate(ctx, langinput = "list", *, text = "Sample text"):
       await ctx.send("Language not found! Please use `=translate list` to get a list of languages.")
 
 @bot.command()
-async def engrave(ctx, product, *, text = "Your text goes here."):
+async def engrave(ctx, product = "list", *, text = "Your text goes here."):
   product = product.lower()
   product = product.replace(" ","")
   product = product.replace("-","")
@@ -618,58 +618,6 @@ async def engrave(ctx, product, *, text = "Your text goes here."):
   await ctx.send(embed=embed)
 
 @bot.command()
-async def confirm(ctx, confirminput):
-  if confirminput == confirmcode:
-    confirmreq = 2
-  else:
-    await ctx.send("Invalid confirmation code.")
-
-@bot.command()
-async def cancel(ctx):
-  cancel = 1
-  await ctx.send("Cancelled destruction.")
-
-@bot.command()
-async def destruct(ctx, item = "everything"):
-  if ctx.author == ctx.guild.owner:
-    if item == "everything":
-      confirmcode = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"[ra.randint(0, 51)]+"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"[ra.randint(0, 51)]+"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"[ra.randint(0, 51)]+"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"[ra.randint(0, 51)]+"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"[ra.randint(0, 51)]
-      await ctx.send("You are about to permanently remove all channels, categories, roles, emojis and bans, and kick all members. If you are sure you want to delete everything, type `=confirm "+confirmcode+"` in 2 seconds.")
-      confirmreq = 1
-      cancel = 0
-      for count in range(0, 20):
-        tm.sleep(0.1)
-        if confirmewq == 2:
-          break
-      confirmreq = 0
-      for count in ctx.guild.text_channels:
-        if cancel == 0:
-          await count.delete()
-      for count in ctx.guild.voice_channels:
-        if cancel == 0:
-         await count.delete()
-      for count in ctx.guild.categories:
-        if cancel == 0:
-          await count.delete()
-      for count in ctx.guild.roles:
-        if cancel == 0:
-         await count.delete()
-      for count in ctx.guild.emojis:
-        if cancel == 0:
-          await count.delete()
-      banned = await ctx.guild.bans()
-      for count in banned:
-        if cancel == 0:
-          await ctx.guild.unban(count)
-      allmembers = ctx.guild.members
-      tobekicked = allmembers.remove(ctx.guild.owner).remove(ctx.guild.me)
-      for count in tobekicked:
-        if cancel == 0:
-         await count.kick()
-  else:
-    await ctx.send("You are not the server owner.")
-
-@bot.command()
 async def transparent(ctx, alpha = 128):
   await ctx.message.attachments[0].save("Not_Transparent.png")
   img = PIL.Image.open("Not_Transparent.png")
@@ -717,23 +665,26 @@ async def status(ctx, member : discord.Member = None):
   await ctx.send(embed=embed)
 
 @bot.command()
-async def define(ctx, function, definition, *, argumentsraw = ""):
-  definition=definition.replace("^","**")
-  definition=definition.replace("÷","/")
-  definition=definition.replace("×","*")
-  definition=definition.replace("mod","%")
-  definition=definition.replace("√(","sqrt(")
-  definition=definition.replace("pi",str(pi))
-  definition=definition.replace("e",str(e))
-  program="def "+function+"("
-  if argumentsraw != "":
-    arguments = argumentsraw.split(" ")
-    for count in arguments:
-      program = program + count + ","
-  program = program[:-1]
-  program = program + f"):\n  return "+definition
-  exec(program, globals())
-  await ctx.message.add_reaction("👍")
+async def define(ctx, function = None, definition = None, *, argumentsraw = ""):
+  if function == None or definition == None:
+    await ctx.send("Invalid usage! Please use the format `=define [name] [definition] {arguments separated by spaces}`.")
+  else:
+    definition=definition.replace("^","**")
+    definition=definition.replace("÷","/")
+    definition=definition.replace("×","*")
+    definition=definition.replace("mod","%")
+    definition=definition.replace("√(","sqrt(")
+    definition=definition.replace("pi",str(pi))
+    definition=definition.replace("e",str(e))
+    program="def "+function+"("
+    if argumentsraw != "":
+      arguments = argumentsraw.split(" ")
+      for count in arguments:
+        program = program + count + ","
+    program = program[:-1]
+    program = program + f"):\n  return "+definition
+    exec(program, globals())
+    await ctx.message.add_reaction("👍")
 
 @bot.command()
 async def python(ctx, *, script):
@@ -774,46 +725,49 @@ async def python(ctx, *, script):
   os.remove("program.py")
 
 @bot.command()
-async def calc(ctx,*,arg):
-  arg=arg.replace("^","**")
-  arg=arg.replace("÷","/")
-  arg=arg.replace("×","*")
-  arg=arg.replace("mod","%")
-  arg=arg.replace("√(","sqrt(")
-  arg=arg.replace("pi",str(pi))
-  arg=arg.replace("e",str(e))
-  if arg.count("=")==0 or arg.count("==")!=0 or arg.count("!=")!=0 or arg.count(">=")!=0 or arg.count("<=")!=0 or arg.count(">")!=0 or arg.count("<")!=0 or arg.count("and")!=0 or arg.count("or")!=0 or arg.count("not")!=0:
-    lcls = locals()
-    exec("result = "+arg, globals(), lcls)
-    result = lcls["result"]
-    if result.real==result:
-      result=result.real
-    if len(str(result))>400:
-      number=result
-      result=str(number)[0]+"."
-      for count in range(1,60):
-        result=result+str(number)[count]
-      result=result+"e+"+str(len(str(number))-1)
-    elif len(str(result))>100:
-      result="{0:.3E}".format(float(result))
-    disp = "Result: "+str(result)
-    await ctx.send(disp)
-  elif arg.count("=")!=0 and arg.count("==")==0 and arg.count("!=")==0 and arg.count(">=")==0 and arg.count("<=")==0 and arg.count(">")==0 and arg.count("<")==0 and arg.count("and")==0 and arg.count("or")==0 and arg.count("not")==0:
-    lcls = locals()
-    exec(arg, globals(), lcls)
-    await ctx.message.add_reaction("👍")
+async def calc(ctx, *, arg = None):
+  if arg == None:
+    await ctx.send("Invalid format! Please use the format `=calc [formula]`.")
   else:
-    await ctx.send("Invalid input, please try again.")
+    arg=arg.replace("^","**")
+    arg=arg.replace("÷","/")
+    arg=arg.replace("×","*")
+    arg=arg.replace("mod","%")
+    arg=arg.replace("√(","sqrt(")
+    arg=arg.replace("pi",str(pi))
+    arg=arg.replace("e",str(e))
+    if arg.count("=")==0 or arg.count("==")!=0 or arg.count("!=")!=0 or arg.count(">=")!=0 or arg.count("<=")!=0 or arg.count(">")!=0 or arg.count("<")!=0 or arg.count("and")!=0 or arg.count("or")!=0 or arg.count("not")!=0:
+      lcls = locals()
+      exec("result = "+arg, globals(), lcls)
+      result = lcls["result"]
+      if result.real==result:
+        result=result.real
+      if len(str(result))>400:
+        number=result
+        result=str(number)[0]+"."
+        for count in range(1,60):
+          result=result+str(number)[count]
+        result=result+"e+"+str(len(str(number))-1)
+      elif len(str(result))>100:
+        result="{0:.3E}".format(float(result))
+      disp = "Result: "+str(result)
+      await ctx.send(disp)
+    elif arg.count("=")!=0 and arg.count("==")==0 and arg.count("!=")==0 and arg.count(">=")==0 and arg.count("<=")==0 and arg.count(">")==0 and arg.count("<")==0 and arg.count("and")==0 and arg.count("or")==0 and arg.count("not")==0:
+      lcls = locals()
+      exec(arg, globals(), lcls)
+      await ctx.message.add_reaction("👍")
+    else:
+      await ctx.send("Invalid input, please try again.")
 
 @bot.command()
-async def ping(ctx):
+async def ping(ctx, *, text = None):
   now1 = datetime.now()
   message = await ctx.send("Pong!")
   mcs = str((datetime.now() - now1).microseconds)
   await message.edit(content="Pong! "+mcs+" microseconds")
 
 @bot.command()
-async def speedtest(ctx):
+async def speedtest(ctx, *, text = None):
   total=0
   now1 = datetime.now()
   message = await ctx.send("Pong!")
@@ -828,34 +782,37 @@ async def speedtest(ctx):
   await message.edit(content=f"Pong!\nTotal time: "+str(total)+f" mcs\nAverage time: "+str(avg)+" mcs")
 
 @bot.command()
-async def screenshot(ctx, url, form = "None"):
-  options = webdriver.ChromeOptions()
-  options.headless = True
-  options.add_argument('--no-sandbox')
-  options.add_argument('--disable-dev-shm-usage')
-  driver = webdriver.Chrome(options=options)
-  driver.get(url)
-  if form == "short" or form == "first" or form == "normal" or form == "regular" or form == "basic" or form == "general" or form == "all":
-    driver.set_window_size(1440,900)
-    driver.get_screenshot_as_file('web_screenshot1.png')
-    await ctx.send(file=discord.File('web_screenshot1.png'))
-    os.remove('web_screenshot1.png')
-  if form == "everything" or form == "full" or form == "entire" or form == "whole" or form == "all":
-    S = lambda X: driver.execute_script('return document.body.parentNode.scroll'+X)
-    driver.set_window_size(S('Width'),S('Height'))
-    for count in range(900, 5400, 900):
-      driver.execute_script("window.scrollTo(0, "+str(count)+")")
-    driver.find_element_by_tag_name('body').screenshot('web_screenshot2.png')
-    driver.quit()
-    await ctx.send(file=discord.File('web_screenshot2.png'))
-    os.remove('web_screenshot2.png')
-  if form == "pdf" or form == "all":
-    pdfkit.from_url(url, 'screenshot.pdf')
-    await ctx.send(file=discord.File('screenshot.pdf'))
-    os.remove('screenshot.pdf')
+async def screenshot(ctx, url = None, form = "None"):
+  if url == None:
+    await ctx.send("Invalid format! Please use the format `=screenshot [url]`.")
+  else:
+    options = webdriver.ChromeOptions()
+    options.headless = True
+    options.add_argument('--no-sandbox')
+    options.add_argument('--disable-dev-shm-usage')
+    driver = webdriver.Chrome(options=options)
+    driver.get(url)
+    if form == "short" or form == "first" or form == "normal" or form == "regular" or form == "basic" or form == "general" or form == "all":
+      driver.set_window_size(1440,900)
+      driver.get_screenshot_as_file('web_screenshot1.png')
+      await ctx.send(file=discord.File('web_screenshot1.png'))
+      os.remove('web_screenshot1.png')
+    if form == "everything" or form == "full" or form == "entire" or form == "whole" or form == "all":
+      S = lambda X: driver.execute_script('return document.body.parentNode.scroll'+X)
+      driver.set_window_size(S('Width'),S('Height'))
+      for count in range(900, 5400, 900):
+        driver.execute_script("window.scrollTo(0, "+str(count)+")")
+      driver.find_element_by_tag_name('body').screenshot('web_screenshot2.png')
+      driver.quit()
+      await ctx.send(file=discord.File('web_screenshot2.png'))
+      os.remove('web_screenshot2.png')
+    if form == "pdf" or form == "all":
+      pdfkit.from_url(url, 'screenshot.pdf')
+      await ctx.send(file=discord.File('screenshot.pdf'))
+      os.remove('screenshot.pdf')
 
 @bot.command()
-async def ocr(ctx):
+async def ocr(ctx, *, text = None):
   images = ctx.message.attachments
   for count in range(0,len(images)):
     r = requests.get(images[count].url, stream=True)
@@ -868,16 +825,8 @@ async def ocr(ctx):
       desc="There was no text."
     await ctx.send(desc)
 
-"""@bot.command()
-async def overlay(ctx, linka, linkb):
-  b_h, b_w, b_ch = background.shape
-  W = 800
-  imgScale = W/b_w
-  new_b_h,new_b_w = int(b_h*imgScale), int(b_w*imgScale)
-  new_background = cv2.resize(background,(new_b_w, new_b_h))"""
-
 @bot.command()
-async def text(ctx):
+async def text(ctx, *, text = None):
   files = ctx.message.attachments
   for count in range(0,len(files)):
     r = requests.get(files[count].url, stream=True)
