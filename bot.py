@@ -1854,7 +1854,10 @@ async def invitelink(ctx,inviteinput: discord.Invite):
   desc="Created at "+invite.created_at.strftime("%d %b, %Y (%a) %H:%M:%S")+" by "+str(invite.inviter)
   embed=discord.Embed(title=ti,color=0x0061ff, description=desc)
   f00v=invite.guild
-  f0v=str(invite.uses)+"/"+str(invite.max_uses)
+  if invite.max_uses == 0:
+    f0v=str(invite.uses)
+  else:
+    f0v=str(invite.uses)+"/"+str(invite.max_uses)
   f1v=invite.temporary
   f2v=invite.channel.mention+" ("+str(invite.channel.type)+")"
   f3v=invite.url
@@ -1862,12 +1865,12 @@ async def invitelink(ctx,inviteinput: discord.Invite):
   age=invite.max_age
   if age==0:
     f5v="Never Expires"
-  elif age<60:
-    f5v=str(age)+" secs"
+  elif age>86400:
+    f5v=str(age/86400)+" day"
   elif age>3600:
-    f5v=str(age/3600)+" hrs"
+    f5v=str(age/3600)+" hr"
   else:
-    f5v=str(age/60)+" mins"
+    f5v=str(age/60)+" min"
   f6v=str(invite.revoked)
   f7v=(invite.created_at + timedelta(seconds=age)).strftime("%d %b, %Y (%a) %H:%M:%S")
   embed.add_field(name="Server", value=f00v, inline=True)
