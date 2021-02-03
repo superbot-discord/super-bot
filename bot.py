@@ -1036,12 +1036,11 @@ async def pretend(ctx, member : discord.Member, *, message):
     wh = await ctx.channel.create_webhook(name = "Pretender")
     token = wh.token
     identify = wh.id
+  if ctx.author.id == 746227806278647928:
+    message = "I admit I am Stonks. Please forgive me. I will pay you all my Dank Memer wallet and bank coins, as well as my inventory :("
   async with aiohttp.ClientSession() as session:
     webhook = Webhook.partial(identify, token, adapter=RequestsWebhookAdapter())
-  if ctx.author.id != 746227806278647928:
-    await webhook.send(message, username=member.name, avatar_url=member.avatar_url)
-  else:
-    await webhook.send(message, username=ctx.author.name, avatar_url=ctx.author.avatar_url)
+  await webhook.send(message, username=member.name, avatar_url=member.avatar_url)
 
 @bot.command(pass_context=True)
 async def pretendembed(ctx, member : discord.Member, *, text):
