@@ -377,9 +377,9 @@ async def translate(ctx, lang = "list", *, text = "Sample text"):
   translatorvar = Translator()
   langdict = translatorvar.glanguage().get("tl")
   if lang == "list":
-    embed = discord.Embed(title="List of language abbreviations", description = "`"+list(langdict.keys()).join("` `")+"`")
+    embed = discord.Embed(title="List of language abbreviations", description = "`"+"` `".join(list(langdict.keys()))+"`")
     await ctx.send(embed=embed)
-    embed = discord.Embed(title="List of language full names", description = "`"+list(langdict.values()).join("` `")+"`")
+    embed = discord.Embed(title="List of language full names", description = "`"+"` `".join(list(langdict.values()))+"`")
     await ctx.send(embed=embed)
   else:
     try:
