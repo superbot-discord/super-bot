@@ -1418,7 +1418,7 @@ async def rtimer(ctx, timetocount,*,Text=None):
     allid.append(idcode+str(ctx.guild.id))
     desc = "Initializing countdown…"
     message = await ctx.send(desc)
-    while seconds>=1 and eval("terminate"+str(ctx.guild.id)+idcode.lower())==0:
+    while seconds>=1 and eval("terminate"+idcode.lower()+str(ctx.guild.id))==0:
       seconds = int((end - datetime.now()).total_seconds())
       newsec=str(seconds%60)
       newmin=str((seconds%3600)//60)
