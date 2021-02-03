@@ -388,7 +388,7 @@ async def invite(ctx):
 async def translate(ctx, langinput = "list", *, text = "Sample text"):
   if langinput.count(",")==1:
     lang = langinput.split(",")[0]
-    fromlang = langinput.split(",")[2]
+    fromlang = langinput.split(",")[1]
   else:
     lang = langinput
   translatorvar = Translator()
