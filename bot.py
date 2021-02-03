@@ -1358,9 +1358,9 @@ async def emoji(ctx,*,newsec):
 @bot.command()
 async def terminate(ctx, *, idc):
   if id_pattern.fullmatch(idc) and len(idc)==5:
-    if allid.count(idc.upper()+ctx.guild.id)==1:
-      exec("terminate"+idc.lower()+ctx.guild.id+"=1",globals())
-      allid.remove(idc.upper()+ctx.guild.id)
+    if allid.count(idc.upper()+str(ctx.guild.id))==1:
+      exec("terminate"+idc.lower()+str(ctx.guild.id)+"=1",globals())
+      allid.remove(idc.upper()+str(ctx.guild.id))
       await ctx.send("Timer terminated!")
     else:
       await ctx.send("Please provide a valid timer code. A timer code could be found at the beginning of a running timer.")
@@ -1376,7 +1376,7 @@ async def rtimer(ctx, timetocount,*,Text=None):
     end = datetime.now() + timedelta(seconds = sec)
     seconds = int((end - datetime.now()).total_seconds())
     idcode = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"[ra.randint(0, 25)]+"ABCDEFGHIJKLMNOPQRSTUVWXYZ"[ra.randint(0, 25)]+"ABCDEFGHIJKLMNOPQRSTUVWXYZ"[ra.randint(0, 25)]+"ABCDEFGHIJKLMNOPQRSTUVWXYZ"[ra.randint(0, 25)]+"ABCDEFGHIJKLMNOPQRSTUVWXYZ"[ra.randint(0, 25)]
-    exec("terminate"+idcode.lower()+ctx.guild.id+"=0",globals())
+    exec("terminate"+idcode.lower()+str(ctx.guild.id)+"=0",globals())
     newidcode=idcode
     newidcode=newidcode.replace("A",":regional_indicator_a:")
     newidcode=newidcode.replace("B",":regional_indicator_b:")
@@ -1404,10 +1404,10 @@ async def rtimer(ctx, timetocount,*,Text=None):
     newidcode=newidcode.replace("X",":regional_indicator_x:")
     newidcode=newidcode.replace("Y",":regional_indicator_y:")
     newidcode=newidcode.replace("Z",":regional_indicator_z:")
-    allid.append(idcode+ctx.guild.id)
+    allid.append(idcode+str(ctx.guild.id))
     desc = "Initializing countdown…"
     message = await ctx.send(desc)
-    while seconds>=1 and eval("terminate"+ctx.guild.id+idcode.lower())==0:
+    while seconds>=1 and eval("terminate"+str(ctx.guild.id)+idcode.lower())==0:
       seconds = int((end - datetime.now()).total_seconds())
       newsec=str(seconds%60)
       newmin=str((seconds%3600)//60)
