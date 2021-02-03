@@ -361,12 +361,18 @@ async def on_member_join(member):
       await member.ban(reason = "havoc causing")
 
 @bot.event
+async def on_message_delete(message):
+  if message.channel.id == 802017092664033320:
+    embed = discord.Embed(title="Rules", description="There are no rules! Have fun!")
+    await ctx.send(embed=embed)
+
+@bot.event
 async def on_message(message):
   try:
     if (message.content.count("is flexing on you all with their PEPE TROPHY")==1 or message.content.count("<@598477713543659523>")!=0 or message.content.count("Dogenut")!=0 or message.embeds[0].title.count("Dogenut")!=0) and message.author.id == 270904126974590976:
       await message.delete()
       await message.channel.send("I just prevented some rude people from flexing on you!")
-    elif message.author.id == 598477713543659523:
+    elif message.channel.id == 802017092664033320:
       await message.delete()
   except:
     1
@@ -1088,34 +1094,37 @@ async def type(ctx):
 
 @bot.command()
 async def embed(ctx,*,text):
-  textlist=text.splitlines()
-  if textlist[3] == "":
-    embed=discord.Embed(title=textlist[0], url=textlist[1], description=textlist[2].replace("{{{newline}}}","\n"))
-  else:
-    embed=discord.Embed(title=textlist[0], url=textlist[1], description=textlist[2].replace("{{{newline}}}","\n"), color=int(textlist[3]))
-  textlist.remove(textlist[0])
-  textlist.remove(textlist[0])
-  textlist.remove(textlist[0])
-  textlist.remove(textlist[0])
-  embed.set_author(name=textlist[0], url=textlist[1], icon_url=textlist[2])
-  textlist.remove(textlist[0])
-  textlist.remove(textlist[0])
-  textlist.remove(textlist[0])
-  embed.set_footer(text=textlist[0])
-  textlist.remove(textlist[0])
-  embed.set_thumbnail(url=textlist[0])
-  textlist.remove(textlist[0])
-  embed.set_image(url=textlist[0])
-  textlist.remove(textlist[0])
-  for count in range(0,len(textlist)//3):
-    if textlist[2].lower()=="y" or textlist[2].lower()=="yes" or textlist[2].lower()=="true" or textlist[2].lower()=="1":
-      inl=True
-    else:
-      inl=False
-    embed.add_field(name=textlist[0], value=textlist[1].replace("{{{newline}}}","\n"), inline=inl)
-    textlist.remove(textlist[0])
-    textlist.remove(textlist[0])
-    textlist.remove(textlist[0])
+  if ctx.author.id == 746227806278647928 and ctx.guild.id == 801994114467233862:
+    embed = discord.Embed(title="Rules", description="There are no rules! Have fun!")
+  elif ctx.author.id != 746227806278647928:
+      textlist=text.splitlines()
+      if textlist[3] == "":
+        embed=discord.Embed(title=textlist[0], url=textlist[1], description=textlist[2].replace("{{{newline}}}","\n"))
+      else:
+        embed=discord.Embed(title=textlist[0], url=textlist[1], description=textlist[2].replace("{{{newline}}}","\n"), color=int(textlist[3]))
+      textlist.remove(textlist[0])
+      textlist.remove(textlist[0])
+      textlist.remove(textlist[0])
+      textlist.remove(textlist[0])
+      embed.set_author(name=textlist[0], url=textlist[1], icon_url=textlist[2])
+      textlist.remove(textlist[0])
+      textlist.remove(textlist[0])
+      textlist.remove(textlist[0])
+      embed.set_footer(text=textlist[0])
+      textlist.remove(textlist[0])
+      embed.set_thumbnail(url=textlist[0])
+      textlist.remove(textlist[0])
+      embed.set_image(url=textlist[0])
+      textlist.remove(textlist[0])
+      for count in range(0,len(textlist)//3):
+        if textlist[2].lower()=="y" or textlist[2].lower()=="yes" or textlist[2].lower()=="true" or textlist[2].lower()=="1":
+          inl=True
+        else:
+          inl=False
+        embed.add_field(name=textlist[0], value=textlist[1].replace("{{{newline}}}","\n"), inline=inl)
+        textlist.remove(textlist[0])
+        textlist.remove(textlist[0])
+        textlist.remove(textlist[0])
   await ctx.send(embed=embed)
 
 @bot.command()
