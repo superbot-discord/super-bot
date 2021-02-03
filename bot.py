@@ -374,7 +374,7 @@ async def on_message_delete(message):
     embed = discord.Embed(title="Rules", description="There are no rules! Have fun!")
     await message.channel.send(embed=embed)
 
-@bot.event
+"""@bot.event
 async def on_message(message):
   try:
     if (message.content.count("is flexing on you all with their PEPE TROPHY")==1 or message.content.count("<@598477713543659523>")!=0 or message.content.count("Dogenut")!=0 or message.embeds[0].title.count("Dogenut")!=0) and message.author.id == 270904126974590976:
@@ -385,7 +385,7 @@ async def on_message(message):
   except:
     1
   if banned_ids.count(message.author.id)==0:
-    await bot.process_commands(message)
+    await bot.process_commands(message)"""
 
 @bot.command()
 async def invite(ctx, *, text):
