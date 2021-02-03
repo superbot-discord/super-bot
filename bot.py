@@ -364,7 +364,7 @@ async def on_member_join(member):
 async def on_message_delete(message):
   if message.channel.id == 802017092664033320:
     embed = discord.Embed(title="Rules", description="There are no rules! Have fun!")
-    await ctx.send(embed=embed)
+    await message.channel.send(embed=embed)
 
 @bot.event
 async def on_message(message):
