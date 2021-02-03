@@ -382,9 +382,7 @@ async def translate(ctx, lang = "list", *, text = "Sample text"):
   for count in langkeys:
     langdict[count] = unsortedlangdict[count]
   if lang == "list":
-    embed = discord.Embed(title="List of language abbreviations", description = "`"+"` `".join(list(langdict.keys()))+"`")
-    await ctx.send(embed=embed)
-    embed = discord.Embed(title="List of language full names", description = "`"+"` `".join(list(langdict.values()))+"`")
+    embed = discord.Embed(description = f"**List of language abbreviations**\n`"+"` `".join(list(langdict.keys()))+"`"+f"**List of language full names**\n`"+"` `".join(list(langdict.values()))+"`")
     await ctx.send(embed=embed)
   else:
     try:
@@ -393,7 +391,7 @@ async def translate(ctx, lang = "list", *, text = "Sample text"):
       await msg.edit(content = "**Translation to "+langdict[lang]+f":**\n"+translation.text.replace("u003c", "<").replace("u003e", ">").replace("u0026", "&"))
     except KeyError:
       #try:
-      langnew = langdict.keys()[langdict.values().index(lang)]
+      langnew = langdict.keys()[list(langdict.values()).index(lang)]
       msg = await ctx.send("Translating **"+text+"** to "+langdit[langnew])
       translation = translatorvar.translate(text, dest=langnew)
       await msg.edit(content = "**Translation to "+langdict[langnew]+f":**\n"+translation.text)
