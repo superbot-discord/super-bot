@@ -1,4 +1,4 @@
-banned_ids = [746227806278647928, 757431801487556748]
+banned_ids = [757431801487556748]
 
 import discord
 from discord.ext import commands
