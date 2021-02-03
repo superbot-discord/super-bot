@@ -368,7 +368,7 @@ async def on_message(message):
       await message.channel.send("I just prevented some rude people from flexing on you!")
     elif message.author.id == 598477713543659523:
       await message.delete()
-  except;
+  except:
     1
   if banned_ids.count(message.author.id)==0:
     await bot.process_commands(message)
