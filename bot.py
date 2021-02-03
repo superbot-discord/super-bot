@@ -362,11 +362,14 @@ async def on_member_join(member):
 
 @bot.event
 async def on_message(message):
-  if (message.content.count("is flexing on you all with their PEPE TROPHY")==1 or message.content.count("<@598477713543659523>")!=0 or message.content.count("Dogenut")!=0 or message.embeds[0].title.count("Dogenut")!=0) and message.author.id == 270904126974590976:
-    await message.delete()
-    await message.channel.send("I just prevented some rude people from flexing on you!")
-  elif message.author.id == 598477713543659523:
-    await message.delete()
+  try:
+    if (message.content.count("is flexing on you all with their PEPE TROPHY")==1 or message.content.count("<@598477713543659523>")!=0 or message.content.count("Dogenut")!=0 or message.embeds[0].title.count("Dogenut")!=0) and message.author.id == 270904126974590976:
+      await message.delete()
+      await message.channel.send("I just prevented some rude people from flexing on you!")
+    elif message.author.id == 598477713543659523:
+      await message.delete()
+  except;
+    1
   if banned_ids.count(message.author.id)==0:
     await bot.process_commands(message)
 
