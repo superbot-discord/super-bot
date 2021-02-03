@@ -45,6 +45,14 @@ client = discord.Client()
 bot.remove_command('help')
 typer=0
 autodel=None
+translatorvar = Translator()
+unsortedlangdict = translatorvar.glanguage().get("tl")
+srclangdict = translatorvar.glanguage().get("sl")
+langkeys = list(unsortedlangdict.keys())
+langkeys.sort()
+langdict = {}
+for count in langkeys:
+  langdict[count] = unsortedlangdict[count]
 
 async def on_ready(self):
   print('Connected!')
@@ -391,16 +399,13 @@ async def translate(ctx, langinput = "list", *, text = "Sample text"):
     fromlang = langinput.split(",")[1]
   else:
     lang = langinput
-  translatorvar = Translator()
-  unsortedlangdict = translatorvar.glanguage().get("tl")
-  langkeys = list(unsortedlangdict.keys())
-  langkeys.sort()
-  langdict = {}
-  for count in langkeys:
-    langdict[count] = unsortedlangdict[count]
   if lang == "list" or lang == "all":
     embed = discord.Embed(description = f"**List of language abbreviations**\n`"+"` `".join(list(langdict.keys()))+f"`\n\n**List of language full names**\n`"+"` `".join(list(langdict.values()))+"`")
     await ctx.send(embed=embed)
+  if list(srclangdict.values()).count(fromlang) == 1:
+    fromlang = list(srclangdict.keys())[list(srclangdict.values()).index(fromlang)]
+  if list(langdict.values()).count(lang) == 1:
+    lang = list(langdict.keys())[list(langdict.values()).index(lang)]
   else:
     try:
       msg = await ctx.send("Translating **"+text+"** to "+langdict[lang])
@@ -409,17 +414,8 @@ async def translate(ctx, langinput = "list", *, text = "Sample text"):
       except:
         translation = translatorvar.translate(text, dest=lang)
       await msg.edit(content = "**Translation to "+langdict[lang]+f":**\n"+translation.text.replace("u003c", "<").replace("u003e", ">").replace("u0026", "&"))
-    except KeyError:
-      try:
-        langnew = list(langdict.keys())[list(langdict.values()).index(lang)]
-        msg = await ctx.send("Translating **"+text+"** to "+langdict[langnew])
-        try:
-          translation = translatorvar.translate(text, src=fromlang, dest=lang)
-        except:
-          translation = translatorvar.translate(text, dest=lang)
-        await msg.edit(content = "**Translation to "+langdict[langnew]+f":**\n"+translation.text)
-      except:
-        await ctx.send("Language not found! Please use `=translate list` to get a list of languages.")
+    except:
+      await ctx.send("Language not found! Please use `=translate list` to get a list of languages.")
 
 @bot.command()
 async def engrave(ctx, product, *, text = "Your text goes here."):
