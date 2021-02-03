@@ -1025,6 +1025,10 @@ async def react(ctx, message : discord.Message, emoji : discord.Emoji):
 
 @bot.command(pass_context=True)
 async def pretend(ctx, member : discord.Member, *, message):
+  try:
+    await ctx.message.delete()
+  except:
+    1
   whl = await ctx.channel.webhooks()
   ourweb = False
   for count in whl:
