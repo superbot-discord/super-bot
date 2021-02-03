@@ -864,27 +864,22 @@ async def text(ctx):
 
 @bot.command()
 async def html(ctx, *, code = None):
-  await ctx.send("Test 1")
   match = html_pattern.fullmatch(code)
-  await ctx.send("Test 2")
   if match:
-    await ctx.send("Test 2a")
     code = code.replace("```html","", 1)
     code = code.replace("```","")
-  await ctx.send("Test 3")
   if code == None:
-    await ctx.send("Test 3a")
     r = requests.get(ctx.message.attachments[0].url, stream=True)
     r.raise_for_status()
     r.raw.decode_content = True
     code = r.content
-  await ctx.send("Test 4")
+  await ctx.send("Test 1")
   pdfkit.from_string(code, 'html.pdf')
-  await ctx.send("Test 5")
+  await ctx.send("Test 2")
   await ctx.send(file=discord.File('html.pdf'))
-  await ctx.send("Test 6")
+  await ctx.send("Test 3")
   os.remove('html.pdf')
-  await ctx.send("Test 7")
+  await ctx.send("Test 4")
 
 @bot.command()
 async def youtube(ctx, *, url):
