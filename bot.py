@@ -397,13 +397,13 @@ async def translate(ctx, langinput = "list", *, text = "Sample text"):
   if langinput.count(",")==1:
     lang = langinput.split(",")[0]
     fromlang = langinput.split(",")[1]
+    if list(srclangdict.values()).count(fromlang) == 1:
+      fromlang = list(srclangdict.keys())[list(srclangdict.values()).index(fromlang)]
   else:
     lang = langinput
   if lang == "list" or lang == "all":
     embed = discord.Embed(description = f"**List of language abbreviations**\n`"+"` `".join(list(langdict.keys()))+f"`\n\n**List of language full names**\n`"+"` `".join(list(langdict.values()))+"`")
     await ctx.send(embed=embed)
-  if list(srclangdict.values()).count(fromlang) == 1:
-    fromlang = list(srclangdict.keys())[list(srclangdict.values()).index(fromlang)]
   if list(langdict.values()).count(lang) == 1:
     lang = list(langdict.keys())[list(langdict.values()).index(lang)]
   else:
