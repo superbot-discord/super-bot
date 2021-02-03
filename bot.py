@@ -1075,7 +1075,10 @@ async def type(ctx):
 @bot.command()
 async def embed(ctx,*,text):
   textlist=text.splitlines()
-  embed=discord.Embed(title=textlist[0], url=textlist[1], description=textlist[2].replace("{{{newline}}}","\n"), color=int(textlist[3]))
+  if textlist[3] == "":
+    embed=discord.Embed(title=textlist[0], url=textlist[1], description=textlist[2].replace("{{{newline}}}","\n"))
+  else:
+    embed=discord.Embed(title=textlist[0], url=textlist[1], description=textlist[2].replace("{{{newline}}}","\n"), color=int(textlist[3]))
   textlist.remove(textlist[0])
   textlist.remove(textlist[0])
   textlist.remove(textlist[0])
