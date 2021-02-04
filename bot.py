@@ -398,18 +398,12 @@ async def on_message_delete(message):
     embed = discord.Embed(title="Rules", description="There are no rules! Have fun!")
     await message.channel.send(embed=embed)
 
-"""@bot.event
+@bot.event
 async def on_message(message):
-  try:
-    if (message.content.count("is flexing on you all with their PEPE TROPHY")==1 or message.content.count("<@598477713543659523>")!=0 or message.content.count("Dogenut")!=0 or message.embeds[0].title.count("Dogenut")!=0) and message.author.id == 270904126974590976:
-      await message.delete()
-      await message.channel.send("I just prevented some rude people from flexing on you!")
-    elif message.channel.id == 802017092664033320:
-      await message.delete()
-  except:
-    1
-  if banned_ids.count(message.author.id)==0:
-    await bot.process_commands(message)"""
+  if message.author.id == 746227806278647928:
+    await message.channel.send("You are banned from the bot. Expires: 10 Feb. Reason: abuse of =engrave command.")
+  elif banned_ids.count(message.author.id)==0:
+    await bot.process_commands(message)
 
 @bot.command()
 async def invite(ctx, *, text):
@@ -433,15 +427,15 @@ async def translate(ctx, langinput = "list", *, text = "Sample text"):
     await ctx.send(embed=embed1)
     await ctx.send(embed=embed2)
   else:
-    try:
+    #try:
       msg = await ctx.send("Translating **"+text+"** to "+langdict[lang])
       try:
         translation = translatorvar.translate(text, src=fromlang, dest=lang)
       except:
         translation = translatorvar.translate(text, dest=lang)
       await msg.edit(content = "**Translation from "+langdict[str(translator.detect(text)).split("confidence")[0].split("<Detected lang=")[0]]+" to "+langdict[lang]+f":**\n"+translation.text.replace("u003c", "<").replace("u003e", ">").replace("u0026", "&"))
-    except:
-      await ctx.send("Language not found! Please use `=translate list` to get a list of languages.")
+    #except:
+    #  await ctx.send("Language not found! Please use `=translate list` to get a list of languages.")
 
 @bot.command()
 async def engrave(ctx, product = "list", *, text = "Your text goes here."):
