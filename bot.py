@@ -433,7 +433,7 @@ async def translate(ctx, langinput = "list", *, text = "Sample text"):
         translation = translatorvar.translate(text, src=fromlang, dest=lang)
       except:
         translation = translatorvar.translate(text, dest=lang)
-      await msg.edit(content = "**Translation from "+langdict[str(translatorvar.detect(text)).split("confidence")[0].split("<Detected lang=")[0]]+" to "+langdict[lang]+f":**\n"+translation.text.replace("u003c", "<").replace("u003e", ">").replace("u0026", "&"))
+      await msg.edit(content = "**Translation from "+langdict[translatorvar.detect("Ahoj").lang].split("confidence")[0].split("<Detected lang=")[0]]+" to "+langdict[lang]+f":**\n"+translation.text.replace("u003c", "<").replace("u003e", ">").replace("u0026", "&"))
     #except:
     #  await ctx.send("Language not found! Please use `=translate list` to get a list of languages.")
 
