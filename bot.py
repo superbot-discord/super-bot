@@ -47,12 +47,17 @@ typer=0
 autodel=None
 translatorvar = Translator()
 unsortedlangdict = translatorvar.glanguage().get("tl")
-srclangdict = translatorvar.glanguage().get("sl")
+unsortedsrclangdict = translatorvar.glanguage().get("sl")
 langkeys = list(unsortedlangdict.keys())
 langkeys.sort()
 langdict = {}
 for count in langkeys:
   langdict[count] = unsortedlangdict[count]
+srclangkeys = list(unsortedsrclangdict.keys())
+srclangkeys.sort()
+srclangdict = {}
+for count in srclangkeys:
+  srclangdict[count] = unsortedsrclangdict[count]
 
 async def on_ready(self):
   print('Connected!')
@@ -401,11 +406,11 @@ async def translate(ctx, langinput = "list", *, text = "Sample text"):
       fromlang = list(srclangdict.keys())[list(srclangdict.values()).index(fromlang)]
   else:
     lang = langinput
-  if lang == "list" or lang == "all":
-    embed = discord.Embed(description = f"**List of language abbreviations**\n`"+"` `".join(list(langdict.keys()))+f"`\n\n**List of language full names**\n`"+"` `".join(list(langdict.values()))+"`")
-    await ctx.send(embed=embed)
   if list(langdict.values()).count(lang) == 1:
-    lang = list(langdict.keys())[list(langdict.values()).index(lang)]
+      lang = list(langdict.keys())[list(langdict.values()).index(lang)]
+  if lang == "list" or lang == "all":
+    embed = discord.Embed(description = f"**List of Language Input (Abbreviations)**\n`"+"` `".join(list(langdict.keys()))+f"`\n\n**List of Language Input (Full Names)**\n`"+"` `".join(list(langdict.values()))+f"`\n\n**List of Language Output (Abbreviations)**\n`"+"` `".join(list(srclangdict.keys()))+f"`\n\n**List of Language Output (Full Names)**\n"+"` `".join(list(srclangdict.values()))+"`")
+    await ctx.send(embed=embed)
   else:
     try:
       msg = await ctx.send("Translating **"+text+"** to "+langdict[lang])
