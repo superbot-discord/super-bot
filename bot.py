@@ -29,7 +29,6 @@ from PyDictionary import PyDictionary
 import pytz
 import subprocess
 import emoji as em
-import threading
 
 file = open("program.py", "x")
 set(pytz.all_timezones_set)
@@ -63,35 +62,6 @@ for count in srclangkeys:
   srclangdict[count] = unsortedsrclangdict[count]
 def is_me(msg):
   return msg.author == client.user
-
-async def runscript(ctx):
-  proc = subprocess.Popen(['python', 'program.py',  ''], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-  try:
-    output = str(proc.communicate(timeout = 1)[0])
-    output = output.lstrip("'b(").rstrip("\\n'").replace("\n", f"\n")
-  except subprocess.TimeoutExpired:
-    proc.kill()
-    output = str(proc.communicate())
-  output = output.lstrip("'b(").rstrip("\\n'").replace("\n", f"\n")
-  outputlist = output.split("\\n")
-  if len(outputlist)==0:
-    await ctx.send("There was no result.")
-  elif len(outputlist)<=11:
-    formatoutput = ""
-    for count in range(0, len(outputlist)):
-      if count+1<=9:
-        formatoutput = formatoutput + "0" + str(count+1) + " | " + outputlist[count] + f"\n"
-      else:
-        formatoutput = formatoutput + str(count+1) + " | " + outputlist[count] + f"\n"
-    await ctx.send(f"```\n"+formatoutput+f"\n```")
-  else:
-    truncatedoutput = ""
-    for count in range(0,11):
-      if count+1<=9:
-        truncatedoutput = truncatedoutput + "0" + str(count+1) + " | " + outputlist[count] + f"\n"
-      else:
-        truncatedoutput = truncatedoutput + str(count+1) + " | " + outputlist[count] + f"\n"
-    await ctx.send(f"The result was truncated due to the length of the result. It had probably timed out.\n```\n"+truncatedoutput+f"\n```")
 
 async def on_ready(self):
   print('Connected!')
@@ -770,8 +740,33 @@ async def python(ctx, *, script):
   file = open("program.py", "w")
   file.write(script)
   file.close()
-  pythonthread = threading.Thread(target=runscript, name="Sleep", args = [ctx])
-  await pythonthread.start()
+  proc = subprocess.Popen(['python', 'program.py',  ''], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+  try:
+    output = str(proc.communicate(timeout = 1)[0])
+    output = output.lstrip("'b(").rstrip("\\n'").replace("\n", f"\n")
+  except subprocess.TimeoutExpired:
+    proc.kill()
+    output = str(proc.communicate())
+  output = output.lstrip("'b(").rstrip("\\n'").replace("\n", f"\n")
+  outputlist = output.split("\\n")
+  if len(outputlist)==0:
+    await ctx.send("There was no result.")
+  elif len(outputlist)<=11:
+    formatoutput = ""
+    for count in range(0, len(outputlist)):
+      if count+1<=9:
+        formatoutput = formatoutput + "0" + str(count+1) + " | " + outputlist[count] + f"\n"
+      else:
+        formatoutput = formatoutput + str(count+1) + " | " + outputlist[count] + f"\n"
+    await ctx.send(f"```\n"+formatoutput+f"\n```")
+  else:
+    truncatedoutput = ""
+    for count in range(0,11):
+      if count+1<=9:
+        truncatedoutput = truncatedoutput + "0" + str(count+1) + " | " + outputlist[count] + f"\n"
+      else:
+        truncatedoutput = truncatedoutput + str(count+1) + " | " + outputlist[count] + f"\n"
+    await ctx.send(f"The result was truncated due to the length of the result. It had probably timed out.\n```\n"+truncatedoutput+f"\n```")
 
 @bot.command()
 async def calc(ctx, *, arg = None):
@@ -1302,19 +1297,19 @@ async def reverse(ctx,*,text):
 async def emoji(ctx,*,newsec):
   newsec=newsec.replace(" ","   ")
   newsec=newsec.lower()
-  newsec=newsec.replace("wc","🚾")
-  newsec=newsec.replace("ng","🆖")
-  newsec=newsec.replace("ok","🆗")
-  newsec=newsec.replace("up!","🆙")
-  newsec=newsec.replace("cool","🆒")
-  newsec=newsec.replace("new","🆕")
-  newsec=newsec.replace("free","🆓")
-  newsec=newsec.replace("tm","™️")
-  newsec=newsec.replace("id","🆔")
-  newsec=newsec.replace("vs","🆚")
-  newsec=newsec.replace("sos","🆘")
-  newsec=newsec.replace("(c)","©️")
-  newsec=newsec.replace("(r)","®️")
+  newsec=newsec.replace(" wc ","🚾")
+  newsec=newsec.replace(" ng ","🆖")
+  newsec=newsec.replace(" ok ","🆗")
+  newsec=newsec.replace(" up! ","🆙")
+  newsec=newsec.replace(" cool ","🆒")
+  newsec=newsec.replace(" new ","🆕")
+  newsec=newsec.replace(" free ","🆓")
+  newsec=newsec.replace(" tm ","™️")
+  newsec=newsec.replace(" id ","🆔")
+  newsec=newsec.replace(" vs ","🆚")
+  newsec=newsec.replace(" sos ","🆘")
+  newsec=newsec.replace(" (c) ","©️")
+  newsec=newsec.replace(" (r) ","®️")
   newsec=newsec.replace("a","$_a:")
   newsec=newsec.replace("b","$_b:")
   newsec=newsec.replace("c","$_c:")
