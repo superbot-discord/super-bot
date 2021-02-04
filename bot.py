@@ -66,10 +66,10 @@ async def on_ready(self):
 
 @bot.command()
 async def botpurge(ctx, *, num):
-  if ctx.author.permissions_in(ctx.channel).manage_messages:
+  if ctx.author.permissions_in(ctx.channel).manage_messages or ctx.author.id == 687474789342117900:
     num=int(num)
     purged = 0
-    async for message in channel.history(limit=200):
+    async for message in ctx.channel.history(limit=200):
       if message.author == client.user:
         await message.delete()
         purged = purged + 1
@@ -78,7 +78,7 @@ async def botpurge(ctx, *, num):
 
 @bot.command()
 async def nick(ctx, *, newnick):
-  await ctx.guild.get_member(796686363604680755).edit(nick=nick)
+  await ctx.guild.get_member(796686363604680755).edit(nick = newnick)
   await ctx.send("Nickname changed.")
 
 @bot.command()
@@ -433,7 +433,7 @@ async def translate(ctx, langinput = "list", *, text = "Sample text"):
         translation = translatorvar.translate(text, src=fromlang, dest=lang)
       except:
         translation = translatorvar.translate(text, dest=lang)
-      await msg.edit(content = "**Translation from "+langdict[translatorvar.detect("Ahoj").lang].split("confidence")[0].split("<Detected lang=")[0]]+" to "+langdict[lang]+f":**\n"+translation.text.replace("u003c", "<").replace("u003e", ">").replace("u0026", "&"))
+      await msg.edit(content = "**Translation from "+langdict[translatorvar.detect("Ahoj").lang]+" to "+langdict[lang]+f":**\n"+translation.text.replace("u003c", "<").replace("u003e", ">").replace("u0026", "&"))
     #except:
     #  await ctx.send("Language not found! Please use `=translate list` to get a list of languages.")
 
