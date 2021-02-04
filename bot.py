@@ -29,6 +29,7 @@ from PyDictionary import PyDictionary
 import pytz
 import subprocess
 import emoji as em
+import asyncio
 
 file = open("program.py", "x")
 set(pytz.all_timezones_set)
