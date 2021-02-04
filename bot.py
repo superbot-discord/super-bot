@@ -90,7 +90,7 @@ async def pyrun(ctx):
         truncatedoutput = truncatedoutput + str(count+1) + " | " + outputlist[count] + f"\n"
     await ctx.send(f"The result was truncated due to the length of the result. It had probably timed out.\n```\n"+truncatedoutput+f"\n```")
 
-async def capscreenshot(ctx):
+async def capscreenshot(ctx, url, form):
   options = webdriver.ChromeOptions()
   options.headless = True
   options.add_argument('--no-sandbox')
@@ -862,7 +862,7 @@ async def screenshot(ctx, url = None, form = "all"):
   if url == None:
     await ctx.send("Invalid format! Please use the format `=screenshot [url]`.")
   else:
-    task = asyncio.create_task(capscreenshot(ctx))
+    task = asyncio.create_task(capscreenshot(ctx, url, form))
     await task
 
 @bot.command()
