@@ -70,11 +70,11 @@ async def botpurge(ctx, *, num):
     num=int(num)
     purged = 0
     async for message in channel.history(limit=200):
-    if message.author == client.user:
-      await message.delete()
-      purged = purged + 1
-      if purged >= num:
-        break
+      if message.author == client.user:
+        await message.delete()
+        purged = purged + 1
+        if purged >= num:
+          break
 
 @bot.command()
 async def nick(ctx, *, newnick):
