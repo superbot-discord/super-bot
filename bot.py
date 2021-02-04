@@ -83,30 +83,27 @@ async def on_reaction_add(reaction, user):
     print(11)
   flagname = em.demojize(flagname)
   print(2)
-  #if flagname.count("flag")==1:
-  flagname = flagname.replace("flag_gb", "en")
-  flagname = flagname.replace("flag_us", "en")
-  flagname = flagname.replace("flag_ca", "en")
-  flagname = flagname.replace("flag_eu", "en")
-  flagname = flagname.replace("flag_jp", "ja")
-  flagname = flagname.replace("flag_cz", "cs")
-  flagname = flagname.replace("flag_gr", "el")
-  flagname = flagname.replace("flag_cn", "zh-CN")
-  flagname = flagname.replace("flag_hk", "zh-TW")
-  flagname = flagname.replace("flag_tw", "zh-TW")
-  print(3)
-  flagname = flagname.lstrip("_galf:")
-  lang = flagname.replace(":","")
-  print(4)
-  try:
+  if flagname.count("flag")==1:
+    flagname = flagname.replace("flag_gb", "en")
+    flagname = flagname.replace("flag_us", "en")
+    flagname = flagname.replace("flag_ca", "en")
+    flagname = flagname.replace("flag_eu", "en")
+    flagname = flagname.replace("flag_jp", "ja")
+    flagname = flagname.replace("flag_cz", "cs")
+    flagname = flagname.replace("flag_gr", "el")
+    flagname = flagname.replace("flag_cn", "zh-CN")
+    flagname = flagname.replace("flag_hk", "zh-TW")
+    flagname = flagname.replace("flag_tw", "zh-TW")
+    print(3)
+    flagname = flagname.lstrip("_galf:")
+    lang = flagname.replace(":","")
+    print(4)
+    #try:
     msg = await ctx.send("Translating **"+reaction.message.content+"** to "+langdict[lang])
-    print(41)
     translation = translatorvar.translate(reaction.message.content, dest=lang)
-    print(42)
     await msg.edit(content = "**Translation from "+langdict[translatorvar.detect(reaction.message.content).lang]+" to "+langdict[lang]+f":**\n"+translation.text.replace("u003c", "<").replace("u003e", ">").replace("u0026", "&"))
-  except:
-    print(43)
-    await reaction.message.channel.send("Sorry, but this language is not supported.")
+    #except:
+    #await reaction.message.channel.send("Sorry, but this language is not supported.")
 
 @bot.command()
 async def botpurge(ctx, *, num):
