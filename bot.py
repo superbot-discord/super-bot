@@ -75,6 +75,7 @@ async def on_message(message):
 @bot.event
 async def on_reaction_add(reaction, user):
   flagname = reaction.emoji
+  flagname = em.demojize(flagname)
   if flagname.count("flag_")==1:
     flagname = flagname.replace("flag_gb", "en")
     flagname = flagname.replace("flag_us", "en")
@@ -86,8 +87,7 @@ async def on_reaction_add(reaction, user):
     flagname = flagname.replace("flag_cn", "zh-CN")
     flagname = flagname.replace("flag_hk", "zh-TW")
     flagname = flagname.replace("flag_tw", "zh-TW")
-    flagname = flagname.lstrip("_galf:").repalce(":","")
-    lang = em.demojize(flagname)
+    lang = flagname.lstrip("_galf:").repalce(":","")
     try:
       msg = await ctx.send("Translating **"+reaction.message.content+"** to "+langdict[lang])
       translation = translatorvar.translate(reaction.message.content, dest=lang)
