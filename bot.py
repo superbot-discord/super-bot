@@ -770,7 +770,7 @@ async def python(ctx, *, script):
   file = open("program.py", "x")
   file.write(script)
   file.close()
-  pythonthread = threading.Thread(target=runscript, name="Sleep", args = ctx)
+  pythonthread = threading.Thread(target=runscript, name="Sleep", args = [ctx])
   pythonthread.start()
 
 @bot.command()
