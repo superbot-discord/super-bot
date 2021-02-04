@@ -429,7 +429,7 @@ async def translate(ctx, langinput = "list", *, text = "Sample text"):
       lang = list(langdict.keys())[list(langdict.values()).index(lang)]
   if lang == "list" or lang == "all":
     embed1 = discord.Embed(description = f"**List of Language Input (Abbreviations)**\n`"+"` `".join(list(langdict.keys()))+f"`\n\n**List of Language Input (Full Names)**\n`"+"` `".join(list(langdict.values())))
-    embed2 = discord.Embed(description = f"**List of Language Output (Abbreviations)**\n`"+"` `".join(list(srclangdict.keys()))+f"`\n\n**List of Language Output (Full Names)**\n"+"` `".join(list(srclangdict.values()))+"`")
+    embed2 = discord.Embed(description = f"**List of Language Output (Abbreviations)**\n`"+"` `".join(list(srclangdict.keys()))+f"`\n\n**List of Language Output (Full Names)**\n`"+"` `".join(list(srclangdict.values()))+"`")
     await ctx.send(embed=embed1)
     await ctx.send(embed=embed2)
   else:
@@ -439,7 +439,7 @@ async def translate(ctx, langinput = "list", *, text = "Sample text"):
         translation = translatorvar.translate(text, src=fromlang, dest=lang)
       except:
         translation = translatorvar.translate(text, dest=lang)
-      await msg.edit(content = "**Translation from "+langdict[translator.detect(text).lang]+" to "+langdict[lang]+f":**\n"+translation.text.replace("u003c", "<").replace("u003e", ">").replace("u0026", "&"))
+      await msg.edit(content = "**Translation from "+langdict[str(translator.detect(text)).split("confidence")[0].split("<Detected lang=")[0]]+" to "+langdict[lang]+f":**\n"+translation.text.replace("u003c", "<").replace("u003e", ">").replace("u0026", "&"))
     except:
       await ctx.send("Language not found! Please use `=translate list` to get a list of languages.")
 
