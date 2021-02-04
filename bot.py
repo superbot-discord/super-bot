@@ -75,24 +75,25 @@ async def on_message(message):
 @bot.event
 async def on_reaction_add(reaction, user):
   flagname = reaction.emoji.name
-  flagname = flagname.replace(":flag_gb:", "en")
-  flagname = flagname.replace(":flag_us:", "en")
-  flagname = flagname.replace(":flag_ca:", "en")
-  flagname = flagname.replace(":flag_eu:", "en")
-  flagname = flagname.replace(":flag_jp:", "ja")
-  flagname = flagname.replace(":flag_cz:", "cs")
-  flagname = flagname.replace(":flag_gr:", "el")
-  flagname = flagname.replace(":flag_cn:", "zh-CN")
-  flagname = flagname.replace(":flag_hk:", "zh-TW")
-  flagname = flagname.replace(":flag_tw:", "zh-TW")
-  flagname = flagname.lstrip("_galf:").rstrip(":")
-  lang = em.demojize(flagname)
-  try:
-    msg = await ctx.send("Translating **"+reaction.message.content+"** to "+langdict[lang])
-    translation = translatorvar.translate(reaction.message.content, dest=lang)
-    await msg.edit(content = "**Translation from "+langdict[translatorvar.detect(reaction.message.content).lang]+" to "+langdict[lang]+f":**\n"+translation.text.replace("u003c", "<").replace("u003e", ">").replace("u0026", "&"))
-  except:
-    await reaction.message.channel.send("Sorry, but this language is not supported.")
+  if flagname.count("flag_")==1:
+    flagname = flagname.replace(":flag_gb:", "en")
+    flagname = flagname.replace(":flag_us:", "en")
+    flagname = flagname.replace(":flag_ca:", "en")
+    flagname = flagname.replace(":flag_eu:", "en")
+    flagname = flagname.replace(":flag_jp:", "ja")
+    flagname = flagname.replace(":flag_cz:", "cs")
+    flagname = flagname.replace(":flag_gr:", "el")
+    flagname = flagname.replace(":flag_cn:", "zh-CN")
+    flagname = flagname.replace(":flag_hk:", "zh-TW")
+    flagname = flagname.replace(":flag_tw:", "zh-TW")
+    flagname = flagname.lstrip("_galf:").rstrip(":")
+    lang = em.demojize(flagname)
+    try:
+      msg = await ctx.send("Translating **"+reaction.message.content+"** to "+langdict[lang])
+      translation = translatorvar.translate(reaction.message.content, dest=lang)
+      await msg.edit(content = "**Translation from "+langdict[translatorvar.detect(reaction.message.content).lang]+" to "+langdict[lang]+f":**\n"+translation.text.replace("u003c", "<").replace("u003e", ">").replace("u0026", "&"))
+    except:
+      await reaction.message.channel.send("Sorry, but this language is not supported.")
 
 @bot.command()
 async def botpurge(ctx, *, num):
