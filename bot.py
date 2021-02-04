@@ -74,11 +74,15 @@ async def on_message(message):
 
 @bot.event
 async def on_reaction_add(reaction, user):
+  print(1)
   try:
     flagname = reaction.emoji.name
+    print(10)
   except:
     flagname = reaction.emoji
+    print(11)
   flagname = em.demojize(flagname)
+  print(2)
   #if flagname.count("flag")==1:
   flagname = flagname.replace("flag_gb", "en")
   flagname = flagname.replace("flag_us", "en")
@@ -90,12 +94,17 @@ async def on_reaction_add(reaction, user):
   flagname = flagname.replace("flag_cn", "zh-CN")
   flagname = flagname.replace("flag_hk", "zh-TW")
   flagname = flagname.replace("flag_tw", "zh-TW")
+  print(3)
   lang = flagname.lstrip("_galf:").repalce(":","")
+  print(4)
   try:
     msg = await ctx.send("Translating **"+reaction.message.content+"** to "+langdict[lang])
+    print(41)
     translation = translatorvar.translate(reaction.message.content, dest=lang)
+    print(42)
     await msg.edit(content = "**Translation from "+langdict[translatorvar.detect(reaction.message.content).lang]+" to "+langdict[lang]+f":**\n"+translation.text.replace("u003c", "<").replace("u003e", ">").replace("u0026", "&"))
   except:
+    print(43)
     await reaction.message.channel.send("Sorry, but this language is not supported.")
 
 @bot.command()
