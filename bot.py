@@ -64,6 +64,10 @@ def is_me(msg):
 async def on_ready(self):
   print('Connected!')
 
+@bot.event
+async def on_reaction_add(reaction, user):
+  
+
 @bot.command()
 async def botpurge(ctx, *, num):
   if ctx.author.permissions_in(ctx.channel).manage_messages or ctx.author.id == 687474789342117900:
@@ -628,7 +632,7 @@ async def engrave(ctx, product = "list", *, text = "Your text goes here."):
     embed = discord.Embed(title="List of products")
     embed.add_field(name="AirPods/Pencil", value="`airpods` `airpodson` `airpodspro` `pencil`", inline=False)
     embed.add_field(name="AirPods Max", value="`airpodsmax` `airpodsmaxgray` `airpodsmaxsilver` `airpodsmaxpink` `airpodsmaxgreen` `airpodsmaxblue`", inline=False)
-    embed.add_field(name="iPad/iPad Mini", value="`ipad(mini)` `ipad(mini)gray` `ipad(mini)silver` `ipad(mini)gold`", inline=False)
+    embed.add_field(name="iPad/iPad Mini", value="`ipadmini` `ipadminigray` `ipadminisilver` `ipadminigold`", inline=False)
     embed.add_field(name="iPad Pro", value="`ipadpro` `ipadprogray` `ipadprosilver`", inline=False)
     embed.add_field(name="iPad Air", value="`ipadair` `ipadairgray` `ipadairsilver` `ipadairrose` `ipadairgreen` `ipadairblue`", inline=False)
     embed.add_field(name="iPod Touch", value="`ipod` `ipodgray` `ipodsilver` `ipodgold` `ipodred` `ipodpink` `ipodblue`", inline=False)
