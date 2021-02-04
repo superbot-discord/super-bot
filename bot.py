@@ -64,9 +64,8 @@ def is_me(msg):
 async def on_ready(self):
   print('Connected!')
 
-@bot.event
-async def on_reaction_add(reaction, user):
-  
+#@bot.event
+#async def on_reaction_add(reaction, user):
 
 @bot.command()
 async def botpurge(ctx, *, num):
