@@ -74,7 +74,7 @@ async def on_message(message):
 
 @bot.event
 async def on_reaction_add(reaction, user):
-  flagname = reaction.emoji
+  flagname = reaction.emoji.name
   flagname = flagname.replace(":flag_gb:", "en")
   flagname = flagname.replace(":flag_us:", "en")
   flagname = flagname.replace(":flag_ca:", "en")
