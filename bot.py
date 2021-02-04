@@ -8,6 +8,7 @@ from datetime import datetime, date, timedelta
 from discord_webhook import DiscordWebhook
 from discord.ext.commands import *
 from discord import Webhook, RequestsWebhookAdapter
+from emoji import *
 import aiohttp
 from math import *
 from cmath import *
@@ -64,8 +65,15 @@ def is_me(msg):
 async def on_ready(self):
   print('Connected!')
 
-#@bot.event
-#async def on_reaction_add(reaction, user):
+@bot.event
+async def on_reaction_add(reaction, user):
+  lang = reaction.emoji.demojize.lstrip("_galf")
+  try:
+    msg = await ctx.send("Translating **"+reaction.message.content+"** to "+langdict[lang])
+    translation = translatorvar.translate(reaction.message.content, dest=lang)
+    await msg.edit(content = "**Translation from "+langdict[translatorvar.detect(reaction.message.content).lang]+" to "+langdict[lang]+f":**\n"+translation.text.replace("u003c", "<").replace("u003e", ">").replace("u0026", "&"))
+  except:
+    await ctx.send("Sorry, but this language is not supported.")
 
 @bot.command()
 async def botpurge(ctx, *, num):
@@ -430,15 +438,19 @@ async def translate(ctx, langinput = "list", *, text = "Sample text"):
     await ctx.send(embed=embed1)
     await ctx.send(embed=embed2)
   else:
-    #try:
+    try:
       msg = await ctx.send("Translating **"+text+"** to "+langdict[lang])
       try:
         translation = translatorvar.translate(text, src=fromlang, dest=lang)
+        try:
+          await msg.edit(content = "**Translation from "+langdict[fromlang]+" to "+langdict[lang]+f":**\n"+translation.text.replace("u003c", "<").replace("u003e", ">").replace("u0026", "&"))
+        except:
+          await msg.edit(content = "**Translation from "+langdict[fromlang]+" to "+langdict[lang]+f":**\n"+translation.text.replace("u003c", "<").replace("u003e", ">").replace("u0026", "&"))
       except:
         translation = translatorvar.translate(text, dest=lang)
-      await msg.edit(content = "**Translation from "+langdict[translatorvar.detect("Ahoj").lang]+" to "+langdict[lang]+f":**\n"+translation.text.replace("u003c", "<").replace("u003e", ">").replace("u0026", "&"))
-    #except:
-    #  await ctx.send("Language not found! Please use `=translate list` to get a list of languages.")
+        await msg.edit(content = "**Translation from "+langdict[translatorvar.detect(text).lang]+" to "+langdict[lang]+f":**\n"+translation.text.replace("u003c", "<").replace("u003e", ">").replace("u0026", "&"))
+    except:
+      await ctx.send("Language not found! Please use `=translate list` to get a list of languages.")
 
 @bot.command()
 async def engrave(ctx, product = "list", *, text = "Your text goes here."):
