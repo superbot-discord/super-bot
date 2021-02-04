@@ -8,7 +8,6 @@ from datetime import datetime, date, timedelta
 from discord_webhook import DiscordWebhook
 from discord.ext.commands import *
 from discord import Webhook, RequestsWebhookAdapter
-from emoji import *
 import aiohttp
 from math import *
 from cmath import *
@@ -29,6 +28,7 @@ import wikipedia
 from PyDictionary import PyDictionary
 import pytz
 import subprocess
+import emoji
 
 set(pytz.all_timezones_set)
 dictionary=PyDictionary()
@@ -67,7 +67,7 @@ async def on_ready(self):
 
 @bot.event
 async def on_reaction_add(reaction, user):
-  lang = reaction.emoji.demojize.lstrip("_galf")
+  lang = emoji.demojize.(reaction.emoji.lstrip("_galf"))
   try:
     msg = await ctx.send("Translating **"+reaction.message.content+"** to "+langdict[lang])
     translation = translatorvar.translate(reaction.message.content, dest=lang)
