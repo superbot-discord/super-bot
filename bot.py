@@ -95,7 +95,8 @@ async def on_reaction_add(reaction, user):
   flagname = flagname.replace("flag_hk", "zh-TW")
   flagname = flagname.replace("flag_tw", "zh-TW")
   print(3)
-  lang = flagname.lstrip("_galf:").repalce(":","")
+  flagname = flagname.lstrip("_galf:")
+  lang = flagname.replace(":","")
   print(4)
   try:
     msg = await ctx.send("Translating **"+reaction.message.content+"** to "+langdict[lang])
