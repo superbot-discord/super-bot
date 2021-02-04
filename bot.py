@@ -771,7 +771,7 @@ async def python(ctx, *, script):
   file.write(script)
   file.close()
   pythonthread = threading.Thread(target=runscript, name="Sleep", args = [ctx])
-  pythonthread.start()
+  await pythonthread.start()
 
 @bot.command()
 async def calc(ctx, *, arg = None):
