@@ -58,9 +58,28 @@ srclangkeys.sort()
 srclangdict = {}
 for count in srclangkeys:
   srclangdict[count] = unsortedsrclangdict[count]
+def is_me(msg):
+  return msg.author == client.user
 
 async def on_ready(self):
   print('Connected!')
+
+@bot.command()
+async def botpurge(ctx, *, num):
+  if ctx.author.permissions_in(ctx.channel).manage_messages:
+    num=int(num)
+    purged = 0
+    async for message in channel.history(limit=200):
+    if message.author == client.user:
+      await message.delete()
+      purged = purged + 1
+      if purged >= num:
+        break
+
+@bot.command()
+async def nick(ctx, *, newnick):
+  await ctx.guild.get_member(796686363604680755).edit(nick=nick)
+  await ctx.send("Nickname changed.")
 
 @bot.command()
 async def help(ctx, *, cat=None):
@@ -409,8 +428,10 @@ async def translate(ctx, langinput = "list", *, text = "Sample text"):
   if list(langdict.values()).count(lang) == 1:
       lang = list(langdict.keys())[list(langdict.values()).index(lang)]
   if lang == "list" or lang == "all":
-    embed = discord.Embed(description = f"**List of Language Input (Abbreviations)**\n`"+"` `".join(list(langdict.keys()))+f"`\n\n**List of Language Input (Full Names)**\n`"+"` `".join(list(langdict.values()))+f"`\n\n**List of Language Output (Abbreviations)**\n`"+"` `".join(list(srclangdict.keys()))+f"`\n\n**List of Language Output (Full Names)**\n"+"` `".join(list(srclangdict.values()))+"`")
-    await ctx.send(embed=embed)
+    embed1 = discord.Embed(description = f"**List of Language Input (Abbreviations)**\n`"+"` `".join(list(langdict.keys()))+f"`\n\n**List of Language Input (Full Names)**\n`"+"` `".join(list(langdict.values())))
+    embed2 = discord.Embed(description = f"**List of Language Output (Abbreviations)**\n`"+"` `".join(list(srclangdict.keys()))+f"`\n\n**List of Language Output (Full Names)**\n"+"` `".join(list(srclangdict.values()))+"`")
+    await ctx.send(embed=embed1)
+    await ctx.send(embed=embed2)
   else:
     try:
       msg = await ctx.send("Translating **"+text+"** to "+langdict[lang])
@@ -418,7 +439,7 @@ async def translate(ctx, langinput = "list", *, text = "Sample text"):
         translation = translatorvar.translate(text, src=fromlang, dest=lang)
       except:
         translation = translatorvar.translate(text, dest=lang)
-      await msg.edit(content = "**Translation to "+langdict[lang]+f":**\n"+translation.text.replace("u003c", "<").replace("u003e", ">").replace("u0026", "&"))
+      await msg.edit(content = "**Translation from "+langdict[translator.detect(text).lang]+" to "+langdict[lang]+f":**\n"+translation.text.replace("u003c", "<").replace("u003e", ">").replace("u0026", "&"))
     except:
       await ctx.send("Language not found! Please use `=translate list` to get a list of languages.")
 
