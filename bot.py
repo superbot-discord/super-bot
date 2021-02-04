@@ -63,7 +63,7 @@ for count in srclangkeys:
 def is_me(msg):
   return msg.author == client.user
 
-def runscript(ctx):
+async def runscript(ctx):
   proc = subprocess.Popen(['python', 'program.py',  ''], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
   try:
     output = str(proc.communicate(timeout = 1)[0])
