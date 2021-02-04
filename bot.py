@@ -28,7 +28,7 @@ import wikipedia
 from PyDictionary import PyDictionary
 import pytz
 import subprocess
-import emoji
+import emoji as em
 
 set(pytz.all_timezones_set)
 dictionary=PyDictionary()
@@ -86,7 +86,7 @@ async def on_message(message):
 
 @bot.event
 async def on_reaction_add(reaction, user):
-  lang = emoji.demojize(reaction.emoji.lstrip("_galf"))
+  lang = em.demojize(reaction.emoji.lstrip("_galf"))
   try:
     msg = await ctx.send("Translating **"+reaction.message.content+"** to "+langdict[lang])
     translation = translatorvar.translate(reaction.message.content, dest=lang)
