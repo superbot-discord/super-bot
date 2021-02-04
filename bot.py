@@ -60,6 +60,62 @@ srclangkeys.sort()
 srclangdict = {}
 for count in srclangkeys:
   srclangdict[count] = unsortedsrclangdict[count]
+async def pyrun(ctx):
+  proc = subprocess.Popen(['python', 'program.py',  ''], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+  try:
+    output = str(proc.communicate(timeout = 1)[0])
+    output = output.lstrip("'b(").rstrip("\\n'").replace("\n", f"\n")
+  except subprocess.TimeoutExpired:
+    proc.kill()
+    output = str(proc.communicate())
+  output = output.lstrip("'b(").rstrip("\\n'").replace("\n", f"\n")
+  outputlist = output.split("\\n")
+  if len(outputlist)==0:
+    await ctx.send("There was no result.")
+  elif len(outputlist)<=11:
+    formatoutput = ""
+    for count in range(0, len(outputlist)):
+      if count+1<=9:
+        formatoutput = formatoutput + "0" + str(count+1) + " | " + outputlist[count] + f"\n"
+      else:
+        formatoutput = formatoutput + str(count+1) + " | " + outputlist[count] + f"\n"
+    await ctx.send(f"```\n"+formatoutput+f"\n```")
+  else:
+    truncatedoutput = ""
+    for count in range(0,11):
+      if count+1<=9:
+        truncatedoutput = truncatedoutput + "0" + str(count+1) + " | " + outputlist[count] + f"\n"
+      else:
+        truncatedoutput = truncatedoutput + str(count+1) + " | " + outputlist[count] + f"\n"
+    await ctx.send(f"The result was truncated due to the length of the result. It had probably timed out.\n```\n"+truncatedoutput+f"\n```")
+
+async def capscreenshot(ctx):
+  options = webdriver.ChromeOptions()
+  options.headless = True
+  options.add_argument('--no-sandbox')
+  options.add_argument('--disable-dev-shm-usage')
+  driver = webdriver.Chrome(options=options)
+  driver.get(url)
+  if form == "short" or form == "first" or form == "normal" or form == "regular" or form == "basic" or form == "general" or form == "all":
+    driver.set_window_size(1440,900)
+    driver.get_screenshot_as_file('web_screenshot1.png')
+    await ctx.send(file=discord.File('web_screenshot1.png'))
+    os.remove('web_screenshot1.png')
+  if form == "everything" or form == "full" or form == "entire" or form == "whole" or form == "all":
+    S = lambda X: driver.execute_script('return document.body.parentNode.scroll'+X)
+    driver.set_window_size(S('Width'),S('Height'))
+    for count in range(900, 5400, 900):
+      driver.execute_script("window.scrollTo(0, "+str(count)+")")
+    driver.find_element_by_tag_name('body').screenshot('web_screenshot2.png')
+    driver.quit()
+    await ctx.send(file=discord.File('web_screenshot2.png'))
+    os.remove('web_screenshot2.png')
+  #if form == "pdf" or form == "all":
+  #  pdfkit.from_url(url, 'screenshot.pdf')
+  #  await ctx.send(file=discord.File('screenshot.pdf'))
+  #  os.remove('screenshot.pdf')
+
+
 def is_me(msg):
   return msg.author == client.user
 
@@ -740,33 +796,8 @@ async def python(ctx, *, script):
   file = open("program.py", "w")
   file.write(script)
   file.close()
-  proc = subprocess.Popen(['python', 'program.py',  ''], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-  try:
-    output = str(proc.communicate(timeout = 1)[0])
-    output = output.lstrip("'b(").rstrip("\\n'").replace("\n", f"\n")
-  except subprocess.TimeoutExpired:
-    proc.kill()
-    output = str(proc.communicate())
-  output = output.lstrip("'b(").rstrip("\\n'").replace("\n", f"\n")
-  outputlist = output.split("\\n")
-  if len(outputlist)==0:
-    await ctx.send("There was no result.")
-  elif len(outputlist)<=11:
-    formatoutput = ""
-    for count in range(0, len(outputlist)):
-      if count+1<=9:
-        formatoutput = formatoutput + "0" + str(count+1) + " | " + outputlist[count] + f"\n"
-      else:
-        formatoutput = formatoutput + str(count+1) + " | " + outputlist[count] + f"\n"
-    await ctx.send(f"```\n"+formatoutput+f"\n```")
-  else:
-    truncatedoutput = ""
-    for count in range(0,11):
-      if count+1<=9:
-        truncatedoutput = truncatedoutput + "0" + str(count+1) + " | " + outputlist[count] + f"\n"
-      else:
-        truncatedoutput = truncatedoutput + str(count+1) + " | " + outputlist[count] + f"\n"
-    await ctx.send(f"The result was truncated due to the length of the result. It had probably timed out.\n```\n"+truncatedoutput+f"\n```")
+  task = asyncio.create_task(pyrun(ctx))
+  await task
 
 @bot.command()
 async def calc(ctx, *, arg = None):
@@ -807,7 +838,7 @@ async def calc(ctx, *, arg = None):
 async def ping(ctx, *, text = None):
   now1 = datetime.now()
   message = await ctx.send("Pong!")
-  mcs = str((datetime.now() - now1).microseconds)
+  mcs = str((datetime.now() - now1).microseconds+(datetime.now() - now1).seconds*1000000)
   await message.edit(content="Pong! "+mcs+" microseconds")
 
 @bot.command()
@@ -830,30 +861,8 @@ async def screenshot(ctx, url = None, form = "all"):
   if url == None:
     await ctx.send("Invalid format! Please use the format `=screenshot [url]`.")
   else:
-    options = webdriver.ChromeOptions()
-    options.headless = True
-    options.add_argument('--no-sandbox')
-    options.add_argument('--disable-dev-shm-usage')
-    driver = webdriver.Chrome(options=options)
-    driver.get(url)
-    if form == "short" or form == "first" or form == "normal" or form == "regular" or form == "basic" or form == "general" or form == "all":
-      driver.set_window_size(1440,900)
-      driver.get_screenshot_as_file('web_screenshot1.png')
-      await ctx.send(file=discord.File('web_screenshot1.png'))
-      os.remove('web_screenshot1.png')
-    if form == "everything" or form == "full" or form == "entire" or form == "whole" or form == "all":
-      S = lambda X: driver.execute_script('return document.body.parentNode.scroll'+X)
-      driver.set_window_size(S('Width'),S('Height'))
-      for count in range(900, 5400, 900):
-        driver.execute_script("window.scrollTo(0, "+str(count)+")")
-      driver.find_element_by_tag_name('body').screenshot('web_screenshot2.png')
-      driver.quit()
-      await ctx.send(file=discord.File('web_screenshot2.png'))
-      os.remove('web_screenshot2.png')
-    #if form == "pdf" or form == "all":
-    #  pdfkit.from_url(url, 'screenshot.pdf')
-    #  await ctx.send(file=discord.File('screenshot.pdf'))
-    #  os.remove('screenshot.pdf')
+    task = asyncio.create_task(capscreenshot(ctx))
+    await task
 
 @bot.command()
 async def ocr(ctx, *, text = None):
