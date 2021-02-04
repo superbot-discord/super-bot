@@ -73,19 +73,8 @@ async def on_message(message):
     await bot.process_commands(message)
 
 @bot.event
-async def on_member_join(member):
-  if member.guild.id == 802010998982180864:
-    if member.id == 155149108183695360 or member.id == 270904126974590976:
-      await member.ban(reason = "havoc causing")
-
-@bot.event
-async def on_message_delete(message):
-  if message.channel.id == 802017092664033320:
-    embed = discord.Embed(title="Rules", description="There are no rules! Have fun!")
-    await message.channel.send(embed=embed)
-
-@bot.event
 async def on_reaction_add(reaction, user):
+  flagname = reaction.emoji
   flagname = flagname.replace(":flag_gb:", "en")
   flagname = flagname.replace(":flag_us:", "en")
   flagname = flagname.replace(":flag_ca:", "en")
@@ -96,7 +85,7 @@ async def on_reaction_add(reaction, user):
   flagname = flagname.replace(":flag_cn:", "zh-CN")
   flagname = flagname.replace(":flag_hk:", "zh-TW")
   flagname = flagname.replace(":flag_tw:", "zh-TW")
-  flagname = reaction.emoji.lstrip("_galf:").rstrip(":")
+  flagname = flagname.lstrip("_galf:").rstrip(":")
   lang = em.demojize(flagname)
   try:
     msg = await ctx.send("Translating **"+reaction.message.content+"** to "+langdict[lang])
