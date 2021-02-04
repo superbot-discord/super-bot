@@ -1017,7 +1017,7 @@ async def purgereactions(ctx, messages, emoji: discord.Emoji = None):
 async def react(ctx, message : discord.Message, emoji : discord.Emoji):
   await ctx.message.delete()
   await message.add_reaction(emoji)
-  tm.sleep(3)
+  asyncio.sleep(3)
   member=ctx.guild.get_member(796686363604680755)
   await message.remove_reaction(emoji, member)
 
