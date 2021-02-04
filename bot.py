@@ -31,6 +31,7 @@ import subprocess
 import emoji as em
 import threading
 
+file = open("program.py", "x")
 set(pytz.all_timezones_set)
 dictionary=PyDictionary()
 allid=[]
@@ -91,7 +92,6 @@ async def runscript(ctx):
       else:
         truncatedoutput = truncatedoutput + str(count+1) + " | " + outputlist[count] + f"\n"
     await ctx.send(f"The result was truncated due to the length of the result. It had probably timed out.\n```\n"+truncatedoutput+f"\n```")
-  os.remove("program.py")
 
 async def on_ready(self):
   print('Connected!')
@@ -767,7 +767,7 @@ async def python(ctx, *, script):
   if match:
     script = script.replace("```py","", 1)
     script = script.replace("```","")
-  file = open("program.py", "x")
+  file = open("program.py", "w")
   file.write(script)
   file.close()
   pythonthread = threading.Thread(target=runscript, name="Sleep", args = [ctx])
