@@ -76,17 +76,17 @@ async def on_message(message):
 async def on_reaction_add(reaction, user):
   flagname = reaction.emoji
   if flagname.count("flag_")==1:
-    flagname = flagname.replace(":flag_gb:", "en")
-    flagname = flagname.replace(":flag_us:", "en")
-    flagname = flagname.replace(":flag_ca:", "en")
-    flagname = flagname.replace(":flag_eu:", "en")
-    flagname = flagname.replace(":flag_jp:", "ja")
-    flagname = flagname.replace(":flag_cz:", "cs")
-    flagname = flagname.replace(":flag_gr:", "el")
-    flagname = flagname.replace(":flag_cn:", "zh-CN")
-    flagname = flagname.replace(":flag_hk:", "zh-TW")
-    flagname = flagname.replace(":flag_tw:", "zh-TW")
-    flagname = flagname.lstrip("_galf:").rstrip(":")
+    flagname = flagname.replace("flag_gb", "en")
+    flagname = flagname.replace("flag_us", "en")
+    flagname = flagname.replace("flag_ca", "en")
+    flagname = flagname.replace("flag_eu", "en")
+    flagname = flagname.replace("flag_jp", "ja")
+    flagname = flagname.replace("flag_cz", "cs")
+    flagname = flagname.replace("flag_gr", "el")
+    flagname = flagname.replace("flag_cn", "zh-CN")
+    flagname = flagname.replace("flag_hk", "zh-TW")
+    flagname = flagname.replace("flag_tw", "zh-TW")
+    flagname = flagname.lstrip("_galf:").repalce(":","")
     lang = em.demojize(flagname)
     try:
       msg = await ctx.send("Translating **"+reaction.message.content+"** to "+langdict[lang])
@@ -818,7 +818,7 @@ async def speedtest(ctx, *, text = None):
   await message.edit(content=f"Pong!\nTotal time: "+str(total)+f" mcs\nAverage time: "+str(avg)+" mcs")
 
 @bot.command()
-async def screenshot(ctx, url = None, form = "None"):
+async def screenshot(ctx, url = None, form = "all"):
   if url == None:
     await ctx.send("Invalid format! Please use the format `=screenshot [url]`.")
   else:
@@ -842,10 +842,10 @@ async def screenshot(ctx, url = None, form = "None"):
       driver.quit()
       await ctx.send(file=discord.File('web_screenshot2.png'))
       os.remove('web_screenshot2.png')
-    if form == "pdf" or form == "all":
-      pdfkit.from_url(url, 'screenshot.pdf')
-      await ctx.send(file=discord.File('screenshot.pdf'))
-      os.remove('screenshot.pdf')
+    #if form == "pdf" or form == "all":
+    #  pdfkit.from_url(url, 'screenshot.pdf')
+    #  await ctx.send(file=discord.File('screenshot.pdf'))
+    #  os.remove('screenshot.pdf')
 
 @bot.command()
 async def ocr(ctx, *, text = None):
