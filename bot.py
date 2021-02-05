@@ -1219,7 +1219,7 @@ async def purgepy(ctx, num, *, pyscript):
     purged = 0
     async for msg in ctx.channel.history(limit=1000):
         if eval(pyscript) == True:
-          await count.delete()
+          await msg.delete()
           purged = purged + 1
           if purged >= num:
             break
