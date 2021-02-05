@@ -16,6 +16,7 @@ from cmath import *
 import random as ra
 import emoji as em
 import numpy as np
+import tracemalloc
 from math import *
 import pytesseract
 import time as tm
@@ -2221,3 +2222,4 @@ async def on_ready():
     
 bot.run('Nzk2Njg2MzYzNjA0NjgwNzU1.X_bh_g.2gMsbVVDkevDdmxvagZd81lE6NM')
 client.run('Nzk2Njg2MzYzNjA0NjgwNzU1.X_bh_g.2gMsbVVDkevDdmxvagZd81lE6NM')
+tracemalloc.start()
