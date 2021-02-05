@@ -925,7 +925,7 @@ async def md(ctx, *, mdcode = None):
   if match:
     mdcode = code.replace("```md","", 1)
     mdcode = code.replace("```","")
-  if code == None:
+  if mdcode == None:
     r = requests.get(ctx.message.attachments[0].url, stream=True)
     r.raise_for_status()
     r.raw.decode_content = True
