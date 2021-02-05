@@ -2,6 +2,7 @@ banned_ids = [757431801487556748, 598477713543659523]
 
 from selenium.webdriver.chrome.options import Options
 from discord import Webhook, RequestsWebhookAdapter
+from googlesearch.googlesearch import GoogleSearch
 from datetime import datetime, date, timedelta
 from discord_webhook import DiscordWebhook
 from pygoogletranslation import Translator
@@ -440,7 +441,7 @@ Turns the PDF to plain text.
 `kick` `ban` `slowmode` `math` `define` `time` `rtimer` `terminate` `timer` (Outdated)
 
 **Web Commands & Developer Tools**
-`screenshot` `youtube` `wiki` `engrave` `python` `ocr` `text` `html` (BETA)
+`screenshot` `youtube` `wiki` `engrave` `python` `ocr` `text` `html` `md` (beta) `search` (beta)
 
 Need help? check the [documentation](https://github.com/johann-lau/Bot#bot-documentation)!
   """
@@ -694,6 +695,14 @@ async def mandelbrot(ctx, size = 1024):
   img.save('Mandelbrot.png')
   await ctx.send(file = discord.File('Mandelbrot.png'))
   os.remove('Mandelbrot.png')
+
+@bot.command()
+async def search(ctx, *, query):
+  response = GoogleSearch().search(query)
+  embed = discord.Embed(title="Google Search results for "+query)
+  for count in range(0, 3):
+    embed.add_field(name=count.title, value=count.getText())
+  await ctx.send(embed=embed)
 
 @bot.command()
 async def status(ctx, member : discord.Member = None):
