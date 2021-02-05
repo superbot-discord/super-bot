@@ -61,7 +61,7 @@ srclangkeys.sort()
 srclangdict = {}
 for count in srclangkeys:
   srclangdict[count] = unsortedsrclangdict[count]
-async def pyrun(ctx):
+def pyrun(ctx):
   proc = subprocess.Popen(['python', 'program.py',  ''], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
   try:
     output = str(proc.communicate(timeout = 1)[0])
@@ -797,8 +797,7 @@ async def python(ctx, *, script):
   file = open("program.py", "w")
   file.write(script)
   file.close()
-  task = asyncio.create_task(pyrun(ctx))
-  await task
+  Process(target=pyrun, args=(ctx,)).start()
 
 @bot.command()
 async def calc(ctx, *, arg = None):
