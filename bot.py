@@ -910,13 +910,13 @@ async def html(ctx, *, code = None):
     r.raise_for_status()
     r.raw.decode_content = True
     code = r.content
-    driver.get(f"data:text/html;charset=utf-8,{code}")
-    S = lambda X: driver.execute_script('return document.body.parentNode.scroll'+X)
-    driver.set_window_size(S('Width'),S('Height'))
-    driver.save_screenshot('html_screenshot.png')
-    driver.quit()
-    await ctx.send(file=discord.File('html_screenshot2.png'))
-    os.remove('html_screenshot2.png')
+  driver.get(f"data:text/html;charset=utf-8,{code}")
+  S = lambda X: driver.execute_script('return document.body.parentNode.scroll'+X)
+  driver.set_window_size(S('Width'),S('Height'))
+  driver.save_screenshot('html_screenshot.png')
+  driver.quit()
+  await ctx.send(file=discord.File('html_screenshot.png'))
+  os.remove('html_screenshot.png')
 
 @bot.command()
 async def youtube(ctx, *, url):
