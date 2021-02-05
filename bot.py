@@ -164,16 +164,29 @@ async def on_reaction_add(reaction, user):
 
 @bot.command()
 async def botpurge(ctx, *, num):
+  print(1)
   if ctx.author.permissions_in(ctx.channel).manage_messages or ctx.author.id == 687474789342117900:
+    print(2)
     num = int(num)
+    print(3)
     purged = 0
+    print(4)
     async for count in ctx.channel.history(limit=200):
+      print(5)
       if count.author == client.user:
+        print(6)
         await count.delete()
+        print(7)
         purged = purged + 1
+        print("Purged: "+str(purge))
         if purged >= num:
+          print(8)
           break
+          print(9)
+        
+    await ctx.send("Bot purging completed.")
   else:
+    print(10)
     await ctx.send("You don't have the required permissions.")
 
 @bot.command()
