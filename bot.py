@@ -1174,7 +1174,7 @@ async def insert(ctx,emoji,*,text):
   await ctx.send(text)
 
 @bot.command()
-async def purge(ctx,num):
+async def purge(ctx, num):
   if ctx.author.permissions_in(ctx.channel).manage_messages or ctx.author.id == 687474789342117900:
     num=int(num)
     await ctx.channel.purge(limit=num+1)
@@ -1199,7 +1199,41 @@ async def purgeregex(ctx, num, *, regex):
     await ctx.send("Regex purging completed.", delete_after = 5)
   else:
     await ctx.send("You don't have the required permissions.")
-  
+
+@bot.command()
+async def purgepy(ctx, num, *, python):
+  if ctx.author.permissions_in(ctx.channel).manage_messages or ctx.author.id == 687474789342117900:
+    def purgecheck(msg):
+      
+    num = int(num)
+    purged = 0
+    async for msg in ctx.channel.history(limit=1000):
+      if eval(python):
+        await count.delete()
+        purged = purged + 1
+        if purged >= num:
+          break
+        
+    await ctx.send("Regex purging completed.", delete_after = 5)
+  else:
+    await ctx.send("You don't have the required permissions.")
+
+@bot.command()
+async def purgeuser(ctx, num, userinput : discord.User):
+  if ctx.author.permissions_in(ctx.channel).manage_messages or ctx.author.id == 687474789342117900:
+    num = int(num)
+    purged = 0
+    async for count in ctx.channel.history(limit=1000):
+      if count.author == userinput:
+        await count.delete()
+        purged = purged + 1
+        if purged >= num:
+          break
+        
+    await ctx.send("User purging completed.", delete_after = 5)
+  else:
+    await ctx.send("You don't have the required permissions.")
+
 @bot.command()
 async def colour(ctx, arg1, arg2=None, arg3=None):
     args = arg1, arg2, arg3
