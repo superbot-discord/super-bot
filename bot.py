@@ -38,8 +38,9 @@ allid=[]
 hexstring_pattern = re.compile(r'#?([0-9A-F]{2})([0-9A-F]{2})([0-9A-F]{2})', re.IGNORECASE)
 id_pattern = re.compile(r'([A-Z]{5})', re.IGNORECASE)
 alphaend_pattern = re.compile(r'.*[a-z]', re.IGNORECASE)
-python_pattern = re.compile(r'^\`\`\`(py)?\n[\s\S]*\`\`\`$')
+python_pattern = re.compile(r'^\`\`\`(py|python)?\n[\s\S]*\`\`\`$')
 html_pattern = re.compile(r'^\`\`\`(html)?\n[\s\S]*\`\`\`$')
+md_pattern = re.compile(r'^\`\`\`(md|markdown)?\n[\s\S]*\`\`\`$')
 UNITS = {'s':'seconds', 'm':'minutes', 'h':'hours', 'd':'days', 'w':'weeks'}
 intents = discord.Intents.all()
 pre = "="
@@ -918,6 +919,48 @@ async def html(ctx, *, code = None):
   driver.quit()
   await ctx.send(file=discord.File('html_screenshot.png'))
   os.remove('html_screenshot.png')
+
+@bot.command()
+async def md(ctx, *, mdcode = None):
+  match = md_pattern.fullmatch(mdcode)
+  if match:
+    mdcode = code.replace("```md","", 1)
+    mdcode = code.replace("```","")
+  if code == None:
+    r = requests.get(ctx.message.attachments[0].url, stream=True)
+    r.raise_for_status()
+    r.raw.decode_content = True
+    mdcode = r.content
+  code = markdown.markdown(mdcode)
+  driver = webdriver.Chrome(options=options)
+  driver.get(f"data:text/html;charset=utf-8,{code}")
+  S = lambda X: driver.execute_script('return document.body.parentNode.scroll'+X)
+  driver.set_window_size(S('Width'),S('Height'))
+  driver.save_screenshot('md_screenshot.png')
+  driver.quit()
+  await ctx.send(file=discord.File('md_screenshot.png'))
+  os.remove('md_screenshot.png')
+
+@bot.command()
+async def markdown(ctx, *, mdcode = None):
+  match = md_pattern.fullmatch(mdcode)
+  if match:
+    mdcode = code.replace("```md","", 1)
+    mdcode = code.replace("```","")
+  if code == None:
+    r = requests.get(ctx.message.attachments[0].url, stream=True)
+    r.raise_for_status()
+    r.raw.decode_content = True
+    mdcode = r.content
+  code = markdown.markdown(mdcode)
+  driver = webdriver.Chrome(options=options)
+  driver.get(f"data:text/html;charset=utf-8,{code}")
+  S = lambda X: driver.execute_script('return document.body.parentNode.scroll'+X)
+  driver.set_window_size(S('Width'),S('Height'))
+  driver.save_screenshot('md_screenshot.png')
+  driver.quit()
+  await ctx.send(file=discord.File('md_screenshot.png'))
+  os.remove('md_screenshot.png')
 
 @bot.command()
 async def youtube(ctx, *, url):
