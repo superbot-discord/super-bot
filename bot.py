@@ -800,7 +800,7 @@ async def python(ctx, *, script):
   file = open("program.py", "w")
   file.write(script)
   file.close()
-  Process(target=pyrun, args=(ctx,)).start()
+  await Process(target=pyrun, args=(ctx,)).start()
 
 @bot.command()
 async def calc(ctx, *, arg = None):
