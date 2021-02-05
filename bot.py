@@ -523,6 +523,7 @@ async def translate(ctx, langinput = "list", *, text = "Sample text"):
       #  await ctx.send("Language not found! Please use `=translate list` to get a list of languages.")
     else:
       lang = langinput
+      msg = await ctx.send("Translating **"+text+"** to "+langdict[lang])
       if list(langdict.values()).count(lang) == 1:
         lang = list(langdict.keys())[list(langdict.values()).index(lang)]
       translation = translatorvar.translate(text, dest=lang)
