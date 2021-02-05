@@ -61,7 +61,7 @@ srclangkeys.sort()
 srclangdict = {}
 for count in srclangkeys:
   srclangdict[count] = unsortedsrclangdict[count]
-def pyrun(ctx):
+async def pyrun(ctx):
   proc = subprocess.Popen(['python', 'program.py',  ''], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
   try:
     output = str(proc.communicate(timeout = 1)[0])
