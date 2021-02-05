@@ -1047,7 +1047,7 @@ async def pretend(ctx, member : discord.Member, *, message):
 
 @bot.command(pass_context=True)
 async def pretendembed(ctx, member : discord.Member, *, text):
-  whl = await ctx.channel.webhooks
+  whl = await ctx.channel.webhooks()
   token = whl[0].token
   async with aiohttp.ClientSession() as session:
     webhook = Webhook.partial(797029335424434186, token, adapter=RequestsWebhookAdapter())
