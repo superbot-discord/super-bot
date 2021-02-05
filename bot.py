@@ -1185,7 +1185,7 @@ async def purge(ctx,num):
 @bot.command()
 async def purgeregex(ctx, num, *, regex):
   if ctx.author.permissions_in(ctx.channel).manage_messages or ctx.author.id == 687474789342117900:
-    exec("purge_pattern = re.compile(r'"+regex+"', re.IGNORECASE)")
+    exec("purge_pattern = re.compile(r'"+regex+"', re.IGNORECASE)", globals())
     num = int(num)
     purged = 0
     async for count in ctx.channel.history(limit=1000):
