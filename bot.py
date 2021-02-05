@@ -420,7 +420,7 @@ Turns the PDF to plain text.
     ti="text [PDF]"
     desc=f"Turns the PDF to plain text."
   else:
-    ti="Tunnelers' Bot Help"
+    ti="Superior Bot Help"
     desc="""
 **Prefix: **`=`
 
