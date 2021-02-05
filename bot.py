@@ -11,7 +11,7 @@ from PyDictionary import PyDictionary
 from discord.ext.commands import *
 from discord.ext import commands
 from selenium import webdriver
-from markdown import markdown
+from markdown2 import Markdown
 from cmath import *
 import random as ra
 import emoji as em
@@ -66,6 +66,7 @@ options = webdriver.ChromeOptions()
 options.headless = True
 options.add_argument('--no-sandbox')
 options.add_argument('--disable-dev-shm-usage')
+markdowner = Markdown()
 def is_me(msg):
   return msg.author == client.user
 
@@ -931,7 +932,7 @@ async def md(ctx, *, mdcode = None):
     r.raise_for_status()
     r.raw.decode_content = True
     mdcode = r.content
-  code = markdown(mdcode)
+  code = str(markdowner.convert(mdcode)).lstrip("'u").rstrip("'")
   driver = webdriver.Chrome(options=options)
   driver.get(f"data:text/html;charset=utf-8,{code}")
   S = lambda X: driver.execute_script('return document.body.parentNode.scroll'+X)
@@ -952,7 +953,7 @@ async def markdown(ctx, *, mdcode = None):
     r.raise_for_status()
     r.raw.decode_content = True
     mdcode = r.content
-  code = markdown(mdcode)
+  code = str(markdowner.convert(mdcode)).lstrip("'u").rstrip("'")
   driver = webdriver.Chrome(options=options)
   driver.get(f"data:text/html;charset=utf-8,{code}")
   S = lambda X: driver.execute_script('return document.body.parentNode.scroll'+X)
