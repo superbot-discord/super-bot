@@ -1227,7 +1227,7 @@ async def purgepy(ctx, num, *, pyscript):
       except:
         await ctx.send("I don't have the required permissions, or the script was malformed.")
         break
-    await ctx.send("Regex purging completed.", delete_after = 5)
+    await ctx.send("Python purging completed.", delete_after = 5)
   else:
     await ctx.send("You don't have the required permissions.")
 
