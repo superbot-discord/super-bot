@@ -1190,30 +1190,55 @@ async def purgeregex(ctx, num, *, regex):
     purged = 0
     async for count in ctx.channel.history(limit=1000):
       match = match = purge_pattern.fullmatch(count.content)
-      if match:
-        await count.delete()
-        purged = purged + 1
-        if purged >= num:
-          break
-        
+      try:
+        if match:
+          await count.delete()
+          purged = purged + 1
+          if purged >= num:
+            break
+      except:
+        await ctx.send("I don't have the required permissions, or the regex was malformed.")
+        break
     await ctx.send("Regex purging completed.", delete_after = 5)
   else:
     await ctx.send("You don't have the required permissions.")
 
 @bot.command()
-async def purgepy(ctx, num, *, python):
+async def purgepygex(ctx, num, regex, *, pyscript):
   if ctx.author.permissions_in(ctx.channel).manage_messages or ctx.author.id == 687474789342117900:
-    def purgecheck(msg):
-      
+    exec("purge_pattern = re.compile(r'"+regex+"', re.IGNORECASE)", globals())
+    num = int(num)
+    purged = 0
+    async for count in ctx.channel.history(limit=1000):
+      match = match = purge_pattern.fullmatch(count.content)
+      try:
+        if match and eval(pyscript):
+          await count.delete()
+          purged = purged + 1
+          if purged >= num:
+            break
+      except:
+        await ctx.send("I don't have the required permissions, or the regex/script was malformed.")
+        break
+    await ctx.send("Python Regex purging completed.", delete_after = 5)
+  else:
+    await ctx.send("You don't have the required permissions.")
+
+@bot.command()
+async def purgepy(ctx, num, *, pyscript):
+  if ctx.author.permissions_in(ctx.channel).manage_messages or ctx.author.id == 687474789342117900:
     num = int(num)
     purged = 0
     async for msg in ctx.channel.history(limit=1000):
-      if eval(python):
-        await count.delete()
-        purged = purged + 1
-        if purged >= num:
-          break
-        
+      try:
+        if eval(pyscript):
+          await count.delete()
+          purged = purged + 1
+          if purged >= num:
+            break
+      except:
+        await ctx.send("I don't have the required permissions, or the script was malformed.")
+        break
     await ctx.send("Regex purging completed.", delete_after = 5)
   else:
     await ctx.send("You don't have the required permissions.")
