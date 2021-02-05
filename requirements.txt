@@ -19,4 +19,4 @@ pydictionary==2.0.1
 pytz==2020.5
 emoji==1.2.0
 google-search==1.0.2
-urllib2==20.6
+urllib2
