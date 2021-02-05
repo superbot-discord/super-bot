@@ -1199,7 +1199,7 @@ async def purgepygex(ctx, num, regex, *, pyscript):
     async for count in ctx.channel.history(limit=1000):
       match = match = purge_pattern.fullmatch(count.content)
       try:
-        if match and eval(pyscript):
+        if match and eval(pyscript) == True:
           await count.delete()
           purged = purged + 1
           if purged >= num:
@@ -1218,15 +1218,12 @@ async def purgepy(ctx, num, *, pyscript):
     num = int(num)
     purged = 0
     async for msg in ctx.channel.history(limit=1000):
-      try:
-        if eval(pyscript):
+        if eval(pyscript) == True:
           await count.delete()
           purged = purged + 1
           if purged >= num:
             break
-      except:
-        await ctx.send("I don't have the required permissions, or the script was malformed.")
-        break
+        
     await ctx.send("Python purging completed.", delete_after = 5)
   else:
     await ctx.send("You don't have the required permissions.")
