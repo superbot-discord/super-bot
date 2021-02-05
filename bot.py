@@ -765,7 +765,7 @@ async def python(ctx, *, script):
       else:
         formatoutput = formatoutput + str(count+1) + " | " + outputlist[count] + f"\n"
     
-    if formatoutput == "01 | ":
+    if formatoutput == f"01 | \n":
       await ctx.send("There was no result to be shown.")
     else:
       await ctx.send(f"```\n"+formatoutput+f"\n```")
