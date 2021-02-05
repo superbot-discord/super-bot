@@ -460,6 +460,7 @@ async def translate(ctx, langinput = "list", *, text = "Sample text"):
         fromlang = list(srclangdict.keys())[list(srclangdict.values()).index(fromlang)]
     else:
       fromlang = "auto"
+      lang = langinput
     if list(langdict.values()).count(lang) == 1:
       lang = list(langdict.keys())[list(langdict.values()).index(lang)]
     msg = await ctx.send("Translating **"+text+"** to "+langdict[lang])
