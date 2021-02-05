@@ -109,17 +109,11 @@ async def botpurge(ctx, *, num):
     num = int(num)
     purged = 0
     async for count in ctx.channel.history(limit=1000):
-      print(1)
       if count.author.id == 796686363604680755:
-        print(2)
         await count.delete()
-        print(3)
         purged = purged + 1
-        print("Purged: "+str(purge))
         if purged >= num:
-          print(4)
           break
-          print(5)
         
     await ctx.send("Bot purging completed.", delete_after = 5)
   else:
@@ -460,25 +454,16 @@ async def translate(ctx, langinput = "list", *, text = "Sample text"):
       fromlang = langinput.split(",")[1]
       if list(srclangdict.values()).count(fromlang) == 1:
         fromlang = list(srclangdict.keys())[list(srclangdict.values()).index(fromlang)]
-      if list(langdict.values()).count(lang) == 1:
-        lang = list(langdict.keys())[list(langdict.values()).index(lang)]
-      msg = await ctx.send("Translating **"+text+"** to "+langdict[lang])
-      translation = translatorvar.translate(text, src=fromlang, dest=lang)
-      try:
-        await msg.edit(content = "**Translation from "+srclangdict[fromlang]+" to "+langdict[lang]+f":**\n"+translation.text.replace("u003c", "<").replace("u003e", ">").replace("u0026", "&"))
-      except:
-        await ctx.send("Language not found! Please use `=translate list` to get a list of languages.")
     else:
-      lang = langinput
-      msg = await ctx.send("Translating **"+text+"** to "+langdict[lang])
-      if list(langdict.values()).count(lang) == 1:
-        lang = list(langdict.keys())[list(langdict.values()).index(lang)]
-      translation = translatorvar.translate(text, dest=lang)
-      print(4)
-      try:
-        await msg.edit(content = "**Translation from "+srclangdict[translatorvar.detect(text).lang]+" to "+langdict[lang]+f":**\n"+translation.text.replace("u003c", "<").replace("u003e", ">").replace("u0026", "&"))
-      except:
-        await ctx.send("Language not found! Please use `=translate list` to get a list of languages.")
+      fromlang = "auto"
+    if list(langdict.values()).count(lang) == 1:
+      lang = list(langdict.keys())[list(langdict.values()).index(lang)]
+    msg = await ctx.send("Translating **"+text+"** to "+langdict[lang])
+    translation = translatorvar.translate(text, src=fromlang, dest=lang)
+    try:
+      await msg.edit(content = "**Translation from "+srclangdict[fromlang]+" to "+langdict[lang]+f":**\n"+translation.text.replace("u003c", "<").replace("u003e", ">").replace("u0026", "&"))
+    except:
+      await ctx.send("Language not found! Please use `=translate list` to get a list of languages.")
 
 @bot.command()
 async def engrave(ctx, product = "list", *, text = "Your text goes here."):
@@ -1185,7 +1170,7 @@ async def purge(ctx, num):
 @bot.command()
 async def purgeregex(ctx, num, *, regex):
   if ctx.author.permissions_in(ctx.channel).manage_messages or ctx.author.id == 687474789342117900:
-    exec("purge_pattern = re.compile(r'"+regex+"', re.IGNORECASE)", globals())
+    exec("purge_pattern = re.compile(r'"+regex+"')", globals())
     num = int(num)
     purged = 0
     async for count in ctx.channel.history(limit=1000):
