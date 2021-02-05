@@ -63,7 +63,7 @@ srclangkeys.sort()
 srclangdict = {}
 for count in srclangkeys:
   srclangdict[count] = unsortedsrclangdict[count]
-async def pyrun(ctx):
+def pyrun(ctx):
   tracemalloc.start()
   proc = subprocess.Popen(['python', 'program.py',  ''], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
   try:
