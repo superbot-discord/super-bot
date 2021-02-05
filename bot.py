@@ -1,35 +1,36 @@
 banned_ids = [757431801487556748, 598477713543659523]
 
-import discord
-from discord.ext import commands
-import random as ra
-import time as tm
+from selenium.webdriver.chrome.options import Options
+from discord import Webhook, RequestsWebhookAdapter
 from datetime import datetime, date, timedelta
 from discord_webhook import DiscordWebhook
-from discord.ext.commands import *
-from discord import Webhook, RequestsWebhookAdapter
-import aiohttp
-from math import *
-from cmath import *
-import numpy as np
-import re
-import pytesseract
-import requests
-import PIL
-from PIL import ImageDraw, ImageFilter
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
-import os
+from pygoogletranslation import Translator
 from pdf2image import convert_from_path
+from PIL import ImageDraw, ImageFilter
+from PyDictionary import PyDictionary
+from multiprocessing import Process
+from discord.ext.commands import *
+from discord.ext import commands
+from selenium import webdriver
+from cmath import *
+import random as ra
+import emoji as em
+import numpy as np
+from math import *
+import pytesseract
+import time as tm
+import subprocess
+import wikipedia
+import requests
+import aiohttp
+import asyncio
+import discord
 import pdfkit
 import pytube
-from pygoogletranslation import Translator
-import wikipedia
-from PyDictionary import PyDictionary
 import pytz
-import subprocess
-import emoji as em
-import asyncio
+import PIL
+import re
+import os
 
 file = open("program.py", "x")
 set(pytz.all_timezones_set)
