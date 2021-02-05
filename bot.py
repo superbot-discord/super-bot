@@ -1,5 +1,4 @@
 banned_ids = [757431801487556748, 598477713543659523]
-from googlesearch.googlesearch import GoogleSearch
 from selenium.webdriver.chrome.options import Options
 from discord import Webhook, RequestsWebhookAdapter
 from datetime import datetime, date, timedelta
@@ -693,14 +692,6 @@ async def mandelbrot(ctx, size = 1024):
   img.save('Mandelbrot.png')
   await ctx.send(file = discord.File('Mandelbrot.png'))
   os.remove('Mandelbrot.png')
-
-@bot.command()
-async def search(ctx, *, query):
-  response = GoogleSearch().search(query)
-  embed = discord.Embed(title="Google Search results for "+query)
-  for count in range(0, 3):
-    embed.add_field(name=count.title, value=count.getText())
-  await ctx.send(embed=embed)
 
 @bot.command()
 async def status(ctx, member : discord.Member = None):
