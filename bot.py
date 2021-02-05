@@ -508,14 +508,18 @@ async def translate(ctx, langinput = "list", *, text = "Sample text"):
     await ctx.send(embed=embed1)
     await ctx.send(embed=embed2)
   else:
-    msg = await ctx.send("Translating **"+text+"** to "+langdict[lang])
     try:
-      translation = translatorvar.translate(text, src=fromlang, dest=lang)
-      await msg.edit(content = "**Translation from "+langdict[fromlang]+" to "+langdict[lang]+f":**\n"+translation.text.replace("u003c", "<").replace("u003e", ">").replace("u0026", "&"))
-    except NameError:
+      msg = await ctx.send("Translating **"+text+"** to "+langdict[lang])
+      try:
+        translation = translatorvar.translate(text, src=fromlang, dest=lang)
+        try:
+          await msg.edit(content = "**Translation from "+langdict[fromlang]+" to "+langdict[lang]+f":**\n"+translation.text.replace("u003c", "<").replace("u003e", ">").replace("u0026", "&"))
+        except:
+          await msg.edit(content = "**Translation from "+langdict[fromlang]+" to "+langdict[lang]+f":**\n"+translation.text.replace("u003c", "<").replace("u003e", ">").replace("u0026", "&"))
+      except:
         translation = translatorvar.translate(text, dest=lang)
         await msg.edit(content = "**Translation from "+langdict[translatorvar.detect(text).lang]+" to "+langdict[lang]+f":**\n"+translation.text.replace("u003c", "<").replace("u003e", ">").replace("u0026", "&"))
-    else:
+    except:
       await ctx.send("Language not found! Please use `=translate list` to get a list of languages.")
 
 @bot.command()
