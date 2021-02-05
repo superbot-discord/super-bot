@@ -1,8 +1,7 @@
 banned_ids = [757431801487556748, 598477713543659523]
-
+from googlesearch import GoogleSearch
 from selenium.webdriver.chrome.options import Options
 from discord import Webhook, RequestsWebhookAdapter
-from googlesearch.googlesearch import GoogleSearch
 from datetime import datetime, date, timedelta
 from discord_webhook import DiscordWebhook
 from pygoogletranslation import Translator
