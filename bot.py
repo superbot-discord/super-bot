@@ -65,7 +65,6 @@ options = webdriver.ChromeOptions()
 options.headless = True
 options.add_argument('--no-sandbox')
 options.add_argument('--disable-dev-shm-usage')
-driver = webdriver.Chrome(options=options)
 def is_me(msg):
   return msg.author == client.user
 
@@ -842,6 +841,7 @@ async def speedtest(ctx, *, text = None):
 
 @bot.command()
 async def screenshot(ctx, url = None, form = "all"):
+  driver = webdriver.Chrome(options=options)
   if url == None:
     await ctx.send("Invalid format! Please use the format `=screenshot [url]`.")
   else:
@@ -910,6 +910,7 @@ async def html(ctx, *, code = None):
     r.raise_for_status()
     r.raw.decode_content = True
     code = r.content
+  driver = webdriver.Chrome(options=options)
   driver.get(f"data:text/html;charset=utf-8,{code}")
   S = lambda X: driver.execute_script('return document.body.parentNode.scroll'+X)
   driver.set_window_size(S('Width'),S('Height'))
