@@ -1039,18 +1039,29 @@ async def pretend(ctx, member : discord.Member, *, message):
     wh = await ctx.channel.create_webhook(name = "Pretender")
     token = wh.token
     identify = wh.id
-  if ctx.author.id == 746227806278647928:
-    message = "I admit I am Stonks. Please forgive me. I will pay you all my Dank Memer wallet and bank coins, as well as my inventory :("
   async with aiohttp.ClientSession() as session:
     webhook = Webhook.partial(identify, token, adapter=RequestsWebhookAdapter())
   await webhook.send(message, username=member.name, avatar_url=member.avatar_url)
 
 @bot.command(pass_context=True)
 async def pretendembed(ctx, member : discord.Member, *, text):
+  try:
+    await ctx.message.delete()
+  except:
+    1
   whl = await ctx.channel.webhooks()
-  token = whl[0].token
+  ourweb = False
+  for count in whl:
+    if count.name == "Pretender":
+      ourweb = True
+      token = count.token
+      identify = count.id
+  if len(whl) == 0 or ourweb == False:
+    wh = await ctx.channel.create_webhook(name = "Pretender")
+    token = wh.token
+    identify = wh.id
   async with aiohttp.ClientSession() as session:
-    webhook = Webhook.partial(797029335424434186, token, adapter=RequestsWebhookAdapter())
+    webhook = Webhook.partial(identify, token, adapter=RequestsWebhookAdapter())
   textlist=text.splitlines()
   if textlist[3]=="":
     embed=discord.Embed(title=textlist[0], url=textlist[1], description=textlist[2].replace("{{{newline}}}","\n"))
