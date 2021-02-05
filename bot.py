@@ -64,6 +64,7 @@ srclangdict = {}
 for count in srclangkeys:
   srclangdict[count] = unsortedsrclangdict[count]
 async def pyrun(ctx):
+  tracemalloc.start()
   proc = subprocess.Popen(['python', 'program.py',  ''], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
   try:
     output = str(proc.communicate(timeout = 1)[0])
@@ -2222,4 +2223,3 @@ async def on_ready():
     
 bot.run('Nzk2Njg2MzYzNjA0NjgwNzU1.X_bh_g.2gMsbVVDkevDdmxvagZd81lE6NM')
 client.run('Nzk2Njg2MzYzNjA0NjgwNzU1.X_bh_g.2gMsbVVDkevDdmxvagZd81lE6NM')
-tracemalloc.start()
