@@ -12,6 +12,7 @@ from discord.ext.commands import *
 from discord.ext import commands
 from selenium import webdriver
 from markdown2 import Markdown
+from pnglatex import pnglatex
 from cmath import *
 import random as ra
 import emoji as em
@@ -962,6 +963,12 @@ async def markdown(ctx, *, mdcode = None):
   driver.quit()
   await ctx.send(file=discord.File('md_screenshot.png'))
   os.remove('md_screenshot.png')
+
+@bot.command()
+async def latex(ctx, *, latexcode = None):
+  output = pnglatex(latexcode, 'latex.png')
+  await ctx.send(file=discord.File('latex.png'))
+  os.remove('latex.png')
 
 @bot.command()
 async def youtube(ctx, *, url):
