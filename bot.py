@@ -105,6 +105,10 @@ async def on_reaction_add(reaction, user):
 
 @bot.command()
 async def botpurge(ctx, *, num):
+  try:
+    await ctx.message.delete()
+  except:
+    1
   if ctx.author.permissions_in(ctx.channel).manage_messages or ctx.author.id == 687474789342117900:
     num = int(num)
     purged = 0
@@ -1160,6 +1164,10 @@ async def insert(ctx,emoji,*,text):
 
 @bot.command()
 async def purge(ctx, num):
+  try:
+    await ctx.message.delete()
+  except:
+    1
   if ctx.author.permissions_in(ctx.channel).manage_messages or ctx.author.id == 687474789342117900:
     num=int(num)
     await ctx.channel.purge(limit=num+1)
@@ -1169,7 +1177,10 @@ async def purge(ctx, num):
 
 @bot.command()
 async def purgeregex(ctx, num, *, regex):
-  await ctx.message.delete()
+  try:
+    await ctx.message.delete()
+  except:
+    1
   if ctx.author.permissions_in(ctx.channel).manage_messages or ctx.author.id == 687474789342117900:
     exec("purge_pattern = re.compile(r'"+regex+"')", globals())
     num = int(num)
@@ -1191,7 +1202,10 @@ async def purgeregex(ctx, num, *, regex):
 
 @bot.command()
 async def purgepygex(ctx, num, regex, *, pyscript):
-  await ctx.message.delete()
+  try:
+    await ctx.message.delete()
+  except:
+    1
   if ctx.author.permissions_in(ctx.channel).manage_messages or ctx.author.id == 687474789342117900:
     exec("purge_pattern = re.compile(r'"+regex+"', re.IGNORECASE)", globals())
     num = int(num)
@@ -1213,7 +1227,10 @@ async def purgepygex(ctx, num, regex, *, pyscript):
 
 @bot.command()
 async def purgepy(ctx, num, *, pyscript):
-  await ctx.message.delete()
+  try:
+    await ctx.message.delete()
+  except:
+    1
   if ctx.author.permissions_in(ctx.channel).manage_messages or ctx.author.id == 687474789342117900:
     num = int(num)
     purged = 0
@@ -1230,7 +1247,10 @@ async def purgepy(ctx, num, *, pyscript):
 
 @bot.command()
 async def purgeuser(ctx, num, userinput : discord.User):
-  await ctx.message.delete()
+  try:
+    await ctx.message.delete()
+  except:
+    1
   if ctx.author.permissions_in(ctx.channel).manage_messages or ctx.author.id == 687474789342117900:
     num = int(num)
     purged = 0
