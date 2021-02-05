@@ -75,7 +75,7 @@ async def pyrun(ctx):
   output = output.lstrip("'b(").rstrip("\\n'").replace("\n", f"\n")
   outputlist = output.split("\\n")
   if len(outputlist)==0:
-    await ctx.send("There was no result.")
+    q.put("There was no result.")
   elif len(outputlist)<=11:
     formatoutput = ""
     for count in range(0, len(outputlist)):
@@ -83,7 +83,7 @@ async def pyrun(ctx):
         formatoutput = formatoutput + "0" + str(count+1) + " | " + outputlist[count] + f"\n"
       else:
         formatoutput = formatoutput + str(count+1) + " | " + outputlist[count] + f"\n"
-    await ctx.send(f"```\n"+formatoutput+f"\n```")
+    q.put(f"```\n"+formatoutput+f"\n```")
   else:
     truncatedoutput = ""
     for count in range(0,11):
@@ -91,7 +91,7 @@ async def pyrun(ctx):
         truncatedoutput = truncatedoutput + "0" + str(count+1) + " | " + outputlist[count] + f"\n"
       else:
         truncatedoutput = truncatedoutput + str(count+1) + " | " + outputlist[count] + f"\n"
-    await ctx.send(f"The result was truncated due to the length of the result. It had probably timed out.\n```\n"+truncatedoutput+f"\n```")
+    q.put(f"The result was truncated due to the length of the result. It had probably timed out.\n```\n"+truncatedoutput+f"\n```")
 
 async def capscreenshot(ctx, url, form):
   options = webdriver.ChromeOptions()
@@ -800,7 +800,11 @@ async def python(ctx, *, script):
   file = open("program.py", "w")
   file.write(script)
   file.close()
-  await Process(target=pyrun, args=(ctx,)).start()
+  q = Queue()
+  pyprocess = Process(target=pyrun, args=(ctx,))
+  pyprocess.start()
+  print(q.get())
+  p.join()
 
 @bot.command()
 async def calc(ctx, *, arg = None):
