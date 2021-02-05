@@ -61,6 +61,11 @@ srclangkeys.sort()
 srclangdict = {}
 for count in srclangkeys:
   srclangdict[count] = unsortedsrclangdict[count]
+options = webdriver.ChromeOptions()
+options.headless = True
+options.add_argument('--no-sandbox')
+options.add_argument('--disable-dev-shm-usage')
+driver = webdriver.Chrome(options=options)
 def is_me(msg):
   return msg.author == client.user
 
@@ -840,11 +845,6 @@ async def screenshot(ctx, url = None, form = "all"):
   if url == None:
     await ctx.send("Invalid format! Please use the format `=screenshot [url]`.")
   else:
-    options = webdriver.ChromeOptions()
-    options.headless = True
-    options.add_argument('--no-sandbox')
-    options.add_argument('--disable-dev-shm-usage')
-    driver = webdriver.Chrome(options=options)
     driver.get(url)
     if form == "short" or form == "first" or form == "normal" or form == "regular" or form == "basic" or form == "general" or form == "all":
       driver.set_window_size(1440,900)
