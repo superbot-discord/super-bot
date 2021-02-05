@@ -1932,12 +1932,12 @@ Region: """+str(guild.region)
   else:
     f5v="Not Required"
   f6v=str(guild.verification_level)
-  f7v=guild.explicit_content_filter
-  if f7v=="disabled":
+  ecf=guild.explicit_content_filter
+  if ecf=="disabled":
     f7v="Disabled"
-  if f7v=="no_role":
-    f7v="Member without roles"
-  if f7v=="all_members":
+  elif ecf=="no_role":
+    f7v="Members without roles"
+  elif ecf=="all_members":
     f7v="All Members"""
   f8v=""
   for count in guild.members:
