@@ -164,29 +164,25 @@ async def on_reaction_add(reaction, user):
 
 @bot.command()
 async def botpurge(ctx, *, num):
-  print(1)
   if ctx.author.permissions_in(ctx.channel).manage_messages or ctx.author.id == 687474789342117900:
-    print(2)
     num = int(num)
-    print(3)
     purged = 0
-    print(4)
     async for count in ctx.channel.history(limit=200):
-      print(5)
-      if count.author == client.user:
-        print(6)
+      print(1)
+      if count.author.id == 796686363604680755:
+        print(2)
         await count.delete()
-        print(7)
+        print(3)
         purged = purged + 1
         print("Purged: "+str(purge))
         if purged >= num:
-          print(8)
+          print(4)
           break
-          print(9)
+          print(5)
         
     await ctx.send("Bot purging completed.")
   else:
-    print(10)
+    print(6)
     await ctx.send("You don't have the required permissions.")
 
 @bot.command()
@@ -521,19 +517,19 @@ async def translate(ctx, langinput = "list", *, text = "Sample text"):
         lang = list(langdict.keys())[list(langdict.values()).index(lang)]
       msg = await ctx.send("Translating **"+text+"** to "+langdict[lang])
       translation = translatorvar.translate(text, src=fromlang, dest=lang)
-      try:
-        await msg.edit(content = "**Translation from "+langdict[fromlang]+" to "+langdict[lang]+f":**\n"+translation.text.replace("u003c", "<").replace("u003e", ">").replace("u0026", "&"))
-      except:
-        await ctx.send("Language not found! Please use `=translate list` to get a list of languages.")
+      #try:
+      await msg.edit(content = "**Translation from "+langdict[fromlang]+" to "+langdict[lang]+f":**\n"+translation.text.replace("u003c", "<").replace("u003e", ">").replace("u0026", "&"))
+      #except:
+      #  await ctx.send("Language not found! Please use `=translate list` to get a list of languages.")
     else:
       lang = langinput
       if list(langdict.values()).count(lang) == 1:
         lang = list(langdict.keys())[list(langdict.values()).index(lang)]
-      try:
-        translation = translatorvar.translate(text, dest=lang)
-        await msg.edit(content = "**Translation from "+langdict[translatorvar.detect(text).lang]+" to "+langdict[lang]+f":**\n"+translation.text.replace("u003c", "<").replace("u003e", ">").replace("u0026", "&"))
-      except:
-        await ctx.send("Language not found! Please use `=translate list` to get a list of languages.")
+      translation = translatorvar.translate(text, dest=lang)
+      #try:
+      await msg.edit(content = "**Translation from "+langdict[translatorvar.detect(text).lang]+" to "+langdict[lang]+f":**\n"+translation.text.replace("u003c", "<").replace("u003e", ">").replace("u0026", "&"))
+      #except:
+      #  await ctx.send("Language not found! Please use `=translate list` to get a list of languages.")
 
 @bot.command()
 async def engrave(ctx, product = "list", *, text = "Your text goes here."):
