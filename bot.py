@@ -856,7 +856,7 @@ async def screenshot(ctx, url = None, form = "all"):
       driver.set_window_size(S('Width'),S('Height'))
       for count in range(900, 5400, 900):
         driver.execute_script("window.scrollTo(0, "+str(count)+")")
-      driver.get_screenshot_as_file('web_screenshot1.png')
+      driver.get_screenshot_as_file('web_screenshot2.png')
       driver.quit()
       await ctx.send(file=discord.File('web_screenshot2.png'))
       os.remove('web_screenshot2.png')
