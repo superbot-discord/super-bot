@@ -5,7 +5,6 @@ from discord import Webhook, RequestsWebhookAdapter
 from datetime import datetime, date, timedelta
 from discord_webhook import DiscordWebhook
 from pygoogletranslation import Translator
-from multiprocessing import Process, Queue
 from pdf2image import convert_from_path
 from PIL import ImageDraw, ImageFilter
 from PyDictionary import PyDictionary
@@ -16,7 +15,6 @@ from cmath import *
 import random as ra
 import emoji as em
 import numpy as np
-import tracemalloc
 from math import *
 import pytesseract
 import time as tm
@@ -63,63 +61,6 @@ srclangkeys.sort()
 srclangdict = {}
 for count in srclangkeys:
   srclangdict[count] = unsortedsrclangdict[count]
-def pyrun(ctx):
-  tracemalloc.start()
-  proc = subprocess.Popen(['python', 'program.py',  ''], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-  try:
-    output = str(proc.communicate(timeout = 1)[0])
-    output = output.lstrip("'b(").rstrip("\\n'").replace("\n", f"\n")
-  except subprocess.TimeoutExpired:
-    proc.kill()
-    output = str(proc.communicate())
-  output = output.lstrip("'b(").rstrip("\\n'").replace("\n", f"\n")
-  outputlist = output.split("\\n")
-  if len(outputlist)==0:
-    q.put("There was no result.")
-  elif len(outputlist)<=11:
-    formatoutput = ""
-    for count in range(0, len(outputlist)):
-      if count+1<=9:
-        formatoutput = formatoutput + "0" + str(count+1) + " | " + outputlist[count] + f"\n"
-      else:
-        formatoutput = formatoutput + str(count+1) + " | " + outputlist[count] + f"\n"
-    q.put(f"```\n"+formatoutput+f"\n```")
-  else:
-    truncatedoutput = ""
-    for count in range(0,11):
-      if count+1<=9:
-        truncatedoutput = truncatedoutput + "0" + str(count+1) + " | " + outputlist[count] + f"\n"
-      else:
-        truncatedoutput = truncatedoutput + str(count+1) + " | " + outputlist[count] + f"\n"
-    q.put(f"The result was truncated due to the length of the result. It had probably timed out.\n```\n"+truncatedoutput+f"\n```")
-
-async def capscreenshot(ctx, url, form):
-  options = webdriver.ChromeOptions()
-  options.headless = True
-  options.add_argument('--no-sandbox')
-  options.add_argument('--disable-dev-shm-usage')
-  driver = webdriver.Chrome(options=options)
-  driver.get(url)
-  if form == "short" or form == "first" or form == "normal" or form == "regular" or form == "basic" or form == "general" or form == "all":
-    driver.set_window_size(1440,900)
-    driver.get_screenshot_as_file('web_screenshot1.png')
-    await ctx.send(file=discord.File('web_screenshot1.png'))
-    os.remove('web_screenshot1.png')
-  if form == "everything" or form == "full" or form == "entire" or form == "whole" or form == "all":
-    S = lambda X: driver.execute_script('return document.body.parentNode.scroll'+X)
-    driver.set_window_size(S('Width'),S('Height'))
-    for count in range(900, 5400, 900):
-      driver.execute_script("window.scrollTo(0, "+str(count)+")")
-    driver.find_element_by_tag_name('body').screenshot('web_screenshot2.png')
-    driver.quit()
-    await ctx.send(file=discord.File('web_screenshot2.png'))
-    os.remove('web_screenshot2.png')
-  #if form == "pdf" or form == "all":
-  #  pdfkit.from_url(url, 'screenshot.pdf')
-  #  await ctx.send(file=discord.File('screenshot.pdf'))
-  #  os.remove('screenshot.pdf')
-
-
 def is_me(msg):
   return msg.author == client.user
 
@@ -817,11 +758,35 @@ async def python(ctx, *, script):
   file = open("program.py", "w")
   file.write(script)
   file.close()
-  q = Queue()
-  pyprocess = Process(target=pyrun, args=(ctx,))
-  pyprocess.start()
-  print(q.get())
-  p.join()
+  proc = subprocess.Popen(['python', 'program.py',  ''], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+  try:
+    output = str(proc.communicate(timeout = 1)[0])
+    output = output.lstrip("'b(").rstrip("\\n'").replace("\n", f"\n")
+  except subprocess.TimeoutExpired:
+    proc.kill()
+    output = str(proc.communicate())
+  output = output.lstrip("'b(").rstrip("\\n'").replace("\n", f"\n")
+  outputlist = output.split("\\n")
+  if len(outputlist)<=11:
+    formatoutput = ""
+    for count in range(0, len(outputlist)):
+      if count+1<=9:
+        formatoutput = formatoutput + "0" + str(count+1) + " | " + outputlist[count] + f"\n"
+      else:
+        formatoutput = formatoutput + str(count+1) + " | " + outputlist[count] + f"\n"
+    
+    if formatoutput == "01 | ":
+      await ctx.send("There was no result to be shown.")
+    else:
+      await ctx.send(f"```\n"+formatoutput+f"\n```")
+  else:
+    truncatedoutput = ""
+    for count in range(0,11):
+      if count+1<=9:
+        truncatedoutput = truncatedoutput + "0" + str(count+1) + " | " + outputlist[count] + f"\n"
+      else:
+        truncatedoutput = truncatedoutput + str(count+1) + " | " + outputlist[count] + f"\n"
+    await ctx.send(f"The result was truncated due to the length of the result. It had probably timed out.\n```\n"+truncatedoutput+f"\n```")
 
 @bot.command()
 async def calc(ctx, *, arg = None):
@@ -885,8 +850,30 @@ async def screenshot(ctx, url = None, form = "all"):
   if url == None:
     await ctx.send("Invalid format! Please use the format `=screenshot [url]`.")
   else:
-    task = asyncio.create_task(capscreenshot(ctx, url, form))
-    await task
+    options = webdriver.ChromeOptions()
+    options.headless = True
+    options.add_argument('--no-sandbox')
+    options.add_argument('--disable-dev-shm-usage')
+    driver = webdriver.Chrome(options=options)
+    driver.get(url)
+    if form == "short" or form == "first" or form == "normal" or form == "regular" or form == "basic" or form == "general" or form == "all":
+      driver.set_window_size(1440,900)
+      driver.get_screenshot_as_file('web_screenshot1.png')
+      await ctx.send(file=discord.File('web_screenshot1.png'))
+      os.remove('web_screenshot1.png')
+    if form == "everything" or form == "full" or form == "entire" or form == "whole" or form == "all":
+      S = lambda X: driver.execute_script('return document.body.parentNode.scroll'+X)
+      driver.set_window_size(S('Width'),S('Height'))
+      for count in range(900, 5400, 900):
+        driver.execute_script("window.scrollTo(0, "+str(count)+")")
+      driver.find_element_by_tag_name('body').screenshot('web_screenshot2.png')
+      driver.quit()
+      await ctx.send(file=discord.File('web_screenshot2.png'))
+      os.remove('web_screenshot2.png')
+    if form == "pdf" or form == "all":
+      pdfkit.from_url(url, 'screenshot.pdf')
+      await ctx.send(file=discord.File('screenshot.pdf'))
+      os.remove('screenshot.pdf')
 
 @bot.command()
 async def ocr(ctx, *, text = None):
@@ -1192,6 +1179,24 @@ async def purge(ctx,num):
     num=int(num)
     await ctx.channel.purge(limit=num+1)
     await ctx.send("Purging completed.", delete_after = 5)
+  else:
+    await ctx.send("You don't have the required permissions.")
+
+@bot.command()
+async def purgeregex(ctx, num, *, regex):
+  if ctx.author.permissions_in(ctx.channel).manage_messages or ctx.author.id == 687474789342117900:
+    exec("purge_pattern = re.compile(r'"+regex+"', re.IGNORECASE)")
+    num = int(num)
+    purged = 0
+    async for count in ctx.channel.history(limit=1000):
+      match = match = purge_pattern.fullmatch(count.content)
+      if match:
+        await count.delete()
+        purged = purged + 1
+        if purged >= num:
+          break
+        
+    await ctx.send("Regex purging completed.", delete_after = 5)
   else:
     await ctx.send("You don't have the required permissions.")
   
