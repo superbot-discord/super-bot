@@ -16,7 +16,6 @@ from markdown2 import Markdown
 from pnglatex import pnglatex
 from cmath import *
 import random as ra
-import emoji as em
 import numpy as np
 from math import *
 import pytesseract
