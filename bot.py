@@ -11,6 +11,7 @@ from PyDictionary import PyDictionary
 from discord.ext.commands import *
 from discord.ext import commands
 from selenium import webdriver
+from markdown import markdown
 from cmath import *
 import random as ra
 import emoji as em
@@ -21,7 +22,6 @@ import time as tm
 import subprocess
 import wikipedia
 import requests
-import markdown
 import aiohttp
 import asyncio
 import discord
@@ -931,7 +931,7 @@ async def md(ctx, *, mdcode = None):
     r.raise_for_status()
     r.raw.decode_content = True
     mdcode = r.content
-  code = markdown.markdown(mdcode)
+  code = markdown(mdcode)
   driver = webdriver.Chrome(options=options)
   driver.get(f"data:text/html;charset=utf-8,{code}")
   S = lambda X: driver.execute_script('return document.body.parentNode.scroll'+X)
@@ -952,7 +952,7 @@ async def markdown(ctx, *, mdcode = None):
     r.raise_for_status()
     r.raw.decode_content = True
     mdcode = r.content
-  code = markdown.markdown(mdcode)
+  code = markdown(mdcode)
   driver = webdriver.Chrome(options=options)
   driver.get(f"data:text/html;charset=utf-8,{code}")
   S = lambda X: driver.execute_script('return document.body.parentNode.scroll'+X)
