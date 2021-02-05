@@ -856,14 +856,10 @@ async def screenshot(ctx, url = None, form = "all"):
       driver.set_window_size(S('Width'),S('Height'))
       for count in range(900, 5400, 900):
         driver.execute_script("window.scrollTo(0, "+str(count)+")")
-      driver.find_element_by_tag_name('body').screenshot('web_screenshot2.png')
+      driver.get_screenshot_as_file('web_screenshot1.png')
       driver.quit()
       await ctx.send(file=discord.File('web_screenshot2.png'))
       os.remove('web_screenshot2.png')
-    if form == "pdf" or form == "all":
-      pdfkit.from_url(url, 'screenshot.pdf')
-      await ctx.send(file=discord.File('screenshot.pdf'))
-      os.remove('screenshot.pdf')
 
 @bot.command()
 async def ocr(ctx, *, text = None):
@@ -914,13 +910,13 @@ async def html(ctx, *, code = None):
     r.raise_for_status()
     r.raw.decode_content = True
     code = r.content
-  await ctx.send("Test 1")
-  pdfkit.from_string(code, 'html.pdf')
-  await ctx.send("Test 2")
-  await ctx.send(file=discord.File('html.pdf'))
-  await ctx.send("Test 3")
-  os.remove('html.pdf')
-  await ctx.send("Test 4")
+    driver.get(f"data:text/html;charset=utf-8,{code}")
+    S = lambda X: driver.execute_script('return document.body.parentNode.scroll'+X)
+    driver.set_window_size(S('Width'),S('Height'))
+    driver.save_screenshot('html_screenshot.png')
+    driver.quit()
+    await ctx.send(file=discord.File('html_screenshot2.png'))
+    os.remove('html_screenshot2.png')
 
 @bot.command()
 async def youtube(ctx, *, url):
