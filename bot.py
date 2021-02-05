@@ -167,7 +167,7 @@ async def botpurge(ctx, *, num):
   if ctx.author.permissions_in(ctx.channel).manage_messages or ctx.author.id == 687474789342117900:
     num = int(num)
     purged = 0
-    async for count in ctx.channel.history(limit=200):
+    async for count in ctx.channel.history(limit=1000):
       print(1)
       if count.author.id == 796686363604680755:
         print(2)
@@ -180,7 +180,7 @@ async def botpurge(ctx, *, num):
           break
           print(5)
         
-    await ctx.send("Bot purging completed.")
+    await ctx.send("Bot purging completed.", delete_after = 5)
   else:
     print(6)
     await ctx.send("You don't have the required permissions.")
@@ -1188,11 +1188,12 @@ async def insert(ctx,emoji,*,text):
 
 @bot.command()
 async def purge(ctx,num):
-  if ctx.author.id == 746227806278647928 or ctx.author.id == 757431801487556748:
-    await ctx.send("The no_liar permission is required.")
-  else:
+  if ctx.author.permissions_in(ctx.channel).manage_messages or ctx.author.id == 687474789342117900:
     num=int(num)
     await ctx.channel.purge(limit=num+1)
+    await ctx.send("Purging completed.", delete_after = 5)
+  else:
+    await ctx.send("You don't have the required permissions.")
   
 @bot.command()
 async def colour(ctx, arg1, arg2=None, arg3=None):
