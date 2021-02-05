@@ -5,10 +5,10 @@ from discord import Webhook, RequestsWebhookAdapter
 from datetime import datetime, date, timedelta
 from discord_webhook import DiscordWebhook
 from pygoogletranslation import Translator
+from multiprocessing import Process, Queue
 from pdf2image import convert_from_path
 from PIL import ImageDraw, ImageFilter
 from PyDictionary import PyDictionary
-from multiprocessing import Process
 from discord.ext.commands import *
 from discord.ext import commands
 from selenium import webdriver
