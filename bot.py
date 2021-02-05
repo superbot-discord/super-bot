@@ -24,7 +24,6 @@ import requests
 import aiohttp
 import asyncio
 import discord
-import pdfkit
 import pytube
 import pytz
 import PIL
