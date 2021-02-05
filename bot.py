@@ -21,6 +21,7 @@ import time as tm
 import subprocess
 import wikipedia
 import requests
+import markdown
 import aiohttp
 import asyncio
 import discord
