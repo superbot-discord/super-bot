@@ -523,10 +523,10 @@ async def translate(ctx, langinput = "list", *, text = "Sample text"):
         lang = list(langdict.keys())[list(langdict.values()).index(lang)]
       msg = await ctx.send("Translating **"+text+"** to "+langdict[lang])
       translation = translatorvar.translate(text, src=fromlang, dest=lang)
-      #try:
-      await msg.edit(content = "**Translation from "+langdict[fromlang]+" to "+langdict[lang]+f":**\n"+translation.text.replace("u003c", "<").replace("u003e", ">").replace("u0026", "&"))
-      #except:
-      #  await ctx.send("Language not found! Please use `=translate list` to get a list of languages.")
+      try:
+        await msg.edit(content = "**Translation from "+srclangdict[fromlang]+" to "+langdict[lang]+f":**\n"+translation.text.replace("u003c", "<").replace("u003e", ">").replace("u0026", "&"))
+      except:
+        await ctx.send("Language not found! Please use `=translate list` to get a list of languages.")
     else:
       lang = langinput
       msg = await ctx.send("Translating **"+text+"** to "+langdict[lang])
@@ -535,12 +535,9 @@ async def translate(ctx, langinput = "list", *, text = "Sample text"):
       translation = translatorvar.translate(text, dest=lang)
       print(4)
       try:
-        await msg.edit(content = "**Translation from "+langdict[translatorvar.detect(text).lang]+" to "+langdict[lang]+f":**\n"+translation.text.replace("u003c", "<").replace("u003e", ">").replace("u0026", "&"))
+        await msg.edit(content = "**Translation from "+srclangdict[translatorvar.detect(text).lang]+" to "+langdict[lang]+f":**\n"+translation.text.replace("u003c", "<").replace("u003e", ">").replace("u0026", "&"))
       except:
-        try:
-          await msg.edit(content = "**Translation from "+translatorvar.detect(text).lang+" to "+langdict[lang]+f":**\n"+translation.text.replace("u003c", "<").replace("u003e", ">").replace("u0026", "&"))
-        except:
-          await ctx.send("Language not found! Please use `=translate list` to get a list of languages.")
+        await ctx.send("Language not found! Please use `=translate list` to get a list of languages.")
 
 @bot.command()
 async def engrave(ctx, product = "list", *, text = "Your text goes here."):
