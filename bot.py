@@ -1022,23 +1022,16 @@ async def definition(ctx, *, word):
 async def wiki(ctx, *, query):
   wikipedia.set_lang("en")
   try:
-    desc = wikipedia.summary(query)
-    if len(desc)>2048:
-      desc = desc[0:2046]+"…"
+    desc = wikipedia.summary(query)[:2047]
     page = wikipedia.page(title=query, auto_suggest=True, redirect=True, preload=False)
     embed = discord.Embed(title=query, description=desc)
-    #for count in page.sections:
-    #  embed.add_field(name=count, value=wikipeida.section(count)[:500], inline=False)
+    for count in page.sections:
+      embed.add_field(name=count, value=wikipeida.section(count)[:499], inline=False)
     if len(page.images)!=0:
       embed.set_thumbnail(url = page.images[0])
     if len(page.images)>=2:
       embed.set_image(url = page.images[1])
     await ctx.send(embed = embed)
-    file = open("wiki.html", "w")
-    file.write(page.html())
-    file.close()
-    await ctx.send(file=discord.File('wiki.html'))
-    os.remove('wiki.html')
     desc = ""
     for count in page.images:
       desc = desc + str(count) + " "
