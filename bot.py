@@ -1939,11 +1939,11 @@ Region: """+str(guild.region)
     f5v="Not Required"
   f6v=str(guild.verification_level)
   ecf=guild.explicit_content_filter
-  if ecf=="disabled":
+  if ecf==discord.ContentFilter("disabled"):
     f7v="Disabled"
-  elif ecf=="no_role":
+  elif ecf==discord.ContentFilter("no_role"):
     f7v="Members without roles"
-  elif ecf=="all_members":
+  elif ecf==discord.ContentFilter("all_members"):
     f7v="All Members"""
   f8v=""
   for count in guild.members:
