@@ -1025,32 +1025,32 @@ async def definition(ctx, *, word):
 @bot.command()
 async def wiki(ctx, *, query):
   totallen = 0
-  #try:
-  desc = wikipedia.summary(query)[:2047]
-  totallen = totallen + len(wikipedia.summary(query)) + len(desc) + len(query)
-  wpage = wikipedia.page(title=query, auto_suggest=True, redirect=True, preload=False)
-  embed = discord.Embed(title=query, url="https://en.wikipedia.org/wiki/"+wpage.title.replace(" ","_"), description=desc)
-  print(wpage.sections)
-  counter = 0
-  for count in wpage.sections:
-    if counter >=4 or totallen + len(wpage.section(count)) >= 6000:
-      break
-    if len(wpage.section(count))!=0:
-      embed.add_field(name=count, value=wpage.section(count)[:499], inline=False)
-      totallen = totallen + len(wpage.section(count))
-      counter = counter + 1
-  if len(wpage.images)>=1:
-    embed.set_thumbnail(url = wpage.images[0])
-  if len(wpage.images)>=2:
-    embed.set_image(url = wpage.images[1])
-  await ctx.send(embed = embed)
-  #except:
-  #  results = wikipedia.search(query, results=20, suggestion=False)
-  #  desc = "**Please make one of these searches:**"
-  #  for count in results:
-  #    desc = desc + "`"+str(count)+"` "
-  #  embed = discord.Embed(title=query, description=desc)
-  #  await ctx.send(embed = embed)
+  try:
+    desc = wikipedia.summary(query)[:2047]
+    totallen = totallen + len(wikipedia.summary(query)) + len(desc) + len(query)
+    wpage = wikipedia.page(title=query, auto_suggest=True, redirect=True, preload=False)
+    embed = discord.Embed(title=query, url="https://en.wikipedia.org/wiki/"+wpage.title.replace(" ","_"), description=desc)
+    print(wpage.sections)
+    counter = 0
+    for count in wpage.sections:
+      if counter >=4 or totallen + len(wpage.section(count)) >= 6000:
+        break
+      if len(wpage.section(count))!=0:
+        embed.add_field(name=count, value=wpage.section(count)[:499], inline=False)
+        totallen = totallen + len(wpage.section(count))
+        counter = counter + 1
+    if len(wpage.images)>=1:
+      embed.set_thumbnail(url = wpage.images[0])
+    if len(wpage.images)>=2:
+      embed.set_image(url = wpage.images[1])
+    await ctx.send(embed = embed)
+  except:
+    results = wikipedia.search(query, results=20, suggestion=False)
+    desc = "**Please make one of these searches:**"
+    for count in results:
+      desc = desc + "`"+str(count)+"` "
+    embed = discord.Embed(title=query, description=desc)
+    await ctx.send(embed = embed)
   
 @bot.command()
 async def purgereactions(ctx, messages, emoji: discord.Emoji = None):
