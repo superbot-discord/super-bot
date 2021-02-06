@@ -1024,13 +1024,18 @@ async def wiki(ctx, *, query):
   totallen = 0
   #try:
   desc = wikipedia.summary(query)[:2047]
-  totallen = totallen + len(wikipedia.summary(query))
+  totallen = totallen + len(wikipedia.summary(query)) + len(desc) + len(query)
   wpage = wikipedia.page(title=query, auto_suggest=True, redirect=True, preload=False)
   embed = discord.Embed(title=query, url="https://en.wikipedia.org/wiki/"+wpage.title.replace(" ","_"), description=desc)
   print(wpage.sections)
-  for count in wpage.sections[:2]:
-    embed.add_field(name=count, value=wpage.section(count)[:499], inline=False)
-    totallen = totallen + len(wpage.section(count))
+  counter = 0
+  for count in wpage.sections:
+    if counter >=4 or totallen + len(wpage.section(count)) >= 6000
+      break
+    if len(wpage.section(count))!=0:
+      embed.add_field(name=count, value=wpage.section(count)[:499], inline=False)
+      totallen = totallen + len(wpage.section(count))
+      counter = counter + 1
   if len(wpage.images)>=1:
     embed.set_thumbnail(url = wpage.images[0])
   if len(wpage.images)>=2:
