@@ -65,7 +65,7 @@ options = webdriver.ChromeOptions()
 options.headless = True
 options.add_argument('--no-sandbox')
 options.add_argument('--disable-dev-shm-usage')
-markdowner = Markdown(extras=["tables", "strike", "link-patterns", "footnotes"])
+markdowner = Markdown(extras=["tables", "strike", "footnotes"])
 def is_me(msg):
   return msg.author == client.user
 
