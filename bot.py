@@ -65,7 +65,8 @@ options = webdriver.ChromeOptions()
 options.headless = True
 options.add_argument('--no-sandbox')
 options.add_argument('--disable-dev-shm-usage')
-markdowner = Markdown(extras=["tables", "strike", "footnotes"])
+markdowner = Markdown(extras=["strike", "footnotes"])
+wikipedia.set_lang("en")
 def is_me(msg):
   return msg.author == client.user
 
@@ -1020,7 +1021,6 @@ async def definition(ctx, *, word):
 
 @bot.command()
 async def wiki(ctx, *, query):
-  set_lang("en")
   totallen = 0
   #try:
   desc = summary(query)[:2047]
