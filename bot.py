@@ -2,7 +2,7 @@ banned_ids = [757431801487556748, 598477713543659523]
 from selenium.webdriver.chrome.options import Options
 from discord import Webhook, RequestsWebhookAdapter
 from datetime import datetime, date, timedelta
-from wikipedia import set_lang, page, summary
+from wikipedia import *
 from pygoogletranslation import Translator
 from discord_webhook import DiscordWebhook
 from pdf2image import convert_from_path
@@ -1022,27 +1022,27 @@ async def definition(ctx, *, word):
 async def wiki(ctx, *, query):
   set_lang("en")
   totallen = 0
-  try:
-    desc = summary(query)[:2047]
-    totallen = totallen + len(summary(query))
-    wpage = page(title=query, auto_suggest=True, redirect=True, preload=False)
-    embed = discord.Embed(title=query, url="https://en.wikipedia.org/wiki/"+wpage.title.replace(" ","_"), description=desc)
-    print(wpage.sections)
-    for count in wpage.sections[:2]:
-      embed.add_field(name=count, value=wikipeida.section(count)[:499], inline=False)
-      totallen = totallen + len(wikipeida.section(count))
-    if len(wpage.images)>=1:
-      embed.set_thumbnail(url = wpage.images[0])
-    if len(wpage.images)>=2:
-      embed.set_image(url = wpage.images[1])
-    await ctx.send(embed = embed)
-  except:
-    results = wikipedia.search(query, results=20, suggestion=False)
-    desc = "**Please make one of these searches:**"
-    for count in results:
-      desc = desc + "`"+str(count)+"` "
-    embed = discord.Embed(title=query, description=desc)
-    await ctx.send(embed = embed)
+  #try:
+  desc = summary(query)[:2047]
+  totallen = totallen + len(summary(query))
+  wpage = page(title=query, auto_suggest=True, redirect=True, preload=False)
+  embed = discord.Embed(title=query, url="https://en.wikipedia.org/wiki/"+wpage.title.replace(" ","_"), description=desc)
+  print(wpage.sections)
+  for count in wpage.sections[:2]:
+    embed.add_field(name=count, value=wikipeida.section(count)[:499], inline=False)
+    totallen = totallen + len(wikipeida.section(count))
+  if len(wpage.images)>=1:
+    embed.set_thumbnail(url = wpage.images[0])
+  if len(wpage.images)>=2:
+    embed.set_image(url = wpage.images[1])
+  await ctx.send(embed = embed)
+  #except:
+  #  results = search(query, results=20, suggestion=False)
+  #  desc = "**Please make one of these searches:**"
+  #  for count in results:
+  #    desc = desc + "`"+str(count)+"` "
+  #  embed = discord.Embed(title=query, description=desc)
+  #  await ctx.send(embed = embed)
   
 @bot.command()
 async def purgereactions(ctx, messages, emoji: discord.Emoji = None):
