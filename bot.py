@@ -1962,11 +1962,6 @@ Region: """+str(guild.region)
   f13v=guild.description
   if f13v==None:
     f13v="No description"
-  f14vlist=await guild.bans()
-  f14v=""
-  for count in f14vlist:
-    f14v=f14v+count.user.mention+" "
-  f14v=f14v[:-1]
   embed.add_field(name="Text Channels ("+str(len(guild.text_channels))+")", value=f0v, inline=True)
   embed.add_field(name="Voice Channels ("+str(len(guild.voice_channels))+")", value=f1v, inline=True)
   embed.add_field(name="Categories ("+str(len(guild.categories))+")", value=f1vb, inline=True)
@@ -1995,6 +1990,14 @@ Region: """+str(guild.region)
     embed.add_field(name="Emojis", value=f11v, inline=True)
   if len(f12v)!=0:
     embed.add_field(name="Animated emojis", value=f12v, inline=True)
+  try:
+    f14vlist=await guild.bans()
+    f14v=""
+    for count in f14vlist:
+      f14v=f14v+count.user.mention+" "
+    f14v=f14v[:-1]
+  except:
+    f14v="Unable to get banned members without Ban-members permission."
   if len(f14v)!=0:
     embed.add_field(name="Banned Users", value=f14v, inline=True)
   await ctx.send(embed=embed)
