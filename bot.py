@@ -2,8 +2,9 @@ banned_ids = [757431801487556748, 598477713543659523]
 from selenium.webdriver.chrome.options import Options
 from discord import Webhook, RequestsWebhookAdapter
 from datetime import datetime, date, timedelta
-from discord_webhook import DiscordWebhook
+from wikipedia import set_lang, page, summary
 from pygoogletranslation import Translator
+from discord_webhook import DiscordWebhook
 from pdf2image import convert_from_path
 from PIL import ImageDraw, ImageFilter
 from PyDictionary import PyDictionary
@@ -19,7 +20,6 @@ from math import *
 import pytesseract
 import time as tm
 import subprocess
-import wikipedia
 import requests
 import aiohttp
 import asyncio
@@ -1020,27 +1020,23 @@ async def definition(ctx, *, word):
 
 @bot.command()
 async def wiki(ctx, *, query):
-  wikipedia.set_lang("en")
+  set_lang("en")
   totallen = 0
   try:
-    desc = wikipedia.summary(query)[:2047]
-    totallen = totallen + len(wikipedia.summary(query))
-    page = wikipedia.page(title=query, auto_suggest=True, redirect=True, preload=False)
-    embed = discord.Embed(title=query, description=desc)
-    for count in page.sections[:5]:
+    desc = summary(query)[:2047]
+    totallen = totallen + len(summary(query))
+    wpage = page(title=query, auto_suggest=True, redirect=True, preload=False)
+    embed = discord.Embed(title=query, url="https://en.wikipedia.org/wiki/"+wpage.title.replace(" ","_"), description=desc)
+    for count in wpage.sections[:5]:
       if totallen + len(wikipeida.section(count)) >= 6000:
         break
       embed.add_field(name=count, value=wikipeida.section(count)[:499], inline=False)
       totallen = totallen + len(wikipeida.section(count))
-    if len(page.images)!=0:
-      embed.set_thumbnail(url = page.images[0])
-    if len(page.images)>=2:
-      embed.set_image(url = page.images[1])
+    if len(wpage.images)>=1:
+      embed.set_thumbnail(url = wpage.images[0])
+    if len(wpage.images)>=2:
+      embed.set_image(url = wpage.images[1])
     await ctx.send(embed = embed)
-    desc = ""
-    for count in page.images:
-      desc = desc + str(count) + " "
-    await ctx.send(desc)
   except:
     results = wikipedia.search(query, results=20, suggestion=False)
     desc = "**Please make one of these searches:**"
@@ -1896,108 +1892,120 @@ async def role(ctx,role: discord.Role=None):
   await ctx.send(embed=embed)
 
 @bot.command()
-async def server(ctx):
+async def server(ctx, text = "regular"):
   guild=ctx.guild
   ti=guild.name
   desc="Created at "+guild.created_at.strftime("%d %b, %Y (%a) %H:%M:%S")+" by "+str(guild.owner.mention)+"""
 Region: """+str(guild.region)
-  embed=discord.Embed(title=ti,color=0x0061ff, description=desc)
+  embed=discord.Embed(title=ti, description=desc)
   embed.set_author(name="Server Information",icon_url=guild.icon_url)
-  f0v=""
-  for count in guild.text_channels:
-    f0v=f0v+str(count.mention)+" "
-  f1v=""
-  f0v=f0v[:-1]
-  if len(guild.voice_channels)==0:
-    f1v="No Voice Channels"
+  if text == "mod":
+    try:
+      f1vlist=await guild.bans()
+      f1v=""
+      for count in f1vlist:
+        f1v=f1v+count.user.mention+" "
+      f1v=f1v[:-1]
+    except:
+      f1v="Unable to get banned members without Ban-members permission."
+    if len(f1v)!=0:
+      embed.add_field(name="Banned Users", value=f1v, inline=True)
+    try:
+      f2vlist=await guild.invites()
+      f2v=""
+      for count in f2vlist:
+        f2v=f2v+count.url+" "
+      f2v=f2v[:-1]
+    except:
+      f2v="Unable to get invites without Manage-server permission."
+    if len(f2v)!=0:
+      embed.add_field(name="Invites", value=f2v, inline=True)
   else:
-    for count in guild.voice_channels:
-      f1v=f1v+str(count.name)+", "
-    f1v=f1v[:-2]
-  f1vb=""
-  if len(guild.categories)==0:
-    f1v="No Categories"
-  else:
-    for count in guild.categories:
-      f1vb=f1vb+str(count.name)+", "
-    f1vb=f1vb[:-2]
-  f1va=""
-  f1valist=guild.roles
-  f1valist.reverse()
-  for count in f1valist:
-    f1va=f1va+count.mention+" "
-  f1va=f1va[:-1]
-  f2v=str(guild.bitrate_limit//1000)+" kbps"
-  f3v=str(guild.filesize_limit//1048576)+" MB"
-  f4v=str(guild.emoji_limit)
-  f5v=guild.mfa_level
-  if f5v==1:
-    f5v="Required"
-  else:
-    f5v="Not Required"
-  f6v=str(guild.verification_level)
-  ecf=guild.explicit_content_filter
-  if str(ecf)=="disabled":
-    f7v="Disabled"
-  elif str(ecf)=="no_role":
-    f7v="Members without roles"
-  elif str(ecf)=="all_members":
-    f7v="All Members"""
-  f8v=""
-  for count in guild.members:
-    f8v=f8v+count.mention+" "
-  f8v=f8v[:-1]
-  f10va=str(guild.id)
-  f11v=""
-  f12v=""
-  for count in guild.emojis:
-    if count.animated==False:
-      f11v=f11v+str(count)+" "
+    f0v=""
+    for count in guild.text_channels:
+      f0v=f0v+str(count.mention)+" "
+    f1v=""
+    f0v=f0v[:-1]
+    if len(guild.voice_channels)==0:
+      f1v="No Voice Channels"
     else:
-      f12v=f12v+str(count)+" "
-  f11v=f11v[:-1]
-  f12v=f12v[:-1]
-  f13v=guild.description
-  if f13v==None:
-    f13v="No description"
-  embed.add_field(name="Text Channels ("+str(len(guild.text_channels))+")", value=f0v, inline=True)
-  embed.add_field(name="Voice Channels ("+str(len(guild.voice_channels))+")", value=f1v, inline=True)
-  embed.add_field(name="Categories ("+str(len(guild.categories))+")", value=f1vb, inline=True)
-  embed.add_field(name="Roles ("+str(len(guild.roles))+")", value=f1va, inline=False)
-  embed.add_field(name="Members ("+str(len(guild.members))+")", value=f8v, inline=False)
-  embed.add_field(name="Max bitrate", value=f2v, inline=True)
-  embed.add_field(name="Max filesize", value=f3v, inline=True)
-  embed.add_field(name="Max emojis", value=f4v, inline=True)
-  embed.add_field(name="2FA for Moderation", value=f5v, inline=True)
-  embed.add_field(name="Verification Level", value=f6v, inline=True)
-  embed.add_field(name="Explict Content Filter", value=f7v, inline=True)
-  if guild.afk_channel!=None:
-    f9v=str(guild.afk_timeout//60)+" mins"
-    f10v=guild.afk_channel
-    embed.add_field(name="AFK Timeout", value=f9v, inline=True)
-    embed.add_field(name="AFK Channel", value=f10v, inline=True)
-  embed.add_field(name="ID", value=f10va, inline=True)
-  if guild.features.count("COMMUNITY")==1:
-    embed.add_field(name="Community", value="This is a community server.", inline=True)
-  if guild.features.count("WELCOME_SCREEN_ENABLED")==1:
-    embed.add_field(name="Welcome Screen", value="The server has enabled the welcome screen.", inline=True)
-  if guild.features.count("PUBLIC")==1:
-    embed.add_field(name="Public", value="This is a public server.", inline=True)
-  embed.add_field(name="Description", value=f13v, inline=False)
-  if len(f11v)!=0:
-    embed.add_field(name="Emojis", value=f11v, inline=True)
-  if len(f12v)!=0:
-    embed.add_field(name="Animated emojis", value=f12v, inline=True)
-  try:
-    f14vlist=await guild.bans()
-    f14v=""
-    for count in f14vlist:
-      f14v=f14v+count.user.mention+" "
-    f14v=f14v[:-1]
-  except:
-    f14v="Unable to get banned members without Ban-members permission."
-  if len(f14v)!=0:
-    embed.add_field(name="Banned Users", value=f14v, inline=True)
+      for count in guild.voice_channels:
+        f1v=f1v+str(count.name)+", "
+      f1v=f1v[:-2]
+    f1vb=""
+    if len(guild.categories)==0:
+      f1v="No Categories"
+    else:
+      for count in guild.categories:
+        f1vb=f1vb+str(count.name)+", "
+      f1vb=f1vb[:-2]
+    f1va=""
+    f1valist=guild.roles
+    f1valist.reverse()
+    for count in f1valist:
+      f1va=f1va+count.mention+" "
+    f1va=f1va[:-1]
+    f2v=str(guild.bitrate_limit//1000)+" kbps"
+    f3v=str(guild.filesize_limit//1048576)+" MB"
+    f4v=str(guild.emoji_limit)
+    f5v=guild.mfa_level
+    if f5v==1:
+      f5v="Required"
+    else:
+      f5v="Not Required"
+    f6v=str(guild.verification_level)
+    ecf=guild.explicit_content_filter
+    if str(ecf)=="disabled":
+      f7v="Disabled"
+    elif str(ecf)=="no_role":
+      f7v="Members without roles"
+    elif str(ecf)=="all_members":
+      f7v="All Members"""
+    f8v=""
+    for count in guild.members:
+      f8v=f8v+count.mention+" "
+    f8v=f8v[:-1]
+    f10va=str(guild.id)
+    f11v=""
+    f12v=""
+    for count in guild.emojis:
+      if count.animated==False:
+        f11v=f11v+str(count)+" "
+      else:
+        f12v=f12v+str(count)+" "
+    f11v=f11v[:-1]
+    f12v=f12v[:-1]
+    f13v=guild.description
+    if f13v==None:
+      f13v="No description"
+    embed.add_field(name="Text Channels ("+str(len(guild.text_channels))+")", value=f0v, inline=True)
+    embed.add_field(name="Voice Channels ("+str(len(guild.voice_channels))+")", value=f1v, inline=True)
+    embed.add_field(name="Categories ("+str(len(guild.categories))+")", value=f1vb, inline=True)
+    embed.add_field(name="Roles ("+str(len(guild.roles))+")", value=f1va, inline=False)
+    embed.add_field(name="Members ("+str(len(guild.members))+")", value=f8v, inline=False)
+    embed.add_field(name="Max bitrate", value=f2v, inline=True)
+    embed.add_field(name="Max filesize", value=f3v, inline=True)
+    embed.add_field(name="Max emojis", value=f4v, inline=True)
+    embed.add_field(name="2FA for Moderation", value=f5v, inline=True)
+    embed.add_field(name="Verification Level", value=f6v, inline=True)
+    embed.add_field(name="Explict Content Filter", value=f7v, inline=True)
+    if guild.afk_channel!=None:
+      f9v=str(guild.afk_timeout//60)+" mins"
+      f10v=guild.afk_channel
+      embed.add_field(name="AFK Timeout", value=f9v, inline=True)
+      embed.add_field(name="AFK Channel", value=f10v, inline=True)
+    embed.add_field(name="ID", value=f10va, inline=True)
+    if guild.features.count("COMMUNITY")==1:
+      embed.add_field(name="Community", value="This is a community server.", inline=True)
+    if guild.features.count("WELCOME_SCREEN_ENABLED")==1:
+      embed.add_field(name="Welcome Screen", value="The server has enabled the welcome screen.", inline=True)
+    if guild.features.count("PUBLIC")==1:
+      embed.add_field(name="Public", value="This is a public server.", inline=True)
+    embed.add_field(name="Description", value=f13v, inline=False)
+    if len(f11v)!=0:
+      embed.add_field(name="Emojis", value=f11v, inline=True)
+    if len(f12v)!=0:
+      embed.add_field(name="Animated emojis", value=f12v, inline=True)
   await ctx.send(embed=embed)
 
 @bot.command()
