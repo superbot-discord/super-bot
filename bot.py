@@ -1027,9 +1027,8 @@ async def wiki(ctx, *, query):
     totallen = totallen + len(summary(query))
     wpage = page(title=query, auto_suggest=True, redirect=True, preload=False)
     embed = discord.Embed(title=query, url="https://en.wikipedia.org/wiki/"+wpage.title.replace(" ","_"), description=desc)
-    for count in wpage.sections[:5]:
-      if totallen + len(wikipeida.section(count)) >= 6000:
-        break
+    print(wpage.sections)
+    for count in wpage.sections[:2]:
       embed.add_field(name=count, value=wikipeida.section(count)[:499], inline=False)
       totallen = totallen + len(wikipeida.section(count))
     if len(wpage.images)>=1:
