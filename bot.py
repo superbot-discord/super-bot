@@ -1018,6 +1018,7 @@ async def definition(ctx, *, word):
     desc = desc + count + ", "
   desc = desc [:-2]
   embed = discord.Embed(title=ti, description=desc)
+  await ctx.send(embed=embed)
 
 @bot.command()
 async def wiki(ctx, *, query):
