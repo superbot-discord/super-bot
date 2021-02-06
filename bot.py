@@ -1023,7 +1023,7 @@ async def definition(ctx, *, word):
 async def wiki(ctx, *, query):
   totallen = 0
   #try:
-  desc = summary(query)[:2047]
+  desc = wikipedia.summary(query)[:2047]
   totallen = totallen + len(wikipedia.summary(query))
   wpage = wikipedia.page(title=query, auto_suggest=True, redirect=True, preload=False)
   embed = discord.Embed(title=query, url="https://en.wikipedia.org/wiki/"+wpage.title.replace(" ","_"), description=desc)
