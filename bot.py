@@ -1021,12 +1021,17 @@ async def definition(ctx, *, word):
 @bot.command()
 async def wiki(ctx, *, query):
   wikipedia.set_lang("en")
+  totallen = 0
   try:
     desc = wikipedia.summary(query)[:2047]
+    totallen = totallen + len(wikipedia.summary(query))
     page = wikipedia.page(title=query, auto_suggest=True, redirect=True, preload=False)
     embed = discord.Embed(title=query, description=desc)
-    for count in page.sections:
+    for count in page.sections[:5]:
+      if totallen + len(wikipeida.section(count)) >= 6000:
+        break
       embed.add_field(name=count, value=wikipeida.section(count)[:499], inline=False)
+      totallen = totallen + len(wikipeida.section(count))
     if len(page.images)!=0:
       embed.set_thumbnail(url = page.images[0])
     if len(page.images)>=2:
