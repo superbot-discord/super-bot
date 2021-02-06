@@ -1030,7 +1030,7 @@ async def wiki(ctx, *, query):
   print(wpage.sections)
   counter = 0
   for count in wpage.sections:
-    if counter >=4 or totallen + len(wpage.section(count)) >= 6000
+    if counter >=4 or totallen + len(wpage.section(count)) >= 6000:
       break
     if len(wpage.section(count))!=0:
       embed.add_field(name=count, value=wpage.section(count)[:499], inline=False)
