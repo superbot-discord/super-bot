@@ -1007,8 +1007,10 @@ async def definition(ctx, *, word):
   ti = "Definition of "+word
   desc = ""
   definitions = dictionary.meaning(word)
+  counter = 0
   for count in list(definitions.keys()):
-    desc = desc + "**"+count+f"**\n"+str(definitions[count])+f"\n"
+    desc = desc + "**"+count+f"**\n"+definitions[count][counter]+f"\n"
+    counter = counter + 1
   desc = desc + f"**Synonyms**\n"
   for count in dictionary.synonym(word):
     desc = desc + count + ", "
