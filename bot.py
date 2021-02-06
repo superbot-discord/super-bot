@@ -1029,7 +1029,7 @@ async def wiki(ctx, *, query):
   embed = discord.Embed(title=query, url="https://en.wikipedia.org/wiki/"+wpage.title.replace(" ","_"), description=desc)
   print(wpage.sections)
   for count in wpage.sections[:2]:
-    embed.add_field(name=count, value=wikipedua.section(count)[:499], inline=False)
+    embed.add_field(name=count, value=wikipedia.section(count)[:499], inline=False)
     totallen = totallen + len(wikipedia.section(count))
   if len(wpage.images)>=1:
     embed.set_thumbnail(url = wpage.images[0])
