@@ -471,7 +471,7 @@ async def population(ctx, country="current"):
         break
     embed.add_field(name="Deaths", value=item, inline=True)
     while True:
-      item = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR,"span[rel='absolute_growth_this_year']"))).text
+      item = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR,"span[rel='absolute_growth_year']"))).text
       if "retrieving data" not in item:
         break
     embed.add_field(name="Net Growth", value=item, inline=True)
