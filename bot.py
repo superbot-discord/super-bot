@@ -432,7 +432,7 @@ async def invite(ctx, *, text=None):
   await ctx.send(embed=embed)
 
 @bot.command()
-async def covid(ctx, country="world"):
+async def covid(ctx, *, country="world"):
   driver = webdriver.Chrome(options=options)
   if country.lower() == "world" or country.lower() == "global" or country.lower() == "worldwide" or country.lower() == "everywhere" or country.lower() == "anywhere" or country.lower() == "international" or country.lower() == "internationally" or country.lower() == "globally" or country.lower() == "current":
     country = "world"
@@ -440,31 +440,36 @@ async def covid(ctx, country="world"):
   soup=BeautifulSoup(r.content, features="html.parser")
   exec("country_pattern = re.compile(r'"+country+"', re.IGNORECASE)", globals())
   covidtable = soup.findAll('table')[0].findAll('tbody')[0]
+  found = 0
   for count in covidtable.findAll('tr'):
     try:
       match = country_pattern.fullmatch(count.findAll('td')[1].string)
       if match:
         needrow = count
+        found = 1
         break
     except:
       1
-  if country == "world":
-    embed = discord.Embed(title="Coronavirus statistics worldwide")
+  if found == 1:
+    if country == "world":
+      embed = discord.Embed(title="Coronavirus statistics worldwide")
+    else:
+      embed = discord.Embed(title="Coronavirus statistics in "+country)
+    embed.add_field(name="Total Cases", value=needrow.findAll('td')[2].string, inline=True)
+    embed.add_field(name="Total Deaths", value=needrow.findAll('td')[4].string, inline=True)
+    embed.add_field(name="Total Recovered", value=needrow.findAll('td')[6].string, inline=True)
+    embed.add_field(name="New Cases", value=needrow.findAll('td')[3].string, inline=True)
+    embed.add_field(name="New Deaths", value=needrow.findAll('td')[5].string, inline=True)
+    embed.add_field(name="Active Cases", value=needrow.findAll('td')[7].string, inline=True)
+    embed.add_field(name="Serious Cases", value=needrow.findAll('td')[8].string, inline=True)
+    embed.add_field(name="Cases/1M", value=needrow.findAll('td')[9].string, inline=True)
+    embed.add_field(name="Deaths/1M", value=needrow.findAll('td')[10].string, inline=True)
+    if country != "world":
+      embed.add_field(name="Total Tests", value=needrow.findAll('td')[11].string, inline=True)
+      embed.add_field(name="Tests/1M", value=needrow.findAll('td')[12].string, inline=True)
+    await ctx.send(embed=embed)
   else:
-    embed = discord.Embed(title="Coronavirus statistics in "+country)
-  embed.add_field(name="Total Cases", value=needrow.findAll('td')[2].string, inline=True)
-  embed.add_field(name="Total Deaths", value=needrow.findAll('td')[4].string, inline=True)
-  embed.add_field(name="Total Recovered", value=needrow.findAll('td')[6].string, inline=True)
-  embed.add_field(name="New Cases", value=needrow.findAll('td')[3].string, inline=True)
-  embed.add_field(name="New Deaths", value=needrow.findAll('td')[5].string, inline=True)
-  embed.add_field(name="Active Cases", value=needrow.findAll('td')[7].string, inline=True)
-  embed.add_field(name="Serious Cases", value=needrow.findAll('td')[8].string, inline=True)
-  embed.add_field(name="Cases/1M", value=needrow.findAll('td')[9].string, inline=True)
-  embed.add_field(name="Deaths/1M", value=needrow.findAll('td')[10].string, inline=True)
-  if country != "world":
-    embed.add_field(name="Total Tests", value=needrow.findAll('td')[11].string, inline=True)
-    embed.add_field(name="Tests/1M", value=needrow.findAll('td')[12].string, inline=True)
-  await ctx.send(embed=embed)
+    await ctx.send("Invalid country. Please try again.")
 
 @bot.command()
 async def population(ctx, country="current"):
