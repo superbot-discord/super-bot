@@ -854,7 +854,7 @@ async def calc(ctx, *, arg = None):
 async def ping(ctx, *, text = None):
   now1 = datetime.now()
   message = await ctx.send("Pong!")
-  mcs = str((datetime.now() - now1).microseconds+(datetime.now() - now1).seconds*1000000)
+  mcs = str((datetime.now() - now1).microseconds+((datetime.now() - now1).total_seconds)%60)
   await message.edit(content="Pong! "+mcs+" microseconds")
 
 @bot.command()
