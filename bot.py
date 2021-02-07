@@ -11,6 +11,7 @@ from pdf2image import convert_from_path
 from PIL import ImageDraw, ImageFilter
 from PyDictionary import PyDictionary
 from discord.ext.commands import *
+import selenium.common.exceptions
 from discord.ext import commands
 from selenium import webdriver
 from markdown2 import Markdown
