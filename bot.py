@@ -437,7 +437,7 @@ async def covid(ctx, country="world"):
   if country.lower() == "world" or country.lower() == "global" or country.lower() == "worldwide" or country.lower() == "everywhere" or country.lower() == "anywhere" or country.lower() == "international" or country.lower() == "internationally" or country.lower() == "globally" or country.lower() == "current":
     country = "world"
   r=requests.get('https://www.worldometers.info/coronavirus/')
-  soup=BeautifulSoup(r.content, features="lxml")
+  soup=BeautifulSoup(r.content)
   covidtable = soup.findAll('table')[0].findAll('tbody')[0]
   for count in covidtable.findAll('tr'):
     if count.findAll('td')[1].string.lower()==country:
