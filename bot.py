@@ -433,13 +433,15 @@ async def invite(ctx, *, text=None):
 @bot.command()
 async def population(ctx, country="current"):
   driver = webdriver.Chrome(options=options)
-  if country == "world" or country == "global" or country == "worldwide" or country == "everywhere" or country == "anywhere" or country == "international" or country == "internationally" or country == "globally":
-    country = "current"
+  if country == "world" or country == "global" or country == "worldwide" or country == "everywhere" or country == "anywhere" or country == "international" or country == "internationally" or country == "globally" or country == "current":
+    country = "current_"
+  else:
+    country = country + "-"
   driver.get("https://www.worldometers.info/world-population/")
   wait = WebDriverWait(driver,1)
   try:
     while True:
-      item = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR,"span[rel='"+country.lower()+"_population']"))).text
+      item = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR,"span[rel='"+country.lower()+"population']"))).text
       if "retrieving data" not in item:
         break
     embed = discord.Embed(title="Population statistics of "+country)
