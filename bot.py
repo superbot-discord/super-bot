@@ -1,8 +1,10 @@
 banned_ids = [757431801487556748, 598477713543659523]
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.chrome.options import Options
 from discord import Webhook, RequestsWebhookAdapter
 from datetime import datetime, date, timedelta
-import wikipedia
+from selenium.webdriver.common.by import By
 from pygoogletranslation import Translator
 from discord_webhook import DiscordWebhook
 from pdf2image import convert_from_path
@@ -20,6 +22,7 @@ from math import *
 import pytesseract
 import time as tm
 import subprocess
+import wikipedia
 import requests
 import aiohttp
 import asyncio
@@ -79,35 +82,6 @@ async def on_message(message):
     await message.channel.send("You are banned from the bot. Expires: 10 Feb. Reason: abuse of =engrave command.")
   elif banned_ids.count(message.author.id)==0:
     await bot.process_commands(message)
-
-"""@bot.event
-async def on_reaction_add(reaction, user):
-  print(1)
-  flagname = reaction.emoji
-  print(2)
-  print(flagname)
-  if "🇦🇫🇦🇽🇦🇱🇩🇿🇦🇸🇦🇩🇦🇴🇦🇮🇦🇶🇦🇬🇦🇷🇦🇲🇦🇼🇦🇨🇦🇺🇦🇹🇦🇿🇧🇸🇧🇭🇧🇩🇧🇧🇧🇾🇧🇪🇧🇿🇧🇯🇧🇲🇧🇹🇧🇴🇧🇦🇧🇼🇧🇻🇧🇷🇮🇴🇻🇬🇧🇳🇧🇬🇧🇫🇧🇮🇰🇭🇨🇲🇨🇦🇮🇨🇨🇻🇧🇶🇰🇾🇨🇫🇪🇦🇹🇩🇨🇱🇨🇳🇨🇽🇨🇵🇨🇨🇨🇴🇰🇲🇨🇬🇨🇩🇨🇰🇨🇷🇨🇮🇭🇷🇨🇺🇨🇼🇨🇾🇨🇿🇩🇰🇩🇬🇩🇯🇩🇲🇩🇴🇪🇨🇪🇬🇸🇻🇬🇶🇪🇷🇪🇪🇪🇹🇪🇺🇫🇰🇫🇴🇫🇯🇫🇮🇫🇷🇬🇫🇵🇫🇹🇫🇬🇦🇬🇲🇬🇪🇩🇪🇬🇭🇬🇮🇬🇷🇬🇱🇬🇩🇬🇵🇬🇺🇬🇹🇬🇬🇬🇳🇬🇼🇬🇾🇭🇹🇭🇲🇭🇳🇭🇰🇭🇺🇮🇸🇮🇳🇮🇩🇮🇷🇮🇶🇮🇪🇮🇲🇮🇱🇮🇹🇯🇲🇯🇵🇯🇪🇯🇴🇰🇿🇰🇪🇰🇮🇽🇰🇰🇼🇰🇬🇱🇦🇱🇻🇱🇧🇱🇸🇱🇷🇱🇾🇱🇮🇱🇹🇱🇺🇲🇴🇲🇰🇲🇬🇲🇼🇲🇾🇲🇻🇲🇱🇲🇹🇲🇭🇲🇶🇲🇷🇲🇺🇾🇹🇲🇽🇫🇲🇲🇩🇲🇨🇲🇳🇲🇪🇲🇸🇲🇦🇲🇿🇲🇲🇳🇦🇳🇷🇳🇵🇳🇱🇳🇨🇳🇿🇳🇮🇳🇪🇳🇬🇳🇺🇳🇫🇲🇵🇰🇵🇳🇴🇴🇲🇵🇰🇵🇼🇵🇸🇵🇦🇵🇬🇵🇾🇵🇪🇵🇭🇵🇳🇵🇱🇵🇹🇵🇷🇶🇦🇷🇪🇷🇴🇷🇺🇷🇼🇼🇸🇸🇲🇸🇹🇸🇦🇸🇳🇷🇸🇸🇨🇸🇱🇸🇬🇸🇽🇸🇰🇸🇮🇸🇧🇸🇴🇿🇦🇬🇸🇰🇷🇸🇸🇪🇸🇱🇰🇧🇱🇸🇭🇰🇳🇱🇨🇲🇫🇵🇲🇻🇨🇸🇩🇸🇷🇸🇯🇸🇿🇸🇪🇨🇭🇸🇾🇹🇼🇹🇯🇹🇿🇹🇭🇹🇱🇹🇬🇹🇰🇹🇴🇹🇹🇹🇦🇹🇳🇹🇷🇹🇲🇹🇨🇹🇻🇺🇬🇺🇦🇦🇪🇬🇧".count(flagname) == 1:
-    print(21)
-    flagname = flagname.replace("flag_gb", "en")
-    flagname = flagname.replace("flag_us", "en")
-    flagname = flagname.replace("flag_ca", "en")
-    flagname = flagname.replace("flag_eu", "en")
-    flagname = flagname.replace("flag_jp", "ja")
-    flagname = flagname.replace("flag_cz", "cs")
-    flagname = flagname.replace("flag_gr", "el")
-    flagname = flagname.replace("flag_cn", "zh-CN")
-    flagname = flagname.replace("flag_hk", "zh-TW")
-    flagname = flagname.replace("flag_tw", "zh-TW")
-    print(3)
-    flagname = flagname.lstrip("_galf:")
-    lang = flagname.replace(":","")
-    print(4)
-    try:
-      msg = await ctx.send("Translating **"+reaction.message.content+"** to "+langdict[lang])
-      translation = translatorvar.translate(reaction.message.content, dest=lang)
-      await msg.edit(content = "**Translation from "+langdict[translatorvar.detect(reaction.message.content).lang]+" to "+langdict[lang]+f":**\n"+translation.text.replace("u003c", "<").replace("u003e", ">").replace("u0026", "&"))
-    except:
-      await reaction.message.channel.send("Sorry, but this language is not supported.")"""
 
 @bot.command()
 async def botpurge(ctx, *, num):
@@ -244,6 +218,10 @@ Kicks a desired user. The Reason is optional.
 
 **ban [User Name, Nickname, ID or Mention] {Reason}**
 Bans a desired user. The Reason is optional.
+
+**slowmode [Seconds] {Channel(s)}**
+Sets the slowmode for the channel. Any non-numeric value, or zero, disables it.
+Channels is optional. If Channel(s) is not provided, the current channel will be set.\nYou are allowed to use multiple channels, or use `all` to set for all channels in the server.
   """
   elif cat=="information" or cat=="info" or cat=="informative":
     ti="Information Commands"
@@ -375,9 +353,9 @@ Turns the PDF to plain text.
     desc="Bans a desired user. The Reason is optional."
   elif cat=="slowmode":
     ti="slowmode [Seconds] {Channel(s)}"
-    desc=f"Sets the slowmode for the channel. Any non-numeric value, or zero, disables it.\nChannels is optional. If Channel(s) is not provided, the current channel will be set.\nYou are allowed to use multiple channels, or use all to set for all channels in the server."
-  elif cat=="math":
-    ti="math [Formula]"
+    desc=f"Sets the slowmode for the channel. Any non-numeric value, or zero, disables it.\nChannels is optional. If Channel(s) is not provided, the current channel will be set.\nYou are allowed to use multiple channels, or use `all` to set for all channels in the server."
+  elif cat=="calc":
+    ti="calc [Formula]"
     desc="Does boring math for you. Logical comparisons, scientific math, variables and user-defined functions are available. Please check the [documentation](https://github.com/johann-lau/Bot/blob/main/README.md#math-help) for more information."
   elif cat=="define":
     ti="define [name] [definition] [arguments separated by spaces]"
@@ -436,10 +414,10 @@ Turns the PDF to plain text.
 `insert` `spoiler` `rawspoiler` `reverse` `emoji`
 
 **Moderation & Information Commands**
-`kick` `ban` `slowmode` `math` `define` `time` `rtimer` `terminate` `timer` (Outdated)
+`kick` `ban` `slowmode` `purgeregex` `purgepy` `purgepygex` `calc` `define` `time` `rtimer` `terminate` `timer` (Outdated)
 
 **Web Commands & Developer Tools**
-`screenshot` `youtube` `wiki` `engrave` `python` `ocr` `text` `html` `md` (beta) `search` (beta)
+`screenshot` `youtube` `wiki` `engrave` `python` `ocr` `text` `html` `md`
 
 Need help? check the [documentation](https://github.com/johann-lau/Bot#bot-documentation)!
   """
@@ -450,6 +428,55 @@ Need help? check the [documentation](https://github.com/johann-lau/Bot#bot-docum
 async def invite(ctx, *, text=None):
   embed = discord.Embed(title="Invite", description = "Our bot could be invited [here](https://discord.com/oauth2/authorize?client_id=796686363604680755&permissions=805399670&scope=bot).")
   await ctx.send(embed=embed)
+
+@bot.command()
+async def population(ctx, country="current"):
+  if country == "world" or country == "global" or country == "worldwide" or country == "everywhere" or country == "anywhere" or country == "international":
+    country = "current"
+  driver.get("https://www.worldometers.info/world-population/")
+  wait = WebDriverWait(driver,1)
+  try:
+    while True:
+      item = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR,"span[rel='"+country.lower()+"_population']"))).text
+      if "retrieving data" not in item:
+        break
+    embed = discord.Embed(title="Population statistics of "+country)
+    embed.add_field(name="Population", value=item, inline=False)
+    if country == "current":
+      embed = discord.Embed(title="Population statistics of "+country, description="First row")
+      while True:
+      item = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR,"span[rel='births_today']"))).text
+      if "retrieving data" not in item:
+        break
+      embed.add_field(name="Births", value=item, inline=True)
+      while True:
+        item = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR,"span[rel='dth1s_today']"))).text
+        if "retrieving data" not in item:
+          break
+      embed.add_field(name="Deaths", value=item, inline=True)
+      while True:
+        item = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR,"span[rel='absolute_growth']"))).text
+        if "retrieving data" not in item:
+          break
+      embed.add_field(name="Net growth", value=item, inline=True)
+      while True:
+      item = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR,"span[rel='births_this_year']"))).text
+      if "retrieving data" not in item:
+        break
+      embed.add_field(name="Births", value=item, inline=True)
+      while True:
+        item = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR,"span[rel='dth1s_this_year']"))).text
+        if "retrieving data" not in item:
+          break
+      embed.add_field(name="Deaths", value=item, inline=True)
+      while True:
+        item = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR,"span[rel='absolute_growth_this_year']"))).text
+        if "retrieving data" not in item:
+          break
+      embed.add_field(name="Net Growth", value=item, inline=True)
+    await ctx.send(embed=embed)
+  except TimeoutException:
+    await ctx.send("Invalid country. Please try again.")
 
 @bot.command()
 async def translate(ctx, langinput = "list", *, text = "Sample text"):
