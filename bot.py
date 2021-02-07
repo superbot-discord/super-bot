@@ -471,14 +471,15 @@ async def covid(ctx, *, country="world"):
     mycolors = ["#4287F5", "#FF5252", "#CAFF99", "#A1A1A1"]
     plt.pie(y, labels = mylabels, colors = mycolors)
     plt.legend()
-    plt.savefig("piechart.png", transparent=True)
-    file = discord.File("piechart.png", filename="piechart.png")
+    plt.savefig("pc.png", transparent=True)
+    file = discord.File("pc.png", filename="piechart.png")
     embed.set_image(url="attachment://piechart.png")
     if country != "world":
       embed.add_field(name="Recovered/1M", value=str(int(needrow.findAll('td')[6].string.replace(",",""))/int(needrow.findAll('td')[14].string.replace(",",""))*1000000), inline=True)
       embed.add_field(name="Total Tests", value=needrow.findAll('td')[12].string, inline=True)
       embed.add_field(name="Tests/1M", value=needrow.findAll('td')[13].string, inline=True)
-    await ctx.send(embed=embed)
+    await ctx.send(file=file, embed=embed)
+    os.remove('pc.png')
   else:
     await ctx.send("Invalid country. Please try again.")
 
