@@ -16,6 +16,7 @@ from discord.ext import commands
 from selenium import webdriver
 from markdown2 import Markdown
 from pnglatex import pnglatex
+from bs4 import BeautifulSoup
 from cmath import *
 import random as ra
 import numpy as np
