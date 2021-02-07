@@ -436,48 +436,48 @@ async def population(ctx, country="current"):
     country = "current"
   driver.get("https://www.worldometers.info/world-population/")
   wait = WebDriverWait(driver,1)
-  try:
+  #try:
+  while True:
+    item = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR,"span[rel='"+country.lower()+"_population']"))).text
+    if "retrieving data" not in item:
+      break
+  embed = discord.Embed(title="Population statistics of "+country)
+  embed.add_field(name="Population", value=item, inline=False)
+  if country == "current":
+    embed = discord.Embed(title="Population statistics of "+country, description="First row")
     while True:
-      item = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR,"span[rel='"+country.lower()+"_population']"))).text
+      item = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR,"span[rel='births_today']"))).text
       if "retrieving data" not in item:
         break
-    embed = discord.Embed(title="Population statistics of "+country)
-    embed.add_field(name="Population", value=item, inline=False)
-    if country == "current":
-      embed = discord.Embed(title="Population statistics of "+country, description="First row")
-      while True:
-        item = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR,"span[rel='births_today']"))).text
-        if "retrieving data" not in item:
-          break
-      embed.add_field(name="Births", value=item, inline=True)
-      while True:
-        item = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR,"span[rel='dth1s_today']"))).text
-        if "retrieving data" not in item:
-          break
-      embed.add_field(name="Deaths", value=item, inline=True)
-      while True:
-        item = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR,"span[rel='absolute_growth']"))).text
-        if "retrieving data" not in item:
-          break
-      embed.add_field(name="Net growth", value=item, inline=True)
-      while True:
-        item = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR,"span[rel='births_this_year']"))).text
-        if "retrieving data" not in item:
-          break
-      embed.add_field(name="Births", value=item, inline=True)
-      while True:
-        item = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR,"span[rel='dth1s_this_year']"))).text
-        if "retrieving data" not in item:
-          break
-      embed.add_field(name="Deaths", value=item, inline=True)
-      while True:
-        item = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR,"span[rel='absolute_growth_this_year']"))).text
-        if "retrieving data" not in item:
-          break
-      embed.add_field(name="Net Growth", value=item, inline=True)
-    await ctx.send(embed=embed)
-  except TimeoutException:
-    await ctx.send("Invalid country. Please try again.")
+    embed.add_field(name="Births", value=item, inline=True)
+    while True:
+      item = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR,"span[rel='dth1s_today']"))).text
+      if "retrieving data" not in item:
+        break
+    embed.add_field(name="Deaths", value=item, inline=True)
+    while True:
+      item = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR,"span[rel='absolute_growth']"))).text
+      if "retrieving data" not in item:
+        break
+    embed.add_field(name="Net growth", value=item, inline=True)
+    while True:
+      item = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR,"span[rel='births_this_year']"))).text
+      if "retrieving data" not in item:
+        break
+    embed.add_field(name="Births", value=item, inline=True)
+    while True:
+      item = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR,"span[rel='dth1s_this_year']"))).text
+      if "retrieving data" not in item:
+        break
+    embed.add_field(name="Deaths", value=item, inline=True)
+    while True:
+      item = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR,"span[rel='absolute_growth_this_year']"))).text
+      if "retrieving data" not in item:
+        break
+    embed.add_field(name="Net Growth", value=item, inline=True)
+  await ctx.send(embed=embed)
+  #except selenium.common.exceptions.TimeoutException:
+  #  await ctx.send("Invalid country. Please try again.")
 
 @bot.command()
 async def translate(ctx, langinput = "list", *, text = "Sample text"):
