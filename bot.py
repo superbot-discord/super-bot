@@ -438,11 +438,16 @@ async def covid(ctx, country="world"):
     country = "world"
   r=requests.get('https://www.worldometers.info/coronavirus/')
   soup=BeautifulSoup(r.content)
+  exec("country_pattern = re.compile(r'"+country+"', re.IGNORECASE)", globals())
   covidtable = soup.findAll('table')[0].findAll('tbody')[0]
   for count in covidtable.findAll('tr'):
-    if count.findAll('td')[1].string.lower()==country:
-      needrow = count
-      break
+    try:
+      match = country_pattern.fullmatch(count.findAll('td')[1].string)
+      if match:
+        needrow = count
+        break
+    except:
+      1
   if country == "world":
     embed = discord.Embed(title="Coronavirus statistics worldwide")
   else:
