@@ -445,9 +445,9 @@ async def population(ctx, country="current"):
     if country == "current":
       embed = discord.Embed(title="Population statistics of "+country, description="First row")
       while True:
-      item = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR,"span[rel='births_today']"))).text
-      if "retrieving data" not in item:
-        break
+        item = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR,"span[rel='births_today']"))).text
+        if "retrieving data" not in item:
+          break
       embed.add_field(name="Births", value=item, inline=True)
       while True:
         item = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR,"span[rel='dth1s_today']"))).text
@@ -460,9 +460,9 @@ async def population(ctx, country="current"):
           break
       embed.add_field(name="Net growth", value=item, inline=True)
       while True:
-      item = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR,"span[rel='births_this_year']"))).text
-      if "retrieving data" not in item:
-        break
+        item = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR,"span[rel='births_this_year']"))).text
+        if "retrieving data" not in item:
+          break
       embed.add_field(name="Births", value=item, inline=True)
       while True:
         item = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR,"span[rel='dth1s_this_year']"))).text
