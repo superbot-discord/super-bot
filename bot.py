@@ -444,7 +444,7 @@ async def population(ctx, country="current"):
       item = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR,"span[rel='"+country.lower()+"population']"))).text
       if "retrieving data" not in item:
         break
-    embed = discord.Embed(title="Population statistics of "+country)
+    embed = discord.Embed(title="Population statistics of "+country.rstrip("-"))
     embed.add_field(name="Population", value=item, inline=False)
     if country == "current":
       embed = discord.Embed(title="Population statistics worldwide", description="Total Population: "+item)
