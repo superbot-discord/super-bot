@@ -431,9 +431,39 @@ async def invite(ctx, *, text=None):
   await ctx.send(embed=embed)
 
 @bot.command()
+async def covid(ctx, country="world"):
+  driver = webdriver.Chrome(options=options)
+  if country.lower() == "world" or country.lower() == "global" or country.lower() == "worldwide" or country.lower() == "everywhere" or country.lower() == "anywhere" or country.lower() == "international" or country.lower() == "internationally" or country.lower() == "globally" or country.lower() == "current":
+    country = "world"
+  r=requests.get('https://www.worldometers.info/coronavirus/')
+  soup=BeautifulSoup(r.content, features="lxml")
+  covidtable = soup.findAll('table')[0].findAll('tbody')[0]
+  for count in covidtable.findAll('tr'):
+    if count.findAll('td')[1].string.lower()==country:
+      needrow = count
+      break
+  if country == "world":
+    embed = discord.Embed(title="Coronavirus statistics worldwide")
+  else:
+    embed = discord.Embed(title="Coronavirus statistics in "+country)
+  embed.add_field(name="Total Cases", value=needrow.findAll('td')[2], inline=True)
+  embed.add_field(name="Total Deaths", value=needrow.findAll('td')[4], inline=True)
+  embed.add_field(name="Total Recovered", value=needrow.findAll('td')[6], inline=True)
+  embed.add_field(name="New Cases", value=needrow.findAll('td')[3], inline=True)
+  embed.add_field(name="New Deaths", value=needrow.findAll('td')[5], inline=True)
+  embed.add_field(name="Active Cases", value=needrow.findAll('td')[7], inline=True)
+  embed.add_field(name="Serious Cases", value=needrow.findAll('td')[8], inline=True)
+  embed.add_field(name="Cases/1M", value=needrow.findAll('td')[9], inline=True)
+  embed.add_field(name="Deaths/1M", value=needrow.findAll('td')[10], inline=True)
+  if country != "world":
+    embed.add_field(name="Total Tests", value=needrow.findAll('td')[11], inline=True)
+    embed.add_field(name="Tests/1M", value=needrow.findAll('td')[12], inline=True)
+  await ctx.send(embed=embed)
+
+@bot.command()
 async def population(ctx, country="current"):
   driver = webdriver.Chrome(options=options)
-  if country == "world" or country == "global" or country == "worldwide" or country == "everywhere" or country == "anywhere" or country == "international" or country == "internationally" or country == "globally" or country == "current":
+  if country.lower() == "world" or country.lower() == "global" or country.lower() == "worldwide" or country.lower() == "everywhere" or country.lower() == "anywhere" or country.lower() == "international" or country.lower() == "internationally" or country.lower() == "globally" or country.lower() == "current":
     country = "current_"
   else:
     country = country + "-"
@@ -446,7 +476,7 @@ async def population(ctx, country="current"):
         break
     embed = discord.Embed(title="Population statistics of "+country.rstrip("-"))
     embed.add_field(name="Population", value=item, inline=False)
-    if country == "current":
+    if country == "current_":
       embed = discord.Embed(title="Population statistics worldwide", description="Total Population: "+item)
       while True:
         item = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR,"span[rel='births_today']"))).text
