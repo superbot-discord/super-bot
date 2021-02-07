@@ -682,8 +682,7 @@ async def transparent(ctx, alpha = 128):
   img = PIL.Image.open("Not_Transparent.png")
   img2 = img.copy()
   img2.putalpha(int(alpha))
-  img.paste(img2, img)
-  img.save('Transparent.png')
+  img2.save('Transparent.png')
   await ctx.send(file = discord.File('Transparent.png'))
   os.remove('Transparent.png')
 
@@ -1014,11 +1013,11 @@ async def definition(ctx, *, word):
   desc = desc + f"**Synonyms**\n"
   for count in dictionary.synonym(word):
     desc = desc + count + ", "
-  desc = desc [:-2]
+  desc = desc[:-2]
   desc = desc + f"\n**Antonyms**\n"
   for count in dictionary.antonym(word):
     desc = desc + count + ", "
-  desc = desc [:-2]
+  desc = desc[:-2]
   embed = discord.Embed(title=ti, description=desc)
   await ctx.send(embed=embed)
 
