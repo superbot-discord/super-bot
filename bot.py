@@ -431,7 +431,8 @@ async def invite(ctx, *, text=None):
 
 @bot.command()
 async def population(ctx, country="current"):
-  if country == "world" or country == "global" or country == "worldwide" or country == "everywhere" or country == "anywhere" or country == "international":
+  driver = webdriver.Chrome(options=options)
+  if country == "world" or country == "global" or country == "worldwide" or country == "everywhere" or country == "anywhere" or country == "international" or country == "internationally" or country == "globally":
     country = "current"
   driver.get("https://www.worldometers.info/world-population/")
   wait = WebDriverWait(driver,1)
