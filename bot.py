@@ -463,8 +463,8 @@ async def pie(ctx, title, numbers, labels):
     return "{:d} ({:.1f}%)".format(int(pct/100.*np.sum(allvals)), pct)
   y = np.array(numbers.split(","))
   mycolors = []
-  for count in range(0, 1+1/len(numbers), 1/len(numbers)):
-    mycolors.append(cmaphsv(count))
+  for count in range(0, len(numbers.split(","))):
+    mycolors.append(cmaphsv(count/len(numbers.split(","))))
   plt.pie(y, labels = labels.split(","), colors=mycolors, autopct=lambda pct: func(pct, y), textprops = {'color':"w"})
   plt.legend(loc="lower right")
   plt.setp(autotexts, size=8, weight="bold")
