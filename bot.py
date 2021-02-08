@@ -78,7 +78,7 @@ def is_me(msg):
   return msg.author == client.user
 def func(pct, allvals):
   absolute = int(pct/100*np.sum(allvals))
-  return "{:d}\n({:.1f}%)".format(absolute, pct)
+  return "{:d} ({:.1f}%)".format(absolute, pct)
 
 async def on_ready(self):
   print('Connected!')
