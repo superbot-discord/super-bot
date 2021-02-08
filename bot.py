@@ -459,10 +459,13 @@ async def invite(ctx, *, text=None):
 
 @bot.command()
 async def pie(ctx, title, numbers, labels):
-  y = np.array(numbers.split(","))
+  numlst = []
+  for count in numbers.split(","):
+    numlist.append(int(count))
+  y = np.array(numlist)
   mycolors = []
-  for count in range(0, len(numbers.split(","))):
-    mycolors.append(cmaphsv(count/len(numbers.split(","))))
+  for count in range(0, len(numlist)):
+    mycolors.append(cmaphsv(count/len(numlist)))
   plt.pie(y, labels = labels.split(","), colors=mycolors, autopct=lambda pct: func(pct, y), textprops = {'color':"w"})
   plt.legend(loc="lower right")
   plt.setp(autotexts, size=8, weight="bold")
