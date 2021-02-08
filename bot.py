@@ -526,11 +526,10 @@ async def covid(ctx, *, country="world"):
     plt.legend(loc="lower right")
     plt.savefig("pc2.png", transparent=True)
     plt.clf()
-    file = discord.File("pc2.png")
+    filelist = [discord.File("pc2.png"), discord.File("pc2.png")]
     embed.set_thumbnail(url="attachment://pc2.png")
-    file = discord.File("pc1.png")
     embed.set_image(url="attachment://pc1.png")
-    await ctx.send(file=file, embed=embed)
+    await ctx.send(files=filelist, embed=embed)
     os.remove('pc1.png')
     os.remove('pc2.png')
   else:
