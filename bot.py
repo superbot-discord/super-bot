@@ -73,7 +73,7 @@ options.headless = True
 options.add_argument('--no-sandbox')
 options.add_argument('--disable-dev-shm-usage')
 markdowner = Markdown(extras=["strike", "footnotes"])
-hsvcmap = plt.cm.hsv
+cmaphsv = plt.cm.hsv
 wikipedia.set_lang("en")
 def is_me(msg):
   return msg.author == client.user
