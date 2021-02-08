@@ -490,8 +490,8 @@ async def covid(ctx, *, country="world"):
       driver.get("https://www.worldometers.info/world-population/")
       wait = WebDriverWait(driver,2)
       while True:
-        item = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR,"span[rel='current_population']"))).text
-        if "retrieving data" not in item:
+        tpopulation = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR,"span[rel='current_population']"))).text
+        if "retrieving data" not in tpopulation:
           break
     embed.add_field(name="Total Cases", value=tcases, inline=True)
     embed.add_field(name="Total Deaths", value=tdeath, inline=True)
