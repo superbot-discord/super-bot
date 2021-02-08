@@ -469,13 +469,13 @@ async def covid(ctx, *, country="world"):
     y = np.array([int(needrow.findAll('td')[8].string.replace(",",""))-int(needrow.findAll('td')[9].string.replace(",","")), int(needrow.findAll('td')[9].string.replace(",","")), int(needrow.findAll('td')[6].string.replace(",","")), int(needrow.findAll('td')[4].string.replace(",",""))])
     mylabels = ["Active (Mild)", "Active (Serious)", "Recovered", "Died"]
     mycolors = ["#4287F5", "#FF5252", "#CAFF99", "#A1A1A1"]
-    plt.pie(y, labels = mylabels, colors = mycolors)
+    plt.pie(y, labels = mylabels, colors = mycolors, textprops = {color:"#707070"})
     plt.legend()
     plt.savefig("pc.png", transparent=True)
     file = discord.File("pc.png", filename="piechart.png")
     embed.set_image(url="attachment://piechart.png")
     if country != "world":
-      embed.add_field(name="Recovered/1M", value=str(int(needrow.findAll('td')[6].string.replace(",",""))/int(needrow.findAll('td')[14].string.replace(",",""))*1000000), inline=True)
+      #embed.add_field(name="Recovered/1M", value=str(int(needrow.findAll('td')[6].string.replace(",",""))/int(needrow.findAll('td')[14].string.replace(",",""))*1000000), inline=True)
       embed.add_field(name="Total Tests", value=needrow.findAll('td')[12].string, inline=True)
       embed.add_field(name="Tests/1M", value=needrow.findAll('td')[13].string, inline=True)
     await ctx.send(file=file, embed=embed)
