@@ -457,8 +457,14 @@ async def invite(ctx, *, text=None):
   await ctx.send(embed=embed)
 
 @bot.command()
-async def pie()
-
+async def pie(ctx, title, numbers, labels):
+  def func(pct, allvals):
+    return "{:d} ({:.1f}%)".format(int(pct/100.*np.sum(allvals)), pct)
+  y = np.array(numbers.split(","))
+  plt.pie(y, labels = labels.split(","), cmap = 'hsv', autopct=lambda pct: func(pct, y), textprops = {'color':"w"})
+  plt.legend(loc="lower right")
+  plt.setp(autotexts, size=8, weight="bold")
+  plt.set_title(title)
 
 @bot.command()
 async def covid(ctx, *, country="world"):
