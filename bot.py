@@ -472,7 +472,7 @@ async def covid(ctx, *, country="world"):
     y = np.array([int(needrow.findAll('td')[8].string.replace(",",""))-int(needrow.findAll('td')[9].string.replace(",","")), int(needrow.findAll('td')[9].string.replace(",","")), int(needrow.findAll('td')[6].string.replace(",","")), int(needrow.findAll('td')[4].string.replace(",",""))])
     mylabels = ["Active (Mild)", "Active (Serious)", "Recovered", "Died"]
     mycolors = ["#4287F5", "#FF5252", "#CAFF99", "#A1A1A1"]
-    plt.pie(y, labels = mylabels, colors = mycolors, autopct=lambda pct: func(pct, data), textprops = dict(color="#707070"))
+    plt.pie(y, labels = mylabels, colors = mycolors, autopct=lambda pct: func(pct, y), textprops = dict(color="#707070"))
     plt.legend(loc="center right")
     plt.savefig("pc.png", transparent=True)
     file = discord.File("pc.png", filename="piechart.png")
