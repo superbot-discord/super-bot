@@ -1312,10 +1312,6 @@ async def insert(ctx,emoji,*,text):
 
 @bot.command()
 async def purge(ctx, num):
-  try:
-    await ctx.message.delete()
-  except:
-    1
   if ctx.author.permissions_in(ctx.channel).manage_messages or ctx.author.id == 687474789342117900:
     num=int(num)
     await ctx.channel.purge(limit=num+1)
