@@ -519,8 +519,6 @@ async def covid(ctx, *, country="world"):
     plt.legend(loc="lower right")
     plt.savefig("pc1.png", transparent=True)
     plt.clf()
-    file = discord.File("pc1.png", filename="piechart1.png")
-    embed.set_image(url="attachment://piechart1.png")
     mylabels = ["Non-infected", "Infected"]
     mycolors = ["#A0A0A0", "#FF5252"]
     y = np.array([int(tpopulation.replace(",",""))-int(tcases.replace(",","")), int(tcases.replace(",",""))])
@@ -528,6 +526,8 @@ async def covid(ctx, *, country="world"):
     plt.legend(loc="lower right")
     plt.savefig("pc2.png", transparent=True)
     plt.clf()
+    file = discord.File("pc1.png", filename="piechart1.png")
+    embed.set_image(url="attachment://piechart1.png")
     file = discord.File("pc2.png", filename="piechart2.png")
     embed.set_thumbnail(url="attachment://piechart2.png")
     os.remove('pc1.png')
