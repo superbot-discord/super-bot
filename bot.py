@@ -483,6 +483,7 @@ async def covid(ctx, *, country="world"):
     tactive = needrow.findAll('td')[8].string
     tserious = needrow.findAll('td')[9].string
     tdeath = needrow.findAll('td')[4].string
+    tpopulation = needrow.findAll('td')[14].findAll('a')[0].string
     embed.add_field(name="Total Cases", value=tcases, inline=True)
     embed.add_field(name="Total Deaths", value=tdeath, inline=True)
     embed.add_field(name="Total Recovered", value=trecovered, inline=True)
@@ -496,7 +497,7 @@ async def covid(ctx, *, country="world"):
     embed.add_field(name="Cases/1M", value=needrow.findAll('td')[10].string, inline=True)
     embed.add_field(name="Deaths/1M", value=needrow.findAll('td')[11].string, inline=True)
     if country != "world":
-      embed.add_field(name="Recovered/1M", value=str(int(trecovered.replace(",",""))/int(needrow.findAll('td')[14].findAll('a')[0].string.replace(",",""))*1000000), inline=True)
+      embed.add_field(name="Recovered/1M", value=str(int(trecovered.replace(",",""))/int(tpopulation.replace(",",""))*1000000), inline=True)
       embed.add_field(name="Total Tests", value=ttest, inline=True)
       embed.add_field(name="Tests/1M", value=needrow.findAll('td')[13].string, inline=True)
     mylabels = ["Active (Mild)", "Active (Serious)", "Recovered", "Died"]
@@ -505,11 +506,21 @@ async def covid(ctx, *, country="world"):
     plt.pie(y, labels = mylabels, colors = mycolors, autopct=lambda pct: func(pct, y), textprops = {'color':"#707070"}, pctdistance=0.7)
     plt.legend(loc="lower right")
     plt.savefig("pc.png", transparent=True)
+    plt.clf()
     file = discord.File("pc.png", filename="piechart.png")
     embed.set_image(url="attachment://piechart.png")
-    await ctx.send(file=file, embed=embed)
     os.remove('pc.png')
+    mylabels = ["Non-infected", "Infected"]
+    mycolors = ["#A0A0A0", "FF5252"]
+    y = np.array([int(tpopulation.replace(",",""))-int(tcases.replace(",","")), int(tcases.replace(",",""))])
+    plt.pie(y, labels = mylabels, colors = mycolors, autopct=lambda pct: func(pct, y), textprops = {'color':"#707070"}, pctdistance=0.7)
+    plt.legend(loc="lower right")
+    plt.savefig("pc.png", transparent=True)
     plt.clf()
+    file = discord.File("pc.png", filename="piechart.png")
+    embed.set_thumbnail(url="attachment://piechart.png")
+    os.remove('pc.png')
+    await ctx.send(file=file, embed=embed)
   else:
     await ctx.send("Invalid country. Please try again.")
 
