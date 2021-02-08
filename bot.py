@@ -458,9 +458,7 @@ async def invite(ctx, *, text=None):
   await ctx.send(embed=embed)
 
 @bot.command()
-async def pie(ctx, title, numbers, labels):
-  def func(pct, allvals):
-    return "{:d} ({:.1f}%)".format(int(pct/100.*np.sum(allvals)), pct)
+async def pie(ctx, title, numbers, labels):p
   y = np.array(numbers.split(","))
   mycolors = []
   for count in range(0, len(numbers.split(","))):
