@@ -484,7 +484,7 @@ async def covid(ctx, *, country="world"):
     mylabels = ["Active (Mild)", "Active (Serious)", "Recovered", "Died"]
     mycolors = ["#4287F5", "#FF5252", "#CAFF99", "#A1A1A1"]
     y = np.array([int(tactive.replace(",",""))-int(tserious.replace(",","")), int(tserious.replace(",","")), int(trecovered.replace(",","")), int(tdeath.replace(",",""))])
-    plt.pie(y, labels = mylabels, colors = mycolors, autopct=lambda pct: func(pct, y), textprops = dict(color="#707070"))
+    plt.pie(y, labels = mylabels, colors = mycolors, autopct=lambda pct: func(pct, y), textprops = {'color':"#707070"}, pctdistance=0.8)
     plt.legend(loc="lower right")
     plt.savefig("pc.png", transparent=True)
     file = discord.File("pc.png", filename="piechart.png")
@@ -2077,7 +2077,7 @@ Region: """+str(guild.region)
     f13v=guild.description
     if f13v==None:
       f13v="No description"
-    embed.add_field(name="Text Channels ("+str(len(guild.text_channels))+")", value=f0v, inline=True)
+    embed.add_field(name="Text Channels ("+str(len(guild.text_channels))+")", value=f0v, inline=False)
     embed.add_field(name="Voice Channels ("+str(len(guild.voice_channels))+")", value=f1v, inline=True)
     embed.add_field(name="Categories ("+str(len(guild.categories))+")", value=f1vb, inline=True)
     embed.add_field(name="Roles ("+str(len(guild.roles))+")", value=f1va, inline=False)
