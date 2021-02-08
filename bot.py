@@ -467,8 +467,14 @@ async def covid(ctx, *, country="world"):
     embed.add_field(name="New Recovered", value=needrow.findAll('td')[7].string, inline=True)
     embed.add_field(name="Active Cases", value=needrow.findAll('td')[8].string, inline=True)
     embed.add_field(name="Serious Cases", value=needrow.findAll('td')[9].string, inline=True)
+    if country != "world":
+      embed.add_field(name="Cases/Tests", value=str(int(needrow.findAll('td')[2].string)/int(needrow.findAll('td')[12].string)), inline=True)
     embed.add_field(name="Cases/1M", value=needrow.findAll('td')[10].string, inline=True)
     embed.add_field(name="Deaths/1M", value=needrow.findAll('td')[11].string, inline=True)
+    if country != "world":
+      embed.add_field(name="Recovered/1M", value=str(int(needrow.findAll('td')[6].string.replace(",",""))/int(needrow.findAll('td')[14].findAll('a')[0].string.replace(",",""))*1000000), inline=True)
+      embed.add_field(name="Total Tests", value=needrow.findAll('td')[12].string, inline=True)
+      embed.add_field(name="Tests/1M", value=needrow.findAll('td')[13].string, inline=True)
     y = np.array([int(needrow.findAll('td')[8].string.replace(",",""))-int(needrow.findAll('td')[9].string.replace(",","")), int(needrow.findAll('td')[9].string.replace(",","")), int(needrow.findAll('td')[6].string.replace(",","")), int(needrow.findAll('td')[4].string.replace(",",""))])
     mylabels = ["Active (Mild)", "Active (Serious)", "Recovered", "Died"]
     mycolors = ["#4287F5", "#FF5252", "#CAFF99", "#A1A1A1"]
@@ -477,12 +483,6 @@ async def covid(ctx, *, country="world"):
     plt.savefig("pc.png", transparent=True)
     file = discord.File("pc.png", filename="piechart.png")
     embed.set_image(url="attachment://piechart.png")
-    if country != "world":
-      print(needrow.findAll('td')[6].string)
-      print(needrow.findAll('td')[14].findAll('a')[0].string)
-      #embed.add_field(name="Recovered/1M", value=str(int(needrow.findAll('td')[6].string.replace(",",""))/int(needrow.findAll('td')[14].string.replace(",",""))*1000000), inline=True)
-      embed.add_field(name="Total Tests", value=needrow.findAll('td')[12].string, inline=True)
-      embed.add_field(name="Tests/1M", value=needrow.findAll('td')[13].string, inline=True)
     await ctx.send(file=file, embed=embed)
     os.remove('pc.png')
     plt.clf()
