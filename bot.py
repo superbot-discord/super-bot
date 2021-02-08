@@ -1,4 +1,3 @@
-banned_ids = [757431801487556748, 598477713543659523]
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.chrome.options import Options
@@ -35,7 +34,9 @@ import pytz
 import PIL
 import re
 import os
-
+banned_ids = []
+banned_text = []
+bot_admins = [687474789342117900]
 file = open("program.py", "x")
 set(pytz.all_timezones_set)
 dictionary=PyDictionary()
@@ -84,10 +85,27 @@ async def on_ready(self):
 
 @bot.event
 async def on_message(message):
-  if message.author.id == 746227806278647928 and message.content.startswith("="):
-    await message.channel.send("You are banned from the bot. Expires: 10 Feb. Reason: abuse of =engrave command.")
-  elif banned_ids.count(message.author.id)==0:
+  if banned_ids.count(message.author.id)==0 and message.content.startswith("="):
     await bot.process_commands(message)
+  else:
+    await ctx.send("You are banned from the bot. Reason: "+banned_text[banned_id.index(message.author.id)])
+
+@bot.command()
+async def botban(ctx, user = discord.User, *, text="No reason was provided"):
+  if ctx.author.id == 687474789342117900:
+    banned_ids.append(user.id)
+    banned_text.append(text)
+
+@bot.command()
+async def botunban(ctx, user = discord.User):
+  if ctx.author.id == 687474789342117900:
+    banned_text.remove(banned_text[banned_ids.index(user.id)])
+    banned_ids.remove(user.id)
+
+@bot.command()
+async def botadmin(ctx, user = discord.User):
+  if ctx.author.id == 687474789342117900:
+    bot_admins.append(user.id)
 
 @bot.command()
 async def botpurge(ctx, *, num):
@@ -95,7 +113,7 @@ async def botpurge(ctx, *, num):
     await ctx.message.delete()
   except:
     1
-  if ctx.author.permissions_in(ctx.channel).manage_messages or ctx.author.id == 687474789342117900:
+  if ctx.author.permissions_in(ctx.channel).manage_messages or bot_admins.count(ctx.author.id)!=0:
     num = int(num)
     purged = 0
     async for count in ctx.channel.history(limit=1000):
@@ -1250,9 +1268,7 @@ async def type(ctx):
 
 @bot.command()
 async def embed(ctx,*,text):
-  if ctx.author.id == 746227806278647928 and ctx.guild.id == 801994114467233862:
-    embed = discord.Embed(title="Rules", description="There are no rules! Have fun!")
-  elif ctx.author.id != 746227806278647928:
+  if ctx.author.id != 746227806278647928:
       textlist=text.splitlines()
       if textlist[3] == "":
         embed=discord.Embed(title=textlist[0], url=textlist[1], description=textlist[2].replace("{{{newline}}}","\n"))
@@ -1319,7 +1335,7 @@ async def insert(ctx,emoji,*,text):
 
 @bot.command()
 async def purge(ctx, num):
-  if ctx.author.permissions_in(ctx.channel).manage_messages or ctx.author.id == 687474789342117900:
+  if ctx.author.permissions_in(ctx.channel).manage_messages or bot_admins.count(ctx.author.id)!=0:
     num=int(num)
     await ctx.channel.purge(limit=num+1)
     await ctx.send("Purging completed.", delete_after = 5)
@@ -1332,7 +1348,7 @@ async def purgeregex(ctx, num, *, regex):
     await ctx.message.delete()
   except:
     1
-  if ctx.author.permissions_in(ctx.channel).manage_messages or ctx.author.id == 687474789342117900:
+  if ctx.author.permissions_in(ctx.channel).manage_messages or bot_admins.count(ctx.author.id)!=0:
     exec("purge_pattern = re.compile(r'"+regex+"')", globals())
     num = int(num)
     purged = 0
@@ -1357,7 +1373,7 @@ async def purgepygex(ctx, num, regex, *, pyscript):
     await ctx.message.delete()
   except:
     1
-  if ctx.author.permissions_in(ctx.channel).manage_messages or ctx.author.id == 687474789342117900:
+  if ctx.author.permissions_in(ctx.channel).manage_messages or bot_admins.count(ctx.author.id)!=0:
     exec("purge_pattern = re.compile(r'"+regex+"', re.IGNORECASE)", globals())
     num = int(num)
     purged = 0
@@ -1382,7 +1398,7 @@ async def purgepy(ctx, num, *, pyscript):
     await ctx.message.delete()
   except:
     1
-  if ctx.author.permissions_in(ctx.channel).manage_messages or ctx.author.id == 687474789342117900:
+  if ctx.author.permissions_in(ctx.channel).manage_messages or bot_admins.count(ctx.author.id)!=0:
     num = int(num)
     purged = 0
     async for msg in ctx.channel.history(limit=1000):
@@ -1402,7 +1418,7 @@ async def purgeuser(ctx, num, userinput : discord.User):
     await ctx.message.delete()
   except:
     1
-  if ctx.author.permissions_in(ctx.channel).manage_messages or ctx.author.id == 687474789342117900:
+  if ctx.author.permissions_in(ctx.channel).manage_messages or bot_admins.count(ctx.author.id)!=0:
     num = int(num)
     purged = 0
     async for count in ctx.channel.history(limit=1000):
@@ -2403,7 +2419,7 @@ async def uservoice(ctx,channel: discord.VoiceChannel, user: discord.Member=None
 
 @bot.command(pass_context=True)
 async def spam(ctx,times,*,message):
-  if (int(times)<30 and message.count("@")==0) or ctx.author.id == 687474789342117900:
+  if (int(times)<30 and message.count("@")==0) or bot_admins.count(ctx.author.id)!=0:
     try:
       await ctx.message.delete()
     except:
@@ -2415,7 +2431,7 @@ async def spam(ctx,times,*,message):
 
 @bot.command()
 async def ban(ctx, user: discord.Member, *, reason="No reason provided"):
-  if ctx.author.permissions_in(ctx.channel).ban_members or ctx.author.id == 687474789342117900:
+  if ctx.author.permissions_in(ctx.channel).ban_members or bot_admins.count(ctx.author.id)!=0:
     embed = discord.Embed(title=f"{user.name} was banned.", description=f"Reason: {reason}\nBy: {ctx.author.mention}")
     await ctx.send(embed=embed)
     embed = discord.Embed(title=f"You were banned from the server.", description=f"Reason: {reason}\nBy: {ctx.author.mention}")
@@ -2426,7 +2442,7 @@ async def ban(ctx, user: discord.Member, *, reason="No reason provided"):
 
 @bot.command()
 async def unban(ctx, user: discord.User, *, reason="No reason provided"):
-  if ctx.author.permissions_in(ctx.channel).ban_members or ctx.author.id == 687474789342117900:
+  if ctx.author.permissions_in(ctx.channel).ban_members or bot_admins.count(ctx.author.id)!=0:
     embed = discord.Embed(title=f"{user.name} was unbanned.", description=f"Reason: {reason}\nBy: {ctx.author.mention}")
     await ctx.send(embed=embed)
     await ctx.guild.unban(user)
@@ -2435,7 +2451,7 @@ async def unban(ctx, user: discord.User, *, reason="No reason provided"):
 
 @bot.command()
 async def kick(ctx, user: discord.Member, *, reason="No reason provided"):
-  if ctx.author.permissions_in(ctx.channel).kick_members or ctx.author.id == 687474789342117900:
+  if ctx.author.permissions_in(ctx.channel).kick_members or bot_admins.count(ctx.author.id)!=0:
     embed = discord.Embed(title=f"{user.name} was kicked.", description=f"Reason: {reason}\nBy: {ctx.author.mention}")
     await ctx.send(embed=embed)
     embed = discord.Embed(title=f"You were kicked from the server.", description=f"Reason: {reason}\nBy: {ctx.author.mention}")
@@ -2460,7 +2476,7 @@ async def slowmode(ctx, sec = None, *, channels = None):
         allchannel = ctx.message.channel_mentions
       channellist = []
       for count in allchannel:
-        if ctx.author.permissions_in(count).manage_channels or ctx.author.id == 687474789342117900:
+        if ctx.author.permissions_in(count).manage_channels or bot_admins.count(ctx.author.id)!=0:
           orsec = str(count.slowmode_delay)
           await count.edit(slowmode_delay = sec)
           channellist.append(count.mention)
