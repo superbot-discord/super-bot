@@ -87,8 +87,8 @@ async def on_ready(self):
 async def on_message(message):
   if banned_ids.count(message.author.id)==0 and message.content.startswith("="):
     await bot.process_commands(message)
-  else:
-    await ctx.send("You are banned from the bot. Reason: "+banned_text[banned_id.index(message.author.id)])
+  elif message.content.startswith("="):
+    await message.channel.send("You are banned from the bot. Reason: "+banned_text[banned_id.index(message.author.id)])
 
 @bot.command()
 async def botban(ctx, user = discord.User, *, text="No reason was provided"):
