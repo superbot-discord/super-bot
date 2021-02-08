@@ -458,7 +458,7 @@ async def invite(ctx, *, text=None):
   await ctx.send(embed=embed)
 
 @bot.command()
-async def pie(ctx, title, numbers, labels):p
+async def pie(ctx, title, numbers, labels):
   y = np.array(numbers.split(","))
   mycolors = []
   for count in range(0, len(numbers.split(","))):
@@ -467,6 +467,11 @@ async def pie(ctx, title, numbers, labels):p
   plt.legend(loc="lower right")
   plt.setp(autotexts, size=8, weight="bold")
   plt.set_title(title)
+  plt.savefig("piechart.png", transparent=True)
+  plt.clf()
+  file = discord.File("piechart.png")
+  await ctx.send(file=file)
+  os.remove('piechart.png')
 
 @bot.command()
 async def covid(ctx, *, country="world"):
