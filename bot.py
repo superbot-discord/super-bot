@@ -526,13 +526,13 @@ async def covid(ctx, *, country="world"):
     plt.legend(loc="lower right")
     plt.savefig("pc2.png", transparent=True)
     plt.clf()
-    file = discord.File("pc1.png", filename="piechart1.png")
+    file = discord.File("pc1.png", filename="pieone.png")
     embed.set_image(url="attachment://piechart1.png")
     file = discord.File("pc2.png", filename="piechart2.png")
-    embed.set_thumbnail(url="attachment://piechart2.png")
+    embed.set_thumbnail(url="attachment://pietwo.png")
+    await ctx.send(file=file, embed=embed)
     os.remove('pc1.png')
     os.remove('pc2.png')
-    await ctx.send(file=file, embed=embed)
   else:
     await ctx.send("Invalid country. Please try again.")
 
