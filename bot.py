@@ -77,7 +77,7 @@ def is_me(msg):
   return msg.author == client.user
 def func(pct, allvals):
   absolute = int(pct/100.*np.sum(allvals))
-  return "{:.1f}%\n({:d} g)".format(pct, absolute)
+  return "{:d}\n({:.1f}%)".format(absolute, pct)
 
 async def on_ready(self):
   print('Connected!')
@@ -473,13 +473,13 @@ async def covid(ctx, *, country="world"):
     mylabels = ["Active (Mild)", "Active (Serious)", "Recovered", "Died"]
     mycolors = ["#4287F5", "#FF5252", "#CAFF99", "#A1A1A1"]
     plt.pie(y, labels = mylabels, colors = mycolors, autopct=lambda pct: func(pct, y), textprops = dict(color="#707070"))
-    plt.legend(loc="center right")
+    plt.legend(loc="lower right")
     plt.savefig("pc.png", transparent=True)
     file = discord.File("pc.png", filename="piechart.png")
     embed.set_image(url="attachment://piechart.png")
     if country != "world":
-      print(needrow.findAll('td')[6].string.replace(",",""))
-      print(needrow.findAll('td')[14].string.replace(",",""))
+      print(needrow.findAll('td')[6].string)
+      print(needrow.findAll('td')[14].string)
       #embed.add_field(name="Recovered/1M", value=str(int(needrow.findAll('td')[6].string.replace(",",""))/int(needrow.findAll('td')[14].string.replace(",",""))*1000000), inline=True)
       embed.add_field(name="Total Tests", value=needrow.findAll('td')[12].string, inline=True)
       embed.add_field(name="Tests/1M", value=needrow.findAll('td')[13].string, inline=True)
