@@ -502,7 +502,7 @@ async def covid(ctx, *, country="world"):
     mylabels = ["Active (Mild)", "Active (Serious)", "Recovered", "Died"]
     mycolors = ["#4287F5", "#FF5252", "#CAFF99", "#A1A1A1"]
     y = np.array([int(tactive.replace(",",""))-int(tserious.replace(",","")), int(tserious.replace(",","")), int(trecovered.replace(",","")), int(tdeath.replace(",",""))])
-    plt.pie(y, labels = mylabels, colors = mycolors, autopct=lambda pct: func(pct, y), textprops = {'color':"#707070"}, pctdistance=0.85)
+    plt.pie(y, labels = mylabels, colors = mycolors, autopct=lambda pct: func(pct, y), textprops = {'color':"#707070"}, pctdistance=0.7)
     plt.legend(loc="lower right")
     plt.savefig("pc.png", transparent=True)
     file = discord.File("pc.png", filename="piechart.png")
