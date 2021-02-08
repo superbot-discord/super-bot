@@ -483,7 +483,16 @@ async def covid(ctx, *, country="world"):
     tactive = needrow.findAll('td')[8].string
     tserious = needrow.findAll('td')[9].string
     tdeath = needrow.findAll('td')[4].string
-    tpopulation = needrow.findAll('td')[14].findAll('a')[0].string
+    try:
+      tpopulation = needrow.findAll('td')[14].findAll('a')[0].string
+    except:
+      driver = webdriver.Chrome(options=options)
+      driver.get("https://www.worldometers.info/world-population/")
+      wait = WebDriverWait(driver,2)
+      while True:
+        item = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR,"span[rel='current_population']"))).text
+        if "retrieving data" not in item:
+          break
     embed.add_field(name="Total Cases", value=tcases, inline=True)
     embed.add_field(name="Total Deaths", value=tdeath, inline=True)
     embed.add_field(name="Total Recovered", value=trecovered, inline=True)
