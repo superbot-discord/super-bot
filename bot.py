@@ -73,6 +73,7 @@ options.headless = True
 options.add_argument('--no-sandbox')
 options.add_argument('--disable-dev-shm-usage')
 markdowner = Markdown(extras=["strike", "footnotes"])
+hsvcmap = plt.cm.hsv
 wikipedia.set_lang("en")
 def is_me(msg):
   return msg.author == client.user
@@ -461,7 +462,10 @@ async def pie(ctx, title, numbers, labels):
   def func(pct, allvals):
     return "{:d} ({:.1f}%)".format(int(pct/100.*np.sum(allvals)), pct)
   y = np.array(numbers.split(","))
-  plt.pie(y, labels = labels.split(","), cmap = 'hsv', autopct=lambda pct: func(pct, y), textprops = {'color':"w"})
+  mycolors = []
+  for count in range(0, 1+1/len(numbers), 1/len(numbers)):
+    mycolors.append(cmaphsv(count))
+  plt.pie(y, labels = labels.split(","), colors=mycolors, autopct=lambda pct: func(pct, y), textprops = {'color':"w"})
   plt.legend(loc="lower right")
   plt.setp(autotexts, size=8, weight="bold")
   plt.set_title(title)
