@@ -76,7 +76,7 @@ wikipedia.set_lang("en")
 def is_me(msg):
   return msg.author == client.user
 def func(pct, allvals):
-  absolute = int(pct/100.*np.sum(allvals))
+  absolute = int(pct/100*np.sum(allvals))
   return "{:d}\n({:.1f}%)".format(absolute, pct)
 
 async def on_ready(self):
@@ -459,25 +459,31 @@ async def covid(ctx, *, country="world"):
       embed = discord.Embed(title="Coronavirus statistics worldwide")
     else:
       embed = discord.Embed(title="Coronavirus statistics in "+country)
-    embed.add_field(name="Total Cases", value=needrow.findAll('td')[2].string, inline=True)
-    embed.add_field(name="Total Deaths", value=needrow.findAll('td')[4].string, inline=True)
-    embed.add_field(name="Total Recovered", value=needrow.findAll('td')[6].string, inline=True)
+    tcases = needrow.findAll('td')[2].string
+    trecovered = needrow.findAll('td')[6].string
+    ttest = needrow.findAll('td')[12].string
+    tactive = needrow.findAll('td')[8].string
+    tserious = needrow.findAll('td')[9].string
+    tdeath = needrow.findAll('td')[4].string
+    embed.add_field(name="Total Cases", value=tcases, inline=True)
+    embed.add_field(name="Total Deaths", value=tdeath, inline=True)
+    embed.add_field(name="Total Recovered", value=trecovered, inline=True)
     embed.add_field(name="New Cases", value=needrow.findAll('td')[3].string, inline=True)
     embed.add_field(name="New Deaths", value=needrow.findAll('td')[5].string, inline=True)
     embed.add_field(name="New Recovered", value=needrow.findAll('td')[7].string, inline=True)
-    embed.add_field(name="Active Cases", value=needrow.findAll('td')[8].string, inline=True)
-    embed.add_field(name="Serious Cases", value=needrow.findAll('td')[9].string, inline=True)
+    embed.add_field(name="Active Cases", value=tactive, inline=True)
+    embed.add_field(name="Serious Cases", value=tserious, inline=True)
     if country != "world":
-      embed.add_field(name="Cases/Tests", value=str(int(needrow.findAll('td')[2].string)/int(needrow.findAll('td')[12].string)), inline=True)
+      embed.add_field(name="Cases/Tests", value=str(int(tcases.replace(",",""))/int(ttest.replace(",",""))), inline=True)
     embed.add_field(name="Cases/1M", value=needrow.findAll('td')[10].string, inline=True)
     embed.add_field(name="Deaths/1M", value=needrow.findAll('td')[11].string, inline=True)
     if country != "world":
-      embed.add_field(name="Recovered/1M", value=str(int(needrow.findAll('td')[6].string.replace(",",""))/int(needrow.findAll('td')[14].findAll('a')[0].string.replace(",",""))*1000000), inline=True)
-      embed.add_field(name="Total Tests", value=needrow.findAll('td')[12].string, inline=True)
+      embed.add_field(name="Recovered/1M", value=str(int(trecovered.replace(",",""))/int(needrow.findAll('td')[14].findAll('a')[0].string.replace(",",""))*1000000), inline=True)
+      embed.add_field(name="Total Tests", value=ttest, inline=True)
       embed.add_field(name="Tests/1M", value=needrow.findAll('td')[13].string, inline=True)
-    y = np.array([int(needrow.findAll('td')[8].string.replace(",",""))-int(needrow.findAll('td')[9].string.replace(",","")), int(needrow.findAll('td')[9].string.replace(",","")), int(needrow.findAll('td')[6].string.replace(",","")), int(needrow.findAll('td')[4].string.replace(",",""))])
     mylabels = ["Active (Mild)", "Active (Serious)", "Recovered", "Died"]
     mycolors = ["#4287F5", "#FF5252", "#CAFF99", "#A1A1A1"]
+    y = np.array([int(tactive.replace(",",""))-int(tserious.replace(",","")), int(tseriousreplace(",","")), int(trecovered.replace(",","")), int(tdeath.replace(",",""))])
     plt.pie(y, labels = mylabels, colors = mycolors, autopct=lambda pct: func(pct, y), textprops = dict(color="#707070"))
     plt.legend(loc="lower right")
     plt.savefig("pc.png", transparent=True)
