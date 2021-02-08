@@ -520,7 +520,7 @@ async def covid(ctx, *, country="world"):
     embed.set_image(url="attachment://piechart.png")
     os.remove('pc.png')
     mylabels = ["Non-infected", "Infected"]
-    mycolors = ["#A0A0A0", "FF5252"]
+    mycolors = ["#A0A0A0", "#FF5252"]
     y = np.array([int(tpopulation.replace(",",""))-int(tcases.replace(",","")), int(tcases.replace(",",""))])
     plt.pie(y, labels = mylabels, colors = mycolors, autopct=lambda pct: func(pct, y), textprops = {'color':"#707070"}, pctdistance=0.7)
     plt.legend(loc="lower right")
