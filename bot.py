@@ -468,7 +468,6 @@ async def pie(ctx, title, numbers, labels):
     mycolors.append(cmaphsv(count/len(numlist)))
   plt.pie(y, labels = labels.split(","), colors=mycolors, autopct=lambda pct: func(pct, y), textprops = {'color':"w"})
   plt.legend(loc="lower right")
-  plt.setp(autotexts, size=8, weight="bold")
   plt.set_title(title)
   plt.savefig("piechart.png", transparent=True)
   plt.clf()
