@@ -484,7 +484,7 @@ async def covid(ctx, *, country="world"):
     mylabels = ["Active (Mild)", "Active (Serious)", "Recovered", "Died"]
     mycolors = ["#4287F5", "#FF5252", "#CAFF99", "#A1A1A1"]
     y = np.array([int(tactive.replace(",",""))-int(tserious.replace(",","")), int(tserious.replace(",","")), int(trecovered.replace(",","")), int(tdeath.replace(",",""))])
-    plt.pie(y, labels = mylabels, colors = mycolors, autopct=lambda pct: func(pct, y), textprops = {'color':"#707070"}, pctdistance=0.8)
+    plt.pie(y, labels = mylabels, colors = mycolors, autopct=lambda pct: func(pct, y), textprops = {'color':"#707070"}, pctdistance=0.85)
     plt.legend(loc="lower right")
     plt.savefig("pc.png", transparent=True)
     file = discord.File("pc.png", filename="piechart.png")
@@ -1021,8 +1021,8 @@ async def html(ctx, *, code = None):
 async def md(ctx, *, mdcode = None):
   match = md_pattern.fullmatch(mdcode)
   if match:
-    mdcode = code.replace("```md","", 1)
-    mdcode = code.replace("```","")
+    mdcode = mdcode.replace("```md","", 1)
+    code = mdcode.replace("```","")
   if mdcode == None:
     r = requests.get(ctx.message.attachments[0].url, stream=True)
     r.raise_for_status()
@@ -1042,8 +1042,8 @@ async def md(ctx, *, mdcode = None):
 async def markdown(ctx, *, mdcode = None):
   match = md_pattern.fullmatch(mdcode)
   if match:
-    mdcode = code.replace("```md","", 1)
-    mdcode = code.replace("```","")
+    mdcode = mdcode.replace("```md","", 1)
+    code = mdcode.replace("```","")
   if code == None:
     r = requests.get(ctx.message.attachments[0].url, stream=True)
     r.raise_for_status()
