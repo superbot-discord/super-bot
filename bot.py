@@ -457,6 +457,10 @@ async def invite(ctx, *, text=None):
   await ctx.send(embed=embed)
 
 @bot.command()
+async def pie()
+
+
+@bot.command()
 async def covid(ctx, *, country="world"):
   driver = webdriver.Chrome(options=options)
   if country.lower() == "world" or country.lower() == "global" or country.lower() == "worldwide" or country.lower() == "everywhere" or country.lower() == "anywhere" or country.lower() == "international" or country.lower() == "internationally" or country.lower() == "globally" or country.lower() == "current":
@@ -526,7 +530,7 @@ async def covid(ctx, *, country="world"):
     plt.legend(loc="lower right")
     plt.savefig("pc2.png", transparent=True)
     plt.clf()
-    filelist = [discord.File("pc2.png"), discord.File("pc2.png")]
+    filelist = [discord.File("pc1.png"), discord.File("pc2.png")]
     embed.set_thumbnail(url="attachment://pc2.png")
     embed.set_image(url="attachment://pc1.png")
     await ctx.send(files=filelist, embed=embed)
