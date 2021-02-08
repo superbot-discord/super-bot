@@ -459,7 +459,7 @@ async def invite(ctx, *, text=None):
 
 @bot.command()
 async def pie(ctx, title, numbers, labels):
-  numlst = []
+  numlist = []
   for count in numbers.split(","):
     numlist.append(int(count))
   y = np.array(numlist)
