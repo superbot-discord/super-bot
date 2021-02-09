@@ -81,9 +81,6 @@ from botwebscrape import *
 from botengrave import *
 
 @bot.command()
-async def nick(ctx, *, newnick):
-
-@bot.command()
 async def botpurge(ctx, *, num):
   try:
     await ctx.message.delete()
