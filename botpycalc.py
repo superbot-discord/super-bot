@@ -50,7 +50,7 @@ def botpython(script):
     return f"The result was truncated due to the length of the result. It had probably timed out.\n```\n"+truncatedoutput+f"\n```"
 
 def botdefine(function, definition, argumentsraw):
-  if argumentsraw None:
+  if argumentsraw == None:
     return "Not enough args"
   else:
     definition=definition.replace("^","**")
@@ -68,6 +68,7 @@ def botdefine(function, definition, argumentsraw):
     program = program[:-1]
     program = program + f"):\n  return "+definition
     exec(program, globals())
+    return "Add_Reaction"
 
 def botcalc(arg = None):
   if arg == None:
