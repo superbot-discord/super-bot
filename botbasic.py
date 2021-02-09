@@ -3,8 +3,7 @@ from discord_webhook import DiscordWebhook
 from discord.ext.commands import *
 from discord.ext import commands
 
-@bot.command()
-async def help(ctx, *, cat=None):
+def cmdhelp(cat):
   if cat!=None:
     cat=cat.lower()
     cat=cat.replace(" ","")
@@ -325,9 +324,8 @@ Turns the PDF to plain text.
 Need help? check the [documentation](https://github.com/johann-lau/Bot#bot-documentation)!
   """
   embed=discord.Embed(title=ti, description=desc, color=0x0061ff)
-  await ctx.send(embed=embed)
+  return embed
 
-@bot.command()
-async def invite(ctx, *, text=None):
+def cmdinvite():
   embed = discord.Embed(title="Invite", description = "Our bot could be invited [here](https://discord.com/oauth2/authorize?client_id=796686363604680755&permissions=805399670&scope=bot).")
-  await ctx.send(embed=embed)
+  return embed
