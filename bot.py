@@ -295,6 +295,12 @@ Engraves the text on an Apple Product. Airpods, iPad, iPod and Apple Pencil are 
 **python [Script]**
 Executes a Python (3.9.1) script.
 
+**covid {Country}**
+Fetches the Covid-19 status for a specific country. If no country is specified, it will fetch the data of the whole World.
+
+**population {Country}**
+Fetches the Population statistics for a specific country. If no country is specified, it will fetch the data of the whole World.
+
 **ocr [Image]**
 Does an OCR scan for the image.
 
@@ -436,16 +442,19 @@ Turns the PDF to plain text.
 `server` `role` `channel` `voicechannel` `user` `uservoice` `avatar` `invite` `template` (BETA)
 
 **Discord Commands**
-`spam` `embed` `pretend` `pretendembed` `pretendspam` (BETA)
+`spam` `embed` `pretend` `pretendembed`
 
 **Text Manipulation Commands**
 `insert` `spoiler` `rawspoiler` `reverse` `emoji`
 
-**Moderation & Information Commands**
-`kick` `ban` `slowmode` `purgeregex` `purgepy` `purgepygex` `calc` `define` `time` `rtimer` `terminate` `timer` (Outdated)
+**Moderation**
+`kick` `ban` `slowmode` `purgeregex` `purgepy` `purgepygex`
 
-**Web Commands & Developer Tools**
-`screenshot` `youtube` `wiki` `engrave` `python` `ocr` `text` `html` `md`
+**Information Commands**
+`translate` `calc` `define` `time` `rtimer` `terminate`
+
+**Web Commands**
+`screenshot` `youtube` `wiki` `engrave` `covid` `population` `python` `ocr` `text` `html` `md`
 
 Need help? check the [documentation](https://github.com/johann-lau/Bot#bot-documentation)!
   """
