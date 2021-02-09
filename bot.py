@@ -38,6 +38,11 @@ banned_ids = []
 banned_text = []
 bot_admins = [687474789342117900]
 file = open("program.py", "w")
+intents = discord.Intents.all()
+pre = "="
+bot = commands.Bot(command_prefix=commands.when_mentioned_or(pre), intents=intents)
+client = discord.Client()
+bot.remove_command('help')
 set(pytz.all_timezones_set)
 dictionary=PyDictionary()
 allid=[]
