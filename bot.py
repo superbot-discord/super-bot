@@ -77,6 +77,7 @@ def func(pct, allvals):
 from botbasic import *
 from botwebscrape import *
 from botengrave import *
+from botpycalc import *
 
 @bot.event
 async def on_message(message):
