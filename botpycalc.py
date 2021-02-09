@@ -2,15 +2,16 @@ from discord import Webhook, RequestsWebhookAdapter
 from discord_webhook import DiscordWebhook
 from discord.ext.commands import *
 from discord.ext import commands
-from bot import *
 from math import *
 from cmath import *
 import random as ra
 import numpy as np
 from math import *
+import subprocess
+import re
 
-@bot.command()
-async def python(ctx, *, script):
+def botpython(script):
+  python_pattern = re.compile(r'^\`\`\`(py|python)?\n[\s\S]*\`\`\`$')
   match = python_pattern.fullmatch(script)
   if match:
     script = script.replace("```py","", 1)
@@ -36,9 +37,9 @@ async def python(ctx, *, script):
         formatoutput = formatoutput + str(count+1) + " | " + outputlist[count] + f"\n"
     
     if formatoutput == f"01 | \n":
-      await ctx.send("There was no result to be shown.")
+      return "There was no result to be shown."
     else:
-      await ctx.send(f"```\n"+formatoutput+f"\n```")
+      return f"```\n"+formatoutput+f"\n```"
   else:
     truncatedoutput = ""
     for count in range(0,11):
@@ -46,12 +47,11 @@ async def python(ctx, *, script):
         truncatedoutput = truncatedoutput + "0" + str(count+1) + " | " + outputlist[count] + f"\n"
       else:
         truncatedoutput = truncatedoutput + str(count+1) + " | " + outputlist[count] + f"\n"
-    await ctx.send(f"The result was truncated due to the length of the result. It had probably timed out.\n```\n"+truncatedoutput+f"\n```")
+    return f"The result was truncated due to the length of the result. It had probably timed out.\n```\n"+truncatedoutput+f"\n```"
 
-@bot.command()
-async def define(ctx, function = None, definition = None, *, argumentsraw = ""):
-  if function == None or definition == None:
-    await ctx.send("Invalid usage! Please use the format `=define [name] [definition] {arguments separated by spaces}`.")
+def botdefine(function, definition, argumentsraw):
+  if argumentsraw None:
+    return "Not enough args"
   else:
     definition=definition.replace("^","**")
     definition=definition.replace("÷","/")
@@ -68,12 +68,10 @@ async def define(ctx, function = None, definition = None, *, argumentsraw = ""):
     program = program[:-1]
     program = program + f"):\n  return "+definition
     exec(program, globals())
-    await ctx.message.add_reaction("👍")
 
-@bot.command()
-async def calc(ctx, *, arg = None):
+def botcalc(arg = None):
   if arg == None:
-    await ctx.send("Invalid format! Please use the format `=calc [formula]`.")
+    return "Invalid format! Please use the format `=calc [formula]`."
   else:
     arg=arg.replace("^","**")
     arg=arg.replace("÷","/")
@@ -97,10 +95,10 @@ async def calc(ctx, *, arg = None):
       elif len(str(result))>100:
         result="{0:.3E}".format(float(result))
       disp = "Result: "+str(result)
-      await ctx.send(disp)
+      return disp
     elif arg.count("=")!=0 and arg.count("==")==0 and arg.count("!=")==0 and arg.count(">=")==0 and arg.count("<=")==0 and arg.count(">")==0 and arg.count("<")==0 and arg.count("and")==0 and arg.count("or")==0 and arg.count("not")==0:
       lcls = locals()
       exec(arg, globals(), lcls)
-      await ctx.message.add_reaction("👍")
+      return "Add_Reaction"
     else:
-      await ctx.send("Invalid input, please try again.")
+      return "Invalid input, please try again."
