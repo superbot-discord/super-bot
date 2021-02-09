@@ -37,7 +37,7 @@ import os
 banned_ids = []
 banned_text = []
 bot_admins = [687474789342117900]
-file = open("program.py", "x")
+file = open("program.py", "w")
 set(pytz.all_timezones_set)
 dictionary=PyDictionary()
 allid=[]
@@ -79,6 +79,9 @@ from botcontrol import *
 from botbasic import *
 from botwebscrape import *
 from botengrave import *
+
+@bot.command()
+async def nick(ctx, *, newnick):
 
 @bot.command()
 async def botpurge(ctx, *, num):
