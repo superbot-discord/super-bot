@@ -48,13 +48,7 @@ python_pattern = re.compile(r'^\`\`\`(py|python)?\n[\s\S]*\`\`\`$')
 html_pattern = re.compile(r'^\`\`\`(html)?\n[\s\S]*\`\`\`$')
 md_pattern = re.compile(r'^\`\`\`(md|markdown)?\n[\s\S]*\`\`\`$')
 UNITS = {'s':'seconds', 'm':'minutes', 'h':'hours', 'd':'days', 'w':'weeks'}
-intents = discord.Intents.all()
-pre = "="
-bot = commands.Bot(command_prefix=commands.when_mentioned_or(pre), intents=intents)
-client = discord.Client()
-bot.remove_command('help')
 typer=0
-autodel=None
 translatorvar = Translator()
 unsortedlangdict = translatorvar.glanguage().get("tl")
 unsortedsrclangdict = translatorvar.glanguage().get("sl")
@@ -85,6 +79,9 @@ from botcontrol import *
 from botbasic import *
 from botwebscrape import *
 from engrave import *
+
+@bot.command()
+async def nick(ctx, *, newnick):
 
 @bot.command()
 async def botpurge(ctx, *, num):
