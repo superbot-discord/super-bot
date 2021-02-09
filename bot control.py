@@ -1,4 +1,7 @@
-from discord import *
+from discord import Webhook, RequestsWebhookAdapter
+from discord_webhook import DiscordWebhook
+from discord.ext.commands import *
+from discord.ext import commands
 
 @bot.event
 async def on_message(message):
