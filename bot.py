@@ -464,6 +464,10 @@ async def pie(ctx, title, numbers, labels):
     numlist.append(int(count))
   y = np.array(numlist)
   mycolors = []
+  if len(labels) > len(numlist):
+    labels = labels[:len(numlist)-1]
+  elif len(numlist) > len(labels):
+    numlist = numlist[:len(labels)-1]
   for count in range(0, len(numlist)):
     mycolors.append(cmaphsv(count/len(numlist)))
   plt.pie(y, labels = labels.split(","), colors=mycolors, autopct=lambda pct: func(pct, y), textprops = {'color':"w"})
