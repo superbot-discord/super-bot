@@ -20,13 +20,13 @@ async def botpython(script):
   file = open("program.py", "w")
   file.write(script)
   file.close()
-  proc = subprocess.Popen(['python', 'program.py',  ''], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+  proc = await subprocess.Popen(['python', 'program.py',  ''], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
   try:
-    output = str(proc.communicate(timeout = 1)[0])
+    output = await str(proc.communicate(timeout = 1)[0])
     output = output.lstrip("'b(").rstrip("\\n'").replace("\n", f"\n")
   except subprocess.TimeoutExpired:
-    proc.kill()
-    output = str(proc.communicate())
+    await proc.kill()
+    output = await str(proc.communicate())
   output = output.lstrip("'b(").rstrip("\\n'").replace("\n", f"\n")
   outputlist = output.split("\\n")
   if len(outputlist)<=11:
