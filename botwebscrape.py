@@ -5,9 +5,15 @@ from discord import Webhook, RequestsWebhookAdapter
 from discord_webhook import DiscordWebhook
 from discord.ext.commands import *
 from discord.ext import commands
+import discord
 from selenium import webdriver
 from bs4 import BeautifulSoup
 import re
+
+options = webdriver.ChromeOptions()
+options.headless = True
+options.add_argument('--no-sandbox')
+options.add_argument('--disable-dev-shm-usage')
 
 def botcovid(country):
   driver = webdriver.Chrome(options=options)
