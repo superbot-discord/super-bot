@@ -277,8 +277,6 @@ async def status(ctx, member : discord.Member = None):
       embed.set_thumbnail(url=count.album_cover_url)
   await ctx.send(embed=embed)
 
-from botpycalc import *
-
 @bot.command()
 async def ping(ctx, *, text = None):
   now1 = datetime.now()
