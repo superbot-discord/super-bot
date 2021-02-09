@@ -1,6 +1,3 @@
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.chrome.options import Options
 from discord import Webhook, RequestsWebhookAdapter
 from datetime import datetime, date, timedelta
 from selenium.webdriver.common.by import By
@@ -37,7 +34,6 @@ import os
 banned_ids = []
 banned_text = []
 bot_admins = [687474789342117900]
-file = open("program.py", "w")
 intents = discord.Intents.all()
 pre = "="
 bot = commands.Bot(command_prefix=commands.when_mentioned_or(pre), intents=intents)
@@ -49,7 +45,6 @@ allid=[]
 hexstring_pattern = re.compile(r'#?([0-9A-F]{2})([0-9A-F]{2})([0-9A-F]{2})', re.IGNORECASE)
 id_pattern = re.compile(r'([A-Z]{5})', re.IGNORECASE)
 alphaend_pattern = re.compile(r'.*[a-z]', re.IGNORECASE)
-python_pattern = re.compile(r'^\`\`\`(py|python)?\n[\s\S]*\`\`\`$')
 html_pattern = re.compile(r'^\`\`\`(html)?\n[\s\S]*\`\`\`$')
 md_pattern = re.compile(r'^\`\`\`(md|markdown)?\n[\s\S]*\`\`\`$')
 UNITS = {'s':'seconds', 'm':'minutes', 'h':'hours', 'd':'days', 'w':'weeks'}
@@ -85,6 +80,48 @@ from botbasic import *
 from botwebscrape import *
 from botengrave import *
 
+@bot.event
+async def on_message(message):
+  if banned_ids.count(message.author.id)==0 and message.content.startswith("=") and message.content.startswith("==")==False:
+    await bot.process_commands(message)
+  elif message.content.startswith("="):
+    await message.channel.send("You are banned from the bot. Reason: "+banned_text[banned_ids.index(message.author.id)])
+
+@bot.command()
+async def nick(ctx, *, newnick):
+  await ctx.guild.get_member(796686363604680755).edit(nick = newnick)
+  await ctx.send("Nickname changed.")
+
+@bot.command()
+async def help(ctx, *, cat=None):
+  embed = cmdhelp(cat)
+  await ctx.send(embed=embed)
+
+@bot.command()
+async def invite(ctx, *, text=None):
+  embed = cmdinvite()
+  await ctx.send(embed=embed)
+
+@bot.command()
+async def botban(ctx, user : discord.User, *, text="No reason was provided"):
+  if ctx.author.id == 687474789342117900 and banned_ids.cound(user.id) == 0:
+    banned_ids.append(user.id)
+    banned_text.append(text)
+    await ctx.send("Banned user from using the bot.")
+
+@bot.command()
+async def botunban(ctx, user : discord.User):
+  if ctx.author.id == 687474789342117900 and banned_ids.cound(user.id) == 1:
+    banned_text.remove(banned_text[banned_ids.index(user.id)])
+    banned_ids.remove(user.id)
+    await ctx.send("Unbanned user from using the bot.")
+
+@bot.command()
+async def botadmin(ctx, user : discord.User):
+  if ctx.author.id == 687474789342117900:
+    bot_admins.append(user.id)
+    await ctx.send("Added user as bot admin.")
+
 @bot.command()
 async def botpurge(ctx, *, num):
   try:
@@ -105,6 +142,47 @@ async def botpurge(ctx, *, num):
   else:
     print(6)
     await ctx.send("You don't have the required permissions.")
+
+@bot.command()
+async def engrave(ctx, product = "list", *, text = "Your text goes here."):
+  embed = botengrave(product, text)
+  await ctx.send(embed=embed)
+
+@bot.command()
+async def python(ctx, *, script):
+  output = botpython(script)
+  await ctx.send(output)
+
+@bot.command()
+async def define(ctx, function = None, definition = None, *, argumentsraw = ""):
+  if botdefine(function, definition, argumentsraw) == "Not enough args":
+    await ctx.send("Invalid usage! Please use the format `=define [name] [definition] {arguments separated by spaces}`.")
+  else:
+    await ctx.message.add_reaction("👍")
+
+@bot.command()
+async def calc(ctx, *, arg = None):
+  output = botcalc(arg)
+  if output == "Add_Reaction":
+    await ctx.message.add_reaction("👍")
+  else:
+    await ctx.send(output)
+
+@bot.command()
+async def covid(ctx, *, country="world"):
+  output = botcovid(country)
+  if output == "Invalid country. Please try again.":
+    await ctx.send(output)
+  else:
+    await ctx.send(files=output[0], embed=output[1])
+
+@bot.command()
+async def population(ctx, country="current"):
+  output = botpopulation(country)
+  if output == "Invalid country. Please try again.":
+    await ctx.send(output)
+  else:
+    await ctx.send(embed=output)
 
 @bot.command()
 async def pie(ctx, title, numbers, labels):
