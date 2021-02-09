@@ -2,6 +2,7 @@ from discord import Webhook, RequestsWebhookAdapter
 from discord_webhook import DiscordWebhook
 from discord.ext.commands import *
 from discord.ext import commands
+from bot import *
 from math import *
 from cmath import *
 import random as ra
