@@ -38,7 +38,7 @@ from botpycalc import *
 
 banned_ids = []
 banned_text = []
-bot_admins = [687474789342117900]
+bot_admins = [687474789342117900, 457805013474082817]
 intents = discord.Intents.all()
 bot = commands.Bot(command_prefix=commands.when_mentioned_or("="), intents=intents)
 client = discord.Client()
