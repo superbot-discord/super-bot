@@ -1,13 +1,15 @@
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.chrome.options import Options
 from discord import Webhook, RequestsWebhookAdapter
 from discord_webhook import DiscordWebhook
 from discord.ext.commands import *
 from discord.ext import commands
-from bot import *
 from selenium import webdriver
 from bs4 import BeautifulSoup
+import re
 
-@bot.command()
-async def covid(ctx, *, country="world"):
+def botcovid(country):
   driver = webdriver.Chrome(options=options)
   if country.lower() == "world" or country.lower() == "global" or country.lower() == "worldwide" or country.lower() == "everywhere" or country.lower() == "anywhere" or country.lower() == "international" or country.lower() == "internationally" or country.lower() == "globally" or country.lower() == "current":
     country = "world"
@@ -79,14 +81,13 @@ async def covid(ctx, *, country="world"):
     filelist = [discord.File("pc1.png"), discord.File("pc2.png")]
     embed.set_thumbnail(url="attachment://pc2.png")
     embed.set_image(url="attachment://pc1.png")
-    await ctx.send(files=filelist, embed=embed)
+    return [filelist, embed]
     os.remove('pc1.png')
     os.remove('pc2.png')
   else:
-    await ctx.send("Invalid country. Please try again.")
+    return "Invalid country. Please try again."
 
-@bot.command()
-async def population(ctx, country="current"):
+def botpopulation(country):
   driver = webdriver.Chrome(options=options)
   if country.lower() == "world" or country.lower() == "global" or country.lower() == "worldwide" or country.lower() == "everywhere" or country.lower() == "anywhere" or country.lower() == "international" or country.lower() == "internationally" or country.lower() == "globally" or country.lower() == "current":
     country = "current_"
@@ -133,6 +134,6 @@ async def population(ctx, country="current"):
         if "retrieving data" not in item:
           break
       embed.add_field(name="Net Growth", value=item, inline=True)
-    await ctx.send(embed=embed)
+    return embed
   except selenium.common.exceptions.TimeoutException:
-    await ctx.send("Invalid country. Please try again.")
+    return "Invalid country. Please try again."
