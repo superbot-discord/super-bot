@@ -2,10 +2,8 @@ from discord import Webhook, RequestsWebhookAdapter
 from discord_webhook import DiscordWebhook
 from discord.ext.commands import *
 from discord.ext import commands
-from bot import *
 
-@bot.command()
-async def engrave(ctx, product = "list", *, text = "Your text goes here."):
+def botengrave(product, text):
   product = product.lower()
   product = product.replace(" ","")
   product = product.replace("-","")
@@ -202,4 +200,4 @@ async def engrave(ctx, product = "list", *, text = "Your text goes here."):
     
   else:
     embed = discord.Embed(title="Invalid product", description="")
-  await ctx.send(embed=embed)
+  return embed
