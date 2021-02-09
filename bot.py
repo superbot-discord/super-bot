@@ -81,11 +81,11 @@ def func(pct, allvals):
   absolute = int(pct/100*np.sum(allvals))
   return "{:d} ({:.1f}%)".format(absolute, pct)
 
-async def on_ready(self):
-  print('Connected!')
-
 from botcontrol import *
 from botbasic import *
+from botwebscrape import *
+from engrave import *
+
 @bot.command()
 async def botpurge(ctx, *, num):
   try:
@@ -129,8 +129,6 @@ async def pie(ctx, title, numbers, labels):
   await ctx.send(file=file)
   os.remove('piechart.png')
 
-from botwebscrape import *
-
 @bot.command()
 async def translate(ctx, langinput = "list", *, text = "Sample text"):
   if langinput == "list" or langinput == "all":
@@ -155,8 +153,6 @@ async def translate(ctx, langinput = "list", *, text = "Sample text"):
       await msg.edit(content = "**Translation from "+srclangdict[fromlang]+" to "+langdict[lang]+f":**\n"+translation.text.replace("u003c", "<").replace("u003e", ">").replace("u0026", "&"))
     except:
       await ctx.send("Language not found! Please use `=translate list` to get a list of languages.")
-
-from engrave import *
 
 @bot.command()
 async def transparent(ctx, alpha = 128):
