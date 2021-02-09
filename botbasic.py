@@ -2,12 +2,6 @@ from discord import Webhook, RequestsWebhookAdapter
 from discord_webhook import DiscordWebhook
 from discord.ext.commands import *
 from discord.ext import commands
-from bot import *
-
-@bot.command()
-async def nick(ctx, *, newnick):
-  await ctx.guild.get_member(796686363604680755).edit(nick = newnick)
-  await ctx.send("Nickname changed.")
 
 @bot.command()
 async def help(ctx, *, cat=None):
