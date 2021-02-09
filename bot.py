@@ -7,7 +7,6 @@ import matplotlib.pyplot as plt
 from pdf2image import convert_from_path
 from PIL import ImageDraw, ImageFilter
 from PyDictionary import PyDictionary
-from discord.ext.commands import *
 import selenium.common.exceptions
 from discord.ext import commands
 from selenium import webdriver
@@ -31,12 +30,17 @@ import pytz
 import PIL
 import re
 import os
+
+from botbasic import *
+from botwebscrape import *
+from botengrave import *
+from botpycalc import *
+
 banned_ids = []
 banned_text = []
 bot_admins = [687474789342117900]
 intents = discord.Intents.all()
-pre = "="
-bot = commands.Bot(command_prefix=commands.when_mentioned_or(pre), intents=intents)
+bot = commands.Bot(command_prefix=commands.when_mentioned_or("="), intents=intents)
 client = discord.Client()
 bot.remove_command('help')
 set(pytz.all_timezones_set)
@@ -74,10 +78,6 @@ def is_me(msg):
 def func(pct, allvals):
   absolute = int(pct/100*np.sum(allvals))
   return "{:d} ({:.1f}%)".format(absolute, pct)
-from botbasic import *
-from botwebscrape import *
-from botengrave import *
-from botpycalc import *
 
 @bot.event
 async def on_message(message):
