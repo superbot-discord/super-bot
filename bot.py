@@ -74,8 +74,6 @@ def is_me(msg):
 def func(pct, allvals):
   absolute = int(pct/100*np.sum(allvals))
   return "{:d} ({:.1f}%)".format(absolute, pct)
-
-from botcontrol import *
 from botbasic import *
 from botwebscrape import *
 from botengrave import *
