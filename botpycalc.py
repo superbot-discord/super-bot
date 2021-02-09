@@ -20,7 +20,7 @@ async def botpython(script):
   file = open("program.py", "w")
   file.write(script)
   file.close()
-  proc = await subprocess.Popen(['python', 'program.py',  ''], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+  proc = subprocess.Popen(['python', 'program.py',  ''], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
   try:
     output = await str(proc.communicate(timeout = 1)[0])
     output = output.lstrip("'b(").rstrip("\\n'").replace("\n", f"\n")
