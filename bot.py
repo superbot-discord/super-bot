@@ -93,12 +93,12 @@ async def nick(ctx, *, newnick):
 
 @bot.command()
 async def help(ctx, *, cat=None):
-  embed = cmdhelp(cat)
+  embed = bothelp(cat)
   await ctx.send(embed=embed)
 
 @bot.command()
 async def invite(ctx, *, text=None):
-  embed = cmdinvite()
+  embed = botinvite()
   await ctx.send(embed=embed)
 
 @bot.command()
