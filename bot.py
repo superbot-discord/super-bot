@@ -199,7 +199,7 @@ async def pie(ctx, title, numbers, label):
     mycolors.append(cmaphsv(count/len(numlist)))
   plt.pie(y, labels=labels, colors=mycolors, autopct=lambda pct: func(pct, y), textprops = {'color':"w"})
   plt.legend(loc="lower right")
-  plt.title(title, textprops = {'color':"r"})
+  plt.title(title)
   plt.savefig("piechart.png", transparent=True)
   plt.clf()
   file = discord.File("piechart.png")
@@ -221,7 +221,7 @@ async def barh(ctx, title, numbers, label):
   for count in range(0, len(numlist)):
     mycolors.append(cmaphsv(count/len(numlist)))
   plt.barh(np.arange(len(labels)), numlist, align='center')
-  plt.title(title, textprops = {'color':"r"})
+  plt.title(title)
   plt.set_yticks(np.arange(len(labels)))
   plt.set_yticklabels(labels)
   plt.invert_yaxis()
