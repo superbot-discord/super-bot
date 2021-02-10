@@ -8,7 +8,6 @@ from pdf2image import convert_from_path
 from PIL import ImageDraw, ImageFilter
 from PyDictionary import PyDictionary
 import selenium.common.exceptions
-import matplotlib.axes as ax
 from discord.ext import commands
 from selenium import webdriver
 from markdown2 import Markdown
