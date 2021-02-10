@@ -10,7 +10,7 @@ from selenium import webdriver
 from bs4 import BeautifulSoup
 import re
 import requests
-import matplotlib
+import matplotlib as plt
 from selenium.webdriver.common.by import By
 import numpy as np
 
