@@ -9,6 +9,7 @@ import discord
 from selenium import webdriver
 from bs4 import BeautifulSoup
 import re
+import requests
 
 options = webdriver.ChromeOptions()
 options.headless = True
