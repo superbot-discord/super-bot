@@ -221,12 +221,10 @@ async def barh(ctx, title, numbers, label):
     labels = labels[:len(numlist)-1]
   elif len(numlist) > len(labels):
     numlist = numlist[:len(labels)-1]
-  y = np.array(numlist)
   y_pos = np.arange(len(labels))
-  for count in range(0, len(numlist)):
-    mycolors.append(cmaphsv(count/len(numlist)))
-  plt.title(title)
-  plt.barh(np.arange(len(labels)), numlist, align='center')
+  plt.rcdefaults()
+  fig, ax = plt.subplots()
+  ax.barh(np.arange(len(labels)), numlist, align='center')
   ax.set_yticks(y_pos)
   ax.set_yticklabels(labels)
   ax.invert_yaxis()
