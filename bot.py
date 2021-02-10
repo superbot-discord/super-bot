@@ -179,6 +179,14 @@ async def covid(ctx, *, country="world"):
     await ctx.send(files=output[0], embed=output[1])
 
 @bot.command()
+async def minecraft(ctx, *, item="tnt"):
+  output = botminecraft(item)
+  if output == "Invalid country. Please try again.":
+    await ctx.send(output)
+  else:
+    await ctx.send(embed=output)
+
+@bot.command()
 async def population(ctx, country="current"):
   output = botpopulation(country)
   if output == "Invalid country. Please try again.":
