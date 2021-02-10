@@ -15,7 +15,7 @@ options.headless = True
 options.add_argument('--no-sandbox')
 options.add_argument('--disable-dev-shm-usage')
 
-def botcovid(country):
+def botcovid(country : str):
   driver = webdriver.Chrome(options=options)
   if country.lower() == "world" or country.lower() == "global" or country.lower() == "worldwide" or country.lower() == "everywhere" or country.lower() == "anywhere" or country.lower() == "international" or country.lower() == "internationally" or country.lower() == "globally" or country.lower() == "current":
     country = "world"
@@ -93,7 +93,7 @@ def botcovid(country):
   else:
     return "Invalid country. Please try again."
 
-def botpopulation(country):
+def botpopulation(country : str):
   driver = webdriver.Chrome(options=options)
   if country.lower() == "world" or country.lower() == "global" or country.lower() == "worldwide" or country.lower() == "everywhere" or country.lower() == "anywhere" or country.lower() == "international" or country.lower() == "internationally" or country.lower() == "globally" or country.lower() == "current":
     country = "current_"
