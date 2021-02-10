@@ -11,7 +11,7 @@ from math import *
 import subprocess
 import re
 
-async def botpython(script):
+def botpython(script):
   python_pattern = re.compile(r'^\`\`\`(py|python)?\n[\s\S]*\`\`\`$')
   match = python_pattern.fullmatch(script)
   if match:
