@@ -11,6 +11,7 @@ from bs4 import BeautifulSoup
 import re
 import requests
 import matplotlib
+from selenium.webdriver.common.by import By
 
 options = webdriver.ChromeOptions()
 options.headless = True
