@@ -149,7 +149,7 @@ async def engrave(ctx, product = "list", *, text = "Your text goes here."):
 
 @bot.command()
 async def python(ctx, *, script):
-  output = await botpython(script)
+  output = botpython(script)
   await ctx.send(output)
 
 @bot.command()
