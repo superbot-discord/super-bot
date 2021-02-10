@@ -89,8 +89,11 @@ async def on_message(message):
 
 @bot.command()
 async def nick(ctx, *, newnick):
-  await ctx.guild.get_member(796686363604680755).edit(nick = newnick)
-  await ctx.send("Nickname changed.")
+  if ctx.author.id == 687474789342117900 and banned_ids.cound(user.id) == 0:
+    await ctx.guild.get_member(796686363604680755).edit(nick = newnick)
+    await ctx.send("Nickname changed.")
+  else:
+    await ctx.send("You don't have the required permissions.")
 
 @bot.command()
 async def help(ctx, *, cat=None):
@@ -907,19 +910,6 @@ async def rawrawspoiler(ctx, *, text):
   text="\\\|\\\|\\\|\\\|".join(text)
   text="\\\|\\\|"+text+"\\\|\\\|"
   await ctx.send(text)
-
-@bot.command()
-async def prefix(ctx, new = None):
-  global pre
-  if new == None:
-    await ctx.send("The prefix for the bot is `"+pre+"`. You may also mention the bot as a prefix.")
-  else:
-    if alphaend_pattern.fullmatch(new):
-      pre = new + " "
-    else:
-      pre = new
-    bot = commands.Bot(command_prefix=commands.when_mentioned_or(pre), intents=intents)
-    await ctx.send("The prefix for the bot has been set to `"+pre+"`. You may also mention the bot as a prefix.")
 
 @bot.command()
 async def emojiinfo(ctx,emojiarg : discord.Emoji):
