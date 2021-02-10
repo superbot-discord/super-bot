@@ -71,8 +71,8 @@ def botdefine(function : str, definition : str, argumentsraw : str):
     exec(program, globals())
     return "Add_Reaction"
 
-def botcalc(arg = None : str):
-  if arg == None:
+def botcalc(arg : str):
+  if arg == "None":
     return "Invalid format! Please use the format `=calc [formula]`."
   else:
     arg=arg.replace("^","**")
