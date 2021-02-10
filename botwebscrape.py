@@ -14,6 +14,10 @@ import matplotlib.pyplot as plt
 from selenium.webdriver.common.by import By
 import numpy as np
 
+def func(pct, allvals):
+  absolute = int(pct/100*np.sum(allvals))
+  return "{:d} ({:.1f}%)".format(absolute, pct)
+
 options = webdriver.ChromeOptions()
 options.headless = True
 options.add_argument('--no-sandbox')
