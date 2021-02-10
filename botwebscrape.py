@@ -12,6 +12,7 @@ import re
 import requests
 import matplotlib
 from selenium.webdriver.common.by import By
+import numpy as np
 
 options = webdriver.ChromeOptions()
 options.headless = True
