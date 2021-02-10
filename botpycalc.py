@@ -18,7 +18,7 @@ def botpython(script : str):
     script = script.replace("```py","", 1)
     script = script.replace("```","")
   file = open("program.py", "w")
-  file.write(script)
+  file.write(str(script))
   file.close()
   proc = subprocess.Popen(['python', 'program.py',  ''], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
   try:
