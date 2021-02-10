@@ -4,7 +4,7 @@ from discord.ext.commands import *
 from discord.ext import commands
 import discord
 
-def bothelp(cat):
+def bothelp(cat : str):
   if cat!=None:
     cat=cat.lower()
     cat=cat.replace(" ","")
