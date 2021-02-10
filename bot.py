@@ -184,7 +184,7 @@ async def population(ctx, country="current"):
     await ctx.send(embed=output)
 
 @bot.command()
-async def pie(ctx, title, numbers, label):
+async def pie(ctx, title, numbers, label : str):
   numlist = []
   for count in numbers.split(","):
     numlist.append(int(count))
@@ -197,7 +197,7 @@ async def pie(ctx, title, numbers, label):
   y = np.array(numlist)
   for count in range(0, len(numlist)):
     mycolors.append(cmaphsv(count/len(numlist)))
-  plt.pie(y, labels = labels.split(","), colors=mycolors, autopct=lambda pct: func(pct, y), textprops = {'color':"w"})
+  plt.pie(y, labels=labels, colors=mycolors, autopct=lambda pct: func(pct, y), textprops = {'color':"w"})
   plt.legend(loc="lower right")
   plt.title(title)
   plt.savefig("piechart.png", transparent=True)
