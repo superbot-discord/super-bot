@@ -4,7 +4,7 @@ from discord.ext.commands import *
 from discord.ext import commands
 import discord
 
-def botengrave(product, text):
+def botengrave(product : str, text : str):
   product = product.lower()
   product = product.replace(" ","")
   product = product.replace("-","")
