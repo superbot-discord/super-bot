@@ -173,6 +173,18 @@ Does an OCR scan for the image.
 **text [PDF]**
 Turns the PDF to plain text.
   """
+  elif cat=="plot" or cat=="plotting" or cat=="chart" or cat=="graph":
+    ti="Web Command and Developer Tools"
+    desc="""
+**pie [Title] [Data] [Labels]**
+Plots a pie chart with the Title (e.g. "Popularity of different fruits"), Data (e.g. 1,2,3,4) and Labels (e.g. Apple,Banana,Cherry,Date).
+
+**barh**
+Plots a **h**orizontal bar chart with the Title (e.g. "Popularity of different fruits"), Data (e.g. 1,2,3,4) and Labels (e.g. Apple,Banana,Cherry,Date).
+
+**barv**
+Plots a **v**ertical bar chart with the Title (e.g. "Popularity of different fruits"), Data (e.g. 1,2,3,4) and Labels (e.g. Apple,Banana,Cherry,Date).
+  """
   elif cat=="help":
     ti="help {Command or Category}"
     desc="Show the help for a specific command/category. The command/category is optional."
@@ -254,6 +266,9 @@ Turns the PDF to plain text.
   elif cat=="slowmode":
     ti="slowmode [Seconds] {Channel(s)}"
     desc=f"Sets the slowmode for the channel. Any non-numeric value, or zero, disables it.\nChannels is optional. If Channel(s) is not provided, the current channel will be set.\nYou are allowed to use multiple channels, or use `all` to set for all channels in the server."
+  elif cat=="nick":
+    ti="nick [New nickname]"
+    desc=f"Sets the nickname of the bot."
   elif cat=="calc":
     ti="calc [Formula]"
     desc="Does boring math for you. Logical comparisons, scientific math, variables and user-defined functions are available. Please check the [documentation](https://github.com/johann-lau/Bot/blob/main/README.md#math-help) for more information."
@@ -305,7 +320,7 @@ Turns the PDF to plain text.
 `help` `invite` `prefix` `ping` `speedtest`
 
 **Discord Information Commands**
-`server` `role` `channel` `voicechannel` `user` `uservoice` `avatar` `invite` `template` (BETA)
+`server` `role` `channel` `voicechannel` `user` `uservoice` `avatar` `invite`
 
 **Discord Commands**
 `spam` `embed` `pretend` `pretendembed`
@@ -314,13 +329,16 @@ Turns the PDF to plain text.
 `insert` `spoiler` `rawspoiler` `reverse` `emoji`
 
 **Moderation**
-`kick` `ban` `slowmode` `purgeregex` `purgepy` `purgepygex`
+`kick` `ban` `slowmode` `nick` `purgeregex` `purgepy` `purgepygex`
 
 **Information Commands**
 `translate` `calc` `define` `time` `rtimer` `terminate`
 
 **Web Commands**
 `screenshot` `youtube` `wiki` `engrave` `covid` `population` `python` `ocr` `text` `html` `md`
+
+**Plot commands**
+`pie` `barh` `barv`
 
 Need help? check the [documentation](https://github.com/johann-lau/Bot#bot-documentation)!
   """
