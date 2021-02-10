@@ -184,11 +184,12 @@ async def population(ctx, country="current"):
     await ctx.send(embed=output)
 
 @bot.command()
-async def pie(ctx, title, numbers, labels):
+async def pie(ctx, title, numbers, label):
   numlist = []
   for count in numbers.split(","):
     numlist.append(int(count))
   mycolors = []
+  labels = label.split(",")
   if len(labels) > len(numlist):
     labels = labels[:len(numlist)-1]
   elif len(numlist) > len(labels):
