@@ -77,7 +77,7 @@ def is_me(msg):
   return msg.author == client.user
 def func(pct, allvals):
   absolute = int(pct/100*np.sum(allvals))
-  return "{:d} ({:.1f}%)".format(absolute, pct)
+  return "{:d} ({:.1f}%)".format(absolute, int(pct))
 
 @bot.event
 async def on_message(message):
@@ -184,7 +184,7 @@ async def population(ctx, country="current"):
     await ctx.send(embed=output)
 
 @bot.command()
-async def pie(ctx, title, numbers, label : str):
+async def barh(ctx, title, numbers, label):
   numlist = []
   for count in numbers.split(","):
     numlist.append(int(count))
@@ -199,12 +199,37 @@ async def pie(ctx, title, numbers, label : str):
     mycolors.append(cmaphsv(count/len(numlist)))
   plt.pie(y, labels=labels, colors=mycolors, autopct=lambda pct: func(pct, y), textprops = {'color':"w"})
   plt.legend(loc="lower right")
-  plt.title(title)
+  plt.title(title, textprops = {'color':"r"})
   plt.savefig("piechart.png", transparent=True)
   plt.clf()
   file = discord.File("piechart.png")
   await ctx.send(file=file)
   os.remove('piechart.png')
+
+@bot.command()
+async def pie(ctx, title, numbers, label):
+  numlist = []
+  for count in numbers.split(","):
+    numlist.append(int(count))
+  mycolors = []
+  labels = label.split(",")
+  if len(labels) > len(numlist):
+    labels = labels[:len(numlist)-1]
+  elif len(numlist) > len(labels):
+    numlist = numlist[:len(labels)-1]
+  y = np.array(numlist)
+  for count in range(0, len(numlist)):
+    mycolors.append(cmaphsv(count/len(numlist)))
+  ax.barh(np.arange(len(labels)), numlist, align='center')
+  plt.title(title, textprops = {'color':"r"})
+  plt.set_yticks(np.arange(len(labels)))
+  plt.set_yticklabels(labels)
+  plt.invert_yaxis()
+  plt.savefig("horizontalbarchart.png", transparent=True)
+  plt.clf()
+  file = discord.File("horizontalbarchart.png")
+  await ctx.send(file=file)
+  os.remove('horizontalbarchart.png')
 
 @bot.command()
 async def translate(ctx, langinput = "list", *, text = "Sample text"):
