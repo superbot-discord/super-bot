@@ -220,6 +220,7 @@ async def barh(ctx, title, numbers, label):
   y = np.array(numlist)
   for count in range(0, len(numlist)):
     mycolors.append(cmaphsv(count/len(numlist)))
+  plt.rcdefaults()
   ax = plt.subplots()
   ax.barh(np.arange(len(labels)), numlist, align='center')
   ax.title(title)
