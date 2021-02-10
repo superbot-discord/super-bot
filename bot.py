@@ -184,7 +184,7 @@ async def population(ctx, country="current"):
     await ctx.send(embed=output)
 
 @bot.command()
-async def barh(ctx, title, numbers, label):
+async def pie(ctx, title, numbers, label):
   numlist = []
   for count in numbers.split(","):
     numlist.append(int(count))
@@ -207,7 +207,7 @@ async def barh(ctx, title, numbers, label):
   os.remove('piechart.png')
 
 @bot.command()
-async def pie(ctx, title, numbers, label):
+async def barh(ctx, title, numbers, label):
   numlist = []
   for count in numbers.split(","):
     numlist.append(int(count))
@@ -220,7 +220,7 @@ async def pie(ctx, title, numbers, label):
   y = np.array(numlist)
   for count in range(0, len(numlist)):
     mycolors.append(cmaphsv(count/len(numlist)))
-  ax.barh(np.arange(len(labels)), numlist, align='center')
+  plt.barh(np.arange(len(labels)), numlist, align='center')
   plt.title(title, textprops = {'color':"r"})
   plt.set_yticks(np.arange(len(labels)))
   plt.set_yticklabels(labels)
