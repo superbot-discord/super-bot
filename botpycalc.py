@@ -11,7 +11,7 @@ from math import *
 import subprocess
 import re
 
-def botpython(script):
+def botpython(script : str):
   python_pattern = re.compile(r'^\`\`\`(py|python)?\n[\s\S]*\`\`\`$')
   match = python_pattern.fullmatch(script)
   if match:
@@ -50,7 +50,7 @@ def botpython(script):
         truncatedoutput = truncatedoutput + str(count+1) + " | " + outputlist[count] + f"\n"
     return f"The result was truncated due to the length of the result. It had probably timed out.\n```\n"+truncatedoutput+f"\n```"
 
-def botdefine(function, definition, argumentsraw):
+def botdefine(function : str, definition : str, argumentsraw : str):
   if argumentsraw == None:
     return "Not enough args"
   else:
@@ -71,7 +71,7 @@ def botdefine(function, definition, argumentsraw):
     exec(program, globals())
     return "Add_Reaction"
 
-def botcalc(arg = None):
+def botcalc(arg = None : str):
   if arg == None:
     return "Invalid format! Please use the format `=calc [formula]`."
   else:
