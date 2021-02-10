@@ -8,6 +8,7 @@ from pdf2image import convert_from_path
 from PIL import ImageDraw, ImageFilter
 from PyDictionary import PyDictionary
 import selenium.common.exceptions
+import matplotlib.axes.Axes as ax
 from discord.ext import commands
 from selenium import webdriver
 from markdown2 import Markdown
@@ -220,14 +221,12 @@ async def barh(ctx, title, numbers, label):
   y = np.array(numlist)
   for count in range(0, len(numlist)):
     mycolors.append(cmaphsv(count/len(numlist)))
-  plt.rcdefaults()
-  ax = plt.subplots()
   ax.barh(np.arange(len(labels)), numlist, align='center')
-  ax.title(title)
-  ax.set_yticks(np.arange(len(labels)))
-  ax.set_yticklabels(labels)
-  ax.invert_yaxis()
-  ax.savefig("horizontalbarchart.png", transparent=True)
+  plt.title(title)
+  plt.set_yticks(np.arange(len(labels)))
+  plt.set_yticklabels(labels)
+  plt.invert_yaxis()
+  plt.savefig("horizontalbarchart.png", transparent=True)
   plt.clf()
   file = discord.File("horizontalbarchart.png")
   await ctx.send(file=file)
