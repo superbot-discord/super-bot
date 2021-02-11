@@ -5,7 +5,6 @@ from discord_webhook import DiscordWebhook
 import matplotlib.pyplot as plt
 from pdf2image import convert_from_path
 from PIL import ImageDraw, ImageFilter
-from PyDictionary import PyDictionary
 import selenium.common.exceptions
 from discord.ext import commands
 from selenium import webdriver
@@ -19,7 +18,6 @@ from math import *
 import pytesseract
 import time as tm
 import subprocess
-import wikipedia
 import requests
 import aiohttp
 import asyncio
@@ -31,6 +29,7 @@ import re
 import os
 
 from botwebscrape import *
+from botwebinfo import *
 from botengrave import *
 from botpycalc import *
 from botbasic import *
@@ -181,7 +180,7 @@ async def covid(ctx, *, country="world"):
 @bot.command()
 async def minecraft(ctx, *, item="tnt"):
   output = botminecraft(item)
-  if output == "Invalid country. Please try again.":
+  if output == "Invalid item. Please try again.":
     await ctx.send(output)
   else:
     await ctx.send(embed=output)
@@ -465,23 +464,11 @@ async def youtube(ctx, *, url):
 
 @bot.command()
 async def definition(ctx, *, word):
-  ti = "Definition of "+word
-  desc = ""
-  definitions = dictionary.meaning(word)
-  counter = 0
-  for count in list(definitions.keys()):
-    desc = desc + "**"+count+f"**\n"+definitions[count][counter]+f"\n"
-    counter = counter + 1
-  desc = desc + f"**Synonyms**\n"
-  for count in dictionary.synonym(word):
-    desc = desc + count + ", "
-  desc = desc[:-2]
-  desc = desc + f"\n**Antonyms**\n"
-  for count in dictionary.antonym(word):
-    desc = desc + count + ", "
-  desc = desc[:-2]
-  embed = discord.Embed(title=ti, description=desc)
-  await ctx.send(embed=embed)
+  output = botdefinition(word)
+  if output == "Invalid word. Please try again.":
+    await ctx.send(output)
+  else:
+    await ctx.send(embed=embed)
 
 @bot.command()
 async def wiki(ctx, *, query):
