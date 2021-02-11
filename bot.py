@@ -42,8 +42,6 @@ intents = discord.Intents.all()
 bot = commands.Bot(command_prefix=commands.when_mentioned_or("="), intents=intents)
 client = discord.Client()
 bot.remove_command('help')
-set(pytz.all_timezones_set)
-dictionary=PyDictionary()
 allid=[]
 id_pattern = re.compile(r'([A-Z]{5})', re.IGNORECASE)
 alphaend_pattern = re.compile(r'.*[a-z]', re.IGNORECASE)
@@ -51,28 +49,12 @@ html_pattern = re.compile(r'^\`\`\`(html)?\n[\s\S]*\`\`\`$')
 md_pattern = re.compile(r'^\`\`\`(md|markdown)?\n[\s\S]*\`\`\`$')
 UNITS = {'s':'seconds', 'm':'minutes', 'h':'hours', 'd':'days', 'w':'weeks'}
 typer=0
-translatorvar = Translator()
-unsortedlangdict = translatorvar.glanguage().get("tl")
-unsortedsrclangdict = translatorvar.glanguage().get("sl")
-langkeys = list(unsortedlangdict.keys())
-langkeys.sort()
-langdict = {}
-for count in langkeys:
-  langdict[count] = unsortedlangdict[count]
-srclangkeys = list(unsortedsrclangdict.keys())
-srclangkeys.sort()
-srclangdict = {}
-for count in srclangkeys:
-  srclangdict[count] = unsortedsrclangdict[count]
 options = webdriver.ChromeOptions()
 options.headless = True
 options.add_argument('--no-sandbox')
 options.add_argument('--disable-dev-shm-usage')
 markdowner = Markdown(extras=["strike", "footnotes"])
 cmaphsv = plt.cm.hsv
-wikipedia.set_lang("en")
-def is_me(msg):
-  return msg.author == client.user
 def func(pct, allvals):
   absolute = int(pct/100*np.sum(allvals))
   return "{:d} ({:.1f}%)".format(absolute, int(pct))
