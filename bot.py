@@ -31,10 +31,11 @@ import PIL
 import re
 import os
 
-from botbasic import *
 from botwebscrape import *
 from botengrave import *
 from botpycalc import *
+from botbasic import *
+from botplot import *
 
 banned_ids = []
 banned_text = []
@@ -196,74 +197,33 @@ async def population(ctx, country="current"):
 
 @bot.command()
 async def pie(ctx, title, numbers, label):
-  numlist = []
-  for count in numbers.split(","):
-    numlist.append(int(count))
-  mycolors = []
-  labels = label.split(",")
-  if len(labels) > len(numlist):
-    labels = labels[:len(numlist)-1]
-  elif len(numlist) > len(labels):
-    numlist = numlist[:len(labels)-1]
-  y = np.array(numlist)
-  for count in range(0, len(numlist)):
-    mycolors.append(cmaphsv(count/len(numlist)))
-  plt.pie(y, labels=labels, colors=mycolors, autopct=lambda pct: func(pct, y), textprops = {'color':"w"})
-  plt.legend(loc="lower right")
-  plt.title(title)
-  plt.savefig("piechart.png", transparent=True)
-  plt.clf()
-  file = discord.File("piechart.png")
-  await ctx.send(file=file)
-  os.remove('piechart.png')
+  try:
+    botpie(title, numbers, label)
+    file = discord.File("piechart.png")
+    await ctx.send(file=file)
+    os.remove('piechart.png')
+  except:
+    await ctx.send("Invalid input. Please try again.")
 
 @bot.command()
 async def barh(ctx, title, numbers, label):
-  numlist = []
-  for count in numbers.split(","):
-    numlist.append(int(count))
-  mycolors = []
-  labels = tuple(label.split(","))
-  if len(labels) > len(numlist):
-    labels = labels[:len(numlist)-1]
-  elif len(numlist) > len(labels):
-    numlist = numlist[:len(labels)-1]
-  y_pos = np.arange(len(labels))
-  plt.rcdefaults()
-  fig, ax = plt.subplots()
-  ax.barh(np.arange(len(labels)), numlist, align='center')
-  ax.set_yticks(y_pos)
-  ax.set_yticklabels(labels)
-  ax.invert_yaxis()
-  plt.savefig("horizontalbarchart.png", transparent=True)
-  plt.clf()
-  file = discord.File("horizontalbarchart.png")
-  await ctx.send(file=file)
-  os.remove('horizontalbarchart.png')
+  try:
+    botbarh(title, numbers, label)
+    file = discord.File("horizontalbarchart.png")
+    await ctx.send(file=file)
+    os.remove('horizontalbarchart.png')
+  except:
+    await ctx.send("Invalid input. Please try again.")
 
 @bot.command()
 async def barv(ctx, title, numbers, label):
-  numlist = []
-  for count in numbers.split(","):
-    numlist.append(int(count))
-  mycolors = []
-  labels = tuple(label.split(","))
-  if len(labels) > len(numlist):
-    labels = labels[:len(numlist)-1]
-  elif len(numlist) > len(labels):
-    numlist = numlist[:len(labels)-1]
-  x_pos = np.arange(len(labels))
-  plt.rcdefaults()
-  fig, ax = plt.subplots()
-  ax.bar(np.arange(len(labels)), numlist, align='center')
-  ax.set_xticks(x_pos)
-  ax.set_xticklabels(labels)
-  ax.invert_xaxis()
-  plt.savefig("verticalbarchart.png", transparent=True)
-  plt.clf()
-  file = discord.File("verticalbarchart.png")
-  await ctx.send(file=file)
-
+  try:
+    notbarv(title, numbers, label)
+    file = discord.File("verticalbarchart.png")
+    await ctx.send(file=file)
+    os.remove('verticalbarchart.png')
+  except:
+    await ctx.send("Invalid input. Please try again.")
 
 @bot.command()
 async def translate(ctx, langinput = "list", *, text = "Sample text"):
