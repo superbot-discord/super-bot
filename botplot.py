@@ -1,6 +1,10 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
+def func(pct, allvals):
+  absolute = int(pct/100*np.sum(allvals))
+  return "{:d} ({:.1f}%)".format(absolute, int(pct))
+
 def botpie(title, numbers, label):
   numlist = []
     for count in numbers.split(","):
