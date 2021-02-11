@@ -216,7 +216,7 @@ async def barh(ctx, title, numbers, label):
 @bot.command()
 async def barv(ctx, title, numbers, label):
   try:
-    notbarv(title, numbers, label)
+    botbarv(title, numbers, label)
     file = discord.File("verticalbarchart.png")
     await ctx.send(file=file)
     os.remove('verticalbarchart.png')
