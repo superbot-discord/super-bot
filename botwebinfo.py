@@ -5,6 +5,20 @@ import wikipedia
 from bs4 import BeautifulSoup
 import requests
 import re
+translatorvar = Translator()
+unsortedlangdict = translatorvar.glanguage().get("tl")
+unsortedsrclangdict = translatorvar.glanguage().get("sl")
+langkeys = list(unsortedlangdict.keys())
+langkeys.sort()
+langdict = {}
+for count in langkeys:
+  langdict[count] = unsortedlangdict[count]
+srclangkeys = list(unsortedsrclangdict.keys())
+srclangkeys.sort()
+srclangdict = {}
+for count in srclangkeys:
+  srclangdict[count] = unsortedsrclangdict[count]
+wikipedia.set_lang("en")
 
 def botminecraft(item):
   r=requests.get('https://minecraft.gamepedia.com/'+item)
