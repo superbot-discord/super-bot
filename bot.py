@@ -23,7 +23,6 @@ import aiohttp
 import asyncio
 import discord
 import pytube
-import pytz
 import PIL
 import re
 import os
@@ -34,6 +33,7 @@ from botengrave import *
 from botpycalc import *
 from botbasic import *
 from botplot import *
+from botinfo import *
 
 banned_ids = []
 banned_text = []
@@ -45,7 +45,6 @@ bot.remove_command('help')
 set(pytz.all_timezones_set)
 dictionary=PyDictionary()
 allid=[]
-hexstring_pattern = re.compile(r'#?([0-9A-F]{2})([0-9A-F]{2})([0-9A-F]{2})', re.IGNORECASE)
 id_pattern = re.compile(r'([A-Z]{5})', re.IGNORECASE)
 alphaend_pattern = re.compile(r'.*[a-z]', re.IGNORECASE)
 html_pattern = re.compile(r'^\`\`\`(html)?\n[\s\S]*\`\`\`$')
@@ -743,90 +742,27 @@ async def purgeuser(ctx, num, userinput : discord.User):
 
 @bot.command()
 async def colour(ctx, arg1, arg2=None, arg3=None):
-    args = arg1, arg2, arg3
-    match = hexstring_pattern.fullmatch(arg1)
-    if all(arg and arg.isdigit() and 0 <= int(arg) < 256 for arg in args):
-      desc = f'RGB: {arg1},{arg2},{arg3}'
-      r, g, b = map(int, args)
-    elif arg1.isdigit() and 0 <= int(arg1) < 2 ** 24:
-      desc = f'Decimal: {arg1}'
-      n = int(arg1)
-      r, g, b = n >> 16, (n >> 8) & 255, n & 255
-    elif match:
-      desc = f'Hex: {arg1}'
-      r, g, b = (int(val, 16) for val in match.groups())
+    output = botcolor(arg1, arg2, arg3)
+    if output == "Please specify a correct color value.":
+      await ctx.send(output)
     else:
-      await ctx.send('Please specify a correct colour value.')
-      return
-    deci = (r << 16) + (g << 8) + b
-    hex_ = f'{deci:02x}'.upper()
-    if len(hex_)!=6:
-      while len(hex_)<6:
-        hex_="0"+hex_
-    embed = discord.Embed(title='Colour information', description=desc, color=deci)
-    embed.add_field(name='RGB', value=f'{r},{g},{b}', inline=True)
-    embed.add_field(name='Hex Code', value=f'#{hex_}', inline=True)
-    embed.add_field(name='Decimal Value', value=deci, inline=True)
-    embed.set_thumbnail(url=f'https://htmlcolors.com/color-image/{hex_}.png')
-    await ctx.send(embed=embed)
+      await ctx.send(embed=output)
 
 @bot.command()
 async def color(ctx, arg1, arg2=None, arg3=None):
-    args = arg1, arg2, arg3
-    match = hexstring_pattern.fullmatch(arg1)
-    if all(arg and arg.isdigit() and 0 <= int(arg) < 256 for arg in args):
-      desc = f'RGB: {arg1},{arg2},{arg3}'
-      r, g, b = map(int, args)
-    elif arg1.isdigit() and 0 <= int(arg1) < 2 ** 24:
-      desc = f'Decimal: {arg1}'
-      n = int(arg1)
-      r, g, b = n >> 16, (n >> 8) & 255, n & 255
-    elif match:
-      desc = f'Hex: {arg1}'
-      r, g, b = (int(val, 16) for val in match.groups())
+    output = botcolor(arg1, arg2, arg3)
+    if output == "Please specify a correct color value.":
+      await ctx.send(output)
     else:
-      await ctx.send('Please specify a correct colour value.')
-      return
-    deci = (r << 16) + (g << 8) + b
-    hex_ = f'{deci:02x}'.upper()
-    if len(hex_)!=6:
-      while len(hex_)<6:
-        hex_="0"+hex_
-    embed = discord.Embed(title='Colour information', description=desc, color=deci)
-    embed.add_field(name='RGB', value=f'{r},{g},{b}', inline=True)
-    embed.add_field(name='Hex Code', value=f'#{hex_}', inline=True)
-    embed.add_field(name='Decimal Value', value=deci, inline=True)
-    embed.set_thumbnail(url=f'https://htmlcolors.com/color-image/{hex_}.png')
-    await ctx.send(embed=embed)
+      await ctx.send(embed=output)
 
 @bot.command()
 async def time(ctx, *, timezoneinput="0"):
-  if timezoneinput.replace(".","").isnumeric():
-    timezone=float(timezoneinput)
-    if 15>timezone>-15 and timezone%0.25==0:
-      tnow = datetime.now() + timedelta(minutes = int(timezoneinput*60))
-      current = "Time in UTC " + timezoneinput + " is " + tnow.strftime("%d %b, %Y (%a) %H:%M:%S")
-      await ctx.send(current)
-    else:
-      await ctx.send("Invalid timezone! Timezone must be below 15, above -15 and divisible by 0.25.")
-  elif timezoneinput=="all":
-    desc = f"**[ISO 3166 Country Codes](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2#Officially_assigned_code_elements)**:\n```AD AE AF AG AI AL AM AO AQ AR AS AT AU AW AX AZ BA BB BD BE BF BG BH BI BJ BL BM BN BO BQ BR BS BT BV BW BY BZ CA CC CD CF CG CH CI CK CL CM CN CO CR CU CV CW CX CY CZ DE DJ DK DM DO DZ EC EE EG EH ER ES ET FI FJ FK FM FO FR GA GB GD GE GF GG GH GI GL GM GN GP GQ GR GS GT GU GW GY HK HM HN HR HT HU ID IE IL IM IN IO IQ IR IS IT JE JM JO JP KE KG KH KI KM KN KP KR KW KY KZ LA LB LC LI LK LR LS LT LU LV LY MA MC MD ME MF MG MH MK ML MM MN MO MP MQ MR MS MT MU MV MW MX MY MZ NA NC NE NF NG NI NL NO NP NR NU NZ OM PA PE PF PG PH PK PL PM PN PR PS PT PW PY QA RE RO RS RU RW SA SB SC SD SE SG SH SI SJ SK SL SM SN SO SR SS ST SV SX SY SZ TC TD TF TG TH TJ TK TL TM TN TO TR TT TV TW TZ UA UG UM US UY UZ VA VC VE VG VI VN VU WF WS YE YT ZA ZM ZW```\nIn addition, **[TZ Database Names](http://worldtimeapi.org/api/timezone.txt)** and **UTC Timezone Numbers** (between -15 and 15, divisible by 0.25) are supported."
-    embed = discord.Embed(title="All Timezones", description=desc)
-    await ctx.send(embed=embed)
-  elif len(timezoneinput)==2 and timezoneinput.isalpha():
-    try:
-      tz = pytz.timezone(pytz.country_timezones[timezoneinput][0])
-      current = "Time in " + pytz.country_timezones(timezoneinput)[0] + " is " + datetime.now(tz=tz).strftime("%d %b, %Y (%a) %H:%M:%S")
-      await ctx.send(current)
-    except:
-      await ctx.send("Invalid ISO-3166 Country Code.")
+  output = bottime(timezoneinput)
+  if type(output) == str:
+    await ctx.send(output)
   else:
-    try:
-      tz = pytz.timezone(timezoneinput)
-      current = "Time in " + timezoneinput + " is " + datetime.now(tz=tz).strftime("%d %b, %Y (%a) %H:%M:%S")
-    except:
-      await ctx.send("Timezone not found. Please use `=time all` for a list of all timezones.")
-    await ctx.send(current)
+    await ctx.send(embed=output)
 
 @bot.command()
 async def spoiler(ctx,*,text):
@@ -856,86 +792,14 @@ async def emojiinfo(ctx,emojiarg : discord.Emoji):
   await ctx.send(embed=embed)
 
 @bot.command()
-async def reverse(ctx,*,text):
+async def reverse(ctx, *, text):
   text = text[::-1]
   await ctx.send(text)
 
 @bot.command()
-async def emoji(ctx,*,newsec):
-  newsec=newsec.replace(" ","   ")
-  newsec=newsec.lower()
-  newsec=newsec.replace(" wc","🚾")
-  newsec=newsec.replace(" ng","🆖")
-  newsec=newsec.replace(" ok","🆗")
-  newsec=newsec.replace(" up!","🆙")
-  newsec=newsec.replace(" cool","🆒")
-  newsec=newsec.replace(" new","🆕")
-  newsec=newsec.replace(" free","🆓")
-  newsec=newsec.replace(" tm","™️")
-  newsec=newsec.replace(" id","🆔")
-  newsec=newsec.replace(" vs","🆚")
-  newsec=newsec.replace(" sos","🆘")
-  newsec=newsec.replace(" (c)","©️")
-  newsec=newsec.replace(" (r)","®️")
-  newsec=newsec.replace("a","🇦 ")
-  newsec=newsec.replace("b","🇧 ")
-  newsec=newsec.replace("c","🇨 ")
-  newsec=newsec.replace("d","🇩 ")
-  newsec=newsec.replace("e","🇪 ")
-  newsec=newsec.replace("f","🇫 ")
-  newsec=newsec.replace("g","🇬 ")
-  newsec=newsec.replace("h","🇭 ")
-  newsec=newsec.replace("i","🇮 ")
-  newsec=newsec.replace("j","🇯 ")
-  newsec=newsec.replace("k","🇰 ")
-  newsec=newsec.replace("l","🇱 ")
-  newsec=newsec.replace("m","🇲 ")
-  newsec=newsec.replace("n","🇳 ")
-  newsec=newsec.replace("o","🇴 ")
-  newsec=newsec.replace("p","🇵 ")
-  newsec=newsec.replace("q","🇶 ")
-  newsec=newsec.replace("r","🇷 ")
-  newsec=newsec.replace("s","🇸 ")
-  newsec=newsec.replace("t","🇹 ")
-  newsec=newsec.replace("u","🇺 ")
-  newsec=newsec.replace("v","🇻 ")
-  newsec=newsec.replace("w","🇼 ")
-  newsec=newsec.replace("x","🇽 ")
-  newsec=newsec.replace("y","🇾 ")
-  newsec=newsec.replace("z","🇿 ")
-  newsec=newsec.replace("||",":pause_button:")
-  newsec=newsec.replace(">||",":play_pause:")
-  newsec=newsec.replace(">>|",":track_next:")
-  newsec=newsec.replace("|<<",":track_previous:")
-  newsec=newsec.replace("<->",":left_right_arrow:")
-  newsec=newsec.replace("->",":arrow_right:")
-  newsec=newsec.replace("<-",":arrow_left:")
-  newsec=newsec.replace(">>",":fast_forward:")
-  newsec=newsec.replace("<<",":rewind:")
-  newsec=newsec.replace(">",":arrow_forward:")
-  newsec=newsec.replace("<",":arrow_backward:")
-  newsec=newsec.replace("!",":exclamation:")
-  newsec=newsec.replace("?",":question:")
-  newsec=newsec.replace("!!",":bangbang:")
-  newsec=newsec.replace("!?",":interrobang:")
-  newsec=newsec.replace("$",":heavy_dollar_sign:")
-  newsec=newsec.replace("#",":hash:")
-  newsec=newsec.replace("*",":asterisk:")
-  newsec=newsec.replace("+",":heavy_plus_sign:")
-  newsec=newsec.replace("-",":heavy_minus_sign:")
-  newsec=newsec.replace("×",":heavy_multiplication_x:")
-  newsec=newsec.replace("÷",":heavy_division_sign:")
-  newsec=newsec.replace("1",":one:")
-  newsec=newsec.replace("2",":two:")
-  newsec=newsec.replace("3",":three:")
-  newsec=newsec.replace("4",":four:")
-  newsec=newsec.replace("5",":five:")
-  newsec=newsec.replace("6",":six:")
-  newsec=newsec.replace("7",":seven:")
-  newsec=newsec.replace("8",":eight:")
-  newsec=newsec.replace("9",":nine:")
-  newsec=newsec.replace("0",":zero:")
-  await ctx.send(newsec)
+async def emoji(ctx, *, text):
+  output = botemoji(text)
+  await ctx.send(output)
 
 @bot.command()
 async def terminate(ctx, *, idc):
