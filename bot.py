@@ -1079,12 +1079,9 @@ async def role(ctx,role: discord.Role=None):
   desc=role.mention
   embed=discord.Embed(title=ti,color=role.color, description=desc)
   memberlist=role.members
-  if len(memberlist)==0:
+  f0v = ", ".join(memberlist)
+  if len(f0v)==0:
     f0v="No members assigned with "+role.name
-  else:
-    f0v=""
-    for count in memberlist:
-      f0v=f0v+count.name
   mention=role.mentionable
   if mention:
     f1v="Mentionable"
@@ -1102,7 +1099,7 @@ async def role(ctx,role: discord.Role=None):
   f5v=role.position
   f6v=role.color
   embed.add_field(name="Mentions", value=f1v, inline=True)
-  embed.add_field(name="Members", value=f0v, inline=True)
+  embed.add_field(name="Members ("+len(memberlist)+")", value=f0v, inline=True)
   embed.add_field(name="Displayed separately?", value=f2v, inline=True)
   embed.add_field(name="Role ID", value=f4v, inline=True)
   embed.add_field(name="Position in hierarchy", value=f5v, inline=True)
@@ -1190,8 +1187,7 @@ Region: """+str(guild.region)
     f8v=f8v[:-1]
     f10va=str(guild.id)
     f11v=""
-    f12v=""
-    for count in guild.emojis:
+    f12v=" ".join(guild.emojis):
       if count.animated==False:
         f11v=f11v+str(count)+" "
       else:
