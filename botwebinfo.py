@@ -5,6 +5,7 @@ import wikipedia
 from bs4 import BeautifulSoup
 import requests
 import re
+dictionary=PyDictionary()
 translatorvar = Translator()
 unsortedlangdict = translatorvar.glanguage().get("tl")
 unsortedsrclangdict = translatorvar.glanguage().get("sl")
