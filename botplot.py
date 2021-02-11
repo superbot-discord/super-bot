@@ -24,7 +24,7 @@ def botpie(title, numbers, label):
   plt.savefig("piechart.png", transparent=True)
   plt.clf()
 
-def botbarv(title, numbers, label):
+def botbarh(title, numbers, label):
   numlist = []
   for count in numbers.split(","):
     numlist.append(int(count))
@@ -44,7 +44,7 @@ def botbarv(title, numbers, label):
   plt.savefig("horizontalbarchart.png", transparent=True)
   plt.clf()
 
-def botv(title, numbers, label):
+def botbarv(title, numbers, label):
   numlist = []
   for count in numbers.split(","):
     numlist.append(int(count))
