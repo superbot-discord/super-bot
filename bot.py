@@ -242,6 +242,30 @@ async def barh(ctx, title, numbers, label):
   os.remove('horizontalbarchart.png')
 
 @bot.command()
+async def barv(ctx, title, numbers, label):
+  numlist = []
+  for count in numbers.split(","):
+    numlist.append(int(count))
+  mycolors = []
+  labels = tuple(label.split(","))
+  if len(labels) > len(numlist):
+    labels = labels[:len(numlist)-1]
+  elif len(numlist) > len(labels):
+    numlist = numlist[:len(labels)-1]
+  x_pos = np.arange(len(labels))
+  plt.rcdefaults()
+  fig, ax = plt.subplots()
+  ax.bar(np.arange(len(labels)), numlist, align='center')
+  ax.set_xticks(x_pos)
+  ax.set_xticklabels(labels)
+  ax.invert_xaxis()
+  plt.savefig("verticalbarchart.png", transparent=True)
+  plt.clf()
+  file = discord.File("verticalbarchart.png")
+  await ctx.send(file=file)
+
+
+@bot.command()
 async def translate(ctx, langinput = "list", *, text = "Sample text"):
   if langinput == "list" or langinput == "all":
     embed1 = discord.Embed(description = f"**List of Language Input (Abbreviations)**\n`"+"` `".join(list(langdict.keys()))+f"`\n\n**List of Language Input (Full Names)**\n`"+"` `".join(list(langdict.values())))
