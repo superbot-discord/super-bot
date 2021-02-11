@@ -16,7 +16,7 @@ def botminecraft(item):
   hardness = table.findAll('tr')[4].findAll('td')[0].findAll('p')[0].string.replace(f"\n","")
   luminant = table.findAll('tr')[5].findAll('td')[0].findAll('p')[0].string.replace(f"\n","")
   transparent = table.findAll('tr')[6].findAll('td')[0].findAll('p')[0].string.replace(f"\n","")
-  flamable = table.findAll('tr')[7].findAll('td')[0].findAll('p')[0].string.replace(f"\n","")
+  flammable = table.findAll('tr')[7].findAll('td')[0].findAll('p')[0].string.replace(f"\n","")
   cffl = table.findAll('tr')[8].findAll('td')[0].findAll('p')[0].string.replace(f"\n","")
   desc=str(soup.findAll('p')[9])
   desc = re.sub(r'/<a href="\/([\s\S]*?)" title="([\s\S]*?)">([\w]*)<\/a>/g', r'[\3](https://minecraft.gamepedia.com/\1)', desc)
