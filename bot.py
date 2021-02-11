@@ -2,14 +2,12 @@ from discord import Webhook, RequestsWebhookAdapter
 from datetime import datetime, date, timedelta
 from selenium.webdriver.common.by import By
 from discord_webhook import DiscordWebhook
-import matplotlib.pyplot as plt
 from pdf2image import convert_from_path
-from PIL import ImageDraw, ImageFilter
 import selenium.common.exceptions
 from discord.ext import commands
+import matplotlib.pyplot as plt
 from selenium import webdriver
 from markdown2 import Markdown
-from pnglatex import pnglatex
 from bs4 import BeautifulSoup
 from cmath import *
 import random as ra
@@ -403,12 +401,6 @@ async def markdown(ctx, *, mdcode = None):
   driver.quit()
   await ctx.send(file=discord.File('md_screenshot.png'))
   os.remove('md_screenshot.png')
-
-@bot.command()
-async def latex(ctx, *, latexcode = None):
-  output = pnglatex(latexcode, 'latex.png')
-  await ctx.send(file=discord.File('latex.png'))
-  os.remove('latex.png')
 
 @bot.command()
 async def youtube(ctx, *, url):
