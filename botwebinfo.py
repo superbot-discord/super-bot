@@ -1,4 +1,6 @@
+import discord
 from pygoogletranslation import Translator
+from PyDictionary import PyDictionary
 import wikipedia
 
 def bottranslate(langinput, text):
@@ -50,3 +52,25 @@ def botwiki(query):
       desc = desc + "`"+str(count)+"` "
     embed = discord.Embed(title=query, description=desc)
   return embed
+
+def botdefinition(word):
+  try:
+    ti = "Definition of "+word
+    desc = ""
+    definitions = dictionary.meaning(word)
+    counter = 0
+    for count in list(definitions.keys()):
+      desc = desc + "**"+count+f"**\n"+definitions[count][counter]+f"\n"
+      counter = counter + 1
+    desc = desc + f"**Synonyms**\n"
+    for count in dictionary.synonym(word):
+      desc = desc + count + ", "
+    desc = desc[:-2]
+    desc = desc + f"\n**Antonyms**\n"
+    for count in dictionary.antonym(word):
+      desc = desc + count + ", "
+    desc = desc[:-2]
+    embed = discord.Embed(title=ti, description=desc)
+    return embed
+  except:
+    return "Invalid word. Please try again."
