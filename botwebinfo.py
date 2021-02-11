@@ -30,6 +30,7 @@ def botminecraft(item):
   embed.add_field(name="Burns with lava?", value=cffl)
   embed.add_field(name="Blast Resistance", value=blastr)
   embed.add_field(name="Hardness", value=hardness)
+  return embed
 
 def bottranslate(langinput, text):
   if langinput == "list" or langinput == "all":
