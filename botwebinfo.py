@@ -2,6 +2,34 @@ import discord
 from pygoogletranslation import Translator
 from PyDictionary import PyDictionary
 import wikipedia
+from bs4 import BeautifulSoup
+import requests
+import re
+
+def botminecraft(item):
+  r=requests.get('https://minecraft.gamepedia.com/'+item)
+  soup=BeautifulSoup(r.content, features="html.parser")
+  table = soup.findAll('table')[0].findAll('tbody')[0]
+  renewable = table.findAll('tr')[0].findAll('td')[0].findAll('p')[0].string.replace(f"\n","")
+  stackable = table.findAll('tr')[1].findAll('td')[0].findAll('p')[0].string.replace(f"\n","")
+  blastr = table.findAll('tr')[3].findAll('td')[0].findAll('p')[0].string.replace(f"\n","")
+  hardness = table.findAll('tr')[4].findAll('td')[0].findAll('p')[0].string.replace(f"\n","")
+  luminant = table.findAll('tr')[5].findAll('td')[0].findAll('p')[0].string.replace(f"\n","")
+  transparent = table.findAll('tr')[6].findAll('td')[0].findAll('p')[0].string.replace(f"\n","")
+  flamable = table.findAll('tr')[7].findAll('td')[0].findAll('p')[0].string.replace(f"\n","")
+  cffl = table.findAll('tr')[8].findAll('td')[0].findAll('p')[0].string.replace(f"\n","")
+  desc=str(soup.findAll('p')[9])
+  desc = re.sub(r'/<a href="\/([\s\S]*?)" title="([\s\S]*?)">([\w]*)<\/a>/g', r'[\3](https://minecraft.gamepedia.com/\1)', desc)
+  desc = re.sub(r'/<b>([\s\S]*?)<\/b>/g', r'**\1**', desc)
+  embed = discord.Embed(title = "Minecraft: "+item, desc=desc)
+  embed.add_field(name="Renewable?", value=renewable)
+  embed.add_field(name="Stackable?", value=stackable)
+  embed.add_field(name="Luminant?", value=luminant)
+  embed.add_field(name="Transparent?", value=transparent)
+  embed.add_field(name="Flammable?", value=flammable)
+  embed.add_field(name="Burns with lava?", value=cffl)
+  embed.add_field(name="Blast Resistance", value=blastr)
+  embed.add_field(name="Hardness", value=hardness)
 
 def bottranslate(langinput, text):
   if langinput == "list" or langinput == "all":
