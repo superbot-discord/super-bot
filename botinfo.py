@@ -2,6 +2,7 @@ import discord
 import datetime
 import pytz
 import re
+set(pytz.all_timezones_set)
 hexstring_pattern = re.compile(r'#?([0-9A-F]{2})([0-9A-F]{2})([0-9A-F]{2})', re.IGNORECASE)
 
 def botcolor(arg1, arg2, arg3):
