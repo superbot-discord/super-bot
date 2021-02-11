@@ -1187,7 +1187,7 @@ Region: """+str(guild.region)
     f8v=f8v[:-1]
     f10va=str(guild.id)
     f11v=""
-    f12v=" ".join(guild.emojis):
+    f12v=" ".join(guild.emojis)
       if count.animated==False:
         f11v=f11v+str(count)+" "
       else:
