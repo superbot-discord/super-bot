@@ -1254,7 +1254,10 @@ async def invitelink(ctx,inviteinput: discord.Invite):
   else:
     f5v=str(age/60)+" min"
   f6v=str(invite.revoked)
-  f7v=(invite.created_at + timedelta(seconds=age)).strftime("%d %b, %Y (%a) %H:%M:%S")
+  if f5v == "Never Expires":
+    f7v = "Never"
+  else:
+    f7v=(invite.created_at + timedelta(seconds=age)).strftime("%d %b, %Y (%a) %H:%M:%S")
   embed.add_field(name="Server", value=f00v, inline=True)
   embed.add_field(name="Uses", value=f0v, inline=True)
   embed.add_field(name="Temporary?", value=f1v, inline=True)
