@@ -60,6 +60,5 @@ def botv(title, numbers, label):
   ax.bar(np.arange(len(labels)), numlist, align='center')
   ax.set_xticks(x_pos)
   ax.set_xticklabels(labels)
-  ax.invert_xaxis()
   plt.savefig("verticalbarchart.png", transparent=True)
   plt.clf()
