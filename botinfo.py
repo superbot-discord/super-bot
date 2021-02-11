@@ -1,0 +1,132 @@
+import discord
+import datetime
+import pytz
+import re
+
+def botcolor(arg1, arg2, arg3):
+  args = arg1, arg2, arg3
+  match = hexstring_pattern.fullmatch(arg1)
+  if all(arg and arg.isdigit() and 0 <= int(arg) < 256 for arg in args):
+    desc = f'RGB: {arg1},{arg2},{arg3}'
+    r, g, b = map(int, args)
+  elif arg1.isdigit() and 0 <= int(arg1) < 2 ** 24:
+    desc = f'Decimal: {arg1}'
+    n = int(arg1)
+    r, g, b = n >> 16, (n >> 8) & 255, n & 255
+  elif match:
+    desc = f'Hex: {arg1}'
+    r, g, b = (int(val, 16) for val in match.groups())
+  else:
+    return "Please specify a correct colour value."
+  deci = (r << 16) + (g << 8) + b
+  hex_ = f'{deci:02x}'.upper()
+  if len(hex_)!=6:
+    while len(hex_)<6:
+      hex_="0"+hex_
+  embed = discord.Embed(title='Colour information', description=desc, color=deci)
+  embed.add_field(name='RGB', value=f'{r},{g},{b}', inline=True)
+  embed.add_field(name='Hex Code', value=f'#{hex_}', inline=True)
+  embed.add_field(name='Decimal Value', value=deci, inline=True)
+  embed.set_thumbnail(url=f'https://htmlcolors.com/color-image/{hex_}.png')
+  return embed
+
+def botemoji(text):
+  text=text.replace(" ","   ")
+  text=text.lower()
+  text=text.replace(" wc","🚾")
+  text=text.replace(" ng","🆖")
+  text=text.replace(" ok","🆗")
+  text=text.replace(" up!","🆙")
+  text=text.replace(" cool","🆒")
+  text=text.replace(" new","🆕")
+  text=text.replace(" free","🆓")
+  text=text.replace(" tm","™️")
+  text=text.replace(" id","🆔")
+  text=text.replace(" vs","🆚")
+  text=text.replace(" sos","🆘")
+  text=text.replace(" (c)","©️")
+  text=text.replace(" (r)","®️")
+  text=text.replace("a","🇦 ")
+  text=text.replace("b","🇧 ")
+  text=text.replace("c","🇨 ")
+  text=text.replace("d","🇩 ")
+  text=text.replace("e","🇪 ")
+  text=text.replace("f","🇫 ")
+  text=text.replace("g","🇬 ")
+  text=text.replace("h","🇭 ")
+  text=text.replace("i","🇮 ")
+  text=text.replace("j","🇯 ")
+  text=text.replace("k","🇰 ")
+  text=text.replace("l","🇱 ")
+  text=text.replace("m","🇲 ")
+  text=text.replace("n","🇳 ")
+  text=text.replace("o","🇴 ")
+  text=text.replace("p","🇵 ")
+  text=text.replace("q","🇶 ")
+  text=text.replace("r","🇷 ")
+  text=text.replace("s","🇸 ")
+  text=text.replace("t","🇹 ")
+  text=text.replace("u","🇺 ")
+  text=text.replace("v","🇻 ")
+  text=text.replace("w","🇼 ")
+  text=text.replace("x","🇽 ")
+  text=text.replace("y","🇾 ")
+  text=text.replace("z","🇿 ")
+  text=text.replace("||",":pause_button:")
+  text=text.replace(">||",":play_pause:")
+  text=text.replace(">>|",":track_next:")
+  text=text.replace("|<<",":track_previous:")
+  text=text.replace("<->",":left_right_arrow:")
+  text=text.replace("->",":arrow_right:")
+  text=text.replace("<-",":arrow_left:")
+  text=text.replace(">>",":fast_forward:")
+  text=text.replace("<<",":rewind:")
+  text=text.replace(">",":arrow_forward:")
+  text=text.replace("<",":arrow_backward:")
+  text=text.replace("!",":exclamation:")
+  text=text.replace("?",":question:")
+  text=text.replace("!!",":bangbang:")
+  text=text.replace("!?",":interrobang:")
+  text=text.replace("$",":heavy_dollar_sign:")
+  text=text.replace("#",":hash:")
+  text=text.replace("*",":asterisk:")
+  text=text.replace("+",":heavy_plus_sign:")
+  text=text.replace("-",":heavy_minus_sign:")
+  text=text.replace("×",":heavy_multiplication_x:")
+  text=text.replace("÷",":heavy_division_sign:")
+  text=text.replace("1",":one:")
+  text=text.replace("2",":two:")
+  text=text.replace("3",":three:")
+  text=text.replace("4",":four:")
+  text=text.replace("5",":five:")
+  text=text.replace("6",":six:")
+  text=text.replace("7",":seven:")
+  text=text.replace("8",":eight:")
+  text=text.replace("9",":nine:")
+  text=text.replace("0",":zero:")
+  return text
+
+def bottime(timezoneinput):
+  if timezoneinput.replace(".","").isnumeric():
+    timezone=float(timezoneinput)
+    if 15>timezone>-15 and timezone%0.25==0:
+      tnow = datetime.now() + datetime.timedelta(minutes = int(timezoneinput*60))
+      return "Time in UTC " + timezoneinput + " is " + tnow.strftime("%d %b, %Y (%a) %H:%M:%S")
+    else:
+      return "Invalid timezone! Timezone must be below 15, above -15 and divisible by 0.25."
+  elif timezoneinput=="all":
+    desc = f"**[ISO 3166 Country Codes](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2#Officially_assigned_code_elements)**:\n```AD AE AF AG AI AL AM AO AQ AR AS AT AU AW AX AZ BA BB BD BE BF BG BH BI BJ BL BM BN BO BQ BR BS BT BV BW BY BZ CA CC CD CF CG CH CI CK CL CM CN CO CR CU CV CW CX CY CZ DE DJ DK DM DO DZ EC EE EG EH ER ES ET FI FJ FK FM FO FR GA GB GD GE GF GG GH GI GL GM GN GP GQ GR GS GT GU GW GY HK HM HN HR HT HU ID IE IL IM IN IO IQ IR IS IT JE JM JO JP KE KG KH KI KM KN KP KR KW KY KZ LA LB LC LI LK LR LS LT LU LV LY MA MC MD ME MF MG MH MK ML MM MN MO MP MQ MR MS MT MU MV MW MX MY MZ NA NC NE NF NG NI NL NO NP NR NU NZ OM PA PE PF PG PH PK PL PM PN PR PS PT PW PY QA RE RO RS RU RW SA SB SC SD SE SG SH SI SJ SK SL SM SN SO SR SS ST SV SX SY SZ TC TD TF TG TH TJ TK TL TM TN TO TR TT TV TW TZ UA UG UM US UY UZ VA VC VE VG VI VN VU WF WS YE YT ZA ZM ZW```\nIn addition, **[TZ Database Names](http://worldtimeapi.org/api/timezone.txt)** and **UTC Timezone Numbers** (between -15 and 15, divisible by 0.25) are supported."
+    embed = discord.Embed(title="All Timezones", description=desc)
+    return embed
+  elif len(timezoneinput)==2 and timezoneinput.isalpha():
+    try:
+      tz = pytz.timezone(pytz.country_timezones[timezoneinput][0])
+      return "Time in " + pytz.country_timezones(timezoneinput)[0] + " is " + datetime.now(tz=tz).strftime("%d %b, %Y (%a) %H:%M:%S")
+    except:
+      return "Timezone not found. Please use `=time all` for a list of all timezones."
+  else:
+    try:
+      tz = pytz.timezone(timezoneinput)
+      return "Time in " + timezoneinput + " is " + datetime.now(tz=tz).strftime("%d %b, %Y (%a) %H:%M:%S")
+    except:
+      return "Timezone not found. Please use `=time all` for a list of all timezones."
