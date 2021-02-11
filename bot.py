@@ -1178,14 +1178,7 @@ Region: """+str(guild.region)
       f8v=f8v+count.mention+" "
     f8v=f8v[:-1]
     f10va=str(guild.id)
-    f11v=""
-    f12v=" ".join(guild.emojis)
-      if count.animated==False:
-        f11v=f11v+str(count)+" "
-      else:
-        f12v=f12v+str(count)+" "
-    f11v=f11v[:-1]
-    f12v=f12v[:-1]
+    f11v=" ".join(guild.emojis)
     f13v=guild.description
     if f13v==None:
       f13v="No description"
@@ -1215,8 +1208,6 @@ Region: """+str(guild.region)
     embed.add_field(name="Description", value=f13v, inline=False)
     if len(f11v)!=0:
       embed.add_field(name="Emojis", value=f11v, inline=True)
-    if len(f12v)!=0:
-      embed.add_field(name="Animated emojis", value=f12v, inline=True)
   await ctx.send(embed=embed)
 
 @bot.command()
