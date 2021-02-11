@@ -7,22 +7,22 @@ def func(pct, allvals):
 
 def botpie(title, numbers, label):
   numlist = []
-    for count in numbers.split(","):
-      numlist.append(int(count))
-    mycolors = []
-    labels = label.split(",")
-    if len(labels) > len(numlist):
-      labels = labels[:len(numlist)-1]
-    elif len(numlist) > len(labels):
-      numlist = numlist[:len(labels)-1]
-    y = np.array(numlist)
-    for count in range(0, len(numlist)):
-      mycolors.append(cmaphsv(count/len(numlist)))
-    plt.pie(y, labels=labels, colors=mycolors, autopct=lambda pct: func(pct, y), textprops = {'color':"w"})
-    plt.legend(loc="lower right")
-    plt.title(title)
-    plt.savefig("piechart.png", transparent=True)
-    plt.clf()
+  for count in numbers.split(","):
+    numlist.append(int(count))
+  mycolors = []
+  labels = label.split(",")
+  if len(labels) > len(numlist):
+    labels = labels[:len(numlist)-1]
+  elif len(numlist) > len(labels):
+    numlist = numlist[:len(labels)-1]
+  y = np.array(numlist)
+  for count in range(0, len(numlist)):
+    mycolors.append(cmaphsv(count/len(numlist)))
+  plt.pie(y, labels=labels, colors=mycolors, autopct=lambda pct: func(pct, y), textprops = {'color':"w"})
+  plt.legend(loc="lower right")
+  plt.title(title)
+  plt.savefig("piechart.png", transparent=True)
+  plt.clf()
 
 def botbarv(title, numbers, label):
   numlist = []
