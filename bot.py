@@ -45,6 +45,7 @@ id_pattern = re.compile(r'([A-Z]{5})', re.IGNORECASE)
 alphaend_pattern = re.compile(r'.*[a-z]', re.IGNORECASE)
 html_pattern = re.compile(r'^\`\`\`(html)?\n[\s\S]*\`\`\`$')
 md_pattern = re.compile(r'^\`\`\`(md|markdown)?\n[\s\S]*\`\`\`$')
+verify_pattern = re.compile(r'[^ ⠀][\s\S]{0,30}?[^ ⠀]#?[\d]{4}(,|, | )?[\d+\-*/×÷%xyz()\[\]\{\}]{1,50}=[\d+\-*/×÷%xyz()\[\]\{\}]{1,50}(,|, | )?[\w ]{3,20}(,|, | )?(Red|Orange|Yellow|Green|Light( |_)?Green|Dark( |_)?Green|Cyan|Blue|Light( |_)?Blue|Dark( |_)?Blue|Purple|Pink|Brown)', re.IGNORECASE)
 UNITS = {'s':'seconds', 'm':'minutes', 'h':'hours', 'd':'days', 'w':'weeks'}
 typer=0
 options = webdriver.ChromeOptions()
@@ -59,7 +60,14 @@ def func(pct, allvals):
 
 @bot.event
 async def on_message(message):
-  if banned_ids.count(message.author.id)==0 and message.content.startswith("=") and message.content.startswith("==")==False:
+  match = verify_pattern.fullmatch(message.content)
+  if message.channel.id == 811562994151850024 and match == False:
+    await message.channel.send(f"Invalid verification format! Please double check the format and try again.\n**Original Content: **"+message.content, delete_after=10)
+    try:
+      await message.delete()
+    except:
+      1
+  elif banned_ids.count(message.author.id)==0 and message.content.startswith("=") and message.content.startswith("==")==False:
     await bot.process_commands(message)
   elif message.content.startswith("="):
     await message.channel.send("You are banned from the bot. Reason: "+banned_text[banned_ids.index(message.author.id)])
