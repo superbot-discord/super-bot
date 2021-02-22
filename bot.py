@@ -46,7 +46,7 @@ id_pattern = re.compile(r'([A-Z]{5})', re.IGNORECASE)
 alphaend_pattern = re.compile(r'.*[a-z]', re.IGNORECASE)
 html_pattern = re.compile(r'^\`\`\`(html)?\n[\s\S]*\`\`\`$')
 md_pattern = re.compile(r'^\`\`\`(md|markdown)?\n[\s\S]*\`\`\`$')
-verify_pattern = re.compile(r'[^ ⠀][\s\S]{0,30}?[^ ⠀]#?[\d]{4}(,|, | )?[\d+\-*/×÷%xyz()\[\]\{\}]{1,50}=[\d+\-*/×÷%xyz()\[\]\{\}]{1,50}(,|, | )?[\w ]{3,20}(,|, | )?(Red|Orange|Yellow|Green|Light( |_)?Green|Dark( |_)?Green|Cyan|Blue|Light( |_)?Blue|Dark( |_)?Blue|Purple|Pink|Brown)', re.IGNORECASE)
+verify_pattern = re.compile(r'[^ ⠀][\s\S]{0,30}?[^ ⠀]#?[\d]{4}(,|, | )?[\d+\-*/×÷%xyz()\[\]\{\}]{1,50}=[\d+\-*/×÷%xyz()\[\]\{\}]{1,50}(,|, | )?[\S ]{3,20}(,|, | )?(Red|Orange|Yellow|Green|Light( |_)?Green|Dark( |_)?Green|Cyan|Blue|Light( |_)?Blue|Dark( |_)?Blue|Purple|Pink|Brown)', re.IGNORECASE)
 UNITS = {'s':'seconds', 'm':'minutes', 'h':'hours', 'd':'days', 'w':'weeks'}
 typer=0
 options = webdriver.ChromeOptions()
@@ -291,25 +291,20 @@ async def speedtest(ctx, *, text = None):
 
 @bot.command()
 async def screenshot(ctx, url = None, form = "all"):
-  driver = webdriver.Chrome(options=options)
-  if url == None:
-    await ctx.send("Invalid format! Please use the format `=screenshot [url]`.")
+  a = botscreenshot(url, form)
+  if a == "Invalid format! Please use the format `=screenshot [url]`.":
+    await ctx.send(a)
   else:
-    driver.get(url)
-    if form == "short" or form == "first" or form == "normal" or form == "regular" or form == "basic" or form == "general" or form == "all":
-      driver.set_window_size(1440,900)
-      driver.get_screenshot_as_file('web_screenshot1.png')
-      await ctx.send(file=discord.File('web_screenshot1.png'))
-      os.remove('web_screenshot1.png')
-    if form == "everything" or form == "full" or form == "entire" or form == "whole" or form == "all":
-      S = lambda X: driver.execute_script('return document.body.parentNode.scroll'+X)
-      driver.set_window_size(S('Width'),S('Height'))
-      for count in range(900, 5400, 900):
-        driver.execute_script("window.scrollTo(0, "+str(count)+")")
-      driver.get_screenshot_as_file('web_screenshot2.png')
-      driver.quit()
-      await ctx.send(file=discord.File('web_screenshot2.png'))
-      os.remove('web_screenshot2.png')
+    try:
+      await ctx.send('web_screenshot1')
+      os.remove('web_screenshot1')
+    except:
+      1
+    try:
+      await ctx.send('web_screenshot2')
+      os.remove('web_screenshot2')
+    except:
+      1
 
 @bot.command()
 async def ocr(ctx, *, text = None):
