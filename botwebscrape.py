@@ -23,6 +23,21 @@ options.headless = True
 options.add_argument('--no-sandbox')
 options.add_argument('--disable-dev-shm-usage')
 
+def botscreenshot(url, form):
+  driver = webdriver.Chrome(options=options)
+  if url == None:
+    return "Invalid format! Please use the format `=screenshot [url]`."
+  else:
+    driver.get(url)
+    if form == "short" or form == "first" or form == "normal" or form == "regular" or form == "basic" or form == "general" or form == "all":
+      driver.set_window_size(1440,900)
+      driver.get_screenshot_as_file('web_screenshot1.png')
+    if form == "everything" or form == "full" or form == "entire" or form == "whole" or form == "all":
+      S = lambda X: driver.execute_script('return document.body.parentNode.scroll'+X)
+      driver.set_window_size(S('Width'),S('Height'))
+      driver.get_screenshot_as_file('web_screenshot2.png')
+    driver.quit()
+
 def botcovid(country : str):
   driver = webdriver.Chrome(options=options)
   if country.lower() == "world" or country.lower() == "global" or country.lower() == "worldwide" or country.lower() == "everywhere" or country.lower() == "anywhere" or country.lower() == "international" or country.lower() == "internationally" or country.lower() == "globally" or country.lower() == "current":
