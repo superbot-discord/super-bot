@@ -1,5 +1,5 @@
 from discord import Webhook, RequestsWebhookAdapter
-from datetime import datetime, date, timedelta, now
+from datetime import datetime, date, timedelta
 from selenium.webdriver.common.by import By
 from discord_webhook import DiscordWebhook
 from pdf2image import convert_from_path
