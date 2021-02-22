@@ -214,7 +214,7 @@ async def barv(ctx, numbers, label, *, title="No_title_required"):
 
 @bot.command(aliases=["histogram", "histograms"])
 async def hist(ctx, numbers, *, title="No_title_required"):
-   try:
+  try:
     bothist(title, numbers)
     file = discord.File("histogram.png")
     await ctx.send(file=file)
