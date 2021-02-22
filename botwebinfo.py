@@ -49,8 +49,8 @@ def botminecraft(item):
 
 def bottranslate(langinput, text):
   if langinput == "list" or langinput == "all":
-    embed1 = discord.Embed(description = f"**List of Language Input (Abbreviations)**\n`"+"` `".join(list(langdict.keys()))+f"`\n\n**List of Language Input (Full Names)**\n`"+"` `".join(list(langdict.values())))
-    embed2 = discord.Embed(description = f"**List of Language Output (Abbreviations)**\n`"+"` `".join(list(srclangdict.keys()))+f"`\n\n**List of Language Output (Full Names)**\n`"+"` `".join(list(srclangdict.values()))+"`")
+    embed1 = discord.Embed(description = f"**List of Language Input (Abbreviations)**\n`"+"  ".join(list(langdict.keys()))+f"`\n\n**List of Language Input (Full Names)**\n`"+"` `".join(list(langdict.values())))
+    embed2 = discord.Embed(description = f"**List of Language Output (Abbreviations)**\n`"+"  ".join(list(srclangdict.keys()))+f"`\n\n**List of Language Output (Full Names)**\n`"+"` `".join(list(srclangdict.values()))+"`")
     return [embed1, embed2]
   else:
     if langinput.count(",")==1:
