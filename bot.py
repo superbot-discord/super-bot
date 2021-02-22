@@ -1569,5 +1569,5 @@ async def on_ready():
   await bot.change_presence(status=discord.Status.idle, activity=activity)
   print("Bot is ready!")
     
-bot.run('Nzk2Njg2MzYzNjA0NjgwNzU1.X_bh_g.8hTTqUvK4c3Hj-3kkJRU42xSkG4')
-client.run('Nzk2Njg2MzYzNjA0NjgwNzU1.X_bh_g.8hTTqUvK4c3Hj-3kkJRU42xSkG4')
+bot.run('Nzk2Njg2MzYzNjA0NjgwNzU1.X_bh_g.8LrZQX__nLUKyXDgpOt5bLnEN7Q')
+client.run('Nzk2Njg2MzYzNjA0NjgwNzU1.X_bh_g.8LrZQX__nLUKyXDgpOt5bLnEN7Q')
