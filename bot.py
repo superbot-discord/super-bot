@@ -215,7 +215,7 @@ async def barv(ctx, title, numbers, label):
 @bot.command()
 async def translate(ctx, langinput = "list", *, text = "Sample text"):
   output = bottranslate(langinput, text)
-  if output[0] == "*":
+  if output[0] == "*" or output[0] == "L":
     await ctx.send(output)
   else:
     e1 = output[0]
