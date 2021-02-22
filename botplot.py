@@ -11,7 +11,8 @@ def bothist(title, numbers):
   for count in numbers.split(","):
     numlist.append(float(count))
   plt.hist(numlist)
-  plt.title(title)
+  if title != "No_title_required":
+    plt.title(title)
   plt.savefig("histogram.png", transparent=True)
   plt.clf()
 
