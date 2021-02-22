@@ -203,7 +203,7 @@ async def barh(ctx, numbers, label, *, title="No_title_required"):
     await ctx.send("Invalid input. Please try again.")
 
 @bot.command()
-async def barv(ctx numbers, label, *, title="No_title_required"):
+async def barv(ctx, numbers, label, *, title="No_title_required"):
   try:
     botbarv(title, numbers, label)
     file = discord.File("verticalbarchart.png")
