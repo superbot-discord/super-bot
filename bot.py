@@ -215,7 +215,7 @@ async def barv(ctx, title, numbers, label):
 @bot.command()
 async def translate(ctx, langinput = "list", *, text = "Sample text"):
   output = bottranslate(langinput, text)
-  if type(output) == str:
+  if str(type(output)) == "<class 'str'>" or str(type(output)) == '<class "str">':
     await ctx.send(output)
   else:
     e1 = output[0]
@@ -272,7 +272,7 @@ async def status(ctx, member : discord.Member = None):
 
 @bot.command()
 async def ping(ctx, *, text = None):
-  now1 = now()
+  now1 = datetime.datetime.now()
   message = await ctx.send("Pong!")
   mcs = str(int((datetime.datetime.now() - now1).microseconds)+int(((datetime.datetime.now() - now1).total_seconds())%60))
   await message.edit(content="Pong! "+mcs+" microseconds")
