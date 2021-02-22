@@ -182,7 +182,7 @@ async def population(ctx, country="current"):
   else:
     await ctx.send(embed=output)
 
-@bot.command()
+@bot.command(aliases=["piechart", "circlechart"])
 async def pie(ctx, title, numbers, label):
   try:
     botpie(title, numbers, label)
@@ -209,6 +209,16 @@ async def barv(ctx, title, numbers, label):
     file = discord.File("verticalbarchart.png")
     await ctx.send(file=file)
     os.remove('verticalbarchart.png')
+  except:
+    await ctx.send("Invalid input. Please try again.")
+
+@bot.command(aliases=["histogram", "histograms"])
+async def hist(ctx, title, numbers):
+   try:
+    bothist(title, numbers)
+    file = discord.File("histogram.png")
+    await ctx.send(file=file)
+    os.remove('histogram.png')
   except:
     await ctx.send("Invalid input. Please try again.")
 
