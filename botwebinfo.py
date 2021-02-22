@@ -64,10 +64,10 @@ def bottranslate(langinput, text):
     if list(langdict.values()).count(lang) == 1:
       lang = list(langdict.keys())[list(langdict.values()).index(lang)]
     translation = translatorvar.translate(text, src=fromlang, dest=lang)
-    try:
-      return "**Translation from "+srclangdict[fromlang]+" to "+langdict[lang]+f":**\n"+translation.text.replace("u003c", "<").replace("u003e", ">").replace("u0026", "&")
-    except:
-      return "Language not found! Please use `=translate list` to get a list of languages."
+    #try:
+    return "**Translation from "+srclangdict[fromlang]+" to "+langdict[lang]+f":**\n"+translation.text.replace("u003c", "<").replace("u003e", ">").replace("u0026", "&")
+    #except:
+    #  return "Language not found! Please use `=translate list` to get a list of languages."
 
 def botwiki(query):
   totallen = 0
