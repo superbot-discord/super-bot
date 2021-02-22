@@ -214,11 +214,13 @@ async def barv(ctx, title, numbers, label):
 @bot.command()
 async def translate(ctx, langinput = "list", *, text = "Sample text"):
   output = bottranslate(langinput, text)
-  if type(output)==str:
+  if type(output) == str:
     await ctx.send(output)
   else:
-    await ctx.send(embed=output[0])
-    await ctx.send(embed=output[1])
+    e1 = output[0]
+    e2 = output[1]
+    await ctx.send(embed=e1)
+    await ctx.send(embed=e2)
 
 @bot.command()
 async def transparent(ctx, alpha = 128):
