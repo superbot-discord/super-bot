@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
+cmaphsv = plt.cm.hsv
 def func(pct, allvals):
   absolute = int(pct/100*np.sum(allvals))
   return "{:d} ({:.1f}%)".format(absolute, int(pct))
