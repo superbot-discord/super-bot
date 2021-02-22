@@ -299,13 +299,13 @@ async def screenshot(ctx, url = None, form = "all"):
     await ctx.send(a)
   else:
     try:
-      await ctx.send(file=discord.File('web_screenshot1'))
-      os.remove('web_screenshot1')
+      await ctx.send(file=discord.File('web_screenshot1.png'))
+      os.remove('web_screenshot1.png')
     except:
       1
     try:
-      await ctx.send(file=discord.File('web_screenshot2'))
-      os.remove('web_screenshot2')
+      await ctx.send(file=discord.File('web_screenshot2.png'))
+      os.remove('web_screenshot2.png')
     except:
       1
 
