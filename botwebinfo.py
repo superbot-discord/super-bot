@@ -65,7 +65,7 @@ def bottranslate(langinput, text):
       lang = list(langdict.keys())[list(langdict.values()).index(lang)]
     translation = translatorvar.translate(text, src=fromlang, dest=lang)
     try:
-      return "**Translation from "+srclangdict[fromlang]+" to "+langdict[lang]+f":**\n"+translation.text.replace("u003c", "<").replace("u003e", ">").replace("u0026", "&")
+      return "**Translation from "+srclangdict[translatorvar.detect(text)]+" to "+langdict[lang]+f":**\n"+translation.text.replace("u003c", "<").replace("u003e", ">").replace("u0026", "&")
     except:
       return "Language not found! Please use `=translate list` to get a list of languages."
 
