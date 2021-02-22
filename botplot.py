@@ -31,7 +31,8 @@ def botpie(title, numbers, label):
     mycolors.append(cmaphsv(count/len(numlist)))
   plt.pie(y, labels=labels, colors=mycolors, autopct=lambda pct: func(pct, y), textprops = {'color':"w"})
   plt.legend(loc="lower right")
-  plt.title(title)
+  if title != "No_title_required":
+    plt.title(title)
   plt.savefig("piechart.png", transparent=True)
   plt.clf()
 
@@ -52,6 +53,8 @@ def botbarh(title, numbers, label):
   ax.set_yticks(y_pos)
   ax.set_yticklabels(labels)
   ax.invert_yaxis()
+  if title != "No_title_required":
+    plt.title(title)
   plt.savefig("horizontalbarchart.png", transparent=True)
   plt.clf()
 
@@ -71,5 +74,7 @@ def botbarv(title, numbers, label):
   ax.bar(np.arange(len(labels)), numlist, align='center')
   ax.set_xticks(x_pos)
   ax.set_xticklabels(labels)
+  if title != "No_title_required":
+    plt.title(title)
   plt.savefig("verticalbarchart.png", transparent=True)
   plt.clf()
