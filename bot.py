@@ -558,7 +558,7 @@ async def type(ctx):
     await ctx.send("Stopped typing")
 
 @bot.command(aliases=["simpleembed"])
-async def simpembed, *, text):
+async def simpembed(ctx, *, text):
   textlist=text.splitlines()
   if len(textlist) == 1:
     embed=discord.Embed(title=textlist[0])
