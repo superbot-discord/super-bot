@@ -6,6 +6,15 @@ def func(pct, allvals):
   absolute = int(pct/100*np.sum(allvals))
   return "{:d} ({:.1f}%)".format(absolute, int(pct))
 
+def bothist(title, numbers):
+  numlist = []
+  for count in numbers.split(","):
+    numlist.append(float(count))
+  plt.hist(numlist)
+  plt.title(title)
+  plt.savefig("histogram.png", transparent=True)
+  plt.clf()
+
 def botpie(title, numbers, label):
   numlist = []
   for count in numbers.split(","):
