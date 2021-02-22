@@ -183,7 +183,7 @@ async def population(ctx, country="current"):
     await ctx.send(embed=output)
 
 @bot.command(aliases=["piechart", "circlechart"])
-async def pie(ctx, numbers, label, title="No_title_required"):
+async def pie(ctx, numbers, label, *, title="No_title_required"):
   try:
     botpie(title, numbers, label)
     file = discord.File("piechart.png")
@@ -193,7 +193,7 @@ async def pie(ctx, numbers, label, title="No_title_required"):
     await ctx.send("Invalid input. Please try again.")
 
 @bot.command()
-async def barh(ctx, numbers, label, title="No_title_required"):
+async def barh(ctx, numbers, label, *, title="No_title_required"):
   try:
     botbarh(title, numbers, label)
     file = discord.File("horizontalbarchart.png")
@@ -203,7 +203,7 @@ async def barh(ctx, numbers, label, title="No_title_required"):
     await ctx.send("Invalid input. Please try again.")
 
 @bot.command()
-async def barv(ctx numbers, label, title="No_title_required"):
+async def barv(ctx numbers, label, *, title="No_title_required"):
   try:
     botbarv(title, numbers, label)
     file = discord.File("verticalbarchart.png")
@@ -213,7 +213,7 @@ async def barv(ctx numbers, label, title="No_title_required"):
     await ctx.send("Invalid input. Please try again.")
 
 @bot.command(aliases=["histogram", "histograms"])
-async def hist(ctx, numbers, title="No_title_required"):
+async def hist(ctx, numbers, *, title="No_title_required"):
    try:
     bothist(title, numbers)
     file = discord.File("histogram.png")
