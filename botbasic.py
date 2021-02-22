@@ -168,19 +168,22 @@ Does an OCR scan for the image.
 
 **text [PDF]**
 Turns the PDF to plain text.
-  """
+"""
   elif cat=="plot" or cat=="plotting" or cat=="chart" or cat=="graph":
     ti="Web Command and Developer Tools"
     desc="""
-**pie [Title] [Data] [Labels]**
+**pie [Data] [Title] [Labels]**
 Plots a pie chart with the Title (e.g. "Popularity of different fruits"), Data (e.g. 1,2,3,4) and Labels (e.g. Apple,Banana,Cherry,Date).
 
-**barh**
+**barh [Data] {Title}**
 Plots a **h**orizontal bar chart with the Title (e.g. "Popularity of different fruits"), Data (e.g. 1,2,3,4) and Labels (e.g. Apple,Banana,Cherry,Date).
 
-**barv**
+**barv [Data] {Title}**
 Plots a **v**ertical bar chart with the Title (e.g. "Popularity of different fruits"), Data (e.g. 1,2,3,4) and Labels (e.g. Apple,Banana,Cherry,Date).
-  """
+
+**hist [Data] {Title}**
+Plots a 1-dimensional histogram.
+"""
   elif cat=="help":
     ti="help {Command or Category}"
     desc="Show the help for a specific command/category. The command/category is optional."
@@ -334,7 +337,7 @@ Plots a **v**ertical bar chart with the Title (e.g. "Popularity of different fru
 `screenshot` `youtube` `wiki` `engrave` `covid` `population` `python` `ocr` `text` `html` `md`
 
 **Plot commands**
-`pie` `barh` `barv`
+`pie` `barh` `barv` `hist`
 
 Need help? check the [documentation](https://github.com/johann-lau/Bot#bot-documentation)!
   """
