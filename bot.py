@@ -554,22 +554,7 @@ async def type(ctx):
 
 @bot.command(aliases=["simpleembed"])
 async def simpembed(ctx, *, text):
-  textlist=text.splitlines()
-  if len(textlist) == 1:
-    embed=discord.Embed(title=textlist[0])
-  elif len(textlist) == 2:
-    embed=discord.Embed(title=textlist[0], url=textlist[1])
-    textlist.remove(textlist[0])
-  textlist.remove(textlist[0])
-  for count in range(0,len(textlist)//3):
-    if textlist[2].lower()=="y" or textlist[2].lower()=="yes" or textlist[2].lower()=="true" or textlist[2].lower()=="1":
-      inl=True
-    else:
-      inl=False
-    embed.add_field(name=textlist[0], value=textlist[1].replace("{{{newline}}}","\n"), inline=inl)
-    textlist.remove(textlist[0])
-    textlist.remove(textlist[0])
-    textlist.remove(textlist[0])
+  embed = botsimpembed(text)
   await ctx.send(embed=embed)
 
 @bot.command()
