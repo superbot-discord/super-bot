@@ -1,5 +1,5 @@
 from discord import Webhook, RequestsWebhookAdapter
-from datetime import datetime, date, timedelta, datetime.now
+from datetime import datetime, date, timedelta, now
 from selenium.webdriver.common.by import By
 from discord_webhook import DiscordWebhook
 from pdf2image import convert_from_path
@@ -16,6 +16,7 @@ from math import *
 import pytesseract
 import time as tm
 import subprocess
+import datetime
 import requests
 import aiohttp
 import asyncio
@@ -273,7 +274,7 @@ async def status(ctx, member : discord.Member = None):
 async def ping(ctx, *, text = None):
   now1 = now()
   message = await ctx.send("Pong!")
-  mcs = str(int((now() - now1).microseconds)+int(((now() - now1).total_seconds())%60))
+  mcs = str(int((datetime.datetime.now() - now1).microseconds)+int(((datetime.datetime.now() - now1).total_seconds())%60))
   await message.edit(content="Pong! "+mcs+" microseconds")
 
 @bot.command()
