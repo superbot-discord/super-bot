@@ -61,7 +61,7 @@ def func(pct, allvals):
 @bot.event
 async def on_message(message):
   match = verify_pattern.fullmatch(message.content)
-  if message.channel.id == 811562994151850024 and match == False:
+  if message.channel.id == 811562994151850024 and match == False and message.author.roles.count(guild.get_role(810729029790597190)) == 0:
     await message.channel.send(f"Invalid verification format! Please double check the format and try again.\n**Original Content: **"+message.content, delete_after=10)
     try:
       await message.delete()
