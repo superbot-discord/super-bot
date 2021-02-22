@@ -1,5 +1,24 @@
 import discord
 
+def botsimpembed(text):
+  textlist=text.splitlines()
+  if len(textlist) == 1:
+    embed=discord.Embed(title=textlist[0])
+  elif len(textlist) == 2:
+    embed=discord.Embed(title=textlist[0], description=textlist[1])
+    textlist.remove(textlist[0])
+  textlist.remove(textlist[0])
+  for count in range(0,len(textlist)//3):
+    if textlist[2].lower()=="y" or textlist[2].lower()=="yes" or textlist[2].lower()=="true" or textlist[2].lower()=="1":
+      inl=True
+    else:
+      inl=False
+    embed.add_field(name=textlist[0], value=textlist[1].replace("{{{newline}}}","\n"), inline=inl)
+    textlist.remove(textlist[0])
+    textlist.remove(textlist[0])
+    textlist.remove(textlist[0])
+  return embed
+
 def botembed(text):
   textlist=text.splitlines()
   if len(textlist) == 1:
