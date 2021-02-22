@@ -19,14 +19,16 @@ def botembed(text):
   textlist.remove(textlist[0])
   if len(textlist) == 1:
     embed.set_author(name=textlist[0])
+    textlist.remove(textlist[0])
   elif len(textlist) == 2:
     embed.set_author(name=textlist[0], url=textlist[1])
+    textlist.remove(textlist[0])
     textlist.remove(textlist[0])
   elif len(textlist) == 3:
     embed.set_author(name=textlist[0], url=textlist[1], icon_url=textlist[2])
     textlist.remove(textlist[0])
     textlist.remove(textlist[0])
-  textlist.remove(textlist[0])
+    textlist.remove(textlist[0])
   if len(textlist) == 1:
     embed.set_footer(text=textlist[0])
     textlist.remove(textlist[0])
