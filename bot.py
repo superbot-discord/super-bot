@@ -69,7 +69,7 @@ async def on_message(message):
       await message.delete()
     except:
       1
-  elif message.author.id == 757431801487556748:
+  elif message.author.id == 757431801487556748 and (message.count('Joe')==1 or message.count('Joh')==1 or message.count('Bitch')==1 or message.count('Piss')==1):
     await message.delete()
   elif banned_ids.count(message.author.id)==0 and message.content.startswith("=") and message.content.startswith("==")==False:
     await bot.process_commands(message)
@@ -305,14 +305,14 @@ async def ping(ctx, *, text = None):
 @bot.command()
 async def speedtest(ctx, *, text = None):
   total=0
-  now1 = datetime.now()
+  now1 = datetime.datetime.now()
   message = await ctx.send("Pong!")
-  mcs = (datetime.now() - now1).microseconds
+  mcs = (datetime.datetime.now() - now1).microseconds
   total = total + mcs
   for count in range(1,6):
-    now1 = datetime.now()
+    now1 = datetime.datetime.now()
     await message.edit(content="Pong! "+str(mcs)+" microseconds  (Test "+str(count)+")")
-    mcs = (datetime.now() - now1).microseconds
+    mcs = (datetime.datetime.now() - now1).microseconds
     total = total + mcs
   avg = int(total/6)
   await message.edit(content=f"Pong!\nTotal time: "+str(total)+f" mcs\nAverage time: "+str(avg)+" mcs")
@@ -802,8 +802,8 @@ async def rtimer(ctx, timetocount,*,Text=None):
       UNITS.get(m.group('unit').lower(), 'seconds'): int(m.group('val'))
       for m in re.finditer(r'(?P<val>\d+)(?P<unit>[smhdw]?)', timetocount, flags=re.I)
     }).total_seconds())
-    end = datetime.now() + timedelta(seconds = sec)
-    seconds = int((end - datetime.now()).total_seconds())
+    end = datetime.datetime.now() + timedelta(seconds = sec)
+    seconds = int((end - datetime.datetime.now()).total_seconds())
     idcode = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"[ra.randint(0, 25)]+"ABCDEFGHIJKLMNOPQRSTUVWXYZ"[ra.randint(0, 25)]+"ABCDEFGHIJKLMNOPQRSTUVWXYZ"[ra.randint(0, 25)]+"ABCDEFGHIJKLMNOPQRSTUVWXYZ"[ra.randint(0, 25)]+"ABCDEFGHIJKLMNOPQRSTUVWXYZ"[ra.randint(0, 25)]
     exec("terminate"+idcode.lower()+str(ctx.guild.id)+"=0",globals())
     newidcode=idcode
@@ -837,7 +837,7 @@ async def rtimer(ctx, timetocount,*,Text=None):
     desc = "Initializing countdown…"
     message = await ctx.send(desc)
     while seconds>=1 and eval("terminate"+idcode.lower()+str(ctx.guild.id))==0:
-      seconds = int((end - datetime.now()).total_seconds())
+      seconds = int((end - datetime.datetime.now()).total_seconds())
       newsec=str(seconds%60)
       newmin=str((seconds%3600)//60)
       newhrs=str(seconds%86400//3600)
