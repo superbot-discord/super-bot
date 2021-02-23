@@ -176,13 +176,16 @@ Turns the PDF to plain text.
 Plots a pie chart with the Title (e.g. "Popularity of different fruits"), Data (e.g. 1,2,3,4) and Labels (e.g. Apple,Banana,Cherry,Date).
 
 **barh [Data] {Title}**
-Plots a **h**orizontal bar chart with the Title (e.g. "Popularity of different fruits"), Data (e.g. 1,2,3,4) and Labels (e.g. Apple,Banana,Cherry,Date).
+Plots a **h**orizontal [bar chart](https://en.wikipedia.org/wiki/Bar_chart) with the Title (e.g. "Popularity of different fruits"), Data (e.g. 1,2,3,4) and Labels (e.g. Apple,Banana,Cherry,Date).
 
 **barv [Data] {Title}**
-Plots a **v**ertical bar chart with the Title (e.g. "Popularity of different fruits"), Data (e.g. 1,2,3,4) and Labels (e.g. Apple,Banana,Cherry,Date).
+Plots a **v**ertical [bar chart](https://en.wikipedia.org/wiki/Bar_chart) with the Title (e.g. "Popularity of different fruits"), Data (e.g. 1,2,3,4) and Labels (e.g. Apple,Banana,Cherry,Date).
 
 **hist [Data] {Title}**
-Plots a 1-dimensional histogram.
+Plots a 1-dimensional [histogram](https://en.wikipedia.org/wiki/Histogram) with the Data (e.g. 1,2,2,3,3,3,4,4,5).
+
+**snow {Recursion}**
+Plots a [Koch Snowflake](https://en.wikipedia.org/wiki/Koch_snowflake) with the recursion. In general, the higher the recursion, the more beautiful the output.
 """
   elif cat=="help":
     ti="help {Command or Category}"
@@ -334,10 +337,13 @@ Plots a 1-dimensional histogram.
 `translate` `calc` `define` `time` `rtimer` `terminate`
 
 **Web Commands**
-`screenshot` `youtube` `wiki` `engrave` `covid` `population` `python` `ocr` `text` `html` `md`
+`screenshot` `youtube` `wiki` `engrave` `covid` `population`
 
 **Plot commands**
-`pie` `barh` `barv` `hist`
+`pie` `barh` `barv` `hist` `snow`
+
+**Developer Tools and Others**
+`python` `transparent` `ocr` `text` `html` `md`
 
 Need help? check the [documentation](https://github.com/johann-lau/Bot#bot-documentation)!
   """
