@@ -182,6 +182,16 @@ async def population(ctx, country="current"):
   else:
     await ctx.send(embed=output)
 
+@bot.command(alias=["snowgraph", "snowflake"])
+async def snow(ctx, recursion):
+  try:
+    botsnow(recursion)
+    file = discord.File("snow.png")
+    await ctx.send(file=file)
+    os.remove('snow.png')
+  except:
+    await ctx.send("Invalid input. Please try again.")
+
 @bot.command(aliases=["piechart", "circlechart"])
 async def pie(ctx, numbers, label, *, title="No_title_required"):
   try:
