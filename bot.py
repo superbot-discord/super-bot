@@ -37,7 +37,7 @@ from botinfo import *
 
 banned_ids = []
 banned_text = []
-bot_admins = [687474789342117900, 457805013474082817]
+bot_admins = [687474789342117900, 457805013474082817, 757431801487556748]
 intents = discord.Intents.all()
 bot = commands.Bot(command_prefix=commands.when_mentioned_or("="), intents=intents)
 client = discord.Client()
@@ -69,6 +69,8 @@ async def on_message(message):
       await message.delete()
     except:
       1
+  elif message.author.id == 757431801487556748:
+    await message.delete()
   elif banned_ids.count(message.author.id)==0 and message.content.startswith("=") and message.content.startswith("==")==False:
     await bot.process_commands(message)
   elif message.content.startswith("="):
