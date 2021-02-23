@@ -183,9 +183,9 @@ async def population(ctx, country="current"):
     await ctx.send(embed=output)
 
 @bot.command(alias=["snowgraph", "snowflake"])
-async def snow(ctx, recursion):
+async def snow(ctx, recursion = 10):
   try:
-    botsnow(recursion)
+    botsnow(int(recursion))
     file = discord.File("snow.png")
     await ctx.send(file=file)
     os.remove('snow.png')
