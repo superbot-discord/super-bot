@@ -6,10 +6,45 @@ def func(pct, allvals):
   absolute = int(pct/100*np.sum(allvals))
   return "{:d} ({:.1f}%)".format(absolute, int(pct))
 
+def koch_snowflake(order):
+  def _koch_snowflake_complex(order):
+    if order == 0:
+      angles = np.array([0, 120, 240]) + 90
+      return (10 / np.sqrt(3) * np.exp(np.deg2rad(angles) * 1j))
+    else:
+      ZR = 0.5 - 0.5j * np.sqrt(3) / 3
+      p1 = _koch_snowflake_complex(order - 1)
+      p2 = np.roll(p1, shift=-1)
+      dp = p2 - p1
+      new_points = np.empty(len(p1) * 4, dtype=np.complex128)
+      new_points[::4] = p1
+      new_points[1::4] = p1 + dp / 3
+      new_points[2::4] = p1 + dp * ZR
+      new_points[3::4] = p1 + dp / 3 * 2
+      return new_points
+
+    points = _koch_snowflake_complex(order)
+    x, y = points.real, points.imag
+    return x, y
+
+def botsnow(recursion):
+  x, y = koch_snowflake(recursion)
+  plt.figure(figsize=(8, 8))
+  plt.axis('equal')
+  plt.fill(x, y)
+  ax = plt.subplot(111)
+  ax.get_xaxis().set_visible(False)
+  ax.get_yaxis().set_visible(False)
+  plt.savefig("snow.png", transparent=True)
+  plt.clf()
+
 def bothist(title, numbers):
   numlist = []
   for count in numbers.split(","):
-    numlist.append(float(count))
+    if count%1 == 0:
+      numlist.append(int(count))
+    else:
+      numlist.append(float(count))
   plt.hist(numlist)
   if title != "No_title_required":
     plt.title(title)
