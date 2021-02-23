@@ -35,6 +35,10 @@ def botsnow(recursion):
   ax = plt.subplot(111)
   ax.get_xaxis().set_visible(False)
   ax.get_yaxis().set_visible(False)
+  ax.spines['top'].set_visible(False)
+  ax.spines['bottom'].set_visible(False)
+  ax.spines['left'].set_visible(False)
+  ax.spines['right'].set_visible(False)
   plt.savefig("snow.png", transparent=True)
   plt.clf()
 
