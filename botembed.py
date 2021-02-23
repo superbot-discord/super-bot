@@ -5,7 +5,7 @@ def botsimpembed(text):
   if len(textlist) == 1:
     embed=discord.Embed(title=textlist[0])
   elif len(textlist) == 2:
-    embed=discord.Embed(title=textlist[0], description=textlist[1])
+    embed=discord.Embed(title=textlist[0], description=textlist[1].replace("{{{newline}}}",f"\n"))
     textlist.remove(textlist[0])
   textlist.remove(textlist[0])
   for count in range(0,len(textlist)//3):
@@ -13,7 +13,7 @@ def botsimpembed(text):
       inl=True
     else:
       inl=False
-    embed.add_field(name=textlist[0], value=textlist[1].replace("{{{newline}}}","\n"), inline=inl)
+    embed.add_field(name=textlist[0], value=textlist[1].replace("{{{newline}}}",f"\n"), inline=inl)
     textlist.remove(textlist[0])
     textlist.remove(textlist[0])
     textlist.remove(textlist[0])
@@ -23,11 +23,14 @@ def botembed(text):
   textlist=text.splitlines()
   if len(textlist) == 1:
     embed=discord.Embed(title=textlist[0])
+    textlist.remove(textlist[0])
   elif len(textlist) == 2:
     embed=discord.Embed(title=textlist[0], url=textlist[1])
     textlist.remove(textlist[0])
+    textlist.remove(textlist[0])
   elif len(textlist) == 3 or (len(textlist) == 4 and (textlist[3] == "" or textlist[3] == " ")):
     embed=discord.Embed(title=textlist[0], url=textlist[1], description=textlist[2].replace("{{{newline}}}","\n"))
+    textlist.remove(textlist[0])
     textlist.remove(textlist[0])
     textlist.remove(textlist[0])
   elif len(textlist) == 4:
@@ -35,7 +38,7 @@ def botembed(text):
     textlist.remove(textlist[0])
     textlist.remove(textlist[0])
     textlist.remove(textlist[0])
-  textlist.remove(textlist[0])
+    textlist.remove(textlist[0])
   if len(textlist) == 1:
     embed.set_author(name=textlist[0])
     textlist.remove(textlist[0])
@@ -62,7 +65,7 @@ def botembed(text):
       inl=True
     else:
       inl=False
-    embed.add_field(name=textlist[0], value=textlist[1].replace("{{{newline}}}","\n"), inline=inl)
+    embed.add_field(name=textlist[0], value=textlist[1].replace("{{{newline}}}",f"\n"), inline=inl)
     textlist.remove(textlist[0])
     textlist.remove(textlist[0])
     textlist.remove(textlist[0])
