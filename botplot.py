@@ -23,9 +23,9 @@ def koch_snowflake(order):
       new_points[3::4] = p1 + dp / 3 * 2
       return new_points
 
-    points = _koch_snowflake_complex(order)
-    x, y = points.real, points.imag
-    return x, y
+  points = _koch_snowflake_complex(order)
+  x, y = points.real, points.imag
+  return x, y
 
 def botsnow(recursion):
   x, y = koch_snowflake(recursion)
