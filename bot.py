@@ -184,13 +184,13 @@ async def population(ctx, country="current"):
 
 @bot.command(alias=["snowgraph", "snowflake"])
 async def snow(ctx, recursion = 10):
-  try:
-    botsnow(int(recursion))
-    file = discord.File("snow.png")
-    await ctx.send(file=file)
-    os.remove('snow.png')
-  except:
-    await ctx.send("Invalid input. Please try again.")
+  #try:
+  botsnow(int(recursion))
+  file = discord.File("snow.png")
+  await ctx.send(file=file)
+  os.remove('snow.png')
+  #except:
+  #  await ctx.send("Invalid input. Please try again.")
 
 @bot.command(aliases=["piechart", "circlechart"])
 async def pie(ctx, numbers, label, *, title="No_title_required"):
