@@ -61,6 +61,11 @@ def func(pct, allvals):
   return "{:d} ({:.1f}%)".format(absolute, int(pct))
 
 @bot.event
+async def on_invite_create(invite):
+  if invite.guild.id == 809368482344075265:
+    await invite.delete()
+
+@bot.event
 async def on_message(message):
   match = verify_pattern.fullmatch(message.content)
   if message.channel.id == 811562994151850024 and match == None and message.author.roles.count(message.guild.get_role(810729029790597190)) == 0:
