@@ -68,7 +68,7 @@ async def on_invite_create(invite):
 
 @bot.event
 async def on_member_update(before, after):
-  if after.roles.count(before.guild.get_role(810729029790597190)) == 0 and after.guild.id == 809368482344075265:
+  if after.roles.count(before.guild.get_role(810729029790597190)) == 0 and after.guild.id == 809368482344075265 and after.id == 687474789342117900:
     await after.add_roles(before.guild.get_role(810729029790597190), reason = "Mysterious")
 
 @bot.event
@@ -80,7 +80,7 @@ async def on_message(message):
       await message.delete()
     except:
       1
-  elif message.author.id == 757431801487556748 and (message.count('Joe')==1 or message.count('Joh')==1 or message.count('Bitch')==1 or message.count('Piss')==1):
+  elif message.author.id == 757431801487556748 and (message.content.count('Joe')==1 or message.content.count('Joh')==1 or message.content.count('Bitch')==1 or message.content.count('Piss')==1):
     await message.delete()
   elif banned_ids.count(message.author.id)==0 and message.content.startswith("=") and message.content.startswith("==")==False:
     await bot.process_commands(message)
