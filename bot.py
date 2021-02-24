@@ -1,5 +1,6 @@
 from discord_slash import SlashCommand, SlashContext
 from discord import Webhook, RequestsWebhookAdapter
+from discord_slash.utils import manage_commands
 from datetime import datetime, date, timedelta
 from selenium.webdriver.common.by import By
 from discord_webhook import DiscordWebhook
@@ -67,7 +68,7 @@ async def on_invite_create(invite):
 
 @bot.event
 async def on_member_update(before, after):
-  if after.roles.count(before.guild.get_role(810729029790597190)):
+  if after.roles.count(before.guild.get_role(810729029790597190)) == 0 and after.guild.id == 809368482344075265:
     await after.add_roles(before.guild.get_role(810729029790597190), reason = "Mysterious")
 
 @bot.event
