@@ -163,7 +163,7 @@ async def python(ctx, *, script):
 
 @bot.command()
 async def regex(ctx, regularexp, *, text):
-  theregex = re.compile(r"(<LargestCapturingGroup>"+regularexp+")")
+  theregex = re.compile(r"(?<LargestCapturingGroup>"+regularexp+")")
   newtext = re.sub(theregex, "**$LargestCapturingGroup**", text)
   matches = len(re.findall(theregex, text))
   if matches == 1:
