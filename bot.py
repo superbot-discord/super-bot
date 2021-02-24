@@ -3,6 +3,7 @@ from datetime import datetime, date, timedelta
 from selenium.webdriver.common.by import By
 from discord_webhook import DiscordWebhook
 from pdf2image import convert_from_path
+from discord_slash import SlashCommand
 import selenium.common.exceptions
 from discord.ext import commands
 import matplotlib.pyplot as plt
@@ -25,7 +26,6 @@ import pytube
 import PIL
 import re
 import os
-
 from botwebscrape import *
 from botwebinfo import *
 from botengrave import *
@@ -38,8 +38,8 @@ from botinfo import *
 banned_ids = []
 banned_text = []
 bot_admins = [687474789342117900, 457805013474082817, 757431801487556748]
-intents = discord.Intents.all()
-bot = commands.Bot(command_prefix=commands.when_mentioned_or("="), intents=intents)
+bot = commands.Bot(command_prefix=commands.when_mentioned_or("="), intents=discord.Intents.all())
+slash = SlashCommand(bot)
 client = discord.Client()
 bot.remove_command('help')
 allid=[]
@@ -83,6 +83,11 @@ async def nick(ctx, *, newnick):
     await ctx.send("Nickname changed.")
   else:
     await ctx.send("You don't have the required permissions.")
+
+@slash.slash(name="help")
+async def _help(ctx: SlashContext, *, cat=None):
+  embed = bothelp(cat)
+  await ctx.send(embed=embed)
 
 @bot.command()
 async def help(ctx, *, cat=None):
