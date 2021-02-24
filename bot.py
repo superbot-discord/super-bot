@@ -65,6 +65,10 @@ async def on_invite_create(invite):
   if invite.guild.id == 809368482344075265:
     await invite.delete()
 
+#@bot.event
+#async def on_member_update(before, after):
+  
+
 @bot.event
 async def on_message(message):
   match = verify_pattern.fullmatch(message.content)
@@ -89,11 +93,11 @@ async def nick(ctx, *, newnick):
   else:
     await ctx.send("You don't have the required permissions.")
 
-@slash.slash(name="help", description = "View all commands of the bot.", options=[manage_commands.create_option(name = "cat", description = "Category of command you need help with.", option_type = 3, required = False)], guild_ids = [809368482344075265, 807164404960854026, 744520955585626132, 813688458819928066, 336642139381301249, 806083349688877077, 806011717418090497, 802834833554014208, 805441351033552916])
+"""@slash.slash(name="help", description = "View all commands of the bot.", options=[manage_commands.create_option(name = "cat", description = "Category of command you need help with.", option_type = 3, required = False)], guild_ids = [809368482344075265, 807164404960854026, 744520955585626132, 813688458819928066, 336642139381301249, 806083349688877077, 806011717418090497, 802834833554014208, 805441351033552916])
 async def _help(ctx: SlashContext, *, cat = None):
   embed = bothelp(cat)
   await ctx.respond()
-  await ctx.send(embed=embed)
+  await ctx.send(embed=embed)"""
 
 @bot.command()
 async def help(ctx, *, cat=None):
