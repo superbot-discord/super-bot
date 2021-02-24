@@ -1127,9 +1127,13 @@ async def role(ctx,role: discord.Role=None):
   desc=role.mention
   embed=discord.Embed(title=ti,color=role.color, description=desc)
   memberlist=role.members
-  f0v = ", ".join(memberlist)
-  if len(f0v)==0:
-    f0v="No members assigned with "+role.name
+  if len(memberlist) == 0:
+    f0v = "No members assigned with this role."
+  else:
+    f0v = ""
+    for count in range(memberlist):
+      f0v = f0v + count.mention + " "
+    f0v = f0v[:-2]
   mention=role.mentionable
   if mention:
     f1v="Mentionable"
@@ -1220,13 +1224,6 @@ async def server(ctx, text = "regular"):
     for count in f1valist:
       f1va = f1va + count.mention+" "
     f1va = f1va[:-1]
-    if len(f1va) > 500:
-      f1va = ""
-      for count in f1valist:
-        if len(f1va + count.name) > 500:
-          break
-        f1va = f1va + count.name+", "
-      f1va = f1va [:-2] + "…"
     f2v = str(guild.bitrate_limit//1000)+" kbps"
     f3v = str(guild.filesize_limit//1048576)+" MB"
     f4v = str(guild.emoji_limit)
@@ -1288,7 +1285,17 @@ async def server(ctx, text = "regular"):
         embed.add_field(name="Emojis", value=f11v, inline=True)
     except:
       1
-  await ctx.send(embed=embed)
+  try:
+    await ctx.send(embed=embed)
+  except:
+    f1va = ""
+    for count in f1valist:
+      if len(f1va + count.name) > 500:
+        break
+      f1va = f1va + count.name+", "
+    f1va = f1va [:-2] + "…"
+    embed.set_field_at(3, name="Roles ("+str(len(guild.roles))+")", value=f1va, inline=False)
+    await ctx.send(embed=embed)
 
 @bot.command()
 async def template(ctx,template: discord.Template):
