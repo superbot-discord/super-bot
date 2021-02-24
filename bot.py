@@ -39,7 +39,7 @@ banned_ids = []
 banned_text = []
 bot_admins = [687474789342117900, 457805013474082817, 757431801487556748]
 bot = commands.Bot(command_prefix=commands.when_mentioned_or("="), intents=discord.Intents.all())
-slash = SlashCommand(bot)
+slash = SlashCommand(bot, auto_register=True)
 client = discord.Client()
 bot.remove_command('help')
 allid=[]
@@ -84,10 +84,10 @@ async def nick(ctx, *, newnick):
   else:
     await ctx.send("You don't have the required permissions.")
 
-@slash.slash(name="help")
+"""@slash.slash(name="help")
 async def _help(ctx: SlashContext, *, cat=None):
   embed = bothelp(cat)
-  await ctx.send(embed=embed)
+  await ctx.send(embed=embed)"""
 
 @bot.command()
 async def help(ctx, *, cat=None):
