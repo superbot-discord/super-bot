@@ -1163,8 +1163,7 @@ async def role(ctx,role: discord.Role=None):
 async def server(ctx, text = "regular"):
   guild=ctx.guild
   ti=guild.name
-  desc="Created at "+guild.created_at.strftime("%d %b, %Y (%a) %H:%M:%S")+" by "+str(guild.owner.mention)+"""
-Region: """+str(guild.region)
+  desc="Created at "+guild.created_at.strftime("%d %b, %Y (%a) %H:%M:%S")+" by "+str(guild.owner.mention)+f"\nRegion: "+str(guild.region)+f"\nServer Icon: "+guild.icon_url
   embed=discord.Embed(title=ti, description=desc)
   embed.set_author(name="Server Information",icon_url=guild.icon_url)
   if text == "mod":
@@ -1197,22 +1196,32 @@ Region: """+str(guild.region)
     if len(guild.voice_channels)==0:
       f1v="No Voice Channels"
     else:
+      f1v = ""
       for count in guild.voice_channels:
-        f1v=f1v+str(count.name)+", "
-      f1v=f1v[:-2]
+        if len(f1v + count.name) > 500:
+          break
+        f1v = f1v+count.name+", "
+      f1v = f1v [:-2] + "…"
     f1vb=""
     if len(guild.categories)==0:
       f1v="No Categories"
     else:
       for count in guild.categories:
         f1vb=f1vb+str(count.name)+", "
-      f1vb=f1vb[:-2]
+      f1vb = f1vb[:-2]
     f1va=""
     f1valist=guild.roles
     f1valist.reverse()
     for count in f1valist:
-      f1va=f1va+count.mention+" "
-    f1va=f1va[:-1]
+      f1va = f1va+count.mention+" "
+    f1va = f1va[:-1]
+    if len(f1va) > 500:
+      f1va = ""
+      for count in f1valist:
+        if len(f1va + count.name) > 500:
+          break
+        f1va=f1va+count.name+", "
+      f1va = f1va [:-2] + "…"
     f2v=str(guild.bitrate_limit//1000)+" kbps"
     f3v=str(guild.filesize_limit//1048576)+" MB"
     f4v=str(guild.emoji_limit)
@@ -1233,11 +1242,17 @@ Region: """+str(guild.region)
     for count in guild.members:
       f8v=f8v+count.mention+" "
     f8v=f8v[:-1]
-    f10va=str(guild.id)
-    f11v=" ".join(guild.emojis)
-    f13v=guild.description
-    if f13v==None:
-      f13v="No description"
+    if len(f8v) > 500:
+      f8v = ""
+      for count in guild.members:
+        if len(f8v + count.username) > 500:
+          break
+        f8v = f8v+count.username+", "
+      f8v = f8v [:-2] + "…"
+    f10va = str(guild.id)
+    f13v = guild.description
+    if f13v == None:
+      f13v = "No description"
     embed.add_field(name="Text Channels ("+str(len(guild.text_channels))+")", value=f0v, inline=False)
     embed.add_field(name="Voice Channels ("+str(len(guild.voice_channels))+")", value=f1v, inline=True)
     embed.add_field(name="Categories ("+str(len(guild.categories))+")", value=f1vb, inline=True)
@@ -1262,8 +1277,12 @@ Region: """+str(guild.region)
     if guild.features.count("PUBLIC")==1:
       embed.add_field(name="Public", value="This is a public server.", inline=True)
     embed.add_field(name="Description", value=f13v, inline=False)
-    if len(f11v)!=0:
-      embed.add_field(name="Emojis", value=f11v, inline=True)
+    try:
+      f11v=" ".join(guild.emojis)
+      if len(f11v)!=0:
+        embed.add_field(name="Emojis", value=f11v, inline=True)
+    except:
+      1
   await ctx.send(embed=embed)
 
 @bot.command()
