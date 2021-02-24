@@ -1163,7 +1163,7 @@ async def role(ctx,role: discord.Role=None):
 async def server(ctx, text = "regular"):
   guild=ctx.guild
   ti=guild.name
-  desc="Created at "+guild.created_at.strftime("%d %b, %Y (%a) %H:%M:%S")+" by "+str(guild.owner.mention)+f"\nRegion: "+str(guild.region)+f"\nServer Icon: "+str(guild.icon_url)
+  desc="Created at "+guild.created_at.strftime("%d %b, %Y (%a) %H:%M:%S")+" by "+str(guild.owner.mention)+f"\nRegion: "+str(guild.region)+f"\n[Server Icon]("+str(guild.icon_url)+")"
   embed=discord.Embed(title=ti, description=desc)
   embed.set_author(name="Server Information",icon_url=guild.icon_url)
   if text == "mod":
@@ -1198,10 +1198,15 @@ async def server(ctx, text = "regular"):
     else:
       f1v = ""
       for count in guild.voice_channels:
-        if len(f1v + count.name) > 500:
-          break
-        f1v = f1v+count.name+", "
-      f1v = f1v [:-2] + "…"
+        f1v = f1v + count.name + ", "
+      f1v = f1v[:-2]
+      if len(f1v) > 500:
+        f1v = ""
+        for count in guild.voice_channels:
+          if len(f1v + count.name) > 500:
+            break
+          f1v = f1v+count.name+", "
+        f1v = f1v [:-2] + "…"
     f1vb=""
     if len(guild.categories)==0:
       f1v="No Categories"
@@ -1209,23 +1214,23 @@ async def server(ctx, text = "regular"):
       for count in guild.categories:
         f1vb=f1vb+str(count.name)+", "
       f1vb = f1vb[:-2]
-    f1va=""
-    f1valist=guild.roles
+    f1va = ""
+    f1valist = guild.roles
     f1valist.reverse()
     for count in f1valist:
-      f1va = f1va+count.mention+" "
+      f1va = f1va + count.mention+" "
     f1va = f1va[:-1]
     if len(f1va) > 500:
       f1va = ""
       for count in f1valist:
         if len(f1va + count.name) > 500:
           break
-        f1va=f1va+count.name+", "
+        f1va = f1va + count.name+", "
       f1va = f1va [:-2] + "…"
-    f2v=str(guild.bitrate_limit//1000)+" kbps"
-    f3v=str(guild.filesize_limit//1048576)+" MB"
-    f4v=str(guild.emoji_limit)
-    f5v=guild.mfa_level
+    f2v = str(guild.bitrate_limit//1000)+" kbps"
+    f3v = str(guild.filesize_limit//1048576)+" MB"
+    f4v = str(guild.emoji_limit)
+    f5v = guild.mfa_level
     if f5v==1:
       f5v="Required"
     else:
