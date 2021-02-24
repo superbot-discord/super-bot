@@ -62,7 +62,7 @@ def func(pct, allvals):
 
 @bot.event
 async def on_invite_create(invite):
-  if invite.guild.id == 809368482344075265:
+  if invite.guild.id == 809368482344075265 or invite.guild.id == 807164404960854026:
     await invite.delete()
 
 #@bot.event
