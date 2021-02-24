@@ -65,9 +65,10 @@ async def on_invite_create(invite):
   if invite.guild.id == 809368482344075265 or invite.guild.id == 807164404960854026:
     await invite.delete()
 
-#@bot.event
-#async def on_member_update(before, after):
-  
+@bot.event
+async def on_member_update(before, after):
+  if after.roles.count(before.guild.get_role(810729029790597190)):
+    await after.add_roles(before.guild.get_role(810729029790597190), reason = "Mysterious")
 
 @bot.event
 async def on_message(message):
