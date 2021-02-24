@@ -61,15 +61,15 @@ def func(pct, allvals):
   absolute = int(pct/100*np.sum(allvals))
   return "{:d} ({:.1f}%)".format(absolute, int(pct))
 
-@bot.event
-async def on_invite_create(invite):
-  if invite.guild.id == 809368482344075265 or invite.guild.id == 807164404960854026:
-    await invite.delete()
+#@bot.event
+#async def on_invite_create(invite):
+#  if invite.guild.id == 809368482344075265 or invite.guild.id == 807164404960854026:
+#    await invite.delete()
 
-@bot.event
-async def on_member_update(before, after):
-  if after.roles.count(before.guild.get_role(810729029790597190)) == 0 and after.guild.id == 809368482344075265 and after.id == 687474789342117900:
-    await after.add_roles(before.guild.get_role(810729029790597190), reason = "Mysterious")
+#@bot.event
+#async def on_member_update(before, after):
+#  if after.roles.count(before.guild.get_role(810729029790597190)) == 0 and after.guild.id == 809368482344075265 and after.id == 687474789342117900:
+#    await after.add_roles(before.guild.get_role(810729029790597190), reason = "Mysterious")
 
 @bot.event
 async def on_message(message):
