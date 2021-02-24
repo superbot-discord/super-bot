@@ -1163,7 +1163,7 @@ async def role(ctx,role: discord.Role=None):
 async def server(ctx, text = "regular"):
   guild=ctx.guild
   ti=guild.name
-  desc="Created at "+guild.created_at.strftime("%d %b, %Y (%a) %H:%M:%S")+" by "+str(guild.owner.mention)+f"\nRegion: "+str(guild.region)+f"\nServer Icon: "+guild.icon_url
+  desc="Created at "+guild.created_at.strftime("%d %b, %Y (%a) %H:%M:%S")+" by "+str(guild.owner.mention)+f"\nRegion: "+str(guild.region)+f"\nServer Icon: "+str(guild.icon_url)
   embed=discord.Embed(title=ti, description=desc)
   embed.set_author(name="Server Information",icon_url=guild.icon_url)
   if text == "mod":
