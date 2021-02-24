@@ -563,7 +563,7 @@ async def pretend(ctx, member : discord.Member, *, message):
     identify = wh.id
   async with aiohttp.ClientSession() as session:
     webhook = Webhook.partial(identify, token, adapter=RequestsWebhookAdapter())
-  await webhook.send(message, username=member.name, avatar_url=member.avatar_url)
+    await webhook.send(message, username=member.name, avatar_url=member.avatar_url)
 
 @bot.command(pass_context=True)
 async def pretendembed(ctx, member : discord.Member, *, text):
