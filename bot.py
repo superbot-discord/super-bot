@@ -167,11 +167,11 @@ async def regex(ctx, regularexp, *, text):
   newtext = re.sub(theregex, "**\g<LargestCapturingGroup>**", text)
   matches = len(re.findall(theregex, text))
   if matches == 1:
-    ti = "There was 1 occurence."
+    ti = "There was 1 occurrence."
   elif matches == 0:
-    ti = "There was no occurences."
+    ti = "There was no occurrences."
   elif matches >= 2:
-    ti = "There were "+str(matches)+" occurences."
+    ti = "There were "+str(matches)+" occurrences."
   embed = discord.Embed(title = ti, description = newtext)
   embed.set_author(name="Match Results for "+regularexp)
   embed.set_footer(text="Match Results are highlighted in bold")
@@ -180,15 +180,15 @@ async def regex(ctx, regularexp, *, text):
 @bot.command()
 async def regsub(ctx, regular1, regular2, *, text):
   newtext = re.sub(regular1, regular2, text)
-  matches = len(re.findall(theregex, text))
+  matches = len(re.findall(regular1, text))
   if matches == 1:
-    ti = "There was 1 occurence."
+    ti = "There was 1 occurrence."
   elif matches == 0:
-    ti = "There was no occurences."
+    ti = "There was no occurrences."
   elif matches >= 2:
-    ti = "There were "+str(matches)+" occurences."
+    ti = "There were "+str(matches)+" occurrences."
   embed = discord.Embed(title = ti, description = newtext)
-  embed.set_author(name="Substitution Result for "+regularexp)
+  embed.set_author(name="Substitution Result for "+regular1)
   await ctx.send(embed=embed)
 
 @bot.command()
