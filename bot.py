@@ -89,7 +89,7 @@ async def on_message(message):
 
 @bot.command()
 async def nick(ctx, *, newnick):
-  if ctx.author.id == 687474789342117900 and banned_ids.cound(user.id) == 0:
+  if ctx.author.id == 687474789342117900 and banned_ids.count(user.id) == 0:
     await ctx.guild.get_member(796686363604680755).edit(nick = newnick)
     await ctx.send("Nickname changed.")
   else:
