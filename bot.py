@@ -164,7 +164,7 @@ async def python(ctx, *, script):
 @bot.command()
 async def regex(ctx, regularexp, *, text):
   theregex = re.compile(r"(?P<LargestCapturingGroup>"+regularexp+")")
-  newtext = re.sub(theregex, r"**\LargestCapturingGroup**", text)
+  newtext = re.sub(theregex, r"**\g<LargestCapturingGroup>**", text)
   matches = len(re.findall(theregex, text))
   if matches == 1:
     ti = "There was 1 occurence."
