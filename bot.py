@@ -89,7 +89,7 @@ async def on_message(message):
 
 @bot.command()
 async def nick(ctx, *, newnick):
-  if ctx.author.id == 687474789342117900 and banned_ids.count(ctx.user.id) == 0:
+  if ctx.author.id == 687474789342117900:
     await ctx.guild.get_member(796686363604680755).edit(nick = newnick)
     await ctx.send("Nickname changed.")
   else:
@@ -113,14 +113,14 @@ async def invite(ctx, *, text=None):
 
 @bot.command()
 async def botban(ctx, user : discord.User, *, text="No reason was provided"):
-  if ctx.author.id == 687474789342117900 and banned_ids.count(ctx.user.id) == 0:
+  if ctx.author.id == 687474789342117900:
     banned_ids.append(user.id)
     banned_text.append(text)
     await ctx.send("Banned user from using the bot.")
 
 @bot.command()
 async def botunban(ctx, user : discord.User):
-  if ctx.author.id == 687474789342117900 and banned_ids.count(ctx.user.id) == 1:
+  if ctx.author.id == 687474789342117900 and banned_ids.count(user.id) == 1:
     banned_text.remove(banned_text[banned_ids.index(user.id)])
     banned_ids.remove(user.id)
     await ctx.send("Unbanned user from using the bot.")
