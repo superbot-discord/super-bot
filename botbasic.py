@@ -134,13 +134,9 @@ The Timer ID is a random 5-alphabet code and can be found at the beginning of a 
 
 **translate [To language]{,From language} [Text]**
 Translates text to another language. If From language is not provided, it will detect the language. e.g. `=translate en Ahoj` `=translate en,cs Ahoj`
-
-**timer [Seconds] {Text}**
-Starts a timer. The Text is optional.
-**Alert: This command is outdated. Consider using** `rtimer` **instead.**
   """
-  elif cat=="web" or cat=="link" or cat=="url" or cat=="website" or cat=="developer" or cat=="tools" or cat=="misc":
-    ti="Web Command and Developer Tools"
+  elif cat=="web" or cat=="link" or cat=="url" or cat=="website":
+    ti="Web Commands"
     desc="""
 **screenshot [URL]**
 Screenshots the desired webpage. A regular-sized screenshot and a whole-webpage-sized screenshot will be shown.
@@ -154,20 +150,39 @@ Finds a related Wikipedia article.
 **engrave [Product] [Text]**
 Engraves the text on an Apple Product. Airpods, iPad, iPod and Apple Pencil are available. Please check the [documentation](https://github.com/johann-lau/Bot/blob/main/README.md#apple-engrave-help) for more information.
 
-**python [Script]**
-Executes a Python (3.9.1) script.
-
 **covid {Country}**
 Fetches the Covid-19 status for a specific country. If no country is specified, it will fetch the data of the whole World.
 
 **population {Country}**
 Fetches the Population statistics for a specific country. If no country is specified, it will fetch the data of the whole World.
+"""
+
+  elif cat=="developer" or cat=="tools" or cat=="misc" or cat=="other" or cat=="others" or cat=="extras":
+    ti="Developer Tools"
+    desc="""
+**python [Script]**
+Executes a Python (3.9.1) script.
+
+**transparent [Image] {Transparency Level}**
+Makes an image transparent with the transparency level (between 0 and 255).
 
 **ocr [Image]**
 Does an OCR scan for the image.
 
 **text [PDF]**
 Turns the PDF to plain text.
+
+**html [HTML Code]**
+Screenshots an HTML code.
+
+**md [Markdown Code]**
+Screenshots a Markdown code.
+
+**regex [Regex] [Text]**
+Check for text occurrences for a Regular Expression.
+
+**regsub [Regex 1] [Regex 2] [Text]**
+Find Regex 1 in text, then replace with Regex 2.
 """
   elif cat=="plot" or cat=="plotting" or cat=="chart" or cat=="graph":
     ti="Web Command and Developer Tools"
@@ -185,7 +200,7 @@ Plots a **v**ertical [bar chart](https://en.wikipedia.org/wiki/Bar_chart) with t
 Plots a 1-dimensional [histogram](https://en.wikipedia.org/wiki/Histogram) with the Data (e.g. 1,2,2,3,3,3,4,4,5).
 
 **snow {Recursion}**
-Plots a [Koch Snowflake](https://en.wikipedia.org/wiki/Koch_snowflake) with the recursion. In general, the higher the recursion, the more beautiful the output.
+Plots a [Koch Snowflake](https://en.wikipedia.org/wiki/Koch_snowflake) with the recursion (max. 10). In general, the higher the recursion, the more beautiful the output.
 """
   elif cat=="help":
     ti="help {Command or Category}"
@@ -343,7 +358,7 @@ Plots a [Koch Snowflake](https://en.wikipedia.org/wiki/Koch_snowflake) with the 
 `pie` `barh` `barv` `hist` `snow`
 
 **Developer Tools and Others**
-`python` `transparent` `ocr` `text` `html` `md`
+`python` `transparent` `ocr` `text` `html` `md` `regex` `regsub`
 
 Need help? check the [documentation](https://github.com/johann-lau/Bot#bot-documentation)!
   """
