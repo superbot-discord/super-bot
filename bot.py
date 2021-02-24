@@ -174,7 +174,7 @@ async def regex(ctx, regularexp, *, text):
     ti = "There were "+str(matches)+" occurences."
   embed = discord.Embed(title = ti, desc = newtext)
   embed.set_author(name="Match Results for "+regularexp)
-  embed.set_footer("Match Results are highlighted in bold")
+  embed.set_footer(text="Match Results are highlighted in bold")
   await ctx.send(embed=embed)
 
 @bot.command()
