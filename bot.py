@@ -177,6 +177,20 @@ async def regex(ctx, regularexp, *, text):
   await ctx.send(embed=embed)
 
 @bot.command()
+async def regsub(ctx, regular1, regular2, *, text):
+  newtext = re.sub(regular1, regular2, text)
+  matches = len(re.findall(theregex, text))
+  if matches == 1:
+    ti = "There was 1 occurence."
+  elif matches == 0:
+    ti = "There was no occurences."
+  elif matches >= 2:
+    ti = "There were "+str(matches)+" occurences."
+  embed = discord.Embed(title = ti, description = newtext)
+  embed.set_author(name="Substitution Result for "+regularexp)
+  await ctx.send(embed=embed)
+
+@bot.command()
 async def define(ctx, function = None, definition = None, *, argumentsraw = ""):
   if botdefine(function, definition, argumentsraw) == "Not enough args":
     await ctx.send("Invalid usage! Please use the format `=define [name] [definition] {arguments separated by spaces}`.")
