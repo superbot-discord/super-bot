@@ -162,6 +162,22 @@ async def python(ctx, *, script):
   await ctx.send(output)
 
 @bot.command()
+async def regex(ctx, regularexp, *, text):
+  theregex = re.compile(r"(<LargestCapturingGroup>"+regularexp+")")
+  newtext = re.sub(theregex, "**$LargestCapturingGroup**", text)
+  matches = len(re.findall(theregex, text))
+  if matches == 1:
+    ti = "There was 1 occurence."
+  elif matches == 0:
+    ti = "There was no occurences."
+  elif matches >= 2:
+    ti = "There were "+str(matches)+" occurences."
+  embed = discord.Embed(title = ti, desc = newtext)
+  embed.set_author("Match Results for "+regularexp)
+  embed.set_footer("Match Results are highlighted in bold")
+  await ctx.send(embed=embed)
+
+@bot.command()
 async def define(ctx, function = None, definition = None, *, argumentsraw = ""):
   if botdefine(function, definition, argumentsraw) == "Not enough args":
     await ctx.send("Invalid usage! Please use the format `=define [name] [definition] {arguments separated by spaces}`.")
