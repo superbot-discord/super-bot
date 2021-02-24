@@ -1,9 +1,9 @@
+from discord_slash import SlashCommand, SlashContext
 from discord import Webhook, RequestsWebhookAdapter
 from datetime import datetime, date, timedelta
 from selenium.webdriver.common.by import By
 from discord_webhook import DiscordWebhook
 from pdf2image import convert_from_path
-from discord_slash import SlashCommand
 import selenium.common.exceptions
 from discord.ext import commands
 import matplotlib.pyplot as plt
