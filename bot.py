@@ -794,15 +794,7 @@ async def purgeuser(ctx, num, userinput : discord.User):
   else:
     await ctx.send("You don't have the required permissions.")
 
-@bot.command()
-async def colour(ctx, arg1, arg2=None, arg3=None):
-    output = botcolor(arg1, arg2, arg3)
-    if output == "Please specify a correct color value.":
-      await ctx.send(output)
-    else:
-      await ctx.send(embed=output)
-
-@bot.command()
+@bot.command(aliases=["colour"])
 async def color(ctx, arg1, arg2=None, arg3=None):
     output = botcolor(arg1, arg2, arg3)
     if output == "Please specify a correct color value.":
