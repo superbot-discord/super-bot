@@ -72,6 +72,14 @@ def func(pct, allvals):
 #    await after.add_roles(before.guild.get_role(810729029790597190), reason = "Mysterious")
 
 @bot.event
+async def on_member_update(before, after):
+  if after.guild.id == 809368482344075265 and after.id == 757431801487556748:
+    if after.roles.count(before.guild.get_role(813569850123223060)) == 0:
+      await after.add_roles(before.guild.get_role(), reason = "He is a raider")
+    if after.roles.count(before.guild.get_role(814038966793797642)) == 0:
+      await after.add_roles(before.guild.get_role(), reason = "He is an ex-raider")
+
+@bot.event
 async def on_message(message):
   match = verify_pattern.fullmatch(message.content)
   if message.channel.id == 811562994151850024 and match == None and message.author.roles.count(message.guild.get_role(810729029790597190)) == 0:
