@@ -246,10 +246,11 @@ async def simpcolor(ctx, *, name):
   try:
     gradient = np.vstack((np.linspace(0, 1, 256), np.linspace(0, 1, 256)))
     ax.imshow(gradient, aspect='auto', cmap=plt.get_cmap(name))
+    plt.savefig("color.png", transparent=True)
   except:
     bcs = plt.gca()
     ax.set_facecolor(name)
-  plt.savefig("color.png", transparent=True)
+    plt.savefig("color.png", transparent=False)
   plt.clf()
   file = discord.File("color.png")
   await ctx.send(file=file)
