@@ -235,8 +235,12 @@ async def population(ctx, country="current"):
 async def simpcolor(ctx, *, name):
   fig, ax = plt.subplots()
   ax.set_axis_off()
-  gradient = np.vstack((np.linspace(0, 1, 256), np.linspace(0, 1, 256)))
-  ax.imshow(gradient, aspect='auto', cmap=plt.get_cmap(name))
+  try:
+    gradient = np.vstack((np.linspace(0, 1, 256), np.linspace(0, 1, 256)))
+    ax.imshow(gradient, aspect='auto', cmap=plt.get_cmap(name))
+  except:
+    bcs = plt.gca()
+    ax.set_facecolor(name)
   plt.savefig("color.png", transparent=True)
   plt.clf()
   file = discord.File("color.png")
