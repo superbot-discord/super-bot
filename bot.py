@@ -1229,7 +1229,7 @@ async def server(ctx, text = "regular"):
         f1v = f1v [:-2] + "…"
     f1vb=""
     if len(guild.categories)==0:
-      f1v="No Categories"
+      f1vb="No Categories"
     else:
       for count in guild.categories:
         f1vb=f1vb+str(count.name)+", "
