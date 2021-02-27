@@ -109,7 +109,7 @@ async def _help(ctx: SlashContext, *, cat = None):
   await ctx.respond()
   await ctx.send(embed=embed)
 
-@bot.command()
+"""@bot.command()
 async def help(ctx, *, cat=None):
   embed = bothelp(cat)
   await ctx.send(embed=embed)
@@ -117,7 +117,7 @@ async def help(ctx, *, cat=None):
 @bot.command()
 async def invite(ctx, *, text=None):
   embed = botinvite()
-  await ctx.send(embed=embed)
+  await ctx.send(embed=embed)"""
 
 @bot.command()
 async def botban(ctx, user : discord.User, *, text="No reason was provided"):
