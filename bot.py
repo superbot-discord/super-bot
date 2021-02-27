@@ -42,7 +42,6 @@ bot_admins = [687474789342117900]
 bot = commands.Bot(command_prefix=commands.when_mentioned_or("="), intents=discord.Intents.all())
 slash = SlashCommand(bot)
 client = discord.Client()
-bot.remove_command('help')
 allid=[]
 id_pattern = re.compile(r'([A-Z]{5})', re.IGNORECASE)
 alphaend_pattern = re.compile(r'.*[a-z]', re.IGNORECASE)
