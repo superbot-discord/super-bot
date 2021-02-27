@@ -371,7 +371,7 @@ Need help? check the [documentation](https://github.com/johann-lau/Bot#bot-docum
   await ctx.send(embed=embed)
 
 @bot.command()
-async def invite(ctx, *, text):
+async def invite(ctx, *, text = ""):
   embed = discord.Embed(title="Invite", description = "Our bot could be invited [here](https://discord.com/oauth2/authorize?client_id=796686363604680755&permissions=805399670&scope=bot).")
   await ctx.send(embed=embed)
 
