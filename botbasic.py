@@ -5,7 +5,7 @@ bot = commands.Bot(command_prefix=commands.when_mentioned_or("="), intents=disco
 bot.remove_command('help')
 
 @bot.command()
-async def help(ctx, *, cat : "all"):
+async def help(ctx, *, cat = "all"):
   if cat!=None:
     cat=cat.lower()
     cat=cat.replace(" ","")
