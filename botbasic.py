@@ -375,4 +375,4 @@ async def invite(ctx, *, text):
   embed = discord.Embed(title="Invite", description = "Our bot could be invited [here](https://discord.com/oauth2/authorize?client_id=796686363604680755&permissions=805399670&scope=bot).")
   await ctx.send(embed=embed)
 
-#bot.run('Nzk2Njg2MzYzNjA0NjgwNzU1.X_bh_g.8LrZQX__nLUKyXDgpOt5bLnEN7Q')
+bot.run('Nzk2Njg2MzYzNjA0NjgwNzU1.X_bh_g.8LrZQX__nLUKyXDgpOt5bLnEN7Q')
