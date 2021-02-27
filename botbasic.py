@@ -1,6 +1,11 @@
+from discord.ext import commands
 import discord
 
-def bothelp(cat : str):
+bot = commands.Bot(command_prefix=commands.when_mentioned_or("="), intents=discord.Intents.all())
+bot.remove_command('help')
+
+@bot.command()
+async def bothelp(ctx, *, cat):
   if cat!=None:
     cat=cat.lower()
     cat=cat.replace(" ","")
@@ -362,9 +367,12 @@ Plots a [Koch Snowflake](https://en.wikipedia.org/wiki/Koch_snowflake) with the 
 
 Need help? check the [documentation](https://github.com/johann-lau/Bot#bot-documentation)!
   """
-  embed=discord.Embed(title=ti, description=desc, color=0x0061ff)
-  return embed
+  embed=discord.Embed(title=ti, description=desc)
+  await ctx.send(embed=embed)
 
-def botinvite():
+@bot.command()
+async def botinvite(ctx, *, text):
   embed = discord.Embed(title="Invite", description = "Our bot could be invited [here](https://discord.com/oauth2/authorize?client_id=796686363604680755&permissions=805399670&scope=bot).")
-  return embed
+  await ctx.send(embed=embed)
+
+bot.run('Nzk2Njg2MzYzNjA0NjgwNzU1.X_bh_g.8LrZQX__nLUKyXDgpOt5bLnEN7Q')
