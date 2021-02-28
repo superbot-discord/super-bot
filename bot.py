@@ -1442,6 +1442,32 @@ async def voicechannel(ctx, channel: discord.VoiceChannel):
   await ctx.send(embed=embed)
 
 @bot.command()
+async def leftuser(ctx, user: discord.User = None, channel: discord.TextChannel = None):
+  ti="User Information"
+  if user==None:
+    user=ctx.author
+  if channel==None:
+    channel=ctx.channel
+  bot=user.bot
+  if bot==True:
+    desc=f"{user.mention} (bot)"
+  else:
+    desc=f"{user.mention} (human)"
+  embed=discord.Embed(title=ti,color=user.color, description=desc)
+  embed.set_thumbnail(url=user.avatar_url)
+  f0v=f"{user.name}#{user.discriminator}"
+  f1v=user.created_at.strftime("%d %b, %Y (%a) %H:%M:%S")
+  f1ts = str(datetime.datetime.now() - user.created_at)
+  if f1ts.count(" days, ") == 0:
+    f1va = re.sub('(\d{1,2}):(\d{2}):(\d{2})', r'\1 hours \2 minutes \3 seconds', f1ts)
+  else:
+    f1va = re.sub('([\d]+) days, (\d{1,2}):(\d{2}):(\d{2})', r'\1 days \2 hrs \3 mins \4 secs', f1ts)[:-7]
+  embed.add_field(name="Name", value=f0v, inline=False)
+  embed.add_field(name="Time since user registered", value=f1va, inline=True)
+  embed.add_field(name="Registered", value=f1v, inline=True)
+  await ctx.send(embed=embed)
+
+@bot.command()
 async def user(ctx, user: discord.Member = None, channel: discord.TextChannel = None):
   ti="User Information"
   if user==None:
@@ -1540,16 +1566,10 @@ async def user(ctx, user: discord.Member = None, channel: discord.TextChannel = 
   f4v=""
   if len(allroles)>1:
     for count in allroles:
-      f1va = f1va + count.mention+" "
-    f1va = f1va[:-1]
+      f4v = f4v + count.mention+" "
+    f4v = f4v[:-1]
   else:
     f4v="No roles"
-  """prof=profile(user)
-  if prof.nitro:
-    f5v="Nitro since "
-    f5v=f5v+prof.premium_since.strftime("%d %b, %Y (%a) %H:%M:%S")
-  else:
-    f5v="No Nitro subscriptions"""
   embed.add_field(name="Time since user registered", value=f1va, inline=True)
   embed.add_field(name="Time since user joined", value=f2va, inline=True)
   embed.add_field(name="Name", value=f0v, inline=False)
