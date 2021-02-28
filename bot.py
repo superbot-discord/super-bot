@@ -1450,17 +1450,27 @@ async def user(ctx,user: discord.Member=None, channel: discord.TextChannel=None)
     channel=ctx.channel
   bot=user.bot
   if bot==True:
-    desc=f"{user.mention} (bot) "
+    desc=f"{user.mention} (bot)"
   else:
-    desc=f"{user.mention} (human) "
+    desc=f"{user.mention} (human)"
   embed=discord.Embed(title=ti,color=user.color, description=desc)
   embed.set_thumbnail(url=user.avatar_url)
   if user.name==user.display_name:
-    f0v=user.name+"#"+user.discriminator
+    f0v=f"{user.name}#{user.discriminator}"
   else:
-    f0v=user.name+"#"+user.discriminator+"  a.k.a. "+user.display_name
+    f0v=f"{user.name}#{user.discriminator}(__Nickname:__ +{user.display_name})"
   f1v=user.created_at.strftime("%d %b, %Y (%a) %H:%M:%S")
+  f1ts = str(datetime.now() - user.created_at)
+  if f1ts.count(" days, ") == 0:
+    f1va = re.sub('(\d{1,2}):(\d{2}):(\d{2})', r'\1 hours \2 minutes \3 seconds', f1ts)
+  else:
+    f1va = re.sub('([\d]+) days, (\d{1,2}):(\d{2}):(\d{2})', r'\1 days \2 hours \3 minutes \4 seconds', f1ts)
   f2v=user.joined_at.strftime("%d %b, %Y (%a) %H:%M:%S")
+  f2ts = str(datetime.now() - user.joined_at)
+  if f2ts.count(" days, ") == 0:
+    f2va = re.sub('(\d{1,2}):(\d{2}):(\d{2})', r'\1 hours \2 minutes \3 seconds', f2ts)
+  else:
+    f2va = re.sub('([\d]+) days, (\d{1,2}):(\d{2}):(\d{2})', r'\1 days \2 hours \3 minutes \4 seconds', f2ts)
   allroles=user.roles
   f3v=""
   if user.permissions_in(channel).administrator:
@@ -1516,6 +1526,16 @@ async def user(ctx,user: discord.Member=None, channel: discord.TextChannel=None)
   f3vb=f3vb[:-2]
   if f3vb=="":
     f3vb="No permissions"
+  if user.status == discord.Status.online:
+    f3vd = "Online"
+  elif user.status == discord.Status.idle:
+    f3vd = "Idle"
+  elif user.status == discord.Status.dnd:
+    f3vd = "Do Not Disturb"
+  elif user.status == discord.Status.offline:
+    f3vd = "Offline"
+  else:
+    f3vd = "Unknown"
   f3vc=str(user.activity)
   f4v=""
   if len(allroles)>1:
@@ -1530,11 +1550,14 @@ async def user(ctx,user: discord.Member=None, channel: discord.TextChannel=None)
     f5v=f5v+prof.premium_since.strftime("%d %b, %Y (%a) %H:%M:%S")
   else:
     f5v="No Nitro subscriptions"""
+  embed.add_field(name="Time since user registered", value=f1va, inline=True)
+  embed.add_field(name="Time since user joined", value=f2va, inline=True)
   embed.add_field(name="Name", value=f0v, inline=False)
   embed.add_field(name="Registered", value=f1v, inline=True)
   embed.add_field(name="Joined", value=f2v, inline=True)
   embed.add_field(name="Server Permissions", value=f3v, inline=False)
   embed.add_field(name="Channel Permissions", value=f3vb, inline=False)
+  embed.add_field(name="Status", value=f3vd, inline=True)
   embed.add_field(name="Activity", value=f3vc, inline=True)
   embed.add_field(name="Roles", value=f4v, inline=True)
   await ctx.send(embed=embed)
