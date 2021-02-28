@@ -1540,8 +1540,8 @@ async def user(ctx, user: discord.Member = None, channel: discord.TextChannel = 
   f4v=""
   if len(allroles)>1:
     for count in allroles:
-      if count.position!=0:
-        f4v=f4v+count.mention+"⠀"
+      f1va = f1va + count.mention+" "
+    f1va = f1va[:-1]
   else:
     f4v="No roles"
   """prof=profile(user)
