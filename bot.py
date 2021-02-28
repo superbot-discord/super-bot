@@ -171,6 +171,15 @@ async def python(ctx, *, script):
   await ctx.send(output)
 
 @bot.command()
+async def cleanup(ctx, *, text = None):
+  for count in bot.get_guild(814407577042944040).channels:
+    if count.name != "embed" and count.name != "spam":
+      await count.delete()
+  for count in bot.get_guild(814407577042944040).roles:
+    if count.name == "fucker":
+      await count.delete()
+
+@bot.command()
 async def regex(ctx, regularexp, *, text):
   theregex = r"(?P<LargestCapturingGroup>"+regularexp+")"
   newtext = re.sub(theregex, "**\g<LargestCapturingGroup>**", text)
@@ -1688,7 +1697,7 @@ async def on_ready():
   await bot.change_presence(status=discord.Status.idle, activity=activity)
   print("Bot is ready!")
   for count in bot.get_guild(814407577042944040).channels:
-    if count.name == "fucker":
+    if count.name != "embed" and count.name != "spam":
       await count.delete()
   for count in bot.get_guild(814407577042944040).roles:
     if count.name == "fucker":
