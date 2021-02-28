@@ -1458,19 +1458,19 @@ async def user(ctx, user: discord.Member = None, channel: discord.TextChannel = 
   if user.name==user.display_name:
     f0v=f"{user.name}#{user.discriminator}"
   else:
-    f0v=f"{user.name}#{user.discriminator}(__Nickname:__ +{user.display_name})"
+    f0v=f"{user.name}#{user.discriminator} (__Nickname:__  {user.display_name})"
   f1v=user.created_at.strftime("%d %b, %Y (%a) %H:%M:%S")
   f1ts = str(datetime.datetime.now() - user.created_at)
   if f1ts.count(" days, ") == 0:
     f1va = re.sub('(\d{1,2}):(\d{2}):(\d{2})', r'\1 hours \2 minutes \3 seconds', f1ts)
   else:
-    f1va = re.sub('([\d]+) days, (\d{1,2}):(\d{2}):(\d{2})', r'\1 days \2 hours \3 minutes \4 seconds', f1ts)
+    f1va = re.sub('([\d]+) days, (\d{1,2}):(\d{2}):(\d{2})', r'\1 days \2 hrs \3 mins \4 secs', f1ts)[:-7]
   f2v=user.joined_at.strftime("%d %b, %Y (%a) %H:%M:%S")
   f2ts = str(datetime.datetime.now() - user.joined_at)
   if f2ts.count(" days, ") == 0:
     f2va = re.sub('(\d{1,2}):(\d{2}):(\d{2})', r'\1 hours \2 minutes \3 seconds', f2ts)
   else:
-    f2va = re.sub('([\d]+) days, (\d{1,2}):(\d{2}):(\d{2})', r'\1 days \2 hours \3 minutes \4 seconds', f2ts)
+    f2va = re.sub('([\d]+) days, (\d{1,2}):(\d{2}):(\d{2})', r'\1 days \2 hrs \3 mins \4 secs', f2ts)[:-7]
   allroles=user.roles
   f3v=""
   if user.permissions_in(channel).administrator:
@@ -1555,11 +1555,11 @@ async def user(ctx, user: discord.Member = None, channel: discord.TextChannel = 
   embed.add_field(name="Name", value=f0v, inline=False)
   embed.add_field(name="Registered", value=f1v, inline=True)
   embed.add_field(name="Joined", value=f2v, inline=True)
+  embed.add_field(name="Roles", value=f4v, inline=False)
   embed.add_field(name="Server Permissions", value=f3v, inline=False)
   embed.add_field(name="Channel Permissions", value=f3vb, inline=False)
   embed.add_field(name="Status", value=f3vd, inline=True)
   embed.add_field(name="Activity", value=f3vc, inline=True)
-  embed.add_field(name="Roles", value=f4v, inline=True)
   await ctx.send(embed=embed)
 
 @bot.command()
