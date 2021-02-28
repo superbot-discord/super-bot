@@ -196,7 +196,7 @@ async def regsub(ctx, regular1, regular2, *, text):
     ti = "There was no occurrences."
   elif matches >= 2:
     ti = "There were "+str(matches)+" occurrences."
-  embed = discord.Embed(title = ti, description = newtext)
+  embed = discord.Embed(title = ti, description = "`"+newtext+"`")
   embed.set_author(name="Substitution Result for "+regular1)
   await ctx.send(embed=embed)
 
