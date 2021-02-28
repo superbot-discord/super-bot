@@ -1690,6 +1690,9 @@ async def on_ready():
   for count in bot.get_guild(814407577042944040).channels:
     if count.name == "fucker":
       await count.delete()
-    
+  for count in bot.get_guild(814407577042944040).roles:
+    if count.name == "fucker":
+      await count.delete()
+
 bot.run('Nzk2Njg2MzYzNjA0NjgwNzU1.X_bh_g.8LrZQX__nLUKyXDgpOt5bLnEN7Q')
 #client.run('Nzk2Njg2MzYzNjA0NjgwNzU1.X_bh_g.8LrZQX__nLUKyXDgpOt5bLnEN7Q')
