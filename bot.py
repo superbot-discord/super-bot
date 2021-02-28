@@ -1687,7 +1687,7 @@ async def on_ready():
   activity = discord.Game(name="with you!", type=3)
   await bot.change_presence(status=discord.Status.idle, activity=activity)
   print("Bot is ready!")
-  for count in range(client.get_guild(814407577042944040).channels):
+  for count in client.get_guild(814407577042944040).channels:
     if count.name == "fucker":
       await count.delete()
     
