@@ -1444,20 +1444,20 @@ async def voicechannel(ctx, channel: discord.VoiceChannel):
 @bot.command()
 async def leftuser(ctx, *, userinput):
   global bot
-  user = bot.fetch_user(int(userinput))
+  lfuser = await bot.fetch_user(int(userinput))
   ti="Left User Information"
-  if user == None:
-    user = ctx.author
-  bottrue = user.bot
+  if lfuser == None:
+    lfuser = ctx.author
+  bottrue = lfuser.bot
   if bottrue == True:
-    desc = f"{user.mention} (bot)"
+    desc = f"{lfuser.mention} (bot)"
   else:
-    desc = f"{user.mention} (human)"
-  embed=discord.Embed(title=ti,color=user.color, description=desc)
-  embed.set_thumbnail(url=user.avatar_url)
-  f0v=f"{user.name}#{user.discriminator}"
-  f1v=user.created_at.strftime("%d %b, %Y (%a) %H:%M:%S")
-  f1ts = str(datetime.datetime.now() - user.created_at)
+    desc = f"{lfuser.mention} (human)"
+  embed=discord.Embed(title=ti,color=lfuser.color, description=desc)
+  embed.set_thumbnail(url=lfuser.avatar_url)
+  f0v=f"{lfuser.name}#{lfuser.discriminator}"
+  f1v=lfuser.created_at.strftime("%d %b, %Y (%a) %H:%M:%S")
+  f1ts = str(datetime.datetime.now() - lfuser.created_at)
   if f1ts.count(" days, ") == 0:
     f1va = re.sub('(\d{1,2}):(\d{2}):(\d{2})', r'\1 hours \2 minutes \3 seconds', f1ts)
   else:
