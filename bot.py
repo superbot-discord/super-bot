@@ -1446,15 +1446,13 @@ async def leftuser(ctx, *, userinput):
   global bot
   user = bot.get_user(userinput)
   ti="Left User Information"
-  if user==None:
-    user=ctx.author
-  if channel==None:
-    channel=ctx.channel
-  bot=user.bot
-  if bot==True:
-    desc=f"{user.mention} (bot)"
+  if user == None:
+    user = ctx.author
+  bottrue = user.bot
+  if bottrue == True:
+    desc = f"{user.mention} (bot)"
   else:
-    desc=f"{user.mention} (human)"
+    desc = f"{user.mention} (human)"
   embed=discord.Embed(title=ti,color=user.color, description=desc)
   embed.set_thumbnail(url=user.avatar_url)
   f0v=f"{user.name}#{user.discriminator}"
@@ -1476,8 +1474,8 @@ async def user(ctx, user: discord.Member = None, channel: discord.TextChannel = 
     user=ctx.author
   if channel==None:
     channel=ctx.channel
-  bot=user.bot
-  if bot==True:
+  bottrue = user.bot
+  if bottrue == True:
     desc=f"{user.mention} (bot)"
   else:
     desc=f"{user.mention} (human)"
