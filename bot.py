@@ -1444,7 +1444,7 @@ async def voicechannel(ctx, channel: discord.VoiceChannel):
 @bot.command()
 async def leftuser(ctx, *, userinput):
   global bot
-  user = bot.get_user(userinput)
+  user = bot.fetch_user(userinput)
   ti="Left User Information"
   if user == None:
     user = ctx.author
@@ -1565,7 +1565,8 @@ async def user(ctx, user: discord.Member = None, channel: discord.TextChannel = 
   f3vc=str(user.activity)
   f4v=""
   if len(allroles)>1:
-    for count in allroles.reverse():
+    allroles.reverse()
+    for count in allroles:
       f4v = f4v + count.mention+" "
     f4v = f4v[:-1]
   else:
