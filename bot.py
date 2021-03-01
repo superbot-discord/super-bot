@@ -1444,7 +1444,7 @@ async def voicechannel(ctx, channel: discord.VoiceChannel):
 @bot.command()
 async def leftuser(ctx, *, userinput):
   global bot
-  user = bot.fetch_user(userinput)
+  user = bot.fetch_user(int(userinput))
   ti="Left User Information"
   if user == None:
     user = ctx.author
@@ -1491,13 +1491,13 @@ async def user(ctx, user: discord.Member = None, channel: discord.TextChannel = 
     f1va = re.sub(r'(\d{1,2}):(\d{2}):(\d{2})', r'\1 hours \2 minutes \3 seconds', f1ts) + f"\n≈ "+f1ts.split(":")[0]+" hours"
   else:
     days = int(re.sub(r'([\d]+) days, [\s\S]*', r'\1', f1ts))
-    f1va = re.sub(r'([\d]+) days, (\d{1,2}):(\d{2}):(\d{2})', r'\1 days \2 hrs \3 mins \4 secs', f1ts)[:-7] + f"\n≈ "+str((f1ts.split(" days, ")[0])//365) + " years " + str((f1ts.split(" days, ")[0]) % 365) + " days"
+    f1va = re.sub(r'([\d]+) days, (\d{1,2}):(\d{2}):(\d{2})', r'\1 days \2 hrs \3 mins \4 secs', f1ts)[:-7] + f"\n≈ "+str((int(f1ts.split(" days, ")[0]))//365) + " years " + str(int(f1ts.split(" days, ")[0]) % 365) + " days"
   f2v=user.joined_at.strftime("%d %b, %Y (%a) %H:%M:%S")
   f2ts = str(datetime.datetime.now() - user.joined_at)
   if f2ts.count(" days, ") == 0:
     f2va = re.sub(r'(\d{1,2}):(\d{2}):(\d{2})', r'\1 hours \2 minutes \3 seconds', f2ts) + f"\n≈ "+f2ts.split(":")[0]+"hours"
   else:
-    f2va = re.sub(r'([\d]+) days, (\d{1,2}):(\d{2}):(\d{2})', r'\1 days \2 hrs \3 mins \4 secs', f2ts)[:-7] + f"\n≈ "+str((f2ts.split(" days, ")[0])//365) + " years " + str((f2ts.split(" days, ")[0])) % 365 + " days"
+    f2va = re.sub(r'([\d]+) days, (\d{1,2}):(\d{2}):(\d{2})', r'\1 days \2 hrs \3 mins \4 secs', f2ts)[:-7] + f"\n≈ "+str((int(f2ts.split(" days, ")[0]))//365) + " years " + str(int(f2ts.split(" days, ")[0]) % 365) + " days"
   allroles=user.roles
   f3v=""
   if user.permissions_in(channel).administrator:
