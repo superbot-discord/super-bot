@@ -1442,8 +1442,9 @@ async def voicechannel(ctx, channel: discord.VoiceChannel):
   await ctx.send(embed=embed)
 
 @bot.command()
-async def leftuser(ctx, user: discord.User = None, channel: discord.TextChannel = None):
-  ti="User Information"
+async def leftuser(ctx, *, userinput):
+  user = bot.get_user(userinput)
+  ti="Left User Information"
   if user==None:
     user=ctx.author
   if channel==None:
@@ -1497,7 +1498,7 @@ async def user(ctx, user: discord.Member = None, channel: discord.TextChannel = 
     f2va = re.sub('(\d{1,2}):(\d{2}):(\d{2})', r'\1 hours \2 minutes \3 seconds', f2ts)
   else:
     f2va = re.sub('([\d]+) days, (\d{1,2}):(\d{2}):(\d{2})', r'\1 days \2 hrs \3 mins \4 secs', f2ts)[:-7]
-  allroles=user.roles
+  allroles=user.roles.reverse()
   f3v=""
   if user.permissions_in(channel).administrator:
     f3v=f3v+"Admin, "
