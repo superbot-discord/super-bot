@@ -1572,7 +1572,7 @@ async def user(ctx, user: discord.Member = None, channel: discord.TextChannel = 
     f4v = f4v[:-1]
   else:
     f4v="No roles"
-  f5v = ", ".join(user.public_flags.all())
+  f5v = str(user.public_flags.all())
   embed.add_field(name="Time since user registered", value=f1va, inline=True)
   embed.add_field(name="Time since user joined", value=f2va, inline=True)
   embed.add_field(name="Name", value=f0v, inline=False)
