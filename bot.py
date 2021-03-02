@@ -1219,6 +1219,9 @@ async def server(ctx, text = "regular"):
   else:
     f0v=""
     for count in guild.text_channels:
+      if len(f0v+str(count.mention)+" ") > 1024:
+        f0v = f0v + "… "
+        break
       f0v=f0v+str(count.mention)+" "
     f1v=""
     f0v=f0v[:-1]
