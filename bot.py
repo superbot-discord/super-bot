@@ -1228,8 +1228,6 @@ async def server(ctx, text = "regular"):
           f0v = f0v + count2.name + " "
         break
       f0v=f0v+str(count.mention)+" "
-        break
-      f0v=f0v+str(count.mention)+" "
     f1v=""
     f0v=f0v[:-1]
     if len(guild.voice_channels)==0:
