@@ -1220,7 +1220,14 @@ async def server(ctx, text = "regular"):
     f0v=""
     for count in guild.text_channels:
       if len(f0v+str(count.mention)+" ") > 1024:
-        f0v = f0v + "… "
+        f0v = ""
+        for count2 in guild.text_channels:
+          if len(f0v+count2.name+" ") > 1024:
+            f0v = f0v + "… "
+            break
+          f0v = f0v + count2.name + " "
+        break
+      f0v=f0v+str(count.mention)+" "
         break
       f0v=f0v+str(count.mention)+" "
     f1v=""
@@ -1575,7 +1582,37 @@ async def user(ctx, user: discord.Member = None, channel: discord.TextChannel = 
     f4v = f4v[:-1]
   else:
     f4v="No roles"
-  f5v = str(user.public_flags.all())
+  f5v = ""
+  if user.public_flags.staff:
+    f5v = f5v + f"**Staff:** The user is a Discord Employee.\n"
+  if user.public_flags.partner:
+    f5v = f5v + f"**Partner:** The user is a Discord Partner.\n"
+  if user.public_flags.hypesquad:
+    f5v = f5v + f"**Hypesquad:** The user is a HypeSquad Events member.\n"
+  if user.public_flags.early_supporter:
+    f5v = f5v + f"**Early Support:** The user is an Early Supporter.\n"
+  if user.public_flags.team_user:
+    f5v = f5v + f"**Team User:** The user is a Team User.\n"
+  if user.public_flags.bug_hunter:
+    f5v = f5v + f"**Bug Hunter:** The user is a Bug Hunter.\n"
+  if user.public_flags.bug_hunter_level_2:
+    f5v = f5v + f"**Bug Hunter 2:** The user is a Bug Hunter (Level 2).\n"
+  if user.public_flags.system:
+    f5v = f5v + f"**System:** The user is a system user (represents Discord officially).\n"
+  if user.public_flags.verified_bot_developer:
+    f5v = f5v + f"**Developer:** The user is a Verified Bot Developer.\n"
+  if user.public_flags.verified_bot:
+    f5v = f5v + f"**Staff:** The user is a Verified Bot.\n"
+  if user.public_flags.hypesquad_bravery:
+    f5v = f5v + f"**Hypesquad:** The user is in the Hypesquad Bravery House.\n"
+  if user.public_flags.hypesquad_brilliance:
+    f5v = f5v + f"**Hypesquad:** The user is in the Hypesquad Brilliance House.\n"
+  if user.public_flags.hypesquad_balance:
+    f5v = f5v + f"**Hypesquad:** The user is in the Hypesquad Balance House.\n"
+  try:
+    f5v = f5v[:-1]
+  except:
+    f5v = "No Badges"
   embed.add_field(name="Time since user registered", value=f1va, inline=True)
   embed.add_field(name="Time since user joined", value=f2va, inline=True)
   embed.add_field(name="Name", value=f0v, inline=False)
@@ -1586,7 +1623,7 @@ async def user(ctx, user: discord.Member = None, channel: discord.TextChannel = 
   embed.add_field(name="Channel Permissions", value=f3vb, inline=False)
   embed.add_field(name="Status", value=f3vd, inline=True)
   embed.add_field(name="Activity", value=f3vc, inline=True)
-  embed.add_field(name="Flags", value=f5v, inline=True)
+  embed.add_field(name="Badges", value=f5v, inline=False)
   await ctx.send(embed=embed)
 
 @bot.command()
