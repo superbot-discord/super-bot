@@ -1572,6 +1572,7 @@ async def user(ctx, user: discord.Member = None, channel: discord.TextChannel = 
     f4v = f4v[:-1]
   else:
     f4v="No roles"
+  f5v = ", ".join(user.public_flags.all())
   embed.add_field(name="Time since user registered", value=f1va, inline=True)
   embed.add_field(name="Time since user joined", value=f2va, inline=True)
   embed.add_field(name="Name", value=f0v, inline=False)
@@ -1582,6 +1583,7 @@ async def user(ctx, user: discord.Member = None, channel: discord.TextChannel = 
   embed.add_field(name="Channel Permissions", value=f3vb, inline=False)
   embed.add_field(name="Status", value=f3vd, inline=True)
   embed.add_field(name="Activity", value=f3vc, inline=True)
+  embed.add_field(name="Flags", value=f5v, inline=True)
   await ctx.send(embed=embed)
 
 @bot.command()
