@@ -37,7 +37,7 @@ def botembed(text):
     try:
       embed=discord.Embed(title=textlist[0], url=textlist[1], description=textlist[2].replace("{{{newline}}}","\n"), color=int(textlist[3]))
     except:
-      embed=discord.Embed(title=textlist[0], url=textlist[1], description=textlist[2].replace("{{{newline}}}","\n")))
+      embed=discord.Embed(title=textlist[0], url=textlist[1], description=textlist[2].replace("{{{newline}}}","\n"))
     textlist.remove(textlist[0])
     textlist.remove(textlist[0])
     textlist.remove(textlist[0])
