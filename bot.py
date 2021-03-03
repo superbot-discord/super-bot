@@ -1156,7 +1156,7 @@ async def role(ctx,role: discord.Role=None):
     f0v = "No members assigned with this role."
   else:
     f0v = ""
-    for count in range(memberlist):
+    for count in memberlist:
       f0v = f0v + count.mention + " "
     f0v = f0v[:-2]
   mention=role.mentionable
