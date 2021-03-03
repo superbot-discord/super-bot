@@ -33,7 +33,7 @@ def botembed(text):
     textlist.remove(textlist[0])
     textlist.remove(textlist[0])
     textlist.remove(textlist[0])
-  elif len(textlist) == 4:
+  elif len(textlist) >= 4:
     embed=discord.Embed(title=textlist[0], url=textlist[1], description=textlist[2].replace("{{{newline}}}","\n"), color=int(textlist[3]))
     textlist.remove(textlist[0])
     textlist.remove(textlist[0])
