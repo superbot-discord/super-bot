@@ -1280,9 +1280,9 @@ async def server(ctx, text = "regular"):
     if len(f8v) > 500:
       f8v = ""
       for count in guild.members:
-        if len(f8v + count.username) > 500:
+        if len(f8v + count.name) > 500:
           break
-        f8v = f8v+count.username+", "
+        f8v = f8v+count.name+", "
       f8v = f8v [:-2] + "…"
     f10va = str(guild.id)
     f13v = guild.description
