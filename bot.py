@@ -360,7 +360,7 @@ async def status(ctx, member : discord.Member = None):
       if count.emoji==None:
         field=count.name
       else:
-        field=count.emoji+count.name
+        field=":"+count.emoji.name+":"+count.name
       embed.add_field(name="Status", value=field, inline=False)
     if str(count.type)=="ActivityType.playing":
       field=count.name+f"\nStarted: "+str(count.start.strftime("%d %b, %Y (%a) %H:%M:%S"))
