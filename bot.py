@@ -1600,7 +1600,7 @@ async def user(ctx, user: discord.Member = None, channel: discord.TextChannel = 
   if user.public_flags.verified_bot_developer:
     f5v = f5v + f"**Developer:** The user is a Verified Bot Developer.\n"
   if user.public_flags.verified_bot:
-    f5v = f5v + f"**Staff:** The user is a Verified Bot.\n"
+    f5v = f5v + f"**✔︎Bot:** The user is a Verified Bot.\n"
   if user.public_flags.hypesquad_bravery:
     f5v = f5v + f"**Hypesquad:** The user is in the Hypesquad Bravery House.\n"
   if user.public_flags.hypesquad_brilliance:
