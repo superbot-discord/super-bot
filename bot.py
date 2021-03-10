@@ -1336,13 +1336,13 @@ async def server(ctx, text = "regular"):
     await ctx.send(embed=embed)
 
 @bot.command()
-async def template(ctx,template: discord.Template):
-  ti="Template Information: "+template.name+" ("+template.code+")"
-  desc="Created at "+template.created_at.strftime("%d %b, %Y (%a) %H:%M:%S")+" by "+str(template.creator)
-  f0v=template.description
-  f1v=template.uses
-  f2v=template.updated_at.strftime("%d %b, %Y (%a) %H:%M:%S")
-  f3v=template.source_guild
+async def template(ctx,temp: discord.Template):
+  ti="Template Information: "+temp.name+" ("+temp.code+")"
+  desc="Created at "+temp.created_at.strftime("%d %b, %Y (%a) %H:%M:%S")+" by "+str(temp.creator)
+  f0v=temp.description
+  f1v=temp.uses
+  f2v=temp.updated_at.strftime("%d %b, %Y (%a) %H:%M:%S")
+  f3v=temp.source_guild
   embed.add_field(name="Description", value=f0v, inline=False)
   embed.add_field(name="Uses", value=f1v, inline=True)
   embed.add_field(name="Synced", value=f2v, inline=True)
