@@ -111,7 +111,7 @@ async def _help(ctx: SlashContext, *, cat = None):
 
 @bot.command()
 async def raw(ctx, msg : discord.Message):
-  embed = discord.Embed(title = "Raw message", description = "```"+msg.content+"```")
+  embed = discord.Embed(title = "Raw message", url = msg.jump_url, description = "```"+msg.content+"```")
   await ctx.send(embed=embed)
 
 @bot.command()
