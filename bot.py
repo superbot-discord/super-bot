@@ -1472,9 +1472,10 @@ async def leftuser(ctx, *, userinput):
   f1v=lfuser.created_at.strftime("%d %b, %Y (%a) %H:%M:%S")
   f1ts = str(datetime.datetime.now() - lfuser.created_at)
   if f1ts.count(" days, ") == 0:
-    f1va = re.sub('(\d{1,2}):(\d{2}):(\d{2})', r'\1 hours \2 minutes \3 seconds', f1ts)
+    f1va = re.sub(r'(\d{1,2}):(\d{2}):(\d{2})', r'\1 hours \2 minutes \3 seconds', f1ts) + f"\n≈ "+f1ts.split(":")[0]+" hours"
   else:
-    f1va = re.sub('([\d]+) days, (\d{1,2}):(\d{2}):(\d{2})', r'\1 days \2 hrs \3 mins \4 secs', f1ts)[:-7]
+    days = int(re.sub(r'([\d]+) days, [\s\S]*', r'\1', f1ts))
+    f1va = re.sub(r'([\d]+) days, (\d{1,2}):(\d{2}):(\d{2})', r'\1 days \2 hrs \3 mins \4 secs', f1ts)[:-7] + f"\n≈ "+str((int(f1ts.split(" days, ")[0]))//365) + " years " + str(int(f1ts.split(" days, ")[0]) % 365) + " days"
   embed.add_field(name="Name", value=f0v, inline=False)
   embed.add_field(name="Time since user registered", value=f1va, inline=True)
   embed.add_field(name="Registered", value=f1v, inline=True)
