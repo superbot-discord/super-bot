@@ -106,7 +106,7 @@ def botembed(text):
     textlist.remove(textlist[0])
     textlist.remove(textlist[0])
     #except:
-      1
+    #  1
   if len(textlist) == 1 and len(textlist[0].replace(" ", ""))!=0:
     embed.set_author(name=textlist[0])
     textlist.remove(textlist[0])
