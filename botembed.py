@@ -98,12 +98,15 @@ def botembed(text):
   else:#if len(textlist) >= 4 and len(textlist[0].replace(" ", ""))!=0 and len(textlist[1].replace(" ", ""))!=0 and len(textlist[2].replace(" ", ""))!=0 and len(textlist[3].replace(" ", ""))!=0:
     try:
       embed=discord.Embed(title=textlist[0], url=textlist[1], description=textlist[2].replace("{{{newline}}}","\n"), color=int(textlist[3]))
-      textlist.remove(textlist[0])
     except:
       embed=discord.Embed(title=textlist[0], url=textlist[1], description=textlist[2].replace("{{{newline}}}","\n"))
-    textlist.remove(textlist[0])
-    textlist.remove(textlist[0])
-    textlist.remove(textlist[0])
+    try:
+      textlist.remove(textlist[0])
+      textlist.remove(textlist[0])
+      textlist.remove(textlist[0])
+      textlist.remove(textlist[0])
+    except:
+      1
   if len(textlist) == 1 and len(textlist[0].replace(" ", ""))!=0:
     embed.set_author(name=textlist[0])
     textlist.remove(textlist[0])
