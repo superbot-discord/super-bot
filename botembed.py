@@ -90,22 +90,22 @@ def botembed(text):
     embed=discord.Embed(title=textlist[0], url=textlist[1])
     textlist.remove(textlist[0])
     textlist.remove(textlist[0])
-  elif (len(textlist) == 3 or (len(textlist) == 4 and (textlist[3] == "" or textlist[3] == " "))) and len(textlist[0].replace(" ", ""))!=0 and len(textlist[1].replace(" ", ""))!=0 and len(textlist[2].replace(" ", ""))!=0:
+  elif (len(textlist) == 3 or (len(textlist) == 4 and (textlist[3] == "" or textlist[3] == " "))):# and len(textlist[0].replace(" ", ""))!=0 and len(textlist[1].replace(" ", ""))!=0 and len(textlist[2].replace(" ", ""))!=0:
     embed=discord.Embed(title=textlist[0], url=textlist[1], description=textlist[2].replace("{{{newline}}}","\n"))
     textlist.remove(textlist[0])
     textlist.remove(textlist[0])
     textlist.remove(textlist[0])
   else:#if len(textlist) >= 4 and len(textlist[0].replace(" ", ""))!=0 and len(textlist[1].replace(" ", ""))!=0 and len(textlist[2].replace(" ", ""))!=0 and len(textlist[3].replace(" ", ""))!=0:
-    try:
-      embed=discord.Embed(title=textlist[0], url=textlist[1], description=textlist[2].replace("{{{newline}}}","\n"), color=int(textlist[3]))
-    except:
-      embed=discord.Embed(title=textlist[0], url=textlist[1], description=textlist[2].replace("{{{newline}}}","\n"))
-    try:
-      textlist.remove(textlist[0])
-      textlist.remove(textlist[0])
-      textlist.remove(textlist[0])
-      textlist.remove(textlist[0])
-    except:
+    #try:
+    embed=discord.Embed(title=textlist[0], url=textlist[1], description=textlist[2].replace("{{{newline}}}","\n"), color=int(textlist[3]))
+    #except:
+    #  embed=discord.Embed(title=textlist[0], url=textlist[1], description=textlist[2].replace("{{{newline}}}","\n"))
+    #try:
+    textlist.remove(textlist[0])
+    textlist.remove(textlist[0])
+    textlist.remove(textlist[0])
+    textlist.remove(textlist[0])
+    #except:
       1
   if len(textlist) == 1 and len(textlist[0].replace(" ", ""))!=0:
     embed.set_author(name=textlist[0])
