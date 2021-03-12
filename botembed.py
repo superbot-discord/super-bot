@@ -1,5 +1,67 @@
 import discord
 
+def botett(msg):
+  #for count in msg.embeds:
+    count = msg.embeds[0]
+    edict = count.to_dict
+    ekeys = list(edict)
+    desc = "=embed "
+    if ekeys.count('title') == 1:
+      desc = desc + edict['title']
+    desc = desc + f"\n"
+    if ekeys.count('url') == 1:
+      desc = desc + edict['url']
+    desc = desc + f"\n"
+    if ekeys.count('description') == 1:
+      desc = desc + edict['description']
+    desc = desc + f"\n"
+    if ekeys.count('color') == 1:
+      desc = desc + str(edict['color'])
+    desc = desc + f"\n"
+    if ekeys.count('author') == 1:
+      eauthor = ekeys['author']
+      authorkeys = list(eauthor)
+      if authorkeys.count('name') == 1:
+        desc = desc + eauthor['name']
+      desc = desc + f"\n"
+      if authorkeys.count('url') == 1:
+        desc = desc + eauthor['url']
+      desc = desc + f"\n"
+      if authorkeys.count('icon_url') == 1:
+        desc = desc + eauthor['icon_url']
+      desc = desc + f"\n"
+    else:
+      desc = desc + f"\n"
+      desc = desc + f"\n"
+      desc = desc + f"\n"
+    if ekeys.count('footer') == 1:
+      efooter = ekeys['footer']
+      footerkeys = list(efooter)
+      if footerkeys.count('text') == 1:
+        desc = desc + efooter['text']
+      desc = desc + f"\n"
+      if footerkeys.count('icon_url') == 1:
+        desc = desc + efooter['icon_url']
+      desc = desc + f"\n"
+    else:
+      desc = desc + f"\n"
+      desc = desc + f"\n"
+    if ekeys.count('thumbnail') == 1:
+      desc = desc + (edict['thumbnail'])['url']
+    desc = desc + f"\n"
+    if ekeys.count('image') == 1:
+      desc = desc + (edict['image'])['url']
+    desc = desc + f"\n"
+    if ekeys.count('footer') == 1:
+      for count in ekeys['footer']:
+        desc = desc + count['name']
+        desc = desc + f"\n"
+        desc = desc + count['value']
+        desc = desc + f"\n"
+        desc = desc + str(count['inline'])
+        desc = desc + f"\n"
+    return desc
+
 def botsimpembed(text):
   textlist=text.splitlines()
   if len(textlist) == 1:
@@ -56,6 +118,10 @@ def botembed(text):
     textlist.remove(textlist[0])
   if len(textlist) == 1 and len(textlist[0].replace(" ", ""))!=0:
     embed.set_footer(text=textlist[0])
+    textlist.remove(textlist[0])
+  elif len(textlist) == 2 and len(textlist[0].replace(" ", ""))!=0 and len(textlist[1].replace(" ", ""))!=0:
+    embed.set_footer(text=textlist[0], icon_url=textlist[1])
+    textlist.remove(textlist[0])
     textlist.remove(textlist[0])
   if len(textlist) == 1 and len(textlist[0].replace(" ", ""))!=0:
     embed.set_thumbnail(url=textlist[0])
