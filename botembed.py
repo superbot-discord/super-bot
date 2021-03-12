@@ -3,7 +3,7 @@ import discord
 def botett(msg):
   #for count in msg.embeds:
     count = msg.embeds[0]
-    edict = count.to_dict
+    edict = count.to_dict()
     ekeys = list(edict)
     desc = "=embed "
     if ekeys.count('title') == 1:
