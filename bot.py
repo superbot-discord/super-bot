@@ -665,6 +665,11 @@ async def type(ctx):
     typer=0
     await ctx.send("Stopped typing")
 
+@bot.command()
+async def ett(ctx, msg : discord.Message):
+  text = botett(msg)
+  await ctx.send(text)
+
 @bot.command(aliases=["simpleembed"])
 async def simpembed(ctx, *, text):
   embed = botsimpembed(text)
