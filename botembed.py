@@ -19,7 +19,7 @@ def botett(msg):
       desc = desc + str(edict['color'])
     desc = desc + f"\n"
     if ekeys.count('author') == 1:
-      eauthor = ekeys['author']
+      eauthor = edict['author']
       authorkeys = list(eauthor)
       if authorkeys.count('name') == 1:
         desc = desc + eauthor['name']
@@ -53,7 +53,7 @@ def botett(msg):
       desc = desc + (edict['image'])['url']
     desc = desc + f"\n"
     if ekeys.count('fields') == 1:
-      for count in ekeys['fields']:
+      for count in edict['fields']:
         desc = desc + count['name']
         desc = desc + f"\n"
         desc = desc + count['value'].replace(f"\n", "{{{newline}}}")
