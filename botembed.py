@@ -35,7 +35,7 @@ def botett(msg):
       desc = desc + f"\n"
       desc = desc + f"\n"
     if ekeys.count('footer') == 1:
-      efooter = ekeys['footer']
+      efooter = edict['footer']
       footerkeys = list(efooter)
       if footerkeys.count('text') == 1:
         desc = desc + efooter['text']
