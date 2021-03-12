@@ -13,7 +13,7 @@ def botett(msg):
       desc = desc + edict['url']
     desc = desc + f"\n"
     if ekeys.count('description') == 1:
-      desc = desc + edict['description']
+      desc = desc + edict['description'].replace(f"\n", "{{{newline}}}")
     desc = desc + f"\n"
     if ekeys.count('color') == 1:
       desc = desc + str(edict['color'])
@@ -52,11 +52,11 @@ def botett(msg):
     if ekeys.count('image') == 1:
       desc = desc + (edict['image'])['url']
     desc = desc + f"\n"
-    if ekeys.count('footer') == 1:
-      for count in ekeys['footer']:
+    if ekeys.count('fields') == 1:
+      for count in ekeys['fields']:
         desc = desc + count['name']
         desc = desc + f"\n"
-        desc = desc + count['value']
+        desc = desc + count['value'].replace(f"\n", "{{{newline}}}")
         desc = desc + f"\n"
         desc = desc + str(count['inline'])
         desc = desc + f"\n"
