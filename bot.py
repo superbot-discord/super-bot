@@ -1730,23 +1730,28 @@ async def spam(ctx,times,*,message):
 @bot.command()
 async def ban(ctx, user: discord.User, *, delete : int =0, reason="No reason provided"):
   if ctx.author.permissions_in(ctx.channel).ban_members or bot_admins.count(ctx.author.id)!=0:
-    embed = discord.Embed(title=f"You were banned from the server.", description=f"Reason: {reason}\nBy: {ctx.author.mention}")
+    await ctx.guild.ban(user, delete_message_days = delete, reason=reason)
+    embed1 = discord.Embed(title=f"You were banned from the server.", description=f"Reason: {reason}\nBy: {ctx.author.mention}")
     try:
-      await user.send(embed=embed)
+      await user.send(embed=embed1)
     except:
       1
-    embed = discord.Embed(title=f"{user.name} was banned.", description=f"Reason: {reason}\nBy: {ctx.author.mention}")
-    await ctx.guild.ban(user, delete_message_days = delete, reason=reason)
-    await ctx.send(embed=embed)
+    embed2 = discord.Embed(title=f"{user.name} was banned.", description=f"Reason: {reason}\nBy: {ctx.author.mention}")
+    await ctx.send(embed=embed2)
   else:
     await ctx.send("You don't have the required permissions.")
 
 @bot.command()
 async def unban(ctx, user: discord.User, *, reason="No reason provided"):
   if ctx.author.permissions_in(ctx.channel).ban_members or bot_admins.count(ctx.author.id)!=0:
-    embed = discord.Embed(title=f"{user.name} was unbanned.", description=f"Reason: {reason}\nBy: {ctx.author.mention}")
-    await ctx.send(embed=embed)
     await ctx.guild.unban(user)
+    embed1 = discord.Embed(title=f"You were unbanned from the server.", description=f"Reason: {reason}\nBy: {ctx.author.mention}")
+    try:
+      await user.send(embed=embed1)
+    except:
+      1
+    embed2 = discord.Embed(title=f"{user.name} was unbanned.", description=f"Reason: {reason}\nBy: {ctx.author.mention}")
+    await ctx.send(embed=embed2)
   else:
     await ctx.send("You don't have the required permissions.")
 
