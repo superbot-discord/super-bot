@@ -1731,10 +1731,13 @@ async def spam(ctx,times,*,message):
 async def ban(ctx, user: discord.User, *, delete : int =0, reason="No reason provided"):
   if ctx.author.permissions_in(ctx.channel).ban_members or bot_admins.count(ctx.author.id)!=0:
     embed = discord.Embed(title=f"{user.name} was banned.", description=f"Reason: {reason}\nBy: {ctx.author.mention}")
-    await ctx.send(embed=embed)
     embed = discord.Embed(title=f"You were banned from the server.", description=f"Reason: {reason}\nBy: {ctx.author.mention}")
-    await user.send(embed=embed)
+    try:
+      await user.send(embed=embed)
+    except:
+      1
     await ctx.guild.ban(user, delete_message_days = delete, reason=reason)
+    await ctx.send(embed=embed)
   else:
     await ctx.send("You don't have the required permissions.")
 
