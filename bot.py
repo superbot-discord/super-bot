@@ -1728,13 +1728,13 @@ async def spam(ctx,times,*,message):
     await ctx.send("Please spam less than 30 times without any pings.")
 
 @bot.command()
-async def ban(ctx, user: discord.User, *, reason="No reason provided"):
+async def ban(ctx, user: discord.User, *, delete=0 : int, reason="No reason provided"):
   if ctx.author.permissions_in(ctx.channel).ban_members or bot_admins.count(ctx.author.id)!=0:
     embed = discord.Embed(title=f"{user.name} was banned.", description=f"Reason: {reason}\nBy: {ctx.author.mention}")
     await ctx.send(embed=embed)
     embed = discord.Embed(title=f"You were banned from the server.", description=f"Reason: {reason}\nBy: {ctx.author.mention}")
     await user.send(embed=embed)
-    await user.ban(reason=reason)
+    await ctx.guild.ban(user, delete_message_days = delete, reason=reason)
   else:
     await ctx.send("You don't have the required permissions.")
 
