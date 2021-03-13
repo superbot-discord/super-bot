@@ -10,7 +10,6 @@ from discord.ext import commands
 import matplotlib.pyplot as plt
 from selenium import webdriver
 from markdown2 import Markdown
-from bs4 import BeautifulSoup
 from cmath import *
 import random as ra
 import numpy as np
@@ -195,7 +194,7 @@ async def regex(ctx, regularexp, *, text):
     ti = "There was no occurrences."
   elif matches >= 2:
     ti = "There were "+str(matches)+" occurrences."
-  embed = discord.Embed(title = ti, description = newtext)
+  embed = discord.Embed(title = ti, description = newtext.replace("****",""))
   embed.set_author(name="Match Results for "+regularexp)
   embed.set_footer(text="Match Results are highlighted in bold")
   await ctx.send(embed=embed)
