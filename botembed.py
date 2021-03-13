@@ -109,7 +109,7 @@ def botembed(text):
   if len(textlist) == 1 and len(textlist[0].replace(" ", ""))!=0:
     embed.set_author(name=textlist[0])
     textlist.remove(textlist[0])
-  elif len(textlist) == 2 and len(textlist[0].replace(" ", ""))!=0: and len(textlist[1].replace(" ", ""))!=0:
+  elif len(textlist) == 2 and len(textlist[0].replace(" ", ""))!=0 and len(textlist[1].replace(" ", ""))!=0:
     embed.set_author(name=textlist[0], url=textlist[1])
     textlist.remove(textlist[0])
     textlist.remove(textlist[0])
