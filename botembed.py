@@ -87,7 +87,7 @@ def botembed(text):
   elif len(textlist) == 2:# and len(textlist[0].replace(" ", ""))!=0 and len(textlist[1].replace(" ", ""))!=0:
     embed=discord.Embed(title=textlist[0], url=textlist[1])
     textlist = textlist[2:]
-  elif (len(textlist) == 3:# or (len(textlist) == 4 and len(textlist[3].replace(" ", ""))==0)):# and len(textlist[0].replace(" ", ""))!=0 and len(textlist[1].replace(" ", ""))!=0 and len(textlist[2].replace(" ", ""))!=0:
+  elif len(textlist) == 3:# or (len(textlist) == 4 and len(textlist[3].replace(" ", ""))==0)):# and len(textlist[0].replace(" ", ""))!=0 and len(textlist[1].replace(" ", ""))!=0 and len(textlist[2].replace(" ", ""))!=0:
     embed=discord.Embed(title=textlist[0], url=textlist[1], description=textlist[2].replace("{{{newline}}}","\n"))
     textlist = textlist[3:]
   elif len(textlist) >= 4:# and len(textlist[0].replace(" ", ""))!=0:# and len(textlist[3].replace(" ", ""))!=0:# and len(textlist[2].replace(" ", ""))!=0 and len(textlist[3].replace(" ", ""))!=0:
