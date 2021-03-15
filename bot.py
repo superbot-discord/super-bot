@@ -1185,7 +1185,7 @@ async def role(ctx,role: discord.Role=None):
   f5v=role.position
   f6v=role.color
   embed.add_field(name="Mentions", value=f1v, inline=True)
-  embed.add_field(name="Members ("+len(memberlist)+")", value=f0v, inline=True)
+  embed.add_field(name="Members ("+str(len(memberlist))+")", value=f0v, inline=True)
   embed.add_field(name="Displayed separately?", value=f2v, inline=True)
   embed.add_field(name="Role ID", value=f4v, inline=True)
   embed.add_field(name="Position in hierarchy", value=f5v, inline=True)
