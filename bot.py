@@ -59,6 +59,11 @@ cmaphsv = plt.cm.hsv
 def func(pct, allvals):
   absolute = int(pct/100*np.sum(allvals))
   return "{:d} ({:.1f}%)".format(absolute, int(pct))
+sniper1={} # Most recent
+sniper2={}
+sniper3={}
+sniper4={}
+sniper5={} # Oldest
 
 #@bot.event
 #async def on_invite_create(invite):
@@ -69,6 +74,31 @@ def func(pct, allvals):
 #async def on_member_update(before, after):
 #  if after.roles.count(before.guild.get_role(810729029790597190)) == 0 and after.guild.id == 809368482344075265 and after.id == 687474789342117900:
 #    await after.add_roles(before.guild.get_role(810729029790597190), reason = "Mysterious")
+
+@bot.event
+async def on_message_delete(message):
+  keyname = str(message.guild.id)+str(message.channel.id)
+  val = message.content
+  if sniper1.get(keyname, 1) == 1:
+    sniper1[keyname] = val
+  elif sniper2.get(keyname, 1) == 1:
+    sniper2[keyname] = sniper1[keyname]
+    sniper1[keyname] = val
+  elif sniper3.get(keyname, 1) == 1:
+    sniper3[keyname] = sniper2[keyname]
+    sniper2[keyname] = sniper1[keyname]
+    sniper1[keyname] = val
+  elif sniper4.get(keyname, 1) == 1:
+    sniper4[keyname] = sniper3[keyname]
+    sniper3[keyname] = sniper2[keyname]
+    sniper2[keyname] = sniper1[keyname]
+    sniper1[keyname] = val
+  elif sniper5.get(keyname, 1) == 1:
+    sniper5[keyname] = sniper4[keyname]
+    sniper4[keyname] = sniper3[keyname]
+    sniper3[keyname] = sniper2[keyname]
+    sniper2[keyname] = sniper1[keyname]
+    sniper1[keyname] = val
 
 @bot.event
 async def on_member_update(before, after):
@@ -93,6 +123,32 @@ async def on_message(message):
     await bot.process_commands(message)
   elif message.content.startswith("="):
     await message.channel.send("You are banned from the bot. Reason: "+banned_text[banned_ids.index(message.author.id)])
+
+@bot.command()
+async def snipe(ctx, *, chnl : discord.Channel):
+  if chnl == None:
+    chnl = ctx.channel
+  keyname = str(ctx.guild.id)+str(chnl.id)
+  if snipe1.get(keyname, 1) == 1:
+    ti = "Error"
+    desc = "Nothing to snipe from this channel."
+  elif snipe2.get(keyname, 1) == 1:
+    ti = "Snipped message"
+    desc = "```"+sniper1[keyname]+"```"
+  elif snipe3.get(keyname, 1) == 1:
+    desc = f"🇷 🇪 🇨 🇪 🇳	🇹\n```"+sniper1[keyname]+f"```\n```"+sniper2[keyname]+"```"+"🇴 🇱 🇩"
+  elif snipe4.get(keyname, 1) == 1:
+    desc = f"🇷 🇪 🇨 🇪 🇳	🇹\n```"+sniper1[keyname]+f"```\n```"+sniper2[keyname]+sniper3[keyname]+"```"+"🇴 🇱 🇩"
+  elif snipe5.get(keyname, 1) == 1:
+    desc = f"🇷 🇪 🇨 🇪 🇳	🇹\n```"+sniper1[keyname]+f"```\n```"+sniper2[keyname]+sniper3[keyname]+sniper4[keyname]+"```"+"🇴 🇱 🇩"
+  else:
+    desc = f"🇷 🇪 🇨 🇪 🇳	🇹\n```"+sniper1[keyname]+f"```\n```"+sniper2[keyname]+sniper3[keyname]+sniper4[keyname]+sniper5[keyname]+"```"+"🇴 🇱 🇩"
+  try:
+    ti
+  except:
+    ti = "Snipped messages"
+  embed = discord.Embed(title=ti, description=desc)
+  await ctx.send(embed=embed)
 
 @bot.command()
 async def nick(ctx, *, newnick):
