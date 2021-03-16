@@ -125,21 +125,21 @@ async def on_message(message):
     await message.channel.send("You are banned from the bot. Reason: "+banned_text[banned_ids.index(message.author.id)])
 
 @bot.command()
-async def snipe(ctx, *, chnl : discord.TextChannel):
+async def snipe(ctx, *, chnl : discord.TextChannel = ctx.channel):
   if chnl == None:
     chnl = ctx.channel
   keyname = str(ctx.guild.id)+str(chnl.id)
-  if snipe1.get(keyname, 1) == 1:
+  if sniper1.get(keyname, 1) == 1:
     ti = "Error"
     desc = "Nothing to snipe from this channel."
-  elif snipe2.get(keyname, 1) == 1:
+  elif sniper2.get(keyname, 1) == 1:
     ti = "Snipped message"
     desc = "```"+sniper1[keyname]+"```"
-  elif snipe3.get(keyname, 1) == 1:
+  elif sniper3.get(keyname, 1) == 1:
     desc = f"🇷 🇪 🇨 🇪 🇳	🇹\n```"+sniper1[keyname]+f"```\n```"+sniper2[keyname]+"```"+"🇴 🇱 🇩"
-  elif snipe4.get(keyname, 1) == 1:
+  elif sniper4.get(keyname, 1) == 1:
     desc = f"🇷 🇪 🇨 🇪 🇳	🇹\n```"+sniper1[keyname]+f"```\n```"+sniper2[keyname]+sniper3[keyname]+"```"+"🇴 🇱 🇩"
-  elif snipe5.get(keyname, 1) == 1:
+  elif sniper5.get(keyname, 1) == 1:
     desc = f"🇷 🇪 🇨 🇪 🇳	🇹\n```"+sniper1[keyname]+f"```\n```"+sniper2[keyname]+sniper3[keyname]+sniper4[keyname]+"```"+"🇴 🇱 🇩"
   else:
     desc = f"🇷 🇪 🇨 🇪 🇳	🇹\n```"+sniper1[keyname]+f"```\n```"+sniper2[keyname]+sniper3[keyname]+sniper4[keyname]+sniper5[keyname]+"```"+"🇴 🇱 🇩"
