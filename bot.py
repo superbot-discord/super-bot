@@ -125,7 +125,7 @@ async def on_message(message):
     await message.channel.send("You are banned from the bot. Reason: "+banned_text[banned_ids.index(message.author.id)])
 
 @bot.command()
-async def snipe(ctx, *, chnl : discord.Channel):
+async def snipe(ctx, *, chnl : discord.TextChannel):
   if chnl == None:
     chnl = ctx.channel
   keyname = str(ctx.guild.id)+str(chnl.id)
