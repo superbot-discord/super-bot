@@ -66,7 +66,7 @@ def botsimpembed(text):
   textlist=text.splitlines()
   if len(textlist) == 1:
     embed=discord.Embed(title=textlist[0])
-  elif len(textlist) == 2:
+  elif len(textlist) >= 2:
     embed=discord.Embed(title=textlist[0], description=textlist[1].replace("{{{newline}}}",f"\n"))
     textlist = textlist[1:]
   textlist = textlist[1:]
