@@ -70,6 +70,9 @@ def botsimpembed(text):
     embed=discord.Embed(title=textlist[0], description=textlist[1].replace("{{{newline}}}",f"\n"))
     textlist = textlist[1:]
   textlist = textlist[1:]
+  if len(textlist) >= 1:
+    embed.set_image(url=textlist[0])
+    textlist = textlist[1:]
   for count in range(0,len(textlist)//3):
     if textlist[2].lower()=="y" or textlist[2].lower()=="yes" or textlist[2].lower()=="true" or textlist[2].lower()=="1":
       inl=True
