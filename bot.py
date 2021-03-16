@@ -138,11 +138,11 @@ async def snipe(ctx, *, chnl : discord.TextChannel = None):
   elif sniper3.get(keyname, 1) == 1:
     desc = f"🇷 🇪 🇨 🇪 🇳	🇹\n```"+sniper1[keyname]+f"```\n```"+sniper2[keyname]+"```"+"🇴 🇱 🇩"
   elif sniper4.get(keyname, 1) == 1:
-    desc = f"🇷 🇪 🇨 🇪 🇳	🇹\n```"+sniper1[keyname]+f"```\n```"+sniper2[keyname]+sniper3[keyname]+"```"+"🇴 🇱 🇩"
+    desc = f"🇷 🇪 🇨 🇪 🇳	🇹\n```"+sniper1[keyname]+f"```\n```"+sniper2[keyname]+f"```\n```"+sniper3[keyname]+"```"+"🇴 🇱 🇩"
   elif sniper5.get(keyname, 1) == 1:
-    desc = f"🇷 🇪 🇨 🇪 🇳	🇹\n```"+sniper1[keyname]+f"```\n```"+sniper2[keyname]+sniper3[keyname]+sniper4[keyname]+"```"+"🇴 🇱 🇩"
+    desc = f"🇷 🇪 🇨 🇪 🇳	🇹\n```"+sniper1[keyname]+f"```\n```"+sniper2[keyname]+f"```\n```"+sniper3[keyname]+f"```\n```"+sniper4[keyname]+"```"+"🇴 🇱 🇩"
   else:
-    desc = f"🇷 🇪 🇨 🇪 🇳	🇹\n```"+sniper1[keyname]+f"```\n```"+sniper2[keyname]+sniper3[keyname]+sniper4[keyname]+sniper5[keyname]+"```"+"🇴 🇱 🇩"
+    desc = f"🇷 🇪 🇨 🇪 🇳	🇹\n```"+sniper1[keyname]+f"```\n```"+sniper2[keyname]+f"```\n```"+sniper3[keyname]+f"```\n```"+sniper4[keyname]+f"```\n```"+sniper5[keyname]+"```"+"🇴 🇱 🇩"
   try:
     ti
   except:
