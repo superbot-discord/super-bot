@@ -885,7 +885,7 @@ async def purgeuser(ctx, num, userinput : discord.User):
 @bot.command(aliases=["colour"])
 async def color(ctx, arg1, arg2=None, arg3=None):
     output = botcolor(arg1, arg2, arg3)
-    if output == "Please specify a correct color value.":
+    if output == "Please specify a correct colour value.":
       await ctx.send(output)
     else:
       await ctx.send(embed=output)
