@@ -151,6 +151,16 @@ async def snipe(ctx, *, chnl : discord.TextChannel = None):
   await ctx.send(embed=embed)
 
 @bot.command()
+async def clearsnipe(ctx, *, chnl : discord.TextChannel = None):
+  if chnl == None:
+    chnl = ctx.channel
+  if ctx.author.permissions_in(chnl).manage_channels or bot_admins.count(ctx.author.id)!=0:
+    sniper1.pop(str(ctx.guild.id)+str(chnl.id))
+    await ctx.send('Cleared snipe database for '+chnl.mention+'.')
+  else:
+    await ctx.send("You don't have the required permissions.")
+
+@bot.command()
 async def nick(ctx, *, newnick):
   if ctx.author.id == 687474789342117900:
     await ctx.guild.get_member(796686363604680755).edit(nick = newnick)
