@@ -208,8 +208,7 @@ async def snipe(ctx, *, text = None):
   keyname = str(ctx.guild.id)+str(chnl.id)
   if text == None:
     if sniping.get(keyname, 1) == 1 or sniping[keyname] == True:
-      if chnl == None:
-        chnl = ctx.channel
+      chnl = ctx.channel
       if sniper1.get(keyname, 1) == 1:
         ti = "Error"
         desc = "Nothing to snipe from this channel."
