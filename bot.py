@@ -125,7 +125,7 @@ async def on_message_delete(message):
 
 @bot.event
 async def on_reaction_add(reaction, user):
-  if snipereaction.count(reaction.message) != 0:
+  if snipereactions.count(reaction.message) != 0:
     keyname = str(reaction.message.guild.id)+str(reaction.message.channel.id)
     current = sniperdict[reaction.message]
     if reaction.emoji == '⏪':# and sniper1.get(keyname, 1) != 1:
@@ -216,11 +216,11 @@ async def snipe(ctx, *, chnl : discord.TextChannel = None):
   embed = discord.Embed(title=ti, description=desc)
   embed.set_footer(text=foot)
   cmsg = await ctx.send(embed=embed)
-  cmsg.add_reaction('⏪')
-  cmsg.add_reaction('⬅️')
-  cmsg.add_reaction('📌')
-  cmsg.add_reaction('➡️')
-  cmsg.add_reaction('⏩')
+  await cmsg.add_reaction('⏪')
+  await cmsg.add_reaction('⬅️')
+  await cmsg.add_reaction('📌')
+  await cmsg.add_reaction('➡️')
+  await cmsg.add_reaction('⏩')
   snipereactions.append(cmsg)
   sniperdict[cmsg] = 1
 
