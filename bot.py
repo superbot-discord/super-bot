@@ -125,7 +125,7 @@ async def on_message_delete(message):
 
 @bot.event
 async def on_reaction_add(reaction, user):
-  if snipereactions.count(reaction.message) != 0:
+  if snipereactions.count(reaction.message) != 0 and user.id != 796686363604680755:
     keyname = str(reaction.message.guild.id)+str(reaction.message.channel.id)
     current = sniperdict[reaction.message]
     if reaction.emoji == '⏪':# and sniper1.get(keyname, 1) != 1:
