@@ -139,15 +139,15 @@ async def on_reaction_add(reaction, user):
       await reaction.message.channel.send("Unable to Pin/Unpin messages without `Manage Server` permission.")
     elif reaction.emoji == '➡️' and sniperdict[reaction.message] <5 and eval('sniper'+str(sniperdict[reaction.message]+1)+'.get(keyname, 1)') != 1:
       sniperdict[reaction.message] = sniperdict[reaction.message] + 1
-    elif reaction.emoji == '⏩' and sniper5.get(keyname, 1) == 1:
+    elif reaction.emoji == '⏩' and sniper5.get(keyname, 1) != 1:
       sniperdict[reaction.message] = 5
-    elif reaction.emoji == '⏩' and sniper4.get(keyname, 1) == 1:
+    elif reaction.emoji == '⏩' and sniper4.get(keyname, 1) != 1:
       sniperdict[reaction.message] = 4
-    elif reaction.emoji == '⏩' and sniper3.get(keyname, 1) == 1:
+    elif reaction.emoji == '⏩' and sniper3.get(keyname, 1) != 1:
       sniperdict[reaction.message] = 3
-    elif reaction.emoji == '⏩' and sniper2.get(keyname, 1) == 1:
+    elif reaction.emoji == '⏩' and sniper2.get(keyname, 1) != 1:
       sniperdict[reaction.message] = 2
-    elif reaction.emoji == '⏩' and sniper1.get(keyname, 1) == 1:
+    elif reaction.emoji == '⏩' and sniper1.get(keyname, 1) != 1:
       sniperdict[reaction.message] = 1
     else:
       return
