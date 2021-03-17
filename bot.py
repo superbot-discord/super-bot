@@ -205,7 +205,7 @@ async def on_message(message):
 
 @bot.command()
 async def snipe(ctx, *, text = None):
-  keyname = str(ctx.guild.id)+str(chnl.id)
+  keyname = str(ctx.guild.id)+str(ctx.channel.id)
   if text == None:
     if sniping.get(keyname, 1) == 1 or sniping[keyname] == True:
       chnl = ctx.channel
