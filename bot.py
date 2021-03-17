@@ -157,7 +157,7 @@ async def on_reaction_add(reaction, user):
     #  current = current - 1
     ti = "Snipped message"
     desc = eval('sniper'+str(current)+'[keyname]')
-    foot = eval('sniperdatetime'+str(current)+'[keyname]')
+    foot = eval('sniperdate'+str(current)+'[keyname]')
     embed = discord.Embed(title=ti, description=desc)
     embed.set_footer(text=foot)
     await reaction.message.edit(embed=embed)
@@ -200,7 +200,7 @@ async def snipe(ctx, *, chnl : discord.TextChannel = None):
   else:#if sniper2.get(keyname, 1) == 1:
     ti = "Snipped message"
     desc = sniper1[keyname]
-    foot = sniperdatetime1[keyname]
+    foot = snipertime1[keyname]
   """elif sniper3.get(keyname, 1) == 1:
     desc = f"🇷 🇪 🇨 🇪 🇳	🇹\n```"+sniper1[keyname]+f"```\n```"+sniper2[keyname]+"```"+"🇴 🇱 🇩"
   elif sniper4.get(keyname, 1) == 1:
