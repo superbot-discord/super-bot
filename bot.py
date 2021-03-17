@@ -154,18 +154,18 @@ async def on_reaction_add(reaction, user):
       return
     await reaction.remove(user)
     if sniper2.get(keyname, 1) == 1:
-      max = 1
+      maxc = 1
     elif sniper3.get(keyname, 1) == 1:
-      max = 2
+      maxc = 2
     elif sniper4.get(keyname, 1) == 1:
-      max = 3
+      maxc = 3
     elif sniper5.get(keyname, 1) == 1:
-      max = 4
+      maxc = 4
     else:
-      max = 5
+      maxc = 5
     #if eval('sniper'+str(sniperdict[cmsg])+'.get(keyname, 1)') == 1:
     #  sniperdict[cmsg] = sniperdict[cmsg] - 1
-    ti = "Snipped message ("+str(sniperdict[cmsg])+r"/"+str(max)+")"
+    ti = "Snipped message ("+str(sniperdict[cmsg])+r"/"+str(maxc)+")"
     desc = eval('sniper'+str(sniperdict[cmsg])+'[keyname]')
     foot = eval('sniperdate'+str(sniperdict[cmsg])+'[keyname]')
     embed = discord.Embed(title=ti, description=desc)
@@ -219,7 +219,7 @@ async def snipe(ctx, *, chnl : discord.TextChannel = None):
       maxc = 4
     else:
       maxc = 5
-    ti = "Snipped message ("+str(sniperdict[cmsg])+r"/"+str(max)+")"
+    ti = "Snipped message ("+str(sniperdict[cmsg])+r"/"+str(maxc)+")"
     desc = sniper1[keyname]
     foot = sniperdate1[keyname]
   """elif sniper3.get(keyname, 1) == 1:
