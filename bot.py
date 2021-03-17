@@ -132,9 +132,9 @@ async def on_reaction_add(reaction, user):
       current = 1
     elif reaction.emoji == '⬅️' and current >=2:
       current = current - 1
-    elif reaction.emoji == '📌' and reaction.message.pinned == False and client.user.permissions_in(reaction.message.channel).manage_messages:
+    elif reaction.emoji == '📌' and reaction.message.pinned == False and bot.user.permissions_in(reaction.message.channel).manage_messages:
       await reaction.message.pin()
-    elif reaction.emoji == '📌' and reaction.message.pinned == True and client.user.permissions_in(reaction.message.channel).manage_messages:
+    elif reaction.emoji == '📌' and reaction.message.pinned == True and bot.user.permissions_in(reaction.message.channel).manage_messages:
       await reaction.message.unpin()
     elif reaction.emoji == '📌':
       await reaction.message.channel.send("Unable to Pin/Unpin messages without `Manage Server` permission.")
@@ -155,11 +155,11 @@ async def on_reaction_add(reaction, user):
     await reaction.remove(user)
     if sniper2.get(keyname, 1) == 1:
       max = 1
-    if sniper3.get(keyname, 1) == 1:
+    elif sniper3.get(keyname, 1) == 1:
       max = 2
-    if sniper4.get(keyname, 1) == 1:
+    elif sniper4.get(keyname, 1) == 1:
       max = 3
-    if sniper5.get(keyname, 1) == 1:
+    elif sniper5.get(keyname, 1) == 1:
       max = 4
     else:
       max = 5
