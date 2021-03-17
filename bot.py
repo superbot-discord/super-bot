@@ -210,14 +210,24 @@ async def snipe(ctx, *, chnl : discord.TextChannel = None):
   else:#if sniper2.get(keyname, 1) == 1:
     if sniper5.get(keyname, 1) == 1:
       current = 5
-    if sniper4.get(keyname, 1) == 1:
+    elif sniper4.get(keyname, 1) == 1:
       current = 4
-    if sniper3.get(keyname, 1) == 1:
+    elif sniper3.get(keyname, 1) == 1:
       current = 3
-    if sniper2.get(keyname, 1) == 1:
+    elif sniper2.get(keyname, 1) == 1:
       current = 2
-    if sniper1.get(keyname, 1) == 1:
+    elif sniper1.get(keyname, 1) == 1:
       current = 1
+    if sniper2.get(keyname, 1) == 1:
+      max = 1
+    elif sniper3.get(keyname, 1) == 1:
+      max = 2
+    elif sniper4.get(keyname, 1) == 1:
+      max = 3
+    elif sniper5.get(keyname, 1) == 1:
+      max = 4
+    else:
+      max = 5
     ti = "Snipped message ("+str(current)+r"/"+str(max)+")"
     desc = sniper1[keyname]
     foot = sniperdate1[keyname]
