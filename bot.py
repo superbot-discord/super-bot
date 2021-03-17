@@ -121,7 +121,7 @@ async def on_message_delete(message):
     sniperdate4[keyname] = sniperdate3[keyname]
     sniperdate3[keyname] = sniperdate2[keyname]
     sniperdate2[keyname] = sniperdate1[keyname]
-    sniperdate1[keyname] = val
+    sniperdate1[keyname] = adt
 
 @bot.event
 async def on_reaction_add(reaction, user):
@@ -130,7 +130,7 @@ async def on_reaction_add(reaction, user):
     current = sniperdict[reaction.message]
     if reaction.emoji == '⏪':# and sniper1.get(keyname, 1) != 1:
       current = 1
-    elif reaction.emoji == '⬅️' and current >=2:
+    elif reaction.emoji == '⬅️' and current > 1:
       current = current - 1
     elif reaction.emoji == '📌' and reaction.message.pinned == False and reaction.message.guild.get_user(796686363604680755).permissions_in(reaction.message.channel).manage_messages:
       await reaction.message.pin()
@@ -138,7 +138,7 @@ async def on_reaction_add(reaction, user):
       await reaction.message.unpin()
     elif reaction.emoji == '📌':
       await reaction.message.channel.send("Unable to Pin/Unpin messages without `Manage Server` permission.")
-    elif reaction.emoji == '➡️' and current <=4 and eval('sniper'+str(current+1)+'.get(keyname, 1)') != 1:
+    elif reaction.emoji == '➡️' and current <5 and eval('sniper'+str(current+1)+'.get(keyname, 1)') != 1:
       current = current + 1
     elif reaction.emoji == '⏩' and sniper5.get(keyname, 1) == 1:
       current = 5
