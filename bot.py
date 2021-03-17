@@ -70,6 +70,7 @@ sniperdate3={}
 sniperdate4={}
 sniperdate5={}
 sniperdict={}
+sniping={}
 snipereactions=[]
 
 #@bot.event
@@ -203,52 +204,51 @@ async def on_message(message):
     await message.channel.send("You are banned from the bot. Reason: "+banned_text[banned_ids.index(message.author.id)])
 
 @bot.command()
-async def snipe(ctx, *, chnl : discord.TextChannel = None):
-  if chnl == None:
-    chnl = ctx.channel
+async def snipe(ctx, *, text = None):
   keyname = str(ctx.guild.id)+str(chnl.id)
-  if sniper1.get(keyname, 1) == 1:
-    ti = "Error"
-    desc = "Nothing to snipe from this channel."
-    embed = discord.Embed(title=ti, description=desc)
-    await ctx.send(embed=embed)
-    return
-  else:#if sniper2.get(keyname, 1) == 1:
-    if sniper2.get(keyname, 1) == 1:
-      maxc = 1
-    elif sniper3.get(keyname, 1) == 1:
-      maxc = 2
-    elif sniper4.get(keyname, 1) == 1:
-      maxc = 3
-    elif sniper5.get(keyname, 1) == 1:
-      maxc = 4
+  if text == None:
+    if sniping.get(keyname, 1) == 1 or sniping[keyname] == True:
+      if chnl == None:
+        chnl = ctx.channel
+      if sniper1.get(keyname, 1) == 1:
+        ti = "Error"
+        desc = "Nothing to snipe from this channel."
+        embed = discord.Embed(title=ti, description=desc)
+        await ctx.send(embed=embed)
+        return
+      else:#if sniper2.get(keyname, 1) == 1:
+        if sniper2.get(keyname, 1) == 1:
+          maxc = 1
+        elif sniper3.get(keyname, 1) == 1:
+          maxc = 2
+        elif sniper4.get(keyname, 1) == 1:
+          maxc = 3
+        elif sniper5.get(keyname, 1) == 1:
+          maxc = 4
+        else:
+          maxc = 5
+        ti = "Snipped message (1/"+str(maxc)+")"
+        desc = sniper1[keyname]
+        foot = sniperdate1[keyname]
+      embed = discord.Embed(title=ti, description=desc)
+      embed.set_footer(text=foot)
+      cmsg = await ctx.send(embed=embed)
+      sniperdict[cmsg] = 1
+      await cmsg.add_reaction('⏪')
+      await cmsg.add_reaction('⬅️')
+      await cmsg.add_reaction('📌')
+      await cmsg.add_reaction('➡️')
+      await cmsg.add_reaction('⏩')
+      snipereactions.append(cmsg)
     else:
-      maxc = 5
-    ti = "Snipped message (1/"+str(maxc)+")"
-    desc = sniper1[keyname]
-    foot = sniperdate1[keyname]
-  """elif sniper3.get(keyname, 1) == 1:
-    desc = f"🇷 🇪 🇨 🇪 🇳	🇹\n```"+sniper1[keyname]+f"```\n```"+sniper2[keyname]+"```"+"🇴 🇱 🇩"
-  elif sniper4.get(keyname, 1) == 1:
-    desc = f"🇷 🇪 🇨 🇪 🇳	🇹\n```"+sniper1[keyname]+f"```\n```"+sniper2[keyname]+f"```\n```"+sniper3[keyname]+"```"+"🇴 🇱 🇩"
-  elif sniper5.get(keyname, 1) == 1:
-    desc = f"🇷 🇪 🇨 🇪 🇳	🇹\n```"+sniper1[keyname]+f"```\n```"+sniper2[keyname]+f"```\n```"+sniper3[keyname]+f"```\n```"+sniper4[keyname]+"```"+"🇴 🇱 🇩"
-  else:
-    desc = f"🇷 🇪 🇨 🇪 🇳	🇹\n```"+sniper1[keyname]+f"```\n```"+sniper2[keyname]+f"```\n```"+sniper3[keyname]+f"```\n```"+sniper4[keyname]+f"```\n```"+sniper5[keyname]+"```"+"🇴 🇱 🇩"
-  try:
-    ti
-  except:
-    ti = "Snipped messages\""""
-  embed = discord.Embed(title=ti, description=desc)
-  embed.set_footer(text=foot)
-  cmsg = await ctx.send(embed=embed)
-  sniperdict[cmsg] = 1
-  await cmsg.add_reaction('⏪')
-  await cmsg.add_reaction('⬅️')
-  await cmsg.add_reaction('📌')
-  await cmsg.add_reaction('➡️')
-  await cmsg.add_reaction('⏩')
-  snipereactions.append(cmsg)
+      await ctx.send("Snipping is disabled. Please ask someone with manage messages permission to re-enable it.")
+  elif ctx.author.permissions_in(ctx.channel).manage_messages:
+    if textlist[2].startswith("y") or textlist[2].startswith("t") or textlist[2].startswith("e") or textlist[2].lower()=="1":
+      sniping[keyname] = True
+      await ctx.send("Sniping is now enabled.")
+    else:
+      sniping[keyname] = False
+      await ctx.send("Sniping is now disabled.")
 
 @bot.command()
 async def clearsnipe(ctx, *, chnl : discord.TextChannel = None):
@@ -811,7 +811,7 @@ async def pretendembed(ctx, member : discord.Member, *, text):
   embed.set_image(url=textlist[0])
   textlist.remove(textlist[0])
   for count in range(0,len(textlist)//3):
-    if textlist[2].lower()=="y" or textlist[2].lower()=="yes" or textlist[2].lower()=="true" or textlist[2].lower()=="1":
+    if textlist[2].startswith("y") or textlist[2].startswith("t") or textlist[2].startswith("e") or textlist[2].lower()=="1":
       inl=True
     else:
       inl=False
