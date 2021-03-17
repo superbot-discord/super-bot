@@ -86,6 +86,8 @@ snipereactions=[]
 async def on_message_delete(message):
   keyname = str(message.guild.id)+str(message.channel.id)
   val = message.content
+  if val.replace(" ","") == "":
+    return
   adt = "By "+message.author.name+"#"+str(message.author.discriminator)+" at "+message.created_at.strftime("%d %b, %Y (%a) %H:%M:%S")
   if sniper1.get(keyname, 1) == 1:
     sniper1[keyname] = val
