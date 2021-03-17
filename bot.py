@@ -64,6 +64,13 @@ sniper2={}
 sniper3={}
 sniper4={}
 sniper5={} # Oldest
+sniperdate1={}
+sniperdate2={}
+sniperdate3={}
+sniperdate4={}
+sniperdate5={}
+sniperdict={}
+snipereactions=[]
 
 #@bot.event
 #async def on_invite_create(invite):
@@ -79,26 +86,72 @@ sniper5={} # Oldest
 async def on_message_delete(message):
   keyname = str(message.guild.id)+str(message.channel.id)
   val = message.content
+  adt = "By "+message.author.mention+" at "+message.created_at.strftime("%d %b, %Y (%a) %H:%M:%S")
   if sniper1.get(keyname, 1) == 1:
     sniper1[keyname] = val
+    sniperdate1[keyname] = adt
   elif sniper2.get(keyname, 1) == 1:
     sniper2[keyname] = sniper1[keyname]
     sniper1[keyname] = val
+    sniperdate2[keyname] = sniperdate1[keyname]
+    sniperdate1[keyname] = adt
   elif sniper3.get(keyname, 1) == 1:
     sniper3[keyname] = sniper2[keyname]
     sniper2[keyname] = sniper1[keyname]
     sniper1[keyname] = val
+    sniperdate3[keyname] = sniperdate2[keyname]
+    sniperdate2[keyname] = sniperdate1[keyname]
+    sniperdate1[keyname] = adt
   elif sniper4.get(keyname, 1) == 1:
     sniper4[keyname] = sniper3[keyname]
     sniper3[keyname] = sniper2[keyname]
     sniper2[keyname] = sniper1[keyname]
     sniper1[keyname] = val
+    sniperdate4[keyname] = sniperdate3[keyname]
+    sniperdate3[keyname] = sniperdate2[keyname]
+    sniperdate2[keyname] = sniperdate1[keyname]
+    sniperdate1[keyname] = adt
   elif sniper5.get(keyname, 1) == 1:
     sniper5[keyname] = sniper4[keyname]
     sniper4[keyname] = sniper3[keyname]
     sniper3[keyname] = sniper2[keyname]
     sniper2[keyname] = sniper1[keyname]
     sniper1[keyname] = val
+    sniperdate5[keyname] = sniperdate4[keyname]
+    sniperdate4[keyname] = sniperdate3[keyname]
+    sniperdate3[keyname] = sniperdate2[keyname]
+    sniperdate2[keyname] = sniperdate1[keyname]
+    sniperdate1[keyname] = val
+
+@bot.event
+async def on_reaction_add(reaction, user):
+  if snipereaction.count(reaction.message) != 0:
+    keyname = str(reaction.message.guild.id)+str(reaction.message.channel.id)
+    current = sniperdict[reaction.message]
+    if reaction.emoji == '⏪':# and sniper1.get(keyname, 1) != 1:
+      current = 1
+    elif reaction.emoji == '⬅️' and current >=2:
+      current = current - 1
+    elif reaction.emoji == '📌' and reaction.message.pinned == False and client.user.permissions_in(reaction.message.channel).manage_messages:
+      await reaction.message.pin()
+    elif reaction.emoji == '📌' and reaction.message.pinned == True and client.user.permissions_in(reaction.message.channel).manage_messages:
+      await reaction.message.unpin()
+    elif reaction.emoji == '📌':
+      await reaction.message.channel.send("Unable to Pin/Unpin messages without `Manage Server` permission.")
+    elif reaction.emoji == '➡️' and current <=4 and eval('sniper'+str(current+1)+'.get(keyname, 1)) != 1:
+      current = current + 1
+    elif reaction.emoji == '⏩' and sniper5.get(keyname, 1) != 1:
+      current = 5
+    else:
+      return
+    #if eval('sniper'+str(current)+'.get(keyname, 1)') == 1:
+    #  current = current - 1
+    ti = "Snipped message"
+    desc = eval('sniper'+str(current)+'[keyname]')
+    foot = eval('sniperdatetime'+str(current)+'[keyname]')
+    embed = discord.Embed(title=ti, description=desc)
+    embed.set_footer(text=foot)
+    await reaction.message.edit(embed=embed)
 
 @bot.event
 async def on_member_update(before, after):
@@ -132,10 +185,14 @@ async def snipe(ctx, *, chnl : discord.TextChannel = None):
   if sniper1.get(keyname, 1) == 1:
     ti = "Error"
     desc = "Nothing to snipe from this channel."
-  elif sniper2.get(keyname, 1) == 1:
+    embed = discord.Embed(title=ti, description=desc)
+    await ctx.send(embed=embed)
+    return
+  else:#if sniper2.get(keyname, 1) == 1:
     ti = "Snipped message"
-    desc = "```"+sniper1[keyname]+"```"
-  elif sniper3.get(keyname, 1) == 1:
+    desc = sniper1[keyname]
+    foot = sniperdatetime1[keyname]
+  """elif sniper3.get(keyname, 1) == 1:
     desc = f"🇷 🇪 🇨 🇪 🇳	🇹\n```"+sniper1[keyname]+f"```\n```"+sniper2[keyname]+"```"+"🇴 🇱 🇩"
   elif sniper4.get(keyname, 1) == 1:
     desc = f"🇷 🇪 🇨 🇪 🇳	🇹\n```"+sniper1[keyname]+f"```\n```"+sniper2[keyname]+f"```\n```"+sniper3[keyname]+"```"+"🇴 🇱 🇩"
@@ -146,9 +203,17 @@ async def snipe(ctx, *, chnl : discord.TextChannel = None):
   try:
     ti
   except:
-    ti = "Snipped messages"
+    ti = "Snipped messages""""
   embed = discord.Embed(title=ti, description=desc)
-  await ctx.send(embed=embed)
+  embed.set_footer(text=foot)
+  cmsg = await ctx.send(embed=embed)
+  cmsg.add_reaction('⏪')
+  cmsg.add_reaction('⬅️')
+  cmsg.add_reaction('📌')
+  cmsg.add_reaction('➡️')
+  cmsg.add_reaction('⏩')
+  snipereactions.append(cmsg)
+  sniperdict[cmsg] = 1
 
 @bot.command()
 async def clearsnipe(ctx, *, chnl : discord.TextChannel = None):
