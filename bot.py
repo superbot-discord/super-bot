@@ -152,7 +152,7 @@ async def on_reaction_add(reaction, user):
       current = 1
     else:
       return
-    await reaction.remove()
+    await reaction.remove(user)
     #if eval('sniper'+str(current)+'.get(keyname, 1)') == 1:
     #  current = current - 1
     ti = "Snipped message"
