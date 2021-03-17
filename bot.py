@@ -208,7 +208,6 @@ async def snipe(ctx, *, chnl : discord.TextChannel = None):
     await ctx.send(embed=embed)
     return
   else:#if sniper2.get(keyname, 1) == 1:
-    sniperdict[cmsg] = 1
     if sniper2.get(keyname, 1) == 1:
       maxc = 1
     elif sniper3.get(keyname, 1) == 1:
@@ -219,7 +218,7 @@ async def snipe(ctx, *, chnl : discord.TextChannel = None):
       maxc = 4
     else:
       maxc = 5
-    ti = "Snipped message ("+str(sniperdict[cmsg])+r"/"+str(maxc)+")"
+    ti = "Snipped message (1/"+str(maxc)+")"
     desc = sniper1[keyname]
     foot = sniperdate1[keyname]
   """elif sniper3.get(keyname, 1) == 1:
@@ -237,6 +236,7 @@ async def snipe(ctx, *, chnl : discord.TextChannel = None):
   embed = discord.Embed(title=ti, description=desc)
   embed.set_footer(text=foot)
   cmsg = await ctx.send(embed=embed)
+  sniperdict[cmsg] = 1
   await cmsg.add_reaction('⏪')
   await cmsg.add_reaction('⬅️')
   await cmsg.add_reaction('📌')
