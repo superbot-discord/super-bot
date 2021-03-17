@@ -148,14 +148,24 @@ async def on_reaction_add(reaction, user):
       current = 3
     elif reaction.emoji == '⏩' and sniper2.get(keyname, 1) != 1:
       current = 2
-    elif reaction.emoji == '⏩' and sniper5.get(keyname, 1) != 1:
+    elif reaction.emoji == '⏩' and sniper1.get(keyname, 1) != 1:
       current = 1
     else:
       return
     await reaction.remove(user)
+    if sniper2.get(keyname, 1) == 1:
+      max = 1
+    if sniper3.get(keyname, 1) == 1:
+      max = 2
+    if sniper4.get(keyname, 1) == 1:
+      max = 3
+    if sniper5.get(keyname, 1) == 1:
+      max = 4
+    else:
+      max = 5
     #if eval('sniper'+str(current)+'.get(keyname, 1)') == 1:
     #  current = current - 1
-    ti = "Snipped message"
+    ti = "Snipped message ("+str(current)+r"/"+str(max)+")"
     desc = eval('sniper'+str(current)+'[keyname]')
     foot = eval('sniperdate'+str(current)+'[keyname]')
     embed = discord.Embed(title=ti, description=desc)
