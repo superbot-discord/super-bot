@@ -127,29 +127,29 @@ async def on_message_delete(message):
 async def on_reaction_add(reaction, user):
   if snipereactions.count(reaction.message) != 0 and user.id != 796686363604680755:
     keyname = str(reaction.message.guild.id)+str(reaction.message.channel.id)
-    current = sniperdict[reaction.message]
+    sniperdict[cmsg] = sniperdict[reaction.message]
     if reaction.emoji == '⏪':# and sniper1.get(keyname, 1) != 1:
-      current = 1
-    elif reaction.emoji == '⬅️' and current > 1:
-      current = current - 1
+      sniperdict[cmsg] = 1
+    elif reaction.emoji == '⬅️' and sniperdict[cmsg] > 1:
+      sniperdict[cmsg] = sniperdict[cmsg] - 1
     elif reaction.emoji == '📌' and reaction.message.pinned == False and reaction.message.guild.get_user(796686363604680755).permissions_in(reaction.message.channel).manage_messages:
       await reaction.message.pin()
     elif reaction.emoji == '📌' and reaction.message.pinned and reaction.message.guild.get_user(796686363604680755).permissions_in(reaction.message.channel).manage_messages:
       await reaction.message.unpin()
     elif reaction.emoji == '📌':
       await reaction.message.channel.send("Unable to Pin/Unpin messages without `Manage Server` permission.")
-    elif reaction.emoji == '➡️' and current <5 and eval('sniper'+str(current+1)+'.get(keyname, 1)') != 1:
-      current = current + 1
+    elif reaction.emoji == '➡️' and sniperdict[cmsg] <5 and eval('sniper'+str(sniperdict[cmsg]+1)+'.get(keyname, 1)') != 1:
+      sniperdict[cmsg] = sniperdict[cmsg] + 1
     elif reaction.emoji == '⏩' and sniper5.get(keyname, 1) == 1:
-      current = 5
+      sniperdict[cmsg] = 5
     elif reaction.emoji == '⏩' and sniper4.get(keyname, 1) == 1:
-      current = 4
+      sniperdict[cmsg] = 4
     elif reaction.emoji == '⏩' and sniper3.get(keyname, 1) == 1:
-      current = 3
+      sniperdict[cmsg] = 3
     elif reaction.emoji == '⏩' and sniper2.get(keyname, 1) == 1:
-      current = 2
+      sniperdict[cmsg] = 2
     elif reaction.emoji == '⏩' and sniper1.get(keyname, 1) == 1:
-      current = 1
+      sniperdict[cmsg] = 1
     else:
       return
     await reaction.remove(user)
@@ -163,11 +163,11 @@ async def on_reaction_add(reaction, user):
       max = 4
     else:
       max = 5
-    #if eval('sniper'+str(current)+'.get(keyname, 1)') == 1:
-    #  current = current - 1
-    ti = "Snipped message ("+str(current)+r"/"+str(max)+")"
-    desc = eval('sniper'+str(current)+'[keyname]')
-    foot = eval('sniperdate'+str(current)+'[keyname]')
+    #if eval('sniper'+str(sniperdict[cmsg])+'.get(keyname, 1)') == 1:
+    #  sniperdict[cmsg] = sniperdict[cmsg] - 1
+    ti = "Snipped message ("+str(sniperdict[cmsg])+r"/"+str(max)+")"
+    desc = eval('sniper'+str(sniperdict[cmsg])+'[keyname]')
+    foot = eval('sniperdate'+str(sniperdict[cmsg])+'[keyname]')
     embed = discord.Embed(title=ti, description=desc)
     embed.set_footer(text=foot)
     await reaction.message.edit(embed=embed)
@@ -208,27 +208,18 @@ async def snipe(ctx, *, chnl : discord.TextChannel = None):
     await ctx.send(embed=embed)
     return
   else:#if sniper2.get(keyname, 1) == 1:
-    if sniper5.get(keyname, 1) == 1:
-      current = 5
-    elif sniper4.get(keyname, 1) == 1:
-      current = 4
-    elif sniper3.get(keyname, 1) == 1:
-      current = 3
-    elif sniper2.get(keyname, 1) == 1:
-      current = 2
-    elif sniper1.get(keyname, 1) == 1:
-      current = 1
+    sniperdict[cmsg] = 1
     if sniper2.get(keyname, 1) == 1:
-      max = 1
+      maxc = 1
     elif sniper3.get(keyname, 1) == 1:
-      max = 2
+      maxc = 2
     elif sniper4.get(keyname, 1) == 1:
-      max = 3
+      maxc = 3
     elif sniper5.get(keyname, 1) == 1:
-      max = 4
+      maxc = 4
     else:
-      max = 5
-    ti = "Snipped message ("+str(current)+r"/"+str(max)+")"
+      maxc = 5
+    ti = "Snipped message ("+str(sniperdict[cmsg])+r"/"+str(max)+")"
     desc = sniper1[keyname]
     foot = sniperdate1[keyname]
   """elif sniper3.get(keyname, 1) == 1:
@@ -252,7 +243,6 @@ async def snipe(ctx, *, chnl : discord.TextChannel = None):
   await cmsg.add_reaction('➡️')
   await cmsg.add_reaction('⏩')
   snipereactions.append(cmsg)
-  sniperdict[cmsg] = 1
 
 @bot.command()
 async def clearsnipe(ctx, *, chnl : discord.TextChannel = None):
