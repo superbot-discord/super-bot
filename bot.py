@@ -200,7 +200,7 @@ async def snipe(ctx, *, chnl : discord.TextChannel = None):
   else:#if sniper2.get(keyname, 1) == 1:
     ti = "Snipped message"
     desc = sniper1[keyname]
-    foot = snipertime1[keyname]
+    foot = sniperdate1[keyname]
   """elif sniper3.get(keyname, 1) == 1:
     desc = f"🇷 🇪 🇨 🇪 🇳	🇹\n```"+sniper1[keyname]+f"```\n```"+sniper2[keyname]+"```"+"🇴 🇱 🇩"
   elif sniper4.get(keyname, 1) == 1:
