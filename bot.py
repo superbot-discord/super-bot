@@ -212,7 +212,7 @@ async def snipe(ctx, *, chnl : discord.TextChannel = None):
   try:
     ti
   except:
-    ti = "Snipped messages""""
+    ti = "Snipped messages\""""
   embed = discord.Embed(title=ti, description=desc)
   embed.set_footer(text=foot)
   cmsg = await ctx.send(embed=embed)
