@@ -86,7 +86,7 @@ snipereactions=[]
 async def on_message_delete(message):
   keyname = str(message.guild.id)+str(message.channel.id)
   val = message.content
-  adt = "By "+message.author.mention+" at "+message.created_at.strftime("%d %b, %Y (%a) %H:%M:%S")
+  adt = "By "+message.author.name+"#"+str(message.author.discriminator)+" at "+message.created_at.strftime("%d %b, %Y (%a) %H:%M:%S")
   if sniper1.get(keyname, 1) == 1:
     sniper1[keyname] = val
     sniperdate1[keyname] = adt
@@ -132,9 +132,9 @@ async def on_reaction_add(reaction, user):
       current = 1
     elif reaction.emoji == '⬅️' and current >=2:
       current = current - 1
-    elif reaction.emoji == '📌' and reaction.message.pinned == False and bot.user.permissions_in(reaction.message.channel).manage_messages:
+    elif reaction.emoji == '📌' and reaction.message.pinned == False and reaction.message.guild.get_user(796686363604680755).permissions_in(reaction.message.channel).manage_messages:
       await reaction.message.pin()
-    elif reaction.emoji == '📌' and reaction.message.pinned == True and bot.user.permissions_in(reaction.message.channel).manage_messages:
+    elif reaction.emoji == '📌' and reaction.message.pinned and reaction.message.guild.get_user(796686363604680755).permissions_in(reaction.message.channel).manage_messages:
       await reaction.message.unpin()
     elif reaction.emoji == '📌':
       await reaction.message.channel.send("Unable to Pin/Unpin messages without `Manage Server` permission.")
@@ -208,7 +208,7 @@ async def snipe(ctx, *, chnl : discord.TextChannel = None):
     await ctx.send(embed=embed)
     return
   else:#if sniper2.get(keyname, 1) == 1:
-    ti = "Snipped message"
+    ti = "Snipped message ("+str(current)+r"/"+str(max)+")"
     desc = sniper1[keyname]
     foot = sniperdate1[keyname]
   """elif sniper3.get(keyname, 1) == 1:
