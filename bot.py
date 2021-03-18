@@ -12,6 +12,7 @@ from selenium import webdriver
 from markdown2 import Markdown
 from cmath import *
 import random as ra
+import emoji as em
 import numpy as np
 from math import *
 import pytesseract
@@ -23,7 +24,6 @@ import aiohttp
 import asyncio
 import discord
 import pytube
-import emoji
 import PIL
 import re
 import os
@@ -259,7 +259,7 @@ async def poll(ctx, *, text):
   textlist = text.split(" ")
   ti = ""
   for count in textlist:
-    match = poll_pattern.fullmatch(emoji.demojize(count))
+    match = poll_pattern.fullmatch(em.demojize(count))
     if match:
       options.append(re.sub(poll_pattern, r'\1', count))
       reactions.append(re.sub(poll_pattern, r'\2', count))
