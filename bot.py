@@ -272,7 +272,7 @@ async def poll(ctx, *, text):
   embed = discord.Embed(title = ti, description = em.emojize(desc))
   poll = await ctx.send(embed=embed)
   for count in reactions:
-    await poll.add_reaction(rect) 
+    await poll.add_reaction(count) 
 
 @bot.command()
 async def clearsnipe(ctx, *, chnl : discord.TextChannel = None):
