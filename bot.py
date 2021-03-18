@@ -228,6 +228,8 @@ async def reactions(ctx, *, msg : discord.Message):
   plt.clf()
 
 @bot.command()
+
+@bot.command(aliases=['snipe'])
 async def snipe(ctx, *, text = None):
   keyname = str(ctx.guild.id)+str(ctx.channel.id)
   if text == None:
