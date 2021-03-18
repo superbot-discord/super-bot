@@ -256,6 +256,10 @@ async def clearsnipe(ctx, *, chnl : discord.TextChannel = None):
     chnl = ctx.channel
   if ctx.author.permissions_in(chnl).manage_channels or bot_admins.count(ctx.author.id)!=0:
     sniper1.pop(str(ctx.guild.id)+str(chnl.id))
+    sniper2.pop(str(ctx.guild.id)+str(chnl.id))
+    sniper3.pop(str(ctx.guild.id)+str(chnl.id))
+    sniper4.pop(str(ctx.guild.id)+str(chnl.id))
+    sniper5.pop(str(ctx.guild.id)+str(chnl.id))
     await ctx.send('Cleared snipe database for '+chnl.mention+'.')
   else:
     await ctx.send("You don't have the required permissions.")
