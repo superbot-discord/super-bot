@@ -213,9 +213,7 @@ async def reactions(ctx, *, msg : discord.Message):
   labelslist = []
   for counter in reactions:
     numlist.append(counter.count)
-    print(counter)
-    print(em.demojize(counter))
-    labelslist.append(em.demojize(counter))
+    labelslist.append(em.demojize(counter.emoji))
   y = np.array(numlist)
   labels = tuple(labelslist)
   cmaphsv = plt.cm.hsv
