@@ -48,7 +48,7 @@ alphaend_pattern = re.compile(r'.*[a-z]', re.IGNORECASE)
 html_pattern = re.compile(r'^\`\`\`(html)?\n[\s\S]*\`\`\`$')
 md_pattern = re.compile(r'^\`\`\`(md|markdown)?\n[\s\S]*\`\`\`$')
 verify_pattern = re.compile(r'[^ ⠀][\s\S]{0,30}?[^ ⠀]#?[\d]{4}(,|, | )?[\d+\-*/×÷%xyz()\[\]\{\}]{1,50}=[\d+\-*/×÷%xyz()\[\]\{\}]{1,50}(,|, | )?[\S ]{3,20}(,|, | )?(Red|Orange|Yellow|Green|Light( |_)?Green|Dark( |_)?Green|Cyan|Blue|Light( |_)?Blue|Dark( |_)?Blue|Purple|Pink|Brown)', re.IGNORECASE)
-poll_pattern = re.compile(r'([\w]+?)(:\w{2,32}\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])')
+poll_pattern = re.compile(r'/([\w]+?)(:\w{2,32}:|\p{Emoji_Presentation})/u')
 UNITS = {'s':'seconds', 'm':'minutes', 'h':'hours', 'd':'days', 'w':'weeks'}
 typer=0
 options = webdriver.ChromeOptions()
