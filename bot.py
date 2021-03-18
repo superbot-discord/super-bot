@@ -242,7 +242,7 @@ async def snipe(ctx, *, text = None):
     else:
       await ctx.send("Snipping is disabled. Please ask someone with manage messages permission to re-enable it.")
   elif ctx.author.permissions_in(ctx.channel).manage_messages:
-    if text[2].startswith("y") or text[2].startswith("t") or text[2].startswith("e") or text[2]=="1":
+    if text.startswith("y") or text.startswith("t") or text.startswith("e") or text.replace(" ","")=="1":
       sniping[keyname] = True
       await ctx.send("Sniping is now enabled.")
     else:
