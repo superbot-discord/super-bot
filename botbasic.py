@@ -291,22 +291,31 @@ Plots a [Koch Snowflake](https://en.wikipedia.org/wiki/Koch_snowflake) with the 
 **Prefix: **`=`
 **Basic Commands**
 `help` `invite` `prefix` `ping` `speedtest`
+
 **Discord Information Commands**
-`server` `role` `channel` `voicechannel` `user` `uservoice` `avatar` `invite`
+`server` `role` `channel` `voicechannel` `user` `uservoice` `avatar` `invitelink` `reactions`
+
 **Discord Commands**
 `spam` `embed` `pretend` `pretendembed`
+
 **Text Manipulation Commands**
 `insert` `spoiler` `rawspoiler` `reverse` `emoji`
+
 **Moderation**
 `kick` `ban` `slowmode` `nick` `purgeregex` `purgepy` `purgepygex`
+
 **Information Commands**
 `translate` `calc` `define` `time` `rtimer` `terminate`
+
 **Web Commands**
 `screenshot` `youtube` `wiki` `engrave` `covid` `population`
+
 **Plot commands**
 `pie` `barh` `barv` `hist` `snow`
+
 **Developer Tools and Others**
 `python` `transparent` `ocr` `text` `html` `md` `regex` `regsub`
+
 Need help? check the [documentation](https://github.com/johann-lau/Bot#bot-documentation)!
   """
   embed=discord.Embed(title=ti, description=desc, color=0x0061ff)
