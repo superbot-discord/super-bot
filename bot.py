@@ -210,11 +210,12 @@ async def on_message(message):
 async def reactions(ctx, *, msg : discord.Message):
   reactions = msg.reactions
   numlist = []
-  labels = ()
+  labelslist = []
   for counter in reactions:
     numlist.append(counter.count)
-    labels.append(em.demojize(counter))
+    labelslist.append(em.demojize(counter))
   y = np.array(numlist)
+  labels = tuple(labelslist)
   cmaphsv = plt.cm.hsv
   mycolors = []
   for count in range(0, len(numlist)):
