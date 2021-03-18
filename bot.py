@@ -207,6 +207,26 @@ async def on_message(message):
     await message.channel.send("You are banned from the bot. Reason: "+banned_text[banned_ids.index(message.author.id)])
 
 @bot.command()
+async def reactions(ctx, *, msg = discord.Message):
+  reactions = msg.reactions
+  numlist = []
+  labels = ()
+  for counter in reactions:
+    numlist.append(counter.count)
+    labels.append(em.demojize(counter))
+  y = np.array(numlist)
+  cmaphsv = plt.cm.hsv
+  mycolors = []
+  for count in range(0, len(numlist)):
+    mycolors.append(cmaphsv(count/len(numlist)))
+  plt.pie(y, labels=labels, colors=mycolors, autopct=lambda pct: func(pct, y), textprops = {'color':"w"})
+  plt.legend(loc="lower right")
+  plt.title("Reaction Status")
+  plt.savefig("reactions.png", transparent=True)
+  await ctx.send(file = discord.File('reactions.png'))
+  plt.clf()
+
+@bot.command()
 async def snipe(ctx, *, text = None):
   keyname = str(ctx.guild.id)+str(ctx.channel.id)
   if text == None:
