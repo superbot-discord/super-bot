@@ -255,13 +255,14 @@ async def snipe(ctx, *, text = None):
 async def poll(ctx, *, text):
   options = []
   reactions = []
-  textlist = test.split(" ")
+  textlist = text.split(" ")
+  ti = ""
   for count in textlist:
     if pollpattern.fullmatch(count):
       options.append(re.sub(pollpattern, r'\1', count))
-      reactions.append(re.sub(pollpattern, r'\3', count))
+      reactions.append(re.sub(pollpattern, r'\2', count))
     else:
-      ti = count
+      ti = ti + count
   desc = ""
   for count1, count2 in zip(options, reactions):
     desc = desc + f"{count2} {count1} (0)\n"
