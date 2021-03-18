@@ -258,9 +258,9 @@ async def poll(ctx, *, text):
   textlist = text.split(" ")
   ti = ""
   for count in textlist:
-    if pollpattern.fullmatch(count):
-      options.append(re.sub(pollpattern, r'\1', count))
-      reactions.append(re.sub(pollpattern, r'\2', count))
+    if poll_pattern.fullmatch(count):
+      options.append(re.sub(poll_pattern, r'\1', count))
+      reactions.append(re.sub(poll_pattern, r'\2', count))
     else:
       ti = ti + count
   desc = ""
