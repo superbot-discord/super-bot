@@ -258,16 +258,17 @@ async def poll(ctx, *, text):
   reactions = []
   textlist = text.split(" ")
   ti = ""
+  desc = ""
   for count in textlist:
     match = poll_pattern.fullmatch(em.demojize(count))
     if match:
-      options.append(re.sub(poll_pattern, r'\1', count))
-      reactions.append(re.sub(poll_pattern, r'\2', count))
+      optn = re.sub(poll_pattern, r'\1', count)
+      rect = re.sub(poll_pattern, r'\2', count)
+      desc = desc + f"{rect} {optn} (0)\n"
+      options.append(optn)
+      reactions.append(rect)
     else:
-      ti = ti + count
-  desc = ""
-  for count1, count2 in zip(options, reactions):
-    desc = desc + f"{count2} {count1} (0)\n"
+      ti = ti + count + " "
   embed = discord.Embed(title = ti, description = desc)
   await ctx.send(embed=embed)
 
