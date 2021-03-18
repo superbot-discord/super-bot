@@ -23,6 +23,7 @@ import aiohttp
 import asyncio
 import discord
 import pytube
+import emoji
 import PIL
 import re
 import os
@@ -258,7 +259,7 @@ async def poll(ctx, *, text):
   textlist = text.split(" ")
   ti = ""
   for count in textlist:
-    match = poll_pattern.fullmatch(count)
+    match = poll_pattern.fullmatch(emoji.demojize(count))
     if match:
       options.append(re.sub(poll_pattern, r'\1', count))
       reactions.append(re.sub(poll_pattern, r'\2', count))
