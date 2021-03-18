@@ -271,7 +271,7 @@ async def poll(ctx, *, text):
       ti = ti + count + " "
   embed = discord.Embed(title = ti, description = em.emojize(desc))
   poll = await ctx.send(embed=embed)
-  for count in rect:
+  for count in reactions:
     await poll.add_reaction(rect) 
 
 @bot.command()
