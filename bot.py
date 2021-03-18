@@ -1508,6 +1508,10 @@ async def server(ctx, text = "regular"):
       embed.add_field(name="AFK Timeout", value=f9v, inline=True)
       embed.add_field(name="AFK Channel", value=f10v, inline=True)
     embed.add_field(name="ID", value=f10va, inline=True)
+    if guild.default_notifications.all_messages:
+      embed.add_field(name="Default Notifications", value="Members receive notifications for every message by default.", inline=True)
+    else:
+      embed.add_field(name="Default Notifications", value="Members only receive notifications for messages they are mentioned in by default.", inline=True)
     if guild.features.count("COMMUNITY")==1:
       embed.add_field(name="Community", value="This is a community server.", inline=True)
     if guild.features.count("WELCOME_SCREEN_ENABLED")==1:
