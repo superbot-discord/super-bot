@@ -207,7 +207,7 @@ async def on_message(message):
     await message.channel.send("You are banned from the bot. Reason: "+banned_text[banned_ids.index(message.author.id)])
 
 @bot.command()
-async def reactions(ctx, *, msg = discord.Message):
+async def reactions(ctx, *, msg : discord.Message):
   reactions = msg.reactions
   numlist = []
   labels = ()
