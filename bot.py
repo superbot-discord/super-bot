@@ -229,7 +229,7 @@ async def reactions(ctx, *, msg : discord.Message):
 
 @bot.command()
 
-@bot.command(aliases=['snipe'])
+@bot.command(aliases=['sniper'])
 async def snipe(ctx, *, text = None):
   keyname = str(ctx.guild.id)+str(ctx.channel.id)
   if text == None:
