@@ -266,11 +266,13 @@ async def poll(ctx, *, text):
       rect = re.sub(poll_pattern, r'\2', em.demojize(count))
       desc = desc + f"{rect} {optn} (0)\n"
       options.append(optn)
-      reactions.append(rect)
+      reactions.append(em.emojize(rect))
     else:
       ti = ti + count + " "
-  embed = discord.Embed(title = ti, description = desc)
-  await ctx.send(embed=embed)
+  embed = discord.Embed(title = ti, description = em.emojize(desc))
+  poll = await ctx.send(embed=embed)
+  for count in rect:
+    await poll.add_reaction(rect) 
 
 @bot.command()
 async def clearsnipe(ctx, *, chnl : discord.TextChannel = None):
