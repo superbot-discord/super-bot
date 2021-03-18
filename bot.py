@@ -136,7 +136,8 @@ async def on_reaction_add(reaction, user):
       sniperdict[reaction.message] = sniperdict[reaction.message] - 1
     elif reaction.emoji == '📌' and reaction.message.pinned == False and reaction.message.guild.get_member(796686363604680755).permissions_in(reaction.message.channel).manage_messages:
       await reaction.message.pin()
-      await reaction.message.channel.fetch_message(reaction.message.channel.last_message_id).delete()
+      pinmsg = await reaction.message.channel.fetch_message(reaction.message.channel.last_message_id)
+      await pinmsg.delete()
     elif reaction.emoji == '📌' and reaction.message.pinned and reaction.message.guild.get_member(796686363604680755).permissions_in(reaction.message.channel).manage_messages:
       await reaction.message.unpin()
     elif reaction.emoji == '📌':
