@@ -262,8 +262,8 @@ async def poll(ctx, *, text):
   for count in textlist:
     match = poll_pattern.fullmatch(em.demojize(count))
     if match:
-      optn = re.sub(poll_pattern, r'\1', count)
-      rect = re.sub(poll_pattern, r'\2', count)
+      optn = re.sub(poll_pattern, r'\1', em.demojize(count))
+      rect = re.sub(poll_pattern, r'\2', em.demojize(count))
       desc = desc + f"{rect} {optn} (0)\n"
       options.append(optn)
       reactions.append(rect)
