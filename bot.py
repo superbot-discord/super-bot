@@ -1664,8 +1664,6 @@ async def autochannel(ctx, channel):
       embed.add_field(name="Current Members", value=f5v, inline=True)
   def text(channel: discord.TextChannel):
     global embed
-    if channel==None:
-    channel=ctx.channel
     ti="Channel Information: "+channel.name
     desc=channel.mention
     embed=discord.Embed(title=ti, description=desc)
