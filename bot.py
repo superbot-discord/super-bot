@@ -203,7 +203,7 @@ async def on_message(message):
     await message.delete()#delay = 3)"""
   if banned_ids.count(message.author.id)==0 and message.content.startswith("=") and message.content.startswith("==")==False:
     await bot.process_commands(message)
-  elif message.content.startswith("=") and :
+  elif message.content.startswith("="):
     await message.channel.send("You are banned from the bot. Reason: "+banned_text[banned_ids.index(message.author.id)])
 
 @bot.command()
