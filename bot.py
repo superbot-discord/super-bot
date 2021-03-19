@@ -1687,7 +1687,7 @@ async def autochannel(ctx, channel):
     if len(f5vlist)!=0:
       embed.add_field(name="Invites", value=f5v, inline=False)
   #try:
-    await text(channel)
+  await text(channel)
   #except:
   #  await voice(channel)
   await ctx.send(embed=embed)
