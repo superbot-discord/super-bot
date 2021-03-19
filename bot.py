@@ -1690,6 +1690,7 @@ async def autochannel(ctx, channel):
     await text(channel)
   #except:
   #  await voice(channel)
+  await ctx.send(embed=embed)
 
 @bot.command()
 async def channel(ctx, channel: discord.TextChannel=None):
