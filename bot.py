@@ -1686,10 +1686,10 @@ async def autochannel(ctx, channel):
     embed.add_field(name="Category", value=f4v, inline=True)
     if len(f5vlist)!=0:
       embed.add_field(name="Invites", value=f5v, inline=False)
-  try:
+  #try:
     await text(channel)
-  except:
-    await voice(channel)
+  #except:
+  #  await voice(channel)
 
 @bot.command()
 async def channel(ctx, channel: discord.TextChannel=None):
