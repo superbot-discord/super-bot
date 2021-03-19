@@ -477,16 +477,25 @@ async def population(ctx, country="current"):
 async def simpcolor(ctx, *, name):
   fig, ax = plt.subplots()
   ax.set_axis_off()
+  print(1)
   try:
     gradient = np.vstack((np.linspace(0, 1, 256), np.linspace(0, 1, 256)))
+    print(2)
     ax.imshow(gradient, aspect='auto', cmap=plt.get_cmap(name))
+    print(3)
     plt.savefig("color.png", transparent=True)
+    print(4)
   except:
     bcs = plt.gca()
+    print(5)
     ax.set_facecolor(name)
+    print(6)
     plt.savefig("color.png", transparent=False)
+    print(7)
   plt.clf()
+  print(8)
   file = discord.File("color.png")
+  print(9)
   await ctx.send(file=file)
 
 @bot.command(alias=["snowgraph", "snowflake"])
