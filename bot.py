@@ -476,18 +476,18 @@ async def population(ctx, country="current"):
 @bot.command(alias=["simpcolour"])
 async def simpcolor(ctx, *, name):
   fig, ax = plt.subplots()
+  ax.axes.get_xaxis().set_visible(False)
+  ax.axes.get_yaxis().set_visible(False)
   try:
     cmapv = plt.get_cmap(name)
     gradient = np.vstack((np.linspace(0, 1, 256), np.linspace(0, 1, 256)))
-    ax.set_axis_off()
+    ax.set_facecolor("w")
     ax.imshow(gradient, aspect='auto', cmap=cmapv)
     plt.savefig("color.png", transparent=True)
   except:
     plt.clf()
     plt.setp(ax.spines.values(), color="b")
-    ax.axes.get_xaxis().set_visible(False)
-    ax.axes.get_yaxis().set_visible(False)
-    ax.set_facecolor("b")
+    ax.set_facecolor(name)
     plt.show()
     plt.savefig("color.png", transparent=False)
   plt.clf()
