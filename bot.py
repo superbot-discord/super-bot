@@ -1632,7 +1632,7 @@ async def invitelink(ctx,inviteinput: discord.Invite):
 
 @bot.command()
 async def autochannel(ctx, channel):
-  def voice(channel: discord.VoiceChannel):
+  async def voice(channel: discord.VoiceChannel):
     global embed
     ti="Voice Channel Information"
     desc=channel.name
@@ -1662,7 +1662,7 @@ async def autochannel(ctx, channel):
     embed.add_field(name="Max. Members", value=f4v, inline=True)
     if len(f5vlist)!=0:
       embed.add_field(name="Current Members", value=f5v, inline=True)
-  def text(channel: discord.TextChannel):
+  async def text(channel: discord.TextChannel):
     global embed
     ti="Channel Information: "+channel.name
     desc=channel.mention
@@ -1687,9 +1687,9 @@ async def autochannel(ctx, channel):
     if len(f5vlist)!=0:
       embed.add_field(name="Invites", value=f5v, inline=False)
   try:
-    text(channel)
+    await text(channel)
   except:
-    voice(channel)
+    await voice(channel)
 
 @bot.command()
 async def channel(ctx, channel: discord.TextChannel=None):
