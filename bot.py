@@ -1079,7 +1079,7 @@ async def emojiinfo(ctx,emojiarg : discord.Emoji):
   ti="Emoji Info"
   creator=await ctx.guild.fetch_emoji(emojiarg.id)
   desc=str(emojiarg)+emojiarg.name+"\nCreated by "+str(creator.user.mention)+" at "+str(emojiarg.created_at.strftime("%d %b, %Y (%a) %H:%M:%S"))
-  embed=discord.Embed(title=ti, description=desc, color=0x0061ff)
+  embed=discord.Embed(title=ti, description=desc)
   embed.add_field(name="ID", value=emojiarg.id, inline=True)
   await ctx.send(embed=embed)
 
@@ -1368,7 +1368,7 @@ async def random(ctx,lower,upper):
   rand=ra.randint(lower,upper)
   rand=str(rand)
   desc="Your random number is "+rand
-  embed=discord.Embed(title=ti, description=desc, color=0x0061ff)
+  embed=discord.Embed(title=ti, description=desc)
   await ctx.send(embed=embed)
 
 @bot.command()
@@ -1377,7 +1377,7 @@ async def avatar(ctx,user: discord.Member=None):
   if user==None:
     user=ctx.author
   desc=f"Avatar of {user.mention}"
-  embed=discord.Embed(title=ti,color=0x0061ff, description=desc)
+  embed=discord.Embed(title=ti, description=desc)
   embed.set_image(url=user.avatar_url)
   await ctx.send(embed=embed)
 
@@ -1595,7 +1595,7 @@ async def invitelink(ctx,inviteinput: discord.Invite):
       break
   ti="Invite Information: "+invite.code
   desc="Created at "+invite.created_at.strftime("%d %b, %Y (%a) %H:%M:%S")+" by "+str(invite.inviter)
-  embed=discord.Embed(title=ti,color=0x0061ff, description=desc)
+  embed=discord.Embed(title=ti, description=desc)
   f00v=invite.guild
   if invite.max_uses == 0:
     f0v=str(invite.uses)
@@ -1631,12 +1631,75 @@ async def invitelink(ctx,inviteinput: discord.Invite):
   await ctx.send(embed=embed)
 
 @bot.command()
+async def autochannel(ctx, channel):
+  def voice(channel: discord.VoiceChannel):
+    global embed
+    ti="Voice Channel Information"
+    desc=channel.name
+    embed=discord.Embed(title=ti, description=desc)
+    f0v=channel.created_at.strftime("%d %b, %Y (%a) %H:%M:%S")
+    f1v=str(channel.category)
+    f2vlist=await channel.invites()
+    f2v=""
+    for count in f2vlist:
+      f2v=f2v+count.url+"  "
+    f2v=f2v[:-2]
+    f5vlist=channel.members
+    f5v=""
+    for count in f5vlist:
+      f5v=f5v+count.mention+"  "
+    f5v=f5v[:-2]
+    f3v=str(channel.bitrate//1000)+" kbps"
+    if str(channel.user_limit)=="0":
+      f4v="Infinite"
+    else:
+      f4v=str(channel.user_limit)+" members"
+    embed.add_field(name="Created", value=f0v, inline=True)
+    embed.add_field(name="Category", value=f1v, inline=True)
+    if len(f2vlist)!=0:
+      embed.add_field(name="Invites", value=f2v, inline=False)
+    embed.add_field(name="Bitrate", value=f3v, inline=True)
+    embed.add_field(name="Max. Members", value=f4v, inline=True)
+    if len(f5vlist)!=0:
+      embed.add_field(name="Current Members", value=f5v, inline=True)
+  def text(channel: discord.TextChannel):
+    global embed
+    if channel==None:
+    channel=ctx.channel
+    ti="Channel Information: "+channel.name
+    desc=channel.mention
+    embed=discord.Embed(title=ti, description=desc)
+    f0v=channel.created_at.strftime("%d %b, %Y (%a) %H:%M:%S")
+    f3v=str(channel.topic)
+    f4v=str(channel.category)
+    f5vlist=await channel.invites()
+    f5v=""
+    for count in f5vlist:
+      f5v=f5v+count.url+"  "
+    f5v=f5v[:-2]
+    embed.add_field(name="Created", value=f0v, inline=True)
+    if channel.is_nsfw()==True:
+      f1v="This is an NSFW channel."
+      embed.add_field(name="NSFW", value=f1v, inline=True)
+    if channel.is_news()==True:
+      f2v="This is a news channel."
+      embed.add_field(name="NSFW", value=f2v, inline=True)
+    embed.add_field(name="Topic", value=f3v, inline=True)
+    embed.add_field(name="Category", value=f4v, inline=True)
+    if len(f5vlist)!=0:
+      embed.add_field(name="Invites", value=f5v, inline=False)
+  try:
+    text(channel)
+  except:
+    voice(channel)
+
+@bot.command()
 async def channel(ctx, channel: discord.TextChannel=None):
   if channel==None:
     channel=ctx.channel
   ti="Channel Information: "+channel.name
   desc=channel.mention
-  embed=discord.Embed(title=ti,color=0x0061ff, description=desc)
+  embed=discord.Embed(title=ti, description=desc)
   f0v=channel.created_at.strftime("%d %b, %Y (%a) %H:%M:%S")
   f3v=str(channel.topic)
   f4v=str(channel.category)
@@ -1662,7 +1725,7 @@ async def channel(ctx, channel: discord.TextChannel=None):
 async def voicechannel(ctx, channel: discord.VoiceChannel):
   ti="Voice Channel Information"
   desc=channel.name
-  embed=discord.Embed(title=ti,color=0x0061ff, description=desc)
+  embed=discord.Embed(title=ti, description=desc)
   f0v=channel.created_at.strftime("%d %b, %Y (%a) %H:%M:%S")
   f1v=str(channel.category)
   f2vlist=await channel.invites()
