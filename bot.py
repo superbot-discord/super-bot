@@ -227,7 +227,7 @@ async def reactions(ctx, *, msg : discord.Message):
   await ctx.send(file = discord.File('reactions.png'))
   plt.clf()
 
-@bot.command()
+#@bot.command()
 
 @bot.command(aliases=['sniper'])
 async def snipe(ctx, *, text = None):
