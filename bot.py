@@ -192,7 +192,7 @@ async def on_member_update(before, after):
 
 @bot.event
 async def on_message(message):
-  match = verify_pattern.fullmatch(message.content)
+  """match = verify_pattern.fullmatch(message.content)
   if message.channel.id == 811562994151850024 and match == None and message.author.roles.count(message.guild.get_role(810729029790597190)) == 0:
     await message.channel.send(f"Invalid verification format! Please double check the format and try again.\n**Format: **Username#Discriminator, Math equation with equal sign(Max. 100 characters), Favourite Food, Colour\n**Original Content: **"+message.content, delete_after=10)
     try:
@@ -200,10 +200,10 @@ async def on_message(message):
     except:
       1
   elif message.author.id == 814292078984167425:# and (message.content.count('Joe')==1 or message.content.count('Joh')==1 or message.content.count('Bitch')==1 or message.content.count('Piss')==1):
-    await message.delete()#delay = 3)
+    await message.delete()#delay = 3)"""
   elif banned_ids.count(message.author.id)==0 and message.content.startswith("=") and message.content.startswith("==")==False:
     await bot.process_commands(message)
-  elif message.content.startswith("="):
+  elif message.content.startswith("=") and :
     await message.channel.send("You are banned from the bot. Reason: "+banned_text[banned_ids.index(message.author.id)])
 
 @bot.command()
