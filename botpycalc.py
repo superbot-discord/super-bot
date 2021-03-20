@@ -90,7 +90,7 @@ def botcalc(arg : str):
       result = lcls["result"]
       if result.real==result:
         result=result.real
-      if result<=100 and result>0:
+      if result<=1 and result>0:
         result=result+f"\n({round(result*100, 3)}%)"
       if len(str(result))>400:
         number=result
