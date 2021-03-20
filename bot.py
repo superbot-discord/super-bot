@@ -1349,7 +1349,8 @@ async def timer(ctx, timetocount,*,Text=None):
 async def getrole(ctx, role : discord.Role, member : discord.Member = None):
   if member == None:
     member = ctx.author
-  if ctx.author.permissions_in(ctx.channel).manage_roles or bot_admins.count(ctx.author.id)!=0:
+  #if ctx.author.permissions_in(ctx.channel).manage_roles or bot_admins.count(ctx.author.id)!=0:
+  if ctx.author.permissions_in(ctx.channel).manage_roles or role.id == 805462470604095539 or role.id == 805462557472194581 or role.id == 822743463883702302:
     roles=member.roles
     if roles.count(role)==1:
       await member.remove_roles(role)
