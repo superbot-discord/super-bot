@@ -81,13 +81,17 @@ def botcalc(arg : str):
     arg=arg.replace("mod","%")
     arg=arg.replace("√(","sqrt(")
     arg=arg.replace("pi",str(pi))
-    arg=arg.replace("e",str(e))
+    arg=arg.replace(",","")
+    arg=arg.replace(".","")
+    #arg=arg.replace("e",str(e))
     if arg.count("=")==0 or arg.count("==")!=0 or arg.count("!=")!=0 or arg.count(">=")!=0 or arg.count("<=")!=0 or arg.count(">")!=0 or arg.count("<")!=0 or arg.count("and")!=0 or arg.count("or")!=0 or arg.count("not")!=0:
       lcls = locals()
       exec("result = "+arg, globals(), lcls)
       result = lcls["result"]
       if result.real==result:
         result=result.real
+      if result<=100 and result>0:
+        result=result+f"\n({round(result*100, 3)}%)"
       if len(str(result))>400:
         number=result
         result=str(number)[0]+"."
