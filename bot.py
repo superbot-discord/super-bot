@@ -89,14 +89,20 @@ overwrite.view_channel = True
 
 @bot.event
 async def on_voice_state_update(member, before, after):
-  if before.channel.id == 822750915466493982 and after.channel == None:
-    supchat = member.guild.get_channel(822753048510070784)
-    await supchat.purge(limit=1000)
-    await supchat.set_permissions(member, overwrite=None)
-  elif before.channel == None and after.channel.id == 822750915466493982:
-    supchat = member.guild.get_channel(822753048510070784)
-    await supchat.purge(limit=1000)
-    await supchat.set_permissions(member, overwrite=overwrite)
+  try:
+    if before.channel.id == 822750915466493982 and after.channel == None:
+      supchat = member.guild.get_channel(822753048510070784)
+      await supchat.purge(limit=1000)
+      await supchat.set_permissions(member, overwrite=None)
+  except:
+    1
+  try:
+    if before.channel == None and after.channel.id == 822750915466493982:
+      supchat = member.guild.get_channel(822753048510070784)
+      await supchat.purge(limit=1000)
+      await supchat.set_permissions(member, overwrite=overwrite)
+  except:
+    1
 
 @bot.event
 async def on_message_delete(message):
