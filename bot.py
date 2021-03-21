@@ -74,6 +74,9 @@ sniperdate5={}
 sniperdict={}
 sniping={}
 snipereactions=[]
+overwrite = discord.PermissionOverwrite()
+overwrite.send_messages = True
+overwrite.read_messages = True
 
 #@bot.event
 #async def on_invite_create(invite):
@@ -84,6 +87,17 @@ snipereactions=[]
 #async def on_member_update(before, after):
 #  if after.roles.count(before.guild.get_role(810729029790597190)) == 0 and after.guild.id == 809368482344075265 and after.id == 687474789342117900:
 #    await after.add_roles(before.guild.get_role(810729029790597190), reason = "Mysterious")
+
+@bot.event
+async def on_voice_state_update(member, before, after):
+  if before.channel.id == 822750915466493982 and after.channel == None:
+    supchat = member.guild.get_channel(822753048510070784)
+    await supchat.purge(limit=1000)
+    await supchat.set_permissions(member, overwrite=None)
+  elif before.channel == None and after.channel.id == 822750915466493982:
+    supchat = member.guild.get_channel(822753048510070784)
+    await supchat.purge(limit=1000)
+    await supchat.set_permissions(member, overwrite=overwrite)
 
 @bot.event
 async def on_message_delete(message):
