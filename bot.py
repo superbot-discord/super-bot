@@ -75,8 +75,7 @@ sniperdict={}
 sniping={}
 snipereactions=[]
 overwrite = discord.PermissionOverwrite()
-overwrite.send_messages = True
-overwrite.read_messages = True
+overwrite.view_channel = True
 
 #@bot.event
 #async def on_invite_create(invite):
