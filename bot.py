@@ -86,10 +86,20 @@ overwrite.view_channel = True
 #  if after.roles.count(before.guild.get_role(810729029790597190)) == 0 and after.guild.id == 809368482344075265 and after.id == 687474789342117900:
 #    await after.add_roles(before.guild.get_role(810729029790597190), reason = "Mysterious")
 
+@bot.command()
+async def verify(ctx):
+  if ctx.message.guild.id == 823405852131328001:
+    if ctx.author.roles[0].id == 823407479303569419:
+      verifiedmem = ctx.message.guild.get_channel(823410283723620362).overwrites[0][0]
+      theinvite = await bot.get_guild(806083349688877077).get_channel(806085319521992705).create_invite(max_age=300, max_uses=1)
+      desc = "You are verified! Please use [this invite]("+theinvite+") to join the Historical Community server. Have fun!"
+      embed = discord.Embed(title="Verified", description=desc)
+      await ctx.author.send(embed=embed)
+
 @bot.event
 async def on_member_join(member):
   if member.guild.id == 823405852131328001:
-    ch=await member.guild.create_textchannel('verify', overwrites = {guild.default_role: discord.PermissionOverwrite(view_channel=False), member: discord.PermissionOverwrite(view_channel=True)})
+    ch=await member.guild.create_text_channel('verify', overwrites = {guild.default_role: discord.PermissionOverwrite(view_channel=False), member: discord.PermissionOverwrite(view_channel=True)})
     await ch.send(f"{member.mention}, please verify by calculating {str(ra.randint(1,20))}"+ra.choice(["+","-","×"])+str(ra.randint(1,10))+".")
 
 @bot.event
