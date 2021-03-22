@@ -90,7 +90,7 @@ overwrite.view_channel = True
 async def on_member_join(member):
   if member.guild.id == 823405852131328001:
     ch=await member.guild.create_textchannel('verify', overwrites = {guild.default_role: discord.PermissionOverwrite(view_channel=False), member: discord.PermissionOverwrite(view_channel=True)})
-    await ch.send(f"{member.mention}, please verify by calculating {str(ra.randint(1,20))}{ra.choice(\["+","-","×"\])}{str(ra.randint(1,10))}.")
+    await ch.send(f"{member.mention}, please verify by calculating {str(ra.randint(1,20))}"+ra.choice(["+","-","×"])+str(ra.randint(1,10))+".")
 
 @bot.event
 async def on_voice_state_update(member, before, after):
