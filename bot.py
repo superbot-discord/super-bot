@@ -86,16 +86,6 @@ overwrite.view_channel = True
 #  if after.roles.count(before.guild.get_role(810729029790597190)) == 0 and after.guild.id == 809368482344075265 and after.id == 687474789342117900:
 #    await after.add_roles(before.guild.get_role(810729029790597190), reason = "Mysterious")
 
-@bot.command()
-async def verify(ctx):
-  if ctx.message.guild.id == 823405852131328001:
-    if ctx.author.roles[0].id == 823407479303569419:
-      verifiedmem = ctx.message.guild.get_channel(823410283723620362).overwrites[0][0]
-      theinvite = await bot.get_guild(806083349688877077).get_channel(806085319521992705).create_invite(max_age=300, max_uses=1)
-      desc = "You are verified! Please use [this invite]("+theinvite+") to join the Historical Community server. Have fun!"
-      embed = discord.Embed(title="Verified", description=desc)
-      await ctx.author.send(embed=embed)
-
 @bot.event
 async def on_member_join(member):
   if member.guild.id == 823405852131328001:
@@ -235,10 +225,20 @@ async def on_message(message):
       1
   elif message.author.id == 814292078984167425:# and (message.content.count('Joe')==1 or message.content.count('Joh')==1 or message.content.count('Bitch')==1 or message.content.count('Piss')==1):
     await message.delete()#delay = 3)"""
-  if (message.guild.id != 823405852131328001 or message.content == "=verify") and banned_ids.count(message.author.id)==0 and message.content.startswith("=") and message.content.startswith("==")==False:
+  if (message.guild.id != 823405852131328001 or message.content.startswith("=verify")) and banned_ids.count(message.author.id)==0 and message.content.startswith("=") and message.content.startswith("==")==False:
     await bot.process_commands(message)
   elif message.content.startswith("="):
     await message.channel.send("You are banned from the bot. Reason: "+banned_text[banned_ids.index(message.author.id)])
+
+@bot.command()
+async def verify(ctx):
+  if ctx.message.guild.id == 823405852131328001:
+    if ctx.author.roles[0].id == 823407479303569419:
+      verifiedmem = ctx.message.guild.get_channel(823410283723620362).overwrites[0][0]
+      theinvite = await bot.get_guild(806083349688877077).get_channel(806085319521992705).create_invite(max_age=300, max_uses=1)
+      desc = "You are verified! Please use [this invite]("+theinvite+") to join the Historical Community server. Have fun!"
+      embed = discord.Embed(title="Verified", description=desc)
+      await ctx.author.send(embed=embed)
 
 @bot.command()
 async def reactions(ctx, *, msg : discord.Message):
