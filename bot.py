@@ -99,7 +99,7 @@ async def verify(ctx):
 @bot.event
 async def on_member_join(member):
   if member.guild.id == 823405852131328001:
-    ch=await member.guild.create_text_channel('verify', overwrites = {guild.default_role: discord.PermissionOverwrite(view_channel=False), member: discord.PermissionOverwrite(view_channel=True)})
+    ch=await member.guild.create_text_channel('verify', overwrites = {member.guild.default_role: discord.PermissionOverwrite(view_channel=False), member: discord.PermissionOverwrite(view_channel=True)})
     await ch.send(f"{member.mention}, please verify by calculating {str(ra.randint(1,20))}"+ra.choice(["+","-","×"])+str(ra.randint(1,10))+".")
 
 @bot.event
