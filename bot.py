@@ -236,9 +236,10 @@ async def verify(ctx):
     if ctx.author.roles[0].id == 823407479303569419:
       verifiedmem = ctx.message.guild.get_channel(823410283723620362).overwrites[0][0]
       theinvite = await bot.get_guild(806083349688877077).get_channel(806085319521992705).create_invite(max_age=300, max_uses=1)
-      desc = "You are verified! Please use [this invite]("+theinvite+") to join the Historical Community server. Have fun!"
+      desc = "You are verified! Please use [this invite]("+theinvite+") to join the Historical Community server. It would expire in 5 minutes. Have fun!"
       embed = discord.Embed(title="Verified", description=desc)
       await ctx.author.send(embed=embed)
+      await ctx.channel.send(embed=embed)
 
 @bot.command()
 async def reactions(ctx, *, msg : discord.Message):
