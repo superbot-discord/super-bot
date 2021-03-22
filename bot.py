@@ -2111,7 +2111,7 @@ async def slowmode(ctx, sec = None, *, channels = None):
 
 @bot.event
 async def on_ready():
-  activity = discord.Game(name="with you!", type=3)
+  activity = discord.Streaming(name="=help", type=3)
   await bot.change_presence(status=discord.Status.idle, activity=activity)
   print("Bot is ready!")
   """for count in bot.get_guild(814407577042944040).channels:
