@@ -235,7 +235,7 @@ async def on_message(message):
       1
   elif message.author.id == 814292078984167425:# and (message.content.count('Joe')==1 or message.content.count('Joh')==1 or message.content.count('Bitch')==1 or message.content.count('Piss')==1):
     await message.delete()#delay = 3)"""
-  if banned_ids.count(message.author.id)==0 and message.content.startswith("=") and message.content.startswith("==")==False:
+  if (message.guild.id != 823405852131328001 or message.content == "=verify") and banned_ids.count(message.author.id)==0 and message.content.startswith("=") and message.content.startswith("==")==False:
     await bot.process_commands(message)
   elif message.content.startswith("="):
     await message.channel.send("You are banned from the bot. Reason: "+banned_text[banned_ids.index(message.author.id)])
