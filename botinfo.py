@@ -1,5 +1,7 @@
-import discord
+from bs4 import BeautifulSoup
+import requests
 import datetime
+import discord
 import pytz
 import re
 set(pytz.all_timezones_set)
@@ -25,7 +27,11 @@ def botcolor(arg1, arg2, arg3):
   if len(hex_)!=6:
     while len(hex_)<6:
       hex_="0"+hex_
-  embed = discord.Embed(title='Colour information', description=desc, color=deci)
+  page = requests.get('https://www.colorhexa.com/'+hex_)
+  soup = BeautifulSoup(page.content, 'html.parser')
+  results = soup.find(id='header-title')
+  ti = re.sub(r'([\w]+?) \/ #[\da-f]{6} hex color',r'\1',results.text)
+  embed = discord.Embed(title='Colour information: '+ti, description=desc, color=deci)
   embed.add_field(name='RGB', value=f'{r},{g},{b}', inline=True)
   embed.add_field(name='Hex Code', value=f'#{hex_}', inline=True)
   embed.add_field(name='Decimal Value', value=deci, inline=True)
