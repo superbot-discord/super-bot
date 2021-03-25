@@ -1959,7 +1959,10 @@ async def user(ctx, user: discord.Member = None, channel: discord.TextChannel = 
       except:
         f3vc = f"Watching {f3vcraw.name}since "+f3vcraw.start.strftime("%d %b, %Y (%a) %H:%M:%S")
     elif f3vcraw.type.custom:
-      f3vc = f"{f3vcraw.emoji} {f3vcraw.details}"
+      try:
+        f3vc = f":{f3vcraw.emoji.name}: {f3vcraw.details}"
+      except:
+        f3vc = f":{f3vcraw.emoji.name}:"
   except:
     1
   f4v=""
@@ -2010,7 +2013,10 @@ async def user(ctx, user: discord.Member = None, channel: discord.TextChannel = 
   embed.add_field(name="Server Permissions", value=f3v, inline=False)
   embed.add_field(name="Channel Permissions", value=f3vb, inline=False)
   embed.add_field(name="Status", value=f3vd, inline=True)
-  embed.add_field(name="Activity", value=f3vc, inline=True)
+  try:
+    embed.add_field(name="Activity", value=f3vc, inline=True)
+  except:
+    1
   embed.add_field(name="Badges", value=f5v, inline=False)
   await ctx.send(embed=embed)
 
