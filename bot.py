@@ -558,7 +558,7 @@ async def simpcolor(ctx, *, name):
     ax.axes.get_yaxis().set_visible(False)
     plt.setp(ax.spines.values(), color=name)
     ax.set_facecolor(name)
-    plt.savefig("color.png", transparent=False)
+    plt.savefig("color.png", transparent=True)
     plt.clf()
   file = discord.File("color.png")
   await ctx.send(file=file)
