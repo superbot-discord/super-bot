@@ -88,7 +88,7 @@ overwrite.view_channel = True
 
 @bot.event
 async def on_member_join(member):
-  if member.guild.id == 824524455924727839
+  if member.guild.id == 824524455924727839:
     if member.bot:
       botcat = await member.guild.get_channel(824524893152477206)
       await botcat.create_text_channel(member.name,slowmode_delay=1, topic = f"Use and talk about the bot {member.name}.", overwrites={guild.get_role(824526276835803176): discord.PermissionOverwrite(read_messages=True), guild.get_role(824524455924727840): discord.PermissionOverwrite(read_messages=False), guild.get_role(824524665842040852): discord.PermissionOverwrite(read_messages=False), member: discord.PermissionOverwrite(read_messages=True)})
