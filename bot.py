@@ -963,7 +963,7 @@ async def ett(ctx, msg : discord.Message):
   text = botett(msg)
   await ctx.send("```"+text+"```")
 
-@bot.command(aliases=["simpleembed"])
+@bot.command(aliases=["simpleembed", "simplembed"])
 async def simpembed(ctx, *, text):
   embed = botsimpembed(text)
   await ctx.send(embed=embed)
