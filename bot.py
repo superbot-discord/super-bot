@@ -229,23 +229,23 @@ async def on_message(message):
     for count2 in count.emojis:
       if message.content.count(f":{count2.name}:"):
         try:
-          await ctx.message.delete()
+          await message.delete()
         except:
           1
-        whl = await ctx.channel.webhooks()
+        whl = await message.channel.webhooks()
         ourweb = False
-        for count in whl:
-          if count.name == "Pretender":
+        for count3 in whl:
+          if count3.name == "Pretender":
             ourweb = True
-            token = count.token
-            identify = count.id
+            token = count3.token
+            identify = count3.id
         if len(whl) == 0 or ourweb == False:
-          wh = await ctx.channel.create_webhook(name = "Pretender")
+          wh = await message.channel.create_webhook(name = "Pretender")
           token = wh.token
           identify = wh.id
         async with aiohttp.ClientSession() as session:
           webhook = Webhook.partial(identify, token, adapter=RequestsWebhookAdapter())
-          await webhook.send(message, username=member.name, avatar_url=member.avatar_url)
+          await webhook.send(message, username=user.author.name, avatar_url=user.author.avatar_url)
       break
   if banned_ids.count(message.author.id)==0 and message.content.startswith("=") and message.content.startswith("==")==False:
     await bot.process_commands(message)
