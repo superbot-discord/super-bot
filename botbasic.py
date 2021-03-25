@@ -242,7 +242,7 @@ Plots a [Koch Snowflake](https://en.wikipedia.org/wiki/Koch_snowflake) with the 
     desc=f"Sets the nickname of the bot."
   elif cat=="simpcolor":
     ti="simpcolor [name]"
-    desc="View a color based on its name. A full list of colors: https://media.discordapp.net/attachments/805590030625538078/824568260455956551/Colours.001.jpeg?width=2160&height=810"
+    desc="View a color based on its name. A full list of colors:"
   elif cat=="calc":
     ti="calc [Formula]"
     desc="Does boring math for you. Logical comparisons, scientific math, variables and user-defined functions are available. Please check the [documentation](https://github.com/johann-lau/Bot/blob/main/README.md#math-help) for more information."
@@ -319,6 +319,8 @@ Plots a [Koch Snowflake](https://en.wikipedia.org/wiki/Koch_snowflake) with the 
 Need help? check the [documentation](https://github.com/johann-lau/Bot#bot-documentation)!
   """
   embed=discord.Embed(title=ti, description=desc)
+  if cat=="simpcolor":
+    embed.set_image(url="https://media.discordapp.net/attachments/805590030625538078/824568260455956551/Colours.001.jpeg?width=2160&height=810")
   return embed
 
 def botinvite():
