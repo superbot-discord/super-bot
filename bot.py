@@ -232,32 +232,33 @@ async def on_message(message):
       1
   elif message.author.id == 814292078984167425:# and (message.content.count('Joe')==1 or message.content.count('Joh')==1 or message.content.count('Bitch')==1 or message.content.count('Piss')==1):
     await message.delete()#delay = 3)"""#(message.guild.id != 823405852131328001 or message.content.startswith("=verify"))
-  """for count in message.author.mutual_guilds:
-    for count2 in count.emojis:
-      if message.content.count(f":{count2.name}:"):
-        try:
-          await message.delete()
-        except:
-          1
-        whl = await message.channel.webhooks()
-        ourweb = False
-        for count3 in whl:
-          if count3.name == "Pretender":
-            ourweb = True
-            token = count3.token
-            identify = count3.id
-        if len(whl) == 0 or ourweb == False:
-          wh = await message.channel.create_webhook(name = "Pretender")
-          token = wh.token
-          identify = wh.id
-        async with aiohttp.ClientSession() as session:
-          webhook = Webhook.partial(identify, token, adapter=RequestsWebhookAdapter())
-          await webhook.send(message, username=user.author.name, avatar_url=user.author.avatar_url)
-      break"""
-  if banned_ids.count(message.author.id)==0 and message.content.startswith("=") and message.content.startswith("==")==False:
-    await bot.process_commands(message)
-  elif message.content.startswith("="):
-    await message.channel.send("You are banned from the bot. Reason: "+banned_text[banned_ids.index(message.author.id)])
+  if message.authr.id != 796686363604680755:
+    for count in message.author.mutual_guilds:
+      for count2 in count.emojis:
+        if message.content.count(f":{count2.name}:"):
+          try:
+            await message.delete()
+          except:
+            1
+          whl = await message.channel.webhooks()
+          ourweb = False
+          for count3 in whl:
+            if count3.name == "Pretender":
+              ourweb = True
+              token = count3.token
+              identify = count3.id
+          if len(whl) == 0 or ourweb == False:
+            wh = await message.channel.create_webhook(name = "Pretender")
+            token = wh.token
+            identify = wh.id
+          async with aiohttp.ClientSession() as session:
+            webhook = Webhook.partial(identify, token, adapter=RequestsWebhookAdapter())
+            await webhook.send(message, username=user.author.name, avatar_url=user.author.avatar_url)
+        break
+    if banned_ids.count(message.author.id)==0 and message.content.startswith("=") and message.content.startswith("==")==False:
+      await bot.process_commands(message)
+    elif message.content.startswith("="):
+      await message.channel.send("You are banned from the bot. Reason: "+banned_text[banned_ids.index(message.author.id)])
 
 @bot.command()
 async def verify(ctx):
