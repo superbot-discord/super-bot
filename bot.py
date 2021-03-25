@@ -1943,22 +1943,25 @@ async def user(ctx, user: discord.Member = None, channel: discord.TextChannel = 
   else:
     f3vd = "Unknown"
   f3vcraw = user.activity
-  if f3vcraw.type.playing:
-    try:
-      f3vc = f"Playing {f3vcraw.name} since "+f3vcraw.start.strftime("%d %b, %Y (%a) %H:%M:%S")+f"\n{f3vcraw.details}"
-    except:
-      f3vc = f"Playing {f3vcraw.name}"
-  elif f3vcraw.type.streaming:
-    f3vc = f"Streaming [{f3vcraw.name}({f3vcraw.game})]({f3vcraw.url}) via {f3vcraw.platform}\n{f3vcraw.details}"
-  elif f3vcraw.type.listening:
-    f3vc = f"Listening to {f3vcraw.artist} - {f3vcraw.album}: {f3vcraw.title}\nStarted: "+f3vcraw.created_at.strftime("%d %b, %Y (%a) %H:%M:%S")+f"\n{f3vcraw.details}"
-  elif f3vcraw.type.watching:
-    try:
-      f3vc = f"Watching [{f3vcraw.name}]({f3vcraw.url}) since "+f3vcraw.start.strftime("%d %b, %Y (%a) %H:%M:%S")+f"\n{f3vcraw.details}"
-    except:
-      f3vc = f"Watching {f3vcraw.name}since "+f3vcraw.start.strftime("%d %b, %Y (%a) %H:%M:%S")
-  elif f3vcraw.type.custom:
-    f3vc = f"{f3vcraw.emoji} {f3vcraw.details}"
+  try:
+    if f3vcraw.type.playing:
+      try:
+        f3vc = f"Playing {f3vcraw.name} since "+f3vcraw.start.strftime("%d %b, %Y (%a) %H:%M:%S")+f"\n{f3vcraw.details}"
+      except:
+        f3vc = f"Playing {f3vcraw.name}"
+    elif f3vcraw.type.streaming:
+      f3vc = f"Streaming [{f3vcraw.name}({f3vcraw.game})]({f3vcraw.url}) via {f3vcraw.platform}\n{f3vcraw.details}"
+    elif f3vcraw.type.listening:
+      f3vc = f"Listening to {f3vcraw.artist} - {f3vcraw.album}: {f3vcraw.title}\nStarted: "+f3vcraw.created_at.strftime("%d %b, %Y (%a) %H:%M:%S")+f"\n{f3vcraw.details}"
+    elif f3vcraw.type.watching:
+      try:
+        f3vc = f"Watching [{f3vcraw.name}]({f3vcraw.url}) since "+f3vcraw.start.strftime("%d %b, %Y (%a) %H:%M:%S")+f"\n{f3vcraw.details}"
+      except:
+        f3vc = f"Watching {f3vcraw.name}since "+f3vcraw.start.strftime("%d %b, %Y (%a) %H:%M:%S")
+    elif f3vcraw.type.custom:
+      f3vc = f"{f3vcraw.emoji} {f3vcraw.details}"
+  except:
+    1
   f4v=""
   if len(allroles)>1:
     allroles.reverse()
