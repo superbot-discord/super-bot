@@ -225,6 +225,28 @@ async def on_message(message):
       1
   elif message.author.id == 814292078984167425:# and (message.content.count('Joe')==1 or message.content.count('Joh')==1 or message.content.count('Bitch')==1 or message.content.count('Piss')==1):
     await message.delete()#delay = 3)"""#(message.guild.id != 823405852131328001 or message.content.startswith("=verify"))
+  for count in message.author.mutual_guilds:
+    for count2 in count.emojis:
+      if message.content.count(f":{count2.name}:"):
+        try:
+          await ctx.message.delete()
+        except:
+          1
+        whl = await ctx.channel.webhooks()
+        ourweb = False
+        for count in whl:
+          if count.name == "Pretender":
+            ourweb = True
+            token = count.token
+            identify = count.id
+        if len(whl) == 0 or ourweb == False:
+          wh = await ctx.channel.create_webhook(name = "Pretender")
+          token = wh.token
+          identify = wh.id
+        async with aiohttp.ClientSession() as session:
+          webhook = Webhook.partial(identify, token, adapter=RequestsWebhookAdapter())
+          await webhook.send(message, username=member.name, avatar_url=member.avatar_url)
+      break
   if banned_ids.count(message.author.id)==0 and message.content.startswith("=") and message.content.startswith("==")==False:
     await bot.process_commands(message)
   elif message.content.startswith("="):
