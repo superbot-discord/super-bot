@@ -201,9 +201,6 @@ Plots a [Koch Snowflake](https://en.wikipedia.org/wiki/Koch_snowflake) with the 
   elif cat=="template":
     ti="template [Template ID]"
     desc=f"Shows information about the desired server template.\nThis command is still in BETA."
-  elif cat=="spam":
-    ti="spam [Number of times to spam] [Text to spam]"
-    desc=f"Spams the text.\nIt must be less than 30 times and without any mentions."
   elif cat=="embed":
     ti="embed [Title] [Description] [Color]…"
     desc=f"Generates an embed.\n**One line for each argument.**\nPlease check the [documentation](https://github.com/johann-lau/Bot#embed-message-help) for more information."
@@ -243,6 +240,9 @@ Plots a [Koch Snowflake](https://en.wikipedia.org/wiki/Koch_snowflake) with the 
   elif cat=="nick":
     ti="nick [New nickname]"
     desc=f"Sets the nickname of the bot."
+  elif cat=="simpcolor":
+    ti="simpcolor [name]"
+    desc="View a color based on its name. A full list of colors: https://media.discordapp.net/attachments/805590030625538078/824568260455956551/Colours.001.jpeg?width=2160&height=810"
   elif cat=="calc":
     ti="calc [Formula]"
     desc="Does boring math for you. Logical comparisons, scientific math, variables and user-defined functions are available. Please check the [documentation](https://github.com/johann-lau/Bot/blob/main/README.md#math-help) for more information."
@@ -305,7 +305,7 @@ Plots a [Koch Snowflake](https://en.wikipedia.org/wiki/Koch_snowflake) with the 
 `kick` `ban` `slowmode` `nick` `purgeregex` `purgepy` `purgepygex`
 
 **Information Commands**
-`translate` `calc` `define` `time` `rtimer` `terminate`
+`color` `simpcolor` `translate` `calc` `define` `time` `rtimer` `terminate`
 
 **Web Commands**
 `screenshot` `youtube` `wiki` `engrave` `covid` `population`
@@ -318,7 +318,7 @@ Plots a [Koch Snowflake](https://en.wikipedia.org/wiki/Koch_snowflake) with the 
 
 Need help? check the [documentation](https://github.com/johann-lau/Bot#bot-documentation)!
   """
-  embed=discord.Embed(title=ti, description=desc, color=0x0061ff)
+  embed=discord.Embed(title=ti, description=desc)
   return embed
 
 def botinvite():
