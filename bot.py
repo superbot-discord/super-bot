@@ -280,7 +280,7 @@ async def makeinvite(ctx, timetocount, uses : int = 0):
   end = datetime.datetime.now() + timedelta(seconds = sec)
   seconds = int((end - datetime.datetime.now()).total_seconds())
   theinvite = await ctx.channel.create_invite(max_age = seconds, max_uses = uses)
-  await ctx.send("An invite was generated with "+str(seconds)+" seconds of age and "+("infinite" if uses==0 else: str(uses))+" maximum uses: "+theinvite.url)
+  await ctx.send("An invite was generated with "+str(seconds)+" seconds of valid duration: "+theinvite.url)
 
 @bot.command()
 async def reactions(ctx, *, msg : discord.Message):
