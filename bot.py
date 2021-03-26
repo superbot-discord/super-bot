@@ -22,7 +22,6 @@ import datetime
 import requests
 import aiohttp
 import asyncio
-import discord
 import pytube
 import PIL
 import re
@@ -271,6 +270,17 @@ async def verify(ctx):
       embed = discord.Embed(title="Verified", description=desc)
       await ctx.author.send(embed=embed)
       await ctx.channel.send(embed=embed)
+
+@bot.command()
+async def makeinvite(ctx, timetocount, uses : int = 0):
+  sec = int(timedelta(**{
+    UNITS.get(m.group('unit').lower(), 'seconds'): int(m.group('val'))
+    for m in re.finditer(r'(?P<val>\d+)(?P<unit>[smhdw]?)', timetocount, flags=re.I)
+  }).total_seconds())
+  end = datetime.datetime.now() + timedelta(seconds = sec)
+  seconds = int((end - datetime.datetime.now()).total_seconds())
+  theinvite = await ctx.channel.create_invite(max_age = seconds, max_uses = uses)
+  await ctx.send("An invite was generated with "+str(seconds)+" seconds of age and "+("infinite" if uses==0 else: str(uses))+" maximum uses: "+theinvite.url)
 
 @bot.command()
 async def reactions(ctx, *, msg : discord.Message):
