@@ -2210,13 +2210,24 @@ async def on_ready():
     if count.name == "fucker":
       await count.delete()"""
 
-@slash.slash(name="calc", guild_ids=[744520955585626132, 814407577042944040], options=[create_option(name="equation",description="Enter a math equation here.",option_type=3,required=False,)])
-async def _calc(ctx):
+@slash.slash(name="calc", guild_ids=[744520955585626132, 814407577042944040], options=[create_option(name="equation",description="Enter a math equation here.",option_type=3,required=True)])
+async def _calc(ctx, equation:str):
   output = botcalc(arg)
   if output == "Add_Reaction":
     await ctx.message.add_reaction("👍")
   else:
     await ctx.send(output)
+
+@slash.slash(name="calc", guild_ids=[744520955585626132, 814407577042944040], options=[create_option(name="Lower bound",description="The lowest number.",option_type=3,required=True), create_option(name="Upper bound",description="The highest number.",option_type=3,required=True)])
+async def _random(ctx,lower:int,upper:int):
+  ti="Random number between "+lower+" and "+upper
+  lower=int(lower)
+  upper=int(upper)
+  rand=ra.randint(lower,upper)
+  rand=str(rand)
+  desc="Your random number is "+rand
+  embed=discord.Embed(title=ti, description=desc)
+  await ctx.send(embed=embed)
 
 bot.run('Nzk2Njg2MzYzNjA0NjgwNzU1.X_bh_g.8LrZQX__nLUKyXDgpOt5bLnEN7Q')
 #client.run('Nzk2Njg2MzYzNjA0NjgwNzU1.X_bh_g.8LrZQX__nLUKyXDgpOt5bLnEN7Q')
