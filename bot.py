@@ -2419,7 +2419,7 @@ async def _rple(ctx, role:discord.Role):
   #embed.add_field(name="Channel Permissions", value=f3vb, inline=False)
   await ctx.send(embed=embed)
 
-@slash.slash(name="channel", guild_ids=[744520955585626132, 814407577042944040], options=[create_option(name="Channel",description="The channel to show information for.",option_type=7,required=True)])
+@slash.slash(name="channel", options=[create_option(name="Channel",description="The channel to show information for.",option_type=7,required=True)])
 async def _channel(ctx, channel:discord.abc.GuildChannel):
   if channel.type == discord.ChannelType.text:
     ti="Channel Information: "+channel.name
