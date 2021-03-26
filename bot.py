@@ -552,10 +552,6 @@ async def simpcolor(ctx, *, name):
     ax.imshow(gradient, aspect='auto', cmap=cmapv)
     plt.savefig("color.png", transparent=True)
   except:
-    plt.clf()
-    fig, ax = plt.subplots()
-    ax.axes.get_xaxis().set_visible(False)
-    ax.axes.get_yaxis().set_visible(False)
     plt.setp(ax.spines.values(), color=name)
     ax.set_facecolor(name)
     plt.savefig("color.png", transparent=True)
