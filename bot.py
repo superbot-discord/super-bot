@@ -2212,7 +2212,7 @@ async def on_ready():
 
 @slash.slash(name="calc", guild_ids=[744520955585626132, 814407577042944040], options=[create_option(name="Equation",description="A math equation to calculate.",option_type=3,required=True)])
 async def _calc(ctx, equation:str):
-  output = botcalc(arg)
+  output = botcalc(equation)
   if output == "Add_Reaction":
     await ctx.message.add_reaction("👍")
   else:
