@@ -242,12 +242,13 @@ async def on_message(message):
           whl = await message.channel.webhooks()
           ourweb = False
           for count3 in whl:
-            if count3.name == "Pretender":
+            if count3.name == "AnimatedEmoji":
               ourweb = True
               token = count3.token
               identify = count3.id
+              break
           if len(whl) == 0 or ourweb == False:
-            wh = await message.channel.create_webhook(name = "Pretender")
+            wh = await message.channel.create_webhook(name = "AnimatedEmoji")
             token = wh.token
             identify = wh.id
           async with aiohttp.ClientSession() as session:
