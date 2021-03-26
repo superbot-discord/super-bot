@@ -1,6 +1,7 @@
 discord-py-slash-command==1.0.9.5
 pygoogletranslation==2.0.4
 wikipedia-sections==2.0.0
+unicode-charnames==13.0.0
 discord-webhook==0.11.0
 beautifulsoup4==4.9.3
 async-timeout==3.0.1
