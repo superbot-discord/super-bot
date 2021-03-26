@@ -1,3 +1,4 @@
+from discord_slash.utils.manage_commands import create_option, create_choice
 from discord_slash import SlashCommand, SlashContext
 from discord import Webhook, RequestsWebhookAdapter
 from discord_slash.utils import manage_commands
