@@ -1,6 +1,7 @@
 from discord_slash import SlashCommand, SlashContext
 from discord import Webhook, RequestsWebhookAdapter
 from discord_slash.utils import manage_commands
+from unicode_charnames import search_charnames
 from datetime import datetime, date, timedelta
 from selenium.webdriver.common.by import By
 from discord_webhook import DiscordWebhook
@@ -260,6 +261,14 @@ async def on_message(message):
       await message.channel.send("You are banned from the bot. Reason: "+banned_text[banned_ids.index(message.author.id)])
 
 @bot.command()
+async def unicode(ctx, *, query):
+  embed = discord.Embed(title = "Search results for: "+query)
+  allchars = search_charnames(query)
+  for count, count2 in zip(allchars, range(0,25)):
+    embed.add_field(name=count[0], value=count[1], inline=False)
+  await ctx.send(embed=embed)
+
+@bot.command()
 async def verify(ctx):
   if ctx.message.guild.id == 823405852131328001:
     if ctx.author.roles.count(ctx.guild.get_role(823407479303569419))==1:
@@ -273,12 +282,10 @@ async def verify(ctx):
 
 @bot.command()
 async def makeinvite(ctx, timetocount, uses : int = 0):
-  sec = int(timedelta(**{
+  seconds = int(timedelta(**{
     UNITS.get(m.group('unit').lower(), 'seconds'): int(m.group('val'))
     for m in re.finditer(r'(?P<val>\d+)(?P<unit>[smhdw]?)', timetocount, flags=re.I)
   }).total_seconds())
-  end = datetime.datetime.now() + timedelta(seconds = sec)
-  seconds = int((end - datetime.datetime.now()).total_seconds())
   theinvite = await ctx.channel.create_invite(max_age = seconds, max_uses = uses)
   await ctx.send("An invite was generated with "+str(seconds)+" seconds of valid duration: "+theinvite.url)
 
