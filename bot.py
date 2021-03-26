@@ -538,7 +538,7 @@ async def population(ctx, country="current"):
   else:
     await ctx.send(embed=output)
 
-@bot.command(alias=["simpcolour"])
+@bot.command(alias=["simpcolour", "simplecolor", "simplecolour"])
 async def simpcolor(ctx, *, name):
   fig, ax = plt.subplots()
   ax.axes.get_xaxis().set_visible(False)
