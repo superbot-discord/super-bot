@@ -253,7 +253,7 @@ async def on_message(message):
             identify = wh.id
           async with aiohttp.ClientSession() as session:
             webhook = Webhook.partial(identify, token, adapter=RequestsWebhookAdapter())
-            await webhook.send(message, username=message.author.name, avatar_url=message.author.avatar_url)
+            await webhook.send(message.content, username=message.author.name, avatar_url=message.author.avatar_url)
           break
     if banned_ids.count(message.author.id)==0 and message.content.startswith("=") and message.content.startswith("==")==False:
       await bot.process_commands(message)
