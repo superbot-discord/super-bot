@@ -2219,13 +2219,10 @@ async def _calc(ctx, equation:str):
     await ctx.send(output)
 
 @slash.slash(name="random", guild_ids=[744520955585626132, 814407577042944040], options=[create_option(name="Lower bound",description="The lowest number.",option_type=4,required=True), create_option(name="Upper bound",description="The highest number.",option_type=4,required=True)])
-async def _random(ctx,lower:int,upper:int):
-  ti="Random number between "+lower+" and "+upper
-  lower=int(lower)
-  upper=int(upper)
+async def _random(ctx, lower:int, upper:int):
+  ti="Random number between "+str(lower)+" and "+str(upper)
   rand=ra.randint(lower,upper)
-  rand=str(rand)
-  desc="Your random number is "+rand
+  desc="Your random number is "+str(rand)
   embed=discord.Embed(title=ti, description=desc)
   await ctx.send(embed=embed)
 
