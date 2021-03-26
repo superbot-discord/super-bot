@@ -2102,7 +2102,7 @@ async def uservoice(ctx,channel: discord.VoiceChannel, user: discord.Member=None
 
 @bot.command(pass_context=True)
 async def spam(ctx,times,*,message):
-  if (int(times)<30 and message.count("@")==0) or bot_admins.count(ctx.author.id)!=0:
+  if (int(times)<5 and message.count("@")==0) or bot_admins.count(ctx.author.id)!=0:
     try:
       await ctx.message.delete()
     except:
@@ -2110,7 +2110,7 @@ async def spam(ctx,times,*,message):
     for count in range(0,int(times)):
       await ctx.send(message)
   else:
-    await ctx.send("Please spam less than 30 times without any pings.")
+    await ctx.send("Please spam less than 5 times without any pings.")
 
 @bot.command()
 async def ban(ctx, user: discord.User, *, delete : int =0, reason="No reason provided"):
