@@ -2218,7 +2218,7 @@ async def _calc(ctx, equation:str):
   else:
     await ctx.send(output)
 
-@slash.slash(name="calc", guild_ids=[744520955585626132, 814407577042944040], options=[create_option(name="Lower bound",description="The lowest number.",option_type=3,required=True), create_option(name="Upper bound",description="The highest number.",option_type=3,required=True)])
+@slash.slash(name="random", guild_ids=[744520955585626132, 814407577042944040], options=[create_option(name="Lower bound",description="The lowest number.",option_type=3,required=True), create_option(name="Upper bound",description="The highest number.",option_type=3,required=True)])
 async def _random(ctx,lower:int,upper:int):
   ti="Random number between "+lower+" and "+upper
   lower=int(lower)
