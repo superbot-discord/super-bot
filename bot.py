@@ -2210,7 +2210,7 @@ async def on_ready():
     if count.name == "fucker":
       await count.delete()"""
 
-@slash.slash(name="calc", guild_ids=[744520955585626132, 814407577042944040], options=[create_option(name="equation",description="Enter a math equation here.",option_type=3,required=True)])
+@slash.slash(name="calc", guild_ids=[744520955585626132, 814407577042944040], options=[create_option(name="Equation",description="A math equation to calculate.",option_type=3,required=True)])
 async def _calc(ctx, equation:str):
   output = botcalc(arg)
   if output == "Add_Reaction":
@@ -2218,12 +2218,68 @@ async def _calc(ctx, equation:str):
   else:
     await ctx.send(output)
 
-@slash.slash(name="random", guild_ids=[744520955585626132, 814407577042944040], options=[create_option(name="Lower bound",description="The lowest number.",option_type=4,required=True), create_option(name="Upper bound",description="The highest number.",option_type=4,required=True)])
+@slash.slash(name="random", guild_ids=[744520955585626132, 814407577042944040], options=[create_option(name="Lower",description="The lower bound.",option_type=4,required=True), create_option(name="Upper",description="The upper bound.",option_type=4,required=True)])
 async def _random(ctx, lower:int, upper:int):
   ti="Random number between "+str(lower)+" and "+str(upper)
   rand=ra.randint(lower,upper)
   desc="Your random number is "+str(rand)
   embed=discord.Embed(title=ti, description=desc)
+  await ctx.send(embed=embed)
+
+@slash.slash(name="channel", guild_ids=[744520955585626132, 814407577042944040], options=[create_option(name="Channel",description="The channel to show information for.",option_type=7,required=True)])
+async def _channel(ctx, channel:discord.abc.GuildChannel):
+  if channel.type.text:
+    ti="Channel Information: "+channel.name
+    desc=channel.mention
+    embed=discord.Embed(title=ti, description=desc)
+    f0v=channel.created_at.strftime("%d %b, %Y (%a) %H:%M:%S")
+    f3v=str(channel.topic)
+    f4v=str(channel.category)
+    f5vlist=await channel.invites()
+    f5v=""
+    for count in f5vlist:
+      f5v=f5v+count.url+"  "
+    f5v=f5v[:-2]
+    embed.add_field(name="Created", value=f0v, inline=True)
+    if channel.is_nsfw()==True:
+      f1v="This is an NSFW channel."
+      embed.add_field(name="NSFW", value=f1v, inline=True)
+    if channel.is_news()==True:
+      f2v="This is a news channel."
+      embed.add_field(name="NSFW", value=f2v, inline=True)
+    embed.add_field(name="Topic", value=f3v, inline=True)
+    embed.add_field(name="Category", value=f4v, inline=True)
+    if len(f5vlist)!=0:
+      embed.add_field(name="Invites", value=f5v, inline=False)
+  elif channel.type.voice:
+    ti="Voice Channel Information"
+    desc=channel.name
+    embed=discord.Embed(title=ti, description=desc)
+    f0v=channel.created_at.strftime("%d %b, %Y (%a) %H:%M:%S")
+    f1v=str(channel.category)
+    f2vlist=await channel.invites()
+    f2v=""
+    for count in f2vlist:
+      f2v=f2v+count.url+"  "
+    f2v=f2v[:-2]
+    f5vlist=channel.members
+    f5v=""
+    for count in f5vlist:
+      f5v=f5v+count.mention+"  "
+    f5v=f5v[:-2]
+    f3v=str(channel.bitrate//1000)+" kbps"
+    if str(channel.user_limit)=="0":
+      f4v="Infinite"
+    else:
+      f4v=str(channel.user_limit)+" members"
+    embed.add_field(name="Created", value=f0v, inline=True)
+    embed.add_field(name="Category", value=f1v, inline=True)
+    if len(f2vlist)!=0:
+      embed.add_field(name="Invites", value=f2v, inline=False)
+    embed.add_field(name="Bitrate", value=f3v, inline=True)
+    embed.add_field(name="Max. Members", value=f4v, inline=True)
+    if len(f5vlist)!=0:
+      embed.add_field(name="Current Members", value=f5v, inline=True)
   await ctx.send(embed=embed)
 
 bot.run('Nzk2Njg2MzYzNjA0NjgwNzU1.X_bh_g.8LrZQX__nLUKyXDgpOt5bLnEN7Q')
