@@ -233,7 +233,7 @@ async def on_message(message):
   elif message.author.id == 814292078984167425:# and (message.content.count('Joe')==1 or message.content.count('Joh')==1 or message.content.count('Bitch')==1 or message.content.count('Piss')==1):
     await message.delete()#delay = 3)"""#(message.guild.id != 823405852131328001 or message.content.startswith("=verify"))
   if message.author.id != 796686363604680755:
-    for count in message.guild.emojis:
+    for count2 in message.guild.emojis:
         if message.content.count(f":{count2.name}:") and count2.animated:
           try:
             await message.delete()
