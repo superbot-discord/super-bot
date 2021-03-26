@@ -2213,11 +2213,7 @@ async def on_ready():
 from discord_slash import SlashCommand # Importing the newly installed library.
 
 client = discord.Client(intents=discord.Intents.all())
-slash = SlashCommand(client, sync_commands=True) # Declares slash commands through the client.
-
-@slash.slash(name="ping", guild_ids=[744520955585626132, 814407577042944040])
-async def _ping(ctx):
-  await ctx.send(f"Pong! ({client.latency*1000}ms)")
+slash = SlashCommand(bot, sync_commands=True) # Declares slash commands through the client.
 
 @slash.slash(name="calc", guild_ids=[744520955585626132, 814407577042944040], options=[create_option(name="equation",description="Enter a math equation here.",option_type=3,required=False,)])
 async def _calc(ctx):
