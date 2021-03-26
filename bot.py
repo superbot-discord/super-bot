@@ -2210,7 +2210,20 @@ async def on_ready():
     if count.name == "fucker":
       await count.delete()"""
 
-@slash.slash(name="calc", guild_ids=[744520955585626132, 814407577042944040], options=[create_option(name="Equation",description="A math equation to calculate.",option_type=3,required=True)])
+#guild_ids=[744520955585626132, 814407577042944040]
+
+@slash.slash(name="slowmode", options=[create_option(name="Slowmode",description="Adjust the slowmode threshold for the current channel.",option_type=4,required=True)])
+async def _slowmode(ctx, time:int):
+  if ctx.author.permissions_in(ctx.channel).manage_channels or bot_admins.count(ctx.author.id)!=0:
+    if 21600>=time>=0:
+      await ctx.channel.edit(slowmode_delay = time)
+      await ctx.send("Set slowmode to "+str(time)+" second(s) for this channel.")
+    else:
+      await ctx.send("Please enter an integer between 0 and 21600 (inclusive).")
+  else:
+    await ctx.send("You do not have the required permissions.")
+
+@slash.slash(name="calc", options=[create_option(name="Equation",description="A math equation to calculate.",option_type=3,required=True)])
 async def _calc(ctx, equation:str):
   output = botcalc(equation)
   if output == "Add_Reaction":
@@ -2218,7 +2231,7 @@ async def _calc(ctx, equation:str):
   else:
     await ctx.send(output)
 
-@slash.slash(name="random", guild_ids=[744520955585626132, 814407577042944040], options=[create_option(name="Lower",description="The lower bound.",option_type=4,required=True), create_option(name="Upper",description="The upper bound.",option_type=4,required=True)])
+@slash.slash(name="random", options=[create_option(name="Lower",description="The lower bound.",option_type=4,required=True), create_option(name="Upper",description="The upper bound.",option_type=4,required=True)])
 async def _random(ctx, lower:int, upper:int):
   ti="Random number between "+str(lower)+" and "+str(upper)
   rand=ra.randint(lower,upper)
@@ -2226,7 +2239,7 @@ async def _random(ctx, lower:int, upper:int):
   embed=discord.Embed(title=ti, description=desc)
   await ctx.send(embed=embed)
 
-@slash.slash(name="server", guild_ids=[744520955585626132, 814407577042944040], options=[create_option(name="Mode",description="The desired mode.",option_type=3,choices=[create_choice(name="Mod",value="View current invites and banned members."),create_choice(name="Regular",value="View regular information, such as roles and members.")], required=True)])
+@slash.slash(name="server", options=[create_option(name="Mode",description="The desired mode.",option_type=3,choices=[create_choice(name="Mod",value="View current invites and banned members."),create_choice(name="Regular",value="View regular information, such as roles and members.")], required=True)])
 async def _server(ctx, text):
   guild=ctx.guild
   ti=guild.name
@@ -2375,7 +2388,7 @@ async def _server(ctx, text):
     embed.set_field_at(3, name="Roles ("+str(len(guild.roles))+")", value=f1va, inline=False)
     await ctx.send(embed=embed)
 
-@slash.slash(name="role", guild_ids=[744520955585626132, 814407577042944040], options=[create_option(name="Role",description="The role to show information for.",option_type=8,required=True)])
+@slash.slash(name="role", options=[create_option(name="Role",description="The role to show information for.",option_type=8,required=True)])
 async def _rple(ctx, role:discord.Role):
   ti="Role Information: "+role.name
   if role==None:
