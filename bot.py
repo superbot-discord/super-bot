@@ -1501,7 +1501,7 @@ async def server(ctx, text = "regular"):
   embed=discord.Embed(title=ti, description=desc)
   embed.set_author(name="Server Information",icon_url=guild.icon_url)
   if text == "mod":
-    if ctx.guild.id == 814407577042944040:
+    if ctx.guild.id != 814407577042944040:
       try:
         f1vlist=await guild.bans()
         f1v=""
