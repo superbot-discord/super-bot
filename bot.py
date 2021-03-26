@@ -1501,26 +1501,29 @@ async def server(ctx, text = "regular"):
   embed=discord.Embed(title=ti, description=desc)
   embed.set_author(name="Server Information",icon_url=guild.icon_url)
   if text == "mod":
-    try:
-      f1vlist=await guild.bans()
-      f1v=""
-      for count in f1vlist:
-        f1v=f1v+count.user.mention+" "
-      f1v=f1v[:-1]
-    except:
-      f1v="Unable to get banned members without Ban-members permission."
-    if len(f1v)!=0:
-      embed.add_field(name="Banned Users", value=f1v, inline=True)
-    try:
-      f2vlist=await guild.invites()
-      f2v=""
-      for count in f2vlist:
-        f2v=f2v+count.url+" "
-      f2v=f2v[:-1]
-    except:
-      f2v="Unable to get invites without Manage-server permission."
-    if len(f2v)!=0:
-      embed.add_field(name="Invites", value=f2v, inline=True)
+    if ctx.guild.id == 814407577042944040:
+      try:
+        f1vlist=await guild.bans()
+        f1v=""
+        for count in f1vlist:
+          f1v=f1v+count.user.mention+" "
+        f1v=f1v[:-1]
+      except:
+        f1v="Unable to get banned members without Ban-members permission."
+      if len(f1v)!=0:
+        embed.add_field(name="Banned Users", value=f1v, inline=True)
+      try:
+        f2vlist=await guild.invites()
+        f2v=""
+        for count in f2vlist:
+          f2v=f2v+count.url+" "
+        f2v=f2v[:-1]
+      except:
+        f2v="Unable to get invites without Manage-server permission."
+      if len(f2v)!=0:
+        embed.add_field(name="Invites", value=f2v, inline=True)
+    else:
+      await ctx.send("Since a barbarian forced me to disable this command, I had to disable it.")
   else:
     f0v=""
     for count in guild.text_channels:
