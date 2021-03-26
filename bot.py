@@ -265,7 +265,10 @@ async def unicode(ctx, *, query):
   embed = discord.Embed(title = "Search results for: "+query)
   allchars = search_charnames(query)
   for count, count2 in zip(allchars, range(0,25)):
-    embed.add_field(name=count[0], value="\u"+count[0]+" "+count[1], inline=False)
+    try:
+      embed.add_field(name=count[0], value="\u"+count[0]+" "+count[1], inline=False)
+    except:
+      embed.add_field(name=count[0], value=count[1], inline=False)
   await ctx.send(embed=embed)
 
 @bot.command()
