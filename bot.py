@@ -2275,157 +2275,165 @@ async def _random(ctx, lower:int, upper:int):
   embed=discord.Embed(title=ti, description=desc)
   await ctx.send(embed=embed)
 
-@slash.slash(name="server", description="Shows information about the current server.", options=[create_option(name="Mode",description="The desired mode.",option_type=3,choices=[create_choice(name="Mod",value="View current invites and banned members."),create_choice(name="Regular",value="View regular information, such as roles and members.")], required=True)])
-async def _server(ctx, text):
+@slash.slash(name="server", description="Shows information about the current server.")
+async def _server(ctx):
+  1
+
+@slash.subcommand(base = "server", name = "regular", description = "Shows regular information about the current server.")
+async def _server_regular(ctx):
   guild=ctx.guild
   ti=guild.name
   desc="Created at "+guild.created_at.strftime("%d %b, %Y (%a) %H:%M:%S")+" by "+str(guild.owner.mention)+f"\nRegion: "+str(guild.region)+f"\n[Server Icon]("+str(guild.icon_url)+")"
   embed=discord.Embed(title=ti, description=desc)
   embed.set_author(name="Server Information",icon_url=guild.icon_url)
-  if text == "Mod":
-    if ctx.guild.id != 814407577042944040:
-      try:
-        f1vlist=await guild.bans()
-        f1v=""
-        for count in f1vlist:
-          f1v=f1v+count.user.mention+" "
-        f1v=f1v[:-1]
-      except:
-        f1v="Unable to get banned members without Ban-members permission."
-      if len(f1v)!=0:
-        embed.add_field(name="Banned Users", value=f1v, inline=True)
-      try:
-        f2vlist=await guild.invites()
-        f2v=""
-        for count in f2vlist:
-          f2v=f2v+count.url+" "
-        f2v=f2v[:-1]
-      except:
-        f2v="Unable to get invites without Manage-server permission."
-      if len(f2v)!=0:
-        embed.add_field(name="Invites", value=f2v, inline=True)
-    else:
-      await ctx.send("Since a barbarian forced me to disable this command, I had to disable it.")
+  f0v=""
+  for count in guild.text_channels:
+    if len(f0v+str(count.mention)+" ") > 1024:
+      f0v = ""
+      for count2 in guild.text_channels:
+        if len(f0v+count2.name+" ") > 1024:
+          f0v = f0v + "… "
+          break
+        f0v = f0v + count2.name + " "
+      break
+    f0v=f0v+str(count.mention)+" "
+  f1v=""
+  f0v=f0v[:-1]
+  if len(guild.voice_channels)==0:
+    f1v="No Voice Channels"
   else:
-    f0v=""
-    for count in guild.text_channels:
-      if len(f0v+str(count.mention)+" ") > 1024:
-        f0v = ""
-        for count2 in guild.text_channels:
-          if len(f0v+count2.name+" ") > 1024:
-            f0v = f0v + "… "
-            break
-          f0v = f0v + count2.name + " "
-        break
-      f0v=f0v+str(count.mention)+" "
-    f1v=""
-    f0v=f0v[:-1]
-    if len(guild.voice_channels)==0:
-      f1v="No Voice Channels"
-    else:
+    f1v = ""
+    for count in guild.voice_channels:
+      f1v = f1v + count.name + ", "
+    f1v = f1v[:-2]
+    if len(f1v) > 500:
       f1v = ""
       for count in guild.voice_channels:
-        f1v = f1v + count.name + ", "
-      f1v = f1v[:-2]
-      if len(f1v) > 500:
-        f1v = ""
-        for count in guild.voice_channels:
-          if len(f1v + count.name) > 500:
-            break
-          f1v = f1v+count.name+", "
-        f1v = f1v [:-2] + "…"
-    f1vb=""
-    if len(guild.categories)==0:
-      f1vb="No Categories"
-    else:
-      for count in guild.categories:
-        f1vb=f1vb+str(count.name)+", "
-      f1vb = f1vb[:-2]
-    f1va = ""
-    f1valist = guild.roles
-    f1valist.reverse()
-    for count in f1valist:
-      f1va = f1va + count.mention+" "
-    f1va = f1va[:-1]
-    f2v = str(guild.bitrate_limit//1000)+" kbps"
-    f3v = str(guild.filesize_limit//1048576)+" MB"
-    f4v = str(guild.emoji_limit)
-    f5v = guild.mfa_level
-    if f5v==1:
-      f5v="Required"
-    else:
-      f5v="Not Required"
-    f6v=str(guild.verification_level)
-    ecf=guild.explicit_content_filter
-    if str(ecf)=="disabled":
-      f7v="Disabled"
-    elif str(ecf)=="no_role":
-      f7v="Members without roles"
-    elif str(ecf)=="all_members":
-      f7v="All Members"""
-    f8v=""
-    for count in guild.members:
-      f8v=f8v+count.mention+" "
-    f8v=f8v[:-1]
-    if len(f8v) > 500:
-      f8v = ""
-      for count in guild.members:
-        if len(f8v + count.name) > 500:
+        if len(f1v + count.name) > 500:
           break
-        f8v = f8v+count.name+", "
-      f8v = f8v [:-2] + "…"
-    f10va = str(guild.id)
-    f13v = guild.description
-    if f13v == None:
-      f13v = "No description"
-    embed.add_field(name="Text Channels ("+str(len(guild.text_channels))+")", value=f0v, inline=False)
-    embed.add_field(name="Voice Channels ("+str(len(guild.voice_channels))+")", value=f1v, inline=True)
-    embed.add_field(name="Categories ("+str(len(guild.categories))+")", value=f1vb, inline=True)
-    embed.add_field(name="Roles ("+str(len(guild.roles))+")", value=f1va, inline=False)
-    embed.add_field(name="Members ("+str(len(guild.members))+")", value=f8v, inline=False)
-    embed.add_field(name="Max bitrate", value=f2v, inline=True)
-    embed.add_field(name="Max filesize", value=f3v, inline=True)
-    embed.add_field(name="Max emojis", value=f4v, inline=True)
-    embed.add_field(name="2FA for Moderation", value=f5v, inline=True)
-    embed.add_field(name="Verification Level", value=f6v, inline=True)
-    embed.add_field(name="Explict Content Filter", value=f7v, inline=True)
-    if guild.afk_channel!=None:
-      f9v=str(guild.afk_timeout//60)+" mins"
-      f10v=guild.afk_channel
-      embed.add_field(name="AFK Timeout", value=f9v, inline=True)
-      embed.add_field(name="AFK Channel", value=f10v, inline=True)
-    embed.add_field(name="ID", value=f10va, inline=True)
-    #if guild.default_notifications.all_messages:
-    #  embed.add_field(name="Default Notifications", value="Members receive notifications for every message by default.", inline=True)
-    #else:
-    #  embed.add_field(name="Default Notifications", value="Members only receive notifications for messages they are mentioned in by default.", inline=True)
-    if guild.features.count("COMMUNITY")==1:
-      embed.add_field(name="Community", value="This is a community server.", inline=True)
-    if guild.features.count("WELCOME_SCREEN_ENABLED")==1:
-      embed.add_field(name="Welcome Screen", value="The server has enabled the welcome screen.", inline=True)
-    if guild.features.count("PUBLIC")==1:
-      embed.add_field(name="Public", value="This is a public server.", inline=True)
-    embed.add_field(name="Description", value=f13v, inline=False)
-    try:
-      f11v=" ".join(guild.emojis)
-      if len(f11v)!=0:
-        embed.add_field(name="Emojis", value=f11v, inline=True)
-    except:
-      1
-  try:
-    await ctx.send(embed=embed)
-  except:
-    f1va = ""
-    for count in f1valist:
-      if len(f1va + count.name) > 500:
+        f1v = f1v+count.name+", "
+      f1v = f1v [:-2] + "…"
+  f1vb=""
+  if len(guild.categories)==0:
+    f1vb="No Categories"
+  else:
+    for count in guild.categories:
+      f1vb=f1vb+str(count.name)+", "
+    f1vb = f1vb[:-2]
+  f1va = ""
+  f1valist = guild.roles
+  f1valist.reverse()
+  for count in f1valist:
+    f1va = f1va + count.mention+" "
+  f1va = f1va[:-1]
+  f2v = str(guild.bitrate_limit//1000)+" kbps"
+  f3v = str(guild.filesize_limit//1048576)+" MB"
+  f4v = str(guild.emoji_limit)
+  f5v = guild.mfa_level
+  if f5v==1:
+    f5v="Required"
+  else:
+    f5v="Not Required"
+  f6v=str(guild.verification_level)
+  ecf=guild.explicit_content_filter
+  if str(ecf)=="disabled":
+    f7v="Disabled"
+  elif str(ecf)=="no_role":
+    f7v="Members without roles"
+  elif str(ecf)=="all_members":
+    f7v="All Members"""
+  f8v=""
+  for count in guild.members:
+    f8v=f8v+count.mention+" "
+  f8v=f8v[:-1]
+  if len(f8v) > 500:
+    f8v = ""
+    for count in guild.members:
+      if len(f8v + count.name) > 500:
         break
-      f1va = f1va + count.name+", "
-    f1va = f1va [:-2] + "…"
-    embed.set_field_at(3, name="Roles ("+str(len(guild.roles))+")", value=f1va, inline=False)
-    await ctx.send(embed=embed)
+      f8v = f8v+count.name+", "
+    f8v = f8v [:-2] + "…"
+  f10va = str(guild.id)
+  f13v = guild.description
+  if f13v == None:
+    f13v = "No description"
+  embed.add_field(name="Text Channels ("+str(len(guild.text_channels))+")", value=f0v, inline=False)
+  embed.add_field(name="Voice Channels ("+str(len(guild.voice_channels))+")", value=f1v, inline=True)
+  embed.add_field(name="Categories ("+str(len(guild.categories))+")", value=f1vb, inline=True)
+  embed.add_field(name="Roles ("+str(len(guild.roles))+")", value=f1va, inline=False)
+  embed.add_field(name="Members ("+str(len(guild.members))+")", value=f8v, inline=False)
+  embed.add_field(name="Max bitrate", value=f2v, inline=True)
+  embed.add_field(name="Max filesize", value=f3v, inline=True)
+  embed.add_field(name="Max emojis", value=f4v, inline=True)
+  embed.add_field(name="2FA for Moderation", value=f5v, inline=True)
+  embed.add_field(name="Verification Level", value=f6v, inline=True)
+  embed.add_field(name="Explict Content Filter", value=f7v, inline=True)
+  if guild.afk_channel!=None:
+    f9v=str(guild.afk_timeout//60)+" mins"
+    f10v=guild.afk_channel
+    embed.add_field(name="AFK Timeout", value=f9v, inline=True)
+    embed.add_field(name="AFK Channel", value=f10v, inline=True)
+  embed.add_field(name="ID", value=f10va, inline=True)
+  #if guild.default_notifications.all_messages:
+  #  embed.add_field(name="Default Notifications", value="Members receive notifications for every message by default.", inline=True)
+  #else:
+  #  embed.add_field(name="Default Notifications", value="Members only receive notifications for messages they are mentioned in by default.", inline=True)
+  if guild.features.count("COMMUNITY")==1:
+    embed.add_field(name="Community", value="This is a community server.", inline=True)
+  if guild.features.count("WELCOME_SCREEN_ENABLED")==1:
+    embed.add_field(name="Welcome Screen", value="The server has enabled the welcome screen.", inline=True)
+  if guild.features.count("PUBLIC")==1:
+    embed.add_field(name="Public", value="This is a public server.", inline=True)
+  embed.add_field(name="Description", value=f13v, inline=False)
+  try:
+    f11v=" ".join(guild.emojis)
+    if len(f11v)!=0:
+      embed.add_field(name="Emojis", value=f11v, inline=True)
+  except:
+    1
+try:
+  await ctx.send(embed=embed)
+except:
+  f1va = ""
+  for count in f1valist:
+    if len(f1va + count.name) > 500:
+      break
+    f1va = f1va + count.name+", "
+  f1va = f1va [:-2] + "…"
+  embed.set_field_at(3, name="Roles ("+str(len(guild.roles))+")", value=f1va, inline=False)
+  await ctx.send(embed=embed)
+
+@slash.subcommand(base = "server", name = "regular", description = "Shows banned members and valid invites for the current server.")
+async def _server_regular(ctx):
+  guild=ctx.guild
+  ti=guild.name
+  desc="Created at "+guild.created_at.strftime("%d %b, %Y (%a) %H:%M:%S")+" by "+str(guild.owner.mention)+f"\nRegion: "+str(guild.region)+f"\n[Server Icon]("+str(guild.icon_url)+")"
+  embed=discord.Embed(title=ti, description=desc)
+  embed.set_author(name="Server Information",icon_url=guild.icon_url)
+  try:
+    f1vlist=await guild.bans()
+    f1v=""
+    for count in f1vlist:
+      f1v=f1v+count.user.mention+" "
+    f1v=f1v[:-1]
+  except:
+    f1v="Unable to get banned members without Ban-members permission."
+  if len(f1v)!=0:
+    embed.add_field(name="Banned Users", value=f1v, inline=True)
+  try:
+    f2vlist=await guild.invites()
+    f2v=""
+    for count in f2vlist:
+      f2v=f2v+count.url+" "
+    f2v=f2v[:-1]
+  except:
+    f2v="Unable to get invites without Manage-server permission."
+  if len(f2v)!=0:
+    embed.add_field(name="Invites", value=f2v, inline=True)
+  await ctx.send(embed=embed)
 
 @slash.slash(name="role", description="Shows information about a role.", options=[create_option(name="Role",description="The role to show information for.",option_type=8,required=True)])
-async def _rple(ctx, role:discord.Role):
+async def _role(ctx, role:discord.Role):
   ti="Role Information: "+role.name
   if role==None:
     role=ctx.authortop_role
