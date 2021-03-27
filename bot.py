@@ -2240,7 +2240,10 @@ async def _kick(ctx, user: discord.Member, reason="No reason provided"):
     embed = discord.Embed(title=f"{user.name} was kicked.", description=f"Reason: {reason}\nBy: {ctx.author.mention}")
     await ctx.send(embed=embed)
     embed = discord.Embed(title=f"You were kicked from the server.", description=f"Reason: {reason}\nBy: {ctx.author.mention}")
-    await user.send(embed=embed)
+    try:
+      await user.send(embed=embed)
+    except:
+      1
     await user.kick(reason=reason)
   else:
     await ctx.send("You don't have the required permissions.")
