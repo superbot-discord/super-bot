@@ -2212,7 +2212,7 @@ async def on_ready():
 
 #guild_ids=[744520955585626132, 814407577042944040]
 
-@slash.slash(name="purge", description="Purge a number of messages in the current channel.", options=[create_option(name="Number of messages to purge",description="Amount of messages to purge in the current channel.",option_type=4,required=True)])
+@slash.slash(name="purge", description="Purge a number of messages in the current channel.", options=[create_option(name="Number",description="Amount of messages to purge in the current channel.",option_type=4,required=True)])
 async def _purge(ctx, num:int):
   if ctx.author.permissions_in(ctx.channel).manage_messages or bot_admins.count(ctx.author.id)!=0:
     await ctx.channel.purge(limit=num+1)
@@ -2220,7 +2220,7 @@ async def _purge(ctx, num:int):
   else:
     await ctx.send("You don't have the required permissions.")
 
-@slash.slash(name="ban", description="Bans a member.", options=[create_option(name="Member to ban",description="The member to ban.",option_type=6,required=True), create_option(name="Days of messages to purge",description="The number of days of messages to purge from the user.",option_type=4,required=False), create_option(name="Reason",description="The reason to ban the member, which shows in the audit logs.",option_type=3,required=False)])
+@slash.slash(name="ban", description="Bans a member.", options=[create_option(name="Member",description="The member to ban.",option_type=6,required=True), create_option(name="Days of messages to purge",description="The number of days of messages to purge from the user.",option_type=4,required=False), create_option(name="Reason",description="The reason to ban the member, which shows in the audit logs.",option_type=3,required=False)])
 async def _ban(ctx, user: discord.User, delete : int =0, reason="No reason provided"):
   if ctx.author.permissions_in(ctx.channel).ban_members or bot_admins.count(ctx.author.id)!=0:
     await ctx.guild.ban(user, delete_message_days = delete, reason=reason)
@@ -2234,7 +2234,7 @@ async def _ban(ctx, user: discord.User, delete : int =0, reason="No reason provi
   else:
     await ctx.send("You don't have the required permissions.")
 
-@slash.slash(name="kick", description="Kicks a member.", options=[create_option(name="Member to kick",description="The member to kick.",option_type=6,required=True), create_option(name="Reason",description="The reason to kick the member, which shows in the audit logs.",option_type=3,required=False)])
+@slash.slash(name="kick", description="Kicks a member.", options=[create_option(name="Member",description="The member to kick.",option_type=6,required=True), create_option(name="Reason",description="The reason to kick the member, which shows in the audit logs.",option_type=3,required=False)])
 async def _kick(ctx, user: discord.Member, reason="No reason provided"):
   if ctx.author.permissions_in(ctx.channel).kick_members or bot_admins.count(ctx.author.id)!=0:
     embed = discord.Embed(title=f"{user.name} was kicked.", description=f"Reason: {reason}\nBy: {ctx.author.mention}")
