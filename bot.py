@@ -2524,5 +2524,17 @@ async def _channel(ctx, channel:discord.abc.GuildChannel):
       embed.add_field(name="Current Members", value=f5v, inline=True)
   await ctx.send(embed=embed)
 
+@slash.slash(name="test", description="Testing command.")
+async def _test(ctx):
+  1
+
+@slash.subcommand(base = "test", name = "s1", description = "Subcommand 1")
+async def _test_s1(ctx):
+  await ctx.send("You picked subcommand 1.")
+
+@slash.subcommand(base = "test", name = "s2", description = "Subcommand 2")
+async def _test_s2(ctx):
+  await ctx.send("You picked subcommand 2.")
+
 bot.run('Nzk2Njg2MzYzNjA0NjgwNzU1.X_bh_g.8LrZQX__nLUKyXDgpOt5bLnEN7Q')
 #client.run('Nzk2Njg2MzYzNjA0NjgwNzU1.X_bh_g.8LrZQX__nLUKyXDgpOt5bLnEN7Q')
