@@ -2212,7 +2212,40 @@ async def on_ready():
 
 #guild_ids=[744520955585626132, 814407577042944040]
 
-@slash.slash(name="slowmode", options=[create_option(name="Slowmode",description="Adjust the slowmode threshold for the current channel.",option_type=4,required=True)])
+@slash.slash(name="purge", description="Purge a number of messages in the current channel.", options=[create_option(name="Number of messages to purge",description="Amount of messages to purge in the current channel.",option_type=4,required=True)])
+async def _purge(ctx, num:int):
+  if ctx.author.permissions_in(ctx.channel).manage_messages or bot_admins.count(ctx.author.id)!=0:
+    await ctx.channel.purge(limit=num+1)
+    await ctx.send("Purging completed.", delete_after = 5)
+  else:
+    await ctx.send("You don't have the required permissions.")
+
+@slash.slash(name="ban", description="Bans a member.", options=[create_option(name="Member to ban",description="The member to ban.",option_type=6,required=True), create_option(name="Days of messages to purge",description="The number of days of messages to purge from the user.",option_type=4,required=False), create_option(name="Reason",description="The reason to ban the member, which shows in the audit logs.",option_type=3,required=False)])
+async def _ban(ctx, user: discord.User, delete : int =0, reason="No reason provided"):
+  if ctx.author.permissions_in(ctx.channel).ban_members or bot_admins.count(ctx.author.id)!=0:
+    await ctx.guild.ban(user, delete_message_days = delete, reason=reason)
+    embed1 = discord.Embed(title=f"You were banned from the server.", description=f"Reason: {reason}\nBy: {ctx.author.mention}")
+    try:
+      await user.send(embed=embed1)
+    except:
+      1
+    embed2 = discord.Embed(title=f"{user.name} was banned.", description=f"Reason: {reason}\nBy: {ctx.author.mention}")
+    await ctx.send(embed=embed2)
+  else:
+    await ctx.send("You don't have the required permissions.")
+
+@slash.slash(name="kick", description="Kicks a member.", options=[create_option(name="Member to kick",description="The member to kick.",option_type=6,required=True), create_option(name="Reason",description="The reason to kick the member, which shows in the audit logs.",option_type=3,required=False)])
+async def _kick(ctx, user: discord.Member, reason="No reason provided"):
+  if ctx.author.permissions_in(ctx.channel).kick_members or bot_admins.count(ctx.author.id)!=0:
+    embed = discord.Embed(title=f"{user.name} was kicked.", description=f"Reason: {reason}\nBy: {ctx.author.mention}")
+    await ctx.send(embed=embed)
+    embed = discord.Embed(title=f"You were kicked from the server.", description=f"Reason: {reason}\nBy: {ctx.author.mention}")
+    await user.send(embed=embed)
+    await user.kick(reason=reason)
+  else:
+    await ctx.send("You don't have the required permissions.")
+
+@slash.slash(name="slowmode", description="Set the slowmode delay for the current channel.", options=[create_option(name="Delay (seconds)",description="Adjust the slowmode threshold for the current channel.",option_type=4,required=True)])
 async def _slowmode(ctx, time:int):
   if ctx.author.permissions_in(ctx.channel).manage_channels or bot_admins.count(ctx.author.id)!=0:
     if 21600>=time>=0:
@@ -2223,7 +2256,7 @@ async def _slowmode(ctx, time:int):
   else:
     await ctx.send("You do not have the required permissions.")
 
-@slash.slash(name="calc", options=[create_option(name="Equation",description="A math equation to calculate.",option_type=3,required=True)])
+@slash.slash(name="calc", description="Evaluate a mathematical equation..", options=[create_option(name="Equation",description="A math equation to calculate.",option_type=3,required=True)])
 async def _calc(ctx, equation:str):
   output = botcalc(equation)
   if output == "Add_Reaction":
@@ -2231,7 +2264,7 @@ async def _calc(ctx, equation:str):
   else:
     await ctx.send(output)
 
-@slash.slash(name="random", options=[create_option(name="Lower",description="The lower bound.",option_type=4,required=True), create_option(name="Upper",description="The upper bound.",option_type=4,required=True)])
+@slash.slash(name="random", description="Draws a random integer between two numbers.", options=[create_option(name="Lower",description="The lower bound.",option_type=4,required=True), create_option(name="Upper",description="The upper bound.",option_type=4,required=True)])
 async def _random(ctx, lower:int, upper:int):
   ti="Random number between "+str(lower)+" and "+str(upper)
   rand=ra.randint(lower,upper)
@@ -2239,7 +2272,7 @@ async def _random(ctx, lower:int, upper:int):
   embed=discord.Embed(title=ti, description=desc)
   await ctx.send(embed=embed)
 
-@slash.slash(name="server", options=[create_option(name="Mode",description="The desired mode.",option_type=3,choices=[create_choice(name="Mod",value="View current invites and banned members."),create_choice(name="Regular",value="View regular information, such as roles and members.")], required=True)])
+@slash.slash(name="server", description="Shows information about the current server.", options=[create_option(name="Mode",description="The desired mode.",option_type=3,choices=[create_choice(name="Mod",value="View current invites and banned members."),create_choice(name="Regular",value="View regular information, such as roles and members.")], required=True)])
 async def _server(ctx, text):
   guild=ctx.guild
   ti=guild.name
@@ -2388,7 +2421,7 @@ async def _server(ctx, text):
     embed.set_field_at(3, name="Roles ("+str(len(guild.roles))+")", value=f1va, inline=False)
     await ctx.send(embed=embed)
 
-@slash.slash(name="role", options=[create_option(name="Role",description="The role to show information for.",option_type=8,required=True)])
+@slash.slash(name="role", description="Shows information about a role.", options=[create_option(name="Role",description="The role to show information for.",option_type=8,required=True)])
 async def _rple(ctx, role:discord.Role):
   ti="Role Information: "+role.name
   if role==None:
@@ -2432,7 +2465,7 @@ async def _rple(ctx, role:discord.Role):
   #embed.add_field(name="Channel Permissions", value=f3vb, inline=False)
   await ctx.send(embed=embed)
 
-@slash.slash(name="channel", options=[create_option(name="Channel",description="The channel to show information for.",option_type=7,required=True)])
+@slash.slash(name="channel", description="Shows information about a channel.", options=[create_option(name="Channel",description="The channel to show information for.",option_type=7,required=True)])
 async def _channel(ctx, channel:discord.abc.GuildChannel):
   if channel.type == discord.ChannelType.text:
     ti="Channel Information: "+channel.name
