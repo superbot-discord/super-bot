@@ -2220,7 +2220,7 @@ async def _purge(ctx, num:int):
   else:
     await ctx.send("You don't have the required permissions.")
 
-@slash.slash(name="ban", description="Bans a member.", options=[create_option(name="Member",description="The member to ban.",option_type=6,required=True), create_option(name="Days of messages to purge",description="The number of days of messages to purge from the user.",option_type=4,required=False), create_option(name="Reason",description="The reason to ban the member, which shows in the audit logs.",option_type=3,required=False)])
+@slash.slash(name="ban", description="Bans a member.", options=[create_option(name="Member",description="The member to ban.",option_type=6,required=True), create_option(name="Purge-Days",description="The number of days of messages to purge from the user.",option_type=4,required=False), create_option(name="Reason",description="The reason to ban the member, which shows in the audit logs.",option_type=3,required=False)])
 async def _ban(ctx, user: discord.User, delete : int =0, reason="No reason provided"):
   if ctx.author.permissions_in(ctx.channel).ban_members or bot_admins.count(ctx.author.id)!=0:
     await ctx.guild.ban(user, delete_message_days = delete, reason=reason)
@@ -2245,7 +2245,7 @@ async def _kick(ctx, user: discord.Member, reason="No reason provided"):
   else:
     await ctx.send("You don't have the required permissions.")
 
-@slash.slash(name="slowmode", description="Set the slowmode delay for the current channel.", options=[create_option(name="Delay (seconds)",description="Adjust the slowmode threshold for the current channel.",option_type=4,required=True)])
+@slash.slash(name="slowmode", description="Set the slowmode delay for the current channel.", options=[create_option(name="Delay",description="Adjust the slowmode threshold for the current channel.",option_type=4,required=True)])
 async def _slowmode(ctx, time:int):
   if ctx.author.permissions_in(ctx.channel).manage_channels or bot_admins.count(ctx.author.id)!=0:
     if 21600>=time>=0:
