@@ -1814,8 +1814,8 @@ async def channel(ctx, channel: discord.TextChannel=None):
 
 @bot.command()
 async def message(ctx, message: discord.Message=None):
-  if channel==None:
-    channel=ctx.message
+  if message==None:
+    message=ctx.message
   ti=f"[Message Information]({message.jump_url})"
   desc=f"Sent by {message.author.mention} at {message.created_at.strftime('%d %b, %Y (%a) %H:%M:%S')}"
   f0vraw = message.reactions
