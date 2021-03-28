@@ -569,13 +569,22 @@ async def simpcolor(ctx, *, name):
     ax.set_facecolor("w")
     ax.imshow(gradient, aspect='auto', cmap=cmapv)
     plt.savefig("color.png", transparent=True)
+    file = discord.File("color.png")
+    await ctx.send(file=file)
   except:
-    plt.setp(ax.spines.values(), color=name)
-    ax.set_facecolor(name)
-    plt.savefig("color.png", transparent=True)
-    plt.clf()
-  file = discord.File("color.png")
-  await ctx.send(file=file)
+    try:
+      plt.clf()
+      fig, ax = plt.subplots()
+      ax.axes.get_xaxis().set_visible(False)
+      ax.axes.get_yaxis().set_visible(False)
+      plt.setp(ax.spines.values(), color=name)
+      ax.set_facecolor(name)
+      plt.savefig("color.png", transparent=True)
+      plt.clf()
+      file = discord.File("color.png")
+      await ctx.send(file=file)
+    except:
+      await ctx.send("Invalid colour name, please try again.")
 
 @bot.command(alias=["snowgraph", "snowflake"])
 async def snow(ctx, recursion = 10):  
@@ -2532,17 +2541,33 @@ async def _channel(ctx, channel:discord.abc.GuildChannel):
       embed.add_field(name="Current Members", value=f5v, inline=True)
   await ctx.send(embed=embed)
 
-@slash.slash(name="test", description="Testing command.")
-async def _test(ctx):
-  1
-
-@slash.subcommand(base = "test", name = "s1", description = "Subcommand 1")
-async def _test_s1(ctx):
-  await ctx.send("You picked subcommand 1.")
-
-@slash.subcommand(base = "test", name = "s2", description = "Subcommand 2")
-async def _test_s2(ctx):
-  await ctx.send("You picked subcommand 2.")
-
+@slash.slash(name="simplecolor", description=".")
+async def _simplecolor(ctx):
+  fig, ax = plt.subplots()
+  ax.axes.get_xaxis().set_visible(False)
+  ax.axes.get_yaxis().set_visible(False)
+  try:
+    cmapv = plt.get_cmap(name)
+    plt.setp(ax.spines.values(), color="w")
+    gradient = np.vstack((np.linspace(0, 1, 256), np.linspace(0, 1, 256)))
+    ax.set_facecolor("w")
+    ax.imshow(gradient, aspect='auto', cmap=cmapv)
+    plt.savefig("color.png", transparent=True)
+    file = discord.File("color.png")
+    await ctx.send(file=file)
+  except:
+    try:
+      plt.clf()
+      fig, ax = plt.subplots()
+      ax.axes.get_xaxis().set_visible(False)
+      ax.axes.get_yaxis().set_visible(False)
+      plt.setp(ax.spines.values(), color=name)
+      ax.set_facecolor(name)
+      plt.savefig("color.png", transparent=True)
+      plt.clf()
+      file = discord.File("color.png")
+      await ctx.send(file=file)
+    except:
+      await ctx.send("Invalid colour name, please try again.")
 bot.run('Nzk2Njg2MzYzNjA0NjgwNzU1.X_bh_g.8LrZQX__nLUKyXDgpOt5bLnEN7Q')
 #client.run('Nzk2Njg2MzYzNjA0NjgwNzU1.X_bh_g.8LrZQX__nLUKyXDgpOt5bLnEN7Q')
