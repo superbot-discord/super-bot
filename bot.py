@@ -1818,6 +1818,8 @@ async def message(ctx, message: discord.Message=None):
     message=ctx.message
   ti=f"[Message Information]({message.jump_url})"
   desc=f"Sent by {message.author.mention} at {message.created_at.strftime('%d %b, %Y (%a) %H:%M:%S')}"
+  if message.edited_at != None:
+    desc += f"Edited at {message.edited_at.strftime('%d %b, %Y (%a) %H:%M:%S')}"
   f0vraw = message.reactions
   f0v = ""
   for count in f0vraw:
@@ -1844,8 +1846,7 @@ async def message(ctx, message: discord.Message=None):
   f4v = ""
   for count in f4vraw:
     f4v += count.mention + " "
-  if message.edited_at != None:
-    desc += f"Edited at {message.edited_at.strftime('%d %b, %Y (%a) %H:%M:%S')}"
+  embed=discord.Embed(title=ti, description=desc)
   embed.add_field(name="Content", value=message.content[:500], inline=False)
   embed.add_field(name="From channel", value=message.channel.mentiom, inline=True)
   if message.webhook_id != None:
