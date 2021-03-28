@@ -2542,6 +2542,7 @@ async def _channel(ctx, channel:discord.abc.GuildChannel):
 
 @slash.slash(name="simplecolor", description="Gets information about a named color.", options=[create_option(name="Colour",description="The name of the colour.",option_type=4,required=True)])
 async def _simplecolor(ctx):
+  plt.clf()
   fig, ax = plt.subplots()
   ax.axes.get_xaxis().set_visible(False)
   ax.axes.get_yaxis().set_visible(False)
@@ -2556,13 +2557,16 @@ async def _simplecolor(ctx):
     await ctx.send(file=file)
   except:
     try:
+      bcs = plt.gca()
       plt.setp(ax.spines.values(), color=name)
+      fig.set_facecolor(name)
       ax.set_facecolor(name)
-      plt.savefig("color.png", transparent=True)
-      plt.clf()
+      plt.savefig("color.png", transparent=False)
       file = discord.File("color.png")
       await ctx.send(file=file)
     except:
+      plt.clf()
       await ctx.send("Invalid colour name, please try again.")
+
 bot.run('Nzk2Njg2MzYzNjA0NjgwNzU1.X_bh_g.8LrZQX__nLUKyXDgpOt5bLnEN7Q')
 #client.run('Nzk2Njg2MzYzNjA0NjgwNzU1.X_bh_g.8LrZQX__nLUKyXDgpOt5bLnEN7Q')
