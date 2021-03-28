@@ -1892,6 +1892,7 @@ async def message(ctx, message: discord.Message=None):
     embed.add_field(name="Role mentions ("+str(len(f3vraw))+")", value=f3v, inline=False)
   if len(f4vraw) != 0:
     embed.add_field(name="User mentions ("+str(len(f4vraw))+")", value=f4v, inline=False)
+  await ctx.send(embed=embed)
 
 @bot.command()
 async def voicechannel(ctx, channel: discord.VoiceChannel):
