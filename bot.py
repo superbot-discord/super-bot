@@ -578,10 +578,10 @@ async def simpcolor(ctx, *, name):
       plt.setp(ax.spines.values(), color=name)
       ax.set_facecolor(name)
       plt.savefig("color.png", transparent=True)
-      plt.clf()
       file = discord.File("color.png")
       await ctx.send(file=file)
     except:
+      plt.clf()
       await ctx.send("Invalid colour name, please try again.")
 
 @bot.command(alias=["snowgraph", "snowflake"])
