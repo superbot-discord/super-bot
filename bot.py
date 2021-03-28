@@ -1866,9 +1866,9 @@ async def message(ctx, message: discord.Message=None):
     embed.add_field(name="System message", value="This is a system message indicating that someone changed the group's name.", inline=False)
   elif message.type == discord.MessageType.channel_icon_change:
     embed.add_field(name="System message", value="This is a system message indicating that someone changed the group's icon.", inline=False)
-  elif message.type == discord.MessageType.channel_pins_add:
+  elif message.type == discord.MessageType.pins_add:
     embed.add_field(name="System message", value="This is a system message indicating that someone pinned a message.", inline=False)
-  elif message.type == discord.MessageType.channel_new_member:
+  elif message.type == discord.MessageType.new_member:
     embed.add_field(name="System message", value="This is a system message indicating that someone joined the server.", inline=False)
   elif message.type == discord.MessageType.premium_guild_subscription:
     embed.add_field(name="System message", value="This is a system message indicating that someone nitro-boosted the server.", inline=False)
