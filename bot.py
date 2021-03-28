@@ -574,6 +574,7 @@ async def simpcolor(ctx, *, name):
   except:
     try:
       plt.clf()
+      bcs = plt.gca()
       plt.setp(ax.spines.values(), color=name)
       ax.set_facecolor(name)
       plt.savefig("color.png", transparent=True)
