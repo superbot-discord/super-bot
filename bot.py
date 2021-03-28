@@ -567,6 +567,7 @@ async def simpcolor(ctx, *, name):
     cmapv = plt.get_cmap(name)
     plt.setp(ax.spines.values(), color="w")
     gradient = np.vstack((np.linspace(0, 1, 256), np.linspace(0, 1, 256)))
+    fig.set_facecolor("w")
     ax.set_facecolor("w")
     ax.imshow(gradient, aspect='auto', cmap=cmapv)
     plt.savefig("color.png", transparent=True)
