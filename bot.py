@@ -2391,20 +2391,20 @@ async def _server_regular(ctx):
       embed.add_field(name="Emojis", value=f11v, inline=True)
   except:
     1
-try:
-  await ctx.send(embed=embed)
-except:
-  f1va = ""
-  for count in f1valist:
-    if len(f1va + count.name) > 500:
-      break
-    f1va = f1va + count.name+", "
-  f1va = f1va [:-2] + "…"
-  embed.set_field_at(3, name="Roles ("+str(len(guild.roles))+")", value=f1va, inline=False)
-  await ctx.send(embed=embed)
+  try:
+    await ctx.send(embed=embed)
+  except:
+    f1va = ""
+    for count in f1valist:
+      if len(f1va + count.name) > 500:
+        break
+      f1va = f1va + count.name+", "
+    f1va = f1va [:-2] + "…"
+    embed.set_field_at(3, name="Roles ("+str(len(guild.roles))+")", value=f1va, inline=False)
+    await ctx.send(embed=embed)
 
-@slash.subcommand(base = "server", name = "regular", description = "Shows banned members and valid invites for the current server.")
-async def _server_regular(ctx):
+@slash.subcommand(base = "server", name = "mod", description = "Shows banned members and valid invites for the current server.")
+async def _server_mod(ctx):
   guild=ctx.guild
   ti=guild.name
   desc="Created at "+guild.created_at.strftime("%d %b, %Y (%a) %H:%M:%S")+" by "+str(guild.owner.mention)+f"\nRegion: "+str(guild.region)+f"\n[Server Icon]("+str(guild.icon_url)+")"
