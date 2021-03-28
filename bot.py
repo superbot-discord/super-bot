@@ -1856,9 +1856,9 @@ async def message(ctx, message: discord.Message=None):
   if message.mention_everyone:
     embed.add_field(name="@everyone", value="This message mentioned everyone.", inline=True)
   embed.add_field(name="ID", value=str(message.id), inline=True)
-  if message.type == discord.MessageType.recipent_add:
+  if message.type == discord.MessageType.recipient_add:
     embed.add_field(name="System message", value="This is a system message indicating that a recipient has been added to the group.", inline=False)
-  elif message.type == discord.MessageType.recipent_remove:
+  elif message.type == discord.MessageType.recipient_remove:
     embed.add_field(name="System message", value="This is a system message indicating that a recipient has been removed from the group.", inline=False)
   elif message.type == discord.MessageType.call:
     embed.add_field(name="System message", value="This is a system message indicating that someone missed or started a call.", inline=False)
