@@ -574,9 +574,6 @@ async def simpcolor(ctx, *, name):
   except:
     try:
       plt.clf()
-      fig, ax = plt.subplots()
-      ax.axes.get_xaxis().set_visible(False)
-      ax.axes.get_yaxis().set_visible(False)
       plt.setp(ax.spines.values(), color=name)
       ax.set_facecolor(name)
       plt.savefig("color.png", transparent=True)
@@ -2541,7 +2538,7 @@ async def _channel(ctx, channel:discord.abc.GuildChannel):
       embed.add_field(name="Current Members", value=f5v, inline=True)
   await ctx.send(embed=embed)
 
-@slash.slash(name="simplecolor", description=".")
+@slash.slash(name="simplecolor", description="Gets information about a named color.", options=[create_option(name="Colour",description="The name of the colour.",option_type=4,required=True)])
 async def _simplecolor(ctx):
   fig, ax = plt.subplots()
   ax.axes.get_xaxis().set_visible(False)
@@ -2557,10 +2554,6 @@ async def _simplecolor(ctx):
     await ctx.send(file=file)
   except:
     try:
-      plt.clf()
-      fig, ax = plt.subplots()
-      ax.axes.get_xaxis().set_visible(False)
-      ax.axes.get_yaxis().set_visible(False)
       plt.setp(ax.spines.values(), color=name)
       ax.set_facecolor(name)
       plt.savefig("color.png", transparent=True)
