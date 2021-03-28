@@ -1803,16 +1803,94 @@ async def channel(ctx, channel: discord.TextChannel=None):
   f5v=f5v[:-2]
   embed.add_field(name="Created", value=f0v, inline=True)
   if channel.is_nsfw()==True:
-    f1v="This is an NSFW channel."
-    embed.add_field(name="NSFW", value=f1v, inline=True)
+    embed.add_field(name="NSFW", value="This is an NSFW channel.", inline=True)
   if channel.is_news()==True:
-    f2v="This is a news channel."
-    embed.add_field(name="NSFW", value=f2v, inline=True)
+    embed.add_field(name="News", value="This is a news channel.", inline=True)
   embed.add_field(name="Topic", value=f3v, inline=True)
   embed.add_field(name="Category", value=f4v, inline=True)
   if len(f5vlist)!=0:
     embed.add_field(name="Invites", value=f5v, inline=False)
   await ctx.send(embed=embed)
+
+@bot.command()
+async def message(ctx, message: discord.Message=None):
+  if channel==None:
+    channel=ctx.message
+  ti=f"[Message Information]({message.jump_url})"
+  desc=f"Sent by {message.author.mention} at {message.created_at.strftime('%d %b, %Y (%a) %H:%M:%S')}"
+  f0vraw = message.reactions
+  f0v = ""
+  for count in f0vraw:
+    if count.custom_emoji:
+      f0v += f":{count.emoji}:   ("+str(count.count)+")"
+    else:
+      f0v += f"{count.emoji}   ("+str(count.count)+")"
+  f1vraw = message.attachments
+  f1v = ""
+  for count in f1vraw:
+    if count.spoiler:
+      f1v += f"[{count.filename}]({count.url}) (" + str(count.size/1024) + "MB, marked as spoiler)"
+    else:
+      f1v += f"[{count.filename}]({count.url}) (" + str(count.size/1024) + "MB)"
+  f2vraw = message.channel_mentions
+  f2v = ""
+  for count in f2vraw:
+    f2v += count.mention + " "
+  f3vraw = message.role_mentions
+  f3v = ""
+  for count in f3vraw:
+    f3v += count.mention + " "
+  f4vraw = message.mentions
+  f4v = ""
+  for count in f4vraw:
+    f4v += count.mention + " "
+  if message.edited_at != None:
+    desc += f"Edited at {message.edited_at.strftime('%d %b, %Y (%a) %H:%M:%S')}"
+  embed.add_field(name="Content", value=message.content[:500], inline=False)
+  embed.add_field(name="From channel", value=message.channel.mentiom, inline=True)
+  if message.webhook_id != None:
+    embed.add_field(name="Webhook message", value="This message is sent by a webhook.", inline=True)
+  if message.pinned:
+    embed.add_field(name="Pinned", value="This message is pinned.", inline=True)
+  if message.mention_everyone:
+    embed.add_field(name="@everyone", value="This message mentioned everyone.", inline=True)
+  embed.add_field(name="ID", value=str(message.id), inline=True)
+  if message.type.recipent_add:
+    embed.add_field(name="System message", value="This is a system message indicating that a recipient has been added to the group.", inline=False)
+  elif message.type.recipent_remove:
+    embed.add_field(name="System message", value="This is a system message indicating that a recipient has been removed from the group.", inline=False)
+  elif message.type.call:
+    embed.add_field(name="System message", value="This is a system message indicating that someone missed or started a call.", inline=False)
+  elif message.type.channel_name_change:
+    embed.add_field(name="System message", value="This is a system message indicating that someone changed the group's name.", inline=False)
+  elif message.type.channel_icon_change:
+    embed.add_field(name="System message", value="This is a system message indicating that someone changed the group's icon.", inline=False)
+  elif message.type.channel_pins_add:
+    embed.add_field(name="System message", value="This is a system message indicating that someone pinned a message.", inline=False)
+  elif message.type.channel_new_member:
+    embed.add_field(name="System message", value="This is a system message indicating that someone joined the server.", inline=False)
+  elif message.type.premium_guild_subscription:
+    embed.add_field(name="System message", value="This is a system message indicating that someone nitro-boosted the server.", inline=False)
+  elif message.type.premium_guild_tier_1:
+    embed.add_field(name="System message", value="This is a system message indicating that someone nitro-boosted the server. It is now level 1.", inline=False)
+  elif message.type.premium_guild_tier_2:
+    embed.add_field(name="System message", value="This is a system message indicating that someone nitro-boosted the server. It is now level 2.", inline=False)
+  elif message.type.premium_guild_tier_3:
+    embed.add_field(name="System message", value="This is a system message indicating that someone nitro-boosted the server. It is now level 3.", inline=False)
+  elif message.type.channel_follow_add:
+    embed.add_field(name="System message", value="This is a system message indicating that someone followed another server's announcement.", inline=False)
+  if message.application != None:
+    embed.add_field(name=message.application[name], value=f"This message is created by {message.application[name]}.\n{message.application[description]}", inline=False)
+  if len(f0vraw) != 0:
+    embed.add_field(name="Reactions ("+str(len(f0vraw))+")", value=f0v, inline=False)
+  if len(f1vraw) != 0:
+    embed.add_field(name="Attachments ("+str(len(f1vraw))+")", value=f1v, inline=False)
+  if len(f2vraw) != 0:
+    embed.add_field(name="Channel mentions ("+str(len(f2vraw))+")", value=f2v, inline=False)
+  if len(f3vraw) != 0:
+    embed.add_field(name="Role mentions ("+str(len(f3vraw))+")", value=f3v, inline=False)
+  if len(f4vraw) != 0:
+    embed.add_field(name="User mentions ("+str(len(f4vraw))+")", value=f4v, inline=False)
 
 @bot.command()
 async def voicechannel(ctx, channel: discord.VoiceChannel):
