@@ -1848,7 +1848,7 @@ async def message(ctx, message: discord.Message=None):
     f4v += count.mention + " "
   embed=discord.Embed(title=ti, description=desc)
   embed.add_field(name="Content", value=message.content[:500], inline=False)
-  embed.add_field(name="From channel", value=message.channel.mentiom, inline=True)
+  embed.add_field(name="From channel", value=message.channel.mention, inline=True)
   if message.webhook_id != None:
     embed.add_field(name="Webhook message", value="This message is sent by a webhook.", inline=True)
   if message.pinned:
