@@ -573,7 +573,6 @@ async def simpcolor(ctx, *, name):
     await ctx.send(file=file)
   except:
     try:
-      plt.clf()
       bcs = plt.gca()
       #plt.setp(ax.spines.values(), color=name)
       fig.set_facecolor(name)
