@@ -1856,29 +1856,29 @@ async def message(ctx, message: discord.Message=None):
   if message.mention_everyone:
     embed.add_field(name="@everyone", value="This message mentioned everyone.", inline=True)
   embed.add_field(name="ID", value=str(message.id), inline=True)
-  if message.type.recipent_add:
+  if message.type == discord.MessageType.recipent_add:
     embed.add_field(name="System message", value="This is a system message indicating that a recipient has been added to the group.", inline=False)
-  elif message.type.recipent_remove:
+  elif message.type == discord.MessageType.recipent_remove:
     embed.add_field(name="System message", value="This is a system message indicating that a recipient has been removed from the group.", inline=False)
-  elif message.type.call:
+  elif message.type == discord.MessageType.call:
     embed.add_field(name="System message", value="This is a system message indicating that someone missed or started a call.", inline=False)
-  elif message.type.channel_name_change:
+  elif message.type == discord.MessageType.channel_name_change:
     embed.add_field(name="System message", value="This is a system message indicating that someone changed the group's name.", inline=False)
-  elif message.type.channel_icon_change:
+  elif message.type == discord.MessageType.channel_icon_change:
     embed.add_field(name="System message", value="This is a system message indicating that someone changed the group's icon.", inline=False)
-  elif message.type.channel_pins_add:
+  elif message.type == discord.MessageType.channel_pins_add:
     embed.add_field(name="System message", value="This is a system message indicating that someone pinned a message.", inline=False)
-  elif message.type.channel_new_member:
+  elif message.type == discord.MessageType.channel_new_member:
     embed.add_field(name="System message", value="This is a system message indicating that someone joined the server.", inline=False)
-  elif message.type.premium_guild_subscription:
+  elif message.type == discord.MessageType.premium_guild_subscription:
     embed.add_field(name="System message", value="This is a system message indicating that someone nitro-boosted the server.", inline=False)
-  elif message.type.premium_guild_tier_1:
+  elif message.type == discord.MessageType.premium_guild_tier_1:
     embed.add_field(name="System message", value="This is a system message indicating that someone nitro-boosted the server. It is now level 1.", inline=False)
-  elif message.type.premium_guild_tier_2:
+  elif message.type == discord.MessageType.premium_guild_tier_2:
     embed.add_field(name="System message", value="This is a system message indicating that someone nitro-boosted the server. It is now level 2.", inline=False)
-  elif message.type.premium_guild_tier_3:
+  elif message.type == discord.MessageType.premium_guild_tier_3:
     embed.add_field(name="System message", value="This is a system message indicating that someone nitro-boosted the server. It is now level 3.", inline=False)
-  elif message.type.channel_follow_add:
+  elif message.type == discord.MessageType.channel_follow_add:
     embed.add_field(name="System message", value="This is a system message indicating that someone followed another server's announcement.", inline=False)
   if message.application != None:
     embed.add_field(name=message.application[name], value=f"This message is created by {message.application[name]}.\n{message.application[description]}", inline=False)
