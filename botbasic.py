@@ -320,7 +320,7 @@ Need help? check the [documentation](https://github.com/johann-lau/Bot#bot-docum
   """
   embed=discord.Embed(title=ti, description=desc)
   if cat=="simpcolor":
-    embed.set_image(url="https://media.discordapp.net/attachments/805590030625538078/824568260455956551/Colours.001.jpeg?width=2160&height=810")
+    embed.set_image(url="https://cdn.discordapp.com/attachments/805445135239741512/825827558078808148/Colours.001.jpeg")
   return embed
 
 def botinvite():
