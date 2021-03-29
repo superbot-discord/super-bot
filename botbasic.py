@@ -319,7 +319,7 @@ Plots a [Koch Snowflake](https://en.wikipedia.org/wiki/Koch_snowflake) with the 
 Need help? check the [documentation](https://github.com/johann-lau/Bot#bot-documentation)!
   """
   embed=discord.Embed(title=ti, description=desc)
-  if cat=="simpcolor" or cat=="simplecolor" or cat=="simpcolour" or cat=="simplecolour:
+  if cat=="simpcolor" or cat=="simplecolor" or cat=="simpcolour" or cat=="simplecolour":
     embed.set_image(url="https://u.cubeupload.com/Johann/Colours001.jpeg")
   return embed
 
