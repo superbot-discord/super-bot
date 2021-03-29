@@ -240,7 +240,7 @@ Plots a [Koch Snowflake](https://en.wikipedia.org/wiki/Koch_snowflake) with the 
   elif cat=="nick":
     ti="nick [New nickname]"
     desc=f"Sets the nickname of the bot."
-  elif cat=="simpcolor" or cat=="simplecolor" or cat=="simpcolour" or cat=="simplecolour:
+  elif cat=="simpcolor" or cat=="simplecolor" or cat=="simpcolour" or cat=="simplecolour":
     ti="simpcolor [name]"
     desc="View a color based on its name. A full list of colors:"
   elif cat=="calc":
