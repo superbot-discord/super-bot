@@ -240,7 +240,7 @@ Plots a [Koch Snowflake](https://en.wikipedia.org/wiki/Koch_snowflake) with the 
   elif cat=="nick":
     ti="nick [New nickname]"
     desc=f"Sets the nickname of the bot."
-  elif cat=="simpcolor":
+  elif cat=="simpcolor" or cat=="simplecolor" or cat=="simpcolour" or cat=="simplecolour:
     ti="simpcolor [name]"
     desc="View a color based on its name. A full list of colors:"
   elif cat=="calc":
@@ -319,8 +319,8 @@ Plots a [Koch Snowflake](https://en.wikipedia.org/wiki/Koch_snowflake) with the 
 Need help? check the [documentation](https://github.com/johann-lau/Bot#bot-documentation)!
   """
   embed=discord.Embed(title=ti, description=desc)
-  if cat=="simpcolor":
-    embed.set_image(url="https://cdn.discordapp.com/attachments/805445135239741512/825827558078808148/Colours.001.jpeg")
+  if cat=="simpcolor" or cat=="simplecolor" or cat=="simpcolour" or cat=="simplecolour:
+    embed.set_image(url="https://u.cubeupload.com/Johann/Colours001.jpeg")
   return embed
 
 def botinvite():
