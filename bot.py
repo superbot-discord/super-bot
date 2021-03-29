@@ -1486,7 +1486,7 @@ async def role(ctx,role: discord.Role=None):
     f0v = ""
     for count in memberlist:
       f0v = f0v + count.mention + " "
-    f0v = f0v[:-2]
+    f0v = f0v[:-1]
   mention=role.mentionable
   if mention:
     f1v="Mentionable"
@@ -2536,7 +2536,7 @@ async def _role(ctx, role:discord.Role):
     f0v = ""
     for count in memberlist:
       f0v = f0v + count.mention + " "
-    f0v = f0v[:-2]
+    f0v = f0v[:-1]
   mention=role.mentionable
   if mention:
     f1v="Mentionable"
