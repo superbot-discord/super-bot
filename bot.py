@@ -2622,7 +2622,7 @@ async def _channel(ctx, channel:discord.abc.GuildChannel):
       embed.add_field(name="Current Members", value=f5v, inline=True)
   await ctx.send(embed=embed)
 
-@slash.slash(name="simplecolor", description="Gets information about a named color.", options=[create_option(name="Colour",description="The name of the colour.",option_type=4,required=True)])
+@slash.slash(name="simplecolor", description="Gets information about a named color.", options=[create_option(name="Colour",description="The name of the colour.",option_type=3,required=True)])
 async def _simplecolor(ctx):
   plt.clf()
   fig, ax = plt.subplots()
