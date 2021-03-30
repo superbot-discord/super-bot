@@ -682,7 +682,13 @@ async def status(ctx, member : discord.Member = None):
       if count.emoji==None:
         field=count.name
       else:
-        field=":"+count.emoji.name+": "+count.name
+        try:
+          field=":"+count.emoji.name+": "+count.name
+        except:
+          try:
+            field=count.name
+          except:
+            field=":"+count.emoji.name+":"
       embed.add_field(name="Status", value=field, inline=False)
     if str(count.type)=="ActivityType.playing":
       field=count.name+f"\nStarted: "+str(count.start.strftime("%d %b, %Y (%a) %H:%M:%S"))
@@ -2650,7 +2656,7 @@ async def _simplecolor(ctx):
       plt.clf()
       await ctx.send("Invalid colour name, please try again.")
 
-@slash.slash(name="status", description="Shows the status of a member.", options=[create_option(name="Member",description="The name of the colour.",option_type=6,required=False)])
+@slash.slash(name="status", description="Shows the status of a member.", options=[create_option(name="Member",description="The name of the colour.",option_type=6,required=True)])
 async def _status(ctx, member : discord.Member = None):
   if member==None:
     member=ctx.author
@@ -2664,7 +2670,13 @@ async def _status(ctx, member : discord.Member = None):
       if count.emoji==None:
         field=count.name
       else:
-        field=":"+count.emoji.name+": "+count.name
+        try:
+          field=":"+count.emoji.name+": "+count.name
+        except:
+          try:
+            field=count.name
+          except:
+            field=":"+count.emoji.name+":"
       embed.add_field(name="Status", value=field, inline=False)
     if str(count.type)=="ActivityType.playing":
       field=count.name+f"\nStarted: "+str(count.start.strftime("%d %b, %Y (%a) %H:%M:%S"))
