@@ -90,7 +90,7 @@ def botcalc(arg : str):
       if result.real==result:
         result=result.real
       if result<=1 and result>0:
-        result=result+f"\n({round(result*100, 3)}%)"
+        result=result+f"\n"+str(round(result*100, 5))+"%"
       if len(str(result))>400:
         number=result
         result=str(number)[0]+"."
