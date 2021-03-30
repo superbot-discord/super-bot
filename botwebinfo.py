@@ -26,8 +26,9 @@ def botminecraft(item):
   soup=BeautifulSoup(r.content, features="html.parser")
   table = soup.findAll('table')[0].findAll('tbody')[0]
   desc=str(soup.findAll('p')[9])
-  desc = re.sub(r'/<a href="\/([\s\S]*?)" title="([\s\S]*?)">([\w]*)<\/a>/g', r'[\3](https://minecraft.gamepedia.com/\1)', desc)
-  desc = re.sub(r'/<b>([\s\S]*?)<\/b>/g', r'**\1**', desc)
+  desc = re.sub(r'<a href="\/wiki\/([\s\S]*?)" title="([\s\S]*?)">([\s\S]*?)<\/a>', r'[\3](https://minecraft.gamepedia.com/\1)', desc)
+  desc = re.sub(r'<b>([\s\S]*?)<\/b>', r'**\1**', desc)
+  desc = desc.replace("<p>", "").replace("</p>", "")
   embed = discord.Embed(title = "Minecraft: "+item, description=desc)
   for count in table.findAll('tr'):
     try:
