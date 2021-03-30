@@ -30,12 +30,11 @@ def botminecraft(item):
   desc = re.sub(r'/<b>([\s\S]*?)<\/b>/g', r'**\1**', desc)
   embed = discord.Embed(title = "Minecraft: "+item, description=desc)
   for count in table.findAll('tr'):
-      #try:
-      print(count.findAll('th')[0].findAll('p')[0], "\n", count.findAll('td')[0].findAll('p')[0], "\n\n\n")
-      if count.findAll('td')[0].findAll('p')[0].text.replace(" ", "") != "":
+    try:
+      if count.findAll('td')[0].findAll('p')[0].text.replace(" ", "").replace("\n", "") != "":
         embed.add_field(name=count.findAll('th')[0].findAll('p')[0].text, value=count.findAll('td')[0].findAll('p')[0].text)
-      #except:
-      #  1
+    except:
+      1
   return embed
 
 def bottranslate(langinput, text):
