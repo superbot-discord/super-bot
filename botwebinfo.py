@@ -31,7 +31,7 @@ def botminecraft(item):
   embed = discord.Embed(title = "Minecraft: "+item, desc=desc)
   for count in table.findAll('tr'):
     try:
-      print(count.findAll('td')[0].findAll('p')[0], f"\t\t", count.findAll('td')[0].findAll('p')[0])
+      print(count.findAll('th')[0].findAll('p')[0], f"\n", count.findAll('td')[0].findAll('p')[0], f"\n\n\n")
       if count.findAll('td')[0].findAll('p')[0].text.replace(" ", "") != "":
         embed.add_field(name=count.findAll('th')[0].findAll('p')[0].text, value=count.findAll('td')[0].findAll('p')[0].text)
     except:
