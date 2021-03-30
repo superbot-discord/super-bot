@@ -22,7 +22,7 @@ for count in srclangkeys:
 wikipedia.set_lang("en")
 
 def botminecraft(item):
-  r=requests.get('https://minecraft.gamepedia.com/'+item)
+  r=requests.get('https://minecraft.fandom.com/'+item)
   soup=BeautifulSoup(r.content, features="html.parser")
   table = soup.findAll('table')[0].findAll('tbody')[0]
   desc=str(soup.findAll('p')[9])
@@ -30,6 +30,7 @@ def botminecraft(item):
   desc = re.sub(r'/<b>([\s\S]*?)<\/b>/g', r'**\1**', desc)
   embed = discord.Embed(title = "Minecraft: "+item, desc=desc)
   for count in table.findAll('tr'):
+    print(count.findAll('td')[0]+f"\t\t"+count.findAll('td')[0])
     if count.findAll('td')[0].text.replace(" ", "") != "":
       embed.add_field(name=count.findAll('th')[0].text, value=count.findAll('td')[0].text)
   return embed
