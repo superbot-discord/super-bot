@@ -29,9 +29,9 @@ def botminecraft(item):
   desc = re.sub(r'/<a href="\/([\s\S]*?)" title="([\s\S]*?)">([\w]*)<\/a>/g', r'[\3](https://minecraft.gamepedia.com/\1)', desc)
   desc = re.sub(r'/<b>([\s\S]*?)<\/b>/g', r'**\1**', desc)
   embed = discord.Embed(title = "Minecraft: "+item, desc=desc)
-  for count in len(table.findAll('tr')):
-    if table.findAll('tr')[0].findAll('th')[0].text != "Tool":
-      embed.add_field(name=table.findAll('tr')[0].findAll('th')[0].text, value=table.findAll('tr')[0].findAll('td')[0].text)
+  for count in table.findAll('tr'):
+    if count.findAll('th')[0].text != "Tool":
+      embed.add_field(name=count.findAll('th')[0].text, value=count.findAll('td')[0].text)
   return embed
 
 def bottranslate(langinput, text):
