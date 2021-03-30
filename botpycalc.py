@@ -90,15 +90,16 @@ def botcalc(arg : str):
       if result.real==result:
         result=result.real
       if result<=1 and result>0:
-        result=result+f"\n"+str(round(result*100, 5))+"%"
-      if len(str(result))>400:
+        result=str(result)+f"\n"+str(round(result*100, 5))+"%"
+      elif len(str(result))>100:
+        result="{0:.3E}".format(float(result))
+      else:
+        if len(str(result))>400:
         number=result
         result=str(number)[0]+"."
         for count in range(1,60):
           result=result+str(number)[count]
         result=result+"e+"+str(len(str(number))-1)
-      elif len(str(result))>100:
-        result="{0:.3E}".format(float(result))
       disp = "Result: "+str(result)
       return disp
     elif arg.count("=")!=0 and arg.count("==")==0 and arg.count("!=")==0 and arg.count(">=")==0 and arg.count("<=")==0 and arg.count(">")==0 and arg.count("<")==0 and arg.count("and")==0 and arg.count("or")==0 and arg.count("not")==0:
