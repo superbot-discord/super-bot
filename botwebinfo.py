@@ -25,7 +25,7 @@ def botminecraft(item):
   r=requests.get('https://minecraft.fandom.com/'+item)
   soup=BeautifulSoup(r.content, features="html.parser")
   table = soup.findAll('table')[0].findAll('tbody')[0]
-  desc =str(soup.findAll('div', _class = "mw-parser-output")).findAll('p')[0]
+  desc =str(soup.findAll('div', _class = "mw-parser-output").findAll('p')[0])
   desc = re.sub(r'<a (class=".+?" )?href="\/wiki\/(.+?)" title="(.+?)">(.+?)<\/a>', r'[\4](https://minecraft.fandom.com/\2)', desc)
   desc = re.sub(r'<b>([\s\S]*?)<\/b>', r'**\1**', desc)
   desc = desc.replace("<p>", "").replace("</p>", "")
