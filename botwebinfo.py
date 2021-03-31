@@ -34,9 +34,9 @@ def botminecraft(item):
     desc
   except:
     desc = "No block with that name found."
-  desc = re.sub(r'<a (class=".+?" )?href="\/wiki\/(.+?)" title="(.+?)">(.+?)<\/a>', r'[\4](https://minecraft.fandom.com/\2)', desc)
-  desc = re.sub(r'<b>([\s\S]*?)<\/b>', r'**\1**', desc)
-  desc = re.sub(r'<i>([\s\S]*?)<\/i>', r'*\1*', desc)
+  desc = re.sub(r'/<a (class=".+?" )?href="\/wiki\/(.+?)" title="(.+?)">(.+?)<\/a>/g', r'[\4](https://minecraft.fandom.com/\2)', desc)
+  desc = re.sub(r'/<b>([\s\S]*?)<\/b>/g', r'**\1**', desc)
+  desc = re.sub(r'/<i>([\s\S]*?)<\/i>/g', r'*\1*', desc)
   desc = desc.replace("<p>", "").replace("</p>", "")
   desc = re.sub(r'/<([a-z]+?) (class=".+" )?(title="[\s\S]+?")?>([\s\S]*?)<\/\1>/g', 'test', desc)
   embed = discord.Embed(title = "Minecraft: "+item, description=desc, url='https://minecraft.fandom.com/'+item)
