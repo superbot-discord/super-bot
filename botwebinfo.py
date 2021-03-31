@@ -30,7 +30,7 @@ def botminecraft(item):
   desc = re.sub(r'<b>([\s\S]*?)<\/b>', r'**\1**', desc)
   desc = desc.replace("<p>", "").replace("</p>", "")
   desc = re.sub(r'<([a-z]+?) (class=".+" )?(title="[\s\S]+?")?>([\s\S]*?)<\/\1>', '', desc)
-  embed = discord.Embed(title = "Minecraft: "+item, description=desc. url='https://minecraft.fandom.com/'+item)
+  embed = discord.Embed(title = "Minecraft: "+item, description=desc, url='https://minecraft.fandom.com/'+item)
   for count in table.findAll('tr'):
     if count.findAll('td')[0].text.replace("<p>", "").replace("</p>", "").replace(" ", "").replace("\n", "") != "":
       embed.add_field(name=count.findAll('th')[0].text.replace("<p>", "").replace("</p>", ""), value=count.findAll('td')[0].text.replace("<p>", "").replace("</p>", ""))
