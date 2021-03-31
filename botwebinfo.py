@@ -28,7 +28,7 @@ def botminecraft(item):
   results = soup.findAll("p")
   for count in results:
     if len(count.findAll('b')) != 0:
-      desc = count
+      desc = count.text
       break
   try:
     desc
