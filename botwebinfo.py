@@ -32,7 +32,7 @@ def botminecraft(item):
   embed = discord.Embed(title = "Minecraft: "+item, description=desc)
   for count in table.findAll('tr'):
     if count.findAll('td')[0].text.replace("<p>", "").replace("</p>", "").replace(" ", "").replace("\n", "") != "":
-      embed.add_field(name=count.findAll('th')[0].text.replace("<p>", "").replace("</p>", ""), value=count.findAll('td')[0].text.replace("<p>", "").replace("</p>", "")
+      embed.add_field(name=count.findAll('th')[0].text.replace("<p>", "").replace("</p>", ""), value=count.findAll('td')[0].text.replace("<p>", "").replace("</p>", ""))
   return embed
 
 def bottranslate(langinput, text):
