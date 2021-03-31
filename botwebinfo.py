@@ -28,11 +28,11 @@ def botminecraft(item):
   desc=str(soup.findAll('p')[9])
   desc = re.sub(r'<a href="\/wiki\/([\s\S]*?)" title="([\s\S]*?)">([\s\S]*?)<\/a>', r'[\3](https://minecraft.gamepedia.com/\1)', desc)
   desc = re.sub(r'<b>([\s\S]*?)<\/b>', r'**\1**', desc)
-  desc = desc.replace("<p>", "").replace("</p>", "")
+  desc = desc.replace("<p>", "").replace("<\/p>", "")
   embed = discord.Embed(title = "Minecraft: "+item, description=desc)
   for count in table.findAll('tr'):
     try:
-      if count.findAll('td')[0].findAll('p')[0].text.replace(" ", "").replace("\n", "") != "":
+      if count.findAll('td')[0].text.replace("<p>", "").replace("<\/p>", "").replace(" ", "").replace("\n", "") != "":
         embed.add_field(name=count.findAll('th')[0].findAll('p')[0].text, value=count.findAll('td')[0].findAll('p')[0].text)
     except:
       1
