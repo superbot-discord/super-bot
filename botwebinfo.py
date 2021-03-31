@@ -22,7 +22,7 @@ for count in srclangkeys:
 wikipedia.set_lang("en")
 
 def botminecraft(item):
-  r=requests.get('https://minecraft.fandom.com/'+item)
+  r=requests.get('https://minecraft.fandom.com/wiki/'+item)
   soup=BeautifulSoup(r.content, features="html.parser")
   table = soup.findAll('table')[0].findAll('tbody')[0]
   results = soup.findAll("p")
