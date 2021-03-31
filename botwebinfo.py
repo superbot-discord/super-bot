@@ -25,7 +25,15 @@ def botminecraft(item):
   r=requests.get('https://minecraft.fandom.com/'+item)
   soup=BeautifulSoup(r.content, features="html.parser")
   table = soup.findAll('table')[0].findAll('tbody')[0]
-  desc =str(soup.find('div', {'class' : "mw-parser-output"}).find('p'))
+  results = soup.findAll("p")
+  for count in results:
+    if len(count.findAll('b')) != 0:
+      desc = count
+      break
+  try:
+    desc
+  except:
+    desc = "No block with that name found."
   desc = re.sub(r'<a (class=".+?" )?href="\/wiki\/(.+?)" title="(.+?)">(.+?)<\/a>', r'[\4](https://minecraft.fandom.com/\2)', desc)
   desc = re.sub(r'<b>([\s\S]*?)<\/b>', r'**\1**', desc)
   desc = desc.replace("<p>", "").replace("</p>", "")
