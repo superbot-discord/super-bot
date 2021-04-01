@@ -32,23 +32,27 @@ def botminecraft(item):
       break
   try:
     print(desc)
+    desc = re.sub(r'<a (class=".+?" )?href="\/([\w/]+?)" title="([\s\S]+?)">([\s\S]+?)<\/a>', r'[\4](https://minecraft.fandom.com/\2)', desc)
+    desc = re.sub(r'<b>([\s\S]*?)<\/b>', r'**\1**', desc)
+    desc = re.sub(r'<i>([\s\S]*?)<\/i>', r'*\1*', desc)
+    desc = desc.replace("<p>", "").replace("</p>", "")
+    desc = re.sub(r'<([a-z]+?)( ([a-z]+?)=".*?")*?>(.*?)<\/\1>', '', desc)
+    embed = discord.Embed(title = "Minecraft: "+item, description=desc, url='https://minecraft.fandom.com/wiki/'+item)
+    try:
+      for count in table.findAll('tr'):
+        if count.findAll('td')[0].text.replace("<p>", "").replace("</p>", "").replace(" ", "").replace("\n", "") != "":
+          embed.add_field(name=count.findAll('th')[0].text.replace("<p>", "").replace("</p>", ""), value=count.findAll('td')[0].text.replace("<p>", "").replace("</p>", ""))
+    except:
+      1
+    results = soup.findAll("img")
+    image = str(results[1])
+    image = re.sub(r'<img alt=".*?"( class="thumbimage")? decoding="async" height="[\d]*?" src="([\s\S]*?)" width="[\d]*?"/>', r'\2', image)
+    image = re.sub(r'(https:\/\/static.wikia.nocookie.net\/minecraft_gamepedia\/images\/[\S]*?\/[\S]*?\/[\w]*?\.[\w]{2,5}\/revision\/latest)\/scale-to-width-down\/\d{1,4}\?cb=(\d{5,30})', r'\1?cb=\2&format=original', image)
+    embed.set_image(url = image)
+    return embed
   except:
-    desc = "No block with that name found."
-  desc = re.sub(r'<a (class=".+?" )?href="\/([\w/]+?)" title="([\s\S]+?)">([\s\S]+?)<\/a>', r'[\4](https://minecraft.fandom.com/\2)', desc)
-  desc = re.sub(r'<b>([\s\S]*?)<\/b>', r'**\1**', desc)
-  desc = re.sub(r'<i>([\s\S]*?)<\/i>', r'*\1*', desc)
-  desc = desc.replace("<p>", "").replace("</p>", "")
-  desc = re.sub(r'<([a-z]+?)( ([a-z]+?)=".*?")*?>(.*?)<\/\1>', '', desc)
-  embed = discord.Embed(title = "Minecraft: "+item, description=desc, url='https://minecraft.fandom.com/wiki/'+item)
-  for count in table.findAll('tr'):
-    if count.findAll('td')[0].text.replace("<p>", "").replace("</p>", "").replace(" ", "").replace("\n", "") != "":
-      embed.add_field(name=count.findAll('th')[0].text.replace("<p>", "").replace("</p>", ""), value=count.findAll('td')[0].text.replace("<p>", "").replace("</p>", ""))
-  results = soup.findAll("img")
-  image = str(results[1])
-  image = re.sub(r'<img alt=".*?"( class="thumbimage")? decoding="async" height="[\d]*?" src="([\s\S]*?)" width="[\d]*?"/>', r'\2', image)
-  image = re.sub(r'(https:\/\/static.wikia.nocookie.net\/minecraft_gamepedia\/images\/[\S]*?\/[\S]*?\/[\w]*?\.[\w]{2,5}\/revision\/latest)\/scale-to-width-down\/\d{1,4}\?cb=(\d{5,30})', r'\1?cb=\2&format=original', image)
-  embed.set_image(url = image)
-  return embed
+    desc = "No Wiki page with that name found."
+    return desc
 
 def bottranslate(langinput, text):
   if langinput == "list" or langinput == "all":
