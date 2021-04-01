@@ -44,6 +44,18 @@ def botminecraft(item):
           embed.add_field(name=count.findAll('th')[0].text.replace("<p>", "").replace("</p>", ""), value=count.findAll('td')[0].text.replace("<p>", "").replace("</p>", ""))
     except:
       1
+    for count in soup.findAll("h3"):
+    if ["ID", "Metadata", "Share", "Views", "More", "Search", "Minecraft Wiki", "Games", "Useful pages", "Minecraft links", "Gamepedia", "Tools", "In other languages", "Namespaces", "Variants"].count(count.text.replace("[edit]", "")) == 0:
+      desc = str(count.next_element.next_element.next_element.next_element.next_element.next_element.next_element.next_element.next_element.next_element.next_element).replace("<p>", "").replace("</p>", "")
+      desc = re.sub(r'<a (class=".+?" )?href="\/([\w/]+?)"( title="([\s\S]+?))?">([\s\S]+?)<\/a>', r'[\5](https://minecraft.fandom.com/\4)', desc)
+      desc = re.sub(r'<b>([\s\S]*?)<\/b>', r'**\1**', desc)
+      desc = re.sub(r'<i>([\s\S]*?)<\/i>', r'*\1*', desc)
+      desc = re.sub(r'<([a-z]+?)( ([a-z]+?)=".*?")*?>([\s\S]*?)<\/\1>', '', desc)
+      try:
+        embed.add_field(name=count.text.replace("[edit]", ""), value=desc, inline=False)
+      except:
+        1
+
     results = soup.findAll("img")
     image = str(results[1])
     image = re.sub(r'<img alt=".*?"( class="thumbimage")? decoding="async" height="[\d]*?" src="([\s\S]*?)" width="[\d]*?"/>', r'\2', image)
