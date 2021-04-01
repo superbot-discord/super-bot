@@ -544,7 +544,7 @@ async def covid(ctx, *, country="world"):
 @bot.command()
 async def minecraft(ctx, *, item="tnt"):
   output = botminecraft(item)
-  if output == "Invalid item. Please try again.":
+  if output == "No Wiki page with that name found.":
     await ctx.send(output)
   else:
     await ctx.send(embed=output)
