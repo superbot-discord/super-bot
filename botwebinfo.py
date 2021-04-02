@@ -53,7 +53,7 @@ def botminecraft(item):
         desc = re.sub(r'<([a-z]+?)( ([a-z]+?)=".*?")*?>([\s\S]*?)<\/\1>', '', desc)
         try:
           print(desc)
-          if len(desc.replace(" ", "")) != 0:
+          if len(desc.replace(" ", "").replace(f"\n", "")) != 0:
             embed.add_field(name=count.text.replace("[edit]", ""), value=desc, inline=False)
         except:
           1
