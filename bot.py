@@ -25,6 +25,7 @@ import requests
 import aiohttp
 import asyncio
 import pytube
+import typing
 import PIL
 import re
 import os
@@ -1735,9 +1736,8 @@ async def invitelink(ctx,inviteinput: discord.Invite):
   await ctx.send(embed=embed)
 
 @bot.command()
-async def autochannel(ctx, channel):
-  try:
-    channel = ccommands.VoiceChannelConverter(channel)
+async def autochannel(ctx, channel : typing.Union[discord.TextChannel, discord.VoiceChannel, discord.StageChannel]):
+  if channel.type.VoiceChannel:
     ti="Voice Channel Information"
     desc=channel.name
     embed=discord.Embed(title=ti, description=desc)
@@ -1766,71 +1766,70 @@ async def autochannel(ctx, channel):
     embed.add_field(name="Max. Members", value=f4v, inline=True)
     if len(f5vlist)!=0:
       embed.add_field(name="Current Members", value=f5v, inline=True)
-  except:
+  elif channel.type.TextChannel:
+    ti="Channel Information: "+channel.name
+    desc=channel.mention
+    embed=discord.Embed(title=ti, description=desc)
+    f0v=channel.created_at.strftime("%d %b, %Y (%a) %H:%M:%S")
+    f3v=str(channel.topic)
+    f4v=str(channel.category)
+    f5vlist=await channel.invites()
+    f5v=""
+    for count in f5vlist:
+      f5v=f5v+count.url+"  "
+    f5v=f5v[:-2]
+    embed.add_field(name="Created", value=f0v, inline=True)
+    if channel.is_nsfw()==True:
+      f1v="This is an NSFW channel."
+      embed.add_field(name="NSFW", value=f1v, inline=True)
+    if channel.is_news()==True:
+      f2v="This is a news channel."
+      embed.add_field(name="NSFW", value=f2v, inline=True)
+    embed.add_field(name="Topic", value=f3v, inline=True)
+    embed.add_field(name="Category", value=f4v, inline=True)
+    if len(f5vlist)!=0:
+      embed.add_field(name="Invites", value=f5v, inline=False)
+  elif channel.type.StageChannel:
+    ti="Stage Channel Information"
     try:
-      channel = commands.VoiceChannelConverter(channel)
-      ti="Channel Information: "+channel.name
-      desc=channel.mention
-      embed=discord.Embed(title=ti, description=desc)
-      f0v=channel.created_at.strftime("%d %b, %Y (%a) %H:%M:%S")
-      f3v=str(channel.topic)
-      f4v=str(channel.category)
-      f5vlist=await channel.invites()
-      f5v=""
-      for count in f5vlist:
-        f5v=f5v+count.url+"  "
-      f5v=f5v[:-2]
-      embed.add_field(name="Created", value=f0v, inline=True)
-      if channel.is_nsfw()==True:
-        f1v="This is an NSFW channel."
-        embed.add_field(name="NSFW", value=f1v, inline=True)
-      if channel.is_news()==True:
-        f2v="This is a news channel."
-        embed.add_field(name="NSFW", value=f2v, inline=True)
-      embed.add_field(name="Topic", value=f3v, inline=True)
-      embed.add_field(name="Category", value=f4v, inline=True)
-      if len(f5vlist)!=0:
-        embed.add_field(name="Invites", value=f5v, inline=False)
+      desc=channel.name + "  " + channel.topic
     except:
-      channel = ccommands.VoiceChannelConverter(channel)
-      ti="Stage Channel Information"
-      try:
-        desc=channel.name + "  " + channel.topic
-      except:
-        desc=channel.name
-      embed=discord.Embed(title=ti, description=desc)
-      f0v=channel.created_at.strftime("%d %b, %Y (%a) %H:%M:%S")
-      f1v=str(channel.category)
-      f2vlist=await channel.invites()
-      f2v=""
-      for count in f2vlist:
-        f2v=f2v+count.url+"  "
-      f2v=f2v[:-2]
-      f5vlist=channel.members
-      f5v=""
-      for count in f5vlist:
-        f5v=f5v+count.mention+"  "
-      f5v=f5v[:-2]
-      f6vlist=channel.requesting_to_speak
-      f6v=""
-      for count in f6vlist:
-        f6v=f6v+count.mention+"  "
-      f6v=f6v[:-2]
-      f3v=str(channel.bitrate//1000)+" kbps"
-      if str(channel.user_limit)=="0":
-        f4v="Infinite"
-      else:
-        f4v=str(channel.user_limit)+" members"
-      embed.add_field(name="Created", value=f0v, inline=True)
-      embed.add_field(name="Category", value=f1v, inline=True)
-      if len(f2vlist)!=0:
-        embed.add_field(name="Invites", value=f2v, inline=False)
-      embed.add_field(name="Bitrate", value=f3v, inline=True)
-      embed.add_field(name="Max. Members", value=f4v, inline=True)
-      if len(f5vlist)!=0:
-        embed.add_field(name="Current Members", value=f5v, inline=True)
-      if len(f6vlist)!=0:
-        embed.add_field(name="Members requesting to speak", value=f6v, inline=True)
+      desc=channel.name
+    embed=discord.Embed(title=ti, description=desc)
+    f0v=channel.created_at.strftime("%d %b, %Y (%a) %H:%M:%S")
+    f1v=str(channel.category)
+    f2vlist=await channel.invites()
+    f2v=""
+    for count in f2vlist:
+      f2v=f2v+count.url+"  "
+    f2v=f2v[:-2]
+    f5vlist=channel.members
+    f5v=""
+    for count in f5vlist:
+      f5v=f5v+count.mention+"  "
+    f5v=f5v[:-2]
+    f6vlist=channel.requesting_to_speak
+    f6v=""
+    for count in f6vlist:
+      f6v=f6v+count.mention+"  "
+    f6v=f6v[:-2]
+    f3v=str(channel.bitrate//1000)+" kbps"
+    if str(channel.user_limit)=="0":
+      f4v="Infinite"
+    else:
+      f4v=str(channel.user_limit)+" members"
+    embed.add_field(name="Created", value=f0v, inline=True)
+    embed.add_field(name="Category", value=f1v, inline=True)
+    if len(f2vlist)!=0:
+      embed.add_field(name="Invites", value=f2v, inline=False)
+    embed.add_field(name="Bitrate", value=f3v, inline=True)
+    embed.add_field(name="Max. Members", value=f4v, inline=True)
+    if len(f5vlist)!=0:
+      embed.add_field(name="Current Members", value=f5v, inline=True)
+    if len(f6vlist)!=0:
+      embed.add_field(name="Members requesting to speak", value=f6v, inline=True)
+  else:
+    embed = discord.Embed(desc = "Invalid input!")
   await ctx.send(embed=embed)
 
 @bot.command()
