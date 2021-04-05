@@ -1737,7 +1737,7 @@ async def invitelink(ctx,inviteinput: discord.Invite):
 
 @bot.command()
 async def autochannel(ctx, channel : typing.Union[discord.TextChannel, discord.VoiceChannel, discord.StageChannel]):
-  if channel.type.Voice:
+  if channel.type.voice:
     ti="Voice Channel Information"
     desc=channel.name
     embed=discord.Embed(title=ti, description=desc)
@@ -1766,7 +1766,7 @@ async def autochannel(ctx, channel : typing.Union[discord.TextChannel, discord.V
     embed.add_field(name="Max. Members", value=f4v, inline=True)
     if len(f5vlist)!=0:
       embed.add_field(name="Current Members", value=f5v, inline=True)
-  elif channel.type.Text:
+  elif channel.type.text:
     ti="Channel Information: "+channel.name
     desc=channel.mention
     embed=discord.Embed(title=ti, description=desc)
@@ -1789,7 +1789,7 @@ async def autochannel(ctx, channel : typing.Union[discord.TextChannel, discord.V
     embed.add_field(name="Category", value=f4v, inline=True)
     if len(f5vlist)!=0:
       embed.add_field(name="Invites", value=f5v, inline=False)
-  elif channel.type.Stage:
+  elif channel.type.stage:
     ti="Stage Channel Information"
     try:
       desc=channel.name + "  " + channel.topic
