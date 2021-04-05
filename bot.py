@@ -240,7 +240,7 @@ async def on_message(message):
         if message.content.count(f":{count2.name}:") and count2.animated:
           desc = message.content
           gid = message.guild.id
-          desc = re.sub(r'(:[a-zA-Z_-]{2,32}:)', r"<\1"+str(gid)+">", desc)
+          desc = re.sub(r'(:[a-zA-Z_-]{2,32}:)', r"\<\1"+str(gid)+"\>", desc)
           whl = await message.channel.webhooks()
           ourweb = False
           for count3 in whl:
@@ -1737,7 +1737,7 @@ async def invitelink(ctx,inviteinput: discord.Invite):
 
 @bot.command()
 async def autochannel(ctx, channel : typing.Union[discord.TextChannel, discord.VoiceChannel, discord.StageChannel]):
-  if channel.type.voice:
+  if channel.type == discord.ChannelType.voice:
     ti="Voice Channel Information"
     desc=channel.name
     embed=discord.Embed(title=ti, description=desc)
@@ -1766,7 +1766,7 @@ async def autochannel(ctx, channel : typing.Union[discord.TextChannel, discord.V
     embed.add_field(name="Max. Members", value=f4v, inline=True)
     if len(f5vlist)!=0:
       embed.add_field(name="Current Members", value=f5v, inline=True)
-  elif channel.type.text:
+  elif channel.type == discord.ChannelType.text:
     ti="Channel Information: "+channel.name
     desc=channel.mention
     embed=discord.Embed(title=ti, description=desc)
@@ -1789,7 +1789,7 @@ async def autochannel(ctx, channel : typing.Union[discord.TextChannel, discord.V
     embed.add_field(name="Category", value=f4v, inline=True)
     if len(f5vlist)!=0:
       embed.add_field(name="Invites", value=f5v, inline=False)
-  elif channel.type.stage:
+  elif channel.type == discord.ChannelType.stage:
     ti="Stage Channel Information"
     try:
       desc=channel.name + "  " + channel.topic
