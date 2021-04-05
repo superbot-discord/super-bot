@@ -240,7 +240,7 @@ async def on_message(message):
         if message.content.count(f":{count2.name}:") and count2.animated:
           desc = message.content
           gid = message.guild.id
-          desc = re.sub(r'(:[a-zA-Z_-]{2,32}:)', "<"+str(gid)+r"\1>", desc)
+          desc = re.sub(r'(:[a-zA-Z_-]{2,32}:)', r"<\1"+str(gid)+">", desc)
           whl = await message.channel.webhooks()
           ourweb = False
           for count3 in whl:
