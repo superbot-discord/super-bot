@@ -1386,7 +1386,7 @@ async def ttimer(ctx, timetocount,*,Text=None):
       prevdesc = desc
       if seconds<0:
         break
-      desc="Timer (Terminate with `=terminate "newidcode+f"`)\n**"+newday+"** d   **"+newhrs+"** h   **"+newmin+"** m   **"+newsec+"**s"
+      desc="Timer (Terminate with `=terminate "+newidcode+f"`)\n**"+newday+"** d   **"+newhrs+"** h   **"+newmin+"** m   **"+newsec+"**s"
       if desc != prevdesc:
         await message.edit(content = desc)
     desc = "Countdown for "
