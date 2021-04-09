@@ -1340,11 +1340,11 @@ async def ttimer(ctx, timetocount,*,Text=None):
     end = datetime.datetime.now() + timedelta(seconds = sec)
     seconds = int((end - datetime.datetime.now()).total_seconds())
     newidcode = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"[ra.randint(0, 25)]+"ABCDEFGHIJKLMNOPQRSTUVWXYZ"[ra.randint(0, 25)]+"ABCDEFGHIJKLMNOPQRSTUVWXYZ"[ra.randint(0, 25)]+"ABCDEFGHIJKLMNOPQRSTUVWXYZ"[ra.randint(0, 25)]+"ABCDEFGHIJKLMNOPQRSTUVWXYZ"[ra.randint(0, 25)]
-    exec("terminate"+idcode.lower()+str(ctx.guild.id)+"=0",globals())
-    allid.append(idcode+str(ctx.guild.id))
+    exec("terminate"+newidcode.lower()+str(ctx.guild.id)+"=0",globals())
+    allid.append(newidcode+str(ctx.guild.id))
     desc = "Initializing countdown…"
     message = await ctx.send(desc)
-    while seconds>=1 and eval("terminate"+idcode.lower()+str(ctx.guild.id))==0:
+    while seconds>=1 and eval("terminate"+newidcode.lower()+str(ctx.guild.id))==0:
       seconds = int((end - datetime.datetime.now()).total_seconds())
       newsec=str(seconds%60)
       newmin=str((seconds%3600)//60)
