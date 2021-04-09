@@ -1330,117 +1330,82 @@ async def rtimer(ctx, timetocount,*,Text=None):
       await message.reply(f"Countdown complete!\n"+Text)
 
 @bot.command()
-async def timer(ctx, timetocount,*,Text=None):
-    seconds = int(timedelta(**{
-        UNITS.get(m.group('unit').lower(), 'seconds'): int(m.group('val'))
-        for m in re.finditer(r'(?P<val>\d+)(?P<unit>[smhdw]?)', timetocount, flags=re.I)
+async def ttimer(ctx, timetocount,*,Text=None):
+    sec = int(timedelta(**{
+      UNITS.get(m.group('unit').lower(), 'seconds'): int(m.group('val'))
+      for m in re.finditer(r'(?P<val>\d+)(?P<unit>[smhdw]?)', timetocount, flags=re.I)
     }).total_seconds())
-    newsec=str(seconds%60)
-    newmin=str((seconds%3600)//60)
-    newhrs=str(seconds%86400//3600)
-    newday=str(seconds//86400)
-    if int(newsec) <= 9:
-      newsec = "0"+newsec
-    if int(newmin) <= 9:
-      newmin = "0"+newmin
-    if int(newhrs) <= 9:
-      newhrs = "0"+newhrs
-    if int(newday) <= 9:
-      newday = "0"+newday
-    newsec=newsec.replace("1",":one: ")
-    newsec=newsec.replace("2",":two: ")
-    newsec=newsec.replace("3",":three: ")
-    newsec=newsec.replace("4",":four: ")
-    newsec=newsec.replace("5",":five: ")
-    newsec=newsec.replace("6",":six: ")
-    newsec=newsec.replace("7",":seven: ")
-    newsec=newsec.replace("8",":eight: ")
-    newsec=newsec.replace("9",":nine: ")
-    newsec=newsec.replace("0",":zero: ")
-    newmin=newmin.replace("1",":one: ")
-    newmin=newmin.replace("2",":two: ")
-    newmin=newmin.replace("3",":three: ")
-    newmin=newmin.replace("4",":four: ")
-    newmin=newmin.replace("5",":five: ")
-    newmin=newmin.replace("6",":six: ")
-    newmin=newmin.replace("7",":seven: ")
-    newmin=newmin.replace("8",":eight: ")
-    newmin=newmin.replace("9",":nine: ")
-    newmin=newmin.replace("0",":zero: ")
-    newhrs=newhrs.replace("1",":one: ")
-    newhrs=newhrs.replace("2",":two: ")
-    newhrs=newhrs.replace("3",":three: ")
-    newhrs=newhrs.replace("4",":four: ")
-    newhrs=newhrs.replace("5",":five: ")
-    newhrs=newhrs.replace("6",":six: ")
-    newhrs=newhrs.replace("7",":seven: ")
-    newhrs=newhrs.replace("8",":eight: ")
-    newhrs=newhrs.replace("9",":nine: ")
-    newhrs=newhrs.replace("0",":zero: ")
-    newday=newday.replace("1",":one: ")
-    newday=newday.replace("2",":two: ")
-    newday=newday.replace("3",":three: ")
-    newday=newday.replace("4",":four: ")
-    newday=newday.replace("5",":five: ")
-    newday=newday.replace("6",":six: ")
-    newday=newday.replace("7",":seven: ")
-    newday=newday.replace("8",":eight: ")
-    newday=newday.replace("9",":nine: ")
-    newday=newday.replace("0",":zero: ")
-    if seconds<=0:
-      desc="Countdown complete!"
-      await message.edit(content = "Countdown completed for "+str(timetocount))
-    else:
-      desc=newhrs+" :regional_indicator_h: "+newmin+" :regional_indicator_m: "+newsec+":regional_indicator_s:"
-    message=await ctx.send(desc)
-    while seconds!=-1:
-      seconds=int(seconds)-1
+    end = datetime.datetime.now() + timedelta(seconds = sec)
+    seconds = int((end - datetime.datetime.now()).total_seconds())
+    idcode = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"[ra.randint(0, 25)]+"ABCDEFGHIJKLMNOPQRSTUVWXYZ"[ra.randint(0, 25)]+"ABCDEFGHIJKLMNOPQRSTUVWXYZ"[ra.randint(0, 25)]+"ABCDEFGHIJKLMNOPQRSTUVWXYZ"[ra.randint(0, 25)]+"ABCDEFGHIJKLMNOPQRSTUVWXYZ"[ra.randint(0, 25)]
+    exec("terminate"+idcode.lower()+str(ctx.guild.id)+"=0",globals())
+    newidcode=idcode
+    newidcode=newidcode.replace("A",":regional_indicator_a:")
+    newidcode=newidcode.replace("B",":regional_indicator_b:")
+    newidcode=newidcode.replace("C",":regional_indicator_c:")
+    newidcode=newidcode.replace("D",":regional_indicator_d:")
+    newidcode=newidcode.replace("E",":regional_indicator_e:")
+    newidcode=newidcode.replace("F",":regional_indicator_f:")
+    newidcode=newidcode.replace("G",":regional_indicator_g:")
+    newidcode=newidcode.replace("H",":regional_indicator_h:")
+    newidcode=newidcode.replace("I",":regional_indicator_i:")
+    newidcode=newidcode.replace("J",":regional_indicator_j:")
+    newidcode=newidcode.replace("K",":regional_indicator_k:")
+    newidcode=newidcode.replace("L",":regional_indicator_l:")
+    newidcode=newidcode.replace("M",":regional_indicator_m:")
+    newidcode=newidcode.replace("N",":regional_indicator_n:")
+    newidcode=newidcode.replace("O",":regional_indicator_o:")
+    newidcode=newidcode.replace("P",":regional_indicator_p:")
+    newidcode=newidcode.replace("Q",":regional_indicator_q:")
+    newidcode=newidcode.replace("R",":regional_indicator_r:")
+    newidcode=newidcode.replace("S",":regional_indicator_s:")
+    newidcode=newidcode.replace("T",":regional_indicator_t:")
+    newidcode=newidcode.replace("U",":regional_indicator_u:")
+    newidcode=newidcode.replace("V",":regional_indicator_v:")
+    newidcode=newidcode.replace("W",":regional_indicator_w:")
+    newidcode=newidcode.replace("X",":regional_indicator_x:")
+    newidcode=newidcode.replace("Y",":regional_indicator_y:")
+    newidcode=newidcode.replace("Z",":regional_indicator_z:")
+    allid.append(idcode+str(ctx.guild.id))
+    desc = "Initializing countdown…"
+    message = await ctx.send(desc)
+    while seconds>=1 and eval("terminate"+idcode.lower()+str(ctx.guild.id))==0:
+      seconds = int((end - datetime.datetime.now()).total_seconds())
       newsec=str(seconds%60)
       newmin=str((seconds%3600)//60)
-      newhrs=str(seconds//3600)
+      newhrs=str(seconds%86400//3600)
+      newday=str(seconds//86400)
       if int(newsec) <= 9:
         newsec = "0"+newsec
       if int(newmin) <= 9:
         newmin = "0"+newmin
       if int(newhrs) <= 9:
         newhrs = "0"+newhrs
-      newsec=newsec.replace("1",":one: ")
-      newsec=newsec.replace("2",":two: ")
-      newsec=newsec.replace("3",":three: ")
-      newsec=newsec.replace("4",":four: ")
-      newsec=newsec.replace("5",":five: ")
-      newsec=newsec.replace("6",":six: ")
-      newsec=newsec.replace("7",":seven: ")
-      newsec=newsec.replace("8",":eight: ")
-      newsec=newsec.replace("9",":nine: ")
-      newsec=newsec.replace("0",":zero: ")
-      newmin=newmin.replace("1",":one: ")
-      newmin=newmin.replace("2",":two: ")
-      newmin=newmin.replace("3",":three: ")
-      newmin=newmin.replace("4",":four: ")
-      newmin=newmin.replace("5",":five: ")
-      newmin=newmin.replace("6",":six: ")
-      newmin=newmin.replace("7",":seven: ")
-      newmin=newmin.replace("8",":eight: ")
-      newmin=newmin.replace("9",":nine: ")
-      newmin=newmin.replace("0",":zero: ")
-      newhrs=newhrs.replace("1",":one: ")
-      newhrs=newhrs.replace("2",":two: ")
-      newhrs=newhrs.replace("3",":three: ")
-      newhrs=newhrs.replace("4",":four: ")
-      newhrs=newhrs.replace("5",":five: ")
-      newhrs=newhrs.replace("6",":six: ")
-      newhrs=newhrs.replace("7",":seven: ")
-      newhrs=newhrs.replace("8",":eight: ")
-      newhrs=newhrs.replace("9",":nine: ")
-      newhrs=newhrs.replace("0",":zero: ")
-      if seconds<=1:
-        desc=newhrs+"Countdown complete!"
-        await message.edit("Countdown completed for "+str(timetocount))
+      if int(newday) <= 9:
+        newday = "0"+newday
+      prevdesc = desc
+      if seconds<0:
         break
-      else:
-        desc=newhrs+" :regional_indicator_h: "+newmin+" :regional_indicator_m: "+newsec+":regional_indicator_s:"
-        await message.edit(content=desc)
+      desc="Timer (Terminate with `=terminate "newidcode+f"`)\n**"+newday+"** d   **"+newhrs+"** h   **"+newmin+"** m   **"+newsec+"**s"
+      if desc != prevdesc:
+        await message.edit(content = desc)
+    desc = "Countdown for "
+    if sec >= 604800:
+      desc = desc + str(sec//604800) + " weeks "
+      sec = sec%604800
+    if sec >= 86400:
+      desc = desc + str(sec//86400) + " days "
+      sec = sec%86400
+    if sec >= 3600:
+      desc = desc + str(sec//3600) + " hours "
+      sec = sec%3600
+    if sec >= 60:
+      desc = desc + str(sec//60) + " minutes "
+      sec = sec%60
+    if sec >= 1:
+      desc = desc + str(sec//1) + " seconds "
+    desc = desc + "completed!"
+    await message.edit(content=desc)
     if Text==None:
       await message.reply("Countdown complete!")
     else:
