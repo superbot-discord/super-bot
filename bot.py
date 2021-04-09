@@ -79,6 +79,9 @@ snipereactions=[]
 overwrite = discord.PermissionOverwrite()
 overwrite.view_channel = True
 
+def botadmin(context):
+  return 
+
 #@bot.event
 #async def on_invite_create(invite):
 #  if invite.guild.id == 809368482344075265 or invite.guild.id == 807164404960854026:
@@ -402,12 +405,10 @@ async def clearsnipe(ctx, *, chnl : discord.TextChannel = None):
     await ctx.send("You don't have the required permissions.")
 
 @bot.command()
+@commands.is_owner()
 async def nick(ctx, *, newnick):
-  if ctx.author.id == 687474789342117900:
-    await ctx.guild.get_member(796686363604680755).edit(nick = newnick)
-    await ctx.send("Nickname changed.")
-  else:
-    await ctx.send("You don't have the required permissions.")
+  await ctx.guild.get_member(796686363604680755).edit(nick = newnick)
+  await ctx.send("Nickname changed.")
 
 @bot.command()
 async def tts(ctx, *, desc):
@@ -435,24 +436,25 @@ async def invite(ctx, *, text=None):
   await ctx.send(embed=embed)
 
 @bot.command()
+@commands.is_owner()
 async def botban(ctx, user : discord.User, *, text="No reason was provided"):
-  if ctx.author.id == 687474789342117900:
-    banned_ids.append(user.id)
-    banned_text.append(text)
-    await ctx.send("Banned user from using the bot.")
+  banned_ids.append(user.id)
+  banned_text.append(text)
+  await ctx.send("Banned user from using the bot.")
 
 @bot.command()
+@commands.is_owner()
 async def botunban(ctx, user : discord.User):
-  if ctx.author.id == 687474789342117900 and banned_ids.count(user.id) == 1:
+  if banned_ids.count(user.id) == 1:
     banned_text.remove(banned_text[banned_ids.index(user.id)])
     banned_ids.remove(user.id)
     await ctx.send("Unbanned user from using the bot.")
 
 @bot.command()
+@commands.is_owner()
 async def botadmin(ctx, user : discord.User):
-  if ctx.author.id == 687474789342117900:
-    bot_admins.append(user.id)
-    await ctx.send("Added user as bot admin.")
+  bot_admins.append(user.id)
+  await ctx.send("Added user as bot admin.")
 
 @bot.command()
 async def botpurge(ctx, *, num):
@@ -1337,35 +1339,8 @@ async def ttimer(ctx, timetocount,*,Text=None):
     }).total_seconds())
     end = datetime.datetime.now() + timedelta(seconds = sec)
     seconds = int((end - datetime.datetime.now()).total_seconds())
-    idcode = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"[ra.randint(0, 25)]+"ABCDEFGHIJKLMNOPQRSTUVWXYZ"[ra.randint(0, 25)]+"ABCDEFGHIJKLMNOPQRSTUVWXYZ"[ra.randint(0, 25)]+"ABCDEFGHIJKLMNOPQRSTUVWXYZ"[ra.randint(0, 25)]+"ABCDEFGHIJKLMNOPQRSTUVWXYZ"[ra.randint(0, 25)]
+    newidcode = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"[ra.randint(0, 25)]+"ABCDEFGHIJKLMNOPQRSTUVWXYZ"[ra.randint(0, 25)]+"ABCDEFGHIJKLMNOPQRSTUVWXYZ"[ra.randint(0, 25)]+"ABCDEFGHIJKLMNOPQRSTUVWXYZ"[ra.randint(0, 25)]+"ABCDEFGHIJKLMNOPQRSTUVWXYZ"[ra.randint(0, 25)]
     exec("terminate"+idcode.lower()+str(ctx.guild.id)+"=0",globals())
-    newidcode=idcode
-    newidcode=newidcode.replace("A",":regional_indicator_a:")
-    newidcode=newidcode.replace("B",":regional_indicator_b:")
-    newidcode=newidcode.replace("C",":regional_indicator_c:")
-    newidcode=newidcode.replace("D",":regional_indicator_d:")
-    newidcode=newidcode.replace("E",":regional_indicator_e:")
-    newidcode=newidcode.replace("F",":regional_indicator_f:")
-    newidcode=newidcode.replace("G",":regional_indicator_g:")
-    newidcode=newidcode.replace("H",":regional_indicator_h:")
-    newidcode=newidcode.replace("I",":regional_indicator_i:")
-    newidcode=newidcode.replace("J",":regional_indicator_j:")
-    newidcode=newidcode.replace("K",":regional_indicator_k:")
-    newidcode=newidcode.replace("L",":regional_indicator_l:")
-    newidcode=newidcode.replace("M",":regional_indicator_m:")
-    newidcode=newidcode.replace("N",":regional_indicator_n:")
-    newidcode=newidcode.replace("O",":regional_indicator_o:")
-    newidcode=newidcode.replace("P",":regional_indicator_p:")
-    newidcode=newidcode.replace("Q",":regional_indicator_q:")
-    newidcode=newidcode.replace("R",":regional_indicator_r:")
-    newidcode=newidcode.replace("S",":regional_indicator_s:")
-    newidcode=newidcode.replace("T",":regional_indicator_t:")
-    newidcode=newidcode.replace("U",":regional_indicator_u:")
-    newidcode=newidcode.replace("V",":regional_indicator_v:")
-    newidcode=newidcode.replace("W",":regional_indicator_w:")
-    newidcode=newidcode.replace("X",":regional_indicator_x:")
-    newidcode=newidcode.replace("Y",":regional_indicator_y:")
-    newidcode=newidcode.replace("Z",":regional_indicator_z:")
     allid.append(idcode+str(ctx.guild.id))
     desc = "Initializing countdown…"
     message = await ctx.send(desc)
