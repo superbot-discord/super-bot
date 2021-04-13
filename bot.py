@@ -565,7 +565,7 @@ async def population(ctx, country="current"):
   else:
     await ctx.send(embed=output)
 
-@bot.command(alias=["simpcolour", "simplecolor", "simplecolour"])
+@bot.command(aliases=["simpcolour", "simplecolor", "simplecolour"])
 async def simpcolor(ctx, *, name):
   plt.clf()
   fig, ax = plt.subplots()
@@ -585,8 +585,8 @@ async def simpcolor(ctx, *, name):
     try:
       bcs = plt.gca()
       plt.setp(ax.spines.values(), color=name)
+      ax.set_facecolor(name)
       fig.set_facecolor(name)
-      #ax.set_facecolor(name)
       plt.savefig("color.png", transparent=False)
       file = discord.File("color.png")
       await ctx.send(file=file)
