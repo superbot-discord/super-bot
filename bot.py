@@ -93,13 +93,13 @@ def botadmin(context):
 
 @bot.event
 async def on_member_join(member):
-  #if member.guild.id == 824524455924727839:
-  #  if member.bot:
-  #    await member.add_roles(member.guild.get_role(824524665842040852))
-  #    await member.guild.get_channel(824524893152477206).create_text_channel(member.name.lower().replace(" ","-"),slowmode_delay=1, topic = f"Use and talk about the bot {member.name}.", overwrites={member.guild.default_role: discord.PermissionOverwrite(read_messages=False), member.guild.get_role(824526276835803176): discord.PermissionOverwrite(read_messages=True), member: discord.PermissionOverwrite(read_messages=True)})
-  #  else:
-  #    embed = discord.Embed(title = "Welcome", desc="Hello and welcome to Bot Laboratoratory! You can add any bot to this server by [proposing](https://discord.gg/etb53Cvheh). Simply send the bot's invite and we will discuss about it. Have fun!")
-  #    await member.send(embed=embed)
+  if member.guild.id == 824524455924727839:
+    if member.bot:
+      await member.add_roles(member.guild.get_role(824524665842040852))
+      await member.guild.get_channel(824524893152477206).create_text_channel(member.name.lower().replace(" ","-"),slowmode_delay=1, topic = f"Use and talk about the bot {member.name}.", overwrites={member.guild.default_role: discord.PermissionOverwrite(read_messages=False), member.guild.get_role(824526276835803176): discord.PermissionOverwrite(read_messages=True), member: discord.PermissionOverwrite(read_messages=True)})
+    else:
+      embed = discord.Embed(title = "Welcome", desc="Hello and welcome to Bot Laboratoratory! You can add any bot to this server by [proposing](https://discord.gg/etb53Cvheh). Simply send the bot's invite and we will discuss about it. Have fun!")
+      await member.send(embed=embed)
   if member.guild.id == 823405852131328001:
     ch=await member.guild.create_text_channel('verify', overwrites = {member.guild.default_role: discord.PermissionOverwrite(view_channel=False), member: discord.PermissionOverwrite(view_channel=True)})
     await ch.send(f"{member.mention}, please verify by calculating {str(ra.randint(1,20))}"+ra.choice(["+","-","×"])+str(ra.randint(1,10))+".")
@@ -228,7 +228,7 @@ async def on_member_update(before, after):
 
 @bot.event
 async def on_message(message):
-  """match = verify_pattern.fullmatch(message.content)
+  match = verify_pattern.fullmatch(message.content)
   if message.channel.id == 811562994151850024 and match == None and message.author.roles.count(message.guild.get_role(810729029790597190)) == 0:
     await message.channel.send(f"Invalid verification format! Please double check the format and try again.\n**Format: **Username#Discriminator, Math equation with equal sign(Max. 100 characters), Favourite Food, Colour\n**Original Content: **"+message.content, delete_after=10)
     try:
@@ -236,7 +236,7 @@ async def on_message(message):
     except:
       1
   elif message.author.id == 814292078984167425:# and (message.content.count('Joe')==1 or message.content.count('Joh')==1 or message.content.count('Bitch')==1 or message.content.count('Piss')==1):
-    await message.delete()#delay = 3)"""#(message.guild.id != 823405852131328001 or message.content.startswith("=verify"))
+    await message.delete()#delay = 3)#(message.guild.id != 823405852131328001 or message.content.startswith("=verify"))
   if message.author.id != 796686363604680755 and not message.author.bot:
     for count in message.author.mutual_guilds:
       for count2 in count.emojis:
@@ -285,9 +285,9 @@ async def verify(ctx):
       overdict = ctx.message.guild.get_channel(823410283723620362).overwrites
       verifiedmem = list(overdict)[0]
       theinvite = await bot.get_guild(806083349688877077).get_channel(806085319521992705).create_invite(max_age=300, max_uses=1)
-      desc = "You are verified! Please use [this invite]("+theinvite.url+") to join the Historical Community server. It would expire in 5 minutes. Have fun!"
+      desc = "You are verified! Please use [this invite]("+theinvite.url+") to join the Historical Community server. It would expire in 5 minutes. Please kindly ask Henry or Johann if the link expired and you need a new one."
       embed = discord.Embed(title="Verified", description=desc)
-      await ctx.author.send(embed=embed)
+      await discord.utils.find(lambda userarg: userarg.roles[0].id != 823407479303569419, ctx.channel.members).send(embed=embed)
       await ctx.channel.send(embed=embed)
 
 @bot.command()
