@@ -238,33 +238,36 @@ async def on_message(message):
   elif message.author.id == 814292078984167425:# and (message.content.count('Joe')==1 or message.content.count('Joh')==1 or message.content.count('Bitch')==1 or message.content.count('Piss')==1):
     await message.delete()#delay = 3)#(message.guild.id != 823405852131328001 or message.content.startswith("=verify"))
   if message.author.id != 796686363604680755 and not message.author.bot:
-    for count in message.author.mutual_guilds:
-      for count2 in count.emojis:
-        if message.content.count(f":{count2.name}:") and count2.animated:
-          desc = message.content
-          gid = message.guild.id
-          desc = re.sub(r'(:[a-zA-Z_-]{2,32}:)', r"\<\1"+str(gid)+"\>", desc)
-          desc = desc.replace("{nothing}", "")
-          whl = await message.channel.webhooks()
-          ourweb = False
-          for count3 in whl:
-            if count3.name == "AnimatedEmoji":
-              ourweb = True
-              token = count3.token
-              identify = count3.id
-              break
-          if len(whl) == 0 or ourweb == False:
-            wh = await message.channel.create_webhook(name = "AnimatedEmoji")
-            token = wh.token
-            identify = wh.id
-          try:
-            await message.delete()
-          except:
-            1
-          async with aiohttp.ClientSession() as session:
-            webhook = Webhook.partial(identify, token, adapter=RequestsWebhookAdapter())
-            await webhook.send(desc, username=message.author.name, avatar_url=message.author.avatar_url)
-          break
+    try:
+      for count in message.author.mutual_guilds:
+        for count2 in count.emojis:
+          if message.content.count(f":{count2.name}:") and count2.animated:
+            desc = message.content
+            gid = message.guild.id
+            desc = re.sub(r'(:[a-zA-Z_-]{2,32}:)', r"\<\1"+str(gid)+"\>", desc)
+            desc = desc.replace("{nothing}", "")
+            whl = await message.channel.webhooks()
+            ourweb = False
+            for count3 in whl:
+              if count3.name == "AnimatedEmoji":
+                ourweb = True
+                token = count3.token
+                identify = count3.id
+                break
+            if len(whl) == 0 or ourweb == False:
+              wh = await message.channel.create_webhook(name = "AnimatedEmoji")
+              token = wh.token
+              identify = wh.id
+            try:
+              await message.delete()
+            except:
+              1
+            async with aiohttp.ClientSession() as session:
+              webhook = Webhook.partial(identify, token, adapter=RequestsWebhookAdapter())
+              await webhook.send(desc, username=message.author.name, avatar_url=message.author.avatar_url)
+            break
+      except:
+        1
     if banned_ids.count(message.author.id)==0 and message.content.startswith("=") and message.content.startswith("==")==False:
       await bot.process_commands(message)
     elif message.content.startswith("="):
