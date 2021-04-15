@@ -407,6 +407,7 @@ async def youtube(ctx, *, link):
       break
     except:
       1
+    os.remove(count.default_filename)
   if ytv_downloaded == False:
     audios = youtube.streams.filter(type="audio").order_by("abr")
     for count in audios:
@@ -417,6 +418,7 @@ async def youtube(ctx, *, link):
         break
       except:
         1
+      os.remove(count.default_filename)
     if yta_downloaded == False:
       await ctx.send("We are sorry, but the file was too large for us to send. Discord applied a 8-MB limit on all  bots.")
 
@@ -880,7 +882,7 @@ async def markdown(ctx, *, mdcode = None):
   await ctx.send(file=discord.File('md_screenshot.png'))
   os.remove('md_screenshot.png')
 
-@bot.command()
+"""@bot.command()
 async def youtube(ctx, *, url):
   youtube = pytube.YouTube(url)
   video = youtube.streams.filter(file_extension='mp4').get_highest_resolution()
@@ -911,7 +913,7 @@ async def youtube(ctx, *, url):
     os.remove('captions.txt')
   except:
     await edit(msg, "No captions available for the video.")
-  os.remove('YTVideo.mp4')
+  os.remove('YTVideo.mp4')"""
 
 @bot.command()
 async def definition(ctx, *, word):
