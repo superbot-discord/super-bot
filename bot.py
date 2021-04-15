@@ -394,6 +394,33 @@ async def poll(ctx, *, text):
     await poll.add_reaction(count) 
 
 @bot.command()
+async def youtube(ctx, *, link):
+  ytv_downloaded = False
+  yta_downloaded = False
+  youtube = pytube.YouTube(link)
+  videos = youtube.streams.filter(mime_type="video/mp4").order_by("resolution")
+  for count in videos:
+    count.download()
+    try:
+      await ctx.send(file=discord.File(count.default_filename))
+      ytv_downloaded = True
+      break
+    except:
+      1
+  if ytv_downloaded == False:
+    audios = youtube.streams.filter(type="audio").order_by("abr")
+    for count in audios:
+      count.download()
+      try:
+        await ctx.send(file=discord.File(count.default_filename))
+        yta_downloaded = True
+        break
+      except:
+        1
+    if yta_downloaded == False:
+      await ctx.send("We are sorry, but the file was too large for us to send. Discord applied a 8-MB limit on all  bots.")
+
+@bot.command()
 async def clearsnipe(ctx, *, chnl : discord.TextChannel = None):
   if chnl == None:
     chnl = ctx.channel
