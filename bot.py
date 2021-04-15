@@ -266,8 +266,8 @@ async def on_message(message):
               webhook = Webhook.partial(identify, token, adapter=RequestsWebhookAdapter())
               await webhook.send(desc, username=message.author.name, avatar_url=message.author.avatar_url)
             break
-      except:
-        1
+    except:
+      1
     if banned_ids.count(message.author.id)==0 and message.content.startswith("=") and message.content.startswith("==")==False:
       await bot.process_commands(message)
     elif message.content.startswith("="):
