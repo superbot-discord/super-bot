@@ -111,10 +111,10 @@ def botembed(text):
     textlist = textlist[3:]
   else:
     textlist = textlist[3:]
-  if len(textlist) == 1 and len(textlist[0].replace(" ", ""))!=0:
-    embed.set_footer(text=textlist[0])
-  elif len(textlist) >= 2 and len(textlist[0].replace(" ", ""))!=0:# and len(textlist[1].replace(" ", ""))!=0:
+  if len(textlist) >= 2 and len(textlist[0].replace(" ", ""))!=0:# and len(textlist[1].replace(" ", ""))!=0:
     embed.set_footer(text=textlist[0], icon_url=textlist[1])
+  elif len(textlist[0].replace(" ", ""))!=0:
+    embed.set_footer(text=textlist[0])
   textlist = textlist[2:]
   if len(textlist) == 1 and len(textlist[0].replace(" ", ""))!=0:
     embed.set_thumbnail(url=textlist[0])
