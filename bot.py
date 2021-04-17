@@ -49,7 +49,6 @@ allid=[]
 id_pattern = re.compile(r'([A-Z]{5})', re.IGNORECASE)
 alphaend_pattern = re.compile(r'.*[a-z]', re.IGNORECASE)
 html_pattern = re.compile(r'^\`\`\`(html)?\n[\s\S]*\`\`\`$')
-md_pattern = re.compile(r'^\`\`\`(md|markdown)?\n[\s\S]*\`\`\`$')
 verify_pattern = re.compile(r'[^ ⠀][\s\S]{0,30}?[^ ⠀]#?[\d]{4}(,|, | )?[\d+\-*/×÷%xyz()\[\]\{\}]{1,50}=[\d+\-*/×÷%xyz()\[\]\{\}]{1,50}(,|, | )?[\S ]{3,20}(,|, | )?(Red|Orange|Yellow|Green|Light( |_)?Green|Dark( |_)?Green|Cyan|Blue|Light( |_)?Blue|Dark( |_)?Blue|Purple|Pink|Brown)', re.IGNORECASE)
 poll_pattern = re.compile(r'([\w]+?)(:\w{2,32}:|[\uD800-\uDBFF])')
 UNITS = {'s':'seconds', 'm':'minutes', 'h':'hours', 'd':'days', 'w':'weeks'}
@@ -81,15 +80,6 @@ overwrite.view_channel = True
 
 def botadmin(context):
   return 
-
-#@bot.event
-#async def on_invite_create(invite):
-#  if invite.guild.id == 809368482344075265 or invite.guild.id == 807164404960854026:
-#    await invite.delete()
-
-#@bot.event
-#  if after.roles.count(before.guild.get_role(810729029790597190)) == 0 and after.guild.id == 809368482344075265 and after.id == 687474789342117900:
-#    await after.add_roles(before.guild.get_role(810729029790597190), reason = "Mysterious")
 
 @bot.event
 async def on_member_join(member):
@@ -322,8 +312,6 @@ async def reactions(ctx, *, msg : discord.Message):
   plt.savefig("reactions.png", transparent=True)
   await ctx.send(file = discord.File('reactions.png'))
   plt.clf()
-
-#@bot.command()
 
 @bot.command(aliases=['sniper'])
 async def snipe(ctx, *, text = None):
@@ -599,32 +587,12 @@ async def population(ctx, country="current"):
 
 @bot.command(aliases=["simpcolour", "simplecolor", "simplecolour"])
 async def simpcolor(ctx, *, name):
-  plt.clf()
-  fig, ax = plt.subplots()
-  ax.axes.get_xaxis().set_visible(False)
-  ax.axes.get_yaxis().set_visible(False)
+  botsimpcolor(name)
   try:
-    cmapv = plt.get_cmap(name)
-    plt.setp(ax.spines.values(), color="w")
-    gradient = np.vstack((np.linspace(0, 1, 256), np.linspace(0, 1, 256)))
-    fig.set_facecolor("w")
-    ax.set_facecolor("w")
-    ax.imshow(gradient, aspect='auto', cmap=cmapv)
-    plt.savefig("color.png", transparent=True)
     file = discord.File("color.png")
     await ctx.send(file=file)
   except:
-    try:
-      bcs = plt.gca()
-      plt.setp(ax.spines.values(), color=name)
-      ax.set_facecolor(name)
-      fig.set_facecolor(name)
-      plt.savefig("color.png", transparent=False)
-      file = discord.File("color.png")
-      await ctx.send(file=file)
-    except:
-      plt.clf()
-      await ctx.send("Invalid colour name, please try again.")
+    await ctx.send("Invalid colour name, please try again.")
 
 @bot.command(alias=["snowgraph", "snowflake"])
 async def snow(ctx, recursion = 10):  
@@ -771,16 +739,10 @@ async def screenshot(ctx, url = None, form = "all"):
   if a == "Invalid format! Please use the format `=screenshot [url]`.":
     await ctx.send(a)
   else:
-    #try:
     await ctx.send(file=discord.File('web_screenshot1.png'))
     os.remove('web_screenshot1.png')
-    #except:
-    #  1
-    #try:
     await ctx.send(file=discord.File('web_screenshot2.png'))
     os.remove('web_screenshot2.png')
-    #except:
-    #  1
 
 @bot.command()
 async def ocr(ctx, *, text = None):
@@ -822,98 +784,15 @@ async def text(ctx, *, text = None):
 
 @bot.command()
 async def html(ctx, *, code = None):
-  match = html_pattern.fullmatch(code)
-  if match:
-    code = code.replace("```html","", 1)
-    code = code.replace("```","")
-  if code == None:
-    r = requests.get(ctx.message.attachments[0].url, stream=True)
-    r.raise_for_status()
-    r.raw.decode_content = True
-    code = r.content
-  driver = webdriver.Chrome(options=options)
-  driver.get(f"data:text/html;charset=utf-8,{code}")
-  S = lambda X: driver.execute_script('return document.body.parentNode.scroll'+X)
-  driver.set_window_size(S('Width'),S('Height'))
-  driver.save_screenshot('html_screenshot.png')
-  driver.quit()
+  bothtml(code)
   await ctx.send(file=discord.File('html_screenshot.png'))
   os.remove('html_screenshot.png')
 
-@bot.command()
-async def md(ctx, *, mdcode = None):
-  match = md_pattern.fullmatch(mdcode)
-  if match:
-    mdcode = mdcode.replace("```md","", 1)
-    code = mdcode.replace("```","")
-  if mdcode == None:
-    r = requests.get(ctx.message.attachments[0].url, stream=True)
-    r.raise_for_status()
-    r.raw.decode_content = True
-    mdcode = r.content
-  code = str(markdowner.convert(mdcode)).lstrip("'u").rstrip("'")
-  driver = webdriver.Chrome(options=options)
-  driver.get(f"data:text/html;charset=utf-8,{code}")
-  S = lambda X: driver.execute_script('return document.body.parentNode.scroll'+X)
-  driver.set_window_size(S('Width'),S('Height'))
-  driver.save_screenshot('md_screenshot.png')
-  driver.quit()
-  await ctx.send(file=discord.File('md_screenshot.png'))
-  os.remove('md_screenshot.png')
-
-@bot.command()
+@bot.command(aliases=['md'])
 async def markdown(ctx, *, mdcode = None):
-  match = md_pattern.fullmatch(mdcode)
-  if match:
-    mdcode = mdcode.replace("```md","", 1)
-    code = mdcode.replace("```","")
-  if code == None:
-    r = requests.get(ctx.message.attachments[0].url, stream=True)
-    r.raise_for_status()
-    r.raw.decode_content = True
-    mdcode = r.content
-  code = str(markdowner.convert(mdcode)).lstrip("'u").rstrip("'")
-  driver = webdriver.Chrome(options=options)
-  driver.get(f"data:text/html;charset=utf-8,{code}")
-  S = lambda X: driver.execute_script('return document.body.parentNode.scroll'+X)
-  driver.set_window_size(S('Width'),S('Height'))
-  driver.save_screenshot('md_screenshot.png')
-  driver.quit()
-  await ctx.send(file=discord.File('md_screenshot.png'))
+  botmd(mdcode)
+  await ctx.send(file=discord.File('md_screenshot.png')
   os.remove('md_screenshot.png')
-
-"""@bot.command()
-async def youtube(ctx, *, url):
-  youtube = pytube.YouTube(url)
-  video = youtube.streams.filter(file_extension='mp4').get_highest_resolution()
-  if video.filesize<=8388119:
-    video.download(filename='YTVideo')
-  else:
-    for count in youtube.streams.filter(file_extension='mp4', progressive=True).order_by('resolution').desc():
-      if count.filesize<=8388119:
-        count.download(filename='YTVideo')
-        break
-  try:
-    msg = await ctx.send(file=discord.File('YTVideo.mp4'))
-  except:
-    await ctx.send("The video is too large to upload.")
-  audio = youtube.streams.filter(only_audio=True, file_extension='mp3')[0]
-  audio.download(filename='YTAudio')
-  await ctx.send(file=discord.File('YTAudio.mp3'))
-  try:
-    captions = youtube.captions.get_by_language_code('en').generate_srt_captions()
-    actualcaptions = ""
-    for count in captions.splitlines():
-      if count.isnumeric()==False and (count.count(" --> ")!=1 or count.count(":")!=4 or count.count(",")!=2):
-        actualcaptions = actualcaptions + count + f"\n"
-    file = open("captions.txt", "w")
-    file.write(actualcaptions)
-    file.close()
-    await ctx.send(file=discord.File('captions.txt'))
-    os.remove('captions.txt')
-  except:
-    await edit(msg, "No captions available for the video.")
-  os.remove('YTVideo.mp4')"""
 
 @bot.command()
 async def definition(ctx, *, word):
@@ -1221,13 +1100,11 @@ async def emojiinfo(ctx,emojiarg : discord.Emoji):
 
 @bot.command()
 async def reverse(ctx, *, text):
-  text = text[::-1]
-  await ctx.send(text)
+  await ctx.send(text[::-1])
 
 @bot.command()
 async def emoji(ctx, *, text):
-  output = botemoji(text)
-  await ctx.send(output)
+  await ctx.send(botemoji(text))
 
 @bot.command()
 async def terminate(ctx, *, idc):
@@ -2312,14 +2189,6 @@ async def on_ready():
   activity = discord.Activity(type=discord.ActivityType.playing, name="with =help", details="=ping to check whether the bot is responsive; =help for a list of commands; =invite to invite the bot to your own server")
   await bot.change_presence(status=discord.Status.idle, activity=activity)
   print("Bot is ready!")
-  """for count in bot.get_guild(814407577042944040).channels:
-    if count.name != "embed" and count.name != "spam":
-      await count.delete()
-  for count in bot.get_guild(814407577042944040).roles:
-    if count.name == "fucker":
-      await count.delete()"""
-
-#guild_ids=[744520955585626132, 814407577042944040]
 
 @slash.slash(name="purge", description="Purge a number of messages in the current channel.", options=[create_option(name="Number",description="Amount of messages to purge in the current channel.",option_type=4,required=True)])
 async def _purge(ctx, num:int):
@@ -2643,31 +2512,12 @@ async def _channel(ctx, channel:discord.abc.GuildChannel):
 
 @slash.slash(name="simplecolor", description="Gets information about a named color.", options=[create_option(name="Colour",description="The name of the colour.",option_type=3,required=True)])
 async def _simplecolor(ctx):
-  plt.clf()
-  fig, ax = plt.subplots()
-  ax.axes.get_xaxis().set_visible(False)
-  ax.axes.get_yaxis().set_visible(False)
+  botsimpcolor(name)
   try:
-    cmapv = plt.get_cmap(name)
-    plt.setp(ax.spines.values(), color="w")
-    gradient = np.vstack((np.linspace(0, 1, 256), np.linspace(0, 1, 256)))
-    ax.set_facecolor("w")
-    ax.imshow(gradient, aspect='auto', cmap=cmapv)
-    plt.savefig("color.png", transparent=True)
     file = discord.File("color.png")
     await ctx.send(file=file)
   except:
-    try:
-      bcs = plt.gca()
-      plt.setp(ax.spines.values(), color=name)
-      fig.set_facecolor(name)
-      ax.set_facecolor(name)
-      plt.savefig("color.png", transparent=False)
-      file = discord.File("color.png")
-      await ctx.send(file=file)
-    except:
-      plt.clf()
-      await ctx.send("Invalid colour name, please try again.")
+    await ctx.send("Invalid colour name, please try again.")
 
 @slash.slash(name="status", description="Shows the status of a member.", options=[create_option(name="Member",description="The name of the colour.",option_type=6,required=True)])
 async def _status(ctx, member : discord.Member = None):
@@ -2705,4 +2555,3 @@ async def _status(ctx, member : discord.Member = None):
   await ctx.send(embed=embed)
 
 bot.run('Nzk2Njg2MzYzNjA0NjgwNzU1.X_bh_g.8LrZQX__nLUKyXDgpOt5bLnEN7Q')
-#client.run('Nzk2Njg2MzYzNjA0NjgwNzU1.X_bh_g.8LrZQX__nLUKyXDgpOt5bLnEN7Q')
