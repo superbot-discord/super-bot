@@ -44,7 +44,6 @@ bot_admins = [687474789342117900]
 bot = commands.Bot(command_prefix=commands.when_mentioned_or("="), intents=discord.Intents.all())
 bot.remove_command('help')
 slash = SlashCommand(bot, sync_commands=True)
-#client = discord.Client(intents=discord.Intents.all())
 allid=[]
 id_pattern = re.compile(r'([A-Z]{5})', re.IGNORECASE)
 alphaend_pattern = re.compile(r'.*[a-z]', re.IGNORECASE)
@@ -79,7 +78,7 @@ overwrite = discord.PermissionOverwrite()
 overwrite.view_channel = True
 
 def botadmin(context):
-  return 
+  return context.author.id == 687474789342117900
 
 @bot.event
 async def on_member_join(member):
@@ -2352,10 +2351,10 @@ async def _server_regular(ctx):
     embed.add_field(name="AFK Timeout", value=f9v, inline=True)
     embed.add_field(name="AFK Channel", value=f10v, inline=True)
   embed.add_field(name="ID", value=f10va, inline=True)
-  #if guild.default_notifications.all_messages:
-  #  embed.add_field(name="Default Notifications", value="Members receive notifications for every message by default.", inline=True)
-  #else:
-  #  embed.add_field(name="Default Notifications", value="Members only receive notifications for messages they are mentioned in by default.", inline=True)
+  if guild.default_notifications.all_messages:
+    embed.add_field(name="Default Notifications", value="Members receive notifications for every message by default.", inline=True)
+  else:
+    embed.add_field(name="Default Notifications", value="Members only receive notifications for messages they are mentioned in by default.", inline=True)
   if guild.features.count("COMMUNITY")==1:
     embed.add_field(name="Community", value="This is a community server.", inline=True)
   if guild.features.count("WELCOME_SCREEN_ENABLED")==1:
