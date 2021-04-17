@@ -13,6 +13,7 @@ import requests
 import matplotlib.pyplot as plt
 from selenium.webdriver.common.by import By
 import numpy as np
+md_pattern = re.compile(r'^\`\`\`(md|markdown)?\n[\s\S]*\`\`\`$')
 
 def func(pct, allvals):
   absolute = int(pct/100*np.sum(allvals))
@@ -22,6 +23,41 @@ options = webdriver.ChromeOptions()
 options.headless = True
 options.add_argument('--no-sandbox')
 options.add_argument('--disable-dev-shm-usage')
+
+def botmd(mdcode):
+  match = md_pattern.fullmatch(mdcode)
+  if match:
+    mdcode = mdcode.replace("```md","", 1)
+    code = mdcode.replace("```","")
+  if code == None:
+    r = requests.get(ctx.message.attachments[0].url, stream=True)
+    r.raise_for_status()
+    r.raw.decode_content = True
+    mdcode = r.content
+  code = str(markdowner.convert(mdcode)).lstrip("'u").rstrip("'")
+  driver = webdriver.Chrome(options=options)
+  driver.get(f"data:text/html;charset=utf-8,{code}")
+  S = lambda X: driver.execute_script('return document.body.parentNode.scroll'+X)
+  driver.set_window_size(S('Width'),S('Height'))
+  driver.save_screenshot('md_screenshot.png')
+  driver.quit()
+
+def bothtml(code):
+  match = html_pattern.fullmatch(code)
+  if match:
+    code = code.replace("```html","", 1)
+    code = code.replace("```","")
+  if code == None:
+    r = requests.get(ctx.message.attachments[0].url, stream=True)
+    r.raise_for_status()
+    r.raw.decode_content = True
+    code = r.content
+  driver = webdriver.Chrome(options=options)
+  driver.get(f"data:text/html;charset=utf-8,{code}")
+  S = lambda X: driver.execute_script('return document.body.parentNode.scroll'+X)
+  driver.set_window_size(S('Width'),S('Height'))
+  driver.save_screenshot('html_screenshot.png')
+  driver.quit()
 
 def botscreenshot(url, form):
   driver = webdriver.Chrome(options=options)
