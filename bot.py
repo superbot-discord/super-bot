@@ -790,7 +790,7 @@ async def html(ctx, *, code = None):
 @bot.command(aliases=['md'])
 async def markdown(ctx, *, mdcode = None):
   botmd(mdcode)
-  await ctx.send(file=discord.File('md_screenshot.png')
+  await ctx.send(file=discord.File('md_screenshot.png'))
   os.remove('md_screenshot.png')
 
 @bot.command()
