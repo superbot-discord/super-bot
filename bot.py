@@ -46,17 +46,10 @@ bot.remove_command('help')
 slash = SlashCommand(bot, sync_commands=True)
 allid=[]
 id_pattern = re.compile(r'([A-Z]{5})', re.IGNORECASE)
-alphaend_pattern = re.compile(r'.*[a-z]', re.IGNORECASE)
-html_pattern = re.compile(r'^\`\`\`(html)?\n[\s\S]*\`\`\`$')
 verify_pattern = re.compile(r'[^ ⠀][\s\S]{0,30}?[^ ⠀]#?[\d]{4}(,|, | )?[\d+\-*/×÷%xyz()\[\]\{\}]{1,50}=[\d+\-*/×÷%xyz()\[\]\{\}]{1,50}(,|, | )?[\S ]{3,20}(,|, | )?(Red|Orange|Yellow|Green|Light( |_)?Green|Dark( |_)?Green|Cyan|Blue|Light( |_)?Blue|Dark( |_)?Blue|Purple|Pink|Brown)', re.IGNORECASE)
 poll_pattern = re.compile(r'([\w]+?)(:\w{2,32}:|[\uD800-\uDBFF])')
 UNITS = {'s':'seconds', 'm':'minutes', 'h':'hours', 'd':'days', 'w':'weeks'}
 typer=0
-options = webdriver.ChromeOptions()
-options.headless = True
-options.add_argument('--no-sandbox')
-options.add_argument('--disable-dev-shm-usage')
-markdowner = Markdown(extras=["strike", "footnotes"])
 cmaphsv = plt.cm.hsv
 def func(pct, allvals):
   absolute = int(pct/100*np.sum(allvals))
@@ -301,7 +294,6 @@ async def reactions(ctx, *, msg : discord.Message):
     labelslist.append(em.demojize(counter.emoji))
   y = np.array(numlist)
   labels = tuple(labelslist)
-  cmaphsv = plt.cm.hsv
   mycolors = []
   for count in range(0, len(numlist)):
     mycolors.append(cmaphsv(count/len(numlist)))
