@@ -8,7 +8,7 @@ set(pytz.all_timezones_set)
 hexstring_pattern = re.compile(r'#?([0-9A-F]{2})([0-9A-F]{2})([0-9A-F]{2})', re.IGNORECASE)
 
 def botregex(regularexp, text):
-theregex = r"(?P<LargestCapturingGroup>"+regularexp+")"
+  theregex = r"(?P<LargestCapturingGroup>"+regularexp+")"
   newtext = re.sub(theregex, "**\g<LargestCapturingGroup>**", text)
   matches = len(re.findall(theregex, text))
   if matches == 1:
