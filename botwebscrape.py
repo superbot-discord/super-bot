@@ -13,6 +13,8 @@ import requests
 import matplotlib.pyplot as plt
 from selenium.webdriver.common.by import By
 import numpy as np
+markdowner = Markdown(extras=["strike", "footnotes"])
+html_pattern = re.compile(r'^\`\`\`(html)?\n[\s\S]*\`\`\`$')
 md_pattern = re.compile(r'^\`\`\`(md|markdown)?\n[\s\S]*\`\`\`$')
 
 def func(pct, allvals):
