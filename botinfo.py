@@ -7,6 +7,34 @@ import re
 set(pytz.all_timezones_set)
 hexstring_pattern = re.compile(r'#?([0-9A-F]{2})([0-9A-F]{2})([0-9A-F]{2})', re.IGNORECASE)
 
+def botregex(regularexp, text):
+theregex = r"(?P<LargestCapturingGroup>"+regularexp+")"
+  newtext = re.sub(theregex, "**\g<LargestCapturingGroup>**", text)
+  matches = len(re.findall(theregex, text))
+  if matches == 1:
+    ti = "There was 1 occurrence."
+  elif matches == 0:
+    ti = "There was no occurrences."
+  elif matches >= 2:
+    ti = "There were "+str(matches)+" occurrences."
+  embed = discord.Embed(title = ti, description = newtext.replace("****",""))
+  embed.set_author(name="Match Results for "+regularexp)
+  embed.set_footer(text="Match Results are highlighted in bold")
+  return embed
+
+def botregsub(regular1, regular2, text):
+  newtext = re.sub(regular1, regular2, text)
+  matches = len(re.findall(regular1, text))
+  if matches == 1:
+    ti = "There was 1 occurrence."
+  elif matches == 0:
+    ti = "There was no occurrences."
+  elif matches >= 2:
+    ti = "There were "+str(matches)+" occurrences."
+  embed = discord.Embed(title = ti, description = "`"+newtext+"`")
+  embed.set_author(name="Substitution Result for "+regular1)
+  return embed
+
 def botcolor(arg1, arg2, arg3):
   args = arg1, arg2, arg3
   match = hexstring_pattern.fullmatch(arg1)
