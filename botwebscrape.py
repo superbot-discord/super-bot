@@ -2,17 +2,18 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.chrome.options import Options
 from discord import Webhook, RequestsWebhookAdapter
+from selenium.webdriver.common.by import By
 from discord_webhook import DiscordWebhook
 from discord.ext.commands import *
 from discord.ext import commands
-import discord
+import matplotlib.pyplot as plt
+from markdown2 import Markdown
 from selenium import webdriver
 from bs4 import BeautifulSoup
-import re
-import requests
-import matplotlib.pyplot as plt
-from selenium.webdriver.common.by import By
 import numpy as np
+import requests
+import discord
+import re
 markdowner = Markdown(extras=["strike", "footnotes"])
 html_pattern = re.compile(r'^\`\`\`(html)?\n[\s\S]*\`\`\`$')
 md_pattern = re.compile(r'^\`\`\`(md|markdown)?\n[\s\S]*\`\`\`$')
