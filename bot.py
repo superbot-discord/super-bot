@@ -374,7 +374,7 @@ async def youtube(ctx, *, link):
   ytv_downloaded = False
   yta_downloaded = False
   youtube = pytube.YouTube(link)
-  videos = youtube.streams.filter(mime_type="video/mp4").order_by("resolution")
+  videos = youtube.streams.filter(mime_type="video/mp4").filter(progressive="True").order_by("resolution")
   for count in videos:
     count.download()
     try:
@@ -506,32 +506,12 @@ async def cleanup(ctx, *, text = None):
 
 @bot.command()
 async def regex(ctx, regularexp, *, text):
-  theregex = r"(?P<LargestCapturingGroup>"+regularexp+")"
-  newtext = re.sub(theregex, "**\g<LargestCapturingGroup>**", text)
-  matches = len(re.findall(theregex, text))
-  if matches == 1:
-    ti = "There was 1 occurrence."
-  elif matches == 0:
-    ti = "There was no occurrences."
-  elif matches >= 2:
-    ti = "There were "+str(matches)+" occurrences."
-  embed = discord.Embed(title = ti, description = newtext.replace("****",""))
-  embed.set_author(name="Match Results for "+regularexp)
-  embed.set_footer(text="Match Results are highlighted in bold")
+  embed = botregex(regularexp, text)
   await ctx.send(embed=embed)
 
 @bot.command()
 async def regsub(ctx, regular1, regular2, *, text):
-  newtext = re.sub(regular1, regular2, text)
-  matches = len(re.findall(regular1, text))
-  if matches == 1:
-    ti = "There was 1 occurrence."
-  elif matches == 0:
-    ti = "There was no occurrences."
-  elif matches >= 2:
-    ti = "There were "+str(matches)+" occurrences."
-  embed = discord.Embed(title = ti, description = "`"+newtext+"`")
-  embed.set_author(name="Substitution Result for "+regular1)
+  embed = botregsub(regular1, regular2, text)
   await ctx.send(embed=embed)
 
 @bot.command()
