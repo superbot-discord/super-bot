@@ -374,7 +374,7 @@ async def youtube(ctx, *, link):
   ytv_downloaded = False
   yta_downloaded = False
   youtube = pytube.YouTube(link)
-  videos = youtube.streams.filter(mime_type="video/mp4").filter(progressive="True").order_by("resolution")
+  videos = youtube.streams.filter(mime_type="video/mp4").filter(progressive="True").filter(type="video"), order_by("resolution")
   for count in videos:
     count.download()
     try:
