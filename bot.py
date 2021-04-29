@@ -371,7 +371,7 @@ async def poll(ctx, *, text):
 
 @bot.command()
 async def unscramble(ctx, *, text):
-  await ctx.send(botunscramble(text))
+  await ctx.send(embed=botunscramble(text))
 
 @bot.command()
 async def youtube(ctx, *, link):
