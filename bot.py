@@ -370,7 +370,7 @@ async def poll(ctx, *, text):
     await poll.add_reaction(count) 
 
 @bot.command()
-async def unsccramble(ctx, *, text):
+async def unscramble(ctx, *, text):
   await ctx.send(botunscramble(text))
 
 @bot.command()
