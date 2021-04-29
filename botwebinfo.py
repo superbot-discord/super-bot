@@ -26,12 +26,12 @@ def botunscramble(text):
   soup=BeautifulSoup(r.content, features="html.parser")
   everything = soup.findAll('a', target="_blank")
   length = 99999
-  output = f"You used the word {text}."
+  output = discord.Embed(title=f"You used the word {text}.")
   for count in everything[:-7]:
     formatted = count.text.rstrip(" ").replace(f"\n","")
     if length != len(formatted):
       length = len(formatted)
-      output += f"\n" + str(len(formatted)) + "-letter words" + formatted
+      output.add_field(name=str(length)+"-letters", value = formatted)
     elif len(formatted) >= 0:
      output += formatted
   if len(output.replace(" ", "").replace(f"\n", "")) == 0:
