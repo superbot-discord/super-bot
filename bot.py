@@ -713,7 +713,7 @@ async def screenshot(ctx, url = None, form = "all"):
     os.remove('web_screenshot2.png')
 
 @bot.command()
-async def ocr(ctx, *, text = None):
+async def ocr(ctx, lang="eng", *, text = None):
   images = ctx.message.attachments
   for count in range(0,len(images)):
     r = requests.get(images[count].url, stream=True)
@@ -722,7 +722,7 @@ async def ocr(ctx, *, text = None):
     with PIL.Image.open(r.raw) as img:
       desc=pytesseract.image_to_string(img)
     r.close()
-    if desc=="":
+    if desc.replace(" ","")=="":
       desc="There was no text."
     await ctx.send(desc)
 
