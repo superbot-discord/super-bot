@@ -37,6 +37,7 @@ def botunscramble(text):
       content = f"`{formatted}` "
     elif len(formatted) >= 0:
      content += f"`{formatted}` "
+  output.add_field(name=str(length)+"-letters", value = content)
   return output
 
 def botminecraft(item):
