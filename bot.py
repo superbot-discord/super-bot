@@ -370,6 +370,10 @@ async def poll(ctx, *, text):
     await poll.add_reaction(count) 
 
 @bot.command()
+async def unsccramble(ctx, *, text):
+  await ctx.send(botunscramble(text))
+
+@bot.command()
 async def youtube(ctx, *, link):
   ytv_downloaded = False
   yta_downloaded = False
