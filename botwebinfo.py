@@ -28,7 +28,7 @@ def botunscramble(text):
   output = discord.Embed(title=f"Unscrambled results for {text}")
   content = everything[0].text.rstrip(" ").replace(f"\n","")
   length = len(content)
-  for count in everything[1:-7]:
+  for count in everything[0:-7]:
     formatted = count.text.rstrip(" ").replace(f"\n","")
     if length != len(formatted):
       length = len(formatted)
