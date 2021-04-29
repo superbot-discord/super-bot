@@ -31,6 +31,7 @@ def botunscramble(text):
   for count in everything[:-7]:
     formatted = count.text.rstrip(" ").replace(f"\n","")
     if length != len(formatted):
+      content += f"`{formatted}` "
       length = len(formatted)
       output.add_field(name=str(length)+"-letters", value = content)
       content = ""
