@@ -720,7 +720,7 @@ async def ocr(ctx, lang="eng", *, text = None):
     r.raise_for_status()
     r.raw.decode_content = True
     with PIL.Image.open(r.raw) as img:
-      desc=pytesseract.image_to_string(img)
+      desc=pytesseract.image_to_string(img, lang=lang)
     r.close()
     if desc.replace(" ","")=="":
       desc="There was no text."
