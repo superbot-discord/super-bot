@@ -25,16 +25,15 @@ def botunscramble(text):
   r=requests.get(f"https://wordunscrambler.me/unscramble/{text}")
   soup=BeautifulSoup(r.content, features="html.parser")
   everything = soup.findAll('a', target="_blank")
-  length = 99999
   output = discord.Embed(title=f"Unscrambled results for {text}")
-  content = ""
-  for count in everything[:-7]:
+  content = everything[0].text.rstrip(" ").replace(f"\n","")
+  length = len(content)
+  for count in everything[1:-7]:
     formatted = count.text.rstrip(" ").replace(f"\n","")
     if length != len(formatted):
-      content += f"`{formatted}` "
       length = len(formatted)
       output.add_field(name=str(length)+"-letters", value = content)
-      content = ""
+      content = f"`{formatted}` "
     elif len(formatted) >= 0:
      content += f"`{formatted}` "
   return output
