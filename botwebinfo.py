@@ -21,6 +21,23 @@ for count in srclangkeys:
   srclangdict[count] = unsortedsrclangdict[count]
 wikipedia.set_lang("en")
 
+def botunscramble(text):
+  r=requests.get(f"https://wordunscrambler.me/unscramble/{text}")
+  soup=BeautifulSoup(r.content, features="html.parser")
+  everything = soup.findAll('a', target="_blank")
+  length = 99999
+  output = f"You used the word {text}."
+  for count in everything[:-7]:
+    formatted = count.text.rstrip(" ").replace(f"\n","")
+    if length != len(formatted):
+      length = len(formatted)
+      output += f"\n" + str(len(formatted)) + "-letter words" + formatted
+    elif len(formatted) >= 0:
+     output += formatted
+  if len(output.replace(" ", "").replace(f"\n", "")) == 0:
+    output = "No results!"
+  return output
+
 def botminecraft(item):
   r=requests.get('https://minecraft.fandom.com/wiki/'+item)
   soup=BeautifulSoup(r.content, features="html.parser")
