@@ -36,9 +36,9 @@ def botunscramble(text):
       output.add_field(name=str(length)+"-letters", value=content, inline=False)
       length = len(formatted)
       content = f"`{formatted}` "
-    elif len(formatted) >= 0 and len(content+formatted)<=1022:
+    elif len(formatted) >= 0 and len(content+formatted)<=1021:
      content += f"`{formatted}` "
-    elif len(content+formatted)>1022:
+    elif len(content+formatted)>1021:
       content += "…"
     if len(output)>=5985:
       content += "…"
