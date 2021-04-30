@@ -26,9 +26,11 @@ def botunscramble(text):
   soup=BeautifulSoup(r.content, features="html.parser")
   everything = soup.findAll('a', target="_blank")
   output = discord.Embed(title=f"Unscrambled results for {text}")
-  txt = False
   for count in everything[0:-7]:
     formatted = count.text.rstrip(" ").replace(f"\n","")
+    if len(output)+len(formatted)>=5998:
+      content += "…"
+      break
     if count == everything[0]:
       content = f"`{formatted}` "
       length = len(formatted)
@@ -44,27 +46,22 @@ def botunscramble(text):
         output.add_field(name=str(length)+"-letters", value = content + "…", inline=False)
         content = ""
         length = length - 1
-    if len(output)>=5985:
-      content += "…"
-      txt = True
-      break
   output.add_field(name=str(length)+"-letters", value = content, inline=False)
-  if txt == True:
-    length = 99999
-    text = f"WORD: {text}\n"
-    for count in everything[:-7]:
-      formatted = count.text.rstrip(" ").replace(f"\n","")
-      if count == everything[0]:
-        length = len(formatted)
-        text += f"MOST LIKELY OUTPUT(S)\n"+formatted
-      elif length != len(formatted):
-        length = len(formatted)
-        text += f"\n"+str(len(formatted))+f"-letter word(s)\n"+formatted
-      elif len(formatted) >= 0:
-        text += formatted
-        file = open("output.txt", "w")
-        file.write(text)
-        file.close()
+  length = 99999
+  text = f"WORD: {text}\n"
+  for count in everything[:-7]:
+    formatted = count.text.rstrip(" ").replace(f"\n","")
+    if count == everything[0]:
+      length = len(formatted)
+      text += f"MOST LIKELY OUTPUT(S)\n"+formatted
+    elif length != len(formatted):
+      length = len(formatted)
+      text += f"\n"+str(len(formatted))+f"-letter word(s)\n"+formatted
+    elif len(formatted) >= 0:
+      text += formatted + f"\n"
+      file = open("output.txt", "w")
+      file.write(text)
+      file.close()
   return output
 
 def botminecraft(item):
