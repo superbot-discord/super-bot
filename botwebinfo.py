@@ -51,7 +51,7 @@ def botunscramble(text):
   output.add_field(name=str(length)+"-letters", value = content, inline=False)
   if txt == True:
     length = 99999
-    text = f"WORD: {word}\n"
+    text = f"WORD: {text}\n"
     for count in everything[:-7]:
       formatted = count.text.rstrip(" ").replace(f"\n","")
       if count == everything[0]:
