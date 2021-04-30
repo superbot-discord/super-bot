@@ -374,7 +374,7 @@ async def unscramble(ctx, *, text):
   try:
     await ctx.send(embed=botunscramble(text), file=discord.File("output.txt"))
   except:
-    await ctx.send(embed=botunscramble(text), file=discord.File("output.txt"))
+    await ctx.send(embed=botunscramble(text))
 
 @bot.command()
 async def youtube(ctx, *, link):
