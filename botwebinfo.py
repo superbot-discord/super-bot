@@ -38,12 +38,14 @@ def botunscramble(text):
       content = f"`{formatted}` "
     elif len(formatted) >= 0 and len(content+formatted)<=1022:
      content += f"`{formatted}` "
+    elif len(content+formatted)>1022:
+      content += "…"
     if len(output)>=5985:
       content += "…"
-      break
       txt = True
+      break
   output.add_field(name=str(length)+"-letters", value = content, inline=False)
-  if txt:
+  if txt == True:
     length = 99999
     text = f"WORD: {word}\n"
     for count in everything[:-7]:
