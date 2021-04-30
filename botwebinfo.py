@@ -29,9 +29,6 @@ def botunscramble(text):
   content = ""
   for count in everything[0:-7]:
     formatted = count.text.rstrip(" ").replace(f"\n","")
-    if len(output)+len(formatted+content)>=5970:
-      content += "…"
-      break
     if count == everything[0]:
       content = f"`{formatted}` "
       length = len(formatted)
@@ -47,6 +44,9 @@ def botunscramble(text):
         output.add_field(name=str(length)+"-letters", value = content + "…", inline=False)
         content = ""
         length = length - 1
+    if len(output)+len(formatted+content)>=5970:
+      content += "…"
+      break
   output.add_field(name=str(length)+"-letters", value = content, inline=False)
   length = 99999
   text = f"WORD: {text}\n"
