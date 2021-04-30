@@ -59,7 +59,7 @@ def botunscramble(text):
         file = open("output.txt", "w")
         file.write(text)
         file.close()
-      return output
+  return output
 
 def botminecraft(item):
   r=requests.get('https://minecraft.fandom.com/wiki/'+item)
