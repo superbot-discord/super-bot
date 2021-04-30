@@ -26,6 +26,7 @@ def botunscramble(text):
   soup=BeautifulSoup(r.content, features="html.parser")
   everything = soup.findAll('a', target="_blank")
   output = discord.Embed(title=f"Unscrambled results for {text}")
+  content = ""
   for count in everything[0:-7]:
     formatted = count.text.rstrip(" ").replace(f"\n","")
     if len(output)+len(formatted+content)>=5970:
