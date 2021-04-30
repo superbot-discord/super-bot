@@ -24,35 +24,31 @@ wikipedia.set_lang("en")
 def botunscramble(text):
   r=requests.get(f"https://wordunscrambler.me/unscramble/{text}")
   soup=BeautifulSoup(r.content, features="html.parser")
-  everything = soup.findAll('a', target="_blank")
+  everything = soup.findAll('a', target="_blank")[:-7]
   output = discord.Embed(title=f"Unscrambled results for {text}")
   content = ""
-  for count in everything[0:-7]:
-    formatted = count.text.rstrip(" ").replace(f"\n","")
-    if count == everything[0]:
-      content = f"`{formatted}` "
-      length = len(formatted)
-    elif length != len(formatted):
-      output.add_field(name=str(length)+"-letters", value=content, inline=False)
-      length = len(formatted)
-      content = f"`{formatted}` "
-    elif len(formatted) >= 0:
-      if len(content+formatted)<1024:
-        content += f"`{formatted}` "
-        length = len(formatted)
+  
+  _sorted = {}
+  for count in everything:
+    _sorted.setdefault(len(count), []).append(count)
+  everything = list(_sorted.values())
+  for count in everything:
+    current = ""
+    for count2 in count:
+      if len(current+count2)<1021:
+        current += (f"`{count2}` ")
+        length = str(len(count2))
       else:
-        if len(content.replace(" ")) != 0:
-          output.add_field(name=str(length)+"-letters", value = content + "…", inline=False)
-        content = ""
-        length = length - 1
-    if len(output)+len(formatted+content)>=5970:
-      content += "…"
+        current += "…"
+        break
+    if len(output)+len(current) <= 5991:
+      output.add_field(name = "{length}-letters", value=current, inline=False)
+    else:
       break
-  if len(content.replace(" ")) != 0:
-    output.add_field(name=str(length)+"-letters", value = content, inline=False)
+  
   length = 99999
   text = f"WORD: {text}\n"
-  for count in everything[:-7]:
+  for count in everything:
     formatted = count.text.rstrip(" ").replace(f"\n","")
     if count == everything[0]:
       length = len(formatted)
@@ -62,9 +58,11 @@ def botunscramble(text):
       text += f"\n"+str(len(formatted))+f"-letter word(s)\n"+formatted
     elif len(formatted) >= 0:
       text += formatted + f"\n"
-      file = open("output.txt", "w")
-      file.write(text)
-      file.close()
+  
+  
+  file = open("output.txt", "w")
+  file.write(text)
+  file.close()
   return output
 
 def botminecraft(item):
