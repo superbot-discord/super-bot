@@ -39,7 +39,7 @@ def botunscramble(text):
     elif len(formatted) >= 0:
       if len(content+formatted)<1021:
         content += f"`{formatted}` "
-      else len(content+formatted)>1021:
+      elif len(content+formatted)>1021:
         content += "…"
     if len(output)>=5985:
       content += "…"
