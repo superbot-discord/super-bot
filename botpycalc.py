@@ -101,6 +101,8 @@ def botcalc(arg : str):
             result=result+str(number)[count]
           result=result+"e+"+str(len(str(number))-1)
       disp = "Result: "+str(result)
+      if "69" in arg and "420" in arg:
+        disp += ", what are you thinking?"
       return disp
     elif arg.count("=")!=0 and arg.count("==")==0 and arg.count("!=")==0 and arg.count(">=")==0 and arg.count("<=")==0 and arg.count(">")==0 and arg.count("<")==0 and arg.count("and")==0 and arg.count("or")==0 and arg.count("not")==0:
       lcls = locals()
