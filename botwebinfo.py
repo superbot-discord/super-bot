@@ -47,19 +47,13 @@ def botunscramble(text):
       break
   
   length = 99999
-  text = f"WORD: {text}\n"
+  text = f"WORD: {text}\n\n"
   for count in everything:
-    formatted = count.text.rstrip(" ").replace(f"\n","")
-    if count == everything[0]:
-      length = len(formatted)
-      text += f"MOST LIKELY OUTPUT(S)\n"+formatted
-    elif length != len(formatted):
-      length = len(formatted)
-      text += f"\n"+str(len(formatted))+f"-letter word(s)\n"+formatted
-    elif len(formatted) >= 0:
-      text += formatted + f"\n"
-  
-  
+    text += f"\n" + str(len(count[0].text.rstrip(" ").replace(f"\n",""))) + "-LETTER WORDS\n"
+    for count2 in count:
+      formatted = count2.text.rstrip(" ").replace(f"\n","")
+      text += f"{formatted}\n"
+      
   file = open("output.txt", "w")
   file.write(text)
   file.close()
