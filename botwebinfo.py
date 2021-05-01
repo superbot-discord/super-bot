@@ -36,15 +36,14 @@ def botunscramble(text):
     current = ""
     for count2 in count:
       if len(current+count2.text.rstrip(" ").replace(f"\n",""))<1021:
-        current += "`" + count2.text.rstrip(" ").replace(f"\n","") + "`"
+        current += "`" + count2.text.rstrip(" ").replace(f"\n","") + "` "
         length = str(len(count2.text.rstrip(" ").replace(f"\n","")))
       else:
         current += "…"
         break
-    if len(output)+len(current) <= 5991:
-      output.add_field(name = "{length}-letters", value=current, inline=False)
-    else:
+    if len(output)+len(current) > 5991:
       break
+    output.add_field(name = f"{length}-letters", value=current, inline=False)
   
   length = 99999
   text = f"WORD: {text}\n\n"
