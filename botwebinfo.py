@@ -26,18 +26,18 @@ def botunscramble(text):
   soup=BeautifulSoup(r.content, features="html.parser")
   everything = soup.findAll('a', target="_blank")[:-7]
   output = discord.Embed(title=f"Unscrambled results for {text}")
-  content = ""
-  
   _sorted = {}
   for count in everything:
     _sorted.setdefault(len(count), []).append(count)
+  print(_sorted)
   everything = list(_sorted.values())
+  print(everything)
   for count in everything:
     current = ""
+    length = str(len(count[0].text.rstrip(" ").replace(f"\n","")))
     for count2 in count:
       if len(current+count2.text.rstrip(" ").replace(f"\n",""))<1021:
         current += "`" + count2.text.rstrip(" ").replace(f"\n","") + "` "
-        length = str(len(count2.text.rstrip(" ").replace(f"\n","")))
       else:
         current += "…"
         break
@@ -45,7 +45,6 @@ def botunscramble(text):
       break
     output.add_field(name = f"{length}-letters", value=current, inline=False)
   
-  length = 99999
   text = f"WORD: {text}\n\n"
   for count in everything:
     text += f"\n" + str(len(count[0].text.rstrip(" ").replace(f"\n",""))) + "-LETTER WORDS\n"
