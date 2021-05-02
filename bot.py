@@ -370,12 +370,9 @@ async def poll(ctx, *, text):
     await poll.add_reaction(count) 
 
 @bot.command()
-async def unscramble(ctx, *, text):
-  output = botunscramble(text)
-  try:
-    await ctx.send(embed=output, file=discord.File("output.txt"))
-  except:
-    await ctx.send(embed=output)
+async def unscramble(ctx, text, length="0"):
+  output = botunscramble(text, length)
+  await ctx.send(embed=output, file=discord.File("output.txt"))
 
 @bot.command()
 async def youtube(ctx, *, link):
