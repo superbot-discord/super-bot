@@ -52,7 +52,7 @@ def botunscramble(text, ilength):
         break
     if len(output)+len(current) > 5991:
       break
-    if ilength == 0 or ilength == length:
+    if ilength == 0 or ilength == int(length):
       output.add_field(name = f"{length}-letters", value=current, inline=False)
   
   text = f"WORD: {text}\n\n"
