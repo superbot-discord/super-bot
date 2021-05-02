@@ -5,6 +5,7 @@ from discord_slash.utils import manage_commands
 from unicode_charnames import search_charnames
 from datetime import datetime, date, timedelta
 from discord_webhook import DiscordWebhook
+from captcha.image import ImageCaptcha
 import selenium.common.exceptions
 from discord.ext import commands
 import matplotlib.pyplot as plt
@@ -46,6 +47,7 @@ id_pattern = re.compile(r'([A-Z]{5})', re.IGNORECASE)
 verify_pattern = re.compile(r'[^ ⠀][\s\S]{0,30}?[^ ⠀]#?[\d]{4}(,|, | )?[\d+\-*/×÷%xyz()\[\]\{\}]{1,50}=[\d+\-*/×÷%xyz()\[\]\{\}]{1,50}(,|, | )?[\S ]{3,20}(,|, | )?(Red|Orange|Yellow|Green|Light( |_)?Green|Dark( |_)?Green|Cyan|Blue|Light( |_)?Blue|Dark( |_)?Blue|Purple|Pink|Brown)', re.IGNORECASE)
 poll_pattern = re.compile(r'([\w]+?)(:\w{2,32}:|[\uD800-\uDBFF])')
 UNITS = {'s':'seconds', 'm':'minutes', 'h':'hours', 'd':'days', 'w':'weeks'}
+image = ImageCaptcha()
 typer=0
 cmaphsv = plt.cm.hsv
 def func(pct, allvals):
@@ -373,6 +375,7 @@ async def poll(ctx, *, text):
 async def unscramble(ctx, text, length="0"):
   output = botunscramble(text, length)
   await ctx.send(embed=output, file=discord.File("output.txt"))
+  os.remove('output.txt')
 
 @bot.command()
 async def youtube(ctx, *, link):
@@ -589,6 +592,15 @@ async def pie(ctx, numbers, label, *, title="No_title_required"):
     os.remove('piechart.png')
   except:
     await ctx.send("Invalid input. Please try again.")
+
+@bot.command()
+async def captcha(ctx, *, text)
+if text == "random":
+  text = random.choice("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789") + random.choice("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789") + random.choice("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789") + random.choice("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789")
+data = image.generate(text)
+image.write('1234', 'captcha.png')
+await ctx.send(f"Captcha for {text}", file = discord.File('captcha.png'))
+os.remove('captcha.png')
 
 @bot.command()
 async def barh(ctx, numbers, label, *, title="No_title_required"):
