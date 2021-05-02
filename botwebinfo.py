@@ -24,7 +24,10 @@ wikipedia.set_lang("en")
 def botunscramble(text):
   r=requests.get(f"https://wordunscrambler.me/unscramble/{text}")
   soup=BeautifulSoup(r.content, features="html.parser")
-  everything = soup.findAll('a', target="_blank")[:-7]
+  raw_everything = soup.findAll('a', target="_blank")[:-7]
+  everything = []
+  for count in raw_everything:
+    everything.append(count.text)
   output = discord.Embed(title=f"Unscrambled results for {text}")
   _sorted = {}
   for count in everything:
@@ -36,8 +39,8 @@ def botunscramble(text):
     current = ""
     length = str(len(count[0].text.rstrip(" ").replace(f"\n","")))
     for count2 in count:
-      if len(current+count2.text.rstrip(" ").replace(f"\n",""))<1021:
-        current += "`" + count2.text.rstrip(" ").replace(f"\n","") + "` "
+      if len(current+count2.rstrip(" ").replace(f"\n",""))<1021:
+        current += "`" + count2.rstrip(" ").replace(f"\n","") + "` "
       else:
         current += "…"
         break
@@ -47,9 +50,9 @@ def botunscramble(text):
   
   text = f"WORD: {text}\n\n"
   for count in everything:
-    text += f"\n" + str(len(count[0].text.rstrip(" ").replace(f"\n",""))) + "-LETTER WORDS\n"
+    text += f"\n" + str(len(count[0].rstrip(" ").replace(f"\n",""))) + "-LETTER WORDS\n"
     for count2 in count:
-      formatted = count2.text.rstrip(" ").replace(f"\n","")
+      formatted = count2.rstrip(" ").replace(f"\n","")
       text += f"{formatted}\n"
       
   file = open("output.txt", "w")
