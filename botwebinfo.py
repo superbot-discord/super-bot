@@ -37,7 +37,7 @@ def botunscramble(text):
   print(everything)
   for count in everything:
     current = ""
-    length = str(len(count[0].text.rstrip(" ").replace(f"\n","")))
+    length = str(len(count[0].rstrip(" ").replace(f"\n","")))
     for count2 in count:
       if len(current+count2.rstrip(" ").replace(f"\n",""))<1021:
         current += "`" + count2.rstrip(" ").replace(f"\n","") + "` "
