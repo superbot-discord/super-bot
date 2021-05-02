@@ -21,7 +21,13 @@ for count in srclangkeys:
   srclangdict[count] = unsortedsrclangdict[count]
 wikipedia.set_lang("en")
 
-def botunscramble(text):
+def botunscramble(text, ilength):
+  try:
+    ilength = int(ilength)
+  except:
+    ilength = 0
+  if ilength != 0 and ilength > len(text):
+    ilength = 0
   r=requests.get(f"https://wordunscrambler.me/unscramble/{text}")
   soup=BeautifulSoup(r.content, features="html.parser")
   raw_everything = soup.findAll('a', target="_blank")[:-7]
@@ -46,14 +52,16 @@ def botunscramble(text):
         break
     if len(output)+len(current) > 5991:
       break
-    output.add_field(name = f"{length}-letters", value=current, inline=False)
+    if ilength == 0 or ilength == length:
+      output.add_field(name = f"{length}-letters", value=current, inline=False)
   
   text = f"WORD: {text}\n\n"
   for count in everything:
-    text += f"\n" + str(len(count[0].rstrip(" ").replace(f"\n",""))) + "-LETTER WORDS\n"
-    for count2 in count:
-      formatted = count2.rstrip(" ").replace(f"\n","")
-      text += f"{formatted}\n"
+    if ilength == 0 or ilength == len(count[0].rstrip(" ").replace(f"\n","")):
+      text += f"\n" + str(len(count[0].rstrip(" ").replace(f"\n",""))) + "-LETTER WORDS\n"
+      for count2 in count:
+        formatted = count2.rstrip(" ").replace(f"\n","")
+        text += f"{formatted}\n"
       
   file = open("output.txt", "w")
   file.write(text)
