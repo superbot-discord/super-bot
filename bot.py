@@ -1299,7 +1299,7 @@ async def role(ctx,role: discord.Role=None):
   ti="Role Information: "+role.name
   if role==None:
     role=ctx.authortop_role
-  desc=role.mention
+  desc=role.mention + " created at " + role.created_at.strftime("%d %b, %Y (%a) %H:%M:%S")
   embed=discord.Embed(title=ti,color=role.color, description=desc)
   memberlist=role.members
   if len(memberlist) == 0:
@@ -1321,20 +1321,18 @@ async def role(ctx,role: discord.Role=None):
     f2v="Yes"
   else:
     f2v="No"
-  f3v=role.created_at.strftime("%d %b, %Y (%a) %H:%M:%S")
   f4v=role.id
   f5v=role.position
   f6v=role.color
   embed.add_field(name="Mentions", value=f1v, inline=True)
-  embed.add_field(name="Members ("+str(len(memberlist))+")", value=f0v, inline=True)
   embed.add_field(name="Displayed separately?", value=f2v, inline=True)
   embed.add_field(name="Role ID", value=f4v, inline=True)
   embed.add_field(name="Position in hierarchy", value=f5v, inline=True)
   embed.add_field(name="Color", value=f6v, inline=True)
-  embed.add_field(name="Created at", value=f3v, inline=True)
   if role.is_integration():
     f7v="This role is managed by an integration, such as a bot."
     embed.add_field(name="Integration", value=f7v, inline=False)
+  embed.add_field(name="Members ("+str(len(memberlist))+")", value=f0v, inline=False)
   #embed.add_field(name="Channel Permissions", value=f3vb, inline=False)
   await ctx.send(embed=embed)
 
@@ -1828,7 +1826,7 @@ async def user(ctx, user: discord.Member = None, channel: discord.TextChannel = 
   if user.name==user.display_name:
     f0v=f"{user.name}#{user.discriminator}"
   else:
-    f0v=f"{user.name}#{user.discriminator} (__Nickname:__  {user.display_name})"
+    f0v=f"{user.name}#{user.discriminator} (__Nickname:__  `{user.display_name}`)"
   f1v=user.created_at.strftime("%d %b, %Y (%a) %H:%M:%S")
   f1ts = str(datetime.datetime.now() - user.created_at)
   if f1ts.count(" days, ") == 0:
@@ -1897,6 +1895,30 @@ async def user(ctx, user: discord.Member = None, channel: discord.TextChannel = 
   f3vb=f3vb[:-2]
   if f3vb=="":
     f3vb="No permissions"
+  
+  f3ve=""
+  if user.guild_permissions.connect:
+    f3ve=f3ve+"Connect, "
+  if user.guild_permissions.speak:
+    f3ve=f3ve+"Speak (Audio), "
+  if user.guild_permissions.stream:
+    f3ve=f3ve+"Stream (Video), "
+  if user.guild_permissions.use_voice_activation:
+    f3ve=f3ve+"Use Voice Activity, "
+  if user.guild_permissions.priority_speaker:
+    f3ve=f3ve+"Priority Speaker, "
+  if user.guild_permissions.mute_members:
+    f3ve=f3ve+"Mute Memvers, "
+  if user.guild_permissions.deafen_members:
+    f3ve=f3ve+"Deafen Members, "
+  if user.guild_permissions.move_members:
+    f3ve=f3ve+"Move Members, "
+  if user.guild_permissions.request_to_speak:
+    f3ve=f3ve+"Request to Speak, "
+  f3ve=f3ve[:-2]
+  if f3ve=="":
+    f3ve="No permissions"
+  
   if user.status == discord.Status.online:
     f3vd = "Online"
   elif user.status == discord.Status.idle:
@@ -1977,92 +1999,13 @@ async def user(ctx, user: discord.Member = None, channel: discord.TextChannel = 
   embed.add_field(name="Roles", value=f4v, inline=False)
   embed.add_field(name="Server Permissions", value=f3v, inline=False)
   embed.add_field(name="Channel Permissions", value=f3vb, inline=False)
+  embed.add_field(name="Channel Permissions", value=f3ve, inline=False)
   embed.add_field(name="Status", value=f3vd, inline=True)
   try:
     embed.add_field(name="Activity", value=f3vc, inline=True)
   except:
     1
   embed.add_field(name="Badges", value=f5v, inline=False)
-  await ctx.send(embed=embed)
-
-@bot.command()
-async def uservoice(ctx,channel: discord.VoiceChannel, user: discord.Member=None):
-  ti="User Information"
-  if user==None:
-    user=ctx.author
-  bot=user.bot
-  if bot==True:
-    desc=f"{user.mention} (bot) "
-  else:
-    desc=f"{user.mention} (human) "
-  embed=discord.Embed(title=ti,color=user.color, description=desc)
-  embed.set_thumbnail(url=user.avatar_url)
-  if user.name==user.display_name:
-    f0v=user.name+"#"+user.discriminator
-  else:
-    f0v=user.name+"#"+user.discriminator+"  a.k.a. "+user.display_name
-  f1v=user.created_at.strftime("%d %b, %Y (%a) %H:%M:%S")
-  f2v=user.joined_at.strftime("%d %b, %Y (%a) %H:%M:%S")
-  allroles=user.roles
-  f3v=""
-  if user.permissions_in(channel).administrator:
-    f3v=f3v+"Admin, "
-  if user.permissions_in(channel).manage_guild:
-    f3v=f3v+"Manage Server, "
-  if user.permissions_in(channel).manage_roles:
-    f3v=f3v+"Manage Roles, "
-  if user.permissions_in(channel).administrator:
-    f3v=f3v+"Manage Permissions, "
-  if user.permissions_in(channel).view_audit_log:
-    f3v=f3v+"View Audit Logs, "
-  if user.permissions_in(channel).view_guild_insights:
-    f3v=f3v+"View Server Insights, "
-  if user.permissions_in(channel).kick_members:
-    f3v=f3v+"Kick Members, "
-  if user.permissions_in(channel).ban_members:
-    f3v=f3v+"Ban Members, "
-  if user.permissions_in(channel).manage_nicknames:
-    f3v=f3v+"Manage Nicknames, "
-  if user.permissions_in(channel).manage_webhooks:
-    f3v=f3v+"Manage Webhooks, "
-  if user.permissions_in(channel).manage_emojis:
-    f3v=f3v+"Manage Emojis, "
-  if user.permissions_in(channel).manage_nicknames:
-    f3v=f3v+"Change Nickname, "
-  if user.permissions_in(channel).mention_everyone:
-    f3v=f3v+"Mention Everyone, "
-  if user.permissions_in(channel).create_instant_invite:
-    f3v=f3v+"Create Invite, "
-  f3v=f3v[:-2]
-  f3vc=""
-  if user.permissions_in(channel).connect:
-    f3vc=f3vc+"Connect, "
-  if user.permissions_in(channel).speak:
-    f3vc=f3vc+"Speak, "
-  if user.permissions_in(channel).stream:
-    f3vc=f3vc+"Video, "
-  if user.permissions_in(channel).use_voice_activation:
-    f3vc=f3vc+"Voice Activity, "
-  if user.permissions_in(channel).priority_speaker:
-    f3vc=f3vc+"Priority Speaker, "
-  if user.permissions_in(channel).mute_members:
-    f3vc=f3vc+"Mute Members, "
-  if user.permissions_in(channel).deafen_members:
-    f3vc=f3vc+"Deafen Members, "
-  f3vc=f3vc[:-2]
-  f4v=""
-  if len(allroles)>1:
-    for count in allroles:
-      if count.position!=0:
-        f4v=f4v+count.mention+"⠀"
-  else:
-    f4v="No roles"
-  embed.add_field(name="Name", value=f0v, inline=False)
-  embed.add_field(name="Registered", value=f1v, inline=True)
-  embed.add_field(name="Joined", value=f2v, inline=True)
-  embed.add_field(name="Server Permissions", value=f3v, inline=False)
-  embed.add_field(name="Channel Permissions", value=f3vc, inline=False)
-  embed.add_field(name="Roles", value=f4v, inline=True)
   await ctx.send(embed=embed)
 
 """@bot.command(pass_context=True)
