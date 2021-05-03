@@ -594,11 +594,11 @@ async def pie(ctx, numbers, label, *, title="No_title_required"):
     await ctx.send("Invalid input. Please try again.")
 
 @bot.command()
-async def captcha(ctx, *, text)
+async def captcha(ctx, *, text):
 if text == "random":
   text = random.choice("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789") + random.choice("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789") + random.choice("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789") + random.choice("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789")
 data = image.generate(text)
-image.write('1234', 'captcha.png')
+image.write(text, 'captcha.png')
 await ctx.send(f"Captcha for {text}", file = discord.File('captcha.png'))
 os.remove('captcha.png')
 
