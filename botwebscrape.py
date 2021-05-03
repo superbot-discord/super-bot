@@ -26,6 +26,7 @@ options = webdriver.ChromeOptions()
 options.headless = True
 options.add_argument('--no-sandbox')
 options.add_argument('--disable-dev-shm-usage')
+options.add_argument("–lang=zh-TW")
 
 def botmd(mdcode):
   match = md_pattern.fullmatch(mdcode)
