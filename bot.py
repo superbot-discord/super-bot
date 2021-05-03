@@ -595,12 +595,12 @@ async def pie(ctx, numbers, label, *, title="No_title_required"):
 
 @bot.command()
 async def captcha(ctx, *, text):
-if text == "random":
-  text = random.choice("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789") + random.choice("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789") + random.choice("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789") + random.choice("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789")
-data = image.generate(text)
-image.write(text, 'captcha.png')
-await ctx.send(f"Captcha for {text}", file = discord.File('captcha.png'))
-os.remove('captcha.png')
+  if text == "random":
+    text = random.choice("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789") + random.choice("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789") + random.choice("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789") + random.choice("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789")
+  data = image.generate(text)
+  image.write(text, 'captcha.png')
+  await ctx.send(f"Captcha for {text}", file = discord.File('captcha.png'))
+  os.remove('captcha.png')
 
 @bot.command()
 async def barh(ctx, numbers, label, *, title="No_title_required"):
