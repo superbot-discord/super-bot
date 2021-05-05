@@ -42,9 +42,7 @@ def botunscramble(text, ilength):
   _sorted = {}
   for count in everything:
     _sorted.setdefault(len(count), []).append(count)
-  print(_sorted)
   everything = list(_sorted.values())
-  print(everything)
   for count in everything:
     current = ""
     length = str(len(count[0].rstrip(" ").replace(f"\n","")))
