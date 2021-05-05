@@ -33,7 +33,7 @@ def botunscramble(text, ilength):
   raw_everything = soup.findAll('a', target="_blank")[:-7]
   everything = []
   for count in raw_everything:
-    formatted = re.sub(r'<a href="/dictionary/(\S+?)" title="Lookup \1 in Dictionary" target="_blank" data-word="\1" class="wordWrapper">', '', count)
+    formatted = re.sub(r'<a href="/dictionary/(\S+?)" title="Lookup \1 in Dictionary" target="_blank" data-word="\1" class="wordWrapper">', '', str(count))
     formatted = re.sub(r'</a>', '', formatted)
     formatted = re.sub(r"<span>(\w+?)<\/span>", r"\1", formatted)
     formatted = re.sub(r'<span class="marked-letter">(\w+?)<\/span>', lambda pat: pat.group(1).upper(), formatted)
