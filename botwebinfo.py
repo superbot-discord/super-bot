@@ -33,7 +33,9 @@ def botunscramble(text, ilength):
   raw_everything = soup.findAll('a', target="_blank")[:-7]
   everything = []
   for count in raw_everything:
-    everything.append(count.text)
+    formatted = re.sub(r"<span>(\w+?)<\/span>", r"\1", str(count))
+    formatted = re.sub(r'<span class="marked-letter">(\w+?)<\/span>', r"\U\1", formatted)
+    everything.append(formatted)
   output = discord.Embed(title=f"Unscrambled results for {text}")
   _sorted = {}
   for count in everything:
