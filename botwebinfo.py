@@ -34,7 +34,7 @@ def botunscramble(text, ilength):
   everything = []
   for count in raw_everything:
     formatted = re.sub(r"<span>(\w+?)<\/span>", r"\1", str(count))
-    formatted = re.sub(r'<span class="marked-letter">(\w+?)<\/span>', r"\U\1", formatted)
+    formatted = re.sub(r'<span class="marked-letter">(\w+?)<\/span>', lambda pat: pat.group(1).upper(), formatted)
     everything.append(formatted)
   output = discord.Embed(title=f"Unscrambled results for {text}")
   _sorted = {}
