@@ -647,7 +647,9 @@ async def table(ctx, *, text):
   if output == "Invalid syntax, please try again.":
     await ctx.send(output)
   else:
-    open('table.txt', 'wb').write(output)
+    file = open("table.txt", "w")
+	  file.write(str(script))
+    file.close()
     await ctx.send(output, file=discord.File('table.txt'))
     os.remove('table.txt')
 
