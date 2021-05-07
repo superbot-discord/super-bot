@@ -622,7 +622,7 @@ async def table(ctx, *, text):
     style = PresetStyle.double_thin_compact
   else:
     try:
-      style = exec("PresetStyle."+rawstyle)
+      style = eval("PresetStyle."+rawstyle)
     except:
       style = PresetStyle.double_thin_compact
   headers = header.split(",")
