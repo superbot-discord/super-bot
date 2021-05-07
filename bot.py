@@ -607,7 +607,7 @@ async def table(ctx, *, text):
   splitted = text.split(f"\n")
   header = splitted[0]
   footer = splitted[1]
-  everythingelse = splitted[2:len(splitted)]
+  everythingelse = splitted[2:len(splitted)-1]
   if "|||" in header:
     rawstyle = re.sub(r"([\w]*?)\|\|\|([\s\S]*)", r"\1", header)
     header = re.sub(r"([\w]*?)\|\|\|([\s\S]*)", r"\2", header)
