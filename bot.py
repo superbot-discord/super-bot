@@ -611,11 +611,19 @@ async def table(ctx, *, text):
     everythingelse = splitted[2:len(splitted)]
   except:
     pass
-  if header.startswith("|||"):
-    header = header.replace("|||", "", 1)
+  if "|||" in header:
+    style = re.sub(r"([\s\S]*?)|||([\s\S]*)", r"\1", header)
+    header = re.sub(r"([\s\S]*?)|||([\s\S]*)", r"\2", header)
     first_col_heading = True
   else:
     first_col_heading = False
+  if stype.replace(" ", "") == "":
+    style = PresetStyle.double_thin_compact
+  else:
+    try:
+      exec("stype = PresetStyle."+style,  globals())
+    except
+      style = PresetStyle.double_thin_compact
   headers = header.split(",")
   footers = footer.split(",")
   rawbodies = everythingelse#.split(f"\n")
