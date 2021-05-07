@@ -610,7 +610,7 @@ async def table(ctx, *, text):
     splitted.insert(0, "")
   header = splitted[0]
   footer = splitted[1]
-  everythingelse = splitted[2:len(splitted)-1]
+  everythingelse = splitted[2:len(splitted)]
   if "|||" in header:
     rawstyle = re.sub(r"([\w]*?)\|\|\|([\s\S]*)", r"\1", header)
     header = re.sub(r"([\w]*?)\|\|\|([\s\S]*)", r"\2", header)
@@ -653,7 +653,7 @@ async def table(ctx, *, text):
     file = open("table.txt", "w")
     file.write(output)
     file.close()
-    await ctx.send(output, file=discord.File('table.txt'))
+    await ctx.send(f"```{output}```", file=discord.File('table.txt'))
     os.remove('table.txt')
 
 @bot.command()
