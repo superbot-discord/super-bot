@@ -615,7 +615,8 @@ async def table(ctx, *, text):
     rawstyle = re.sub(r"([\w]*?)\|\|\|([\s\S]*)", r"\1", header)
     header = re.sub(r"([\w]*?)\|\|\|([\s\S]*)", r"\2", header)
     #first_col_heading = True
-  #else:
+  else:
+    rawstyle = ""
   #first_col_heading = False
   if rawstyle.replace(" ", "") == "":
     style = PresetStyle.double_thin_compact
