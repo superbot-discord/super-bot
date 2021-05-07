@@ -631,8 +631,25 @@ async def table(ctx, *, text):
   bodies = []
   for count in rawbodies:
     bodies.append(count.split(","))
-  output = table2ascii(header=headers, footer=footers, body=bodies, style=style)# first_col_heading=first_col_heading)
-  await ctx.send(f"```{output}```")
+  try:
+    output = table2ascii(header=headers, footer=footers, body=bodies, style=style)# first_col_heading=first_col_heading)
+  except:
+    try:
+      output = table2ascii(footer=footers, body=bodies, style=style)
+    except:
+      try:
+        output = table2ascii(header=headers, body=bodies, style=style)
+      except:
+        try:
+          output = table2ascii(body=bodies, style=style)
+        except:
+          output = "Invalid syntax, please try again."
+  if output == "Invalid syntax, please try again.":
+    await ctx.send(output)
+  else:
+    open('table.txt', 'wb').write(output)
+    await ctx.send(output, file=discord.File('table.txt'))
+    os.remove('table.txt')
 
 @bot.command()
 async def barh(ctx, numbers, label, *, title="No_title_required"):
