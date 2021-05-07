@@ -617,7 +617,7 @@ async def table(ctx, *, text):
     #first_col_heading = True
   #else:
   #first_col_heading = False
-  if style.replace(" ", "") == "":
+  if rawstyle.replace(" ", "") == "":
     style = PresetStyle.double_thin_compact
   else:
     try:
