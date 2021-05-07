@@ -648,7 +648,7 @@ async def table(ctx, *, text):
     await ctx.send(output)
   else:
     file = open("table.txt", "w")
-	  file.write(str(script))
+    file.write(str(script))
     file.close()
     await ctx.send(output, file=discord.File('table.txt'))
     os.remove('table.txt')
