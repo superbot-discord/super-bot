@@ -612,8 +612,8 @@ async def table(ctx, *, text):
   except:
     pass
   if "|||" in header:
-    style = re.sub(r"([\s\S]*?)|||([\s\S]*)", r"\1", header)
-    header = re.sub(r"([\s\S]*?)|||([\s\S]*)", r"\2", header)
+    style = re.sub(r"([\w]*?)\|\|\|([\s\S]*)", r"\1", header)
+    header = re.sub(r"([\w]*?)\|\|\|([\s\S]*)", r"\2", header)
     #first_col_heading = True
   #else:
   #first_col_heading = False
