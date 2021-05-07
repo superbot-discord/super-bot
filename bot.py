@@ -630,7 +630,7 @@ async def table(ctx, *, text):
   bodies = []
   for count in rawbodies:
     bodies.append(count.split(","))
-  output = table2ascii(header=headers, footer=footers, body=bodies)#, first_col_heading=first_col_heading)
+  output = table2ascii(header=headers, footer=footers, body=bodies, style=style)# first_col_heading=first_col_heading)
   await ctx.send(f"```{output}```")
 
 @bot.command()
