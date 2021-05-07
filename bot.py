@@ -611,8 +611,8 @@ async def table(ctx, *, text):
     everythingelse = splitted[2:len(splitted)]
   except:
     pass
-  if header.startswith("$"):
-    header = header.replace("$", "", 1)
+  if header.startswith("|||"):
+    header = header.replace("|||", "", 1)
     first_col_heading = True
   else:
     first_col_heading = False
@@ -623,7 +623,7 @@ async def table(ctx, *, text):
   for count in rawbodies:
     bodies.append(count.split(","))
   output = table2ascii(header=headers, footer=footers, body=bodies, first_col_heading=first_col_heading)
-  await ctx.send(output)
+  await ctx.send(f"```{output}```")
 
 @bot.command()
 async def barh(ctx, numbers, label, *, title="No_title_required"):
