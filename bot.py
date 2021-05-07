@@ -623,7 +623,7 @@ async def table(ctx, *, text):
     first_col_footer = False
   headers = header.split(",")
   footers = footer.split(",")
-  rawbodies = everythingelse.split(f"\n")
+  rawbodies = everythingelse#.split(f"\n")
   bodies = []
   for count in rawbodies:
     bodies.append(count.split(","))
