@@ -6,6 +6,7 @@ from unicode_charnames import search_charnames
 from datetime import datetime, date, timedelta
 from discord_webhook import DiscordWebhook
 from captcha.image import ImageCaptcha
+from table2ascii import table2ascii
 import selenium.common.exceptions
 from discord.ext import commands
 import matplotlib.pyplot as plt
@@ -490,7 +491,6 @@ async def botpurge(ctx, *, num):
         
     await ctx.send("Bot purging completed.", delete_after = 5)
   else:
-    print(6)
     await ctx.send("You don't have the required permissions.")
 
 @bot.command()
@@ -601,6 +601,34 @@ async def captcha(ctx, *, text):
   image.write(text, 'captcha.png')
   await ctx.send(f"Captcha for {text}", file = discord.File('captcha.png'))
   os.remove('captcha.png')
+
+@bot.command()
+async def table(ctx, *, text):
+  splitted = text.split(f"\n")
+  try:
+    header = splitted[0]
+    footer = splitted[1]
+    everythingelse = splitted[2:len(splitted)]
+  except:
+    pass
+  if header.startswith("$"):
+    header = header.replace("$", "", 1)
+    first_col_heading = True
+  else:
+    first_col_heading = False
+  if footer.startswith("$"):
+    footer = footer.replace("$", "", 1)
+    first_col_footer = True
+  else:
+    first_col_footer = False
+  headers = header.split(",")
+  footers = footer.split(",")
+  rawbodies = everythingelse.split(f"\n")
+  bodies = []
+  for count in rawbodies:
+    bodies.append(count.split(","))
+  output = table2ascii(header=headers, footer=footers, body=bodies, first_col_heading=first_col_heading, last_col_heading=last_col_heading)
+  await ctx.send(output)
 
 @bot.command()
 async def barh(ctx, numbers, label, *, title="No_title_required"):
