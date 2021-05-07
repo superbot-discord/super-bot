@@ -614,9 +614,9 @@ async def table(ctx, *, text):
   if "|||" in header:
     style = re.sub(r"([\s\S]*?)|||([\s\S]*)", r"\1", header)
     header = re.sub(r"([\s\S]*?)|||([\s\S]*)", r"\2", header)
-    first_col_heading = True
-  else:
-    first_col_heading = False
+    #first_col_heading = True
+  #else:
+  #first_col_heading = False
   if style.replace(" ", "") == "":
     style = PresetStyle.double_thin_compact
   else:
@@ -630,7 +630,7 @@ async def table(ctx, *, text):
   bodies = []
   for count in rawbodies:
     bodies.append(count.split(","))
-  output = table2ascii(header=headers, footer=footers, body=bodies, first_col_heading=first_col_heading)
+  output = table2ascii(header=headers, footer=footers, body=bodies)#, first_col_heading=first_col_heading)
   await ctx.send(f"```{output}```")
 
 @bot.command()
