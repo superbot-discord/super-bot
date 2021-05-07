@@ -605,12 +605,9 @@ async def captcha(ctx, *, text):
 @bot.command()
 async def table(ctx, *, text):
   splitted = text.split(f"\n")
-  try:
-    header = splitted[0]
-    footer = splitted[1]
-    everythingelse = splitted[2:len(splitted)]
-  except:
-    pass
+  header = splitted[0]
+  footer = splitted[1]
+  everythingelse = splitted[2:len(splitted)]
   if "|||" in header:
     rawstyle = re.sub(r"([\w]*?)\|\|\|([\s\S]*)", r"\1", header)
     header = re.sub(r"([\w]*?)\|\|\|([\s\S]*)", r"\2", header)
