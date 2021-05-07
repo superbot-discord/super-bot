@@ -6,7 +6,7 @@ from unicode_charnames import search_charnames
 from datetime import datetime, date, timedelta
 from discord_webhook import DiscordWebhook
 from captcha.image import ImageCaptcha
-from table2ascii import table2ascii
+from table2ascii import table2ascii, PresetStyle
 import selenium.common.exceptions
 from discord.ext import commands
 import matplotlib.pyplot as plt
