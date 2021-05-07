@@ -616,18 +616,13 @@ async def table(ctx, *, text):
     first_col_heading = True
   else:
     first_col_heading = False
-  if footer.startswith("$"):
-    footer = footer.replace("$", "", 1)
-    first_col_footer = True
-  else:
-    first_col_footer = False
   headers = header.split(",")
   footers = footer.split(",")
   rawbodies = everythingelse#.split(f"\n")
   bodies = []
   for count in rawbodies:
     bodies.append(count.split(","))
-  output = table2ascii(header=headers, footer=footers, body=bodies, first_col_heading=first_col_heading, last_col_heading=last_col_heading)
+  output = table2ascii(header=headers, footer=footers, body=bodies, first_col_heading=first_col_heading)
   await ctx.send(output)
 
 @bot.command()
