@@ -605,7 +605,9 @@ async def captcha(ctx, *, text):
 @bot.command()
 async def table(ctx, *, text):
   splitted = text.split(f"\n")
-  print(splitted)
+  if len(splitter) == 1:
+    splitter.insert("", 0)
+    splitter.insert("", 0)
   header = splitted[0]
   footer = splitted[1]
   everythingelse = splitted[2:len(splitted)-1]
