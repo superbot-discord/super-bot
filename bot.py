@@ -617,12 +617,12 @@ async def table(ctx, *, text):
     first_col_heading = True
   else:
     first_col_heading = False
-  if stype.replace(" ", "") == "":
+  if style.replace(" ", "") == "":
     style = PresetStyle.double_thin_compact
   else:
     try:
-      exec("stype = PresetStyle."+style,  globals())
-    except
+      exec("style=PresetStyle."+style,  globals())
+    except:
       style = PresetStyle.double_thin_compact
   headers = header.split(",")
   footers = footer.split(",")
