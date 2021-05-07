@@ -625,8 +625,11 @@ async def table(ctx, *, text):
       style = eval("PresetStyle."+rawstyle)
     except:
       style = PresetStyle.double_thin_compact
-  headers = header.split(",")
-  footers = footer.split(",")
+  try:
+    headers = header.split(",")
+    footers = footer.split(",")
+  except:
+    pass
   rawbodies = everythingelse#.split(f"\n")
   bodies = []
   for count in rawbodies:
