@@ -278,8 +278,8 @@ Plots a [Koch Snowflake](https://en.wikipedia.org/wiki/Koch_snowflake) with the 
   elif cat=="text":
     ti="text [PDF]"
     desc=f"Turns the PDF to plain text."
-  elif cat=="engrave":
-    ti="engrave [Product] [Text]"
+  elif cat=="table":
+    ti="table [Text]"
     desc="""Constructs a plain text table. Available styles: `markdown` `minimalist` `simple` `borderless`
 `ascii(_borderless/box/compact/double/minimalist/simple)` `double(_box/compact/thin_compact)` `thick(_box/compact)` `thin(_box/compact/double/thick/rounded/compact_rounded/double_rounded/thick_rounded)`
 Please check the [documentation](https://github.com/johann-lau/Bot/blob/main/README.md#table-help) for more information."""
