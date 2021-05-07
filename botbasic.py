@@ -47,8 +47,6 @@ This command is still in BETA.
   elif cat=="discord":
     ti="Discord Commands"
     desc="""
-**spam [Number of times to spam] [Text to spam]**
-Spams the text.
 It must be less than 30 times and without any mentions.
 **embed [Title] [Description] [Color] [Author] [Author URL] [Author Image URL] [Footer] [Thumbnail Image URL] [Image URL]…**
 Generates an embed.
@@ -60,8 +58,6 @@ Pretends as a user and send something, using the magic of webhooks.
 Pretends as a user and generates an embed.
 **One line for each argument.**
 Please check the [documentation](https://github.com/johann-lau/Bot#embed-message-help) for more information.
-**pretendspam [User Name, Nickname, ID or Mention] [Text]**
-Pretends as a user and spams the text.
 It must be less than 30 times and without any mentions.
   """
   elif cat=="text" or cat=="textmanipulation" or cat=="manipulation":
@@ -210,9 +206,6 @@ Plots a [Koch Snowflake](https://en.wikipedia.org/wiki/Koch_snowflake) with the 
   elif cat=="pretendembed":
     ti="pretendembed [User Name, Nickname, ID or Mention] [Title] [Description] [Color]…"
     desc=f"Pretends as a user and generates an embed.\n**One line for each argument.**\nPlease check the [documentation](https://github.com/johann-lau/Bot#embed-message-help) for more information."
-  elif cat=="pretendspam":
-    ti="pretendspam [User Name, Nickname, ID or Mention] [Text]"
-    desc=f"Pretends as a user and spams the text.\nIt must be less than 30 times and without any mentions."
   elif cat=="insert":
     ti="insert [Emoji] [Text]"
     desc=f"Replaces the spaces in the text with emojis.\nProtip: also works with multiple emojis by wrapping all emojis in quotation marks. E.g. `=insert \":thumbsup: :heart:\" I love this bot!`"
@@ -296,7 +289,7 @@ Plots a [Koch Snowflake](https://en.wikipedia.org/wiki/Koch_snowflake) with the 
 `server` `role` `channel` `voicechannel` `user` `uservoice` `avatar` `invitelink` `reactions`
 
 **Discord Commands**
-`spam` `embed` `pretend` `pretendembed`
+`embed` `pretend` `pretendembed`
 
 **Text Manipulation Commands**
 `insert` `spoiler` `rawspoiler` `reverse` `emoji`
@@ -311,7 +304,7 @@ Plots a [Koch Snowflake](https://en.wikipedia.org/wiki/Koch_snowflake) with the 
 `screenshot` `youtube` `wiki` `engrave` `covid` `population`
 
 **Plot commands**
-`pie` `barh` `barv` `hist` `snow`
+`table` `pie` `barh` `barv` `hist` `snow`
 
 **Developer Tools and Others**
 `python` `transparent` `ocr` `text` `html` `md` `regex` `regsub`
