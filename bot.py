@@ -606,8 +606,8 @@ async def captcha(ctx, *, text):
 async def table(ctx, *, text):
   splitted = text.split(f"\n")
   if len(splitted) == 1:
-    splitted.insert("", 0)
-    splitted.insert("", 0)
+    splitted.insert(0, "")
+    splitted.insert(0, "")
   header = splitted[0]
   footer = splitted[1]
   everythingelse = splitted[2:len(splitted)-1]
