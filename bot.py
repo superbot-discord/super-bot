@@ -601,6 +601,15 @@ async def captcha(ctx, *, text):
   os.remove('captcha.png')
 
 @bot.command()
+async def draw(ctx, *, text):
+  output = botdraw(text)
+  if len(output) > 1994:
+    await ctx.send(file=discord.File('drawing.txt'))
+  else:
+    await ctx.send(f"```{output}```", file=discord.File('drawing.txt'))
+  os.remove('drawing.txt')
+
+@bot.command()
 async def ascii(ctx, *, text):
   output = botascii(text)
   if len(output) > 1994 or len(text) > 11:
