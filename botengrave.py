@@ -32,8 +32,8 @@ def botengrave(product : str, text : str):
   text = text.replace("`","%60")
   if product == "airtag" or product == "airtags":
     embed = discord.Embed(title="Engrave on AirTags")
-    embed.set_image(url=f"https://www.apple.com/hk/shop/preview/engrave/PX532ZP/A?th={text}&s=2&f=mixed")
-  if product == "airpodspro" or product == "airpodpro":
+    embed.set_image(url="https://www.apple.com/hk/shop/preview/engrave/PX532ZP/A?th=" + text + "&s=2&f=mixed")
+  elif product == "airpodspro" or product == "airpodpro":
     embed = discord.Embed(title="Engrave on AirPods Pro")
     embed.set_image(url="https://www.apple.com/shop/preview/engrave/PWP22AM/A?th="+text+"&s=2&tl=&f=mixed")
   elif product == "airpodson" or product == "airpodon":
