@@ -21,6 +21,7 @@ def botdraw(text):
       rtext = re.sub(r'(-?[\d]+?)\|(-?[\d]+?)\|(-?[\s\S]+)', r'\3', count)
       canvas_.add_item(item.Item("+" + "-"*len(rtext) + f"+\n|" + rtext + f"|\n+" + "-"*len(rtext) + "+", position=[int(pos_x), int(pos_y)]))
     elif count.startswith("L|"):
+      count = count.replace("L|", "", 1)
       x1 = re.sub(r'(-?[\d]+?)\|(-?[\d]+?)\|(-?[\d]+?)\|(-?[\d]+?)', r'\1', count)
       y1 = re.sub(r'(-?[\d]+?)\|(-?[\d]+?)\|(-?[\d]+?)\|(-?[\d]+?)', r'\2', count)
       x2 = re.sub(r'(-?[\d]+?)\|(-?[\d]+?)\|(-?[\d]+?)\|(-?[\d]+?)', r'\3', count)
