@@ -29,12 +29,12 @@ def bottable(text):
     rawstyle = ""
   if header.startswith("$F$"):
     first_col_heading = True
-    header = header.lstrip("$F$")
+    header = header.replace("$F$", "", 1)
   else:
     first_col_heading = False
   if header.startswith("$L$"):
     last_col_heading = True
-    header = header.lstrip("$L$")
+    header = header.replace("$L$", "", 1)
   else:
     last_col_heading = False
   if rawstyle.replace(" ", "") == "":
