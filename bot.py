@@ -626,10 +626,18 @@ async def table(ctx, *, text):
   if "|||" in header:
     rawstyle = re.sub(r"([\w]*?)\|\|\|([\s\S]*)", r"\1", header)
     header = re.sub(r"([\w]*?)\|\|\|([\s\S]*)", r"\2", header)
-    #first_col_heading = True
   else:
     rawstyle = ""
-  #first_col_heading = False
+  if header.startswith("$F$"):
+    first_col_heading = True
+    header = header.lstrip("$F$")
+  else:
+    first_col_heading = False
+  if header.startswith("$L$"):
+    last_col_heading = True
+    header = header.lstrip("$L$")
+  else:
+    last_col_heading = False
   if rawstyle.replace(" ", "") == "":
     style = PresetStyle.double_thin_compact
   else:
