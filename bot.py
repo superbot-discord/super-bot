@@ -609,9 +609,9 @@ async def ascii(ctx, *, text):
   file.write(output)
   file.close()
   if len(output) > 1994 or len(text) > 11:
-    await ctx.send(file=discord.File('table.txt'))
+    await ctx.send(file=discord.File('ascii.txt'))
   else:
-    await ctx.send(f"```{output}```", file=discord.File('table.txt'))
+    await ctx.send(f"```{output}```", file=discord.File('ascii.txt'))
   os.remove('ascii.txt')
 
 @bot.command()
