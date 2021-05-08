@@ -16,15 +16,15 @@ def botdraw(text):
   for count in splitted:
     if count.startswith("R|"):
       count = count.replace("R|", "", 1)
-      pos_x = re.sub(r'([\d]+?)\|([\d]+?)\|([\s\S]+)', r'\1', count)
-      pos_y = re.sub(r'([\d]+?)\|([\d]+?)\|([\s\S]+)', r'\2', count)
-      rtext = re.sub(r'([\d]+?)\|([\d]+?)\|([\s\S]+)', r'\3', count)
+      pos_x = re.sub(r'(-?[\d]+?)\|(-?[\d]+?)\|(-?[\s\S]+)', r'\1', count)
+      pos_y = re.sub(r'(-?[\d]+?)\|(-?[\d]+?)\|(-?[\s\S]+)', r'\2', count)
+      rtext = re.sub(r'(-?[\d]+?)\|(-?[\d]+?)\|(-?[\s\S]+)', r'\3', count)
       canvas_.add_item(item.Item("+" + "-"*len(rtext) + f"+\n|" + rtext + f"|\n+" + "-"*len(rtext) + "+", position=[int(pos_x), int(pos_y)]))
     elif count.startswith("L|"):
-      x1 = re.sub(r'([\d]+?)\|([\d]+?)\|([\d]+?)\|([\d]+?)', r'\1', count)
-      y1 = re.sub(r'([\d]+?)\|([\d]+?)\|([\d]+?)\|([\d]+?)', r'\2', count)
-      x2 = re.sub(r'([\d]+?)\|([\d]+?)\|([\d]+?)\|([\d]+?)', r'\3', count)
-      y2 = re.sub(r'([\d]+?)\|([\d]+?)\|([\d]+?)\|([\d]+?)', r'\4', count)
+      x1 = re.sub(r'(-?[\d]+?)\|(-?[\d]+?)\|(-?[\d]+?)\|(-?[\d]+?)', r'\1', count)
+      y1 = re.sub(r'(-?[\d]+?)\|(-?[\d]+?)\|(-?[\d]+?)\|(-?[\d]+?)', r'\2', count)
+      x2 = re.sub(r'(-?[\d]+?)\|(-?[\d]+?)\|(-?[\d]+?)\|(-?[\d]+?)', r'\3', count)
+      y2 = re.sub(r'(-?[\d]+?)\|(-?[\d]+?)\|(-?[\d]+?)\|(-?[\d]+?)', r'\4', count)
       canvas_.add_item(item.Line(start=[x1, y1], end=[x2, y2]))
   output = canvas_.render()
   file = open("drawing.txt", "w")
