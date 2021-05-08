@@ -16,8 +16,8 @@ import random as ra
 import emoji as em
 import numpy as np
 from math import *
-import pytesseract
 import time as tm
+from art import *
 import subprocess
 import datetime
 import requests
@@ -601,6 +601,18 @@ async def captcha(ctx, *, text):
   image.write(text, 'captcha.png')
   await ctx.send(f"Captcha for {text}", file = discord.File('captcha.png'))
   os.remove('captcha.png')
+
+@bot.command()
+async def ascii(ctx, *, text):
+  output = text2art(text,"cybermedium") + f"\n" + text2art(text,"big")+f"\n" + text2art(text,"future_1")
+  file = open("ascii.txt", "w")
+  file.write(output)
+  file.close()
+  if len(output) > 1994 or len(text) > 11:
+    await ctx.send(file=discord.File('table.txt'))
+  else:
+    await ctx.send(f"```{output}```", file=discord.File('table.txt'))
+  os.remove('ascii.txt')
 
 @bot.command()
 async def table(ctx, *, text):
