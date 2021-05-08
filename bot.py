@@ -655,7 +655,7 @@ async def table(ctx, *, text):
   for count in rawbodies:
     bodies.append(count.split(","))
   try:
-    output = table2ascii(header=headers, footer=footers, body=bodies, style=style)# first_col_heading=first_col_heading)
+    output = table2ascii(header=headers, footer=footers, body=bodies, style=style, first_col_heading=first_col_heading,  last_col_heading=last_col_heading)
   except:
     try:
       output = table2ascii(footer=footers, body=bodies, style=style)
