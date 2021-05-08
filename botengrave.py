@@ -30,6 +30,9 @@ def botengrave(product : str, text : str):
   text = text.replace("@","%40")
   text = text.replace("^","%5E")
   text = text.replace("`","%60")
+  if product == "airtag" or product == "airtags":
+    embed = discord.Embed(title="Engrave on AirTags")
+    embed.set_image(url=f"https://www.apple.com/hk/shop/preview/engrave/PX532ZP/A?th={text}&s=2&f=mixed")
   if product == "airpodspro" or product == "airpodpro":
     embed = discord.Embed(title="Engrave on AirPods Pro")
     embed.set_image(url="https://www.apple.com/shop/preview/engrave/PWP22AM/A?th="+text+"&s=2&tl=&f=mixed")
@@ -192,7 +195,7 @@ def botengrave(product : str, text : str):
     embed.set_image(url="https://www.apple.com/shop/preview/engrave/PU8F2AM/A?th="+text+"&s=2&tl=")
   elif product == "list" or product == "product" or product == "help" or product == "products":
     embed = discord.Embed(title="List of products")
-    embed.add_field(name="AirPods/Pencil", value="`airpods` `airpodson` `airpodspro` `pencil`", inline=False)
+    embed.add_field(name="AirPods/Accesories", value="`airpods` `airpodson` `airpodspro` `pencil` `airtag`", inline=False)
     embed.add_field(name="AirPods Max", value="`airpodsmax` `airpodsmaxgray` `airpodsmaxsilver` `airpodsmaxpink` `airpodsmaxgreen` `airpodsmaxblue`", inline=False)
     embed.add_field(name="iPad/iPad Mini", value="`ipadmini` `ipadminigray` `ipadminisilver` `ipadminigold`", inline=False)
     embed.add_field(name="iPad Pro", value="`ipadpro` `ipadprogray` `ipadprosilver`", inline=False)
