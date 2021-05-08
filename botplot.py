@@ -26,7 +26,11 @@ def botdraw(text):
       x2 = re.sub(r'([\d]+?)\|([\d]+?)\|([\d]+?)\|([\d]+?)', '\3', count)
       y2 = re.sub(r'([\d]+?)\|([\d]+?)\|([\d]+?)\|([\d]+?)', '\4', count)
       canvas_.add_item(item.Line(start=[x1, y1], end=[x2, y2]))
-  return canvas_.render()
+  output = canvas_.render()
+  file = open("drawing.txt", "w")
+  file.write(output)
+  file.close()
+  return output
 
 def botascii(text):
   output = text2art(text,"cybermedium") + f"\n" + text2art(text,"big")+f"\n" + text2art(text,"future_1")
