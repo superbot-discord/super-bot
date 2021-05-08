@@ -5,6 +5,7 @@ unicode-charnames==13.0.0
 discord-webhook==0.11.0
 beautifulsoup4==4.9.3
 async-timeout==3.0.1
+ascii-canvas==1.3.5
 pydictionary==2.0.1
 pytesseract==0.3.7
 table2ascii==0.1.1
