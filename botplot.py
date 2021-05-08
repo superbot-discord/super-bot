@@ -1,18 +1,39 @@
 from table2ascii import table2ascii, PresetStyle
+from ascii_canvas import canvas, item
 import matplotlib.pyplot as plt
 import numpy as np
 from art import *
+import re
 
 cmaphsv = plt.cm.hsv
 def func(pct, allvals):
   absolute = int(pct/100*np.sum(allvals))
   return "{:d} ({:.1f}%)".format(absolute, int(pct))
 
+def botdraw(text):
+  canvas_ = canvas.Canvas()
+  splitted = text.split(f"\n")
+  for count in splitted:
+    if count.startswith("R|"):
+      count = count.replace("R|", "", 1)
+      pos_x = re.sub(r'([\d]+?)\|([\d]+?)\|([\s\S]+)', '\1', count)
+      pos_y = re.sub(r'([\d]+?)\|([\d]+?)\|([\s\S]+)', '\2', count)
+      rtext = re.sub(r'([\d]+?)\|([\d]+?)\|([\s\S]+)', '\3', count)
+      canvas_.add_item(item.Item("+" + "-"*len(rtext) + f"+\n|" + rtext + f"|\n+" + "-"*len(rtext) + "+", position=[int(pos_x), int(pos_y)]))
+    elif count.startswith("L|"):
+      x1 = re.sub(r'([\d]+?)\|([\d]+?)\|([\d]+?)\|([\d]+?)', '\1', count)
+      y1 = re.sub(r'([\d]+?)\|([\d]+?)\|([\d]+?)\|([\d]+?)', '\2', count)
+      x2 = re.sub(r'([\d]+?)\|([\d]+?)\|([\d]+?)\|([\d]+?)', '\3', count)
+      y2 = re.sub(r'([\d]+?)\|([\d]+?)\|([\d]+?)\|([\d]+?)', '\4', count)
+      canvas_.add_item(item.Line(start=[x1, y1], end=[x2, y2]))
+  return canvas_.render()
+
 def botascii(text):
   output = text2art(text,"cybermedium") + f"\n" + text2art(text,"big")+f"\n" + text2art(text,"future_1")
   file = open("ascii.txt", "w")
   file.write(output)
   file.close()
+  return output
 
 def bottable(text):
   splitted = text.split(f"\n")
@@ -66,6 +87,7 @@ def bottable(text):
           output = table2ascii(body=bodies, style=style)
         except:
           output = "Invalid syntax, please try again."
+  return output
 
 def botsimpcolor(name):
   plt.clf()
