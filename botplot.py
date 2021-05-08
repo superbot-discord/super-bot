@@ -25,7 +25,7 @@ def botdraw(text):
       y1 = re.sub(r'(-?[\d]+?)\|(-?[\d]+?)\|(-?[\d]+?)\|(-?[\d]+?)', r'\2', count)
       x2 = re.sub(r'(-?[\d]+?)\|(-?[\d]+?)\|(-?[\d]+?)\|(-?[\d]+?)', r'\3', count)
       y2 = re.sub(r'(-?[\d]+?)\|(-?[\d]+?)\|(-?[\d]+?)\|(-?[\d]+?)', r'\4', count)
-      canvas_.add_item(item.Line(start=[x1, y1], end=[x2, y2]))
+      canvas_.add_item(item.Line(start=[int(x1), int(y1)], end=[int(x2), int(y2)]))
   output = canvas_.render()
   file = open("drawing.txt", "w")
   file.write(output)
