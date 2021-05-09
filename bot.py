@@ -675,7 +675,7 @@ async def translate(ctx, langinput = "list", *, text = "Sample text"):
 
 @bot.command()
 async def render(ctx):
-  output = asc.loadFromUrl(ctx.message.attachments[0].url, color=False)
+  output = asc.loadFromUrl(ctx.message.attachments[0].url, columns=ctx.message.attachments[0].width*3, color=False)
   file = open('Output.txt', 'w')
   file.write(output)
   file.close()
