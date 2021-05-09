@@ -1,7 +1,6 @@
 from discord_slash.utils.manage_commands import create_option, create_choice
 from discord_slash import SlashCommand, SlashContext
 from discord import Webhook, RequestsWebhookAdapter
-from discord_slash.utils import manage_commands
 from unicode_charnames import search_charnames
 from datetime import datetime, date, timedelta
 from discord_webhook import DiscordWebhook
@@ -675,7 +674,7 @@ async def translate(ctx, langinput = "list", *, text = "Sample text"):
 
 @bot.command()
 async def render(ctx):
-  output = asc.loadFromUrl(ctx.message.attachments[0].url, columns=ctx.message.attachments[0].width*3, color=False)
+  output = asc.loadFromUrl(ctx.message.attachments[0].url, columns=ctx.message.attachments[0].width*1.5, color=False)
   file = open('Output.txt', 'w')
   file.write(output)
   file.close()
