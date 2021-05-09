@@ -24,6 +24,7 @@ import aiohttp
 import asyncio
 import pytube
 import typing
+import ascii
 import PIL
 import re
 import os
@@ -671,6 +672,15 @@ async def translate(ctx, langinput = "list", *, text = "Sample text"):
     e2 = output[1]
     await ctx.send(embed=e1)
     await ctx.send(embed=e2)
+
+@bot.command()
+async def render(ctx):
+  output = ascii.loadFromUrl(ctx.message.attachments[0].url)
+  file = open('Output.txt', 'w')
+  file.write(output)
+  file.close()
+  await ctx.send(file = discord.File('Output.txt'))
+  os.remove('Output.txt')
 
 @bot.command()
 async def transparent(ctx, alpha = 128):
