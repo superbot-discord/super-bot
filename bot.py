@@ -1090,7 +1090,7 @@ async def emojiinfo(ctx,emojiarg : typing.Union[discord.Emoji, str]):
     cemoji = ems.db.get_emoji_by_alias(emojiarg)
     if cemoji == None:
       cemoji = ems.db.get_emoji_by_code(emojiarg)
-    embed = discord.Embed(title="Emoji Info", description = cemoji[1] + " :" + ":, :".join(cemoji[0])) + ":"
+    embed = discord.Embed(title="Emoji Info", description = (cemoji[1] + " :" + ":, :".join(cemoji[0]) + ":"))
     embed.add_field(name="Category", value=cemoji[3], inline=True)
     embed.add_field(name="Unicode Version", value=cemoji[4], inline=True)
     if len(cemoji[2]) > 0:
