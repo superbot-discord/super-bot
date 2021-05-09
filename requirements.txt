@@ -20,6 +20,7 @@ pytube==10.4.1
 Pillow==8.1.0
 numpy==1.19.5
 imgkit==1.0.2
+emojis==0.6.0
 captcha==0.3
 emoji==1.2.0
 pytz==2020.5
