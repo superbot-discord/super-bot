@@ -12,6 +12,7 @@ import matplotlib.pyplot as plt
 from selenium import webdriver
 import emojis as ems
 from cmath import *
+import ascii as asc
 import random as ra
 import emoji as em
 import numpy as np
@@ -24,7 +25,6 @@ import aiohttp
 import asyncio
 import pytube
 import typing
-import ascii
 import PIL
 import re
 import os
@@ -675,7 +675,7 @@ async def translate(ctx, langinput = "list", *, text = "Sample text"):
 
 @bot.command()
 async def render(ctx):
-  output = ascii.loadFromUrl(ctx.message.attachments[0].url)
+  output = asc.loadFromUrl(ctx.message.attachments[0].url)
   file = open('Output.txt', 'w')
   file.write(output)
   file.close()
