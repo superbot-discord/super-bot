@@ -674,7 +674,12 @@ async def translate(ctx, langinput = "list", *, text = "Sample text"):
 
 @bot.command()
 async def render(ctx):
-  output = asc.loadFromUrl(ctx.message.attachments[0].url, columns=ctx.message.attachments[0].width*1.5, color=False)
+  for count in range(40, 4, -1):
+    try:
+      output = asc.loadFromUrl(ctx.message.attachments[0].url, columns=ctx.message.attachments[0].width*count/10, color=False)
+      break
+    except:
+      pass
   file = open('Output.txt', 'w')
   file.write(output)
   file.close()
