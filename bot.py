@@ -10,6 +10,7 @@ import selenium.common.exceptions
 from discord.ext import commands
 import matplotlib.pyplot as plt
 from selenium import webdriver
+import emojis as ems
 from cmath import *
 import random as ra
 import emoji as em
@@ -1079,12 +1080,21 @@ async def rawrawspoiler(ctx, *, text):
   await ctx.send(text)
 
 @bot.command()
-async def emojiinfo(ctx,emojiarg : discord.Emoji):
-  ti="Emoji Info"
-  creator=await ctx.guild.fetch_emoji(emojiarg.id)
-  desc=str(emojiarg)+emojiarg.name+"\nCreated by "+str(creator.user.mention)+" at "+str(emojiarg.created_at.strftime("%d %b, %Y (%a) %H:%M:%S"))
-  embed=discord.Embed(title=ti, description=desc)
-  embed.add_field(name="ID", value=emojiarg.id, inline=True)
+async def emojiinfo(ctx,emojiarg : typing.Union[discord.Emoji, str]):
+  try:
+    creator = await ctx.guild.fetch_emoji(emojiarg.id)
+    desc = str(emojiarg)+emojiarg.name+"\nCreated by "+str(creator.user.mention)+" at "+str(emojiarg.created_at.strftime("%d %b, %Y (%a) %H:%M:%S"))
+    embed = discord.Embed(title="Emoji Info", description=desc)
+    embed.add_field(name="ID", value=emojiarg.id, inline=True)
+  except:
+    cemoji = ems.db.get_emoji_by_alias(emojiarg)
+    if cemoji == None:
+      cemoji = ems.db.get_emoji_by_code(emojiarg)
+    embed = discord.Embed(title="Emoji Info", description = cemoji[1] + " :" + ":, :".join(cemoji[0])) + ":"
+    embed.add_field(name="Category", value=cemoji[3], inline=True)
+    embed.add_field(name="Unicode Version", value=cemoji[4], inline=True)
+    if len(cemoji[2]) > 0:
+      embed.add_field(name="Tags", value=", ".join(cemoji[2]), inline=True)
   await ctx.send(embed=embed)
 
 @bot.command()
