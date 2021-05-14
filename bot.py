@@ -603,6 +603,11 @@ async def captcha(ctx, *, text):
   os.remove('captcha.png')
 
 @bot.command()
+async def hello(ctx, *, text):
+  embed = discord.Embed(title="Leaderboard", description="We upload the leaderboard to YouTube every week. You can find the leaderboard [here](https://youtu.be/4spCNEPawyQ).")
+  await ctx.send(embed=embed)
+
+@bot.command()
 async def draw(ctx, *, text):
   output = botdraw(text)
   if len(output) > 1994:
