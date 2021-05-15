@@ -261,7 +261,7 @@ async def unicode(ctx, *, query):
   desc = ""
   for count, count2 in zip(allchars, range(0,25)):
     desc += "\\u"+count[0]+"  U+"+count[0]+"  "+count[1]
-  embed = discord.Embed(title = "Search results for: "+query)
+  embed = discord.Embed(title = "Search results for: "+query, desc=desc)
   await ctx.send(embed=embed)
 
 @bot.command()
