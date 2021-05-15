@@ -257,10 +257,11 @@ async def on_message(message):
 
 @bot.command()
 async def unicode(ctx, *, query):
-  embed = discord.Embed(title = "Search results for: "+query)
   allchars = search_charnames(query)
+  desc = ""
   for count, count2 in zip(allchars, range(0,25)):
-    embed.add_field(name=count[0], value=count[1], inline=False)
+    desc += "\\u"+count[0]+"  U+"+count[0]+"  "+count[1]
+  embed = discord.Embed(title = "Search results for: "+query)
   await ctx.send(embed=embed)
 
 @bot.command()
