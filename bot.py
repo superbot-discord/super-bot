@@ -455,6 +455,16 @@ async def invite(ctx, *, text=None):
 
 @bot.command()
 @commands.is_owner()
+async def purgeserver(ctx, text, condition="1==1", *, nothing):
+  text = text.lower()
+  if text.startswith("role"):
+    for _role in ctx.guild.roles():
+      if condition:
+        await _role.delete()
+    await ctx.send("Role purging completed.")
+
+@bot.command()
+@commands.is_owner()
 async def botban(ctx, user : discord.User, *, text="No reason was provided"):
   banned_ids.append(user.id)
   banned_text.append(text)
