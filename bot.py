@@ -458,7 +458,8 @@ async def invite(ctx, *, text=None):
 async def purgeserver(ctx, text, condition="1==1", *, nothing):
   text = text.lower()
   if text.startswith("role"):
-    for _role in ctx.guild.roles():
+    allroles = ctx.guild.roles()
+    for _role in allroles:
       if condition:
         await _role.delete()
     await ctx.send("Role purging completed.")
