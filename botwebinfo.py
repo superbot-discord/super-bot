@@ -38,7 +38,7 @@ def botunscramble(text, ilength):
     formatted = re.sub(r"<span>(\w+?)<\/span>", r"\1", formatted)
     formatted = formatted.replace('<sub><span class="score-wrapper"></span></sub>', '')
     formatted = formatted.replace(" ", "").replace(f"\n","")
-    formatted = re.sub(r'<span class="marked-letter">(\w+?)<\/span>', lambda pat: pat.group(1).upper(), formatted)
+    formatted = re.sub(r'<span class="marked-letter">(\w)<\/span>', lambda pat: pat.group(1).upper(), formatted)
     everything.append(formatted)
   output = discord.Embed(title=f"Unscrambled results for {text}")
   _sorted = {}
