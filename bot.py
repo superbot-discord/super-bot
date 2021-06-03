@@ -255,6 +255,11 @@ async def on_message(message):
     elif message.content.startswith("="):
       await message.channel.send("You are banned from the bot. Reason: "+banned_text[banned_ids.index(message.author.id)])
 
+@bot.command(aliases=['fattam', 'fatam' , 'lsc', 'teacher', 'fatteacher', 'fateacher'])
+async def fattam(ctx, *, input_):
+  if input_.startswith("mental") or input_.startswith("dis"):
+    await ctx.send(f"你咩三點九翻到來呀？我係四點十分。\n你，只不過係等左我二十五分鐘！你而家冤枉我！\n你！話曬給我聽你等左我幾耐！\n你唔好同我說黃逸濤，我而家係問曾言凱！你等左我幾耐？")
+
 @bot.command()
 async def unicode(ctx, *, query):
   allchars = search_charnames(query)
