@@ -258,6 +258,14 @@ async def on_message(message):
 @bot.command(aliases=['fatam' , 'lsc', 'teacher', 'fatteacher', 'fateacher'])
 async def fattam(ctx, *, input_):
   if input_.startswith("mental") or input_.startswith("dis"):
+    await ctx.send(f"你咩三點九翻到來呀？我係Miss Mary Chow。\n你，只不過係等左我二十五分鐘！你而家冤枉我！冤枉我！冤枉我！\n你！話曬給我聽你等左我幾耐！\n你唔好同我說黃逸濤，我而家係問緊黃逸濤！你等左我幾耐？")
+  elif input_.startswith("shum") or input.startswith("egg") or input.startswith("ict"):
+    await ctx.send("I love people having hair, you know")
+  elif input_.startswith("kwan") or input.startswith("tenc") or input.startswith("math"):
+    await ctx.send("你知我好少讚人\n同學應該好難過啦，因為星期一冇Maths堂，所以星期一我會比多D功課你做")
+  elif input_.startswith("joanne") or input.startswith("cheng") or input_.startswith("lol") or input.startswith("chi"):
+    await ctx.send("朝頭早咩個書包翻屋企\n李淵枉我")
+  else:
     await ctx.send(f"你咩三點九翻到來呀？我係四點十分。\n你，只不過係等左我二十五分鐘！你而家冤枉我！\n你！話曬給我聽你等左我幾耐！\n你唔好同我說黃逸濤，我而家係問曾言凱！你等左我幾耐？")
 
 @bot.command()
