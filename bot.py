@@ -268,14 +268,14 @@ async def fattam(ctx, *, input_):
   else:
     await ctx.send(f"你咩三點九翻到來呀？我係四點十分。\n你，只不過係等左我二十五分鐘！你而家冤枉我！\n你！話曬給我聽你等左我幾耐！\n你唔好同我說黃逸濤，我而家係問曾言凱！你等左我幾耐？")
 
-@bot.command()
+"""@bot.command()
 async def unicode(ctx, *, query):
   allchars = search_charnames(query)
   desc = ""
   for count, count2 in zip(allchars, range(0,25)):
-    desc += f"\n" + f"\u{count[0]}" + "  U+"+count[0]+"  "+count[1]
+    desc += f"\n" + "\u"+count[0] + "  U+"+count[0]+"  "+count[1]
   embed = discord.Embed(title = "Search results for: "+query, description=desc)
-  await ctx.send(embed=embed)
+  await ctx.send(embed=embed)"""
 
 @bot.command()
 async def verify(ctx):
