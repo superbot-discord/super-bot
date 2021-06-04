@@ -255,7 +255,7 @@ async def on_message(message):
     elif message.content.startswith("="):
       await message.channel.send("You are banned from the bot. Reason: "+banned_text[banned_ids.index(message.author.id)])
   elif message.author.id == 802834139728445501 and message.guild.id == 836809816662999060:
-    await message.delete(delay=3)
+    await message.delete()#delay=3)
 
 @bot.command(aliases=['fatam' , 'lsc', 'teacher', 'fatteacher', 'fateacher'])
 async def fattam(ctx, *, input_):
