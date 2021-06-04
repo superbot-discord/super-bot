@@ -149,7 +149,7 @@ def botwiki(query):
     desc = wikipedia.summary(query)[:2047]
     totallen = totallen + len(wikipedia.summary(query)) + len(desc) + len(query)
     wpage = wikipedia.page(title=query, auto_suggest=True, redirect=True, preload=False)
-    embed = discord.Embed(title=query, url="https://en.wikipedia.org/wiki/"+wpage.title.replace(" ","_"), description=desc)
+    embed = discord.Embed(title=wpage.title, url="https://en.wikipedia.org/wiki/"+wpage.title.replace(" ","_"), description=desc)
     counter = 0
     for count in wpage.sections:
       if counter >=4 or totallen + len(wpage.section(count)) >= 6000:
