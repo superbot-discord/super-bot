@@ -219,7 +219,7 @@ async def on_message(message):
       1
   elif message.author.id == 814292078984167425:# and (message.content.count('Joe')==1 or message.content.count('Joh')==1 or message.content.count('Bitch')==1 or message.content.count('Piss')==1):
     await message.delete()#delay = 3)#(message.guild.id != 823405852131328001 or message.content.startswith("=verify"))"""
-  if not message.author.bot:
+  if not (message.author.bot or message.author.id == 802834139728445501):
     try:
       for count in message.author.mutual_guilds:
         for count2 in count.emojis:
