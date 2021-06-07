@@ -134,7 +134,7 @@ async def on_message_delete(message):
     sniperdate3[keyname] = sniperdate2[keyname]
     sniperdate2[keyname] = sniperdate1[keyname]
     sniperdate1[keyname] = adt
-  elif sniper5.get(keyname, 1) == 1:
+  else:
     sniper5[keyname] = sniper4[keyname]
     sniper4[keyname] = sniper3[keyname]
     sniper3[keyname] = sniper2[keyname]
