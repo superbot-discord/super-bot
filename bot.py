@@ -216,9 +216,11 @@ async def on_message(message):
     try:
       await message.delete()
     except:
-      1
-  elif message.author.id == 814292078984167425:# and (message.content.count('Joe')==1 or message.content.count('Joh')==1 or message.content.count('Bitch')==1 or message.content.count('Piss')==1):
-    await message.delete()#delay = 3)#(message.guild.id != 823405852131328001 or message.content.startswith("=verify"))"""
+      1"""
+  if message.guild.id == 852899227004305458 and message.author.id not in [687474789342117900, 752335217339007067]:
+    content=message.content.replace(" ", "").replace(".", "").replace(",", "").replace("'", "").replace('"', "").replace("[", "").replace("]", "").replace("(", "").replace(")", "").replace("{", "").replace("}", "").replace("-", "").replace("_", "").replace("+", "").replace("=", "").replace("*", "").replace("!", "").replace("?", "").replace(":", "").replace(";", "").replace("@", "").replace("#", "").replace("$", "")
+    if content in ["fuck", "bitch", "btch", "shit", "sht"]:
+      await message.delete()
   if not (message.author.bot or message.author.id == 802834139728445501):
     try:
       for count in message.author.mutual_guilds:
