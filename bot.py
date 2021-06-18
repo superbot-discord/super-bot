@@ -2557,4 +2557,4 @@ async def _status(ctx, member : discord.Member = None):
       embed.set_thumbnail(url=count.album_cover_url)
   await ctx.send(embed=embed)
 
-bot.run('Nzk2Njg2MzYzNjA0NjgwNzU1.X_bh_g.i0ygG4hFbsBlXHqZJDXL2Ef7NpM')
+bot.run('Nzk2Njg2MzYzNjA0NjgwNzU1.X_bh_g.6uKl_EPp5r5XZpSxCxPTIuA69aE')
