@@ -538,7 +538,7 @@ async def cleanup(ctx, *, text = None):
     #for count in bot.get_guild(814407577042944040).channels:
     #  if count.name != "embed" and count.name != "spam":
     #    await count.delete()
-    for count in bot.get_guild(814407577042944040).roles:
+    for count in bot.get_guild(852899227004305458).roles:
       if count.name == "new role" or count.name == "Impostor" or count.name == "bitch forever":
         await count.delete()
 
