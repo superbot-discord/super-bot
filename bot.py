@@ -532,14 +532,15 @@ async def python(ctx, *, script):
   output = botpython(script)
   await ctx.send(output)
 
-"""@bot.command()
+@bot.command()
 async def cleanup(ctx, *, text = None):
-  for count in bot.get_guild(814407577042944040).channels:
-    if count.name != "embed" and count.name != "spam":
-      await count.delete()
-  for count in bot.get_guild(814407577042944040).roles:
-    if count.name == "fucker":
-      await count.delete()"""
+  if ctx.author.id == 687474789342117900:
+    #for count in bot.get_guild(814407577042944040).channels:
+    #  if count.name != "embed" and count.name != "spam":
+    #    await count.delete()
+    for count in bot.get_guild(814407577042944040).roles:
+      if count.name == "new role" or count.name == "Impostor" or count.name == "bitch forever":
+        await count.delete()
 
 @bot.command()
 async def regex(ctx, regularexp, *, text):
