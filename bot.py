@@ -217,10 +217,9 @@ async def on_message(message):
       await message.delete()
     except:
       1"""
-  if message.guild.id == 852899227004305458 and message.author.id not in [687474789342117900, 752335217339007067]:
-    content=message.content.replace(" ", "").replace(".", "").replace(",", "").replace("'", "").replace('"', "").replace("[", "").replace("]", "").replace("(", "").replace(")", "").replace("{", "").replace("}", "").replace("-", "").replace("_", "").replace("+", "").replace("=", "").replace("*", "").replace("!", "").replace("?", "").replace(":", "").replace(";", "").replace("@", "").replace("#", "").replace("$", "")
-    if content in ["fuck", "bitch", "btch", "shit", "sht"]:
-      await message.delete()
+  if message.guild.id == 852899227004305458 and message.author.id != 796686363604680755 and message.channel.id in [856053769149874196, 864757953121878026, 864754633910255646]:
+    await message.add_reaction("<:UpArrowSquare:864762633194569728>")
+    await message.add_reaction("<:DownArrowSquare:864762633625534485>")
   if not (message.author.bot or message.author.id == 802834139728445501):
     try:
       for count in message.author.mutual_guilds:
@@ -1132,10 +1131,15 @@ async def rawrawspoiler(ctx, *, text):
 @bot.command()
 async def emojiinfo(ctx,emojiarg : typing.Union[discord.Emoji, str]):
   try:
-    creator = await ctx.guild.fetch_emoji(emojiarg.id)
-    desc = str(emojiarg)+emojiarg.name+"\nCreated by "+str(creator.user.mention)+" at "+str(emojiarg.created_at.strftime("%d %b, %Y (%a) %H:%M:%S"))
-    embed = discord.Embed(title="Emoji Info", description=desc)
-    embed.add_field(name="ID", value=emojiarg.id, inline=True)
+    try:
+      creator = await ctx.guild.fetch_emoji(emojiarg.id)
+      desc = str(emojiarg)+emojiarg.name+"\nCreated by "+str(creator.user.mention)+" at "+str(emojiarg.created_at.strftime("%d %b, %Y (%a) %H:%M:%S"))
+      embed = discord.Embed(title="Emoji Info", description=desc)
+      embed.add_field(name="ID", value=emojiarg.id, inline=True)
+    except:
+      desc = str(emojiarg)+emojiarg.name+"\n`Created by` field can only be retrieved with the manage-emojis permission.\nCreated at "+str(emojiarg.created_at.strftime("%d %b, %Y (%a) %H:%M:%S"))
+      embed = discord.Embed(title="Emoji Info", description=desc)
+      embed.add_field(name="ID", value=emojiarg.id, inline=True)
   except:
     cemoji = ems.db.get_emoji_by_alias(emojiarg)
     if cemoji == None:
