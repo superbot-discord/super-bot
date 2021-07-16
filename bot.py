@@ -28,9 +28,11 @@ import typing
 import PIL
 import re
 import os
+
 from botwebscrape import *
 from botwebinfo import *
 from botengrave import *
+from botanimals import *
 from botpycalc import *
 from botbasic import *
 from botembed import *
