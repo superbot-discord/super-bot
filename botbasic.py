@@ -3,32 +3,34 @@ import discord
 def bothelp(cat : str):
   desc = """**Prefix: **`=`
 **Basic Commands**
-`help` `invite` `prefix` `ping` `speedtest` `invite`
+`help` `invite` `prefix` `ping` `speedtest` `botpurge`
 
 **Discord Information Commands**
-`server` `role` `channel` `voicechannel` `user` `uservoice` `avatar` `invitelink` `reactions` `template`
+`server` `invitelink` `role` `channel` `voicechannel` `autochannel` `user` `avatar` `status` `uservoice` `leftuser` `message` `raw` `reactions` `emojiinfo` `template`
 
 **Discord Commands**
-`embed` `pretend` `pretendembed`
+`react` `snipe` `clearsnipe` `pretend` `pretendembed` `embed` `editembed` `simpleembed` `ett`
+**Coming soon: **quickembed which eliminates the use of `{{{newline}}}` entirely
 
 **Text Manipulation Commands**
-`insert` `spoiler` `rawspoiler` `reverse` `emoji`
+`poll` `insert` `spoiler` `rawspoiler` `reverse` `emoji`
 
 **Moderation**
-`kick` `ban` `slowmode` `nick` `purgeregex` `purgepy` `purgepygex`
+`kick` `ban` `unban` `slowmode` `purge` `purgeuser` `purgeregex` `purgepy` `purgepygex` `nick` `makeinvite`
 
 **Information Commands**
-`color` `simpcolor` `translate` `calc` `define` `time` `rtimer` `terminate`
+`color` `simplecolor` `translate` `definition` `calc` `define` `time` `rtimer` `ttimer` `terminate`
 
 **Web Commands**
 `screenshot` `youtube` `wiki` `engrave` `covid` `population`
 
-**Plot commands**
-`table` `pie` `barh` `barv` `hist` `snow`
+**Plot/Drawing commands**
+`ascii` `table` `render` `captcha` `pie` `barh` `barv` `hist` `snow` `mandelbrot`
 
-**Developer Tools and Others**
+**Developer Tools and Miscellaneous commands**
 `python` `transparent` `ocr` `text` `html` `md` `regex` `regsub`
 
+`hello` leads you to death
 Need help? check the [documentation](https://github.com/johann-lau/Bot#bot-documentation)!"""
   embed=discord.Embed(title=ti, description=desc)
   return embed
