@@ -285,7 +285,7 @@ async def unicode(ctx, *, query):
 @bot.command()
 async def cat(ctx, number=1):
   desc = botcat(number)
-  await ctx.send(desc)
+  await ctx.send(files = desc)
 
 @bot.command()
 async def verify(ctx):
