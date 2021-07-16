@@ -1,7 +1,7 @@
 import discord
 
 def bothelp(cat : str):
-desc = """**Prefix: **`=`
+  desc = """**Prefix: **`=`
 **Basic Commands**
 `help` `invite` `prefix` `ping` `speedtest` `invite`
 
@@ -29,11 +29,8 @@ desc = """**Prefix: **`=`
 **Developer Tools and Others**
 `python` `transparent` `ocr` `text` `html` `md` `regex` `regsub`
 
-Need help? check the [documentation](https://github.com/johann-lau/Bot#bot-documentation)!
-  """
+Need help? check the [documentation](https://github.com/johann-lau/Bot#bot-documentation)!"""
   embed=discord.Embed(title=ti, description=desc)
-  if cat=="simpcolor" or cat=="simplecolor" or cat=="simpcolour" or cat=="simplecolour":
-    embed.set_image(url="https://u.cubeupload.com/Johann/Colours001.jpeg")
   return embed
 
 def botinvite():
