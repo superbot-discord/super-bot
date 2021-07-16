@@ -281,6 +281,11 @@ async def unicode(ctx, *, query):
   await ctx.send(embed=embed)
 
 @bot.command()
+async def cat(ctx, number=1):
+  desc = botcat(number)
+  await ctx.send(desc)
+
+@bot.command()
 async def verify(ctx):
   if ctx.message.guild.id == 823405852131328001:
     if ctx.author.roles.count(ctx.guild.get_role(823407479303569419))==1:
@@ -980,6 +985,11 @@ async def type(ctx):
 async def ett(ctx, msg : discord.Message):
   text = botett(msg)
   await ctx.send("```"+text+"```")
+
+@bot.command(aliases=["fastembed", "qe"])
+async def quickembed(ctx, *, text):
+  embed = botquickembed(text)
+  await ctx.send(embed=embed)
 
 @bot.command(aliases=["simpleembed", "simplembed"])
 async def simpembed(ctx, *, text):
