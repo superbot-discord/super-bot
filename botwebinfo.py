@@ -82,7 +82,6 @@ def botminecraft(item):
       desc = str(count)
       break
   try:
-    print(desc)
     desc = re.sub(r'<a (class=".+?" )?href="\/([\w/]+?)" title="([\s\S]+?)">([\s\S]+?)<\/a>', r'[\4](https://minecraft.fandom.com/\2)', desc)
     desc = re.sub(r'<b>([\s\S]*?)<\/b>', r'**\1**', desc)
     desc = re.sub(r'<i>([\s\S]*?)<\/i>', r'*\1*', desc)
@@ -114,7 +113,7 @@ def botminecraft(item):
     results = soup.findAll("img")
     image = str(results[1])
     image = re.sub(r'<img alt=".*?"( class="thumbimage")? decoding="async" height="[\d]*?" src="([\s\S]*?)" width="[\d]*?"/>', r'\2', image)
-    image = re.sub(r'(https:\/\/static.wikia.nocookie.net\/minecraft_gamepedia\/images\/[\S]*?\/[\S]*?\/[\w]*?\.[\w]{2,5}\/revision\/latest)\/scale-to-width-down\/\d{1,4}\?cb=(\d{5,30})', r'\1?cb=\2&format=original', image)
+    #image = re.sub(r'(https:\/\/static.wikia.nocookie.net\/minecraft_gamepedia\/images\/[\S]*?\/[\S]*?\/[\w]*?\.[\w]{2,5}\/revision\/latest)\/scale-to-width-down\/\d{1,4}\?cb=(\d{5,30})', r'\1?cb=\2&format=original', image)
     embed.set_image(url = image)
     return embed
   except:
