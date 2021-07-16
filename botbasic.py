@@ -13,13 +13,13 @@ def bothelp(cat : str):
 **Coming soon: **quickembed which eliminates the use of `{{{newline}}}` entirely
 
 **Text Manipulation Commands**
-`poll` `insert` `spoiler` `rawspoiler` `reverse` `emoji`
+`poll` `insert` `spoiler` `rawspoiler` `rawrawspoiler` `reverse` `emoji`
 
 **Moderation**
 `kick` `ban` `unban` `slowmode` `purge` `purgeuser` `purgeregex` `purgepy` `purgepygex` `nick` `makeinvite`
 
 **Information Commands**
-`color` `simplecolor` `translate` `definition` `calc` `define` `time` `rtimer` `ttimer` `terminate`
+`color` `simplecolor` `translate` `definition` `calc` `define` `time` `rtimer` `ttimer` `terminate` `minecraft`
 
 **Web Commands**
 `screenshot` `youtube` `wiki` `engrave` `covid` `population`
