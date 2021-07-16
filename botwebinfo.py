@@ -111,7 +111,7 @@ def botminecraft(item):
           1
     """
     results = soup.findAll("img")
-    image = str(results[1])
+    image = str(results[2])
     image = re.sub(r'<img alt="[\s\S]*?"( class="thumbimage")? (decoding="async")? height="[\d]*?" src="([\s\S]*?)" (width="[\d]*?")?/>', r'\3', image)
     #image = re.sub(r'(https:\/\/static.wikia.nocookie.net\/minecraft_gamepedia\/images\/[\S]*?\/[\S]*?\/[\w]*?\.[\w]{2,5}\/revision\/latest)\/scale-to-width-down\/\d{1,4}\?cb=(\d{5,30})', r'\1?cb=\2&format=original', image)
     embed.set_image(url = image)
