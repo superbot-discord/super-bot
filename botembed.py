@@ -65,7 +65,7 @@ def botett(msg):
 def botquickembed(text):
   textlist=text.splitlines()
   try:
-    embed=discord.Embed(title=textlist[0], description=textlist[2:], color = int(textlist[1]))
+    embed=discord.Embed(title=textlist[0], description="\n".join(textlist[2:]), color = int(textlist[1]))
   except:
     try:
       embed=discord.Embed(title=textlist[0], color = int(textlist[1]))
