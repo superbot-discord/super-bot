@@ -377,11 +377,11 @@ async def poll(ctx, *, text):
   for count in textlist:
     match = poll_pattern.fullmatch(em.demojize(count))
     if match:
-      optn = re.sub(poll_pattern, r'\1', em.demojize(count))
-      rect = re.sub(poll_pattern, r'\2', em.demojize(count))
+      optn = re.sub(poll_pattern, r'\1', ems.demojize(count))
+      rect = re.sub(poll_pattern, r'\2', ems.demojize(count))
       desc = desc + f"{rect} {optn} (0)\n"
       options.append(optn)
-      reactions.append(em.emojize(rect))
+      reactions.append(ems.emojize(rect))
     else:
       ti = ti + count + " "
   embed = discord.Embed(title = ti, description = em.emojize(desc))
