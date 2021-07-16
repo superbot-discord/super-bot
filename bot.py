@@ -687,7 +687,7 @@ async def barv(ctx, numbers, label, *, title="No_title_required"):
     await ctx.send("Invalid input. Please try again.")
 
 @bot.command(aliases=["histogram", "histograms"])
-async def hist(ctx, numbers, *, title="No_title_required"):
+async def hist(ctx, numbers, *, title="No title"):
   try:
     bothist(title, numbers)
     file = discord.File("histogram.png")
