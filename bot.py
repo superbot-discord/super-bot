@@ -284,7 +284,7 @@ async def unicode(ctx, *, query):
 
 @bot.command()
 async def dog(ctx, number=1):
-  await ctx.send(files=botdog(number))
+  await ctx.send(botdog(number))
 
 @bot.command()
 async def verify(ctx):
