@@ -64,10 +64,25 @@ def botett(msg):
 
 def botsimpembed(text):
   textlist=text.splitlines()
+  try:
+    embed=discord.Embed(title=textlist[0], description=textlist[2:], color = int(textlist[1]))
+  except:
+    try:
+      embed=discord.Embed(title=textlist[0], color = int(textlist[1]))
+    except:
+      embed=discord.Embed(title=textlist[0])
+  
+  return embed
+
+def botsimpembed(text):
+  textlist=text.splitlines()
   if len(textlist) == 1:
     embed=discord.Embed(title=textlist[0])
   elif len(textlist) >= 2:
-    embed=discord.Embed(title=textlist[0], description=textlist[1].replace("{{{newline}}}",f"\n"))
+    try:
+      embed=discord.Embed(title=textlist[0], description=textlist[1].replace("{{{newline}}}",f"\n"))
+    except:
+      embed=discord.Embed(description=textlist[1].replace("{{{newline}}}",f"\n"))
     textlist = textlist[1:]
   textlist = textlist[1:]
   if len(textlist) >= 1:
