@@ -802,10 +802,16 @@ async def screenshot(ctx, url = None, form = "all"):
   if a == "Invalid format! Please use the format `=screenshot [url]`.":
     await ctx.send(a)
   else:
-    await ctx.send(file=discord.File('web_screenshot1.png'))
-    os.remove('web_screenshot1.png')
-    await ctx.send(file=discord.File('web_screenshot2.png'))
-    os.remove('web_screenshot2.png')
+    try:
+      await ctx.send(file=discord.File('web_screenshot1.png'))
+      os.remove('web_screenshot1.png')
+    except:
+      pass
+    try:
+      await ctx.send(file=discord.File('web_screenshot2.png'))
+      os.remove('web_screenshot2.png')
+    except:
+      pass
 
 @bot.command()
 async def ocr(ctx, lang="eng", *, text = None):
