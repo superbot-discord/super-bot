@@ -8,7 +8,7 @@ def botdog(number):
     r=requests.get(f"https://dog.ceo/api/breeds/image/random")
     link=re.sub('{"message":"([\s\S]*?)","status":"success"}', r'\1', r.content.decode("utf-8"))
     link=link.replace("\\", "")
-    open('dog.jpg', 'w').write(requests.get(link).content)
+    open('dog.jpg', 'w').write(requests.get(link).content.decode("utf-8"))
     desc = [discord.File('dog.jpg')]
   else:
     desc = []
@@ -16,6 +16,6 @@ def botdog(number):
       r=requests.get(f"https://dog.ceo/api/breeds/image/random")
       link=re.sub('{"message":"([\s\S]*?)","status":"success"}', r'\1', r.content.decode("utf-8"))
       fname = 'dog' + str(count) + '.jpg'
-      open(fname, 'w').write(requests.get(link).content)
+      open(fname, 'w').write(requests.get(link).content.decode("utf-8"))
       desc.append(discord.File(fname))
   return desc
