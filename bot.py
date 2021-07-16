@@ -635,8 +635,8 @@ async def pie(ctx, numbers, label, *, title="No_title_required"):
     await ctx.send("Invalid input. Please try again.")
 
 @bot.command()
-async def captcha(ctx, *, text):
-  if text == "random":
+async def captcha(ctx, *, text=None):
+  if text == None:
     text = ra.choice("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789") + ra.choice("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789") + ra.choice("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789") + ra.choice("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789")
   data = image.generate(text)
   image.write(text, 'captcha.png')
@@ -644,7 +644,7 @@ async def captcha(ctx, *, text):
   os.remove('captcha.png')
 
 @bot.command()
-async def hello(ctx, *, text):
+async def hello(ctx, *, text=None):
   embed = discord.Embed(title="Leaderboard", description="We upload the leaderboard to YouTube every week. You can find the leaderboard [here](https://youtu.be/4spCNEPawyQ).")
   await ctx.send(embed=embed)
 
