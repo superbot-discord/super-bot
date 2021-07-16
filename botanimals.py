@@ -15,4 +15,4 @@ def botdog(number):
       r=requests.get(f"https://dog.ceo/api/breeds/image/random")
       link=re.sub('{"message":"([\s\S]*?)","status":"success"}', r'\1', r.content.decode("utf-8"))
       desc += f"link\n"
-    return desc
+  return desc
