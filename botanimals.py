@@ -13,6 +13,20 @@ def botdog(number):
     desc = ""
     for count in range(1, number+1):
       r=requests.get(f"https://dog.ceo/api/breeds/image/random")
-      link=re.sub('{"message":"([\s\S]*?)","status":"success"}', r'\1', r.content.decode("utf-8"))
+      link=re.sub('{"message":"([\S]*?)","status":"success"}', r'\1', r.content.decode("utf-8"))
+      link=link.replace("\\", "")
+      desc += f"{link}\n"
+  return desc
+
+def botcat(number):
+  if number == 1:
+    r=requests.get(f"https://api.thecatapi.com/v1/images/search")
+    link=re.sub('[{"breeds":[\s\S]*?,"id":"[\s\S]*?","url":"([\S]*?)","width":[\d]*?,"height":[\d]*?}]', r'\1', r.content.decode("utf-8"))
+    desc = link
+  else:
+    desc = ""
+    for count in range(1, number+1):
+      r=requests.get(f"https://api.thecatapi.com/v1/images/search")
+      link=re.sub('[{"breeds":[\s\S]*?,"id":"[\s\S]*?","url":"([\S]*?)","width":[\d]*?,"height":[\d]*?}]', r'\1', r.content.decode("utf-8"))
       desc += f"{link}\n"
   return desc
