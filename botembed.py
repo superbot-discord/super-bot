@@ -62,7 +62,7 @@ def botett(msg):
         desc = desc + f"\n"
     return desc
 
-def botsimpembed(text):
+def botquickembed(text):
   textlist=text.splitlines()
   try:
     embed=discord.Embed(title=textlist[0], description=textlist[2:], color = int(textlist[1]))
