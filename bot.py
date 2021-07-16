@@ -284,8 +284,7 @@ async def unicode(ctx, *, query):
 
 @bot.command()
 async def dog(ctx, number=1):
-  embed = discord.Embed(title="Cat(s)", description=botcat(number))
-  await ctx.send(embed=embed)
+  await ctx.send(botdog(number))
 
 @bot.command()
 async def verify(ctx):
