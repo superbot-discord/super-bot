@@ -155,7 +155,7 @@ def botsnow(recursion):
 def bothist(title, numbers):
   numlist = []
   for count in numbers.split(","):
-    if count%1 == 0:
+    if float(count)%1 == 0:
       numlist.append(int(count))
     else:
       numlist.append(float(count))
