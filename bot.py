@@ -284,7 +284,13 @@ async def unicode(ctx, *, query):
 
 @bot.command()
 async def dog(ctx, number=1):
-  await ctx.send(botdog(number))
+  if number<9:
+    await ctx.send(botdog(number))
+
+@bot.command()
+async def cat(ctx, number=1):
+  if number<9:
+    await ctx.send(botcat(number))
 
 @bot.command()
 async def verify(ctx):
