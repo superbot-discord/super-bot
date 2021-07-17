@@ -43,20 +43,29 @@ def botqrencode(text):
     bgc = textlist2[1]
     tsize = textlist2[2]
     bsize = textlist2[3]
-    version = textlist2[4]
+    iecorr = textlist2[4]
+    if iecorr == "4":
+      ecorr = qrcode.constants.ERROR_CORRECT_H
+    elif iecorr == "3":
+      ecorr = qrcode.constants.ERROR_CORRECT_Q
+    elif iecorr == "2":
+      ecorr = qrcode.constants.ERROR_CORRECT_M
+    else:
+      ecorr = qrcode.constants.ERROR_CORRECT_L
+    version = textlist2[5]
   except:
     pass
   try:
-    qr = qrcode.QRCode(version=version, error_correction=qrcode.constants.ERROR_CORRECT_H, box_size=tsize, border=bsize)
+    qr = qrcode.QRCode(version=version, error_correction=ecorr, box_size=tsize, border=bsize)
   except:
     try:
-      qr = qrcode.QRCode(version=1, error_correction=qrcode.constants.ERROR_CORRECT_H, box_size=tsize, border=bsize)
+      qr = qrcode.QRCode(version=1, error_correction=ecorr, box_size=tsize, border=bsize)
     except:
       try:
-        qr = qrcode.QRCode(version=1, error_correction=qrcode.constants.ERROR_CORRECT_H, box_size=tsize, border=4)
+        qr = qrcode.QRCode(version=1, error_correction=ecorr, box_size=tsize, border=4)
       except:
         try:
-          qr = qrcode.QRCode(version=1, error_correction=qrcode.constants.ERROR_CORRECT_H, box_size=10, border=4)
+          qr = qrcode.QRCode(version=1, error_correction=ecorr, box_size=10, border=4)
         except:
           return "Invalid input. Please try again."
   try:
