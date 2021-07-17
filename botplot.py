@@ -39,11 +39,11 @@ def botqrencode(text):
   try:
     textlist2 = textlist[1].split(" ")
     data = textlist[0].replace("{{{newline}}}", f"\n")
-    fgc = textlist2[1]
-    bgc = textlist2[2]
-    tsize = textlist2[3]
-    bsize = textlist2[4]
-    version = textlist2[5]
+    fgc = textlist2[0]
+    bgc = textlist2[1]
+    tsize = textlist2[2]
+    bsize = textlist2[3]
+    version = textlist2[4]
   except:
     pass
   try:
