@@ -285,8 +285,9 @@ async def unicode(ctx, *, query):
 @bot.command()
 async def qr(ctx, *, text=None):
   for count in ctx.message.attachments:
-    await count.save()
-    await ctx.send(qr_img.qr_decode(count.filename))
+    await count.save('qrcode.png')
+    await ctx.send(qr_img.qr_decode('qrcode.png'))
+    os.remove('qrcode.png')
 
 @bot.command()
 async def qrmake(ctx, *, text):
