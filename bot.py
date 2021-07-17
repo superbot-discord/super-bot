@@ -282,7 +282,7 @@ async def unicode(ctx, *, query):
   await ctx.send(embed=embed)
 
 @bot.command()
-async def qrmake(ctx, text):
+async def qrmake(ctx, *, text):
   output = botqrencode(text)
   try:
     await ctx.send(file=discord.File("QRCode.png"))
