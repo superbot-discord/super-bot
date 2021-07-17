@@ -62,12 +62,15 @@ def botqrencode(text):
       qr = qrcode.QRCode(version=1, error_correction=ecorr, box_size=tsize, border=bsize)
     except:
       try:
-        qr = qrcode.QRCode(version=1, error_correction=ecorr, box_size=tsize, border=4)
+        qr = qrcode.QRCode(version=1, error_correction=qrcode.constants.ERROR_CORRECT_L, box_size=tsize, border=bsize)
       except:
         try:
-          qr = qrcode.QRCode(version=1, error_correction=ecorr, box_size=10, border=4)
+          qr = qrcode.QRCode(version=1, error_correction=qrcode.constants.ERROR_CORRECT_L, box_size=tsize, border=4)
         except:
-          return "Invalid input. Please try again."
+          try:
+            qr = qrcode.QRCode(version=1, error_correction=qrcode.constants.ERROR_CORRECT_L, box_size=10, border=4)
+          except:
+            return "Invalid input. Please try again."
   try:
     qr.add_data(data)
   except:
