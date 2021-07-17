@@ -283,6 +283,14 @@ async def unicode(ctx, *, query):
   await ctx.send(embed=embed)
 
 @bot.command()
+async def qrmake(ctx, text):
+  output = botqrencode(text)
+  try:
+    await ctx.send(file=discord.File("QRCode.png"))
+  except:
+    await ctx.send(output)
+
+@bot.command()
 async def dog(ctx, number=1):
   if number<9:
     await ctx.send(botdog(number))
