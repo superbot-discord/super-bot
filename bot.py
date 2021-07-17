@@ -294,6 +294,7 @@ async def qrmake(ctx, *, text):
   output = botqrencode(text)
   try:
     await ctx.send(file=discord.File("QRCode.png"))
+    os.remove("QRCode.png")
   except:
     await ctx.send(output)
 
