@@ -36,8 +36,8 @@ def botdraw(text):
 
 def botqrencode(text):
   textlist = text.split("\n")
-  textlist2 = textlist[1].split(" ")
   try:
+    textlist2 = textlist[1].split(" ")
     data = textlist[0].replace("{{{newline}}}", f"\n")
     fgc = textlist2[1]
     bgc = textlist2[2]
