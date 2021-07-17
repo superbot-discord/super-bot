@@ -22,6 +22,7 @@ import datetime
 import requests
 import aiohttp
 import asyncio
+import qr_img
 import pytube
 import typing
 import PIL
@@ -280,6 +281,12 @@ async def unicode(ctx, *, query):
     embed.add_field(name = count[1].title(), value = "U+" + count[0] + eval("u\" \\u"+count[0]+"\""))
   
   await ctx.send(embed=embed)
+
+@bot.command()
+async def qr(ctx, *, text=None):
+  for count in ctx.message.attachments:
+    await count.save()
+    await ctx.send(qr_img.qr_decode(count.filename))
 
 @bot.command()
 async def qrmake(ctx, *, text):
