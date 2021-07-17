@@ -3,6 +3,7 @@ from ascii_canvas import canvas, item
 import matplotlib.pyplot as plt
 import numpy as np
 from art import *
+import qrcode
 import re
 
 cmaphsv = plt.cm.hsv
@@ -32,6 +33,47 @@ def botdraw(text):
   file.write(output)
   file.close()
   return output
+
+def botqrencode(text):
+  textlist = text.split("\n")
+  textlist2 = textlist[1].split(" ")
+  try:
+    data = textlist[0].replace("{{{newline}}}", f"\n")
+    fgc = textlist2[1]
+    bgc = textlist2[2]
+    tsize = textlist2[3]
+    bsize = textlist2[4]
+    version = textlist2[5]
+  except:
+    pass
+  try:
+    qr = qrcode.QRCode(version=version, error_correction=qrcode.constants.ERROR_CORRECT_H, box_size=tsize, border=bsize)
+  except:
+    try:
+      qr = qrcode.QRCode(version=1, error_correction=qrcode.constants.ERROR_CORRECT_H, box_size=tsize, border=bsize)
+    except:
+      try:
+        qr = qrcode.QRCode(version=1, error_correction=qrcode.constants.ERROR_CORRECT_H, box_size=tsize, border=4)
+      except:
+        try:
+          qr = qrcode.QRCode(version=1, error_correction=qrcode.constants.ERROR_CORRECT_H, box_size=10, border=4)
+        except:
+          return "Invalid input. Please try again."
+  try:
+    qr.add_data(data)
+  except:
+    return "Invalid input. Please try again."
+  try:
+    img = qr.make_image(fill_color=fgc, back_color=bgc)
+  except:
+    try:
+      img = qr.make_image(fill_color=fgc, back_color="black")
+    except:
+      try:
+        img = qr.make_image(fill_color="white", back_color=bgc)
+      except:
+        img = qr.make_image(fill_color="black", back_color="white")
+  img.save('QRCode.png')
 
 def botascii(text):
   output = text2art(text,"cybermedium") + f"\n" + text2art(text,"big")+f"\n" + text2art(text,"future_1")
