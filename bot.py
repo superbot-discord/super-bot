@@ -14,7 +14,6 @@ from cmath import *
 import ascii as asc
 import random as ra
 import pytesseract
-import emoji as em
 import numpy as np
 from math import *
 import time as tm
