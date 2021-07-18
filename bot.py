@@ -283,6 +283,10 @@ async def unicode(ctx, *, query):
   await ctx.send(embed=embed)
 
 @bot.command()
+async def redirect(ctx, *, url):
+  await ctx.send(botredirect(url))
+
+@bot.command()
 async def qr(ctx, *, text=None):
   for count in ctx.message.attachments:
     await count.save('qrcode.png')
@@ -475,12 +479,6 @@ async def nick(ctx, *, newnick):
 @bot.command()
 async def tts(ctx, *, desc):
   await ctx.send(desc, tts = True)
-
-"""@slash.slash(name="help", description = "View all commands of the bot.", options=[manage_commands.create_option(name = "cat", description = "Category of command you need help with.", option_type = 3, required = False)], guild_ids = [809368482344075265, 807164404960854026, 744520955585626132, 813688458819928066, 336642139381301249, 806083349688877077, 806011717418090497, 802834833554014208, 805441351033552916])
-async def _help(ctx: SlashContext, *, cat = None):
-  embed = bothelp(cat)
-  await ctx.respond()
-  await ctx.send(embed=embed)"""
 
 @bot.command()
 async def raw(ctx, msg : discord.Message):
@@ -2150,18 +2148,6 @@ async def user(ctx, user: discord.Member = None, channel: discord.TextChannel = 
     1
   embed.add_field(name="Badges", value=f5v, inline=False)
   await ctx.send(embed=embed)
-
-"""@bot.command(pass_context=True)
-async def spam(ctx,times,*,message):
-  if (int(times)<5 and message.count("@")==0) or bot_admins.count(ctx.author.id)!=0:
-    try:
-      await ctx.message.delete()
-    except:
-      1
-    for count in range(0,int(times)):
-      await ctx.send(message)
-  else:
-    await ctx.send("Please spam less than 5 times without any pings.")"""
 
 @bot.command()
 async def ban(ctx, user: discord.User, *, delete : int =0, reason="No reason provided"):
