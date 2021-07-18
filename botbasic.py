@@ -3,7 +3,7 @@ import discord
 def bothelp(cat : str):
   desc = """**Prefix: **`=`
 **Basic Commands**
-`help` `invite` `prefix` `ping` `speedtest` `botpurge`
+`help` `invite` `prefix` `ping` `botpurge`
 
 **Discord Information Commands**
 `server` `invitelink` `role` `channel` `voicechannel` `autochannel` `user` `avatar` `status` `uservoice` `leftuser` `message` `raw` `reactions` `emojiinfo` `template`
