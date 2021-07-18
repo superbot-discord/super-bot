@@ -95,7 +95,7 @@ def botminecraft(item):
   table = soup.findAll('table')[0].findAll('tbody')[0]
   results = soup.findAll("p")
   for count in results:
-    if len(count.findAll('b')) != 0:
+    if len(count.findAll('b')) != 0 and count.parent.name != "td":
       desc = str(count)
       break
   try:
