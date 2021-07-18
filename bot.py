@@ -260,19 +260,6 @@ async def on_message(message):
   elif message.author.id == 802834139728445501 and message.guild.id == 836809816662999060:
     await message.delete()#delay=3)
 
-@bot.command(aliases=['fatam' , 'lsc', 'teacher', 'fatteacher', 'fateacher'])
-async def fattam(ctx, *, input_):
-  if input_.startswith("mental") or input_.startswith("dis"):
-    await ctx.send(f"你咩三點九翻到來呀？我係Miss Mary Chow。\n你，只不過係等左我二十五分鐘！你而家冤枉我！冤枉我！冤枉我！\n你！話曬給我聽你等左我幾耐！\n你唔好同我說黃逸濤，我而家係問緊黃逸濤！你等左我幾耐？")
-  elif input_.startswith("shum") or input_.startswith("egg") or input_.startswith("ict"):
-    await ctx.send("I love people having hair, you know")
-  elif input_.startswith("kwan") or input_.startswith("tenc") or input_.startswith("math"):
-    await ctx.send("你知我好少讚人\n同學應該好難過啦，因為星期一冇Maths堂，所以星期一我會比多D功課你做")
-  elif input_.startswith("joanne") or input_.startswith("cheng") or input_.startswith("lol") or input_.startswith("chi"):
-    await ctx.send("朝頭早咩個書包翻屋企\n李淵枉我")
-  else:
-    await ctx.send(f"你咩三點九翻到來呀？我係四點十分。\n你，只不過係等左我二十五分鐘！你而家冤枉我！\n你！話曬給我聽你等左我幾耐！\n你唔好同我說黃逸濤，我而家係問曾言凱！你等左我幾耐？")
-
 @bot.command()
 async def unicode(ctx, *, query):
   allchars = search_charnames(query)
@@ -454,7 +441,7 @@ async def youtube(ctx, *, link):
         1
       os.remove(count.default_filename)
     if yta_downloaded == False:
-      await ctx.send("We are sorry, but the file was too large for us to send. Discord applied a 8-MB limit on all  bots.")
+      await ctx.send("Sorry, the file is too large.")
 
 @bot.command()
 async def clearsnipe(ctx, *, chnl : discord.TextChannel = None):
@@ -471,10 +458,10 @@ async def clearsnipe(ctx, *, chnl : discord.TextChannel = None):
     await ctx.send("You don't have the required permissions.")
 
 @bot.command()
-@commands.is_owner()
 async def nick(ctx, *, newnick):
-  await ctx.guild.get_member(796686363604680755).edit(nick = newnick)
-  await ctx.send("Nickname changed.")
+  if ctx.author.permissions_in(ctx.channel).manage_nicknames:
+    await ctx.guild.get_member(796686363604680755).edit(nick = newnick)
+    await ctx.send("Nickname changed.")
 
 @bot.command()
 async def tts(ctx, *, desc):
@@ -556,16 +543,6 @@ async def engrave(ctx, product = "list", *, text = "Your text goes here."):
 async def python(ctx, *, script):
   output = botpython(script)
   await ctx.send(output)
-
-@bot.command()
-async def cleanup(ctx, *, text = None):
-  if ctx.author.id == 687474789342117900:
-    #for count in bot.get_guild(814407577042944040).channels:
-    #  if count.name != "embed" and count.name != "spam":
-    #    await count.delete()
-    for count in bot.get_guild(852899227004305458).roles:
-      if count.name == "new role" or count.name == "Impostor" or count.name == "bitch forever":
-        await count.delete()
 
 @bot.command()
 async def regex(ctx, regularexp, *, text):
@@ -806,21 +783,6 @@ async def ping(ctx, *, text = None):
   message = await ctx.send("Pong!")
   mcs = str(int((datetime.datetime.now() - now1).microseconds)+int(((datetime.datetime.now() - now1).total_seconds())%60))
   await message.edit(content="Pong! "+mcs+" microseconds")
-
-@bot.command()
-async def speedtest(ctx, *, text = None):
-  total=0
-  now1 = datetime.datetime.now()
-  message = await ctx.send("Pong!")
-  mcs = (datetime.datetime.now() - now1).microseconds
-  total = total + mcs
-  for count in range(1,6):
-    now1 = datetime.datetime.now()
-    await message.edit(content="Pong! "+str(mcs)+" microseconds  (Test "+str(count)+")")
-    mcs = (datetime.datetime.now() - now1).microseconds
-    total = total + mcs
-  avg = int(total/6)
-  await message.edit(content=f"Pong!\nTotal time: "+str(total)+f" mcs\nAverage time: "+str(avg)+" mcs")
 
 @bot.command()
 async def screenshot(ctx, url = None, form = "all"):
