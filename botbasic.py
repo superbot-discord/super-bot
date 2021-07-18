@@ -32,7 +32,7 @@ def bothelp(cat : str):
 
 `hello` leads you to death
 Need help? check the [documentation](https://github.com/johann-lau/Bot#bot-documentation)!"""
-  embed=discord.Embed(title=ti, description=desc)
+  embed=discord.Embed(title="SuperBot#4073 (ID:796686363604680755)", description=desc)
   return embed
 
 def botinvite():
