@@ -16,7 +16,7 @@ pdf2image==1.14.0
 requests==2.25.1
 markdown2==2.4.0
 aiohttp==3.7.3
-pytube==10.4.1
+pytube==10.9.2
 Pillow==8.1.0
 numpy==1.19.5
 imgkit==1.0.2
