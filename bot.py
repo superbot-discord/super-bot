@@ -433,8 +433,8 @@ async def youtube(ctx, *, link):
       youtube = pytube.Search(link).results[0]
     yt = youtube.streams.filter(mime_type="video/mp4").filter(progressive="True").filter(type="video").order_by("resolution").first()
     embed = discord.Embed(title="Download (Click here)", url=yt.url, description="This video has a size of around "+str(round(yt.filesize/1048.576)/1000)+f"MB. Make sure you use a WiFi network for large videos.\n[Channel]("+youtube.channel_url+")")
-    embed.add_field(name="Title", value=str(youtube.title), inline=False)
-    embed.add_field(name="Description", value=str(youtube.description), inline=False)
+    embed.add_field(name="Title", value=youtube.title, inline=False)
+    embed.add_field(name="Description", value=youtube.description, inline=False)
     embed.add_field(name="Tags", value=", ".join(youtube.keywords), inline=False)
     embed.add_field(name="Views", value=str(youtube.views), inline=True)
     embed.add_field(name="Date uploaded", value=youtube.publish_date.strftime("%d %b, %Y (%a) %H:%M:%S"), inline=True)
