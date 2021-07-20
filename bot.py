@@ -415,9 +415,9 @@ async def unscramble(ctx, text, length="0"):
   os.remove('output.txt')
 
 @bot.command()
-async def youtube(ctx, *, text):
+async def youtube(ctx, *, link):
   try:
-    playlist = pytube.Playlist(text)
+    playlist = pytube.Playlist(link)
     text = ""
     for count in playlist:
       text=text+str(count)+"  "+pytube.YouTube(text).streams.filter(mime_type="video/mp4").filter(progressive="True").filter(type="video").order_by("resolution").first().url+f"\n"
@@ -428,9 +428,9 @@ async def youtube(ctx, *, text):
     os.remove("output.txt")
   except:
     try:
-      youtube = pytube.YouTube(text)
+      youtube = pytube.YouTube(link)
     except:
-      youtube = pytube.Search(text).results[0]
+      youtube = pytube.Search(link).results[0]
     await ctx.send("[Download link]("+youtube.streams.filter(mime_type="video/mp4").filter(progressive="True").filter(type="video").order_by("resolution").first().url+")")
 
 @bot.command()
