@@ -431,7 +431,9 @@ async def youtube(ctx, *, link):
       youtube = pytube.YouTube(link)
     except:
       youtube = pytube.Search(link).results[0]
-    await ctx.send("[Download link]("+youtube.streams.filter(mime_type="video/mp4").filter(progressive="True").filter(type="video").order_by("resolution").first().url+")")
+    yt = youtube.streams.filter(mime_type="video/mp4").filter(progressive="True").filter(type="video").order_by("resolution").first()
+    embed = discord.Embed(title="Download (Click here)", url=yt.url, description="This video has a size of "+str(round(yt.filesize/1048.576)/1000)+"MB. Make sure you use a WiFi network for large videos.")
+    await ctx.send(embed=embed)
 
 @bot.command()
 async def clearsnipe(ctx, *, chnl : discord.TextChannel = None):
