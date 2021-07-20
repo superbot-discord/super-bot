@@ -438,7 +438,7 @@ async def youtube(ctx, *, link):
     embed.add_field(name="Tags", value=", ".join(youtube.keywords), inline=False)
     embed.add_field(name="Views", value=str(youtube.views), inline=True)
     embed.add_field(name="Date uploaded", value=youtube.publish_date.strftime("%d %b, %Y (%a) %H:%M:%S"), inline=True)
-    ytlen = youtube.views.length
+    ytlen = youtube.length
     if ytlen >= 21600:
       ytlenformat = str(ytlen//21600)+"  days plus "+str(ytlen%21600//3600).zfill(2)+":"+str(ytlen%3600//60).zfill(2)+":"+str(ytlen%60).zfill(2)
     elif ytlen >= 3600:
