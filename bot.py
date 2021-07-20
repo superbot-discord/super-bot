@@ -434,10 +434,10 @@ async def youtube(ctx, *, link):
     yt = youtube.streams.filter(mime_type="video/mp4").filter(progressive="True").filter(type="video").order_by("resolution").first()
     embed = discord.Embed(title="Download (Click here)", url=yt.url, description="This video has a size of around "+str(round(yt.filesize/1048.576)/1000)+f"MB. Make sure you use a WiFi network for large videos.\n[Channel]("+youtube.channel_url+")")
     embed.add_field(name="Title", value=youtube.title, inline=False)
-    embed.add_field(name="Description", value=youtube.description, inline=False)
-    embed.add_field(name="Tags", value=", ".join(youtube.keywords), inline=False)
+    embed.add_field(name="Description", value=youtube.description[:1023], inline=False)
+    embed.add_field(name="Tags", value=(", ".join(youtube.keywords))[:1023], inline=False)
     embed.add_field(name="Views", value=str(youtube.views), inline=True)
-    embed.add_field(name="Date uploaded", value=youtube.publish_date.strftime("%d %b, %Y (%a) %H:%M:%S"), inline=True)
+    embed.add_field(name="Date uploaded", value=youtube.publish_date.strftime("%d %b, %Y (%a)"), inline=True)
     ytlen = youtube.length
     if ytlen >= 21600:
       ytlenformat = str(ytlen//21600)+"  days plus "+str(ytlen%21600//3600).zfill(2)+":"+str(ytlen%3600//60).zfill(2)+":"+str(ytlen%60).zfill(2)
