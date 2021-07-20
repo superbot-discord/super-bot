@@ -153,14 +153,14 @@ def botsimpcolor(name):
   fig, ax = plt.subplots()
   ax.axes.get_xaxis().set_visible(False)
   ax.axes.get_yaxis().set_visible(False)
-  try:
-    cmapv = plt.get_cmap(name)
-    plt.setp(ax.spines.values(), color="w")
-    gradient = np.vstack((np.linspace(0, 1, 256), np.linspace(0, 1, 256)))
-    fig.set_facecolor("w")
-    ax.set_facecolor(cmapv)
-    plt.savefig("color.png", transparent=True)
-  except:
+  #try:
+  cmapv = plt.get_cmap(name)
+  plt.setp(ax.spines.values(), color="w")
+  gradient = np.vstack((np.linspace(0, 1, 256), np.linspace(0, 1, 256)))
+  fig.set_facecolor("w")
+  ax.set_facecolor(cmapv)
+  plt.savefig("color.png", transparent=True)
+  """except:
     try:
       bcs = plt.gca()
       plt.setp(ax.spines.values(), color=name)
@@ -168,7 +168,7 @@ def botsimpcolor(name):
       fig.set_facecolor(name)
       plt.savefig("color.png", transparent=False)
     except:
-      plt.clf()
+      plt.clf()"""
 
 def koch_snowflake(order):
   def _koch_snowflake_complex(order):
