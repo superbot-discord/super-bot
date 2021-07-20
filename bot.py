@@ -432,7 +432,24 @@ async def youtube(ctx, *, link):
     except:
       youtube = pytube.Search(link).results[0]
     yt = youtube.streams.filter(mime_type="video/mp4").filter(progressive="True").filter(type="video").order_by("resolution").first()
-    embed = discord.Embed(title="Download (Click here)", url=yt.url, description="This video has a size of "+str(round(yt.filesize/1048.576)/1000)+"MB. Make sure you use a WiFi network for large videos.")
+    embed = discord.Embed(title="Download (Click here)", url=yt.url, description="This video has a size of around "+str(round(yt.filesize/1048.576)/1000)+f"MB. Make sure you use a WiFi network for large videos.\n[Channel]("+youtube.channel_url+")")
+    embed.add_field(name="Title", value=str(youtube.title), inline=False)
+    embed.add_field(name="Description", value=str(youtube.description), inline=False)
+    embed.add_field(name="Tags", value=", ".join(youtube.keywords), inline=False)
+    embed.add_field(name="Views", value=str(youtube.views), inline=True)
+    embed.add_field(name="Date uploaded", value=youtube.publish_date.strftime("%d %b, %Y (%a) %H:%M:%S"), inline=True)
+    ytlen = youtube.views.length
+    if ytlen >= 21600:
+      ytlenformat = str(ytlen//21600)+"  days plus "+str(ytlen%21600//3600).zfill(2)+":"+str(ytlen%3600//60).zfill(2)+":"+str(ytlen%60).zfill(2)
+    elif ytlen >= 3600:
+      ytlenformat = str(ytlen//3600).zfill(2)+":"+str(ytlen%3600//60).zfill(2)+":"+str(ytlen%60).zfill(2)
+    else:
+      ytlenformat = str(ytlen//60).zfill(2)+":"+str(ytlen%60).zfill(2)
+    embed.add_field(name="Length", value=ytlenformat, inline=True)
+    channel = Channel(youtube.channel_url)
+    embed.add_field(name="Channel", value="["+channel.channel_name+"]("+youtube.channel_url+")", inline=False)
+    embed.add_field(name="Channel Views", value=channel.views, inline=True)
+    embed.add_field(name="Channel Videos", value=str(len(channel.videos)), inline=True)
     await ctx.send(embed=embed)
 
 @bot.command()
