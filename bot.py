@@ -80,7 +80,9 @@ async def on_member_join(member):
   if member.guild.id == 824524455924727839:
     if member.bot:
       await member.add_roles(member.guild.get_role(824524665842040852))
-      await member.guild.get_channel(824524893152477206).create_text_channel(member.name.lower().replace(" ","-"),slowmode_delay=1, topic = f"Use and talk about the bot {member.name}.", overwrites={member.guild.default_role: discord.PermissionOverwrite(read_messages=False), member.guild.get_role(824526276835803176): discord.PermissionOverwrite(read_messages=True), member: discord.PermissionOverwrite(read_messages=True)})
+      await member.guild.get_channel(824524893152477206).create_text_channel(member.name.lower().replace(" ","-"),slowmode_delay=1, topic = f"Use and talk about the bot {member.name}.", 
+        overwrites={member.guild.default_role: discord.PermissionOverwrite(read_messages=False), member.guild.get_role(824526276835803176): discord.PermissionOverwrite(read_messages=True),
+        member: discord.PermissionOverwrite(read_messages=True)})
     else:
       embed = discord.Embed(title = "Welcome", desc="Hello and welcome to Bot Laboratoratory! You can add any bot to this server by [proposing](https://discord.gg/etb53Cvheh). Simply send the bot's invite and we will discuss about it. Have fun!")
       await member.send(embed=embed)
@@ -432,7 +434,7 @@ async def youtube(ctx, *, link):
     except:
       youtube = pytube.Search(link).results[0]
     yt = youtube.streams.filter(mime_type="video/mp4").filter(progressive="True").filter(type="video").order_by("resolution").first()
-    embed = discord.Embed(title="Download (Click here)", url=yt.url, description="This video has a size of around "+str(round(yt.filesize/1048.576)/1000)+f"MB. Make sure you use a WiFi network for large videos.\n[Channel]("+youtube.channel_url+")")
+    embed = discord.Embed(title="Download (Click here)", url=yt.url, description="This video has a size of around "+str(round(yt.filesize/1048.576)/1000)+f"MB. Make sure you use a WiFi network for large videos.\nChannel: ["+pytube.Channel(youtube.channel_url).channel.channel_name+"]("+youtube.channel_url+")")
     embed.add_field(name="Title", value=youtube.title, inline=False)
     if len(youtube.description[:1023].replace(" ", "")) == 0:
       embed.add_field(name="Description", value="No description provided", inline=False)
@@ -452,8 +454,8 @@ async def youtube(ctx, *, link):
     else:
       ytlenformat = str(ytlen//60).zfill(2)+":"+str(ytlen%60).zfill(2)
     embed.add_field(name="Length", value=ytlenformat, inline=True)
-    channel = pytube.Channel(youtube.channel_url)
-    embed.add_field(name="Channel", value="["+channel.channel_name+"]("+youtube.channel_url+")", inline=True)
+    #channel = pytube.Channel(youtube.channel_url)
+    #embed.add_field(name="Channel", value="["+channel.channel_name+"]("+youtube.channel_url+")", inline=True)
     #embed.add_field(name="Channel Views", value=channel.views, inline=True)
     #embed.add_field(name="Channel Videos", value=str(len(channel.videos)), inline=True)
     await ctx.send(embed=embed)
