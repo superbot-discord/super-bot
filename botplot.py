@@ -1,7 +1,7 @@
 from table2ascii import table2ascii, PresetStyle
 from ascii_canvas import canvas, item
 import matplotlib.pyplot as plt
-from matplotlib import Sankey
+from matplotlib.sankey import Sankey
 import numpy as np
 from art import *
 import qrcode
