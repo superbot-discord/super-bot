@@ -1,6 +1,7 @@
 from table2ascii import table2ascii, PresetStyle
 from ascii_canvas import canvas, item
 import matplotlib.pyplot as plt
+from matplotlib import Sankey
 import numpy as np
 from art import *
 import qrcode
@@ -158,7 +159,7 @@ def botsimpcolor(name):
   plt.setp(ax.spines.values(), color="w")
   gradient = np.vstack((np.linspace(0, 1, 256), np.linspace(0, 1, 256)))
   fig.set_facecolor("w")
-  ax.set_facecolor(cmapv)
+  plt.imshow((1024, 1024), cmap=cmapv)
   plt.savefig("color.png", transparent=True)
   """except:
     try:
@@ -281,3 +282,10 @@ def botbarv(title, numbers, label):
     plt.title(title)
   plt.savefig("verticalbarchart.png", transparent=True)
   plt.clf()
+
+def botsankey(title, innumber, inlabel, outnumber, outlabel, numbers, labels):
+  if len(numbers) == len(labels):
+    halflen = (len(numbers)-1)//2
+    Sankey(flows=[innumber].extend(numbers).append(outnumber),labels=[inlabel].extend(labels).append(outlabel),orientations=[0].extend([1]*halflen).extend([-1]*(len(numbers)-halflen)).finish()
+    plt.savefig("verticalbarchart.png", transparent=True)
+    plt.clf()
