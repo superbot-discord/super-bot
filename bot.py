@@ -415,33 +415,23 @@ async def unscramble(ctx, text, length="0"):
   os.remove('output.txt')
 
 @bot.command()
-async def youtube(ctx, *, link):
-  ytv_downloaded = False
-  yta_downloaded = False
-  youtube = pytube.YouTube(link)
-  videos = youtube.streams.filter(mime_type="video/mp4").filter(progressive="True").filter(type="video"), order_by("resolution")
-  for count in videos:
-    count.download()
+async def youtube(ctx, *, text):
+  try:
+    playlist = pytube.Playlist(text)
+    text = ""
+    for count in playlist:
+      text=text+str(count)+"  "+pytube.YouTube(text).streams.filter(mime_type="video/mp4").filter(progressive="True").filter(type="video").order_by("resolution").first().url+f"\n"
+    file = open("output.txt", "w")
+    file.write(text)
+    file.close()
+    await ctx.send(file=discord.File("output.txt"))
+    os.remove("output.txt")
+  except:
     try:
-      await ctx.send(file=discord.File(count.default_filename))
-      ytv_downloaded = True
-      break
+      youtube = pytube.YouTube(text)
     except:
-      1
-    os.remove(count.default_filename)
-  if ytv_downloaded == False:
-    audios = youtube.streams.filter(type="audio").order_by("abr")
-    for count in audios:
-      count.download()
-      try:
-        await ctx.send(file=discord.File(count.default_filename))
-        yta_downloaded = True
-        break
-      except:
-        1
-      os.remove(count.default_filename)
-    if yta_downloaded == False:
-      await ctx.send("Sorry, the file is too large.")
+      youtube = pytube.Search(text).results[0]
+    await ctx.send("[Download link]("+youtube.streams.filter(mime_type="video/mp4").filter(progressive="True").filter(type="video").order_by("resolution").first().url+")")
 
 @bot.command()
 async def clearsnipe(ctx, *, chnl : discord.TextChannel = None):
