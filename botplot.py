@@ -286,6 +286,6 @@ def botbarv(title, numbers, label):
 def botsankey(title, innumber, inlabel, outnumber, outlabel, numbers, labels):
   if len(numbers) == len(labels):
     halflen = (len(numbers)-1)//2
-    Sankey(flows=[innumber].extend(numbers).append(outnumber),labels=[inlabel].extend(labels).append(outlabel),orientations=[0].extend([1]*halflen).extend([-1]*(len(numbers)-halflen)).finish()
+    Sankey(flows=[innumber].extend(numbers).append(outnumber),labels=[inlabel].extend(labels).append(outlabel),orientations=[0].extend([1]*halflen).extend([-1]*(len(numbers)-halflen))).finish()
     plt.savefig("verticalbarchart.png", transparent=True)
     plt.clf()
