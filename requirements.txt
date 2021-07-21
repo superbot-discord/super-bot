@@ -15,7 +15,7 @@ selenium==4.0.0a7
 pdf2image==1.14.0
 requests==2.25.1
 markdown2==2.4.0
-aiohttp==3.7.3
+aiohttp==3.7.4
 pytube==10.9.2
 Pillow==8.2.0
 numpy==1.19.5
