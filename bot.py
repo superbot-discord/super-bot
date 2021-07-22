@@ -329,7 +329,7 @@ async def reactions(ctx, *, msg : discord.Message):
   labelslist = []
   for counter in reactions:
     numlist.append(counter.count)
-    labelslist.append(em.demojize(counter.emoji))
+    labelslist.append(em.decode(counter.emoji))
   y = np.array(numlist)
   labels = tuple(labelslist)
   mycolors = []
@@ -396,16 +396,16 @@ async def poll(ctx, *, text):
   ti = ""
   desc = ""
   for count in textlist:
-    match = poll_pattern.fullmatch(em.demojize(count))
+    match = poll_pattern.fullmatch(em.decode(count))
     if match:
-      optn = re.sub(poll_pattern, r'\1', ems.demojize(count))
-      rect = re.sub(poll_pattern, r'\2', ems.demojize(count))
+      optn = re.sub(poll_pattern, r'\1', ems.decode(count))
+      rect = re.sub(poll_pattern, r'\2', ems.decode(count))
       desc = desc + f"{rect} {optn} (0)\n"
       options.append(optn)
-      reactions.append(ems.emojize(rect))
+      reactions.append(ems.encode(rect))
     else:
       ti = ti + count + " "
-  embed = discord.Embed(title = ti, description = em.emojize(desc))
+  embed = discord.Embed(title = ti, description = em.encode(desc))
   poll = await ctx.send(embed=embed)
   for count in reactions:
     await poll.add_reaction(count) 
