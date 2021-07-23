@@ -159,8 +159,7 @@ def botsimpcolor(name):
   plt.setp(ax.spines.values(), color="w")
   gradient = np.vstack((np.linspace(0, 1, 256), np.linspace(0, 1, 256)))
   ax.imshow(gradient, aspect='auto', cmap=cmapv)
-  #plt.imshow((1024, 1024), cmap=cmapv)
-  plt.savefig("color.png", transparent=True)
+  ax.savefig("color.png", transparent=True)
   """except:
     try:
       bcs = plt.gca()
