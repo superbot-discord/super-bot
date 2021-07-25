@@ -115,33 +115,36 @@ def botembed(text):
     except:
       embed=discord.Embed(title=textlist[0], url=textlist[1], description=textlist[2].replace("{{{newline}}}","\n"))
       textlist = textlist[3:]
-  if len(textlist) == 1 and len(textlist[0].replace(" ", ""))!=0:
-    embed.set_author(name=textlist[0])
-    textlist = textlist[1:]
-  elif len(textlist) == 2 and len(textlist[0].replace(" ", ""))!=0 and len(textlist[1].replace(" ", ""))!=0:
-    embed.set_author(name=textlist[0], url=textlist[1])
-    textlist = textlist[2:]
-  elif len(textlist) >= 3 and len(textlist[0].replace(" ", ""))!=0 and len(textlist[2].replace(" ", ""))!=0:# and len(textlist[2].replace(" ", ""))!=0:
-    embed.set_author(name=textlist[0], url=textlist[1], icon_url=textlist[2])
-    textlist = textlist[3:]
-  else:
-    textlist = textlist[3:]
-  if len(textlist) >= 2 and len(textlist[0].replace(" ", ""))!=0:# and len(textlist[1].replace(" ", ""))!=0:
-    embed.set_footer(text=textlist[0], icon_url=textlist[1])
-  elif len(textlist[0].replace(" ", ""))!=0:
-    embed.set_footer(text=textlist[0])
-  textlist = textlist[2:]
-  if len(textlist) == 1 and len(textlist[0].replace(" ", ""))!=0:
-    embed.set_thumbnail(url=textlist[0])
-  textlist = textlist[1:]
-  if len(textlist) == 1 and len(textlist[0].replace(" ", ""))!=0:
-    embed.set_image(url=textlist[0])
-  textlist = textlist[1:]
-  for count in range(0, len(textlist)//3):
-    if textlist[2].lower()=="y" or textlist[2].lower()=="yes" or textlist[2].lower()=="true" or textlist[2].lower()=="1":
-      inl=True
+  try:
+    if len(textlist) == 1 and len(textlist[0].replace(" ", ""))!=0:
+      embed.set_author(name=textlist[0])
+      textlist = textlist[1:]
+    elif len(textlist) == 2 and len(textlist[0].replace(" ", ""))!=0 and len(textlist[1].replace(" ", ""))!=0:
+      embed.set_author(name=textlist[0], url=textlist[1])
+      textlist = textlist[2:]
+    elif len(textlist) >= 3 and len(textlist[0].replace(" ", ""))!=0 and len(textlist[2].replace(" ", ""))!=0:# and len(textlist[2].replace(" ", ""))!=0:
+      embed.set_author(name=textlist[0], url=textlist[1], icon_url=textlist[2])
+      textlist = textlist[3:]
     else:
-      inl=False
-    embed.add_field(name=textlist[0], value=textlist[1].replace("{{{newline}}}",f"\n"), inline=inl)
-    textlist = textlist[3:]
+      textlist = textlist[3:]
+    if len(textlist) >= 2 and len(textlist[0].replace(" ", ""))!=0:# and len(textlist[1].replace(" ", ""))!=0:
+      embed.set_footer(text=textlist[0], icon_url=textlist[1])
+    elif len(textlist[0].replace(" ", ""))!=0:
+      embed.set_footer(text=textlist[0])
+    textlist = textlist[2:]
+    if len(textlist) == 1 and len(textlist[0].replace(" ", ""))!=0:
+      embed.set_thumbnail(url=textlist[0])
+    textlist = textlist[1:]
+    if len(textlist) == 1 and len(textlist[0].replace(" ", ""))!=0:
+      embed.set_image(url=textlist[0])
+    textlist = textlist[1:]
+    for count in range(0, len(textlist)//3):
+      if textlist[2].lower()=="y" or textlist[2].lower()=="yes" or textlist[2].lower()=="true" or textlist[2].lower()=="1":
+        inl=True
+      else:
+        inl=False
+      embed.add_field(name=textlist[0], value=textlist[1].replace("{{{newline}}}",f"\n"), inline=inl)
+      textlist = textlist[3:]
+  except:
+    pass
   return embed
