@@ -63,10 +63,7 @@ def botdefine(function : str, definition : str, argumentsraw : str):
     definition=definition.replace("e",str(e))
     program="def "+function+"("
     if argumentsraw != "":
-      arguments = argumentsraw.split(" ")
-      for count in arguments:
-        program = program + count + ","
-    program = program[:-1]
+      program = program + argumentsraw.replace(" ",",")
     program = program + f"):\n  return "+definition
     exec(program, globals())
     return "Add_Reaction"
