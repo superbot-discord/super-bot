@@ -83,7 +83,7 @@ def botcalc(arg : str):
     #arg=arg.replace("e",str(e))
     if arg.count("=")==0 or arg.count("==")!=0 or arg.count("!=")!=0 or arg.count(">=")!=0 or arg.count("<=")!=0 or arg.count(">")!=0 or arg.count("<")!=0 or arg.count("and")!=0 or arg.count("or")!=0 or arg.count("not")!=0:
       lcls = locals()
-      exec("result = "+arg, globals(), lcls)
+      exec("result = "+arg, globals(), globals())
       result = lcls["result"]
       if result.real==result:
         result=result.real
