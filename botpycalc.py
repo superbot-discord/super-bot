@@ -65,7 +65,7 @@ def botdefine(function : str, definition : str, argumentsraw : str):
     if argumentsraw != "":
       program = program + argumentsraw.replace(" ",",")
     program = program + f"):\n  return "+definition
-    exec(program, globals())
+    exec(program, globals(), globals())
     return "Add_Reaction"
 
 def botcalc(arg : str):
@@ -82,9 +82,7 @@ def botcalc(arg : str):
     #arg=arg.replace("a","").replace("e","").replace("i","").replace("o","").replace("u","").replace("h","").replace("r","").replace("s","")
     #arg=arg.replace("e",str(e))
     if arg.count("=")==0 or arg.count("==")!=0 or arg.count("!=")!=0 or arg.count(">=")!=0 or arg.count("<=")!=0 or arg.count(">")!=0 or arg.count("<")!=0 or arg.count("and")!=0 or arg.count("or")!=0 or arg.count("not")!=0:
-      lcls = locals()
       exec("result = "+arg, globals(), globals())
-      result = lcls["result"]
       if result.real==result:
         result=result.real
       if result<=1 and result>0:
