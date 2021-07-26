@@ -83,8 +83,8 @@ def botcalc(arg : str):
     #arg=arg.replace("e",str(e))
     if arg.count("=")==0 or arg.count("==")!=0 or arg.count("!=")!=0 or arg.count(">=")!=0 or arg.count("<=")!=0 or arg.count(">")!=0 or arg.count("<")!=0 or arg.count("and")!=0 or arg.count("or")!=0 or arg.count("not")!=0:
       if "=" in arg and "==" not in arg:
-        exec(arg, globals(), locals())
-      exec("result = "+arg, globals(), locals())
+        exec(arg, globals(), globals())
+      result = "Result: "+str(eval(arg))
       if result.real==result:
         result=result.real
       if result<=1 and result>0:
