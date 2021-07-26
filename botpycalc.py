@@ -15,8 +15,7 @@ def botpython(script : str):
   python_pattern = re.compile(r'^\`\`\`(py|python)?\n[\s\S]*\`\`\`$')
   match = python_pattern.fullmatch(script)
   if match:
-    script = script.replace("```py","", 1)
-    script = script.replace("```","")
+    script = script.replace("```py","", 1).replace("```","")
   file = open("program.py", "w")
   file.write(str(script))
   file.close()
@@ -54,13 +53,7 @@ def botdefine(function : str, definition : str, argumentsraw : str):
   if argumentsraw == None:
     return "Not enough args"
   else:
-    definition=definition.replace("^","**")
-    definition=definition.replace("÷","/")
-    definition=definition.replace("×","*")
-    definition=definition.replace("mod","%")
-    definition=definition.replace("√(","sqrt(")
-    definition=definition.replace("pi",str(pi))
-    definition=definition.replace("e",str(e))
+    definition=definition.replace("^","**").replace("÷","/").replace("×","*").replace("mod","%").replace("√(","sqrt(").replace("pi",str(pi)).replace("e",str(e))
     program="def "+function+"("
     if argumentsraw != "":
       program = program + argumentsraw.replace(" ",",")
@@ -72,19 +65,11 @@ def botcalc(arg : str):
   if arg == "None":
     return "Invalid format! Please use the format `=calc [formula]`."
   else:
-    arg=arg.replace("^","**")
-    arg=arg.replace("÷","/")
-    arg=arg.replace("×","*")
-    arg=arg.replace("mod","%")
-    arg=arg.replace("√(","sqrt(")
-    arg=arg.replace("pi",str(pi))
-    arg=arg.replace(",","")
-    #arg=arg.replace("a","").replace("e","").replace("i","").replace("o","").replace("u","").replace("h","").replace("r","").replace("s","")
-    #arg=arg.replace("e",str(e))
+    arg=arg.replace("^","**").replace("÷","/").replace("×","*").replace("mod","%").replace("√(","sqrt(").replace("pi",str(pi)).replace(",","").replace("r","")
     if arg.count("=")==0 or arg.count("==")!=0 or arg.count("!=")!=0 or arg.count(">=")!=0 or arg.count("<=")!=0 or arg.count(">")!=0 or arg.count("<")!=0 or arg.count("and")!=0 or arg.count("or")!=0 or arg.count("not")!=0:
-      if "=" in arg and "==" not in arg:
-        exec(arg)
-      result = "Result: "+str(eval(arg))
+      lcls = locals()
+      exec("result = "+arg, globals(), lcls)
+      result = lcls["result"]
       if result.real==result:
         result=result.real
       if result<=1 and result>0:
@@ -103,8 +88,8 @@ def botcalc(arg : str):
         disp += ", what are you thinking?"
       return disp
     elif arg.count("=")!=0 and arg.count("==")==0 and arg.count("!=")==0 and arg.count(">=")==0 and arg.count("<=")==0 and arg.count(">")==0 and arg.count("<")==0 and arg.count("and")==0 and arg.count("or")==0 and arg.count("not")==0:
-      lcls = locals()
-      exec(arg, globals(), lcls)
+      #lcls = locals()
+      exec(arg, globals(), globals())
       return "Add_Reaction"
     else:
       return "Invalid input, please try again."
