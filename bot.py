@@ -619,6 +619,12 @@ async def simpcolor(ctx, *, name):
   except:
     await ctx.send("Invalid colour name, please try again.")
 
+@bot.command()
+async def sankey(ctx, innumber, inlabel, outnumber, outlabel, numbers, labels, title):
+  botsankey(title, innumber, inlabel, outnumber, outlabel, numbers, labels)
+  file = discord.File("sankey.png")
+  await ctx.send(file=file)
+
 @bot.command(alias=["snowgraph", "snowflake"])
 async def snow(ctx, recursion = 10):  
   try:
