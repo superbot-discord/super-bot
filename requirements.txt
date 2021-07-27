@@ -1,5 +1,5 @@
 discord-py-slash-command==2.3.2
-pygoogletranslation==2.0.5
+pygoogletranslation==2.0.6
 wikipedia-sections==2.0.0
 unicode-charnames==13.0.0
 discord-webhook==0.14.0
