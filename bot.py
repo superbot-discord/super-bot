@@ -421,8 +421,8 @@ async def youtube(ctx, *, link):
   try:
     playlist = pytube.Playlist(link)
     text = ""
-    for count in playlist:
-      text=text+str(count)+"  "+pytube.YouTube(text).streams.filter(mime_type="video/mp4").filter(progressive="True").filter(type="video").order_by("resolution").first().url+f"\n"
+    for count in playlist.videos:
+      text=text+str(count)+"  "+count.streams.filter(mime_type="video/mp4").filter(progressive="True").filter(type="video").order_by("resolution").first().url+f"\n"
     file = open("output.txt", "w")
     file.write(text)
     file.close()
