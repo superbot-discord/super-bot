@@ -1,4 +1,4 @@
-discord-py-slash-command==2.4.0
+discord-py-slash-command==2.4.2
 pygoogletranslation==2.0.5
 wikipedia-sections==2.0.0
 unicode-charnames==13.0.0
