@@ -2174,7 +2174,7 @@ async def kick(ctx, user: discord.Member, *, reason="No reason provided"):
     await ctx.send("You don't have the required permissions.")
 
 @bot.command()
-async def slowmode(ctx, sec = None, *, channels = None):
+async def slowmode(ctx, sec = None, *, channels:commands.Greedy[discord.TextChannel] = None):
   if sec != None:
     if sec.isdigit() == False:
       sec = 0
@@ -2186,7 +2186,7 @@ async def slowmode(ctx, sec = None, *, channels = None):
       elif channels == "all":
         allchannel = ctx.guild.text_channels
       else:
-        allchannel = ctx.message.channel_mentions
+        allchannel = channels
       channellist = []
       for count in allchannel:
         if ctx.author.permissions_in(count).manage_channels or bot_admins.count(ctx.author.id)!=0:
