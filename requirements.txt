@@ -15,7 +15,7 @@ matplotlib==3.4.3
 selenium==4.0.0.b4
 pdf2image==1.16.0
 requests==2.26.0
-markdown2==2.4.0
+markdown2==2.4.1
 git+git://github.com/priamoryki/pytube@fix_1082
 Pillow==8.3.1
 numpy==1.21.2
