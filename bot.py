@@ -76,6 +76,11 @@ overwrite.view_channel = True
 def botadmin(context):
   return context.author.id == 687474789342117900
 
+def number_to_emoji(text):
+  text=text.replace("1",":one: ").replace("2",":two: ").replace("3",":three: ").replace("4",":four: ").replace("5",":five: ")
+  text=text.replace("6",":six: ").replace("7",":seven: ").replace("8",":eight: ").replace("9",":nine: ").replace("0",":zero: ")
+  return text
+
 @bot.event
 async def on_member_join(member):
   if member.guild.id == 824524455924727839:
@@ -1209,46 +1214,10 @@ async def rtimer(ctx, timetocount,*,Text=None):
         newhrs = "0"+newhrs
       if int(newday) <= 9:
         newday = "0"+newday
-      newsec=newsec.replace("1",":one: ")
-      newsec=newsec.replace("2",":two: ")
-      newsec=newsec.replace("3",":three: ")
-      newsec=newsec.replace("4",":four: ")
-      newsec=newsec.replace("5",":five: ")
-      newsec=newsec.replace("6",":six: ")
-      newsec=newsec.replace("7",":seven: ")
-      newsec=newsec.replace("8",":eight: ")
-      newsec=newsec.replace("9",":nine: ")
-      newsec=newsec.replace("0",":zero: ")
-      newmin=newmin.replace("1",":one: ")
-      newmin=newmin.replace("2",":two: ")
-      newmin=newmin.replace("3",":three: ")
-      newmin=newmin.replace("4",":four: ")
-      newmin=newmin.replace("5",":five: ")
-      newmin=newmin.replace("6",":six: ")
-      newmin=newmin.replace("7",":seven: ")
-      newmin=newmin.replace("8",":eight: ")
-      newmin=newmin.replace("9",":nine: ")
-      newmin=newmin.replace("0",":zero: ")
-      newhrs=newhrs.replace("1",":one: ")
-      newhrs=newhrs.replace("2",":two: ")
-      newhrs=newhrs.replace("3",":three: ")
-      newhrs=newhrs.replace("4",":four: ")
-      newhrs=newhrs.replace("5",":five: ")
-      newhrs=newhrs.replace("6",":six: ")
-      newhrs=newhrs.replace("7",":seven: ")
-      newhrs=newhrs.replace("8",":eight: ")
-      newhrs=newhrs.replace("9",":nine: ")
-      newhrs=newhrs.replace("0",":zero: ")
-      newday=newday.replace("1",":one: ")
-      newday=newday.replace("2",":two: ")
-      newday=newday.replace("3",":three: ")
-      newday=newday.replace("4",":four: ")
-      newday=newday.replace("5",":five: ")
-      newday=newday.replace("6",":six: ")
-      newday=newday.replace("7",":seven: ")
-      newday=newday.replace("8",":eight: ")
-      newday=newday.replace("9",":nine: ")
-      newday=newday.replace("0",":zero: ")
+      newsec=number_to_emoji(newsec)
+      newmin=number_to_emoji(newmin)
+      newhrs=number_to_emoji(newhrs)
+      newday=number_to_emoji(newday)
       prevdesc = desc
       if seconds<0:
         break
