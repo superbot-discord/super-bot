@@ -7,6 +7,7 @@ from discord_webhook import DiscordWebhook
 from captcha.image import ImageCaptcha
 import selenium.common.exceptions
 from discord.ext import commands
+from discord_components import *
 import matplotlib.pyplot as plt
 from selenium import webdriver
 import emojis as ems
@@ -86,9 +87,6 @@ async def on_member_join(member):
     else:
       embed = discord.Embed(title = "Welcome", desc="Hello and welcome to Bot Laboratoratory! You can add any bot to this server by [proposing](https://discord.gg/etb53Cvheh). Simply send the bot's invite and we will discuss about it. Have fun!")
       await member.send(embed=embed)
-  if member.guild.id == 823405852131328001:
-    ch=await member.guild.create_text_channel('verify', overwrites = {member.guild.default_role: discord.PermissionOverwrite(view_channel=False), member: discord.PermissionOverwrite(view_channel=True)})
-    await ch.send(f"{member.mention}, please verify by calculating {str(ra.randint(1,20))}"+ra.choice(["+","-","×"])+str(ra.randint(1,10))+".")
 
 @bot.event
 async def on_voice_state_update(member, before, after):
@@ -195,8 +193,6 @@ async def on_reaction_add(reaction, user):
       maxc = 4
     else:
       maxc = 5
-    #if eval('sniper'+str(sniperdict[reaction.message])+'.get(keyname, 1)') == 1:
-    #  sniperdict[reaction.message] = sniperdict[reaction.message] - 1
     ti = "Snipped message ("+str(sniperdict[reaction.message])+r"/"+str(maxc)+")"
     desc = eval('sniper'+str(sniperdict[reaction.message])+'[keyname]')
     foot = eval('sniperdate'+str(sniperdict[reaction.message])+'[keyname]')
@@ -214,13 +210,6 @@ async def on_member_update(before, after):
 
 @bot.event
 async def on_message(message):
-  """match = verify_pattern.fullmatch(message.content)
-  if message.channel.id == 811562994151850024 and match == None and message.author.roles.count(message.guild.get_role(810729029790597190)) == 0:
-    await message.channel.send(f"Invalid verification format! Please double check the format and try again.\n**Format: **Username#Discriminator, Math equation with equal sign(Max. 100 characters), Favourite Food, Colour\n**Original Content: **"+message.content, delete_after=10)
-    try:
-      await message.delete()
-    except:
-      1"""
   if message.guild.id == 852899227004305458 and message.author.id != 796686363604680755 and message.channel.id in [856053769149874196, 864757953121878026, 864754633910255646]:
     await message.add_reaction("<:UpArrowSquare:864762633194569728>")
     await message.add_reaction("<:DownArrowSquare:864762633625534485>")
@@ -259,8 +248,6 @@ async def on_message(message):
       await bot.process_commands(message)
     elif message.content.startswith("="):
       await message.channel.send("You are banned from the bot. Reason: "+banned_text[banned_ids.index(message.author.id)])
-  elif message.author.id == 802834139728445501 and message.guild.id == 836809816662999060:
-    await message.delete()#delay=3)
 
 @bot.command()
 async def unicode(ctx, *, query):
@@ -354,7 +341,7 @@ async def snipe(ctx, *, text = None):
         embed = discord.Embed(title=ti, description=desc)
         await ctx.send(embed=embed)
         return
-      else:#if sniper2.get(keyname, 1) == 1:
+      else:
         if sniper2.get(keyname, 1) == 1:
           maxc = 1
         elif sniper3.get(keyname, 1) == 1:
@@ -454,7 +441,6 @@ async def youtube(ctx, *, link):
     else:
       ytlenformat = str(ytlen//60).zfill(2)+":"+str(ytlen%60).zfill(2)
     embed.add_field(name="Length", value=ytlenformat, inline=True)
-    #channel = pytube.Channel(youtube.channel_url)
     #embed.add_field(name="Channel", value="["+channel.channel_name+"]("+youtube.channel_url+")", inline=True)
     #embed.add_field(name="Channel Views", value=channel.views, inline=True)
     #embed.add_field(name="Channel Videos", value=str(len(channel.videos)), inline=True)
@@ -1204,32 +1190,8 @@ async def rtimer(ctx, timetocount,*,Text=None):
     idcode = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"[ra.randint(0, 25)]+"ABCDEFGHIJKLMNOPQRSTUVWXYZ"[ra.randint(0, 25)]+"ABCDEFGHIJKLMNOPQRSTUVWXYZ"[ra.randint(0, 25)]+"ABCDEFGHIJKLMNOPQRSTUVWXYZ"[ra.randint(0, 25)]+"ABCDEFGHIJKLMNOPQRSTUVWXYZ"[ra.randint(0, 25)]
     exec("terminate"+idcode.lower()+str(ctx.guild.id)+"=0",globals())
     newidcode=idcode
-    newidcode=newidcode.replace("A",":regional_indicator_a:")
-    newidcode=newidcode.replace("B",":regional_indicator_b:")
-    newidcode=newidcode.replace("C",":regional_indicator_c:")
-    newidcode=newidcode.replace("D",":regional_indicator_d:")
-    newidcode=newidcode.replace("E",":regional_indicator_e:")
-    newidcode=newidcode.replace("F",":regional_indicator_f:")
-    newidcode=newidcode.replace("G",":regional_indicator_g:")
-    newidcode=newidcode.replace("H",":regional_indicator_h:")
-    newidcode=newidcode.replace("I",":regional_indicator_i:")
-    newidcode=newidcode.replace("J",":regional_indicator_j:")
-    newidcode=newidcode.replace("K",":regional_indicator_k:")
-    newidcode=newidcode.replace("L",":regional_indicator_l:")
-    newidcode=newidcode.replace("M",":regional_indicator_m:")
-    newidcode=newidcode.replace("N",":regional_indicator_n:")
-    newidcode=newidcode.replace("O",":regional_indicator_o:")
-    newidcode=newidcode.replace("P",":regional_indicator_p:")
-    newidcode=newidcode.replace("Q",":regional_indicator_q:")
-    newidcode=newidcode.replace("R",":regional_indicator_r:")
-    newidcode=newidcode.replace("S",":regional_indicator_s:")
-    newidcode=newidcode.replace("T",":regional_indicator_t:")
-    newidcode=newidcode.replace("U",":regional_indicator_u:")
-    newidcode=newidcode.replace("V",":regional_indicator_v:")
-    newidcode=newidcode.replace("W",":regional_indicator_w:")
-    newidcode=newidcode.replace("X",":regional_indicator_x:")
-    newidcode=newidcode.replace("Y",":regional_indicator_y:")
-    newidcode=newidcode.replace("Z",":regional_indicator_z:")
+    callback = lambda pat: pat.group(1).lower()
+    newidcode=re.sub('[A-Z]', callback, newidcode)
     allid.append(idcode+str(ctx.guild.id))
     desc = "Initializing countdown…"
     message = await ctx.send(desc)
@@ -2202,12 +2164,6 @@ async def slowmode(ctx, sec = None, *, channels:commands.Greedy[discord.TextChan
   elif sec == None:
     await ctx.send("The current slowmode is "+str(ctx.channel.slowmode_delay)+" second(s).")
 
-@bot.event
-async def on_ready():
-  activity = discord.Activity(type=discord.ActivityType.playing, name="with =help", details="=ping to check whether the bot is responsive; =help for a list of commands; =invite to invite the bot to your own server")
-  await bot.change_presence(status=discord.Status.idle, activity=activity)
-  print("Bot is ready!")
-
 @slash.slash(name="purge", description="Purge a number of messages in the current channel.", options=[create_option(name="Number",description="Amount of messages to purge in the current channel.",option_type=4,required=True)])
 async def _purge(ctx, num:int):
   if ctx.author.permissions_in(ctx.channel).manage_messages or bot_admins.count(ctx.author.id)!=0:
@@ -2571,5 +2527,12 @@ async def _status(ctx, member : discord.Member = None):
       embed.add_field(name="Spotify : "+count.album, value=field, inline=False)
       embed.set_thumbnail(url=count.album_cover_url)
   await ctx.send(embed=embed)
+
+@bot.event
+async def on_ready():
+  activity = discord.Activity(type=discord.ActivityType.playing, name="with =help")
+  await bot.change_presence(status=discord.Status.idle, activity=activity)
+  DiscordComponents(bot, change_discord_methods=True)
+  print("Bot is ready!")
 
 bot.run('Nzk2Njg2MzYzNjA0NjgwNzU1.X_bh_g.6uKl_EPp5r5XZpSxCxPTIuA69aE')
