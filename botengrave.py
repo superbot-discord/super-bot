@@ -32,7 +32,7 @@ def botengrave(product : str, text : str):
   text = text.replace("`","%60")
   if product == "airtag" or product == "airtags":
     embed = discord.Embed(title="Engrave on AirTags")
-    embed.set_image(url="https://www.apple.com/hk/shop/preview/engrave/PX532ZP/A?th=" + text + "&s=2&f=mixed")
+    embed.set_image(url="https://www.apple.com/hk/shop/preview/engrave/PX532AM/A?th=" + text + "&s=2&f=mixed")
   elif product == "airpodspro" or product == "airpodpro":
     embed = discord.Embed(title="Engrave on AirPods Pro")
     embed.set_image(url="https://www.apple.com/shop/preview/engrave/PWP22AM/A?th="+text+"&s=2&tl=&f=mixed")
@@ -96,100 +96,100 @@ def botengrave(product : str, text : str):
     embed = discord.Embed(title="Engrave on iPad Air (Space Gray)")
     split = text.splitlines()
     if len(split) == 1:
-      embed.set_image(url="https://www.apple.com/shop/preview/engrave/PYJ32LL/A?th="+text+"&tl=&s=2")
+      embed.set_image(url="https://www.apple.com/shop/preview/engrave/PYFM2LL/A?th="+text+"&tl=&s=2")
     else:
-      embed.set_image(url="https://www.apple.com/shop/preview/engrave/PYJ32LL/A?th="+split[0]+"&tl="+split[1]+"&s=2")
+      embed.set_image(url="https://www.apple.com/shop/preview/engrave/PYFM2LL/A?th="+split[0]+"&tl="+split[1]+"&s=2")
   elif product == "ipadairsilver" or product == "padairsilver":
     embed = discord.Embed(title="Engrave on iPad Air (Silver)")
     split = text.splitlines()
     if len(split) == 1:
-      embed.set_image(url="https://www.apple.com/shop/preview/engrave/PYHY2LL/A?th="+text+"&tl=&s=2")
+      embed.set_image(url="https://www.apple.com/shop/preview/engrave/PYFN2LL/A?th="+text+"&tl=&s=2")
     else:
-      embed.set_image(url="https://www.apple.com/shop/preview/engrave/PYHY2LL/A?th="+split[0]+"&tl="+split[1]+"&s=2")
+      embed.set_image(url="https://www.apple.com/shop/preview/engrave/PYFN2LL/A?th="+split[0]+"&tl="+split[1]+"&s=2")
   elif product == "ipadairrose" or product == "ipadairrosegold" or product == "padairrose" or product == "padairrosegold":
     embed = discord.Embed(title="Engrave on iPad Air (Rose Gold)")
     split = text.splitlines()
     if len(split) == 1:
-      embed.set_image(url="https://www.apple.com/shop/preview/engrave/PYJ02LL/A?th="+text+"&tl=&s=2")
+      embed.set_image(url="https://www.apple.com/shop/preview/engrave/PYFP2LL/A?th="+text+"&tl=&s=2")
     else:
-      embed.set_image(url="https://www.apple.com/shop/preview/engrave/PYJ02LL/A?th="+split[0]+"&tl="+split[1]+"&s=2")
+      embed.set_image(url="https://www.apple.com/shop/preview/engrave/PYFP2LL/A?th="+split[0]+"&tl="+split[1]+"&s=2")
   elif product == "ipadairgreen" or product == "padairgreen":
     embed = discord.Embed(title="Engrave on iPad Air (Green)")
     split = text.splitlines()
     if len(split) == 1:
-      embed.set_image(url="https://www.apple.com/shop/preview/engrave/PYJ22LL/A?th="+text+"&tl=&s=2")
+      embed.set_image(url="https://www.apple.com/shop/preview/engrave/PYFR2LL/A?th="+text+"&tl=&s=2")
     else:
-      embed.set_image(url="https://www.apple.com/shop/preview/engrave/PYJ22LL/A?th="+split[0]+"&tl="+split[1]+"&s=2")
+      embed.set_image(url="https://www.apple.com/shop/preview/engrave/PYFR2LL/A?th="+split[0]+"&tl="+split[1]+"&s=2")
   elif product == "ipadairblue" or product == "ipadairskyblue" or product == "padairblue" or product == "padairskyblue":
     embed = discord.Embed(title="Engrave on iPad Air (Sky Blue)")
     split = text.splitlines()
     if len(split) == 1:
-      embed.set_image(url="https://www.apple.com/shop/preview/engrave/PYJ12LL/A?th="+text+"&tl=&s=2")
+      embed.set_image(url="https://www.apple.com/shop/preview/engrave/PYFQ2LL/A?th="+text+"&tl=&s=2")
     else:
-      embed.set_image(url="https://www.apple.com/shop/preview/engrave/PYJ12LL/A?th="+split[0]+"&tl="+split[1]+"&s=2")
+      embed.set_image(url="https://www.apple.com/shop/preview/engrave/PYFQ2LL/A?th="+split[0]+"&tl="+split[1]+"&s=2")
   elif product == "ipadminigray" or product == "ipadminigrey" or product == "padminigray" or product == "padminigrey" or product == "ipadminispacegray" or product == "ipadminispacegrey" or product == "padminispacegray" or product == "padminispacegrey" or product == "ipadmini" or product == "padmini":
     embed = discord.Embed(title="Engrave on iPad Mini (Space Gray)")
     split = text.splitlines()
     if len(split) == 1:
-      embed.set_image(url="https://www.apple.com/shop/preview/engrave/PUXM2LL/A?th="+text+"&tl=&s=2")
+      embed.set_image(url="https://www.apple.com/shop/preview/engrave/PUQW2LL/A?th="+text+"&tl=&s=2")
     else:
-      embed.set_image(url="https://www.apple.com/shop/preview/engrave/PUXM2LL/A?th="+split[0]+"&tl="+split[1]+"&s=2")
+      embed.set_image(url="https://www.apple.com/shop/preview/engrave/PUQW2LL/A?th="+split[0]+"&tl="+split[1]+"&s=2")
   elif product == "ipadminisilver" or product == "padminisilver":
     embed = discord.Embed(title="Engrave on iPad Mini (Silver)")
     split = text.splitlines()
     if len(split) == 1:
-      embed.set_image(url="https://www.apple.com/shop/preview/engrave/PUXN2LL/A?th="+text+"&tl=&s=2")
+      embed.set_image(url="https://www.apple.com/shop/preview/engrave/PUQX2LL/A?th="+text+"&tl=&s=2")
     else:
-      embed.set_image(url="https://www.apple.com/shop/preview/engrave/PUXN2LL/A?th="+split[0]+"&tl="+split[1]+"&s=2")
+      embed.set_image(url="https://www.apple.com/shop/preview/engrave/PUQX2LL/A?th="+split[0]+"&tl="+split[1]+"&s=2")
   elif product == "ipadminigold" or product == "ipadminigolden" or product == "padminigold" or product == "padminigolden":
     embed = discord.Embed(title="Engrave on iPad Mini (Gold)")
     split = text.splitlines()
     if len(split) == 1:
-      embed.set_image(url="https://www.apple.com/shop/preview/engrave/PUXP2LL/A?th="+text+"&tl=&s=2")
+      embed.set_image(url="https://www.apple.com/shop/preview/engrave/PUQY2LL/A?th="+text+"&tl=&s=2")
     else:
-      embed.set_image(url="https://www.apple.com/shop/preview/engrave/PUXP2LL/A?th="+split[0]+"&tl="+split[1]+"&s=2")
+      embed.set_image(url="https://www.apple.com/shop/preview/engrave/PUQY2LL/A?th="+split[0]+"&tl="+split[1]+"&s=2")
   elif product == "ipodgray" or product == "ipodgrey" or product == "podgray" or product == "podgrey" or product == "ipodspacegray" or product == "ipodspacegrey" or product == "podspacegray" or product == "podspacegrey" or product == "ipodtouchgray" or product == "ipodtouchgrey" or product == "podtouchgray" or product == "podtouchgrey" or product == "ipodtouchspacegray" or product == "ipodtouchspacegrey" or product == "podtouchspacegray" or product == "podtouchspacegrey" or product == "ipod" or product == "pod" or product == "ipodtouch" or product == "podtouch" :
     embed = discord.Embed(title="Engrave on iPod Touch (Space Gray)")
     split = text.splitlines()
     if len(split) == 1:
-      embed.set_image(url="https://www.apple.com/shop/preview/v2/engrave/PVJE2LL/A?th="+split[0]+"&tl=&s=2")
+      embed.set_image(url="https://www.apple.com/shop/preview/v2/engrave/PVHW2LL/A?th="+split[0]+"&tl=&s=2")
     else:
-      embed.set_image(url="https://www.apple.com/shop/preview/v2/engrave/PVJE2LL/A?th="+split[0]+"&tl="+split[1]+"&s=2")
+      embed.set_image(url="https://www.apple.com/shop/preview/v2/engrave/PVHW2LL/A?th="+split[0]+"&tl="+split[1]+"&s=2")
   elif product == "ipodsilver" or product == "podsilver" or product == "ipodtouchsilver" or product == "podtouchsilver":
     embed = discord.Embed(title="Engrave on iPod Touch (Silver)")
     split = text.splitlines()
     if len(split) == 1:
-      embed.set_image(url="https://www.apple.com/shop/preview/v2/engrave/PVJD2LL/A?th="+split[0]+"&tl=&s=2")
+      embed.set_image(url="https://www.apple.com/shop/preview/v2/engrave/PVHV2LL/A?th="+split[0]+"&tl=&s=2")
     else:
-      embed.set_image(url="https://www.apple.com/shop/preview/v2/engrave/PVJD2LL/A?th="+split[0]+"&tl="+split[1]+"&s=2")
+      embed.set_image(url="https://www.apple.com/shop/preview/v2/engrave/PVHV2LL/A?th="+split[0]+"&tl="+split[1]+"&s=2")
   elif product == "ipodgold" or product == "ipodgolden" or product == "podgold" or product == "podgolden" or product == "ipodtouchgold" or product == "ipodtouchgolden" or product == "podtouchgold" or product == "podtouchgolden":
     embed = discord.Embed(title="Engrave on iPod Touch (Gold)")
     split = text.splitlines()
     if len(split) == 1:
-      embed.set_image(url="https://www.apple.com/shop/preview/v2/engrave/PVJ92LL/A?th="+split[0]+"&tl=&s=2")
+      embed.set_image(url="https://www.apple.com/shop/preview/v2/engrave/PVHT2LL/A?th="+split[0]+"&tl=&s=2")
     else:
-      embed.set_image(url="https://www.apple.com/shop/preview/v2/engrave/PVJ92LL/A?th="+split[0]+"&tl="+split[1]+"&s=2")
+      embed.set_image(url="https://www.apple.com/shop/preview/v2/engrave/PVHT2LL/A?th="+split[0]+"&tl="+split[1]+"&s=2")
   elif product == "ipodblue" or product == "podblue" or product == "ipodtouchblue" or product == "podtouchblue":
     embed = discord.Embed(title="Engrave on iPod Touch (Blue)")
     split = text.splitlines()
     if len(split) == 1:
-      embed.set_image(url="https://www.apple.com/shop/preview/v2/engrave/PVJC2LL/A?th="+split[0]+"&tl=&s=2")
+      embed.set_image(url="https://www.apple.com/shop/preview/v2/engrave/PVHU2LL/A?th="+split[0]+"&tl=&s=2")
     else:
-      embed.set_image(url="https://www.apple.com/shop/preview/v2/engrave/PVJC2LL/A?th="+split[0]+"&tl="+split[1]+"&s=2")
+      embed.set_image(url="https://www.apple.com/shop/preview/v2/engrave/PVHU2LL/A?th="+split[0]+"&tl="+split[1]+"&s=2")
   elif product == "ipodpink" or product == "podpink" or product == "ipodtouchpink" or product == "podtouchpink":
     embed = discord.Embed(title="Engrave on iPod Touch (Pink)")
     split = text.splitlines()
     if len(split) == 1:
-      embed.set_image(url="https://www.apple.com/shop/preview/v2/engrave/PVJ82LL/A?th="+split[0]+"&tl=&s=2")
+      embed.set_image(url="https://www.apple.com/shop/preview/v2/engrave/PVHY2LL/A?th="+split[0]+"&tl=&s=2")
     else:
-      embed.set_image(url="https://www.apple.com/shop/preview/v2/engrave/PVJ82LL/A?th="+split[0]+"&tl="+split[1]+"&s=2")
+      embed.set_image(url="https://www.apple.com/shop/preview/v2/engrave/PVHY2LL/A?th="+split[0]+"&tl="+split[1]+"&s=2")
   elif product == "ipodred" or product == "podred" or product == "ipodtouchred" or product == "podtouchred":
     embed = discord.Embed(title="Engrave on iPod Touch (Red)")
     split = text.splitlines()
     if len(split) == 1:
-      embed.set_image(url="https://www.apple.com/shop/preview/v2/engrave/PVJF2LL/A?th="+split[0]+"&tl=&s=2")
+      embed.set_image(url="https://www.apple.com/shop/preview/v2/engrave/PVHX2LL/A?th="+split[0]+"&tl=&s=2")
     else:
-      embed.set_image(url="https://www.apple.com/shop/preview/v2/engrave/PVJF2LL/A?th="+split[0]+"&tl="+split[1]+"&s=2")
+      embed.set_image(url="https://www.apple.com/shop/preview/v2/engrave/PVHX2LL/A?th="+split[0]+"&tl="+split[1]+"&s=2")
   elif product == "pencil" or product == "pencil2":
     embed = discord.Embed(title="Engrave on Apple Pencil (2nd generation)")
     embed.set_image(url="https://www.apple.com/shop/preview/engrave/PU8F2AM/A?th="+text+"&s=2&tl=")
