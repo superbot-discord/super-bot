@@ -61,16 +61,16 @@ def botengrave(product : str, text : str):
     embed = discord.Embed(title="Engrave on iPad Pro (Space Gray)")
     split = text.splitlines()
     if len(split) == 1:
-      embed.set_image(url="https://www.apple.com/shop/preview/engrave/PXAV2LL/A?th="+text+"&tl=&s=2")
+      embed.set_image(url="https://www.apple.com/shop/preview/engrave/PHP43LL/A?th="+text+"&tl=&s=2")
     else:
-      embed.set_image(url="https://www.apple.com/shop/preview/engrave/PXAV2LL/A?th="+split[0]+"&tl="+split[1]+"&s=2")
+      embed.set_image(url="https://www.apple.com/shop/preview/engrave/PHP43LL/A?th="+split[0]+"&tl="+split[1]+"&s=2")
   elif product == "ipadprosilver":
     embed = discord.Embed(title="Engrave on iPad Pro (Silver)")
     split = text.splitlines()
     if len(split) == 1:
-      embed.set_image(url="https://www.apple.com/shop/preview/engrave/PXAW2LL/A?th="+text+"&tl=&s=2")
+      embed.set_image(url="https://www.apple.com/shop/preview/engrave/PHP53LL/A?th="+text+"&tl=&s=2")
     else:
-      embed.set_image(url="https://www.apple.com/shop/preview/engrave/PXAW2LL/A?th="+split[0]+"&tl="+split[1]+"&s=2")
+      embed.set_image(url="https://www.apple.com/shop/preview/engrave/PHP53LL/A?th="+split[0]+"&tl="+split[1]+"&s=2")
   elif product == "ipadgray" or product == "ipadgrey" or product == "padgray" or product == "padgrey" or product == "ipadspacegray" or product == "ipadspacegrey" or product == "padspacegray" or product == "padspacegrey" or product == "ipad" or product == "pad":
     embed = discord.Embed(title="Engrave on iPad (Space Gray)")
     split = text.splitlines()
@@ -96,9 +96,9 @@ def botengrave(product : str, text : str):
     embed = discord.Embed(title="Engrave on iPad Air (Space Gray)")
     split = text.splitlines()
     if len(split) == 1:
-      embed.set_image(url="https://www.apple.com/shop/preview/engrave/PYHX2LL/A?th="+text+"&tl=&s=2")
+      embed.set_image(url="https://www.apple.com/shop/preview/engrave/PYJ32LL/A?th="+text+"&tl=&s=2")
     else:
-      embed.set_image(url="https://www.apple.com/shop/preview/engrave/PYHX2LL/A?th="+split[0]+"&tl="+split[1]+"&s=2")
+      embed.set_image(url="https://www.apple.com/shop/preview/engrave/PYJ32LL/A?th="+split[0]+"&tl="+split[1]+"&s=2")
   elif product == "ipadairsilver" or product == "padairsilver":
     embed = discord.Embed(title="Engrave on iPad Air (Silver)")
     split = text.splitlines()
