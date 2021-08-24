@@ -2105,31 +2105,31 @@ async def kick(ctx, user: discord.Member, *, reason="No reason provided"):
     await ctx.send("You don't have the required permissions.")
 
 @bot.command()
-async def slowmode(ctx, sec = None, *, channels:commands.Greedy[discord.TextChannel] = None):
+async def slowmode(ctx, sec = None, *, channels:*discord.TextChannel = None):
   if sec != None:
     if sec.isdigit() == False:
       sec = 0
     if int(sec) < 0 or int(sec) > 21600 or int(sec)%1 != 0:
       await ctx.send("Invalid input! Please enter an integer below or equal to 21600.")
+      return
+    if channels == None or channels == "":
+      allchannel = [ctx.channel]
+    elif channels == "all":
+      allchannel = ctx.guild.text_channels
     else:
-      if channels == None or channels == "":
-        allchannel = [ctx.channel]
-      elif channels == "all":
-        allchannel = ctx.guild.text_channels
-      else:
-        allchannel = channels
-      channellist = []
-      for count in allchannel:
-        if ctx.author.permissions_in(count).manage_channels or bot_admins.count(ctx.author.id)!=0:
-          orsec = str(count.slowmode_delay)
-          await count.edit(slowmode_delay = sec)
-          channellist.append(count.mention)
-      if len(channellist)==0:
-        await ctx.send("You don't have the manage channel permission in any of the channels.")
-      elif len(channellist)==1:
-        await ctx.send("Set slowmode from "+orsec+" second(s) to "+sec+" second(s) for "+" ".join(channellist)+".")
-      else:
-        await ctx.send("Set slowmode to "+sec+" second(s) for these channels: "+" ".join(channellist)+".")
+      allchannel = channels
+    channellist = []
+    for count in allchannel:
+      if ctx.author.permissions_in(count).manage_channels or bot_admins.count(ctx.author.id)!=0:
+        orsec = str(count.slowmode_delay)
+        await count.edit(slowmode_delay = sec)
+        channellist.append(count.mention)
+    if len(channellist)==0:
+      await ctx.send("You don't have the manage channel permission in any of the channels.")
+    elif len(channellist)==1:
+      await ctx.send("Set slowmode from "+orsec+" second(s) to "+sec+" second(s) for "+" ".join(channellist)+".")
+    else:
+      await ctx.send("Set slowmode to "+sec+" second(s) for these channels: "+" ".join(channellist)+".")
   elif sec == None:
     await ctx.send("The current slowmode is "+str(ctx.channel.slowmode_delay)+" second(s).")
 
