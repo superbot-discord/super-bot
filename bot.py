@@ -2101,7 +2101,7 @@ async def kick(ctx, user: discord.Member, *, reason="No reason provided"):
     await ctx.send("You don't have the required permissions.")
 
 @bot.command()
-async def slowmode(ctx, sec = None, *, *channels:typing.Union[discord.TextChannel,str]):
+async def slowmode(ctx, sec = None, *, channels:*typing.Union[discord.TextChannel,str]):
   if sec != None:
     if sec.isdigit() == False:
       sec = 0
