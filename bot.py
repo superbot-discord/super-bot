@@ -1,15 +1,13 @@
-from discord_slash.utils.manage_commands import create_option, create_choice
-from discord_slash import SlashCommand, SlashContext
+from discord_slash.utils.manage_commands import create_option
+from discord_slash import SlashCommand
 from discord import Webhook, RequestsWebhookAdapter
 from unicode_charnames import search_charnames
-from datetime import datetime, date, timedelta
-from discord_webhook import DiscordWebhook
+from datetime import datetime, timedelta
+from pdf2image import convert_from_path
 from captcha.image import ImageCaptcha
-import selenium.common.exceptions
 from discord.ext import commands
 from discord_components import *
 import matplotlib.pyplot as plt
-from selenium import webdriver
 import emojis as ems
 from cmath import *
 import ascii as asc
@@ -17,8 +15,6 @@ import random as ra
 import pytesseract
 import numpy as np
 from math import *
-import time as tm
-import subprocess
 import datetime
 import requests
 import aiohttp
@@ -1024,7 +1020,7 @@ async def purgeregex(ctx, num, *, regex):
   except:
     1
   if ctx.author.permissions_in(ctx.channel).manage_messages or bot_admins.count(ctx.author.id)!=0:
-    exec("purge_pattern = re.compile(r'"+regex+"')", globals())
+    purge_pattern = eval("re.compile(r'"+regex+"')")
     num = int(num)
     purged = 0
     async for count in ctx.channel.history(limit=1000):
@@ -1049,7 +1045,7 @@ async def purgepygex(ctx, num, regex, *, pyscript):
   except:
     1
   if ctx.author.permissions_in(ctx.channel).manage_messages or bot_admins.count(ctx.author.id)!=0:
-    exec("purge_pattern = re.compile(r'"+regex+"', re.IGNORECASE)", globals())
+    purge_pattern = eval("re.compile(r'"+regex+"'")
     num = int(num)
     purged = 0
     async for count in ctx.channel.history(limit=1000):
@@ -1794,7 +1790,7 @@ async def message(ctx, message: discord.Message=None):
   elif message.type == discord.MessageType.channel_follow_add:
     embed.add_field(name="System message", value="This is a system message indicating that someone followed another server's announcement.", inline=False)
   if message.application != None:
-    embed.add_field(name=message.application[name], value=f"This message is created by {message.application[name]}.\n{message.application[description]}", inline=False)
+    embed.add_field(name=message.application["name"], value=f"This message is created by {message.application['name']}.\n{message.application['description']}", inline=False)
   if len(f0vraw) != 0:
     embed.add_field(name="Reactions ("+str(len(f0vraw))+")", value=f0v, inline=False)
   if len(f1vraw) != 0:
@@ -2105,21 +2101,23 @@ async def kick(ctx, user: discord.Member, *, reason="No reason provided"):
     await ctx.send("You don't have the required permissions.")
 
 @bot.command()
-async def slowmode(ctx, sec = None, *, channels:*discord.TextChannel = None):
+async def slowmode(ctx, sec = None, *, *channels:typing.Union[discord.TextChannel,str]):
   if sec != None:
     if sec.isdigit() == False:
       sec = 0
     if int(sec) < 0 or int(sec) > 21600 or int(sec)%1 != 0:
       await ctx.send("Invalid input! Please enter an integer below or equal to 21600.")
       return
-    if channels == None or channels == "":
+    if len(channels) == 0:
       allchannel = [ctx.channel]
-    elif channels == "all":
+    elif channels[0] == ("all"):
       allchannel = ctx.guild.text_channels
     else:
       allchannel = channels
     channellist = []
     for count in allchannel:
+      if type(count) == str:
+        continue
       if ctx.author.permissions_in(count).manage_channels or bot_admins.count(ctx.author.id)!=0:
         orsec = str(count.slowmode_delay)
         await count.edit(slowmode_delay = sec)
@@ -2454,7 +2452,7 @@ async def _channel(ctx, channel:discord.abc.GuildChannel):
   await ctx.send(embed=embed)
 
 @slash.slash(name="simplecolor", description="Gets information about a named color.", options=[create_option(name="Colour",description="The name of the colour.",option_type=3,required=True)])
-async def _simplecolor(ctx):
+async def _simplecolor(ctx, name):
   botsimpcolor(name)
   try:
     file = discord.File("color.png")
