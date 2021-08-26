@@ -1326,6 +1326,14 @@ async def random(ctx,lower,upper):
   await ctx.send(embed=embed)
 
 @bot.command()
+async def choice(ctx,*options):
+  ti="Random choice"
+  rand=ra.choice(options)
+  desc="Your random option is "+rand
+  embed=discord.Embed(title=ti, description=desc)
+  await ctx.send(embed=embed)
+
+@bot.command()
 async def avatar(ctx,user: discord.Member=None):
   ti="Avatar"
   if user==None:
