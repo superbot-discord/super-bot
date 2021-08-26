@@ -1656,8 +1656,8 @@ async def autochannel(ctx, channel : typing.Union[discord.TextChannel, discord.V
 
 @bot.command()
 async def channel(ctx, channel: discord.TextChannel=None):
-  task1 = asyncio.create_task(bottchannel(ctx, channel))
-  embed = await task1
+  task = asyncio.create_task(bottchannel(ctx, channel))
+  embed = await task
   await ctx.send(embed=embed)
 
 @bot.command()
@@ -2299,28 +2299,8 @@ async def _role(ctx, role:discord.Role):
 @slash.slash(name="channel", description="Shows information about a channel.", options=[create_option(name="Channel",description="The channel to show information for.",option_type=7,required=True)])
 async def _channel(ctx, channel:discord.abc.GuildChannel):
   if channel.type == discord.ChannelType.text:
-    ti="Channel Information: "+channel.name
-    desc=channel.mention
-    embed=discord.Embed(title=ti, description=desc)
-    f0v=channel.created_at.strftime("%d %b, %Y (%a) %H:%M:%S")
-    f3v=str(channel.topic)
-    f4v=str(channel.category)
-    f5vlist=await channel.invites()
-    f5v=""
-    for count in f5vlist:
-      f5v=f5v+count.url+"  "
-    f5v=f5v[:-2]
-    embed.add_field(name="Created", value=f0v, inline=True)
-    if channel.is_nsfw()==True:
-      f1v="This is an NSFW channel."
-      embed.add_field(name="NSFW", value=f1v, inline=True)
-    if channel.is_news()==True:
-      f2v="This is a news channel."
-      embed.add_field(name="NSFW", value=f2v, inline=True)
-    embed.add_field(name="Topic", value=f3v, inline=True)
-    embed.add_field(name="Category", value=f4v, inline=True)
-    if len(f5vlist)!=0:
-      embed.add_field(name="Invites", value=f5v, inline=False)
+    task = asyncio.create_task(bottchannel(ctx, channel))
+    embed = await task
   elif channel.type == discord.ChannelType.voice:
     ti="Voice Channel Information"
     desc=channel.name
