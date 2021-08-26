@@ -32,6 +32,7 @@ from botengrave import *
 from botanimals import *
 from botpycalc import *
 from botbasic import *
+from botdinfo import *
 from botembed import *
 from botplot import *
 from botinfo import *
@@ -1345,44 +1346,7 @@ async def avatar(ctx,user: discord.Member=None):
 
 @bot.command()
 async def role(ctx,role: discord.Role=None):
-  ti="Role Information: "+role.name
-  if role==None:
-    role=ctx.authortop_role
-  desc=role.mention + " created at " + role.created_at.strftime("%d %b, %Y (%a) %H:%M:%S")
-  embed=discord.Embed(title=ti,color=role.color, description=desc)
-  memberlist=role.members
-  if len(memberlist) == 0:
-    f0v = "No members assigned with this role."
-  else:
-    f0v = ""
-    for count in memberlist:
-      f0v = f0v + count.mention + " "
-    f0v = f0v[:-1]
-  mention=role.mentionable
-  if mention:
-    f1v="Mentionable"
-  else:
-    f1v="Not mentionable"
-  f1v=f1v+"""
-  Mention: `<&"""+str(role.id)+">`"
-  hoisted=role.hoist
-  if hoisted:
-    f2v="Yes"
-  else:
-    f2v="No"
-  f4v=role.id
-  f5v=role.position
-  f6v=role.color
-  embed.add_field(name="Mentions", value=f1v, inline=True)
-  embed.add_field(name="Displayed separately?", value=f2v, inline=True)
-  embed.add_field(name="Role ID", value=f4v, inline=True)
-  embed.add_field(name="Position in hierarchy", value=f5v, inline=True)
-  embed.add_field(name="Color", value=f6v, inline=True)
-  if role.is_integration():
-    f7v="This role is managed by an integration, such as a bot."
-    embed.add_field(name="Integration", value=f7v, inline=False)
-  embed.add_field(name="Members ("+str(len(memberlist))+")", value=f0v, inline=False)
-  #embed.add_field(name="Channel Permissions", value=f3vb, inline=False)
+  embed = botrole(ctx, role)
   await ctx.send(embed=embed)
 
 @bot.command()
