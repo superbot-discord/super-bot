@@ -41,7 +41,7 @@ def botrole(ctx, role):
   #embed.add_field(name="Channel Permissions", value=f3vb, inline=False)
   return embed
 
-def bottchannel(ctx, channel):
+async def bottchannel(ctx, channel):
   if channel==None:
     channel=ctx.channel
   ti="Channel Information: "+channel.name
@@ -70,3 +70,4 @@ def bottchannel(ctx, channel):
   embed.add_field(name="Category", value=f4v, inline=True)
   embed.add_field(name="Members", value=f8v, inline=False)
   embed.add_field(name="ID", value=channel.id, inline=True)
+  return embed
