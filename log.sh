@@ -1,0 +1,1 @@
+heroku logs -a superior-dbot -t
