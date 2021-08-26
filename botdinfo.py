@@ -2,7 +2,7 @@ import discord
 
 def botrole(ctx, role):
   if role==None:
-    role=ctx.authortop_role
+    role=ctx.author.top_role
   ti="Role Information: "+role.name
   desc=role.mention + " created at " + role.created_at.strftime("%d %b, %Y (%a) %H:%M:%S")
   embed=discord.Embed(title=ti,color=role.color, description=desc)
@@ -51,7 +51,7 @@ async def bottchannel(ctx, channel):
   f3v=str(channel.topic)
   f4v=str(channel.category)
   f5vlist=await channel.invites()
-  f5v,f8v=""
+  f5v=f8v=""
   for count in f5vlist:
     f5v=f5v+count.url+"  "
   f5v=f5v[:-2]

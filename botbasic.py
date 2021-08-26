@@ -36,5 +36,5 @@ Need help? check the [documentation](https://github.com/johann-lau/Bot#bot-docum
   return embed
 
 def botinvite():
-  embed = discord.Embed(title="Invite", description = "The bot can be invited [here](https://discord.com/oauth2/authorize?client_id=796686363604680755&permissions=0&scope=bot%20applications.commands).")
+  embed = discord.Embed(title="Invite", description = "The bot can be invited [here](https://discord.com/api/oauth2/authorize?client_id=796686363604680755&permissions=0&scope=bot%20applications.commands).")
   return embed
