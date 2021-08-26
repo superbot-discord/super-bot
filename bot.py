@@ -2499,7 +2499,7 @@ async def _status(ctx, member : discord.Member = None):
 async def on_ready():
   activity = discord.Activity(type=discord.ActivityType.playing, name="with =help")
   await bot.change_presence(status=discord.Status.idle, activity=activity)
-  DiscordComponents(bot, change_discord_methods=True)
+  DiscordComponents(bot)
   print("Bot is ready!")
 
 bot.run('Nzk2Njg2MzYzNjA0NjgwNzU1.X_bh_g.6uKl_EPp5r5XZpSxCxPTIuA69aE')
