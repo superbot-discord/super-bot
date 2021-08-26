@@ -50,7 +50,7 @@ async def bottchannel(ctx, channel):
   f0v=channel.created_at.strftime("%d %b, %Y (%a) %H:%M:%S")
   f3v=str(channel.topic)
   f4v=str(channel.category)
-  f8v=""
+  f5v=" ".join(await channel.invites())
   for count in channel.members:
     f8v=f8v+count.mention+" "
   f8v=f8v[:-1]
@@ -69,5 +69,6 @@ async def bottchannel(ctx, channel):
   embed.add_field(name="Topic", value=f3v, inline=True)
   embed.add_field(name="Category", value=f4v, inline=True)
   embed.add_field(name="Members", value=f8v, inline=False)
+  if f5v:
+    embed.add_field(name="Invites", value=f5v, inline=True)
   embed.add_field(name="ID", value=channel.id, inline=True)
-  return embed
