@@ -1656,9 +1656,10 @@ async def autochannel(ctx, channel : typing.Union[discord.TextChannel, discord.V
 
 @bot.command()
 async def channel(ctx, channel: discord.TextChannel=None):
-  embed = asyncio.create_task(bottchannel(ctx, channel))
-  await embed
-  await ctx.send(embed=embed.result())
+  loop = asyncio.get_event_loop()
+  task = loop.create_task(bottchannel(ctx, channel))
+  loop.run_until_complete(task)
+  await ctx.send(embed=task.result())
 
 @bot.command()
 async def message(ctx, message: discord.Message=None):
