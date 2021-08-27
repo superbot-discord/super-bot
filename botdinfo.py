@@ -295,7 +295,6 @@ async def botinvitel(inviteinput):
       invite=count
       break
   ti="Invite Information: "+invite.code
-  print(invite.created_at)
   desc="Created at "+invite.created_at.strftime("%d %b, %Y (%a) %H:%M:%S")+" by "+str(invite.inviter)
   embed=discord.Embed(title=ti, description=desc)
   f00v=invite.guild
@@ -330,3 +329,4 @@ async def botinvitel(inviteinput):
   embed.add_field(name="Expires", value=f7v, inline=True)
   embed.add_field(name="Valid Duration", value=f5v, inline=True)
   embed.add_field(name="Expired?", value=f6v, inline=True)
+  return embed
