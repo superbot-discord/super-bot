@@ -51,6 +51,7 @@ async def bottchannel(ctx, channel):
   f3v=str(channel.topic)
   f4v=str(channel.category)
   f5v=" ".join(await channel.invites())
+  f8v = ""
   for count in channel.members:
     f8v=f8v+count.mention+" "
   f8v=f8v[:-1]
