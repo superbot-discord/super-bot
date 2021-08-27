@@ -73,6 +73,7 @@ async def bottchannel(ctx, channel):
   if f5v:
     embed.add_field(name="Invites", value=f5v, inline=True)
   embed.add_field(name="ID", value=channel.id, inline=True)
+  return channel
 
 async def botserver(ctx, text):
   guild=ctx.guild
