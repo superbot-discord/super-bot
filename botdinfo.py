@@ -1,4 +1,4 @@
-import discord
+import discord,asyncio
 
 def botrole(ctx, role):
   if role==None:
@@ -50,7 +50,7 @@ async def bottchannel(ctx, channel):
   f0v=channel.created_at.strftime("%d %b, %Y (%a) %H:%M:%S")
   f3v=str(channel.topic)
   f4v=str(channel.category)
-  f5v=" ".join(await channel.invites())
+  f5v=" ".join(asyncio.run(channel.invites()))
   for count in channel.members:
     f8v=f8v+count.mention+" "
   f8v=f8v[:-1]
