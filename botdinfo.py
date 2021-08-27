@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import timedelta
 import discord
 
 def botrole(ctx, role):
@@ -296,6 +296,7 @@ async def botinvitel(invite):
   #     invite=count
   #     break
   ti="Invite Information: "+invite.code
+  print(invite.created_at)
   desc="Created at "+invite.created_at.strftime("%d %b, %Y (%a) %H:%M:%S")+" by "+str(invite.inviter)
   embed=discord.Embed(title=ti, description=desc)
   f00v=invite.guild
