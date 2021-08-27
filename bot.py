@@ -1391,7 +1391,7 @@ async def channel(ctx, channel : typing.Union[discord.TextChannel, discord.Voice
     await ctx.send(embed=task.result())
   else:
     embed = discord.Embed(desc = "Invalid input.")
-  await ctx.send(embed=embed)
+    await ctx.send(embed=embed)
 
 @bot.command()
 async def message(ctx, message: discord.Message=None):
