@@ -1,4 +1,5 @@
-import discord,asyncio
+from datetime import timedelta
+import discord
 
 def botrole(ctx, role):
   if role==None:
@@ -75,7 +76,7 @@ async def bottchannel(ctx, channel):
   embed.add_field(name="ID", value=channel.id, inline=True)
   return embed
 
-async def botvchannel(ctx, channel):
+async def botvchannel(channel):
   ti="Voice Channel Information"
   desc=channel.name
   embed=discord.Embed(title=ti, description=desc)
@@ -105,6 +106,46 @@ async def botvchannel(ctx, channel):
   if len(f5vlist)!=0:
     embed.add_field(name="Current Members", value=f5v, inline=True)
   return embed
+
+async def botstagec(channel):
+  ti="Stage Channel Information"
+  try:
+    desc=channel.name + "  " + channel.topic
+  except:
+    desc=channel.name
+  embed=discord.Embed(title=ti, description=desc)
+  f0v=channel.created_at.strftime("%d %b, %Y (%a) %H:%M:%S")
+  f1v=str(channel.category)
+  f2vlist=await channel.invites()
+  f2v=""
+  for count in f2vlist:
+    f2v=f2v+count.url+"  "
+  f2v=f2v[:-2]
+  f5vlist=channel.members
+  f5v=""
+  for count in f5vlist:
+    f5v=f5v+count.mention+"  "
+  f5v=f5v[:-2]
+  f6vlist=channel.requesting_to_speak
+  f6v=""
+  for count in f6vlist:
+    f6v=f6v+count.mention+"  "
+  f6v=f6v[:-2]
+  f3v=str(channel.bitrate//1000)+" kbps"
+  if str(channel.user_limit)=="0":
+    f4v="Infinite"
+  else:
+    f4v=str(channel.user_limit)+" members"
+  embed.add_field(name="Created", value=f0v, inline=True)
+  embed.add_field(name="Category", value=f1v, inline=True)
+  if len(f2vlist)!=0:
+    embed.add_field(name="Invites", value=f2v, inline=False)
+  embed.add_field(name="Bitrate", value=f3v, inline=True)
+  embed.add_field(name="Max. Members", value=f4v, inline=True)
+  if len(f5vlist)!=0:
+    embed.add_field(name="Current Members", value=f5v, inline=True)
+  if len(f6vlist)!=0:
+    embed.add_field(name="Members requesting to speak", value=f6v, inline=True)
 
 async def botserver(ctx, text):
   guild=ctx.guild
@@ -246,3 +287,46 @@ async def botserver(ctx, text):
     f1va = f1va [:-2] + "…"
     embed.set_field_at(3, name="Roles ("+str(len(guild.roles))+")", value=f1va, inline=False)
     await ctx.send(embed=embed)
+
+async def botinvitel(invite):
+  # ch=inviteinput.channel
+  # allinvites=await ch.invites()
+  # for count in allinvites:
+  #   if count==inviteinput:
+  #     invite=count
+  #     break
+  ti="Invite Information: "+invite.code
+  desc="Created at "+invite.created_at.strftime("%d %b, %Y (%a) %H:%M:%S")+" by "+str(invite.inviter)
+  embed=discord.Embed(title=ti, description=desc)
+  f00v=invite.guild
+  if invite.max_uses == 0:
+    f0v=str(invite.uses)
+  else:
+    f0v=str(invite.uses)+"/"+str(invite.max_uses)
+  f1v=invite.temporary
+  f2v=invite.channel.mention+" ("+str(invite.channel.type)+")"
+  f3v=invite.url
+  f4v=invite.id
+  age=invite.max_age
+  if age==0:
+    f5v="Never Expires"
+  elif age>86400:
+    f5v=str(age/86400)+" day"
+  elif age>3600:
+    f5v=str(age/3600)+" hr"
+  else:
+    f5v=str(age/60)+" min"
+  f6v=str(invite.revoked)
+  if f5v == "Never Expires":
+    f7v = "Never"
+  else:
+    f7v=(invite.created_at + timedelta(seconds=age)).strftime("%d %b, %Y (%a) %H:%M:%S")
+  embed.add_field(name="Server", value=f00v, inline=True)
+  embed.add_field(name="Uses", value=f0v, inline=True)
+  embed.add_field(name="Temporary?", value=f1v, inline=True)
+  embed.add_field(name="URL", value=f3v, inline=True)
+  embed.add_field(name="Channel", value=f2v, inline=True)
+  embed.add_field(name="ID", value=f4v, inline=True)
+  embed.add_field(name="Expires", value=f7v, inline=True)
+  embed.add_field(name="Valid Duration", value=f5v, inline=True)
+  embed.add_field(name="Expired?", value=f6v, inline=True)

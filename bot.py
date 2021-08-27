@@ -1371,105 +1371,27 @@ async def template(ctx,temp: discord.Template):
 
 @bot.command()
 async def invitelink(ctx,inviteinput: discord.Invite):
-  ch=inviteinput.channel
-  allinvites=await ch.invites()
-  for count in allinvites:
-    if count==inviteinput:
-      invite=count
-      break
-  ti="Invite Information: "+invite.code
-  desc="Created at "+invite.created_at.strftime("%d %b, %Y (%a) %H:%M:%S")+" by "+str(invite.inviter)
-  embed=discord.Embed(title=ti, description=desc)
-  f00v=invite.guild
-  if invite.max_uses == 0:
-    f0v=str(invite.uses)
-  else:
-    f0v=str(invite.uses)+"/"+str(invite.max_uses)
-  f1v=invite.temporary
-  f2v=invite.channel.mention+" ("+str(invite.channel.type)+")"
-  f3v=invite.url
-  f4v=invite.id
-  age=invite.max_age
-  if age==0:
-    f5v="Never Expires"
-  elif age>86400:
-    f5v=str(age/86400)+" day"
-  elif age>3600:
-    f5v=str(age/3600)+" hr"
-  else:
-    f5v=str(age/60)+" min"
-  f6v=str(invite.revoked)
-  if f5v == "Never Expires":
-    f7v = "Never"
-  else:
-    f7v=(invite.created_at + timedelta(seconds=age)).strftime("%d %b, %Y (%a) %H:%M:%S")
-  embed.add_field(name="Server", value=f00v, inline=True)
-  embed.add_field(name="Uses", value=f0v, inline=True)
-  embed.add_field(name="Temporary?", value=f1v, inline=True)
-  embed.add_field(name="URL", value=f3v, inline=True)
-  embed.add_field(name="Channel", value=f2v, inline=True)
-  embed.add_field(name="ID", value=f4v, inline=True)
-  embed.add_field(name="Expires", value=f7v, inline=True)
-  embed.add_field(name="Valid Duration", value=f5v, inline=True)
-  embed.add_field(name="Expired?", value=f6v, inline=True)
-  await ctx.send(embed=embed)
-
-@bot.command()
-async def autochannel(ctx, channel : typing.Union[discord.TextChannel, discord.VoiceChannel, discord.StageChannel]):
-  if channel.type == discord.ChannelType.voice:
-    task = asyncio.create_task(botvchannel(ctx, channel))
-    await task
-    await ctx.send(embed=task.result())
-  elif channel.type == discord.ChannelType.text:
-    embed = bottchannel(ctx, channel)
-  elif channel.type == discord.ChannelType.stage:
-    ti="Stage Channel Information"
-    try:
-      desc=channel.name + "  " + channel.topic
-    except:
-      desc=channel.name
-    embed=discord.Embed(title=ti, description=desc)
-    f0v=channel.created_at.strftime("%d %b, %Y (%a) %H:%M:%S")
-    f1v=str(channel.category)
-    f2vlist=await channel.invites()
-    f2v=""
-    for count in f2vlist:
-      f2v=f2v+count.url+"  "
-    f2v=f2v[:-2]
-    f5vlist=channel.members
-    f5v=""
-    for count in f5vlist:
-      f5v=f5v+count.mention+"  "
-    f5v=f5v[:-2]
-    f6vlist=channel.requesting_to_speak
-    f6v=""
-    for count in f6vlist:
-      f6v=f6v+count.mention+"  "
-    f6v=f6v[:-2]
-    f3v=str(channel.bitrate//1000)+" kbps"
-    if str(channel.user_limit)=="0":
-      f4v="Infinite"
-    else:
-      f4v=str(channel.user_limit)+" members"
-    embed.add_field(name="Created", value=f0v, inline=True)
-    embed.add_field(name="Category", value=f1v, inline=True)
-    if len(f2vlist)!=0:
-      embed.add_field(name="Invites", value=f2v, inline=False)
-    embed.add_field(name="Bitrate", value=f3v, inline=True)
-    embed.add_field(name="Max. Members", value=f4v, inline=True)
-    if len(f5vlist)!=0:
-      embed.add_field(name="Current Members", value=f5v, inline=True)
-    if len(f6vlist)!=0:
-      embed.add_field(name="Members requesting to speak", value=f6v, inline=True)
-  else:
-    embed = discord.Embed(desc = "Invalid input!")
-  await ctx.send(embed=embed)
-
-@bot.command()
-async def channel(ctx, channel: discord.TextChannel=None):
-  task = asyncio.create_task(bottchannel(ctx, channel))
+  task = asyncio.create_task(botinvitel(inviteinput))
   await task
   await ctx.send(embed=task.result())
+
+@bot.command()
+async def channel(ctx, channel : typing.Union[discord.TextChannel, discord.VoiceChannel, discord.StageChannel]):
+  if channel.type == discord.ChannelType.text:
+    task = asyncio.create_task(bottchannel(ctx, channel))
+    await task
+    await ctx.send(embed=task.result())
+  elif channel.type == discord.ChannelType.voice:
+    task = asyncio.create_task(botvchannel(channel))
+    await task
+    await ctx.send(embed=task.result())
+  elif channel.type == discord.ChannelType.stage:
+    task = asyncio.create_task(botstagec(channel))
+    await task
+    await ctx.send(embed=task.result())
+  else:
+    embed = discord.Embed(desc = "Invalid input.")
+  await ctx.send(embed=embed)
 
 @bot.command()
 async def message(ctx, message: discord.Message=None):
@@ -1553,12 +1475,6 @@ async def message(ctx, message: discord.Message=None):
   if len(f4vraw) != 0:
     embed.add_field(name="User mentions ("+str(len(f4vraw))+")", value=f4v, inline=False)
   await ctx.send(embed=embed)
-
-@bot.command()
-async def voicechannel(ctx, channel: discord.VoiceChannel):
-  task = asyncio.create_task(botvchannel(ctx, channel))
-  await task
-  await ctx.send(embed=task.result())
 
 @bot.command()
 async def leftuser(ctx, *, userinput):
