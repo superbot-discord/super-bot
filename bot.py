@@ -1417,34 +1417,9 @@ async def invitelink(ctx,inviteinput: discord.Invite):
 @bot.command()
 async def autochannel(ctx, channel : typing.Union[discord.TextChannel, discord.VoiceChannel, discord.StageChannel]):
   if channel.type == discord.ChannelType.voice:
-    ti="Voice Channel Information"
-    desc=channel.name
-    embed=discord.Embed(title=ti, description=desc)
-    f0v=channel.created_at.strftime("%d %b, %Y (%a) %H:%M:%S")
-    f1v=str(channel.category)
-    f2vlist=await channel.invites()
-    f2v=""
-    for count in f2vlist:
-      f2v=f2v+count.url+"  "
-    f2v=f2v[:-2]
-    f5vlist=channel.members
-    f5v=""
-    for count in f5vlist:
-      f5v=f5v+count.mention+"  "
-    f5v=f5v[:-2]
-    f3v=str(channel.bitrate//1000)+" kbps"
-    if str(channel.user_limit)=="0":
-      f4v="Infinite"
-    else:
-      f4v=str(channel.user_limit)+" members"
-    embed.add_field(name="Created", value=f0v, inline=True)
-    embed.add_field(name="Category", value=f1v, inline=True)
-    if len(f2vlist)!=0:
-      embed.add_field(name="Invites", value=f2v, inline=False)
-    embed.add_field(name="Bitrate", value=f3v, inline=True)
-    embed.add_field(name="Max. Members", value=f4v, inline=True)
-    if len(f5vlist)!=0:
-      embed.add_field(name="Current Members", value=f5v, inline=True)
+    task = asyncio.create_task(botvchannel(ctx, channel))
+    await task
+    await ctx.send(embed=task.result())
   elif channel.type == discord.ChannelType.text:
     embed = bottchannel(ctx, channel)
   elif channel.type == discord.ChannelType.stage:
@@ -1581,35 +1556,9 @@ async def message(ctx, message: discord.Message=None):
 
 @bot.command()
 async def voicechannel(ctx, channel: discord.VoiceChannel):
-  ti="Voice Channel Information"
-  desc=channel.name
-  embed=discord.Embed(title=ti, description=desc)
-  f0v=channel.created_at.strftime("%d %b, %Y (%a) %H:%M:%S")
-  f1v=str(channel.category)
-  f2vlist=await channel.invites()
-  f2v=""
-  for count in f2vlist:
-    f2v=f2v+count.url+"  "
-  f2v=f2v[:-2]
-  f5vlist=channel.members
-  f5v=""
-  for count in f5vlist:
-    f5v=f5v+count.mention+"  "
-  f5v=f5v[:-2]
-  f3v=str(channel.bitrate//1000)+" kbps"
-  if str(channel.user_limit)=="0":
-    f4v="Infinite"
-  else:
-    f4v=str(channel.user_limit)+" members"
-  embed.add_field(name="Created", value=f0v, inline=True)
-  embed.add_field(name="Category", value=f1v, inline=True)
-  if len(f2vlist)!=0:
-    embed.add_field(name="Invites", value=f2v, inline=False)
-  embed.add_field(name="Bitrate", value=f3v, inline=True)
-  embed.add_field(name="Max. Members", value=f4v, inline=True)
-  if len(f5vlist)!=0:
-    embed.add_field(name="Current Members", value=f5v, inline=True)
-  await ctx.send(embed=embed)
+  task = asyncio.create_task(botvchannel(ctx, channel))
+  await task
+  await ctx.send(embed=task.result())
 
 @bot.command()
 async def leftuser(ctx, *, userinput):
@@ -1998,35 +1947,9 @@ async def _channel(ctx, channel:discord.abc.GuildChannel):
     await task
     await ctx.send(embed=task.result())
   elif channel.type == discord.ChannelType.voice:
-    ti="Voice Channel Information"
-    desc=channel.name
-    embed=discord.Embed(title=ti, description=desc)
-    f0v=channel.created_at.strftime("%d %b, %Y (%a) %H:%M:%S")
-    f1v=str(channel.category)
-    f2vlist=await channel.invites()
-    f2v=""
-    for count in f2vlist:
-      f2v=f2v+count.url+"  "
-    f2v=f2v[:-2]
-    f5vlist=channel.members
-    f5v=""
-    for count in f5vlist:
-      f5v=f5v+count.mention+"  "
-    f5v=f5v[:-2]
-    f3v=str(channel.bitrate//1000)+" kbps"
-    if str(channel.user_limit)=="0":
-      f4v="Infinite"
-    else:
-      f4v=str(channel.user_limit)+" members"
-    embed.add_field(name="Created", value=f0v, inline=True)
-    embed.add_field(name="Category", value=f1v, inline=True)
-    if len(f2vlist)!=0:
-      embed.add_field(name="Invites", value=f2v, inline=False)
-    embed.add_field(name="Bitrate", value=f3v, inline=True)
-    embed.add_field(name="Max. Members", value=f4v, inline=True)
-    if len(f5vlist)!=0:
-      embed.add_field(name="Current Members", value=f5v, inline=True)
-  await ctx.send(embed=embed)
+    task = asyncio.create_task(botvchannel(ctx, channel))
+    await task
+    await ctx.send(embed=task.result())
 
 @slash.slash(name="simplecolor", description="Gets information about a named color.", options=[create_option(name="Colour",description="The name of the colour.",option_type=3,required=True)])
 async def _simplecolor(ctx, name):
