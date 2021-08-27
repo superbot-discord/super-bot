@@ -288,13 +288,12 @@ async def botserver(ctx, text):
     embed.set_field_at(3, name="Roles ("+str(len(guild.roles))+")", value=f1va, inline=False)
     await ctx.send(embed=embed)
 
-async def botinvitel(invite):
-  # ch=inviteinput.channel
-  # allinvites=await ch.invites()
-  # for count in allinvites:
-  #   if count==inviteinput:
-  #     invite=count
-  #     break
+async def botinvitel(inviteinput):
+  allinvites=await inviteinput.channel.invites()
+  for count in allinvites:
+    if count==inviteinput:
+      invite=count
+      break
   ti="Invite Information: "+invite.code
   print(invite.created_at)
   desc="Created at "+invite.created_at.strftime("%d %b, %Y (%a) %H:%M:%S")+" by "+str(invite.inviter)
