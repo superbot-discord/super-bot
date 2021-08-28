@@ -1,5 +1,11 @@
 from datetime import timedelta
 import discord
+from discord.ext import commands
+
+@commands.command()
+async def role(ctx,role: discord.Role=None):
+  embed = botrole(ctx, role)
+  await ctx.send(embed=embed)
 
 def botrole(ctx, role):
   if role==None:
@@ -330,3 +336,6 @@ async def botinvitel(inviteinput):
   embed.add_field(name="Valid Duration", value=f5v, inline=True)
   embed.add_field(name="Expired?", value=f6v, inline=True)
   return embed
+
+def setup(bot):
+  bot.add_command(role)

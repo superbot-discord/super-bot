@@ -42,6 +42,7 @@ banned_text = []
 bot_admins = [687474789342117900]
 bot = commands.Bot(command_prefix=commands.when_mentioned_or("="), intents=discord.Intents.all(), case_insensitive=True)
 bot.remove_command('help')
+bot.load_extension("botdinfo.py")
 slash = SlashCommand(bot, sync_commands=False)
 allid=[]
 id_pattern = re.compile(r'([A-Z]{5})', re.IGNORECASE)
@@ -1342,11 +1343,6 @@ async def avatar(ctx,user: discord.Member=None):
   desc=f"Avatar of {user.mention}"
   embed=discord.Embed(title=ti, description=desc)
   embed.set_image(url=user.avatar_url)
-  await ctx.send(embed=embed)
-
-@bot.command()
-async def role(ctx,role: discord.Role=None):
-  embed = botrole(ctx, role)
   await ctx.send(embed=embed)
 
 @bot.command()
