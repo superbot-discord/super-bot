@@ -42,7 +42,7 @@ banned_text = []
 bot_admins = [687474789342117900]
 bot = commands.Bot(command_prefix=commands.when_mentioned_or("="), intents=discord.Intents.all(), case_insensitive=True)
 bot.remove_command('help')
-bot.load_extension("botdinfo.py")
+bot.load_extension("botdinfo")
 slash = SlashCommand(bot, sync_commands=False)
 allid=[]
 id_pattern = re.compile(r'([A-Z]{5})', re.IGNORECASE)
