@@ -22,21 +22,19 @@ for count in srclangkeys:
 wikipedia.set_lang("en")
 
 def botredirect(url):
-  urllist = []
-  try:
-    for count in requests.get(url).history:
-      urllist.append(count.url)
-    if len(urllist) == 0:
-      return "Invalid URL. Please try again."
-    elif len(urllist) == 1:
-      return "No redirects found for that URL."
-    elif len(urllist) == 2:
-      return "URL redirected to: "+urllist[1]
-    else:
-      urlend = len(urllist)-2
-      return "Initial URL: "+urllist[0]+f"\n"+f"\n".join(urllist[1:urlend])+"Final URL: "+urllist[len(urllist)-1]
-  except:
+  #try:
+  urllist = requests.get(url).history
+  if len(urllist) == 0:
     return "Invalid URL. Please try again."
+  elif len(urllist) == 1:
+    return "No redirects found for that URL."
+  elif len(urllist) == 2:
+    return "URL redirected to: "+urllist[1]
+  else:
+    urlend = len(urllist)-2
+    return "Initial URL: "+urllist[0]+f"\n"+f"\n".join(urllist[1:urlend])+"Final URL: "+urllist[len(urllist)-1]
+  #except:
+  #  return "Invalid URL. Please try again."
 
 def botunscramble(text, ilength):
   try:

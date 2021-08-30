@@ -1,11 +1,14 @@
 from table2ascii import table2ascii, PresetStyle
 from ascii_canvas import canvas, item
-import matplotlib.pyplot as plt
 from matplotlib.sankey import Sankey
+from discord.ext import commands
+import matplotlib.pyplot as plt
 import numpy as np
 from art import *
+import discord
 import qrcode
 import re
+import os
 
 cmaphsv = plt.cm.hsv
 def func(pct, allvals):
@@ -88,14 +91,20 @@ def botqrencode(text):
         img = qr.make_image(fill_color="black", back_color="white")
   img.save('QRCode.png')
 
-def botascii(text):
+@commands.command()
+async def ascii(ctx, *, text):
   output = text2art(text,"cybermedium") + f"\n" + text2art(text,"big")+f"\n" + text2art(text,"future_1")
   file = open("ascii.txt", "w")
   file.write(output)
   file.close()
-  return output
+  if len(output) > 1994 or len(text) > 11:
+    await ctx.send(file=discord.File('ascii.txt'))
+  else:
+    await ctx.send(f"```{output}```", file=discord.File('ascii.txt'))
+  os.remove('ascii.txt')
 
-def bottable(text):
+@commands.command()
+async def table(ctx, *, text):
   splitted = text.split(f"\n")
   if len(splitted) == 1:
     splitted.insert(0, "")
@@ -146,8 +155,22 @@ def bottable(text):
         try:
           output = table2ascii(body=bodies, style=style)
         except:
-          output = "Invalid syntax, please try again."
-  return output
+          await ctx.send("Invalid syntax, please try again.")
+          return
+  file = open("table.txt", "w")
+  file.write(output)
+  file.close()
+  await ctx.send(f"```{output}```", file=discord.File('table.txt'))
+  os.remove('table.txt')
+
+@commands.command(aliases=["simpcolour", "simplecolor", "simplecolour"])
+async def simpcolor(ctx, *, name):
+  botsimpcolor(name)
+  try:
+    file = discord.File("color.png")
+    await ctx.send(file=file)
+  except:
+    await ctx.send("Invalid colour name, please try again.")
 
 def botsimpcolor(name):
   plt.clf()
@@ -172,6 +195,31 @@ def botsimpcolor(name):
     except:
       plt.clf()
 
+@commands.command(alias=["snowgraph", "snowflake"])
+async def snow(ctx, recursion = 10):  
+  try:
+    if float(recursion) > 10:
+      await ctx.send("We are sorry, the maximum recursion we can process is 10.")
+    else:
+      x, y = koch_snowflake(recursion)
+      plt.figure(figsize=(8, 8))
+      plt.axis('equal')
+      plt.fill(x, y)
+      ax = plt.subplot(111)
+      ax.get_xaxis().set_visible(False)
+      ax.get_yaxis().set_visible(False)
+      ax.spines['top'].set_visible(False)
+      ax.spines['bottom'].set_visible(False)
+      ax.spines['left'].set_visible(False)
+      ax.spines['right'].set_visible(False)
+      plt.savefig("snow.png", transparent=True)
+      plt.clf()
+      file = discord.File("snow.png")
+      await ctx.send(file=file)
+      os.remove('snow.png')
+  except:
+    await ctx.send("Invalid input. Please try again.")
+
 def koch_snowflake(order):
   def _koch_snowflake_complex(order):
     if order == 0:
@@ -193,100 +241,116 @@ def koch_snowflake(order):
   x, y = points.real, points.imag
   return x, y
 
-def botsnow(recursion):
-  x, y = koch_snowflake(recursion)
-  plt.figure(figsize=(8, 8))
-  plt.axis('equal')
-  plt.fill(x, y)
-  ax = plt.subplot(111)
-  ax.get_xaxis().set_visible(False)
-  ax.get_yaxis().set_visible(False)
-  ax.spines['top'].set_visible(False)
-  ax.spines['bottom'].set_visible(False)
-  ax.spines['left'].set_visible(False)
-  ax.spines['right'].set_visible(False)
-  plt.savefig("snow.png", transparent=True)
-  plt.clf()
+@commands.command(aliases=["histogram", "histograms"])
+async def hist(ctx, numbers, *, title="No_title_required"):
+  try:
+    numlist = []
+    for count in numbers.split(","):
+      if float(count)%1 == 0:
+        numlist.append(int(count))
+      else:
+        numlist.append(float(count))
+    plt.hist(numlist)
+    if title != "No_title_required":
+      plt.title(title)
+    plt.savefig("histogram.png", transparent=True)
+    plt.clf()
+    await ctx.send(file=discord.File("histogram.png"))
+    os.remove('histogram.png')
+  except:
+    await ctx.send("Invalid input. Please try again.")
 
-def bothist(title, numbers):
-  numlist = []
-  for count in numbers.split(","):
-    if float(count)%1 == 0:
-      numlist.append(int(count))
-    else:
-      numlist.append(float(count))
-  plt.hist(numlist)
-  if title != "No_title_required":
-    plt.title(title)
-  plt.savefig("histogram.png", transparent=True)
-  plt.clf()
+@commands.command(aliases=["piechart", "circlechart"])
+async def pie(ctx, numbers, label, *, title="No_title_required"):
+  try:
+    numlist = numbers.split(",")
+    mycolors = []
+    labels = label.split(",")
+    if len(labels) > len(numlist):
+      labels = labels[:len(numlist)-1]
+    elif len(numlist) > len(labels):
+      numlist = numlist[:len(labels)-1]
+    y = np.array(numlist)
+    for count in range(0, len(numlist)):
+      mycolors.append(cmaphsv(count/len(numlist)))
+    plt.pie(y, labels=labels, colors=mycolors, autopct=lambda pct: func(pct, y), textprops = {'color':"w"})
+    plt.legend(loc="lower right")
+    if title != "No_title_required":
+      plt.title(title)
+    plt.savefig("piechart.png", transparent=True)
+    plt.clf()
+    await ctx.send(file=discord.File("piechart.png"))
+    os.remove('piechart.png')
+  except:
+    await ctx.send("Invalid input. Please try again.")
 
-def botpie(title, numbers, label):
-  numlist = []
-  for count in numbers.split(","):
-    numlist.append(int(count))
-  mycolors = []
-  labels = label.split(",")
-  if len(labels) > len(numlist):
-    labels = labels[:len(numlist)-1]
-  elif len(numlist) > len(labels):
-    numlist = numlist[:len(labels)-1]
-  y = np.array(numlist)
-  for count in range(0, len(numlist)):
-    mycolors.append(cmaphsv(count/len(numlist)))
-  plt.pie(y, labels=labels, colors=mycolors, autopct=lambda pct: func(pct, y), textprops = {'color':"w"})
-  plt.legend(loc="lower right")
-  if title != "No_title_required":
-    plt.title(title)
-  plt.savefig("piechart.png", transparent=True)
-  plt.clf()
+@commands.command()
+async def barh(ctx, numbers, label, *, title="No_title_required"):
+  try:
+    numlist = numbers.split(",")
+    labels = tuple(label.split(","))
+    if len(labels) > len(numlist):
+      labels = labels[:len(numlist)-1]
+    elif len(numlist) > len(labels):
+      numlist = numlist[:len(labels)-1]
+    y_pos = np.arange(len(labels))
+    plt.rcdefaults()
+    fig, ax = plt.subplots()
+    ax.barh(np.arange(len(labels)), numlist, align='center')
+    ax.set_yticks(y_pos)
+    ax.set_yticklabels(labels)
+    ax.invert_yaxis()
+    if title != "No_title_required":
+      plt.title(title)
+    plt.savefig("horizontalbarchart.png", transparent=True)
+    plt.clf()
+    await ctx.send(file=discord.File("horizontalbarchart.png"))
+    os.remove('horizontalbarchart.png')
+  except:
+    await ctx.send("Invalid input. Please try again.")
 
-def botbarh(title, numbers, label):
-  numlist = []
-  for count in numbers.split(","):
-    numlist.append(int(count))
-  mycolors = []
-  labels = tuple(label.split(","))
-  if len(labels) > len(numlist):
-    labels = labels[:len(numlist)-1]
-  elif len(numlist) > len(labels):
-    numlist = numlist[:len(labels)-1]
-  y_pos = np.arange(len(labels))
-  plt.rcdefaults()
-  fig, ax = plt.subplots()
-  ax.barh(np.arange(len(labels)), numlist, align='center')
-  ax.set_yticks(y_pos)
-  ax.set_yticklabels(labels)
-  ax.invert_yaxis()
-  if title != "No_title_required":
-    plt.title(title)
-  plt.savefig("horizontalbarchart.png", transparent=True)
-  plt.clf()
-
-def botbarv(title, numbers, label):
-  numlist = []
-  for count in numbers.split(","):
-    numlist.append(int(count))
-  mycolors = []
-  labels = tuple(label.split(","))
-  if len(labels) > len(numlist):
-    labels = labels[:len(numlist)-1]
-  elif len(numlist) > len(labels):
-    numlist = numlist[:len(labels)-1]
-  x_pos = np.arange(len(labels))
-  plt.rcdefaults()
-  fig, ax = plt.subplots()
-  ax.bar(np.arange(len(labels)), numlist, align='center')
-  ax.set_xticks(x_pos)
-  ax.set_xticklabels(labels)
-  if title != "No_title_required":
-    plt.title(title)
-  plt.savefig("verticalbarchart.png", transparent=True)
-  plt.clf()
-
-def botsankey(title, innumber, inlabel, outnumber, outlabel, numbers, labels):
-  if len(numbers) == len(labels):
-    halflen = (len(numbers)-1)//2
-    Sankey(flows=[innumber].extend(numbers).append(outnumber),labels=[inlabel].extend(labels).append(outlabel),orientations=[0].extend([1]*halflen).extend([-1]*(len(numbers)-halflen))).finish()
+@commands.command()
+async def barv(ctx, numbers, label, *, title="No_title_required"):
+  try:
+    numlist = numbers.split(",")
+    labels = tuple(label.split(","))
+    if len(labels) > len(numlist):
+      labels = labels[:len(numlist)-1]
+    elif len(numlist) > len(labels):
+      numlist = numlist[:len(labels)-1]
+    x_pos = np.arange(len(labels))
+    plt.rcdefaults()
+    fig, ax = plt.subplots()
+    ax.bar(np.arange(len(labels)), numlist, align='center')
+    ax.set_xticks(x_pos)
+    ax.set_xticklabels(labels)
+    if title != "No_title_required":
+      plt.title(title)
     plt.savefig("verticalbarchart.png", transparent=True)
     plt.clf()
+    await ctx.send(file=discord.File("verticalbarchart.png"))
+    os.remove('verticalbarchart.png')
+  except:
+    await ctx.send("Invalid input. Please try again.")
+
+@commands.command()
+async def sankey(ctx, innumber, inlabel, outnumber, outlabel, title="No_title_required"):
+  if len(innumber) == len(inlabel) and len(outnumber) == len(outlabel):
+    halflen = (len(innumber)-1)//2
+    Sankey(flows=[innumber].extend(innumber).append(outnumber),labels=[inlabel].extend(inlabel).append(outlabel),orientations=[0].extend([1]*halflen).extend([-1]*(len(innumber)-halflen))).finish()
+    if title != "No_title_required":
+      plt.title(title)
+    plt.savefig("verticalbarchart.png", transparent=True)
+    plt.clf()
+    await ctx.send(file=discord.File("sankey.png"))
+  else:
+    await ctx.send("Invalid input. Please try again.")
+
+def setup(bot):
+  bot.add_command(ascii)
+  bot.add_command(table)
+  bot.add_command(simpcolor)
+  bot.add_command(snow)
+  bot.add_command(sankey)
+  bot.add_command(barh)
+  bot.add_command(barv)

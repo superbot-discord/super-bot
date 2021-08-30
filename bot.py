@@ -43,6 +43,7 @@ bot_admins = [687474789342117900]
 bot = commands.Bot(command_prefix=commands.when_mentioned_or("="), intents=discord.Intents.all(), case_insensitive=True)
 bot.remove_command('help')
 bot.load_extension("botdinfo")
+bot.load_extension("botplot")
 slash = SlashCommand(bot, sync_commands=False)
 allid=[]
 id_pattern = re.compile(r'([A-Z]{5})', re.IGNORECASE)
@@ -599,44 +600,6 @@ async def population(ctx, country="current"):
   else:
     await ctx.send(embed=output)
 
-@bot.command(aliases=["simpcolour", "simplecolor", "simplecolour"])
-async def simpcolor(ctx, *, name):
-  botsimpcolor(name)
-  try:
-    file = discord.File("color.png")
-    await ctx.send(file=file)
-  except:
-    await ctx.send("Invalid colour name, please try again.")
-
-@bot.command()
-async def sankey(ctx, innumber, inlabel, outnumber, outlabel, numbers, labels, title):
-  botsankey(title, innumber, inlabel, outnumber, outlabel, numbers, labels)
-  file = discord.File("sankey.png")
-  await ctx.send(file=file)
-
-@bot.command(alias=["snowgraph", "snowflake"])
-async def snow(ctx, recursion = 10):  
-  try:
-    if float(recursion) > 10:
-      await ctx.send("We are sorry, the maximum recursion we can process is 10.")
-    else:
-      botsnow(int(recursion))
-      file = discord.File("snow.png")
-      await ctx.send(file=file)
-      os.remove('snow.png')
-  except:
-    await ctx.send("Invalid input. Please try again.")
-
-@bot.command(aliases=["piechart", "circlechart"])
-async def pie(ctx, numbers, label, *, title="No_title_required"):
-  try:
-    botpie(title, numbers, label)
-    file = discord.File("piechart.png")
-    await ctx.send(file=file)
-    os.remove('piechart.png')
-  except:
-    await ctx.send("Invalid input. Please try again.")
-
 @bot.command()
 async def captcha(ctx, *, text=None):
   if text == None:
@@ -659,57 +622,6 @@ async def draw(ctx, *, text):
   else:
     await ctx.send(f"```{output}```", file=discord.File('drawing.txt'))
   os.remove('drawing.txt')
-
-@bot.command()
-async def ascii(ctx, *, text):
-  output = botascii(text)
-  if len(output) > 1994 or len(text) > 11:
-    await ctx.send(file=discord.File('ascii.txt'))
-  else:
-    await ctx.send(f"```{output}```", file=discord.File('ascii.txt'))
-  os.remove('ascii.txt')
-
-@bot.command()
-async def table(ctx, *, text):
-  output = bottable(text)
-  if output == "Invalid syntax, please try again.":
-    await ctx.send(output)
-  else:
-    file = open("table.txt", "w")
-    file.write(output)
-    file.close()
-    await ctx.send(f"```{output}```", file=discord.File('table.txt'))
-    os.remove('table.txt')
-
-@bot.command()
-async def barh(ctx, numbers, label, *, title="No_title_required"):
-  try:
-    botbarh(title, numbers, label)
-    file = discord.File("horizontalbarchart.png")
-    await ctx.send(file=file)
-    os.remove('horizontalbarchart.png')
-  except:
-    await ctx.send("Invalid input. Please try again.")
-
-@bot.command()
-async def barv(ctx, numbers, label, *, title="No_title_required"):
-  try:
-    botbarv(title, numbers, label)
-    file = discord.File("verticalbarchart.png")
-    await ctx.send(file=file)
-    os.remove('verticalbarchart.png')
-  except:
-    await ctx.send("Invalid input. Please try again.")
-
-@bot.command(aliases=["histogram", "histograms"])
-async def hist(ctx, numbers, *, title="No title"):
-  try:
-    bothist(title, numbers)
-    file = discord.File("histogram.png")
-    await ctx.send(file=file)
-    os.remove('histogram.png')
-  except:
-    await ctx.send("Invalid input. Please try again.")
 
 @bot.command()
 async def translate(ctx, langinput = "list", *, text = "Sample text"):
