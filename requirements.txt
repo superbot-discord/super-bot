@@ -2,7 +2,7 @@ discord-py-slash-command==3.0.1
 pygoogletranslation==2.0.5
 wikipedia-sections==2.0.0
 unicode-charnames==13.0.0
-discord-components==2.0.4
+discord-components==2.0.5
 discord-webhook==0.14.0
 beautifulsoup4==4.9.3
 aiohttp==3.7.4.post0
