@@ -9,10 +9,8 @@ async def botkick(ctx, user, reason):
         except:
             await ctx.send("The bot doesn't have the required permission: Kick members.")
             return
-        embed1 = discord.Embed(title=f"You were kicked from the server.",
-                               description=f"Reason: {reason}\nBy: {ctx.author.mention}")
-        embed2 = discord.Embed(title=f"{user.name} was kicked.",
-                               description=f"Reason: {reason}\nBy: {ctx.author.mention}")
+        embed1 = discord.Embed(title=f"You were kicked from the server.", description=f"Reason: {reason}\nBy: {ctx.author.mention}")
+        embed2 = discord.Embed(title=f"{user.name} was kicked.", description=f"Reason: {reason}\nBy: {ctx.author.mention}")
         try:
             await user.send(embed=embed1)
         except:
@@ -29,10 +27,8 @@ async def botunban(ctx, user, reason):
         except:
             await ctx.send("The bot doesn't have the required permission: Ban members.")
             return
-        embed1 = discord.Embed(title=f"You were unbanned from the server.",
-                               description=f"Reason: {reason}\nBy: {ctx.author.mention}")
-        embed2 = discord.Embed(title=f"{user.name} was unbanned.",
-                               description=f"Reason: {reason}\nBy: {ctx.author.mention}")
+        embed1 = discord.Embed(title=f"You were unbanned from the server.", description=f"Reason: {reason}\nBy: {ctx.author.mention}")
+        embed2 = discord.Embed(title=f"{user.name} was unbanned.", description=f"Reason: {reason}\nBy: {ctx.author.mention}")
         try:
             await user.send(embed=embed1)
         except:
@@ -49,10 +45,8 @@ async def botban(ctx, user, delete, reason):
         except:
             await ctx.send("The bot doesn't have the required permission: Ban members.")
             return
-        embed1 = discord.Embed(title=f"You were banned from the server.",
-                               description=f"Reason: {reason}\nBy: {ctx.author.mention}")
-        embed2 = discord.Embed(title=f"{user.name} was banned.",
-                               description=f"Reason: {reason}\nBy: {ctx.author.mention}")
+        embed1 = discord.Embed(title=f"You were banned from the server.", description=f"Reason: {reason}\nBy: {ctx.author.mention}")
+        embed2 = discord.Embed(title=f"{user.name} was banned.", description=f"Reason: {reason}\nBy: {ctx.author.mention}")
         try:
             await user.send(embed=embed1)
         except:
