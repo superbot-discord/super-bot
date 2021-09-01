@@ -318,13 +318,14 @@ async def makeinvite(ctx, timetocount, uses : int = 0):
 async def reactions(ctx, *, msg : discord.Message):
   reactions = msg.reactions
   numlist = []
-  labels = ()
+  labels = []
   for counter in reactions:
     numlist.append(counter.count)
     try:
       labels.append(em.decode(counter.emoji))
     except:
       labels.append("*"+counter.emoji.name)
+  labels = tuple(labels)
   y = np.array(numlist)
   mycolors = []
   for count in range(0, len(numlist)):
@@ -1268,7 +1269,7 @@ async def server(ctx, text = "regular"):
   await ctx.send(embed=task.result())
 
 @bot.command()
-async def template(ctx,temp: discord.Template):
+async def template(ctx, *, temp: discord.Template):
   ti="Template Information: "+temp.name+" ("+temp.code+")"
   desc="Created at "+temp.created_at.strftime("%d %b, %Y (%a) %H:%M:%S")+" by "+str(temp.creator)
   f0v=temp.description
@@ -1305,7 +1306,7 @@ async def channel(ctx, channel : typing.Union[discord.TextChannel, discord.Voice
     embed = discord.Embed(desc = "Invalid input.")
     await ctx.send(embed=embed)
 
-@bot.command()
+@bot.command(aliases=["msg"])
 async def message(ctx, message: discord.Message=None):
   if message==None:
     message=ctx.message
