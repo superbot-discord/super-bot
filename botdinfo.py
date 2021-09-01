@@ -337,5 +337,39 @@ async def botinvitel(inviteinput):
   embed.add_field(name="Expired?", value=f6v, inline=True)
   return embed
 
+def botstatus(ctx, member):
+  if member==None:
+    member=ctx.author
+  if member.is_on_mobile==True:
+    desc = str(member.status)+" on mobile"
+  else:
+    desc = str(member.status)+" on desktop"
+  embed = discord.Embed(title="Status: "+member.name, description=desc)
+  for count in member.activities:
+    if str(count.type)=="ActivityType.custom":
+      if count.emoji==None:
+        field=count.name
+      else:
+        try:
+          field=":"+count.emoji.name+": "+count.name
+        except:
+          try:
+            field=count.name
+          except:
+            field=":"+count.emoji.name+":"
+      embed.add_field(name="Status", value=field, inline=False)
+    if str(count.type)=="ActivityType.playing":
+      field=count.name+f"\nStarted: "+str(count.start.strftime("%d %b, %Y (%a) %H:%M:%S"))
+      embed.add_field(name="Game", value=field, inline=False)
+    if str(count.type)=="ActivityType.streaming":
+      field="["+count.platform+":"+count.name+"]("+count.url+f")\nStarted: "+count.start.strftime("%d %b, %Y (%a) %H:%M:%S")
+      embed.add_field(name="Game", value=field, inline=False)
+      embed.set_thumbnail(url=count.large_image_url)
+    if str(count.type)=="ActivityType.listening":
+      field=count.artist+" : "+count.title+f"\nStarted: "+count.created_at.strftime("%d %b, %Y (%a) %H:%M:%S")
+      embed.add_field(name="Spotify : "+count.album, value=field, inline=False)
+      embed.set_thumbnail(url=count.album_cover_url)
+  return embed
+
 def setup(bot):
   bot.add_command(role)

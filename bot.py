@@ -672,37 +672,7 @@ async def mandelbrot(ctx, size = 1024):
 
 @bot.command()
 async def status(ctx, member : discord.Member = None):
-  if member==None:
-    member=ctx.author
-  if member.is_on_mobile==True:
-    desc = str(member.status)+" on mobile"
-  else:
-    desc = str(member.status)+" on desktop"
-  embed = discord.Embed(title="Status: "+member.name, description=desc)
-  for count in member.activities:
-    if str(count.type)=="ActivityType.custom":
-      if count.emoji==None:
-        field=count.name
-      else:
-        try:
-          field=":"+count.emoji.name+": "+count.name
-        except:
-          try:
-            field=count.name
-          except:
-            field=":"+count.emoji.name+":"
-      embed.add_field(name="Status", value=field, inline=False)
-    if str(count.type)=="ActivityType.playing":
-      field=count.name+f"\nStarted: "+str(count.start.strftime("%d %b, %Y (%a) %H:%M:%S"))
-      embed.add_field(name="Game", value=field, inline=False)
-    if str(count.type)=="ActivityType.streaming":
-      field="["+count.platform+":"+count.name+"]("+count.url+f")\nStarted: "+count.start.strftime("%d %b, %Y (%a) %H:%M:%S")
-      embed.add_field(name="Game", value=field, inline=False)
-      embed.set_thumbnail(url=count.large_image_url)
-    if str(count.type)=="ActivityType.listening":
-      field=count.artist+" : "+count.title+f"\nStarted: "+count.created_at.strftime("%d %b, %Y (%a) %H:%M:%S")
-      embed.add_field(name="Spotify : "+count.album, value=field, inline=False)
-      embed.set_thumbnail(url=count.album_cover_url)
+  embed = botstatus(ctx, member)
   await ctx.send(embed=embed)
 
 @bot.command(aliases=["online"])
@@ -1699,7 +1669,7 @@ async def _slowmode(ctx, time:int):
     else:
       await ctx.send("Please enter an integer between 0 and 21600 (inclusive).")
   else:
-    await ctx.send("You do not have the required permissions.")
+    await ctx.send("You do not have the required permission: Manage channel.")
 
 @slash.slash(name="calc", description="Evaluate a mathematical equation..", options=[create_option(name="Equation",description="A math equation to calculate.",option_type=3,required=True)])
 async def _calc(ctx, equation:str):
@@ -1760,37 +1730,7 @@ async def _simplecolor(ctx, name):
 
 @slash.slash(name="status", description="Shows the status of a member.", options=[create_option(name="Member",description="The name of the colour.",option_type=6,required=True)])
 async def _status(ctx, member : discord.Member = None):
-  if member==None:
-    member=ctx.author
-  if member.is_on_mobile==True:
-    desc = str(member.status)+" on mobile"
-  else:
-    desc = str(member.status)+" on desktop"
-  embed = discord.Embed(title="Status: "+member.name, description=desc)
-  for count in member.activities:
-    if str(count.type)=="ActivityType.custom":
-      if count.emoji==None:
-        field=count.name
-      else:
-        try:
-          field=":"+count.emoji.name+": "+count.name
-        except:
-          try:
-            field=count.name
-          except:
-            field=":"+count.emoji.name+":"
-      embed.add_field(name="Status", value=field, inline=False)
-    if str(count.type)=="ActivityType.playing":
-      field=count.name+f"\nStarted: "+str(count.start.strftime("%d %b, %Y (%a) %H:%M:%S"))
-      embed.add_field(name="Game", value=field, inline=False)
-    if str(count.type)=="ActivityType.streaming":
-      field="["+count.platform+":"+count.name+"]("+count.url+f")\nStarted: "+count.start.strftime("%d %b, %Y (%a) %H:%M:%S")
-      embed.add_field(name="Game", value=field, inline=False)
-      embed.set_thumbnail(url=count.large_image_url)
-    if str(count.type)=="ActivityType.listening":
-      field=count.artist+" : "+count.title+f"\nStarted: "+count.created_at.strftime("%d %b, %Y (%a) %H:%M:%S")
-      embed.add_field(name="Spotify : "+count.album, value=field, inline=False)
-      embed.set_thumbnail(url=count.album_cover_url)
+  embed = botstatus(ctx, member)
   await ctx.send(embed=embed)
 
 @bot.event
