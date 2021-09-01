@@ -27,6 +27,7 @@ import re
 import os
 
 from botwebscrape import *
+from botmoderate import *
 from botwebinfo import *
 from botengrave import *
 from botanimals import *
@@ -462,7 +463,7 @@ async def clearsnipe(ctx, *, chnl : discord.TextChannel = None):
     sniper5.pop(str(ctx.guild.id)+str(chnl.id))
     await ctx.send('Cleared snipe database for '+chnl.mention+'.')
   else:
-    await ctx.send("You don't have the required permissions.")
+    await ctx.send("You don't have the required permission: Manage channels.")
 
 @bot.command()
 async def nick(ctx, *, newnick):
@@ -479,7 +480,7 @@ async def raw(ctx, msg : discord.Message):
   embed = discord.Embed(title = "Raw message", url = msg.jump_url, description = "```"+discord.utils.escape_markdown(msg.content, as_needed=True)+"```")
   await ctx.send(embed=embed)
 
-@bot.command()
+@bot.command(aliases=["commands"])
 async def help(ctx, *, cat=None):
   embed = bothelp(cat)
   await ctx.send(embed=embed)
@@ -539,7 +540,7 @@ async def botpurge(ctx, *, num):
         
     await ctx.send("Bot purging completed.", delete_after = 5)
   else:
-    await ctx.send("You don't have the required permissions.")
+    await ctx.send("You don't have the required permission: Manage messages.")
 
 @bot.command()
 async def engrave(ctx, product = "list", *, text = "Your text goes here."):
@@ -701,7 +702,7 @@ async def status(ctx, member : discord.Member = None):
       embed.set_thumbnail(url=count.album_cover_url)
   await ctx.send(embed=embed)
 
-@bot.command()
+@bot.command(aliases=["status", "online"])
 async def ping(ctx, *, text = None):
   now1 = datetime.datetime.now()
   message = await ctx.send("Pong!")
@@ -925,7 +926,7 @@ async def purge(ctx, num):
     await ctx.channel.purge(limit=num+1)
     await ctx.send("Purging completed.", delete_after = 5)
   else:
-    await ctx.send("You don't have the required permissions.")
+    await ctx.send("You don't have the required permission: Manage messages.")
 
 @bot.command()
 async def purgeregex(ctx, num, *, regex):
@@ -946,11 +947,11 @@ async def purgeregex(ctx, num, *, regex):
           if purged >= num:
             break
       except:
-        await ctx.send("I don't have the required permissions, or the regex was malformed.")
+        await ctx.send("The bot doesn't have the required permission (Manage messages) or the regex was malformed.")
         break
     await ctx.send("Regex purging completed.", delete_after = 5)
   else:
-    await ctx.send("You don't have the required permissions.")
+    await ctx.send("You don't have the required permission: Manage messages.")
 
 @bot.command()
 async def purgepygex(ctx, num, regex, *, pyscript):
@@ -971,31 +972,34 @@ async def purgepygex(ctx, num, regex, *, pyscript):
           if purged >= num:
             break
       except:
-        await ctx.send("I don't have the required permissions, or the regex/script was malformed.")
+        await ctx.send("The bot doesn't have the required permission (Manage messages) or the regex/script was malformed.")
         break
     await ctx.send("Python Regex purging completed.", delete_after = 5)
   else:
-    await ctx.send("You don't have the required permissions.")
+    await ctx.send("You don't have the required permission: Manage messages.")
 
 @bot.command()
-async def purgepy(ctx, num, *, pyscript):
+async def purgepy(ctx, num, pyscript):
   try:
     await ctx.message.delete()
   except:
     1
-  if ctx.author.permissions_in(ctx.channel).manage_messages or bot_admins.count(ctx.author.id)!=0 or pyscript.replace(" ","") == "msg.author.id==814292078984167425":
+  if ctx.author.permissions_in(ctx.channel).manage_messages or bot_admins.count(ctx.author.id)!=0:
     num = int(num)
     purged = 0
     async for msg in ctx.channel.history(limit=1000):
+      try:
         if eval(pyscript) == True:
           await msg.delete()
           purged = purged + 1
           if purged >= num:
             break
-        
+      except:
+        await ctx.send("The bot doesn't have the required permission (Manage messages) or the script was malformed.")
+        break
     await ctx.send("Python purging completed.", delete_after = 5)
   else:
-    await ctx.send("You don't have the required permissions.")
+    await ctx.send("You don't have the required permission: Manage messages.")
 
 @bot.command()
 async def purgeuser(ctx, num, userinput : discord.User):
@@ -1015,7 +1019,7 @@ async def purgeuser(ctx, num, userinput : discord.User):
         
     await ctx.send("User purging completed.", delete_after = 5)
   else:
-    await ctx.send("You don't have the required permissions.")
+    await ctx.send("You don't have the required permission: Manage messages.")
 
 @bot.command(aliases=["colour"])
 async def color(ctx, arg1, arg2=None, arg3=None):
@@ -1226,7 +1230,7 @@ async def getrole(ctx, role : discord.Role, member : discord.Member = None):
       await ctx.send("Added "+str(role)+" role to "+str(member)+".")
     
   else:
-    await ctx.send("You don't have the required permissions.")
+    await ctx.send("You don't have the required permission: Manage roles.")
 
 @bot.command()
 async def random(ctx,lower,upper):
@@ -1257,7 +1261,7 @@ async def avatar(ctx,user: discord.Member=None):
   embed.set_image(url=user.avatar_url)
   await ctx.send(embed=embed)
 
-@bot.command()
+@bot.command(aliases = ["guild"])
 async def server(ctx, text = "regular"):
   task = asyncio.create_task(botserver(ctx, text))
   await task
@@ -1611,43 +1615,19 @@ async def user(ctx, user: discord.Member = None, channel: discord.TextChannel = 
   await ctx.send(embed=embed)
 
 @bot.command()
-async def ban(ctx, user: discord.User, *, delete : int =0, reason="No reason provided"):
-  if ctx.author.permissions_in(ctx.channel).ban_members or bot_admins.count(ctx.author.id)!=0:
-    await ctx.guild.ban(user, delete_message_days = delete, reason=reason)
-    embed1 = discord.Embed(title=f"You were banned from the server.", description=f"Reason: {reason}\nBy: {ctx.author.mention}")
-    try:
-      await user.send(embed=embed1)
-    except:
-      1
-    embed2 = discord.Embed(title=f"{user.name} was banned.", description=f"Reason: {reason}\nBy: {ctx.author.mention}")
-    await ctx.send(embed=embed2)
-  else:
-    await ctx.send("You don't have the required permissions.")
+async def ban(ctx, user: discord.User, delete : int =0, *, reason="No reason provided"):
+  task = asyncio.create_task(botban(ctx, user, delete, reason))
+  await task
 
 @bot.command()
 async def unban(ctx, user: discord.User, *, reason="No reason provided"):
-  if ctx.author.permissions_in(ctx.channel).ban_members or bot_admins.count(ctx.author.id)!=0:
-    await ctx.guild.unban(user)
-    embed1 = discord.Embed(title=f"You were unbanned from the server.", description=f"Reason: {reason}\nBy: {ctx.author.mention}")
-    try:
-      await user.send(embed=embed1)
-    except:
-      1
-    embed2 = discord.Embed(title=f"{user.name} was unbanned.", description=f"Reason: {reason}\nBy: {ctx.author.mention}")
-    await ctx.send(embed=embed2)
-  else:
-    await ctx.send("You don't have the required permissions.")
+  task = asyncio.create_task(botunban(ctx, user, reason))
+  await task
 
 @bot.command()
 async def kick(ctx, user: discord.Member, *, reason="No reason provided"):
-  if ctx.author.permissions_in(ctx.channel).kick_members or bot_admins.count(ctx.author.id)!=0:
-    embed = discord.Embed(title=f"{user.name} was kicked.", description=f"Reason: {reason}\nBy: {ctx.author.mention}")
-    await ctx.send(embed=embed)
-    embed = discord.Embed(title=f"You were kicked from the server.", description=f"Reason: {reason}\nBy: {ctx.author.mention}")
-    await user.send(embed=embed)
-    await user.kick(reason=reason)
-  else:
-    await ctx.send("You don't have the required permissions.")
+  task = asyncio.create_task(botkick(ctx, user, reason))
+  await task
 
 @bot.command()
 async def slowmode(ctx, sec = None, *channels:typing.Union[discord.TextChannel,str]):
@@ -1672,7 +1652,7 @@ async def slowmode(ctx, sec = None, *channels:typing.Union[discord.TextChannel,s
         await count.edit(slowmode_delay = sec)
         channellist.append(count.mention)
     if len(channellist)==0:
-      await ctx.send("You don't have the manage channel permission in any of the channels.")
+      await ctx.send("You don't have the required permission: Manage channels.")
     elif len(channellist)==1:
       await ctx.send("Set slowmode from "+orsec+" second(s) to "+sec+" second(s) for "+" ".join(channellist)+".")
     else:
@@ -1686,35 +1666,22 @@ async def _purge(ctx, num:int):
     await ctx.channel.purge(limit=num+1)
     await ctx.send("Purging completed.", delete_after = 5)
   else:
-    await ctx.send("You don't have the required permissions.")
+    await ctx.send("You don't have the required permission: Manage messages.")
 
 @slash.slash(name="ban", description="Bans a member.", options=[create_option(name="Member",description="The member to ban.",option_type=6,required=True), create_option(name="Purge-Days",description="The number of days of messages to purge from the user.",option_type=4,required=False), create_option(name="Reason",description="The reason to ban the member, which shows in the audit logs.",option_type=3,required=False)])
 async def _ban(ctx, user: discord.User, delete : int =0, reason="No reason provided"):
-  if ctx.author.permissions_in(ctx.channel).ban_members or bot_admins.count(ctx.author.id)!=0:
-    await ctx.guild.ban(user, delete_message_days = delete, reason=reason)
-    embed1 = discord.Embed(title=f"You were banned from the server.", description=f"Reason: {reason}\nBy: {ctx.author.mention}")
-    try:
-      await user.send(embed=embed1)
-    except:
-      1
-    embed2 = discord.Embed(title=f"{user.name} was banned.", description=f"Reason: {reason}\nBy: {ctx.author.mention}")
-    await ctx.send(embed=embed2)
-  else:
-    await ctx.send("You don't have the required permissions.")
+  task = asyncio.create_task(botban(ctx, user, delete, reason))
+  await task
 
 @slash.slash(name="kick", description="Kicks a member.", options=[create_option(name="Member",description="The member to kick.",option_type=6,required=True), create_option(name="Reason",description="The reason to kick the member, which shows in the audit logs.",option_type=3,required=False)])
 async def _kick(ctx, user: discord.Member, reason="No reason provided"):
-  if ctx.author.permissions_in(ctx.channel).kick_members or bot_admins.count(ctx.author.id)!=0:
-    embed = discord.Embed(title=f"{user.name} was kicked.", description=f"Reason: {reason}\nBy: {ctx.author.mention}")
-    await ctx.send(embed=embed)
-    embed = discord.Embed(title=f"You were kicked from the server.", description=f"Reason: {reason}\nBy: {ctx.author.mention}")
-    try:
-      await user.send(embed=embed)
-    except:
-      1
-    await user.kick(reason=reason)
-  else:
-    await ctx.send("You don't have the required permissions.")
+  task = asyncio.create_task(botkick(ctx, user, reason))
+  await task
+
+@slash.slash(name="unban", description="Unbans a member.", options=[create_option(name="Member",description="The member to ban.",option_type=6,required=True), create_option(name="Reason",description="The reason to ban the member, which shows in the audit logs.",option_type=3,required=False)])
+async def _unban(ctx, user: discord.User, *, reason="No reason provided"):
+  task = asyncio.create_task(botunban(ctx, user, reason))
+  await task
 
 @slash.slash(name="slowmode", description="Set the slowmode delay for the current channel.", options=[create_option(name="Delay",description="Adjust the slowmode threshold for the current channel.",option_type=4,required=True)])
 async def _slowmode(ctx, time:int):
