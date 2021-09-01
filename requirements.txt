@@ -29,4 +29,4 @@ qr-img==1.9
 qrcode==7.3
 six==1.16.0
 ascii==3.6
-art==5.2
+art==5.3
