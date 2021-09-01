@@ -1269,9 +1269,15 @@ async def server(ctx, text = "regular"):
   await ctx.send(embed=task.result())
 
 @bot.command()
-async def template(ctx, *, temp: discord.Template):
+async def template(ctx, *, tempinput):
+  try:
+    temp = bot.fetch_template(tempinput)
+  except:
+    await ctx.send("Invalid input. Please try again.")
+    return
   ti="Template Information: "+temp.name+" ("+temp.code+")"
   desc="Created at "+temp.created_at.strftime("%d %b, %Y (%a) %H:%M:%S")+" by "+str(temp.creator)
+  embed=discord.Embed(title=ti, description=desc)
   f0v=temp.description
   f1v=temp.uses
   f2v=temp.updated_at.strftime("%d %b, %Y (%a) %H:%M:%S")
