@@ -702,7 +702,7 @@ async def status(ctx, member : discord.Member = None):
       embed.set_thumbnail(url=count.album_cover_url)
   await ctx.send(embed=embed)
 
-@bot.command(aliases=["status", "online"])
+@bot.command(aliases=["online"])
 async def ping(ctx, *, text = None):
   now1 = datetime.datetime.now()
   message = await ctx.send("Pong!")
