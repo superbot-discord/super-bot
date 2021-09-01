@@ -6,31 +6,32 @@ def bothelp(cat : str):
 `help` `invite` `prefix` `ping` `botpurge`
 
 **Discord Information Commands**
-`server` `invitelink` `role` `channel` `voicechannel` `autochannel` `user` `avatar` `status` `uservoice` `leftuser` `message` `raw` `reactions` `emojiinfo` `template`
+`server` `invitelink` `role` `channel` `user` `avatar` `status` `leftuser` `message` `raw` `reactions` `emojiinfo` `template`
 
 **Discord Commands**
-`react` `snipe` `clearsnipe` `pretend` `pretendembed` `embed` `editembed` `simpleembed` `ett`
+`react` `snipe` `clearsnipe` `pretend` `pretendembed` `embed` `editembed` `simpleembed` `ett` `tts`
 **Coming soon: **quickembed which eliminates the use of `{{{newline}}}` entirely
+
+**Moderation Commands**
+`kick` `ban` `unban` `slowmode` `purge` `purgeuser` `purgeregex` `purgepy` `purgepygex` `nick` `makeinvite`
 
 **Text Manipulation Commands**
 `poll` `insert` `spoiler` `rawspoiler` `rawrawspoiler` `reverse` `emoji`
 
-**Moderation**
-`kick` `ban` `unban` `slowmode` `purge` `purgeuser` `purgeregex` `purgepy` `purgepygex` `nick` `makeinvite`
-
 **Information Commands**
-`color` `simplecolor` `translate` `definition` `calc` `define` `time` `rtimer` `ttimer` `terminate` `minecraft`
+`color` `simplecolor` `translate` `definition` `calc` `define` `time` `rtimer` `ttimer` `terminate` `minecraft` `unscramble` `unicode` `random` `choice`
 
 **Web Commands**
-`screenshot` `youtube` `wiki` `engrave` `covid` `population`
+`screenshot` `youtube` `wiki` `engrave` `covid` `population` `cat` `dog`
 
-**Plot/Drawing commands**
-`ascii` `table` `render` `captcha` `pie` `barh` `barv` `hist` `snow` `mandelbrot`
+**Plot/Drawing Commands**
+`ascii` `table` `render` `captcha` `pie` `barh` `barv` `hist` `sankey` `snow` `mandelbrot`
 
-**Developer Tools and Miscellaneous commands**
+**Developer Tools and Miscellaneous Commands**
 `python` `transparent` `ocr` `text` `html` `md` `regex` `regsub`
 
 `hello` leads you to death
+Many slash commands are available as well
 Need help? check the [documentation](https://github.com/johann-lau/Bot#bot-documentation)!"""
   embed=discord.Embed(title="SuperBot#4073 (ID:796686363604680755)", description=desc)
   return embed

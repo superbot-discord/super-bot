@@ -318,12 +318,14 @@ async def makeinvite(ctx, timetocount, uses : int = 0):
 async def reactions(ctx, *, msg : discord.Message):
   reactions = msg.reactions
   numlist = []
-  labelslist = []
+  labels = ()
   for counter in reactions:
     numlist.append(counter.count)
-    labelslist.append(em.decode(counter.emoji))
+    try:
+      labels.append(em.decode(counter.emoji))
+    except:
+      labels.append("*"+counter.emoji.name)
   y = np.array(numlist)
-  labels = tuple(labelslist)
   mycolors = []
   for count in range(0, len(numlist)):
     mycolors.append(cmaphsv(count/len(numlist)))
@@ -1108,9 +1110,7 @@ async def rtimer(ctx, timetocount,*,Text=None):
     seconds = int((end - datetime.datetime.now()).total_seconds())
     idcode = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"[ra.randint(0, 25)]+"ABCDEFGHIJKLMNOPQRSTUVWXYZ"[ra.randint(0, 25)]+"ABCDEFGHIJKLMNOPQRSTUVWXYZ"[ra.randint(0, 25)]+"ABCDEFGHIJKLMNOPQRSTUVWXYZ"[ra.randint(0, 25)]+"ABCDEFGHIJKLMNOPQRSTUVWXYZ"[ra.randint(0, 25)]
     exec("terminate"+idcode.lower()+str(ctx.guild.id)+"=0",globals())
-    newidcode=idcode
-    callback = lambda pat: pat.group(1).lower()
-    newidcode=re.sub('[A-Z]', callback, newidcode)
+    newidcode=idcode.lower()
     allid.append(idcode+str(ctx.guild.id))
     desc = "Initializing countdown…"
     message = await ctx.send(desc)
