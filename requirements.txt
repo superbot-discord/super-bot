@@ -1,5 +1,5 @@
 git+git://github.com/Rapptz/discord.py
-discord-py-slash-command==3.0.1
+discord-py-interactions==3.0.2
 pygoogletranslation==2.0.5
 wikipedia-sections==2.0.0
 unicode-charnames==13.0.0
