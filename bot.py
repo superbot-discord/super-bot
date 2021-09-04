@@ -1,4 +1,4 @@
-from discord import Webhook, RequestsWebhookAdapter
+from discord import Webhook
 from unicode_charnames import search_charnames
 from datetime import datetime, timedelta
 from pdf2image import convert_from_path
