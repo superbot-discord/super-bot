@@ -1,15 +1,14 @@
-import selenium
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
 from discord.ext.commands import *
-from discord.ext import commands
 import matplotlib.pyplot as plt
 from markdown2 import Markdown
 from selenium import webdriver
 from bs4 import BeautifulSoup
 import numpy as np
 import requests
+import selenium
 import discord
 import re
 markdowner = Markdown(extras=["strike", "footnotes"])
@@ -27,10 +26,10 @@ options.add_argument('--no-sandbox')
 options.add_argument('--disable-dev-shm-usage')
 options.add_argument("–lang=zh-TW")
 
-def botmd(ctx, mdcode):
-  match = md_pattern.fullmatch(mdcode)
+def botmd(ctx, code):
+  match = md_pattern.fullmatch(code)
   if match:
-    code = re.sub(md_pattern, r"\2", mdcode)
+    code = re.sub(md_pattern, r"\2", code)
   if code == None:
     r = requests.get(ctx.message.attachments[0].url, stream=True)
     r.raise_for_status()
