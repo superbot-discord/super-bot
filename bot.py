@@ -1,5 +1,5 @@
+from art import text_dic1
 from discord_slash.utils.manage_commands import create_option
-from discord import Webhook, RequestsWebhookAdapter
 from unicode_charnames import search_charnames
 from datetime import datetime, timedelta
 from pdf2image import convert_from_path
@@ -8,6 +8,7 @@ from discord_slash import SlashCommand
 from discord.ext import commands
 from discord_components import *
 import matplotlib.pyplot as plt
+from discord import Webhook
 import emojis as ems
 from cmath import *
 import ascii as asc
@@ -101,14 +102,14 @@ async def on_voice_state_update(member, before, after):
       await supchat.purge(limit=1000)
       await supchat.set_permissions(member, overwrite=None)
   except:
-    1
+    pass
   try:
     if before.channel == None and after.channel.id == 822750915466493982:
       supchat = member.guild.get_channel(822753048510070784)
       await supchat.purge(limit=1000)
       await supchat.set_permissions(member, overwrite=overwrite)
   except:
-    1
+    pass
 
 @bot.event
 async def on_message_delete(message):
@@ -242,13 +243,13 @@ async def on_message(message):
             try:
               await message.delete()
             except:
-              1
+              pass
             async with aiohttp.ClientSession() as session:
-              webhook = Webhook.partial(identify, token, adapter=RequestsWebhookAdapter())
+              webhook = Webhook.partial(identify, token, session=session)
               await webhook.send(desc, username=message.author.name, avatar_url=message.author.avatar_url)
             break
     except:
-      1
+      pass
     if banned_ids.count(message.author.id)==0 and message.content.startswith("=") and message.content.startswith("==")==False:
       await bot.process_commands(message)
     elif message.content.startswith("="):
@@ -530,7 +531,7 @@ async def botpurge(ctx, *, num):
   try:
     await ctx.message.delete()
   except:
-    1
+    pass
   if ctx.author.permissions_in(ctx.channel).manage_messages or bot_admins.count(ctx.author.id)!=0:
     num = int(num)
     purged = 0
@@ -784,7 +785,7 @@ async def pretend(ctx, member : discord.Member, *, message):
   try:
     await ctx.message.delete()
   except:
-    1
+    pass
   whl = await ctx.channel.webhooks()
   ourweb = False
   for count in whl:
@@ -797,7 +798,7 @@ async def pretend(ctx, member : discord.Member, *, message):
     token = wh.token
     identify = wh.id
   async with aiohttp.ClientSession() as session:
-    webhook = Webhook.partial(identify, token, adapter=RequestsWebhookAdapter())
+    webhook = Webhook.partial(identify, token, session=session)
     await webhook.send(message, username=member.name, avatar_url=member.avatar_url)
 
 @bot.command(pass_context=True)
@@ -805,7 +806,7 @@ async def pretendembed(ctx, member : discord.Member, *, text):
   try:
     await ctx.message.delete()
   except:
-    1
+    pass
   whl = await ctx.channel.webhooks()
   ourweb = False
   for count in whl:
@@ -818,35 +819,8 @@ async def pretendembed(ctx, member : discord.Member, *, text):
     token = wh.token
     identify = wh.id
   async with aiohttp.ClientSession() as session:
-    webhook = Webhook.partial(identify, token, adapter=RequestsWebhookAdapter())
-  textlist=text.splitlines()
-  if textlist[3]=="":
-    embed=discord.Embed(title=textlist[0], url=textlist[1], description=textlist[2].replace("{{{newline}}}","\n"))
-  else:
-    embed=discord.Embed(title=textlist[0], url=textlist[1], description=textlist[2].replace("{{{newline}}}","\n"), color=int(textlist[3]))
-  textlist.remove(textlist[0])
-  textlist.remove(textlist[0])
-  textlist.remove(textlist[0])
-  textlist.remove(textlist[0])
-  embed.set_author(name=textlist[0], url=textlist[1], icon_url=textlist[2])
-  textlist.remove(textlist[0])
-  textlist.remove(textlist[0])
-  textlist.remove(textlist[0])
-  embed.set_footer(text=textlist[0])
-  textlist.remove(textlist[0])
-  embed.set_thumbnail(url=textlist[0])
-  textlist.remove(textlist[0])
-  embed.set_image(url=textlist[0])
-  textlist.remove(textlist[0])
-  for count in range(0,len(textlist)//3):
-    if textlist[2].startswith("y") or textlist[2].startswith("t") or textlist[2].startswith("e") or textlist[2].lower()=="1":
-      inl=True
-    else:
-      inl=False
-    embed.add_field(name=textlist[0], value=textlist[1].replace("{{{newline}}}","\n"), inline=inl)
-    textlist.remove(textlist[0])
-    textlist.remove(textlist[0])
-    textlist.remove(textlist[0])
+    webhook = Webhook.partial(identify, token, session=session)
+  embed = botembed(text)
   await webhook.send(embed=embed, username=member.name, avatar_url=member.avatar_url)
 
 @bot.command()
@@ -906,7 +880,7 @@ async def purgeregex(ctx, num, *, regex):
   try:
     await ctx.message.delete()
   except:
-    1
+    pass
   if ctx.author.permissions_in(ctx.channel).manage_messages or bot_admins.count(ctx.author.id)!=0:
     purge_pattern = eval("re.compile(r'"+regex+"')")
     num = int(num)
@@ -931,7 +905,7 @@ async def purgepygex(ctx, num, regex, *, pyscript):
   try:
     await ctx.message.delete()
   except:
-    1
+    pass
   if ctx.author.permissions_in(ctx.channel).manage_messages or bot_admins.count(ctx.author.id)!=0:
     purge_pattern = eval("re.compile(r'"+regex+"'")
     num = int(num)
@@ -956,7 +930,7 @@ async def purgepy(ctx, num, pyscript):
   try:
     await ctx.message.delete()
   except:
-    1
+    pass
   if ctx.author.permissions_in(ctx.channel).manage_messages or bot_admins.count(ctx.author.id)!=0:
     num = int(num)
     purged = 0
@@ -979,7 +953,7 @@ async def purgeuser(ctx, num, userinput : discord.User):
   try:
     await ctx.message.delete()
   except:
-    1
+    pass
   if ctx.author.permissions_in(ctx.channel).manage_messages or bot_admins.count(ctx.author.id)!=0:
     num = int(num)
     purged = 0
@@ -1534,7 +1508,7 @@ async def user(ctx, user: discord.Member = None, channel: discord.TextChannel = 
       except:
         f3vc = f":{f3vcraw.emoji.name}:"
   except:
-    1
+    pass
   f4v=""
   if len(allroles)>1:
     allroles.reverse()
@@ -1587,7 +1561,7 @@ async def user(ctx, user: discord.Member = None, channel: discord.TextChannel = 
   try:
     embed.add_field(name="Activity", value=f3vc, inline=True)
   except:
-    1
+    pass
   embed.add_field(name="Badges", value=f5v, inline=False)
   await ctx.send(embed=embed)
 
@@ -1737,8 +1711,6 @@ async def _status(ctx, member : discord.Member = None):
 async def on_ready():
   activity = discord.Activity(type=discord.ActivityType.playing, name="with =help")
   await bot.change_presence(status=discord.Status.idle, activity=activity)
-  dpy_channel = bot.get_channel(870209640888139777)
-  await dpy_channel.join()
   DiscordComponents(bot)
   print("Bot is ready!")
 
