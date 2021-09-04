@@ -1,7 +1,9 @@
-import selenium
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.chrome.options import Options
+from discord import Webhook, RequestsWebhookAdapter
 from selenium.webdriver.common.by import By
+from discord_webhook import DiscordWebhook
 from discord.ext.commands import *
 from discord.ext import commands
 import matplotlib.pyplot as plt
@@ -15,7 +17,6 @@ import re
 markdowner = Markdown(extras=["strike", "footnotes"])
 html_pattern = re.compile(r'^\`\`\`(html)?\n([\s\S]*)\`\`\`$')
 md_pattern = re.compile(r'^\`\`\`(md|markdown)?\n([\s\S]*)\`\`\`$')
-country_pattern = ""
 
 def func(pct, allvals):
   absolute = int(pct/100*np.sum(allvals))
@@ -27,10 +28,10 @@ options.add_argument('--no-sandbox')
 options.add_argument('--disable-dev-shm-usage')
 options.add_argument("–lang=zh-TW")
 
-def botmd(ctx, mdcode):
-  match = md_pattern.fullmatch(mdcode)
+def botmd(mdcode):
+  match = md_pattern.fullmatch(code)
   if match:
-    code = re.sub(md_pattern, r"\2", mdcode)
+    code = re.sub(md_pattern, r"\2", code)
   if code == None:
     r = requests.get(ctx.message.attachments[0].url, stream=True)
     r.raise_for_status()
@@ -44,7 +45,7 @@ def botmd(ctx, mdcode):
   driver.save_screenshot('md_screenshot.png')
   driver.quit()
 
-def bothtml(ctx, code):
+def bothtml(code):
   match = html_pattern.fullmatch(code)
   if match:
     code = re.sub(html_pattern, r"\2", code)

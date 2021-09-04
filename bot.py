@@ -1,13 +1,13 @@
-from discord import Webhook
+from discord_slash.utils.manage_commands import create_option
+from discord_slash import SlashCommand
+from discord import Webhook, RequestsWebhookAdapter
 from unicode_charnames import search_charnames
 from datetime import datetime, timedelta
 from pdf2image import convert_from_path
 from captcha.image import ImageCaptcha
 from discord.ext import commands
+from discord_components import *
 import matplotlib.pyplot as plt
-import discord
-#import pycord as discord
-from discord.app import Option
 import emojis as ems
 from cmath import *
 import ascii as asc
@@ -45,8 +45,7 @@ bot = commands.Bot(command_prefix=commands.when_mentioned_or("="), intents=disco
 bot.remove_command('help')
 bot.load_extension("botdinfo")
 bot.load_extension("botplot")
-simpcolor_choices = ['r','g','b','c','m','y','k','b','tab:blue','tab:orange','tab:green','tab:red','tab:purple',
-'tab:brown','tab:pink','tab:cyan','tab:olive','tab:grey']
+slash = SlashCommand(bot, sync_commands=False)
 allid=[]
 id_pattern = re.compile(r'([A-Z]{5})', re.IGNORECASE)
 verify_pattern = re.compile(r'[^ ⠀][\s\S]{0,30}?[^ ⠀]#?[\d]{4}(,|, | )?[\d+\-*/×÷%xyz()\[\]\{\}]{1,50}=[\d+\-*/×÷%xyz()\[\]\{\}]{1,50}(,|, | )?[\S ]{3,20}(,|, | )?(Red|Orange|Yellow|Green|Light( |_)?Green|Dark( |_)?Green|Cyan|Blue|Light( |_)?Blue|Dark( |_)?Blue|Purple|Pink|Brown)', re.IGNORECASE)
@@ -245,7 +244,7 @@ async def on_message(message):
             except:
               1
             async with aiohttp.ClientSession() as session:
-              webhook = Webhook.partial(identify, token)#, adapter=RequestsWebhookAdapter())
+              webhook = Webhook.partial(identify, token, adapter=RequestsWebhookAdapter())
               await webhook.send(desc, username=message.author.name, avatar_url=message.author.avatar_url)
             break
     except:
@@ -740,13 +739,13 @@ async def text(ctx, *, text = None):
 
 @bot.command()
 async def html(ctx, *, code = None):
-  bothtml(ctx, code)
+  bothtml(code)
   await ctx.send(file=discord.File('html_screenshot.png'))
   os.remove('html_screenshot.png')
 
 @bot.command(aliases=['md'])
 async def markdown(ctx, *, mdcode = None):
-  botmd(ctx, mdcode)
+  botmd(mdcode)
   await ctx.send(file=discord.File('md_screenshot.png'))
   os.remove('md_screenshot.png')
 
@@ -798,7 +797,7 @@ async def pretend(ctx, member : discord.Member, *, message):
     token = wh.token
     identify = wh.id
   async with aiohttp.ClientSession() as session:
-    webhook = Webhook.partial(identify, token)#, adapter=RequestsWebhookAdapter())
+    webhook = Webhook.partial(identify, token, adapter=RequestsWebhookAdapter())
     await webhook.send(message, username=member.name, avatar_url=member.avatar_url)
 
 @bot.command(pass_context=True)
@@ -819,7 +818,7 @@ async def pretendembed(ctx, member : discord.Member, *, text):
     token = wh.token
     identify = wh.id
   async with aiohttp.ClientSession() as session:
-    webhook = Webhook.partial(identify, token)#, adapter=RequestsWebhookAdapter())
+    webhook = Webhook.partial(identify, token, adapter=RequestsWebhookAdapter())
   textlist=text.splitlines()
   if textlist[3]=="":
     embed=discord.Embed(title=textlist[0], url=textlist[1], description=textlist[2].replace("{{{newline}}}","\n"))
@@ -1638,31 +1637,31 @@ async def slowmode(ctx, sec = None, *channels:typing.Union[discord.TextChannel,s
   elif sec == None:
     await ctx.send("The current slowmode is "+str(ctx.channel.slowmode_delay)+" second(s).")
 
-@bot.slash_command(name="purge", description="Purge a number of messages in the current channel.")
-async def _purge(ctx, num : Option(int, "Number of messages to purge", required=True)):
+@slash.slash(name="purge", description="Purge a number of messages in the current channel.", options=[create_option(name="Number",description="Amount of messages to purge in the current channel.",option_type=4,required=True)])
+async def _purge(ctx, num:int):
   if ctx.author.permissions_in(ctx.channel).manage_messages or bot_admins.count(ctx.author.id)!=0:
     await ctx.channel.purge(limit=num+1)
     await ctx.send("Purging completed.", delete_after = 5)
   else:
     await ctx.send("You don't have the required permission: Manage messages.")
 
-@bot.slash_command(name="ban", description="Bans a member.")
-async def _ban(ctx, user: Option(discord.User, "User to ban", required=True), reason : Option(str, "Reason to ban the user", required=False, default="No reason provided")):
-  task = asyncio.create_task(botban(ctx, user, reason))
+@slash.slash(name="ban", description="Bans a member.", options=[create_option(name="Member",description="The member to ban.",option_type=6,required=True), create_option(name="Purge-Days",description="The number of days of messages to purge from the user.",option_type=4,required=False), create_option(name="Reason",description="The reason to ban the member, which shows in the audit logs.",option_type=3,required=False)])
+async def _ban(ctx, user: discord.User, delete : int =0, reason="No reason provided"):
+  task = asyncio.create_task(botban(ctx, user, delete, reason))
   await task
 
-@bot.slash_command(name="kick", description="Kicks a member.")
-async def _kick(ctx, user: Option(discord.User, "User to kick", required=True), reason : Option(str, "Reason to kick the user", required=False, default="No reason provided")):
+@slash.slash(name="kick", description="Kicks a member.", options=[create_option(name="Member",description="The member to kick.",option_type=6,required=True), create_option(name="Reason",description="The reason to kick the member, which shows in the audit logs.",option_type=3,required=False)])
+async def _kick(ctx, user: discord.Member, reason="No reason provided"):
   task = asyncio.create_task(botkick(ctx, user, reason))
   await task
 
-@bot.slash_command(name="unban", description="Unbans a user.")
-async def _unban(ctx, user: Option(discord.User, "User to unban", required=True), reason : Option(str, "Reason to unban the user", required=False, default="No reason provided")):
+@slash.slash(name="unban", description="Unbans a member.", options=[create_option(name="Member",description="The member to ban.",option_type=6,required=True), create_option(name="Reason",description="The reason to ban the member, which shows in the audit logs.",option_type=3,required=False)])
+async def _unban(ctx, user: discord.User, *, reason="No reason provided"):
   task = asyncio.create_task(botunban(ctx, user, reason))
   await task
 
-@bot.slash_command(name="slowmode", description="Set the slowmode delay for the current channel.")
-async def _slowmode(ctx, time : Option(int, "Slowmode delay", required=True)):
+@slash.slash(name="slowmode", description="Set the slowmode delay for the current channel.", options=[create_option(name="Delay",description="Adjust the slowmode threshold for the current channel.",option_type=4,required=True)])
+async def _slowmode(ctx, time:int):
   if ctx.author.permissions_in(ctx.channel).manage_channels or bot_admins.count(ctx.author.id)!=0:
     if 21600>=time>=0:
       await ctx.channel.edit(slowmode_delay = time)
@@ -1672,45 +1671,45 @@ async def _slowmode(ctx, time : Option(int, "Slowmode delay", required=True)):
   else:
     await ctx.send("You do not have the required permission: Manage channel.")
 
-# @bot.slash_command(name="calc", description="Evaluate a mathematical equation..")
-# async def _calc(ctx, equation:str):
-#   output = botcalc(equation)
-#   if output == "Add_Reaction":
-#     await ctx.message.add_reaction("👍")
-#   else:
-#     await ctx.send(output)
+@slash.slash(name="calc", description="Evaluate a mathematical equation..", options=[create_option(name="Equation",description="A math equation to calculate.",option_type=3,required=True)])
+async def _calc(ctx, equation:str):
+  output = botcalc(equation)
+  if output == "Add_Reaction":
+    await ctx.message.add_reaction("👍")
+  else:
+    await ctx.send(output)
 
-@bot.slash_command(name="random", description="Draws a random integer between two numbers.")
-async def _random(ctx, lower : Option(int, "Lower bound", required=True), upper : Option(int, "Upper bound", required=True)):
+@slash.slash(name="random", description="Draws a random integer between two numbers.", options=[create_option(name="Lower",description="The lower bound.",option_type=4,required=True), create_option(name="Upper",description="The upper bound.",option_type=4,required=True)])
+async def _random(ctx, lower:int, upper:int):
   ti="Random number between "+str(lower)+" and "+str(upper)
   rand=ra.randint(lower,upper)
   desc="Your random number is "+str(rand)
   embed=discord.Embed(title=ti, description=desc)
   await ctx.send(embed=embed)
 
-@bot.slash_command(name="server", description="Shows information about the current server.")
+@slash.slash(name="server", description="Shows information about the current server.")
 async def _server(ctx):
   pass
 
-@bot.subcommand(base = "server", name = "regular", description = "Shows regular information about the current server.")
+@slash.subcommand(base = "server", name = "regular", description = "Shows regular information about the current server.")
 async def _server_regular(ctx):
   task = asyncio.create_task(botserver(ctx, "regular"))
   await task
   await ctx.send(embed=task.result())
 
-@bot.subcommand(base = "server", name = "mod", description = "Shows banned members and valid invites for the current server.")
+@slash.subcommand(base = "server", name = "mod", description = "Shows banned members and valid invites for the current server.")
 async def _server_mod(ctx):
   task = asyncio.create_task(botserver(ctx, "mod"))
   await task
   await ctx.send(embed=task.result())
 
-@bot.slash_command(name="role", description="Shows information about a role.")
-async def _role(ctx, role : Option(discord.Role, "Role to show information of", required=False, default=None)):
+@slash.slash(name="role", description="Shows information about a role.", options=[create_option(name="Role",description="The role to show information for.",option_type=8,required=True)])
+async def _role(ctx, role:discord.Role):
   embed = botrole(ctx, role)
   await ctx.send(embed=embed)
 
-@bot.slash_command(name="channel", description="Shows information about a channel.")
-async def _channel(ctx, channel : Option(discord.abc.GuildChannel, "Channel to show information of", required=False, default=None)):
+@slash.slash(name="channel", description="Shows information about a channel.", options=[create_option(name="Channel",description="The channel to show information for.",option_type=7,required=True)])
+async def _channel(ctx, channel:discord.abc.GuildChannel):
   if channel.type == discord.ChannelType.text:
     task = asyncio.create_task(bottchannel(ctx, channel))
     await task
@@ -1720,8 +1719,8 @@ async def _channel(ctx, channel : Option(discord.abc.GuildChannel, "Channel to s
     await task
     await ctx.send(embed=task.result())
 
-@bot.slash_command(name="simplecolor", description="Gets information about a named color.")
-async def _simplecolor(ctx, name : Option(str, "Colour/Gradient name", choices=simpcolor_choices, required=True)):
+@slash.slash(name="simplecolor", description="Gets information about a named color.", options=[create_option(name="Colour",description="The name of the colour.",option_type=3,required=True)])
+async def _simplecolor(ctx, name):
   botsimpcolor(name)
   try:
     file = discord.File("color.png")
@@ -1729,8 +1728,8 @@ async def _simplecolor(ctx, name : Option(str, "Colour/Gradient name", choices=s
   except:
     await ctx.send("Invalid colour name, please try again.")
 
-@bot.slash_command(name="status", description="Shows the status of a member.")
-async def _status(ctx, member : Option(discord.Member, "Member to show the status of", required=False, default=None)):
+@slash.slash(name="status", description="Shows the status of a member.", options=[create_option(name="Member",description="The name of the colour.",option_type=6,required=True)])
+async def _status(ctx, member : discord.Member = None):
   embed = botstatus(ctx, member)
   await ctx.send(embed=embed)
 
@@ -1738,6 +1737,7 @@ async def _status(ctx, member : Option(discord.Member, "Member to show the statu
 async def on_ready():
   activity = discord.Activity(type=discord.ActivityType.playing, name="with =help")
   await bot.change_presence(status=discord.Status.idle, activity=activity)
+  DiscordComponents(bot)
   print("Bot is ready!")
 
 bot.run('Nzk2Njg2MzYzNjA0NjgwNzU1.X_bh_g.6uKl_EPp5r5XZpSxCxPTIuA69aE')
