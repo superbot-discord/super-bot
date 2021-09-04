@@ -740,13 +740,13 @@ async def text(ctx, *, text = None):
 
 @bot.command()
 async def html(ctx, *, code = None):
-  bothtml(code)
+  bothtml(ctx, code)
   await ctx.send(file=discord.File('html_screenshot.png'))
   os.remove('html_screenshot.png')
 
 @bot.command(aliases=['md'])
 async def markdown(ctx, *, mdcode = None):
-  botmd(mdcode)
+  botmd(ctx, mdcode)
   await ctx.send(file=discord.File('md_screenshot.png'))
   os.remove('md_screenshot.png')
 
