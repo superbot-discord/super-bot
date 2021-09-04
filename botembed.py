@@ -2,65 +2,52 @@ import discord
 
 def botett(msg):
   #for count in msg.embeds:
-    count = msg.embeds[0]
-    edict = count.to_dict()
-    ekeys = list(edict)
-    desc = "=embed "
-    if ekeys.count('title') == 1:
-      desc = desc + edict['title']
+  count = msg.embeds[0]
+  edict = count.to_dict()
+  ekeys = list(edict)
+  desc = "=embed "
+  if ekeys.count('title') == 1:
+    desc = desc + edict['title']
+  desc = desc + f"\n"
+  if ekeys.count('url') == 1:
+    desc = desc + edict['url']
+  desc = desc + f"\n"
+  if ekeys.count('description') == 1:
+    desc = desc + edict['description'].replace(f"\n", "{{{newline}}}")
+  desc = desc + f"\n"
+  if ekeys.count('color') == 1:
+    desc = desc + str(edict['color'])
+  desc = desc + f"\n"
+  if ekeys.count('author') == 1:
+    eauthor = edict['author']
+    authorkeys = list(eauthor)
+    if authorkeys.count('name') == 1:
+      desc = desc + eauthor['name'] + f"\n"
+    if authorkeys.count('url') == 1:
+      desc = desc + eauthor['url'] + f"\n"
+    if authorkeys.count('icon_url') == 1:
+      desc = desc + eauthor['icon_url'] + f"\n"
+  else:
+    desc = desc + f"\n" + f"\n" + f"\n"
+  if ekeys.count('footer') == 1:
+    efooter = edict['footer']
+    footerkeys = list(efooter)
+    if footerkeys.count('text') == 1:
+      desc = desc + efooter['text']
     desc = desc + f"\n"
-    if ekeys.count('url') == 1:
-      desc = desc + edict['url']
+    if footerkeys.count('icon_url') == 1:
+      desc = desc + efooter['icon_url']
     desc = desc + f"\n"
-    if ekeys.count('description') == 1:
-      desc = desc + edict['description'].replace(f"\n", "{{{newline}}}")
-    desc = desc + f"\n"
-    if ekeys.count('color') == 1:
-      desc = desc + str(edict['color'])
-    desc = desc + f"\n"
-    if ekeys.count('author') == 1:
-      eauthor = edict['author']
-      authorkeys = list(eauthor)
-      if authorkeys.count('name') == 1:
-        desc = desc + eauthor['name']
-      desc = desc + f"\n"
-      if authorkeys.count('url') == 1:
-        desc = desc + eauthor['url']
-      desc = desc + f"\n"
-      if authorkeys.count('icon_url') == 1:
-        desc = desc + eauthor['icon_url']
-      desc = desc + f"\n"
-    else:
-      desc = desc + f"\n"
-      desc = desc + f"\n"
-      desc = desc + f"\n"
-    if ekeys.count('footer') == 1:
-      efooter = edict['footer']
-      footerkeys = list(efooter)
-      if footerkeys.count('text') == 1:
-        desc = desc + efooter['text']
-      desc = desc + f"\n"
-      if footerkeys.count('icon_url') == 1:
-        desc = desc + efooter['icon_url']
-      desc = desc + f"\n"
-    else:
-      desc = desc + f"\n"
-      desc = desc + f"\n"
-    if ekeys.count('thumbnail') == 1:
-      desc = desc + (edict['thumbnail'])['url']
-    desc = desc + f"\n"
-    if ekeys.count('image') == 1:
-      desc = desc + (edict['image'])['url']
-    desc = desc + f"\n"
-    if ekeys.count('fields') == 1:
-      for count in edict['fields']:
-        desc = desc + count['name']
-        desc = desc + f"\n"
-        desc = desc + count['value'].replace(f"\n", "{{{newline}}}")
-        desc = desc + f"\n"
-        desc = desc + str(count['inline'])
-        desc = desc + f"\n"
-    return desc
+  else:
+    desc = desc + f"\n" + f"\n"
+  if ekeys.count('thumbnail') == 1:
+    desc = desc + (edict['thumbnail'])['url'] + f"\n"
+  if ekeys.count('image') == 1:
+    desc = desc + (edict['image'])['url'] + f"\n"
+  if ekeys.count('fields') == 1:
+    for count in edict['fields']:
+      desc = desc + count['name'] + f"\n" + count['value'].replace(f"\n", "{{{newline}}}") + f"\n" + str(count['inline']) + f"\n"
+  return desc
 
 def botquickembed(text):
   textlist=text.splitlines()
@@ -99,16 +86,16 @@ def botsimpembed(text):
 
 def botembed(text):
   textlist=text.splitlines()
-  if len(textlist) == 1:# and len(textlist[0].replace(" ", ""))!=0:
+  if len(textlist) == 1:
     embed=discord.Embed(title=textlist[0])
     textlist = textlist[1:]
-  elif len(textlist) == 2:# and len(textlist[0].replace(" ", ""))!=0 and len(textlist[1].replace(" ", ""))!=0:
+  elif len(textlist) == 2:
     embed=discord.Embed(title=textlist[0], url=textlist[1])
     textlist = textlist[2:]
-  elif len(textlist) == 3:# or (len(textlist) == 4 and len(textlist[3].replace(" ", ""))==0)):# and len(textlist[0].replace(" ", ""))!=0 and len(textlist[1].replace(" ", ""))!=0 and len(textlist[2].replace(" ", ""))!=0:
+  elif len(textlist) == 3:
     embed=discord.Embed(title=textlist[0], url=textlist[1], description=textlist[2].replace("{{{newline}}}","\n"))
     textlist = textlist[3:]
-  elif len(textlist) >= 4:# and len(textlist[0].replace(" ", ""))!=0:# and len(textlist[3].replace(" ", ""))!=0:# and len(textlist[2].replace(" ", ""))!=0 and len(textlist[3].replace(" ", ""))!=0:
+  elif len(textlist) >= 4:
     try:
       embed=discord.Embed(title=textlist[0], url=textlist[1], description=textlist[2].replace("{{{newline}}}","\n"), color=int(textlist[3]))
       textlist = textlist[4:]
@@ -122,12 +109,12 @@ def botembed(text):
     elif len(textlist) == 2 and len(textlist[0].replace(" ", ""))!=0 and len(textlist[1].replace(" ", ""))!=0:
       embed.set_author(name=textlist[0], url=textlist[1])
       textlist = textlist[2:]
-    elif len(textlist) >= 3 and len(textlist[0].replace(" ", ""))!=0 and len(textlist[2].replace(" ", ""))!=0:# and len(textlist[2].replace(" ", ""))!=0:
+    elif len(textlist) >= 3 and len(textlist[0].replace(" ", ""))!=0 and len(textlist[2].replace(" ", ""))!=0:
       embed.set_author(name=textlist[0], url=textlist[1], icon_url=textlist[2])
       textlist = textlist[3:]
     else:
       textlist = textlist[3:]
-    if len(textlist) >= 2 and len(textlist[0].replace(" ", ""))!=0:# and len(textlist[1].replace(" ", ""))!=0:
+    if len(textlist) >= 2 and len(textlist[0].replace(" ", ""))!=0:
       embed.set_footer(text=textlist[0], icon_url=textlist[1])
     elif len(textlist[0].replace(" ", ""))!=0:
       embed.set_footer(text=textlist[0])

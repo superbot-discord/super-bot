@@ -1,10 +1,10 @@
 from discord_slash.utils.manage_commands import create_option
-from discord_slash import SlashCommand
 from discord import Webhook, RequestsWebhookAdapter
 from unicode_charnames import search_charnames
 from datetime import datetime, timedelta
 from pdf2image import convert_from_path
 from captcha.image import ImageCaptcha
+from discord_slash import SlashCommand
 from discord.ext import commands
 from discord_components import *
 import matplotlib.pyplot as plt

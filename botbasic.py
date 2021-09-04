@@ -1,6 +1,6 @@
 import discord
 
-def bothelp(cat : str):
+def bothelp(cat):
   desc = """**Prefix: **`=`
 **Basic Commands**
 `help` `invite` `prefix` `ping` `botpurge`
