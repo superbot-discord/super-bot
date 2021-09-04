@@ -14,6 +14,7 @@ pytesseract==0.3.8
 table2ascii==0.1.2
 matplotlib==3.4.3
 pdf2image==1.16.0
+discord.py==1.7.3
 requests==2.26.0
 markdown2==2.4.1
 pytube==11.0.1
@@ -30,5 +31,3 @@ six==1.16.0
 ascii==3.6
 art==5.3
 
-
-#discord.py==1.7.3

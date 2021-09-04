@@ -5,7 +5,9 @@ from pdf2image import convert_from_path
 from captcha.image import ImageCaptcha
 from discord.ext import commands
 import matplotlib.pyplot as plt
-from discord.app import Option
+import discord
+#import pycord as discord
+import discord.app as Option
 import emojis as ems
 from cmath import *
 import ascii as asc
