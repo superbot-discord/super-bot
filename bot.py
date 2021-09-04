@@ -27,6 +27,7 @@ import PIL
 import re
 import os
 
+from simplecolour import simple_colours
 from botwebscrape import *
 from botmoderate import *
 from botwebinfo import *
@@ -46,6 +47,7 @@ bot = commands.Bot(command_prefix=commands.when_mentioned_or("="), intents=disco
 bot.remove_command('help')
 bot.load_extension("botdinfo")
 bot.load_extension("botplot")
+bot.load_extension("botanimals")
 slash = SlashCommand(bot, sync_commands=False)
 allid=[]
 id_pattern = re.compile(r'([A-Z]{5})', re.IGNORECASE)
@@ -58,11 +60,11 @@ cmaphsv = plt.cm.hsv
 def func(pct, allvals):
   absolute = int(pct/100*np.sum(allvals))
   return "{:d} ({:.1f}%)".format(absolute, int(pct))
-sniper1={} # Most recent
+sniper1={}
 sniper2={}
 sniper3={}
 sniper4={}
-sniper5={} # Oldest
+sniper5={}
 sniperdate1={}
 sniperdate2={}
 sniperdate3={}
@@ -261,7 +263,6 @@ async def unicode(ctx, *, query):
   embed = discord.Embed(title = "Search results for: "+query)
   for count, count2 in zip(allchars, range(0,25)):
     embed.add_field(name = count[1].title(), value = "U+" + count[0] + eval("u\" \\u"+count[0]+"\""))
-  
   await ctx.send(embed=embed)
 
 @bot.command()
@@ -283,16 +284,6 @@ async def qrmake(ctx, *, text):
     os.remove("QRCode.png")
   except:
     await ctx.send(output)
-
-@bot.command()
-async def dog(ctx, number=1):
-  if number<9:
-    await ctx.send(botdog(number))
-
-@bot.command()
-async def cat(ctx, number=1):
-  if number<9:
-    await ctx.send(botcat(number))
 
 @bot.command()
 async def verify(ctx):
@@ -1693,7 +1684,7 @@ async def _channel(ctx, channel:discord.abc.GuildChannel):
     await task
     await ctx.send(embed=task.result())
 
-@slash.slash(name="simplecolor", description="Gets information about a named color.", options=[create_option(name="Colour",description="The name of the colour.",option_type=3,required=True)])
+@slash.slash(name="simplecolor", description="Gets information about a named color.", options=[create_option(name="Colour",description="The name of the colour.",option_type=3,required=True,choices=simple_colours)])
 async def _simplecolor(ctx, name):
   botsimpcolor(name)
   try:
@@ -1706,6 +1697,21 @@ async def _simplecolor(ctx, name):
 async def _status(ctx, member : discord.Member = None):
   embed = botstatus(ctx, member)
   await ctx.send(embed=embed)
+
+
+@slash.slash(name="dog", description="Shows one or more dog picture(s).", options=[create_option(name="Number",description="Number of pictures to show.",option_type=4,required=False)])
+async def _dog(ctx, number=1):
+  if number<9:
+    await ctx.send(botdog(number))
+  else:
+    await ctx.send("There are too many pictures to show! I can only display up to 9 pictures.")
+
+@slash.slash(name="cat", description="Shows one or more cat picture(s).", options=[create_option(name="Number",description="Number of pictures to show.",option_type=4,required=False)])
+async def _cat(ctx, number=1):
+  if number<9:
+    await ctx.send(botcat(number))
+  else:
+    await ctx.send("There are too many pictures to show! I can only display up to 9 pictures.")
 
 @bot.event
 async def on_ready():
