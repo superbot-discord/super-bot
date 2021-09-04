@@ -1,5 +1,5 @@
 from art import text_dic1
-from discord_slash.utils.manage_commands import create_option
+from discord_slash.utils.manage_commands import create_option, create_choice
 from unicode_charnames import search_charnames
 from datetime import datetime, timedelta
 from pdf2image import convert_from_path
@@ -27,7 +27,7 @@ import PIL
 import re
 import os
 
-from simplecolour import simple_colours
+from simplecolour import simple_colours_raw
 from botwebscrape import *
 from botmoderate import *
 from botwebinfo import *
@@ -39,6 +39,10 @@ from botdinfo import *
 from botembed import *
 from botplot import *
 from botinfo import *
+
+simple_colours_options = []
+for count in simple_colours_raw:
+  simple_colours_options.append(create_choice(value=count[1], name=count[0]))
 
 banned_ids = []
 banned_text = []
@@ -1684,7 +1688,7 @@ async def _channel(ctx, channel:discord.abc.GuildChannel):
     await task
     await ctx.send(embed=task.result())
 
-@slash.slash(name="simplecolor", description="Gets information about a named color.", options=[create_option(name="Colour",description="The name of the colour.",option_type=3,required=True,choices=simple_colours)])
+@slash.slash(name="simplecolor", description="Gets information about a named color.", options=[create_option(name="Colour",description="The name of the colour.",option_type=3,required=True,choices=simple_colours_options)])
 async def _simplecolor(ctx, name):
   botsimpcolor(name)
   try:
