@@ -1,7 +1,4 @@
-from discord import Webhook, RequestsWebhookAdapter
-from discord_webhook import DiscordWebhook
 from discord.ext.commands import *
-from discord.ext import commands
 import discord
 
 def botengrave(product : str, text : str):

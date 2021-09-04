@@ -1,7 +1,6 @@
 import discord
 from bot import bot_admins
 
-
 async def botkick(ctx, user, reason):
     if ctx.author.permissions_in(ctx.channel).kick_members or bot_admins.count(ctx.author.id) != 0:
         try:

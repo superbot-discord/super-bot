@@ -31,8 +31,7 @@ def botredirect(url):
   elif len(urllist) == 2:
     return "URL redirected to: "+urllist[1]
   else:
-    urlend = len(urllist)-2
-    return "Initial URL: "+urllist[0]+f"\n"+f"\n".join(urllist[1:urlend])+"Final URL: "+urllist[len(urllist)-1]
+    return "Initial URL: "+urllist[0]+f"\n"+f"\n".join(urllist[1:len(urllist)-2])+"Final URL: "+urllist[len(urllist)-1]
   #except:
   #  return "Invalid URL. Please try again."
 
