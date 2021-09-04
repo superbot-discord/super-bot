@@ -1615,7 +1615,7 @@ async def _purge(ctx, num:int):
   else:
     await ctx.send("You don't have the required permission: Manage messages.")
 
-@slash.slash(name="ban", description="Bans a member.", options=[create_option(name="member",description="The member to ban.",option_type=6,required=True), create_option(name="purge-Days",description="The number of days of messages to purge from the user.",option_type=4,required=False), create_option(name="reason",description="The reason to ban the member, which shows in the audit logs.",option_type=3,required=False)])
+@slash.slash(name="ban", description="Bans a member.", options=[create_option(name="member",description="The member to ban.",option_type=6,required=True), create_option(name="purge-days",description="The number of days of messages to purge from the user.",option_type=4,required=False), create_option(name="reason",description="The reason to ban the member, which shows in the audit logs.",option_type=3,required=False)])
 async def _ban(ctx, user: discord.User, delete : int =0, reason="No reason provided"):
   task = asyncio.create_task(botban(ctx, user, delete, reason))
   await task
