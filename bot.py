@@ -52,7 +52,7 @@ bot.remove_command('help')
 bot.load_extension("botdinfo")
 bot.load_extension("botplot")
 bot.load_extension("botanimals")
-slash = SlashCommand(bot, sync_commands=False)
+slash = SlashCommand(bot, sync_commands=True)
 allid=[]
 id_pattern = re.compile(r'([A-Z]{5})', re.IGNORECASE)
 verify_pattern = re.compile(r'[^ ⠀][\s\S]{0,30}?[^ ⠀]#?[\d]{4}(,|, | )?[\d+\-*/×÷%xyz()\[\]\{\}]{1,50}=[\d+\-*/×÷%xyz()\[\]\{\}]{1,50}(,|, | )?[\S ]{3,20}(,|, | )?(Red|Orange|Yellow|Green|Light( |_)?Green|Dark( |_)?Green|Cyan|Blue|Light( |_)?Blue|Dark( |_)?Blue|Purple|Pink|Brown)', re.IGNORECASE)
