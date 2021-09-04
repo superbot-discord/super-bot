@@ -7,7 +7,7 @@ from discord.ext import commands
 import matplotlib.pyplot as plt
 import discord
 #import pycord as discord
-import discord.app as Option
+from discord.app import Option
 import emojis as ems
 from cmath import *
 import ascii as asc
@@ -245,7 +245,7 @@ async def on_message(message):
             except:
               1
             async with aiohttp.ClientSession() as session:
-              webhook = Webhook.partial(identify, token, adapter=RequestsWebhookAdapter())
+              webhook = Webhook.partial(identify, token)#, adapter=RequestsWebhookAdapter())
               await webhook.send(desc, username=message.author.name, avatar_url=message.author.avatar_url)
             break
     except:
@@ -798,7 +798,7 @@ async def pretend(ctx, member : discord.Member, *, message):
     token = wh.token
     identify = wh.id
   async with aiohttp.ClientSession() as session:
-    webhook = Webhook.partial(identify, token, adapter=RequestsWebhookAdapter())
+    webhook = Webhook.partial(identify, token)#, adapter=RequestsWebhookAdapter())
     await webhook.send(message, username=member.name, avatar_url=member.avatar_url)
 
 @bot.command(pass_context=True)
@@ -819,7 +819,7 @@ async def pretendembed(ctx, member : discord.Member, *, text):
     token = wh.token
     identify = wh.id
   async with aiohttp.ClientSession() as session:
-    webhook = Webhook.partial(identify, token, adapter=RequestsWebhookAdapter())
+    webhook = Webhook.partial(identify, token)#, adapter=RequestsWebhookAdapter())
   textlist=text.splitlines()
   if textlist[3]=="":
     embed=discord.Embed(title=textlist[0], url=textlist[1], description=textlist[2].replace("{{{newline}}}","\n"))

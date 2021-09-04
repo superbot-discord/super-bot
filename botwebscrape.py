@@ -15,6 +15,7 @@ import re
 markdowner = Markdown(extras=["strike", "footnotes"])
 html_pattern = re.compile(r'^\`\`\`(html)?\n([\s\S]*)\`\`\`$')
 md_pattern = re.compile(r'^\`\`\`(md|markdown)?\n([\s\S]*)\`\`\`$')
+country_pattern = ""
 
 def func(pct, allvals):
   absolute = int(pct/100*np.sum(allvals))
