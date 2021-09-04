@@ -1737,6 +1737,8 @@ async def _status(ctx, member : discord.Member = None):
 async def on_ready():
   activity = discord.Activity(type=discord.ActivityType.playing, name="with =help")
   await bot.change_presence(status=discord.Status.idle, activity=activity)
+  dpy_channel = bot.get_channel(870209640888139777)
+  await dpy_channel.join()
   DiscordComponents(bot)
   print("Bot is ready!")
 
