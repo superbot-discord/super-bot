@@ -82,8 +82,8 @@ overwrite.view_channel = True
 polls = []
 poll_options = {}
 
-def botadmin(context):
-  return context.author.id == 687474789342117900
+botadmin = lambda context : context.author.id == 687474789342117900
+not_by_bot = lambda reaction : reaction.me
 
 def number_to_emoji(text):
   text=text.replace("1",":one: ").replace("2",":two: ").replace("3",":three: ").replace("4",":four: ").replace("5",":five: ")
@@ -219,10 +219,12 @@ async def on_reaction_add(reaction, user):
     cache_embed = msg.embeds[0]
     desc = ""
     options = poll_options[msg.id]
-    for count in range(0, len(msg.reactions)):
-      desc = desc + f"{msg.reactions[count].emoji} {options[count]} ("+ str(msg.reactions[count].count) +f")\n"
+    cache_reactions = msg.reactions
+    cache_reactions.filter(not_by_bot, cache_reactions)
+    for count in range(0, len(cache_reactions)):
+      desc = desc + f"{cache_reactions[count].emoji} {options[count]} ("+ str(cache_reactions[count].count) +f")\n"
     cache = discord.Embed(title = cache_embed.title, description = em.encode(desc))
-    msg.edit(embed=cache)
+    await msg.edit(embed=cache)
 
 @bot.event
 async def on_message(message):
