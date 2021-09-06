@@ -79,6 +79,8 @@ sniping={}
 snipereactions=[]
 overwrite = discord.PermissionOverwrite()
 overwrite.view_channel = True
+polls = []
+poll_options = []
 
 def botadmin(context):
   return context.author.id == 687474789342117900
@@ -162,33 +164,34 @@ async def on_message_delete(message):
 
 @bot.event
 async def on_reaction_add(reaction, user):
-  if snipereactions.count(reaction.message) != 0 and user.id != 796686363604680755:
-    keyname = str(reaction.message.guild.id)+str(reaction.message.channel.id)
+  msg = reaction.message
+  if msg in snipereactions and user.id != 796686363604680755:
+    keyname = str(msg.guild.id)+str(msg.channel.id)
     if reaction.emoji == '⏪':# and sniper1.get(keyname, 1) != 1:
-      sniperdict[reaction.message] = 1
-    elif reaction.emoji == '⬅️' and sniperdict[reaction.message] > 1:
-      sniperdict[reaction.message] = sniperdict[reaction.message] - 1
-    elif reaction.emoji == '📌' and reaction.message.pinned == False and reaction.message.guild.get_member(796686363604680755).permissions_in(reaction.message.channel).manage_messages:
-      await reaction.message.pin()
-      pinmsg = await reaction.message.channel.fetch_message(reaction.message.channel.last_message_id)
+      sniperdict[msg] = 1
+    elif reaction.emoji == '⬅️' and sniperdict[msg] > 1:
+      sniperdict[msg] = sniperdict[msg] - 1
+    elif reaction.emoji == '📌' and msg.pinned == False and msg.guild.get_member(796686363604680755).permissions_in(msg.channel).manage_messages:
+      await msg.pin()
+      pinmsg = await msg.channel.fetch_message(msg.channel.last_message_id)
       await pinmsg.delete()
-    elif reaction.emoji == '📌' and reaction.message.pinned and reaction.message.guild.get_member(796686363604680755).permissions_in(reaction.message.channel).manage_messages:
-      await reaction.message.unpin()
+    elif reaction.emoji == '📌' and msg.pinned and msg.guild.get_member(796686363604680755).permissions_in(msg.channel).manage_messages:
+      await msg.unpin()
     elif reaction.emoji == '📌':
-      await reaction.message.channel.send("Unable to Pin/Unpin messages without `Manage Server` permission.")
+      await msg.channel.send("Unable to Pin/Unpin messages without `Manage Server` permission.")
       return
-    elif reaction.emoji == '➡️' and sniperdict[reaction.message] <5 and eval('sniper'+str(sniperdict[reaction.message]+1)+'.get(keyname, 1)') != 1:
-      sniperdict[reaction.message] = sniperdict[reaction.message] + 1
+    elif reaction.emoji == '➡️' and sniperdict[msg] <5 and eval('sniper'+str(sniperdict[msg]+1)+'.get(keyname, 1)') != 1:
+      sniperdict[msg] = sniperdict[msg] + 1
     elif reaction.emoji == '⏩' and sniper5.get(keyname, 1) != 1:
-      sniperdict[reaction.message] = 5
+      sniperdict[msg] = 5
     elif reaction.emoji == '⏩' and sniper4.get(keyname, 1) != 1:
-      sniperdict[reaction.message] = 4
+      sniperdict[msg] = 4
     elif reaction.emoji == '⏩' and sniper3.get(keyname, 1) != 1:
-      sniperdict[reaction.message] = 3
+      sniperdict[msg] = 3
     elif reaction.emoji == '⏩' and sniper2.get(keyname, 1) != 1:
-      sniperdict[reaction.message] = 2
+      sniperdict[msg] = 2
     elif reaction.emoji == '⏩' and sniper1.get(keyname, 1) != 1:
-      sniperdict[reaction.message] = 1
+      sniperdict[msg] = 1
     elif reaction.emoji == '⬅️' or reaction.emoji == '➡️':
       await reaction.remove(user)
       return
@@ -205,12 +208,20 @@ async def on_reaction_add(reaction, user):
       maxc = 4
     else:
       maxc = 5
-    ti = "Snipped message ("+str(sniperdict[reaction.message])+r"/"+str(maxc)+")"
-    desc = eval('sniper'+str(sniperdict[reaction.message])+'[keyname]')
-    foot = eval('sniperdate'+str(sniperdict[reaction.message])+'[keyname]')
+    ti = "Snipped message ("+str(sniperdict[msg])+r"/"+str(maxc)+")"
+    desc = eval('sniper'+str(sniperdict[msg])+'[keyname]')
+    foot = eval('sniperdate'+str(sniperdict[msg])+'[keyname]')
     embed = discord.Embed(title=ti, description=desc)
     embed.set_footer(text=foot)
-    await reaction.message.edit(embed=embed)
+    await msg.edit(embed=embed)
+  elif msg in polls:
+    cache_embed = msg.embeds[0]
+    desc = ""
+    options = poll_options[msg]
+    for count in msg.reactions.length:
+      desc = desc + f"{msg.reactions[count]} {options[count]} ("+  +f")\n"
+    cache = discord.Embed(title = cache_embed.title, description = em.encode(desc))
+    msg.edit(embed=cache)
 
 @bot.event
 async def on_member_update(before, after):
@@ -399,7 +410,9 @@ async def poll(ctx, *, text):
   embed = discord.Embed(title = ti, description = em.encode(desc))
   poll = await ctx.send(embed=embed)
   for count in reactions:
-    await poll.add_reaction(count) 
+    await poll.add_reaction(count)
+  polls.append(poll)
+  poll_options.append({poll : options})
 
 @bot.command()
 async def unscramble(ctx, text, length="0"):
