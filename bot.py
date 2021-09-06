@@ -405,7 +405,7 @@ async def poll(ctx, *, text):
   for count in reactions:
     await poll.add_reaction(count)
   polls.append(poll.id)
-  poll_options.append({poll.id : options})
+  poll_options[poll.id] = options
 
 @bot.command()
 async def unscramble(ctx, text, length="0"):
