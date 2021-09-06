@@ -220,7 +220,7 @@ async def on_reaction_add(reaction, user):
     desc = ""
     options = poll_options[msg.id]
     for count in range(0, len(msg.reactions)):
-      desc = desc + f"{msg.reactions[count]} {options[count]} ("+ msg.reactions[count].count +f")\n"
+      desc = desc + f"{msg.reactions[count].emoji} {options[count]} ("+ str(msg.reactions[count].count) +f")\n"
     cache = discord.Embed(title = cache_embed.title, description = em.encode(desc))
     msg.edit(embed=cache)
 
@@ -1008,12 +1008,10 @@ async def emojiinfo(ctx,emojiarg : typing.Union[discord.Emoji, str]):
     try:
       creator = await ctx.guild.fetch_emoji(emojiarg.id)
       desc = str(emojiarg)+emojiarg.name+"\nCreated by "+str(creator.user.mention)+" at "+str(emojiarg.created_at.strftime("%d %b, %Y (%a) %H:%M:%S"))
-      embed = discord.Embed(title="Emoji Info", description=desc)
-      embed.add_field(name="ID", value=emojiarg.id, inline=True)
     except:
       desc = str(emojiarg)+emojiarg.name+"\n`Created by` field can only be retrieved with the manage-emojis permission.\nCreated at "+str(emojiarg.created_at.strftime("%d %b, %Y (%a) %H:%M:%S"))
-      embed = discord.Embed(title="Emoji Info", description=desc)
-      embed.add_field(name="ID", value=emojiarg.id, inline=True)
+    embed = discord.Embed(title="Emoji Info", description=desc, url = emojiarg.url)
+    embed.add_field(name="ID", value=emojiarg.id, inline=True)
   except:
     cemoji = ems.db.get_emoji_by_alias(emojiarg)
     if cemoji == None:
