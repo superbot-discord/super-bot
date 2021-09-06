@@ -80,7 +80,7 @@ snipereactions=[]
 overwrite = discord.PermissionOverwrite()
 overwrite.view_channel = True
 polls = []
-poll_options = []
+poll_options = {}
 
 def botadmin(context):
   return context.author.id == 687474789342117900
@@ -1730,7 +1730,7 @@ async def _ping(ctx):
 async def on_ready():
   activity = discord.Activity(type=discord.ActivityType.playing, name="with =help")
   await bot.change_presence(status=discord.Status.idle, activity=activity)
-  await slash.sync_all_commands(slash)
+  await slash.sync_all_commands(SlashCommand)
   DiscordComponents(bot)
   print("Bot is ready!")
 
