@@ -43,7 +43,6 @@ from botinfo import *
 simple_colours_options = []
 for count in simple_colours_raw:
   simple_colours_options.append(create_choice(value=count[1], name=count[0]))
-print(1)
 
 banned_ids = []
 banned_text = []
@@ -80,7 +79,6 @@ sniping={}
 snipereactions=[]
 overwrite = discord.PermissionOverwrite()
 overwrite.view_channel = True
-print(2)
 
 def botadmin(context):
   return context.author.id == 687474789342117900
