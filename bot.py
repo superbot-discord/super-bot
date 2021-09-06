@@ -1720,7 +1720,7 @@ async def _cat(ctx, number=1):
 async def on_ready():
   activity = discord.Activity(type=discord.ActivityType.playing, name="with =help")
   await bot.change_presence(status=discord.Status.idle, activity=activity)
-  await SlashCommand.sync_all_commands(SlashCommand)
+  await slash.sync_all_commands(SlashCommand)
   DiscordComponents(bot)
   print("Bot is ready!")
 
