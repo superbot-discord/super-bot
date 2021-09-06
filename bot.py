@@ -1724,7 +1724,7 @@ async def _ping(ctx):
 async def on_ready():
   activity = discord.Activity(type=discord.ActivityType.playing, name="with =help")
   await bot.change_presence(status=discord.Status.idle, activity=activity)
-  await slash.sync_all_commands(SlashCommand)
+  await SlashCommand.sync_all_commands(slash)
   DiscordComponents(bot)
   print("Bot is ready!")
 
