@@ -219,7 +219,7 @@ async def on_reaction_add(reaction, user):
     cache_embed = msg.embeds[0]
     desc = ""
     options = poll_options[msg.id]
-    for count in len(msg.reactions):
+    for count in range(0, len(msg.reactions)):
       desc = desc + f"{msg.reactions[count]} {options[count]} ("+ msg.reactions[count].count +f")\n"
     cache = discord.Embed(title = cache_embed.title, description = em.encode(desc))
     msg.edit(embed=cache)
