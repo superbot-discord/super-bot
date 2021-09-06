@@ -214,23 +214,15 @@ async def on_reaction_add(reaction, user):
     embed = discord.Embed(title=ti, description=desc)
     embed.set_footer(text=foot)
     await msg.edit(embed=embed)
-  elif msg in polls and user.id != 796686363604680755:
+  elif msg.id in polls and user.id != 796686363604680755:
     print(1)
     cache_embed = msg.embeds[0]
     desc = ""
-    options = poll_options[msg]
+    options = poll_options[msg.id]
     for count in msg.reactions.length:
       desc = desc + f"{msg.reactions[count]} {options[count]} ("+ msg.reactions[count].count +f")\n"
     cache = discord.Embed(title = cache_embed.title, description = em.encode(desc))
     msg.edit(embed=cache)
-
-@bot.event
-async def on_member_update(before, after):
-  if after.guild.id == 809368482344075265 and after.id == 757431801487556748:
-    if after.roles.count(before.guild.get_role(813569850123223060)) == 0:
-      await after.add_roles(before.guild.get_role(), reason = "He is a raider")
-    if after.roles.count(before.guild.get_role(814038966793797642)) == 0:
-      await after.add_roles(before.guild.get_role(), reason = "He is an ex-raider")
 
 @bot.event
 async def on_message(message):
@@ -412,8 +404,8 @@ async def poll(ctx, *, text):
   poll = await ctx.send(embed=embed)
   for count in reactions:
     await poll.add_reaction(count)
-  polls.append(poll)
-  poll_options.append({poll : options})
+  polls.append(poll.id)
+  poll_options.append({poll.id : options})
 
 @bot.command()
 async def unscramble(ctx, text, length="0"):
@@ -1738,7 +1730,7 @@ async def _ping(ctx):
 async def on_ready():
   activity = discord.Activity(type=discord.ActivityType.playing, name="with =help")
   await bot.change_presence(status=discord.Status.idle, activity=activity)
-  await SlashCommand.sync_all_commands(slash)
+  await slash.sync_all_commands(slash)
   DiscordComponents(bot)
   print("Bot is ready!")
 
