@@ -215,6 +215,7 @@ async def on_reaction_add(reaction, user):
     embed.set_footer(text=foot)
     await msg.edit(embed=embed)
   elif msg in polls and user.id != 796686363604680755:
+    print(1)
     cache_embed = msg.embeds[0]
     desc = ""
     options = poll_options[msg]
