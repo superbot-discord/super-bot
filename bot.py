@@ -1716,6 +1716,10 @@ async def _cat(ctx, number=1):
   else:
     await ctx.send("There are too many pictures to show! I can only display up to 9 pictures.")
 
+@slash.slash(name="ping", description="Checks whether the bot is online.")
+async def _ping(ctx):
+  await ctx.send("Pong!")
+
 @bot.event
 async def on_ready():
   activity = discord.Activity(type=discord.ActivityType.playing, name="with =help")
