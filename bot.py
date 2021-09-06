@@ -214,12 +214,12 @@ async def on_reaction_add(reaction, user):
     embed = discord.Embed(title=ti, description=desc)
     embed.set_footer(text=foot)
     await msg.edit(embed=embed)
-  elif msg in polls:
+  elif msg in polls and user.id != 796686363604680755:
     cache_embed = msg.embeds[0]
     desc = ""
     options = poll_options[msg]
     for count in msg.reactions.length:
-      desc = desc + f"{msg.reactions[count]} {options[count]} ("+  +f")\n"
+      desc = desc + f"{msg.reactions[count]} {options[count]} ("+ msg.reactions[count].count +f")\n"
     cache = discord.Embed(title = cache_embed.title, description = em.encode(desc))
     msg.edit(embed=cache)
 
