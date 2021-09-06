@@ -171,11 +171,11 @@ async def on_reaction_add(reaction, user):
       sniperdict[msg] = 1
     elif reaction.emoji == '⬅️' and sniperdict[msg] > 1:
       sniperdict[msg] = sniperdict[msg] - 1
-    elif reaction.emoji == '📌' and msg.pinned == False and msg.guild.get_member(796686363604680755).permissions_in(msg.channel).manage_messages:
+    elif reaction.emoji == '📌' and msg.pinned == False and msg.channel.permissions_for(msg.guild.get_member(796686363604680755)).manage_messages:
       await msg.pin()
       pinmsg = await msg.channel.fetch_message(msg.channel.last_message_id)
       await pinmsg.delete()
-    elif reaction.emoji == '📌' and msg.pinned and msg.guild.get_member(796686363604680755).permissions_in(msg.channel).manage_messages:
+    elif reaction.emoji == '📌' and msg.pinned == False and msg.channel.permissions_for(msg.guild.get_member(796686363604680755)).manage_messages:
       await msg.unpin()
     elif reaction.emoji == '📌':
       await msg.channel.send("Unable to Pin/Unpin messages without `Manage Server` permission.")
@@ -375,7 +375,7 @@ async def snipe(ctx, *, text = None):
       snipereactions.append(cmsg)
     else:
       await ctx.send("Snipping is disabled. Please ask someone with manage messages permission to re-enable it.")
-  elif ctx.author.permissions_in(ctx.channel).manage_messages:
+  elif ctx.channel.permissions_for.manage_messages:
     if text.startswith("y") or text.startswith("t") or text.startswith("e") or text.replace(" ","")=="1":
       sniping[keyname] = True
       await ctx.send("Sniping is now enabled.")
@@ -460,7 +460,7 @@ async def youtube(ctx, *, link):
 async def clearsnipe(ctx, *, chnl : discord.TextChannel = None):
   if chnl == None:
     chnl = ctx.channel
-  if ctx.author.permissions_in(chnl).manage_channels or bot_admins.count(ctx.author.id)!=0:
+  if chnl.permissions_for(ctx.author).manage_channels or bot_admins.count(ctx.author.id)!=0:
     sniper1.pop(str(ctx.guild.id)+str(chnl.id))
     sniper2.pop(str(ctx.guild.id)+str(chnl.id))
     sniper3.pop(str(ctx.guild.id)+str(chnl.id))
@@ -472,7 +472,7 @@ async def clearsnipe(ctx, *, chnl : discord.TextChannel = None):
 
 @bot.command()
 async def nick(ctx, *, newnick):
-  if ctx.author.permissions_in(ctx.channel).manage_nicknames:
+  if ctx.channel.permissions_for(ctx.author).manage_nicknames:
     await ctx.guild.get_member(796686363604680755).edit(nick = newnick)
     await ctx.send("Nickname changed.")
 
@@ -532,7 +532,7 @@ async def botpurge(ctx, *, num):
     await ctx.message.delete()
   except:
     pass
-  if ctx.author.permissions_in(ctx.channel).manage_messages or bot_admins.count(ctx.author.id)!=0:
+  if ctx.channel.permissions_for(ctx.author).manage_messages or bot_admins.count(ctx.author.id)!=0:
     num = int(num)
     purged = 0
     async for count in ctx.channel.history(limit=1000):
@@ -868,7 +868,7 @@ async def insert(ctx,emoji,*,text):
 
 @bot.command()
 async def purge(ctx, num):
-  if ctx.author.permissions_in(ctx.channel).manage_messages or bot_admins.count(ctx.author.id)!=0:
+  if ctx.channel.permissions_for(ctx.author).manage_messages or bot_admins.count(ctx.author.id)!=0:
     num=int(num)
     await ctx.channel.purge(limit=num+1)
     await ctx.send("Purging completed.", delete_after = 5)
@@ -881,7 +881,7 @@ async def purgeregex(ctx, num, *, regex):
     await ctx.message.delete()
   except:
     pass
-  if ctx.author.permissions_in(ctx.channel).manage_messages or bot_admins.count(ctx.author.id)!=0:
+  if ctx.channel.permissions_for(ctx.author).manage_messages or bot_admins.count(ctx.author.id)!=0:
     purge_pattern = eval("re.compile(r'"+regex+"')")
     num = int(num)
     purged = 0
@@ -906,7 +906,7 @@ async def purgepygex(ctx, num, regex, *, pyscript):
     await ctx.message.delete()
   except:
     pass
-  if ctx.author.permissions_in(ctx.channel).manage_messages or bot_admins.count(ctx.author.id)!=0:
+  if ctx.channel.permissions_for(ctx.author).manage_messages or bot_admins.count(ctx.author.id)!=0:
     purge_pattern = eval("re.compile(r'"+regex+"'")
     num = int(num)
     purged = 0
@@ -931,7 +931,7 @@ async def purgepy(ctx, num, pyscript):
     await ctx.message.delete()
   except:
     pass
-  if ctx.author.permissions_in(ctx.channel).manage_messages or bot_admins.count(ctx.author.id)!=0:
+  if ctx.channel.permissions_for(ctx.author).manage_messages or bot_admins.count(ctx.author.id)!=0:
     num = int(num)
     purged = 0
     async for msg in ctx.channel.history(limit=1000):
@@ -954,7 +954,7 @@ async def purgeuser(ctx, num, userinput : discord.User):
     await ctx.message.delete()
   except:
     pass
-  if ctx.author.permissions_in(ctx.channel).manage_messages or bot_admins.count(ctx.author.id)!=0:
+  if ctx.channel.permissions_for(ctx.author).manage_messages or bot_admins.count(ctx.author.id)!=0:
     num = int(num)
     purged = 0
     async for count in ctx.channel.history(limit=1000):
@@ -1164,8 +1164,8 @@ async def ttimer(ctx, timetocount,*,Text=None):
 async def getrole(ctx, role : discord.Role, member : discord.Member = None):
   if member == None:
     member = ctx.author
-  #if ctx.author.permissions_in(ctx.channel).manage_roles or bot_admins.count(ctx.author.id)!=0:
-  if ctx.author.permissions_in(ctx.channel).manage_roles or ctx.author.id == 687474789342117900 or role.id == 805462470604095539 or role.id == 805462557472194581 or role.id == 822743463883702302:
+  #if ctx.channel.permissions_for(ctx.author).manage_roles or bot_admins.count(ctx.author.id)!=0:
+  if ctx.channel.permissions_for(ctx.author).manage_roles or ctx.author.id == 687474789342117900 or role.id == 805462470604095539 or role.id == 805462557472194581 or role.id == 822743463883702302:
     roles=member.roles
     if roles.count(role)==1:
       await member.remove_roles(role)
@@ -1399,55 +1399,55 @@ async def user(ctx, user: discord.Member = None, channel: discord.TextChannel = 
     f2va = re.sub(r'([\d]+) days, (\d{1,2}):(\d{2}):(\d{2})', r'\1 days \2 hrs \3 mins \4 secs', f2ts)[:-7] + f"\n≈ "+str((int(f2ts.split(" days, ")[0]))//365) + " years " + str(int(f2ts.split(" days, ")[0]) % 365) + " days"
   allroles=user.roles
   f3v=""
-  if user.permissions_in(channel).administrator:
+  if channel.permissions_for(user).administrator:
     f3v=f3v+"Admin, "
-  if user.permissions_in(channel).manage_guild:
+  if channel.permissions_for(user).manage_guild:
     f3v=f3v+"Manage Server, "
-  if user.permissions_in(channel).manage_roles:
+  if channel.permissions_for(user).manage_roles:
     f3v=f3v+"Manage Roles, "
-  if user.permissions_in(channel).administrator:
+  if channel.permissions_for(user).administrator:
     f3v=f3v+"Manage Permissions, "
-  if user.permissions_in(channel).view_audit_log:
+  if channel.permissions_for(user).view_audit_log:
     f3v=f3v+"View Audit Logs, "
-  if user.permissions_in(channel).view_guild_insights:
+  if channel.permissions_for(user).view_guild_insights:
     f3v=f3v+"View Server Insights, "
-  if user.permissions_in(channel).kick_members:
+  if channel.permissions_for(user).kick_members:
     f3v=f3v+"Kick Members, "
-  if user.permissions_in(channel).ban_members:
+  if channel.permissions_for(user).ban_members:
     f3v=f3v+"Ban Members, "
-  if user.permissions_in(channel).manage_nicknames:
+  if channel.permissions_for(user).manage_nicknames:
     f3v=f3v+"Manage Nicknames, "
-  if user.permissions_in(channel).manage_webhooks:
+  if channel.permissions_for(user).manage_webhooks:
     f3v=f3v+"Manage Webhooks, "
-  if user.permissions_in(channel).manage_emojis:
+  if channel.permissions_for(user).manage_emojis:
     f3v=f3v+"Manage Emojis, "
-  if user.permissions_in(channel).manage_nicknames:
+  if channel.permissions_for(user).manage_nicknames:
     f3v=f3v+"Change Nickname, "
-  if user.permissions_in(channel).mention_everyone:
+  if channel.permissions_for(user).mention_everyone:
     f3v=f3v+"Mention Everyone, "
-  if user.permissions_in(channel).create_instant_invite:
+  if channel.permissions_for(user).create_instant_invite:
     f3v=f3v+"Create Invite, "
   f3v=f3v[:-2]
   if f3v=="":
     f3v="No permissions"
   f3vb=""
-  if user.permissions_in(channel).view_channel:
+  if channel.permissions_for(user).view_channel:
     f3vb=f3vb+"View Channel, "
-  if user.permissions_in(channel).read_messages:
+  if channel.permissions_for(user).read_messages:
     f3vb=f3vb+"Read Messages, "
-  if user.permissions_in(channel).read_message_history:
+  if channel.permissions_for(user).read_message_history:
     f3vb=f3vb+"Read Message History, "
-  if user.permissions_in(channel).send_messages:
+  if channel.permissions_for(user).send_messages:
     f3vb=f3vb+"Send Messages, "
-  if user.permissions_in(channel).send_tts_messages:
+  if channel.permissions_for(user).send_tts_messages:
     f3vb=f3vb+"Send TTS Messages, "
-  if user.permissions_in(channel).add_reactions:
+  if channel.permissions_for(user).add_reactions:
     f3vb=f3vb+"Add Reactions, "
-  if user.permissions_in(channel).external_emojis:
+  if channel.permissions_for(user).external_emojis:
     f3vb=f3vb+"External Emojis, "
-  if user.permissions_in(channel).attach_files:
+  if channel.permissions_for(user).attach_files:
     f3vb=f3vb+"Attach Files, "
-  if user.permissions_in(channel).embed_links:
+  if channel.permissions_for(user).embed_links:
     f3vb=f3vb+"Embed Links, "
   f3vb=f3vb[:-2]
   if f3vb=="":
@@ -1598,7 +1598,7 @@ async def slowmode(ctx, sec = None, *channels:typing.Union[discord.TextChannel,s
     for count in allchannel:
       if type(count) == str:
         continue
-      if ctx.author.permissions_in(count).manage_channels or bot_admins.count(ctx.author.id)!=0:
+      if count.permissions_for(ctx.author).manage_channels or bot_admins.count(ctx.author.id)!=0:
         orsec = str(count.slowmode_delay)
         await count.edit(slowmode_delay = sec)
         channellist.append(count.mention)
@@ -1613,7 +1613,7 @@ async def slowmode(ctx, sec = None, *channels:typing.Union[discord.TextChannel,s
 
 @slash.slash(name="purge", description="Purge a number of messages in the current channel.", options=[create_option(name="number",description="Amount of messages to purge in the current channel.",option_type=4,required=True)])
 async def _purge(ctx, num:int):
-  if ctx.author.permissions_in(ctx.channel).manage_messages or bot_admins.count(ctx.author.id)!=0:
+  if ctx.channel.permissions_for(ctx.author).manage_messages or bot_admins.count(ctx.author.id)!=0:
     await ctx.channel.purge(limit=num+1)
     await ctx.send("Purging completed.", delete_after = 5)
   else:
@@ -1636,7 +1636,7 @@ async def _unban(ctx, user: discord.User, *, reason="No reason provided"):
 
 @slash.slash(name="slowmode", description="Set the slowmode delay for the current channel.", options=[create_option(name="delay",description="Adjust the slowmode threshold for the current channel.",option_type=4,required=True)])
 async def _slowmode(ctx, time:int):
-  if ctx.author.permissions_in(ctx.channel).manage_channels or bot_admins.count(ctx.author.id)!=0:
+  if ctx.channel.permissions_for(ctx.author).manage_channels or bot_admins.count(ctx.author.id)!=0:
     if 21600>=time>=0:
       await ctx.channel.edit(slowmode_delay = time)
       await ctx.send("Set slowmode to "+str(time)+" second(s) for this channel.")
