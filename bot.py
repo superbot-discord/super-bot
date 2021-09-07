@@ -215,7 +215,7 @@ async def on_reaction_add(reaction, user):
           async for count3 in count2.users():
             if count3.id != 796686363604680755:
               counter = counter + 1
-          desc = desc + f"{count.emoji} {options[count]} ("+ str(counter) +f")\n"
+          desc = desc + f"{count2.emoji} {options[count]} ("+ str(counter) +f")\n"
     cache = discord.Embed(title = cache_embed.title, description = em.encode(desc))
     await msg.edit(embed=cache)
 
