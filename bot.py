@@ -215,12 +215,13 @@ async def on_reaction_add(reaction, user):
     embed.set_footer(text=foot)
     await msg.edit(embed=embed)
   elif msg.id in polls and user.id != 796686363604680755:
-    print(1)
     cache_embed = msg.embeds[0]
     desc = ""
     options = poll_options[msg.id]
-    cache_reactions = msg.reactions
-    cache_reactions = filter(not_by_bot, cache_reactions)
+    cache2_reactions = msg.reactions
+    cache_reactions = []
+    for count in filter(not_by_bot, cache_reactions):
+      cache_reactions.append(count)
     for count in range(0, len(cache_reactions)):
       desc = desc + f"{cache_reactions[count].emoji} {options[count]} ("+ str(cache_reactions[count].count) +f")\n"
     cache = discord.Embed(title = cache_embed.title, description = em.encode(desc))
