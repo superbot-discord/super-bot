@@ -212,7 +212,7 @@ async def on_reaction_add(reaction, user):
         if count2.emoji == current_reaction:
           current_reaction = count2.emoji
           counter = 0
-          for count3 in count2.users:
+          for count3 in count2.users():
             if count2.id != 796686363604680755:
               counter = counter + 1
           desc = desc + f"{count.emoji} {options[count]} ("+ str(counter) +f")\n"
