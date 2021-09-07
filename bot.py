@@ -203,7 +203,6 @@ async def on_reaction_add(reaction, user):
   elif msg.id in polls and user.id != 796686363604680755:
     cache_embed = msg.embeds[0]
     desc = ""
-    options = poll_options[msg.id]
     msg_dict = poll_options[msg.id]
     for count in msg_dict.keys():
       current_reaction = ems.encode(msg_dict[count])
@@ -215,7 +214,7 @@ async def on_reaction_add(reaction, user):
           async for count3 in count2.users():
             if count3.id != 796686363604680755:
               counter = counter + 1
-          desc = desc + f"{count2.emoji} {options[count]} ("+ str(counter) +f")\n"
+          desc = desc + f"{count2.emoji} {msg_dict[count]} ("+ str(counter) +f")\n"
     cache = discord.Embed(title = cache_embed.title, description = em.encode(desc))
     await msg.edit(embed=cache)
 
