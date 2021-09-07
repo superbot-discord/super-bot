@@ -1,4 +1,3 @@
-from art import text_dic1
 from discord_slash.utils.manage_commands import create_option, create_choice
 from discord_slash import SlashCommand, SlashContext
 from unicode_charnames import search_charnames
@@ -91,18 +90,6 @@ def number_to_emoji(text):
   return text
 
 @bot.event
-async def on_member_join(member):
-  if member.guild.id == 824524455924727839:
-    if member.bot:
-      await member.add_roles(member.guild.get_role(824524665842040852))
-      await member.guild.get_channel(824524893152477206).create_text_channel(member.name.lower().replace(" ","-"),slowmode_delay=1, topic = f"Use and talk about the bot {member.name}.", 
-        overwrites={member.guild.default_role: discord.PermissionOverwrite(read_messages=False), member.guild.get_role(824526276835803176): discord.PermissionOverwrite(read_messages=True),
-        member: discord.PermissionOverwrite(read_messages=True)})
-    else:
-      embed = discord.Embed(title = "Welcome", desc="Hello and welcome to Bot Laboratoratory! You can add any bot to this server by [proposing](https://discord.gg/etb53Cvheh). Simply send the bot's invite and we will discuss about it. Have fun!")
-      await member.send(embed=embed)
-
-@bot.event
 async def on_voice_state_update(member, before, after):
   try:
     if before.channel.id == 822750915466493982 and after.channel == None:
@@ -167,7 +154,7 @@ async def on_reaction_add(reaction, user):
   msg = reaction.message
   if msg in snipereactions and user.id != 796686363604680755:
     keyname = str(msg.guild.id)+str(msg.channel.id)
-    if reaction.emoji == '⏪':# and sniper1.get(keyname, 1) != 1:
+    if reaction.emoji == '⏪':
       sniperdict[msg] = 1
     elif reaction.emoji == '⬅️' and sniperdict[msg] > 1:
       sniperdict[msg] = sniperdict[msg] - 1
@@ -220,7 +207,7 @@ async def on_reaction_add(reaction, user):
     options = poll_options[msg.id]
     cache2_reactions = msg.reactions
     cache_reactions = []
-    for count in filter(not_by_bot, cache_reactions):
+    for count in filter(not_by_bot, cache2_reactions):
       cache_reactions.append(count)
     for count in range(0, len(cache_reactions)):
       desc = desc + f"{cache_reactions[count].emoji} {options[count]} ("+ str(cache_reactions[count].count) +f")\n"
@@ -1724,7 +1711,7 @@ async def _cat(ctx, number=1):
     await ctx.send("There are too many pictures to show! I can only display up to 9 pictures.")
 
 @slash.slash(name="ping", description="Checks whether the bot is online.")
-async def _ping(ctx):
+async def _ping(ctx : SlashContext):
   await ctx.send("Pong!")
 
 @bot.event
