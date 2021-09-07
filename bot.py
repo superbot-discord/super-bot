@@ -213,7 +213,7 @@ async def on_reaction_add(reaction, user):
           current_reaction = count2.emoji
           counter = 0
           async for count3 in count2.users():
-            if count2.id != 796686363604680755:
+            if count3.id != 796686363604680755:
               counter = counter + 1
           desc = desc + f"{count.emoji} {options[count]} ("+ str(counter) +f")\n"
     cache = discord.Embed(title = cache_embed.title, description = em.encode(desc))
