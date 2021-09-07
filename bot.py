@@ -214,35 +214,9 @@ async def on_reaction_add(reaction, user):
           async for count3 in count2.users():
             if count3.id != 796686363604680755:
               counter = counter + 1
-          desc = desc + f"{count2.emoji} {msg_dict[count]} ("+ str(counter) +f")\n"
+          desc = desc + f"{count2.emoji} {count} ("+ str(counter) +f")\n"
     cache = discord.Embed(title = cache_embed.title, description = em.encode(desc))
     await msg.edit(embed=cache)
-
-"""
-options = []
-reactions = []
-textlist = text.split(" ")
-ti = ""
-desc = ""
-poll_options_cache = {}
-for count in textlist: # ([\w]+?)(:\w{2,32}:|[\uD800-\uDBFF])
-  match = poll_pattern.fullmatch(em.decode(count))
-  if match:
-    optn = re.sub(poll_pattern, r'\1', ems.decode(count))
-    rect = re.sub(poll_pattern, r'\2', ems.decode(count))
-    desc = desc + f"{rect} {optn} (0)\n"
-    options.append(optn)
-    poll_options_cache[optn] = rect
-    reactions.append(ems.encode(rect))
-  else:
-    ti = ti + count + " "
-embed = discord.Embed(title = ti, description = em.encode(desc))
-poll = await ctx.send(embed=embed)
-for count in reactions:
-  await poll.add_reaction(count)
-polls.append(poll.id)
-poll_options[poll.id] = poll_options_cache
-  """
 
 @bot.event
 async def on_message(message):
@@ -359,10 +333,10 @@ async def reactions(ctx, *, msg : discord.Message):
 
 @bot.command(aliases=['sniper'])
 async def snipe(ctx, *, text = None):
-  keyname = str(ctx.guild.id)+str(ctx.channel.id)
+  chnl = ctx.channel
+  keyname = str(ctx.guild.id)+str(chnl.id)
   if text == None:
     if sniping.get(keyname, 1) == 1 or sniping[keyname] == True:
-      chnl = ctx.channel
       if sniper1.get(keyname, 1) == 1:
         ti = "Error"
         desc = "Nothing to snipe from this channel."
@@ -395,7 +369,7 @@ async def snipe(ctx, *, text = None):
       snipereactions.append(cmsg)
     else:
       await ctx.send("Snipping is disabled. Please ask someone with manage messages permission to re-enable it.")
-  elif ctx.channel.permissions_for.manage_messages:
+  elif chnl.permissions_for.manage_messages:
     if text.startswith("y") or text.startswith("t") or text.startswith("e") or text.replace(" ","")=="1":
       sniping[keyname] = True
       await ctx.send("Sniping is now enabled.")
@@ -1031,9 +1005,10 @@ async def emojiinfo(ctx,emojiarg : typing.Union[discord.Emoji, str]):
       creator = await ctx.guild.fetch_emoji(emojiarg.id)
       desc = str(emojiarg)+emojiarg.name+"\nCreated by "+str(creator.user.mention)+" at "+str(emojiarg.created_at.strftime("%d %b, %Y (%a) %H:%M:%S"))
     except:
-      desc = str(emojiarg)+emojiarg.name+"\n`Created by` field can only be retrieved with the manage-emojis permission.\nCreated at "+str(emojiarg.created_at.strftime("%d %b, %Y (%a) %H:%M:%S"))
-    embed = discord.Embed(title="Emoji Info", description=desc, url = emojiarg.url)
+      desc = str(emojiarg)+"\n`Created by` field can only be retrieved with the manage-emojis permission.\nCreated at "+str(emojiarg.created_at.strftime("%d %b, %Y (%a) %H:%M:%S"))
+    embed = discord.Embed(title=f"Emoji Info: {emojiarg.name}", description=desc)
     embed.add_field(name="ID", value=emojiarg.id, inline=True)
+    embed.set_image(url = emojiarg.url)
   except:
     cemoji = ems.db.get_emoji_by_alias(emojiarg)
     if cemoji == None:
