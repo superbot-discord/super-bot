@@ -82,7 +82,6 @@ polls = []
 poll_options = {}
 
 botadmin = lambda context : context.author.id == 687474789342117900
-not_by_bot = lambda reaction : reaction.me
 
 def number_to_emoji(text):
   text=text.replace("1",":one: ").replace("2",":two: ").replace("3",":three: ").replace("4",":four: ").replace("5",":five: ")
@@ -205,12 +204,38 @@ async def on_reaction_add(reaction, user):
     cache_embed = msg.embeds[0]
     desc = ""
     options = poll_options[msg.id]
-    cache2_reactions = msg.reactions
+    cache_reactions = msg.reactions
     cache_reactions = []
-    for count in filter(not_by_bot, cache2_reactions):
-      cache_reactions.append(count)
-    for count in range(0, len(cache_reactions)):
-      desc = desc + f"{cache_reactions[count].emoji} {options[count]} ("+ str(cache_reactions[count].count) +f")\n"
+    for count in cache_reactions:
+      if count.count == 1 and count.users[0].id == 796686363604680755:
+        continue
+      else:
+        counter = 0
+        for count2 in cache_reactions.user:
+          if count2.id != 796686363604680755:
+            counter = counter + 1
+        desc = desc + f"{count.emoji} {options[count]} ("+ str(counter) +f")\n"
+    cache = discord.Embed(title = cache_embed.title, description = em.encode(desc))
+    await msg.edit(embed=cache)
+
+@bot.event
+async def on_reaction_remove(reaction, user):
+  msg = reaction.message
+  if msg.id in polls and user.id != 796686363604680755:
+    cache_embed = msg.embeds[0]
+    desc = ""
+    options = poll_options[msg.id]
+    cache_reactions = msg.reactions
+    cache_reactions = []
+    for count in cache_reactions:
+      if count.count == 1 and count.users[0].id == 796686363604680755:
+        continue
+      else:
+        counter = 0
+        for count2 in cache_reactions.user:
+          if count2.id != 796686363604680755:
+            counter = counter + 1
+        desc = desc + f"{count.emoji} {options[count]} ("+ str(counter) +f")\n"
     cache = discord.Embed(title = cache_embed.title, description = em.encode(desc))
     await msg.edit(embed=cache)
 
