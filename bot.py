@@ -204,40 +204,46 @@ async def on_reaction_add(reaction, user):
     cache_embed = msg.embeds[0]
     desc = ""
     options = poll_options[msg.id]
-    cache_reactions = msg.reactions
-    cache_reactions = []
-    for count in cache_reactions:
-      if count.count == 1 and count.users[0].id == 796686363604680755:
-        continue
-      else:
-        counter = 0
-        for count2 in cache_reactions.user:
-          if count2.id != 796686363604680755:
-            counter = counter + 1
-        desc = desc + f"{count.emoji} {options[count]} ("+ str(counter) +f")\n"
+    msg_dict = poll_options[msg.id]
+    for count in msg_dict.keys():
+      current_reaction = ems.encode(msg_dict[count])
+      await msg.add_reaction(current_reaction)
+      for count2 in msg.reactions:
+        if count2.emoji == current_reaction:
+          current_reaction = count2.emoji
+          counter = 0
+          for count3 in count2.users:
+            if count2.id != 796686363604680755:
+              counter = counter + 1
+          desc = desc + f"{count.emoji} {options[count]} ("+ str(counter) +f")\n"
     cache = discord.Embed(title = cache_embed.title, description = em.encode(desc))
     await msg.edit(embed=cache)
 
-@bot.event
-async def on_reaction_remove(reaction, user):
-  msg = reaction.message
-  if msg.id in polls and user.id != 796686363604680755:
-    cache_embed = msg.embeds[0]
-    desc = ""
-    options = poll_options[msg.id]
-    cache_reactions = msg.reactions
-    cache_reactions = []
-    for count in cache_reactions:
-      if count.count == 1 and count.users[0].id == 796686363604680755:
-        continue
-      else:
-        counter = 0
-        for count2 in cache_reactions.user:
-          if count2.id != 796686363604680755:
-            counter = counter + 1
-        desc = desc + f"{count.emoji} {options[count]} ("+ str(counter) +f")\n"
-    cache = discord.Embed(title = cache_embed.title, description = em.encode(desc))
-    await msg.edit(embed=cache)
+"""
+options = []
+reactions = []
+textlist = text.split(" ")
+ti = ""
+desc = ""
+poll_options_cache = {}
+for count in textlist: # ([\w]+?)(:\w{2,32}:|[\uD800-\uDBFF])
+  match = poll_pattern.fullmatch(em.decode(count))
+  if match:
+    optn = re.sub(poll_pattern, r'\1', ems.decode(count))
+    rect = re.sub(poll_pattern, r'\2', ems.decode(count))
+    desc = desc + f"{rect} {optn} (0)\n"
+    options.append(optn)
+    poll_options_cache[optn] = rect
+    reactions.append(ems.encode(rect))
+  else:
+    ti = ti + count + " "
+embed = discord.Embed(title = ti, description = em.encode(desc))
+poll = await ctx.send(embed=embed)
+for count in reactions:
+  await poll.add_reaction(count)
+polls.append(poll.id)
+poll_options[poll.id] = poll_options_cache
+  """
 
 @bot.event
 async def on_message(message):
@@ -405,13 +411,15 @@ async def poll(ctx, *, text):
   textlist = text.split(" ")
   ti = ""
   desc = ""
-  for count in textlist:
+  poll_options_cache = {}
+  for count in textlist: # ([\w]+?)(:\w{2,32}:|[\uD800-\uDBFF])
     match = poll_pattern.fullmatch(em.decode(count))
     if match:
       optn = re.sub(poll_pattern, r'\1', ems.decode(count))
       rect = re.sub(poll_pattern, r'\2', ems.decode(count))
       desc = desc + f"{rect} {optn} (0)\n"
       options.append(optn)
+      poll_options_cache[optn] = rect
       reactions.append(ems.encode(rect))
     else:
       ti = ti + count + " "
@@ -420,7 +428,7 @@ async def poll(ctx, *, text):
   for count in reactions:
     await poll.add_reaction(count)
   polls.append(poll.id)
-  poll_options[poll.id] = options
+  poll_options[poll.id] = poll_options_cache
 
 @bot.command()
 async def unscramble(ctx, text, length="0"):
