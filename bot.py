@@ -250,7 +250,7 @@ async def on_message(message):
               pass
             async with aiohttp.ClientSession() as session:
               webhook = Webhook.partial(identify, token, session=session)
-              await webhook.send(desc, username=message.author.name, avatar.url=message.author.avatar.url)
+              await webhook.send(desc, username=message.author.name, avatar_url=message.author.avatar.url)
             break
     except:
       pass
@@ -790,7 +790,7 @@ async def pretend(ctx, member : discord.Member, *, message):
     identify = wh.id
   async with aiohttp.ClientSession() as session:
     webhook = Webhook.partial(identify, token, session=session)
-    await webhook.send(message, username=member.name, avatar.url=member.avatar.url)
+    await webhook.send(message, username=member.name, avatar_url=member.avatar.url)
 
 @bot.command(pass_context=True)
 async def pretendembed(ctx, member : discord.Member, *, text):
@@ -812,7 +812,7 @@ async def pretendembed(ctx, member : discord.Member, *, text):
   async with aiohttp.ClientSession() as session:
     webhook = Webhook.partial(identify, token, session=session)
   embed = botembed(text)
-  await webhook.send(embed=embed, username=member.name, avatar.url=member.avatar.url)
+  await webhook.send(embed=embed, username=member.name, avatar_url=member.avatar.url)
 
 @bot.command()
 async def type(ctx):
