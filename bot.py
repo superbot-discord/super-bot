@@ -1539,8 +1539,9 @@ async def user(ctx, user: discord.Member = None, channel: discord.TextChannel = 
   except:
     pass
   f4v=""
-  if len(allroles)>1:
+  if len(allroles) > 1:
     allroles.reverse()
+    allroles = allroles[:-1]
     for count in allroles:
       f4v = f4v + count.mention+" "
     f4v = f4v[:-1]
