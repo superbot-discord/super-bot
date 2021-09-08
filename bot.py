@@ -4,6 +4,7 @@ from unicode_charnames import search_charnames
 from datetime import datetime, timedelta, timezone
 from pdf2image import convert_from_path
 from captcha.image import ImageCaptcha
+from difflib import SequenceMatcher
 from discord.ext import commands
 from discord_components import *
 import matplotlib.pyplot as plt
@@ -88,6 +89,34 @@ def number_to_emoji(text):
   text=text.replace("1",":one: ").replace("2",":two: ").replace("3",":three: ").replace("4",":four: ").replace("5",":five: ")
   text=text.replace("6",":six: ").replace("7",":seven: ").replace("8",":eight: ").replace("9",":nine: ").replace("0",":zero: ")
   return text
+
+@bot.event
+async def on_command_error(ctx, error):
+    if not isinstance(error, commands.CommandNotFound):
+        return
+
+    message = ctx.message  # later overwrite the attributes
+
+    used_prefix = ctx.prefix  # the prefix used
+    used_command = message.content.split()[0][len(used_prefix):]  # getting the command, `!foo a b c` -> `foo`
+
+    available_commands = [cmd.name for cmd in bot.commands]
+    matches = {  # command name: ratio
+        cmd: SequenceMatcher(None, cmd, used_command).ratio()
+        for cmd in available_commands
+    }
+
+    command = max(matches.items(), key=lambda item: item[1])[0]  # the most similar command
+
+    try:
+        arguments = message.content.split(" ", 1)[1]
+    except IndexError:
+        arguments = ""  # command didn't take any arguments
+
+    new_content = f"{used_prefix}{command} {arguments}".strip()
+    message.content = new_content  # overwriting the "original" message
+
+    await bot.process_commands(message)
 
 @bot.event
 async def on_voice_state_update(member, before, after):
