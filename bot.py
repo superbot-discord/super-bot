@@ -51,7 +51,7 @@ bot.remove_command('help')
 bot.load_extension("botdinfo")
 bot.load_extension("botplot")
 bot.load_extension("botanimals")
-slash = SlashCommand(bot)#, sync_commands=True)
+slash = SlashCommand(bot)
 allid=[]
 id_pattern = re.compile(r'([A-Z]{5})', re.IGNORECASE)
 verify_pattern = re.compile(r'[^ ⠀][\s\S]{0,30}?[^ ⠀]#?[\d]{4}(,|, | )?[\d+\-*/×÷%xyz()\[\]\{\}]{1,50}=[\d+\-*/×÷%xyz()\[\]\{\}]{1,50}(,|, | )?[\S ]{3,20}(,|, | )?(Red|Orange|Yellow|Green|Light( |_)?Green|Dark( |_)?Green|Cyan|Blue|Light( |_)?Blue|Dark( |_)?Blue|Purple|Pink|Brown)', re.IGNORECASE)
@@ -250,7 +250,7 @@ async def on_message(message):
               pass
             async with aiohttp.ClientSession() as session:
               webhook = Webhook.partial(identify, token, session=session)
-              await webhook.send(desc, username=message.author.name, avatar_url=message.author.avatar_url)
+              await webhook.send(desc, username=message.author.name, avatar.url=message.author.avatar.url)
             break
     except:
       pass
@@ -543,11 +543,6 @@ async def botpurge(ctx, *, num):
     await ctx.send("You don't have the required permission: Manage messages.")
 
 @bot.command()
-async def engrave(ctx, product = "list", *, text = "Your text goes here."):
-  embed = botengrave(product, text)
-  await ctx.send(embed=embed)
-
-@bot.command()
 async def python(ctx, *, script):
   output = botpython(script)
   await ctx.send(output)
@@ -795,7 +790,7 @@ async def pretend(ctx, member : discord.Member, *, message):
     identify = wh.id
   async with aiohttp.ClientSession() as session:
     webhook = Webhook.partial(identify, token, session=session)
-    await webhook.send(message, username=member.name, avatar_url=member.avatar_url)
+    await webhook.send(message, username=member.name, avatar.url=member.avatar.url)
 
 @bot.command(pass_context=True)
 async def pretendembed(ctx, member : discord.Member, *, text):
@@ -817,7 +812,7 @@ async def pretendembed(ctx, member : discord.Member, *, text):
   async with aiohttp.ClientSession() as session:
     webhook = Webhook.partial(identify, token, session=session)
   embed = botembed(text)
-  await webhook.send(embed=embed, username=member.name, avatar_url=member.avatar_url)
+  await webhook.send(embed=embed, username=member.name, avatar.url=member.avatar.url)
 
 @bot.command()
 async def type(ctx):
@@ -1198,7 +1193,7 @@ async def avatar(ctx,user: discord.Member=None):
     user=ctx.author
   desc=f"Avatar of {user.mention}"
   embed=discord.Embed(title=ti, description=desc)
-  embed.set_image(url=user.avatar_url)
+  embed.set_image(url=user.avatar.url)
   await ctx.send(embed=embed)
 
 @bot.command(aliases = ["guild"])
@@ -1347,7 +1342,7 @@ async def leftuser(ctx, *, userinput):
   else:
     desc = f"{lfuser.mention} (human)"
   embed=discord.Embed(title=ti,color=lfuser.color, description=desc)
-  embed.set_thumbnail(url=lfuser.avatar_url)
+  embed.set_thumbnail(url=lfuser.avatar.url)
   f0v=f"{lfuser.name}#{lfuser.discriminator}"
   f1v=lfuser.created_at.strftime("%d %b, %Y (%a) %H:%M:%S")
   f1ts = str(datetime.datetime.now() - lfuser.created_at)
@@ -1374,7 +1369,7 @@ async def user(ctx, user: discord.Member = None, channel: discord.TextChannel = 
   else:
     desc=f"{user.mention} (human)"
   embed=discord.Embed(title=ti,color=user.color, description=desc)
-  embed.set_thumbnail(url=user.avatar_url)
+  embed.set_thumbnail(url=user.avatar.url)
   if user.name==user.display_name:
     f0v=f"{user.name}#{user.discriminator}"
   else:

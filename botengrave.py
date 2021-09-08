@@ -1,32 +1,14 @@
-from discord.ext.commands import *
+from discord.ext import commands
 import discord
 
-def botengrave(product : str, text : str):
+@commands.command()
+async def engrave(ctx, product = "list", *, text = "Your text goes here."):
   product = product.lower()
-  product = product.replace(" ","")
-  product = product.replace("-","")
-  product = product.replace("_","")
-  product = product.replace(".","")
-  product = product.replace(",","")
-  text = text.replace("%","%25")
-  text = text.replace(" ","%20")
-  text = text.replace("+","%2B")
-  text = text.replace("/","%2F")
-  text = text.replace(":","%3A")
-  text = text.replace(";","%3B")
-  text = text.replace("[","%5B")
-  text = text.replace("]","%5D")
-  text = text.replace("{","%7B")
-  text = text.replace("}","%7D")
-  text = text.replace("=","%3D")
-  text = text.replace("|","%7C")
-  text = text.replace("#","%23")
-  text = text.replace("$","%24")
-  text = text.replace("&","%26")
-  text = text.replace("?","%3F")
-  text = text.replace("@","%40")
-  text = text.replace("^","%5E")
-  text = text.replace("`","%60")
+  product = product.replace(" ","").replace("-","").replace("_","").replace(".","").replace(",","")
+  text = text.replace("%","%25").replace(" ","%20").replace("+","%2B").replace("/","%2F").replace(":","%3A")
+  text = text.replace(";","%3B").replace("[","%5B").replace("]","%5D").replace("{","%7B").replace("}","%7D")
+  text = text.replace("=","%3D").replace("|","%7C").replace("#","%23").replace("$","%24").replace("&","%26")
+  text = text.replace("?","%3F").replace("@","%40").replace("^","%5E").replace("`","%60")
   if product == "airtag" or product == "airtags":
     embed = discord.Embed(title="Engrave on AirTags")
     embed.set_image(url="https://www.apple.com/hk/shop/preview/engrave/PX532AM/A?th=" + text + "&s=2&f=mixed")
@@ -201,4 +183,4 @@ def botengrave(product : str, text : str):
     
   else:
     embed = discord.Embed(title="Invalid product", description="")
-  return embed
+  await ctx.send(embed = embed)
