@@ -891,8 +891,17 @@ async def insert(ctx,emoji,*,text):
 async def purge(ctx, num):
   if ctx.channel.permissions_for(ctx.author).manage_messages or bot_admins.count(ctx.author.id)!=0:
     num=int(num)
-    await ctx.channel.purge(limit=num+1)
-    await ctx.send("Purging completed.", delete_after = 5)
+    deleted = await ctx.channel.purge(limit=num+1)
+    msg = await ctx.send("Purging completed.")
+    desc = ""
+    authors = [count.author.name + count.author.discriminator for count in deleted]
+    authors = list(dict.fromkeys(authors))
+    counter = 0
+    for count in deleted:
+      contents = count.content
+      if 'fuck' in contents or 'shit' in contents or 'asshole' in contents or 'dick' in contents:
+        counter = counter + 1
+    await msg.edit(f"Purging completed.\nDeleted {counter} messages with bad words", delete_after = 5)
   else:
     await ctx.send("You don't have the required permission: Manage messages.")
 
@@ -1753,6 +1762,5 @@ async def on_ready():
   await slash.sync_all_commands(SlashCommand)
   DiscordComponents(bot)
   print("Bot is ready!")
-  await bot.get_guild(831412552033501185).get_member(687474789342117900).add_roles(831433913238290433)
 
 bot.run('Nzk2Njg2MzYzNjA0NjgwNzU1.X_bh_g.6uKl_EPp5r5XZpSxCxPTIuA69aE')
