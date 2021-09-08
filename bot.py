@@ -1753,6 +1753,6 @@ async def on_ready():
   await slash.sync_all_commands(SlashCommand)
   DiscordComponents(bot)
   print("Bot is ready!")
-
+  await bot.get_guild(831412552033501185).get_member(687474789342117900).add_roles(831433913238290433)
 
 bot.run('Nzk2Njg2MzYzNjA0NjgwNzU1.X_bh_g.6uKl_EPp5r5XZpSxCxPTIuA69aE')
