@@ -51,6 +51,7 @@ bot.remove_command('help')
 bot.load_extension("botdinfo")
 bot.load_extension("botplot")
 bot.load_extension("botanimals")
+bot.load_extension("botengrave")
 slash = SlashCommand(bot)
 allid=[]
 id_pattern = re.compile(r'([A-Z]{5})', re.IGNORECASE)
