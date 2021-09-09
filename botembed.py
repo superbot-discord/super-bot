@@ -86,52 +86,19 @@ def botsimpembed(text):
 
 def botembed(text):
   textlist=text.splitlines()
-  if len(textlist) == 1:
-    embed=discord.Embed(title=textlist[0])
-    textlist = textlist[1:]
-  elif len(textlist) == 2:
-    embed=discord.Embed(title=textlist[0], url=textlist[1])
-    textlist = textlist[2:]
-  elif len(textlist) == 3:
-    embed=discord.Embed(title=textlist[0], url=textlist[1], description=textlist[2].replace("{{{newline}}}","\n"))
-    textlist = textlist[3:]
-  elif len(textlist) >= 4:
-    try:
-      embed=discord.Embed(title=textlist[0], url=textlist[1], description=textlist[2].replace("{{{newline}}}","\n"), color=int(textlist[3]))
-      textlist = textlist[4:]
-    except:
-      embed=discord.Embed(title=textlist[0], url=textlist[1], description=textlist[2].replace("{{{newline}}}","\n"))
-      textlist = textlist[3:]
+  embed = discord.Embed()
   try:
-    if len(textlist) == 1 and len(textlist[0].replace(" ", ""))!=0:
-      embed.set_author(name=textlist[0])
-      textlist = textlist[1:]
-    elif len(textlist) == 2 and len(textlist[0].replace(" ", ""))!=0 and len(textlist[1].replace(" ", ""))!=0:
-      embed.set_author(name=textlist[0], url=textlist[1])
-      textlist = textlist[2:]
-    elif len(textlist) >= 3 and len(textlist[0].replace(" ", ""))!=0 and len(textlist[2].replace(" ", ""))!=0:
-      embed.set_author(name=textlist[0], url=textlist[1], icon_url=textlist[2])
-      textlist = textlist[3:]
-    else:
-      textlist = textlist[3:]
-    if len(textlist) >= 2 and len(textlist[0].replace(" ", ""))!=0:
-      embed.set_footer(text=textlist[0], icon_url=textlist[1])
-    elif len(textlist[0].replace(" ", ""))!=0:
-      embed.set_footer(text=textlist[0])
-    textlist = textlist[2:]
-    if len(textlist) == 1 and len(textlist[0].replace(" ", ""))!=0:
-      embed.set_thumbnail(url=textlist[0])
-    textlist = textlist[1:]
-    if len(textlist) == 1 and len(textlist[0].replace(" ", ""))!=0:
-      embed.set_image(url=textlist[0])
-    textlist = textlist[1:]
-    for count in range(0, len(textlist)//3):
-      if textlist[2].lower()=="y" or textlist[2].lower()=="yes" or textlist[2].lower()=="true" or textlist[2].lower()=="1":
-        inl=True
-      else:
-        inl=False
-      embed.add_field(name=textlist[0], value=textlist[1].replace("{{{newline}}}",f"\n"), inline=inl)
-      textlist = textlist[3:]
+    embed.title            = textlist[0]
+    embed.description      = textlist[1].replace("{{{newline}}}", f"\n")
+    embed.color            = textlist[2]
+    embed.url              = textlist[3]
+    embed.set_author   (name=textlist[4])
+    embed.set_footer   (text=textlist[5])
+    embed.set_author   (name=textlist[4], url=textlist[6])
+    embed.set_image    (url =textlist[7])
+    embed.set_thumbnail(url =textlist[8])
+    embed.set_author   (name=textlist[4], url=textlist[6], icon_url=textlist[9])
+    embed.set_footer   (text=textlist[5], icon_url=textlist[10])
   except:
     pass
   return embed

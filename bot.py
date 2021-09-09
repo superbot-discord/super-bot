@@ -249,6 +249,27 @@ async def on_reaction_add(reaction, user):
     await msg.edit(embed=cache)
 
 @bot.event
+async def on_reaction_remove(reaction, user):
+  msg = reaction.message
+  if msg.id in polls and user.id != 796686363604680755:
+    cache_embed = msg.embeds[0]
+    desc = ""
+    msg_dict = poll_options[msg.id]
+    for count in msg_dict.keys():
+      current_reaction = ems.encode(msg_dict[count])
+      await msg.add_reaction(current_reaction)
+      for count2 in msg.reactions:
+        if count2.emoji == current_reaction:
+          current_reaction = count2.emoji
+          counter = 0
+          async for count3 in count2.users():
+            if count3.id != 796686363604680755:
+              counter = counter + 1
+          desc = desc + f"{count2.emoji} {count} ("+ str(counter) +f")\n"
+    cache = discord.Embed(title = cache_embed.title, description = em.encode(desc))
+    await msg.edit(embed=cache)
+
+@bot.event
 async def on_message(message):
   if message.guild.id == 852899227004305458 and message.author.id != 796686363604680755 and message.channel.id in [856053769149874196, 864757953121878026, 864754633910255646]:
     await message.add_reaction("<:UpArrowSquare:864762633194569728>")
@@ -1758,6 +1779,7 @@ async def _ping(ctx : SlashContext):
 
 @bot.event
 async def on_ready():
+  print("Bot is getting started…")
   activity = discord.Activity(type=discord.ActivityType.playing, name="with =help")
   await bot.change_presence(status=discord.Status.idle, activity=activity)
   await slash.sync_all_commands(SlashCommand)
