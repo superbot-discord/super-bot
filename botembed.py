@@ -90,7 +90,10 @@ def botembed(text):
   try:
     embed.title            = textlist[0]
     embed.description      = textlist[1].replace("{{{newline}}}", f"\n")
-    embed.color            = textlist[2]
+    try:
+      embed.color          = int(textlist[2])
+    except:
+      pass
     embed.url              = textlist[3]
     embed.set_author   (name=textlist[4])
     embed.set_footer   (text=textlist[5])
