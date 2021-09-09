@@ -89,19 +89,50 @@ def botembed(text):
   embed = discord.Embed()
   try:
     embed.title            = textlist[0]
+  except:
+    pass
+  try:
     embed.description      = textlist[1].replace("{{{newline}}}", f"\n")
-    try:
-      embed.color          = int(textlist[2])
-    except:
-      pass
+  except:
+    pass
+  try:
+    embed.color          = int(textlist[2])
+  except:
+    pass
+  try:
     embed.url              = textlist[3]
+  except:
+    pass
+  try:
     embed.set_author   (name=textlist[4])
+  except:
+    pass
+  try:
     embed.set_footer   (text=textlist[5])
+  except:
+    pass
+  try:
     embed.set_author   (name=textlist[4], url=textlist[6])
+  except:
+    pass
+  try:
     embed.set_image    (url =textlist[7])
+  except:
+    pass
+  try:
     embed.set_thumbnail(url =textlist[8])
+  except:
+    pass
+  try:
     embed.set_author   (name=textlist[4], url=textlist[6], icon_url=textlist[9])
+  except:
+    pass
+  try:
     embed.set_footer   (text=textlist[5], icon_url=textlist[10])
   except:
     pass
+  for count in range(0, (len(textlist)-11)//3):
+    inline = textlist[3*count+11].lower()
+    inline = inline.startswith("y") or inline.startswith("1") or inline.startswith("e") or inline.startswith("on")
+    embed.add_field(name=textlist[3*count+12], value=textlist[3*count+13], inline=inline)
   return embed
