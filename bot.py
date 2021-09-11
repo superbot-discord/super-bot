@@ -91,34 +91,6 @@ def number_to_emoji(text):
   return text
 
 @bot.event
-async def on_command_error(ctx, error):
-    if not isinstance(error, commands.CommandNotFound):
-        return
-
-    message = ctx.message  # later overwrite the attributes
-
-    used_prefix = ctx.prefix  # the prefix used
-    used_command = message.content.split()[0][len(used_prefix):]  # getting the command, `!foo a b c` -> `foo`
-
-    available_commands = [cmd.name for cmd in bot.commands]
-    matches = {  # command name: ratio
-        cmd: SequenceMatcher(None, cmd, used_command).ratio()
-        for cmd in available_commands
-    }
-
-    command = max(matches.items(), key=lambda item: item[1])[0]  # the most similar command
-
-    try:
-        arguments = message.content.split(" ", 1)[1]
-    except IndexError:
-        arguments = ""  # command didn't take any arguments
-
-    new_content = f"{used_prefix}{command} {arguments}".strip()
-    message.content = new_content  # overwriting the "original" message
-
-    await bot.process_commands(message)
-
-@bot.event
 async def on_voice_state_update(member, before, after):
   try:
     if before.channel.id == 822750915466493982 and after.channel == None:
@@ -271,22 +243,23 @@ async def on_reaction_remove(reaction, user):
 
 @bot.event
 async def on_command_error(ctx, error):
-  if not isinstance(error, commands.CommandNotFound):
-    return
-  message = ctx.message
-  used_prefix = ctx.prefix
-  used_command = message.content.split()[0][len(used_prefix):]
-  available_commands = [cmd.name for cmd in bot.commands]
-  matches = {cmd: SequenceMatcher(None, cmd, used_command).ratio() for cmd in available_commands}
-  command = max(matches.items(), key=lambda item: item[1])[0]
-  try:
-    arguments = message.content.split(" ", 1)[1]
-  except IndexError:
-    arguments = ""
-  new_content = f"{used_prefix}{command} {arguments}".strip()
-  message.content = new_content
-  await ctx.send(f'Your might have made a typo and your command has been interpreted as {command}.', delete_after=4)
-  await bot.process_commands(message)
+  if isinstance(error, commands.CommandNotFound):
+    message = ctx.message
+    used_prefix = ctx.prefix
+    used_command = message.content.split()[0][len(used_prefix):]
+    available_commands = [cmd.name for cmd in bot.commands]
+    matches = {cmd: SequenceMatcher(None, cmd, used_command).ratio() for cmd in available_commands}
+    command = max(matches.items(), key=lambda item: item[1])[0]
+    try:
+      arguments = message.content.split(" ", 1)[1]
+    except IndexError:
+      arguments = ""
+    new_content = f"{used_prefix}{command} {arguments}".strip()
+    message.content = new_content
+    await ctx.send(f'Your might have made a typo and your command has been interpreted as {command}.', delete_after=4)
+    await bot.process_commands(message)
+  elif isinstance(error, commands.MissingRequiredArgument):
+    await ctx.send(f'You missed one or more arguments! {len(ctx.command.clean_params.keys())} argument(s) are required.\nNote: Multiline arguments are treated as one argument.')
 
 @bot.event
 async def on_message(message):
