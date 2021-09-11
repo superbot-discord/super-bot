@@ -270,6 +270,25 @@ async def on_reaction_remove(reaction, user):
     await msg.edit(embed=cache)
 
 @bot.event
+async def on_command_error(ctx, error):
+  if not isinstance(error, commands.CommandNotFound):
+    return
+  message = ctx.message
+  used_prefix = ctx.prefix
+  used_command = message.content.split()[0][len(used_prefix):]
+  available_commands = [cmd.name for cmd in bot.commands]
+  matches = {cmd: SequenceMatcher(None, cmd, used_command).ratio() for cmd in available_commands}
+  command = max(matches.items(), key=lambda item: item[1])[0]
+  try:
+    arguments = message.content.split(" ", 1)[1]
+  except IndexError:
+    arguments = ""
+  new_content = f"{used_prefix}{command} {arguments}".strip()
+  message.content = new_content
+  await ctx.send(f'Your might have made a typo and your command has been interpreted as {command}.', delete_after=4)
+  await bot.process_commands(message)
+
+@bot.event
 async def on_message(message):
   if message.guild.id == 852899227004305458 and message.author.id != 796686363604680755 and message.channel.id in [856053769149874196, 864757953121878026, 864754633910255646]:
     await message.add_reaction("<:UpArrowSquare:864762633194569728>")
@@ -1449,79 +1468,47 @@ async def user(ctx, user: discord.Member = None, channel: discord.TextChannel = 
     f2va = re.sub(r'([\d]+) days, (\d{1,2}):(\d{2}):(\d{2})', r'\1 days \2 hrs \3 mins \4 secs', f2ts)[:-7] + f"\n≈ "+str((int(f2ts.split(" days, ")[0]))//365) + " years " + str(int(f2ts.split(" days, ")[0]) % 365) + " days"
   allroles=user.roles
   f3v=""
-  if channel.permissions_for(user).administrator:
-    f3v=f3v+"Admin, "
-  if channel.permissions_for(user).manage_guild:
-    f3v=f3v+"Manage Server, "
-  if channel.permissions_for(user).manage_roles:
-    f3v=f3v+"Manage Roles, "
-  if channel.permissions_for(user).administrator:
-    f3v=f3v+"Manage Permissions, "
-  if channel.permissions_for(user).view_audit_log:
-    f3v=f3v+"View Audit Logs, "
-  if channel.permissions_for(user).view_guild_insights:
-    f3v=f3v+"View Server Insights, "
-  if channel.permissions_for(user).kick_members:
-    f3v=f3v+"Kick Members, "
-  if channel.permissions_for(user).ban_members:
-    f3v=f3v+"Ban Members, "
-  if channel.permissions_for(user).manage_nicknames:
-    f3v=f3v+"Manage Nicknames, "
-  if channel.permissions_for(user).manage_webhooks:
-    f3v=f3v+"Manage Webhooks, "
-  if channel.permissions_for(user).manage_emojis:
-    f3v=f3v+"Manage Emojis, "
-  if channel.permissions_for(user).manage_nicknames:
-    f3v=f3v+"Change Nickname, "
-  if channel.permissions_for(user).mention_everyone:
-    f3v=f3v+"Mention Everyone, "
-  if channel.permissions_for(user).create_instant_invite:
-    f3v=f3v+"Create Invite, "
+  f3v += ("Admin, " if channel.permissions_for(user).administrator else "")
+  f3v += ("Manage Server, " if channel.permissions_for(user).manage_guild else "")
+  f3v += ("Manage Roles, " if channel.permissions_for(user).manage_roles else "")
+  f3v += ("Manage Permissions, " if channel.permissions_for(user).administrator else "")
+  f3v += ("View Audit Logs, " if channel.permissions_for(user).view_audit_log else "")
+  f3v += ("View Server Insights, " if channel.permissions_for(user).view_guild_insights else "")
+  f3v += ("Kick Members, " if channel.permissions_for(user).kick_members else "")
+  f3v += ("Ban Members, " if channel.permissions_for(user).ban_members else "")
+  f3v += ("Manage Nicknames, " if channel.permissions_for(user).manage_nicknames else "")
+  f3v += ("Manage Webhooks, " if channel.permissions_for(user).manage_webhooks else "")
+  f3v += ("Manage Emojis, " if channel.permissions_for(user).manage_emojis else "")
+  f3v += ("Change Nickname, " if channel.permissions_for(user).manage_nicknames else "")
+  f3v += ("Mention Everyone, " if channel.permissions_for(user).mention_everyone else "")
+  f3v += ("Create Invite, " if channel.permissions_for(user).create_instant_invite else "")
   f3v=f3v[:-2]
   if f3v=="":
     f3v="No permissions"
   f3vb=""
-  if channel.permissions_for(user).view_channel:
-    f3vb=f3vb+"View Channel, "
-  if channel.permissions_for(user).read_messages:
-    f3vb=f3vb+"Read Messages, "
-  if channel.permissions_for(user).read_message_history:
-    f3vb=f3vb+"Read Message History, "
-  if channel.permissions_for(user).send_messages:
-    f3vb=f3vb+"Send Messages, "
-  if channel.permissions_for(user).send_tts_messages:
-    f3vb=f3vb+"Send TTS Messages, "
-  if channel.permissions_for(user).add_reactions:
-    f3vb=f3vb+"Add Reactions, "
-  if channel.permissions_for(user).external_emojis:
-    f3vb=f3vb+"External Emojis, "
-  if channel.permissions_for(user).attach_files:
-    f3vb=f3vb+"Attach Files, "
-  if channel.permissions_for(user).embed_links:
-    f3vb=f3vb+"Embed Links, "
+  f3vb += ("View Channel, "         if channel.permissions_for(user).view_channel else "")
+  f3vb += ("Read Messages, "        if channel.permissions_for(user).read_messages else "")
+  f3vb += ("Read Message History, " if channel.permissions_for(user).read_message_history else "")
+  f3vb += ("Send Messages, "        if channel.permissions_for(user).send_messages else "")
+  f3vb += ("Send TTS Messages, "    if channel.permissions_for(user).send_tts_messages else "")
+  f3vb += ("Add Reactions, "        if channel.permissions_for(user).add_reactions else "")
+  f3vb += ("External Emojis, "      if channel.permissions_for(user).external_emojis else "")
+  f3vb += ("Attach Files, "         if channel.permissions_for(user).attach_files else "")
+  f3vb += ("Embed Links, "          if channel.permissions_for(user).embed_links else "")
   f3vb=f3vb[:-2]
   if f3vb=="":
     f3vb="No permissions"
   
   f3ve=""
-  if user.guild_permissions.connect:
-    f3ve=f3ve+"Connect, "
-  if user.guild_permissions.speak:
-    f3ve=f3ve+"Speak (Audio), "
-  if user.guild_permissions.stream:
-    f3ve=f3ve+"Stream (Video), "
-  if user.guild_permissions.use_voice_activation:
-    f3ve=f3ve+"Use Voice Activity, "
-  if user.guild_permissions.priority_speaker:
-    f3ve=f3ve+"Priority Speaker, "
-  if user.guild_permissions.mute_members:
-    f3ve=f3ve+"Mute Memvers, "
-  if user.guild_permissions.deafen_members:
-    f3ve=f3ve+"Deafen Members, "
-  if user.guild_permissions.move_members:
-    f3ve=f3ve+"Move Members, "
-  if user.guild_permissions.request_to_speak:
-    f3ve=f3ve+"Request to Speak, "
+  f3ve += ("Connect, "            if user.guild_permissions.connect else "")
+  f3ve += ("Speak (Audio), "      if user.guild_permissions.speak else "")
+  f3ve += ("Stream (Video), "     if user.guild_permissions.stream else "")
+  f3ve += ("Use Voice Activity, " if user.guild_permissions.use_voice_activation else "")
+  f3ve += ("Priority Speaker, "   if user.guild_permissions.priority_speaker else "")
+  f3ve += ("Mute Memvers, "       if user.guild_permissions.mute_members else "")
+  f3ve += ("Deafen Members, "     if user.guild_permissions.deafen_members else "")
+  f3ve += ("Move Members, "       if user.guild_permissions.move_members else "")
+  f3ve += ("Request to Speak, "   if user.guild_permissions.request_to_speak else "")
   f3ve=f3ve[:-2]
   if f3ve=="":
     f3ve="No permissions"
@@ -1569,36 +1556,20 @@ async def user(ctx, user: discord.Member = None, channel: discord.TextChannel = 
   else:
     f4v="No roles"
   f5v = ""
-  if user.public_flags.staff:
-    f5v = f5v + f"**Staff:** The user is a Discord Employee.\n"
-  if user.public_flags.partner:
-    f5v = f5v + f"**Partner:** The user is a Discord Partner.\n"
-  if user.public_flags.hypesquad:
-    f5v = f5v + f"**Hypesquad:** The user is a HypeSquad Events member.\n"
-  if user.public_flags.early_supporter:
-    f5v = f5v + f"**Early Support:** The user is an Early Supporter.\n"
-  if user.public_flags.team_user:
-    f5v = f5v + f"**Team User:** The user is a Team User.\n"
-  if user.public_flags.bug_hunter:
-    f5v = f5v + f"**Bug Hunter:** The user is a Bug Hunter.\n"
-  if user.public_flags.bug_hunter_level_2:
-    f5v = f5v + f"**Bug Hunter 2:** The user is a Bug Hunter (Level 2).\n"
-  if user.public_flags.system:
-    f5v = f5v + f"**System:** The user is a system user (represents Discord officially).\n"
-  if user.public_flags.verified_bot_developer:
-    f5v = f5v + f"**Developer:** The user is a Verified Bot Developer.\n"
-  if user.public_flags.verified_bot:
-    f5v = f5v + f"**✔︎Bot:** The user is a Verified Bot.\n"
-  if user.public_flags.hypesquad_bravery:
-    f5v = f5v + f"**Hypesquad:** The user is in the Hypesquad Bravery House.\n"
-  if user.public_flags.hypesquad_brilliance:
-    f5v = f5v + f"**Hypesquad:** The user is in the Hypesquad Brilliance House.\n"
-  if user.public_flags.hypesquad_balance:
-    f5v = f5v + f"**Hypesquad:** The user is in the Hypesquad Balance House.\n"
-  if len(f5v) == 0:
-    f5v = "No badges"
-  else:
-    f5v = f5v[:-1]
+  f5v = f5v + (f"**Staff:** The user is a Discord Employee.\n"                             if user.public_flags.staff else "")
+  f5v = f5v + (f"**Partner:** The user is a Discord Partner.\n"                            if user.public_flags.partner else "")
+  f5v = f5v + (f"**Hypesquad:** The user is a HypeSquad Events member.\n"                  if user.public_flags.hypesquad else "")
+  f5v = f5v + (f"**Early Support:** The user is an Early Supporter.\n"                     if user.public_flags.early_supporter else "")
+  f5v = f5v + (f"**Team User:** The user is a Team User.\n"                                if user.public_flags.team_user else "")
+  f5v = f5v + (f"**Bug Hunter:** The user is a Bug Hunter.\n"                              if user.public_flags.bug_hunter else "")
+  f5v = f5v + (f"**Bug Hunter 2:** The user is a Bug Hunter (Level 2).\n"                  if user.public_flags.bug_hunter_level_2 else "")
+  f5v = f5v + (f"**System:** The user is a system user (represents Discord officially).\n" if user.public_flags.system else "")
+  f5v = f5v + (f"**Developer:** The user is a Verified Bot Developer.\n"                   if user.public_flags.verified_bot_developer else "")
+  f5v = f5v + (f"**✔︎Bot:** The user is a Verified Bot.\n"                                  if user.public_flags.verified_bot else "")
+  f5v = f5v + (f"**Hypesquad:** The user is in the Hypesquad Bravery House.\n"             if user.public_flags.hypesquad_bravery else "")
+  f5v = f5v + (f"**Hypesquad:** The user is in the Hypesquad Brilliance House.\n"          if user.public_flags.hypesquad_brilliance else "")
+  f5v = f5v + (f"**Hypesquad:** The user is in the Hypesquad Balance House.\n"             if user.public_flags.hypesquad_balance else "")
+  f5v = "No badges" if len(f5v) == 0 else None
   embed.add_field(name="Time since user registered", value=f1va, inline=True)
   embed.add_field(name="Time since user joined", value=f2va, inline=True)
   embed.add_field(name="Name", value=f0v, inline=False)

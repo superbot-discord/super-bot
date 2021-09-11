@@ -51,37 +51,49 @@ def botett(msg):
 
 def botquickembed(text):
   textlist=text.splitlines()
+  embed = discord.Embed()
   try:
-    embed=discord.Embed(title=textlist[0], description="\n".join(textlist[2:]), color = int(textlist[1]))
+    embed.title            = textlist[0]
   except:
-    try:
-      embed=discord.Embed(title=textlist[0], color = int(textlist[1]))
-    except:
-      embed=discord.Embed(title=textlist[0])
+    pass
+  try:
+    embed.color          = int(textlist[1])
+  except:
+    pass
+  try:
+    embed.set_image    (url =textlist[2])
+  except:
+    pass
+  try:
+    embed.description      = textlist[3:]
+  except:
+    pass
   
   return embed
 
 def botsimpembed(text):
   textlist=text.splitlines()
-  if len(textlist) == 1:
-    embed=discord.Embed(title=textlist[0])
-  elif len(textlist) >= 2:
-    try:
-      embed=discord.Embed(title=textlist[0], description=textlist[1].replace("{{{newline}}}",f"\n"))
-    except:
-      embed=discord.Embed(description=textlist[1].replace("{{{newline}}}",f"\n"))
-    textlist = textlist[1:]
-  textlist = textlist[1:]
-  if len(textlist) >= 1:
-    embed.set_image(url=textlist[0])
-    textlist = textlist[1:]
-  for count in range(0,len(textlist)//3):
-    if textlist[2].lower()=="y" or textlist[2].lower()=="yes" or textlist[2].lower()=="true" or textlist[2].lower()=="1":
-      inl=True
-    else:
-      inl=False
-    embed.add_field(name=textlist[0], value=textlist[1].replace("{{{newline}}}",f"\n"), inline=inl)
-    textlist = textlist[3:]
+  embed = discord.Embed()
+  try:
+    embed.title            = textlist[0]
+  except:
+    pass
+  try:
+    embed.description      = textlist[1].replace("{{{newline}}}", f"\n")
+  except:
+    pass
+  try:
+    embed.color          = int(textlist[2])
+  except:
+    pass
+  try:
+    embed.set_image    (url =textlist[3])
+  except:
+    pass
+  for count in range(0, (len(textlist)-11)//3):
+    inline = textlist[3*count+11].lower()
+    inline = inline.startswith("y") or inline.startswith("1") or inline.startswith("e") or inline.startswith("on")
+    embed.add_field(name=textlist[3*count+12], value=textlist[3*count+13], inline=inline)
   return embed
 
 def botembed(text):
