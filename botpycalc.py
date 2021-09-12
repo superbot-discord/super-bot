@@ -9,9 +9,10 @@ import re
 import json
 
 f = open('database.json', 'r')
-contents = f.read()
+db = json.loads(f.read())
 f.close()
-SY2VA = json.loads(contents)
+SY2VA = db[1]
+ASCII = db[0]
 
 def botpython(script : str):
   python_pattern = re.compile(r'^\`\`\`(py|python)?\n[\s\S]*\`\`\`$')
@@ -82,6 +83,13 @@ async def base(ctx, frombase : int, tobase : int, *, text):
     integer, value = divmod(integer, tobase)
     array.append(VA2SY[value])
   answer = ''.join(reversed(array))
+  await ctx.send(answer)
+
+@commands.command()
+async def ascii(ctx, *, text):
+  answer = ""
+  for character in text:
+    answer = answer + ASCII[character]
   await ctx.send(answer)
 
 def botcalc(arg : str):
