@@ -1,44 +1,46 @@
-from discord_slash.utils.manage_commands import create_option, create_choice
-from discord_slash import SlashCommand, SlashContext
-from unicode_charnames import search_charnames
+import asyncio
+import datetime
+import json
+import os
+import random as ra
+import re
+import typing
+from cmath import *
 from datetime import datetime, timedelta, timezone
-from pdf2image import convert_from_path
-from captcha.image import ImageCaptcha
 from difflib import SequenceMatcher
+from math import *
+
+import aiohttp
+import ascii as asc
+import emojis as ems
+import matplotlib.pyplot as plt
+import numpy as np
+import PIL
+import pytesseract
+import pytube
+import qr_img
+import requests
+from captcha.image import ImageCaptcha
+from discord import Webhook
 from discord.ext import commands
 from discord_components import *
-import matplotlib.pyplot as plt
-from discord import Webhook
-import emojis as ems
-from cmath import *
-import ascii as asc
-import random as ra
-import pytesseract
-import numpy as np
-from math import *
-import datetime
-import requests
-import aiohttp
-import asyncio
-import qr_img
-import pytube
-import typing
-import PIL
-import re
-import os
+from discord_slash import SlashCommand, SlashContext
+from discord_slash.utils.manage_commands import create_choice, create_option
+from pdf2image import convert_from_path
+from unicode_charnames import search_charnames
 
-from simplecolour import simple_colours_raw
-from botwebscrape import *
-from botmoderate import *
-from botwebinfo import *
-from botengrave import *
 from botanimals import *
-from botpycalc import *
 from botbasic import *
 from botdinfo import *
 from botembed import *
-from botplot import *
+from botengrave import *
 from botinfo import *
+from botmoderate import *
+from botplot import *
+from botpycalc import *
+from botwebinfo import *
+from botwebscrape import *
+from simplecolour import simple_colours_raw
 
 simple_colours_options = []
 for count in simple_colours_raw:
@@ -53,8 +55,8 @@ bot.load_extension("botdinfo")
 bot.load_extension("botplot")
 bot.load_extension("botanimals")
 bot.load_extension("botengrave")
+bot.load_extension("botpycalc")
 slash = SlashCommand(bot)
-allid=[]
 id_pattern = re.compile(r'([A-Z]{5})', re.IGNORECASE)
 verify_pattern = re.compile(r'[^ ⠀][\s\S]{0,30}?[^ ⠀]#?[\d]{4}(,|, | )?[\d+\-*/×÷%xyz()\[\]\{\}]{1,50}=[\d+\-*/×÷%xyz()\[\]\{\}]{1,50}(,|, | )?[\S ]{3,20}(,|, | )?(Red|Orange|Yellow|Green|Light( |_)?Green|Dark( |_)?Green|Cyan|Blue|Light( |_)?Blue|Dark( |_)?Blue|Purple|Pink|Brown)', re.IGNORECASE)
 poll_pattern = re.compile(r'([\w]+?)(:\w{2,32}:|[\uD800-\uDBFF])')
@@ -62,28 +64,17 @@ UNITS = {'s':'seconds', 'm':'minutes', 'h':'hours', 'd':'days', 'w':'weeks'}
 image = ImageCaptcha()
 typer=0
 cmaphsv = plt.cm.hsv
-def func(pct, allvals):
-  absolute = int(pct/100*np.sum(allvals))
-  return "{:d} ({:.1f}%)".format(absolute, int(pct))
-sniper1={}
-sniper2={}
-sniper3={}
-sniper4={}
-sniper5={}
-sniperdate1={}
-sniperdate2={}
-sniperdate3={}
-sniperdate4={}
-sniperdate5={}
-sniperdict={}
-sniping={}
-snipereactions=[]
+sniper1=sniper2=sniper3=sniper4=sniper5=sniperdate1=sniperdate2=sniperdate3=sniperdate4=sniperdate5=sniperdict=sniping=poll_options={}
+snipereactions=polls=allid=[]
 overwrite = discord.PermissionOverwrite()
 overwrite.view_channel = True
-polls = []
-poll_options = {}
 
+f = open('database.json', 'r')
+contents = f.read()
+f.close()
+SY2VA = json.loads(contents)
 botadmin = lambda context : context.author.id == 687474789342117900
+func = lambda pct, allvals : "{:d} ({:.1f}%)".format(int(pct/100*np.sum(allvals)), int(pct))
 
 def number_to_emoji(text):
   text=text.replace("1",":one: ").replace("2",":two: ").replace("3",":three: ").replace("4",":four: ").replace("5",":five: ")
@@ -332,8 +323,7 @@ async def qrmake(ctx, *, text):
 
 @bot.command()
 async def verify(ctx):
-  if ctx.message.guild.id == 823405852131328001:
-    if ctx.author.roles.count(ctx.guild.get_role(823407479303569419))==1:
+  if ctx.message.guild.id == 823405852131328001 and ctx.author.roles.count(ctx.guild.get_role(823407479303569419))==1:
       overdict = ctx.message.guild.get_channel(823410283723620362).overwrites
       verifiedmem = list(overdict)[0]
       theinvite = await bot.get_guild(806083349688877077).get_channel(806085319521992705).create_invite(max_age=300, max_uses=1)

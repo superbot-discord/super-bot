@@ -1,4 +1,4 @@
-from discord.ext.commands import *
+from discord.ext import commands
 from math import *
 from cmath import *
 import random as ra
@@ -6,6 +6,7 @@ import numpy as np
 from math import *
 import subprocess
 import re
+from bot import SY2VA
 
 def botpython(script : str):
   python_pattern = re.compile(r'^\`\`\`(py|python)?\n[\s\S]*\`\`\`$')
@@ -57,6 +58,25 @@ def botdefine(function : str, definition : str, argumentsraw : str):
     exec(program, globals(), globals())
     return "Add_Reaction"
 
+@commands.command()
+async def base(ctx, text, frombase, tobase):
+  integer = 0
+  for character in text:
+    if character not in SY2VA:
+      await ctx.send('Found unknown character!')
+    value = SY2VA[character]
+    if value >= frombase:
+      await ctx.send('Found digit outside base!')
+    integer *= frombase
+    integer += value
+  VA2SY = dict(map(reversed, SY2VA.items()))
+  array = []
+  while integer:
+    integer, value = divmod(integer, tobase)
+    array.append(VA2SY[value])
+  answer = ''.join(reversed(array))
+  await ctx.send(answer)
+
 def botcalc(arg : str):
   if arg == "None":
     return "Invalid format! Please use the format `=calc [formula]`."
@@ -87,3 +107,6 @@ def botcalc(arg : str):
       return "Add_Reaction"
     else:
       return "Invalid input, please try again."
+
+def setup(bot):
+  bot.add_command(base)

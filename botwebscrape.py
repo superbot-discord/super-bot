@@ -147,8 +147,6 @@ def botcovid(country : str):
     embed.set_thumbnail(url="attachment://pc2.png")
     embed.set_image(url="attachment://pc1.png")
     return [filelist, embed]
-    os.remove('pc1.png')
-    os.remove('pc2.png')
   else:
     return "Invalid country. Please try again."
 
