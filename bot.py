@@ -1,6 +1,5 @@
 import asyncio
 import datetime
-import json
 import os
 import random as ra
 import re
@@ -69,10 +68,6 @@ snipereactions=polls=allid=[]
 overwrite = discord.PermissionOverwrite()
 overwrite.view_channel = True
 
-f = open('database.json', 'r')
-contents = f.read()
-f.close()
-SY2VA = json.loads(contents)
 botadmin = lambda context : context.author.id == 687474789342117900
 func = lambda pct, allvals : "{:d} ({:.1f}%)".format(int(pct/100*np.sum(allvals)), int(pct))
 

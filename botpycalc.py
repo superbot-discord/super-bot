@@ -6,7 +6,12 @@ import numpy as np
 from math import *
 import subprocess
 import re
-from bot import SY2VA
+import json
+
+f = open('database.json', 'r')
+contents = f.read()
+f.close()
+SY2VA = json.loads(contents)
 
 def botpython(script : str):
   python_pattern = re.compile(r'^\`\`\`(py|python)?\n[\s\S]*\`\`\`$')
