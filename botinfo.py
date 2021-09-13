@@ -7,6 +7,7 @@ import pytz
 import re
 set(pytz.all_timezones_set)
 hexstring_pattern = re.compile(r'#?([0-9A-F]{2})([0-9A-F]{2})([0-9A-F]{2})', re.IGNORECASE)
+rgbtoper = lambda input: str(input/2.55)+"%"
 
 def botregex(regularexp, text):
   theregex = r"(?P<LargestCapturingGroup>"+regularexp+")"
@@ -36,21 +37,22 @@ def botregsub(regular1, regular2, text):
   embed.set_author(name="Substitution Result for "+regular1)
   return embed
 
-def botcolor(arg1, arg2, arg3):
-  args = arg1, arg2, arg3
-  match = hexstring_pattern.fullmatch(arg1)
-  if all(arg and arg.isdigit() and 0 <= int(arg) < 256 for arg in args):
-    desc = f'RGB: {arg1},{arg2},{arg3}'
-    r, g, b = map(int, args)
-  elif arg1.isdigit() and 0 <= int(arg1) < 2 ** 24:
-    desc = f'Decimal: {arg1}'
-    n = int(arg1)
+def botcolor(color):
+  colors = re.split(',|\s|;|/|\||\\|&', color)
+  match = hexstring_pattern.fullmatch(colors[0])
+  if all(arg and arg.isdigit() and 0 <= int(arg) < 256 for arg in colors) and len(colors)>2:
+    desc = f'RGB: {colors[0]}, {colors[1]}, {colors[2]}'
+    r, g, b = map(int, colors)
+  elif colors[0].isdigit() and 0 <= int(colors[0]) < 2 ** 24:
+    desc = f'Decimal: {colors[0]}'
+    n = int(colors[0])
     r, g, b = n >> 16, (n >> 8) & 255, n & 255
   elif match:
-    desc = f'Hex: {arg1}'
+    desc = f'Hex: {colors[0]}'
     r, g, b = (int(val, 16) for val in match.groups())
   else:
     return "Please specify a correct colour value."
+  r1, g1, b1 = (rgbtoper(r), rgbtoper(g), rgbtoper(b))
   deci = (r << 16) + (g << 8) + b
   hex_ = f'{deci:02x}'.upper()
   if len(hex_)!=6:
@@ -58,10 +60,11 @@ def botcolor(arg1, arg2, arg3):
       hex_="0"+hex_
   page = requests.get('https://www.colorhexa.com/'+hex_)
   soup = BeautifulSoup(page.content, 'html.parser')
-  results = soup.find(id='header-title')
-  ti = re.sub(r'([\w]+?) \/ #[\da-f]{6} hex color',r'\1',results.text)
-  embed = discord.Embed(title='Colour information: '+ti, description=desc, color=deci)
-  embed.add_field(name='RGB', value=f'{r},{g},{b}', inline=True)
+  result1 = soup.find(id='header-title')
+  ti = re.sub(r'([\w]+?) \/ #[\da-f]{6} hex color',r'\1',result1.text)
+  result2 = soup.find_all("strong")[0].text
+  embed = discord.Embed(title='Colour information: '+ti, description=result2, color=deci)
+  embed.add_field(name='RGB', value=f'{r}, {g}, {b}\n{r1}, {g1}, {b1}', inline=True)
   embed.add_field(name='Hex Code', value=f'#{hex_}', inline=True)
   embed.add_field(name='Decimal Value', value=deci, inline=True)
   embed.set_thumbnail(url=f'https://htmlcolors.com/color-image/{hex_}.png')

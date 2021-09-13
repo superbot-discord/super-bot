@@ -997,8 +997,8 @@ async def purgeuser(ctx, num, userinput : discord.User):
     await ctx.send("You don't have the required permission: Manage messages.")
 
 @bot.command(aliases=["colour"])
-async def color(ctx, arg1, arg2=None, arg3=None):
-    output = botcolor(arg1, arg2, arg3)
+async def color(ctx, *, name):
+    output = botcolor(name)
     if output == "Please specify a correct colour value.":
       await ctx.send(output)
     else:
