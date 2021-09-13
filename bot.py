@@ -3,6 +3,7 @@ import datetime
 import os
 import random as ra
 import re
+import sys
 import typing
 from cmath import *
 from datetime import datetime, timedelta, timezone
@@ -246,6 +247,8 @@ async def on_command_error(ctx, error):
     await bot.process_commands(message)
   elif isinstance(error, commands.MissingRequiredArgument):
     await ctx.send(f'You missed one or more arguments! {len(ctx.command.clean_params.keys())} argument(s) are required.\nNote: Multiline arguments are treated as one argument.')
+  else:
+    print(sys.exc_info)
 
 @bot.event
 async def on_message(message):

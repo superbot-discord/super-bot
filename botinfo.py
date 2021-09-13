@@ -7,7 +7,7 @@ import pytz
 import re
 set(pytz.all_timezones_set)
 hexstring_pattern = re.compile(r'#?([0-9A-F]{2})([0-9A-F]{2})([0-9A-F]{2})', re.IGNORECASE)
-rgbtoper = lambda input: str(round(input/2.55), 3)+"%"
+rgbtoper = lambda input: str(round(input/0.0255)/100)+"%"
 
 def botregex(regularexp, text):
   theregex = r"(?P<LargestCapturingGroup>"+regularexp+")"
