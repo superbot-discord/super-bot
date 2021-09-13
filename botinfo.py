@@ -62,7 +62,7 @@ def botcolor(color):
   soup = BeautifulSoup(page.content, 'html.parser')
   result1 = soup.find(id='header-title')
   ti = re.sub(r'([\w]+?) \/ #[\da-f]{6} hex color',r'\1',result1.text)
-  result2 = soup.find_all("strong")[1].text
+  result2 = soup.find_all("strong")[2].text
   embed = discord.Embed(title='Colour information: '+ti, description=result2, color=deci)
   embed.add_field(name='RGB', value=f'{r}, {g}, {b}\n{r1}, {g1}, {b1}', inline=True)
   embed.add_field(name='Hex Code', value=f'#{hex_}', inline=True)
