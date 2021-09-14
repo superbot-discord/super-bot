@@ -245,7 +245,7 @@ async def on_command_error(ctx, error):
   elif isinstance(error, commands.MissingRequiredArgument):
     await ctx.send(f'You missed one or more arguments! {len(ctx.command.clean_params.keys())} argument(s) are required.\nNote: Multiline arguments are treated as one argument.')
   else:
-    print(sys.exc_info)
+    print(error.name)
 
 @bot.event
 async def on_message(message):
@@ -300,7 +300,7 @@ async def unicode(ctx, *, query):
 async def encode(ctx, code, *, text):
   if code.startswith('sha'):
     a = hashlib.sha256()
-    a.update(code)
+    a.update(bytes(text, encoding='utf-8'))
     await ctx.send(a.hexdigest())
 
 @bot.command()
@@ -1715,11 +1715,12 @@ async def _ping(ctx : SlashContext):
 
 @bot.event
 async def on_ready():
-  print("Bot is getting started…")
+  print('Bot is preparing itself…')
   activity = discord.Activity(type=discord.ActivityType.playing, name="with =help")
   await bot.change_presence(status=discord.Status.idle, activity=activity)
   await slash.sync_all_commands(SlashCommand)
   DiscordComponents(bot)
   print("Bot is ready!")
 
+print("Bot is getting started…")
 bot.run('Nzk2Njg2MzYzNjA0NjgwNzU1.X_bh_g.6uKl_EPp5r5XZpSxCxPTIuA69aE')
