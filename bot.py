@@ -1,6 +1,7 @@
 import asyncio
 import datetime
 import hashlib
+from logging import exception
 import os
 import random as ra
 import re
@@ -245,7 +246,7 @@ async def on_command_error(ctx, error):
   elif isinstance(error, commands.MissingRequiredArgument):
     await ctx.send(f'You missed one or more arguments! {len(ctx.command.clean_params.keys())} argument(s) are required.\nNote: Multiline arguments are treated as one argument.')
   else:
-    print(error.with_traceback)
+    print(error.with_traceback())
 
 
 @bot.event
