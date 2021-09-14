@@ -331,7 +331,7 @@ async def encode(ctx, code, *, text):
     await ctx.send("Encoding not found!")
 
 @bot.command()
-async def encode(ctx, code, *, text):
+async def decode(ctx, code, *, text):
   if SequenceMatcher(None, code, 'base64').ratio()>0.6:
     coder = base64.b64decode(bytes(text, encoding='utf-8'))
     await ctx.send(coder.decode("unicode"))
