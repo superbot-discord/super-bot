@@ -524,11 +524,11 @@ async def youtube(ctx, *, link):
       ytlenformat = str(ytlen//60).zfill(2)+":"+str(ytlen%60).zfill(2)
     embed.add_field(name="Length", value=ytlenformat, inline=True)
     chnl = pytube.Channel(youtube.channel_url)
-    embed.add_field(name="Rating", value=str(youtube.rating), inline=True)
-    embed.add_field(name="Channel", value="["+chnl.channel_name+"]("+youtube.channel_url+")", inline=True)
+    embed.add_field(name="Rating", value=f"{str(round(youtube.rating, 3))}/5", inline=True)
+    embed.add_field(name="Channel", value=f"[{chnl.channel_name}]({youtube.channel_url}) ({len(chnl.videos)} videos)", inline=True)
     if youtube.age_restricted:
       embed.add_field(name="Restricted", value="This video is age-restricted.", inline=True)
-    embed.set_image(url=youtube.thumbnail_url)
+    embed.set_thumbnail(url=youtube.thumbnail_url)
     await ctx.send(embed=embed)
 
 @bot.command()
