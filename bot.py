@@ -524,9 +524,8 @@ async def youtube(ctx, *, link):
       ytlenformat = str(ytlen//60).zfill(2)+":"+str(ytlen%60).zfill(2)
     embed.add_field(name="Length", value=ytlenformat, inline=True)
     chnl = pytube.Channel(youtube.channel_url)
+    embed.add_field(name="Rating", value=str(youtube.rating), inline=True)
     embed.add_field(name="Channel", value="["+chnl.channel_name+"]("+youtube.channel_url+")", inline=True)
-    embed.add_field(name="Channel Views", value=chnl.views, inline=True)
-    embed.add_field(name="Channel Videos", value=str(len(chnl.videos)), inline=True)
     await ctx.send(embed=embed)
 
 @bot.command()
