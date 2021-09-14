@@ -513,7 +513,7 @@ async def youtube(ctx, *, link):
       embed.add_field(name="Tags", value="No tags provided", inline=False)
     else:
       embed.add_field(name="Tags", value=(", ".join(youtube.keywords))[:1023], inline=False)
-    embed.add_field(name="Views", value=str(youtube.views), inline=True)
+    embed.add_field(name="Views", value=f'{str(youtube.views):,}', inline=True)
     embed.add_field(name="Date uploaded", value=youtube.publish_date.strftime("%d %b, %Y (%a)"), inline=True)
     ytlen = youtube.length
     if ytlen >= 21600:
@@ -523,9 +523,9 @@ async def youtube(ctx, *, link):
     else:
       ytlenformat = str(ytlen//60).zfill(2)+":"+str(ytlen%60).zfill(2)
     embed.add_field(name="Length", value=ytlenformat, inline=True)
-    #embed.add_field(name="Channel", value="["+channel.channel_name+"]("+youtube.channel_url+")", inline=True)
-    #embed.add_field(name="Channel Views", value=channel.views, inline=True)
-    #embed.add_field(name="Channel Videos", value=str(len(channel.videos)), inline=True)
+    embed.add_field(name="Channel", value="["+channel.channel_name+"]("+youtube.channel_url+")", inline=True)
+    embed.add_field(name="Channel Views", value=channel.views, inline=True)
+    embed.add_field(name="Channel Videos", value=str(len(channel.videos)), inline=True)
     await ctx.send(embed=embed)
 
 @bot.command()

@@ -166,34 +166,34 @@ async def table(ctx, *, text):
 @commands.command(aliases=["simpcolour", "simplecolor", "simplecolour"])
 async def simpcolor(ctx, *, name):
   botsimpcolor(name)
-  #try:
-  file = discord.File("color.png")
-  await ctx.send(file=file)
-  #except:
-  #  await ctx.send("Invalid colour name, please try again.")
+  try:
+    file = discord.File("color.png")
+    await ctx.send(file=file)
+  except:
+    await ctx.send("Invalid colour name, please try again.")
 
 def botsimpcolor(name):
   plt.clf()
   fig, ax = plt.subplots()
   ax.axes.get_xaxis().set_visible(False)
   ax.axes.get_yaxis().set_visible(False)
-  # try:
-  cmapv = plt.get_cmap(name)
-  plt.setp(ax.spines.values(), color="w")
-  gradient = np.vstack((np.linspace(0, 1, 256), np.linspace(0, 1, 256)))
-  plt.imshow(gradient, aspect='auto', cmap=cmapv)
-  plt.axis('off')
-  plt.subplots_adjust(top = 1, right = 1, bottom = 0, left = 0)
-  plt.savefig("color.png", transparent=True)
-  # except:
-  #   try:
-  #     bcs = plt.gca()
-  #     plt.setp(ax.spines.values(), color=name)
-  #     ax.set_facecolor(name)
-  #     fig.set_facecolor(name)
-  #     plt.savefig("color.png", transparent=False)
-  #   except:
-  #     plt.clf()
+  try:
+    cmapv = plt.get_cmap(name)
+    plt.setp(ax.spines.values(), color="w")
+    gradient = np.vstack((np.linspace(0, 1, 256), np.linspace(0, 1, 256)))
+    plt.imshow(gradient, aspect='auto', cmap=cmapv)
+    plt.axis('off')
+    plt.subplots_adjust(top = 1, right = 1, bottom = 0, left = 0)
+    plt.savefig("color.png", transparent=True)
+  except:
+    try:
+      bcs = plt.gca()
+      plt.setp(ax.spines.values(), color=name)
+      ax.set_facecolor(name)
+      fig.set_facecolor(name)
+      plt.savefig("color.png", transparent=False)
+    except:
+      plt.clf()
 
 @commands.command(alias=["snowgraph", "snowflake"])
 async def snow(ctx, recursion = 10):  
