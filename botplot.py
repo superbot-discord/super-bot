@@ -166,11 +166,11 @@ async def table(ctx, *, text):
 @commands.command(aliases=["simpcolour", "simplecolor", "simplecolour"])
 async def simpcolor(ctx, *, name):
   botsimpcolor(name)
-  try:
-    file = discord.File("color.png")
-    await ctx.send(file=file)
-  except:
-    await ctx.send("Invalid colour name, please try again.")
+  #try:
+  file = discord.File("color.png")
+  await ctx.send(file=file)
+  #except:
+  #  await ctx.send("Invalid colour name, please try again.")
 
 def botsimpcolor(name):
   plt.clf()
