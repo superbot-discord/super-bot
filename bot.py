@@ -4,7 +4,7 @@ import hashlib
 import os
 import random as ra
 import re
-import sys
+import base64
 import typing
 from cmath import *
 from datetime import datetime, timedelta, timezone
@@ -298,10 +298,18 @@ async def unicode(ctx, *, query):
 
 @bot.command()
 async def encode(ctx, code, *, text):
-  if code.startswith('sha'):
-    a = hashlib.sha256()
-    a.update(bytes(text, encoding='utf-8'))
-    await ctx.send(a.hexdigest())
+  if SequenceMatcher(code, 'sha256').ratio()>0.6:
+    coder = hashlib.sha256()
+    coder.update(bytes(text, encoding='utf-8'))
+    await ctx.send(coder.hexdigest())
+  elif SequenceMatcher(code, 'base64').ratio()>0.6:
+    coder = base64.b64encode(bytes(text, encoding='utf-8'))
+    await ctx.send(coder.decode("unicode"))
+  elif SequenceMatcher(code, 'base32').ratio()>0.6:
+    coder = base64.b32encode(bytes(text, encoding='utf-8'))
+    await ctx.send(coder.decode("unicode"))
+  else:
+    await ctx.send("Encoding not found!")
 
 @bot.command()
 async def redirect(ctx, *, url):
