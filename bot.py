@@ -526,6 +526,9 @@ async def youtube(ctx, *, link):
     chnl = pytube.Channel(youtube.channel_url)
     embed.add_field(name="Rating", value=str(youtube.rating), inline=True)
     embed.add_field(name="Channel", value="["+chnl.channel_name+"]("+youtube.channel_url+")", inline=True)
+    if youtube.age_restricted:
+      embed.add_field(name="Restricted", value="This video is age-restricted.", inline=True)
+    embed.set_image(url=youtube.thumbnail_url)
     await ctx.send(embed=embed)
 
 @bot.command()
