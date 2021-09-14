@@ -503,7 +503,7 @@ async def youtube(ctx, *, link):
     except:
       youtube = pytube.Search(link).results[0]
     yt = youtube.streams.filter(mime_type="video/mp4").filter(progressive="True").filter(type="video").order_by("resolution").first()
-    embed = discord.Embed(title="Download (Click here)", url=yt.url, description="This video has a size of around "+str(round(yt.filesize/1048.576)/1000)+f"MB. Make sure you use a WiFi network for large videos.\nChannel: ["+pytube.Channel(youtube.channel_url).channel_name+"]("+youtube.channel_url+")")
+    embed = discord.Embed(title="Download (Click here)", url=yt.url, description="This video has a size of around "+str(round(yt.filesize/1048.576)/1000)+"MB. Make sure you use a WiFi network for large videos.")
     embed.add_field(name="Title", value=youtube.title, inline=False)
     if len(youtube.description[:1023].replace(" ", "")) == 0:
       embed.add_field(name="Description", value="No description provided", inline=False)
@@ -523,9 +523,10 @@ async def youtube(ctx, *, link):
     else:
       ytlenformat = str(ytlen//60).zfill(2)+":"+str(ytlen%60).zfill(2)
     embed.add_field(name="Length", value=ytlenformat, inline=True)
-    embed.add_field(name="Channel", value="["+channel.channel_name+"]("+youtube.channel_url+")", inline=True)
-    embed.add_field(name="Channel Views", value=channel.views, inline=True)
-    embed.add_field(name="Channel Videos", value=str(len(channel.videos)), inline=True)
+    chnl = pytube.Channel(youtube.channel_url)
+    embed.add_field(name="Channel", value="["+chnl.channel_name+"]("+youtube.channel_url+")", inline=True)
+    embed.add_field(name="Channel Views", value=chnl.views, inline=True)
+    embed.add_field(name="Channel Videos", value=str(len(chnl.videos)), inline=True)
     await ctx.send(embed=embed)
 
 @bot.command()
