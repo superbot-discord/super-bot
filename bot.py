@@ -298,15 +298,48 @@ async def unicode(ctx, *, query):
 
 @bot.command()
 async def encode(ctx, code, *, text):
-  if SequenceMatcher(code, 'sha256').ratio()>0.6:
+  if SequenceMatcher(None, code, 'sha512').ratio()>0.6:
+    coder = hashlib.sha512()
+    coder.update(bytes(text, encoding='utf-8'))
+    await ctx.send(coder.hexdigest())
+  elif SequenceMatcher(None, code, 'sha384').ratio()>0.6:
+    coder = hashlib.sha384()
+    coder.update(bytes(text, encoding='utf-8'))
+    await ctx.send(coder.hexdigest())
+  elif SequenceMatcher(None, code, 'sha256').ratio()>0.6:
     coder = hashlib.sha256()
     coder.update(bytes(text, encoding='utf-8'))
     await ctx.send(coder.hexdigest())
-  elif SequenceMatcher(code, 'base64').ratio()>0.6:
+  elif SequenceMatcher(None, code, 'sha224').ratio()>0.6:
+    coder = hashlib.sha224()
+    coder.update(bytes(text, encoding='utf-8'))
+    await ctx.send(coder.hexdigest())
+  elif SequenceMatcher(None, code, 'sha128').ratio()>0.6:
+    coder = hashlib.sha1()
+    coder.update(bytes(text, encoding='utf-8'))
+    await ctx.send(coder.hexdigest())
+  elif SequenceMatcher(None, code, 'base64').ratio()>0.6:
     coder = base64.b64encode(bytes(text, encoding='utf-8'))
     await ctx.send(coder.decode("unicode"))
-  elif SequenceMatcher(code, 'base32').ratio()>0.6:
+  elif SequenceMatcher(None, code, 'base32').ratio()>0.6:
     coder = base64.b32encode(bytes(text, encoding='utf-8'))
+    await ctx.send(coder.decode("unicode"))
+  elif SequenceMatcher(None, code, 'base16').ratio()>0.6:
+    coder = base64.b16encode(bytes(text, encoding='utf-8'))
+    await ctx.send(coder.decode("unicode"))
+  else:
+    await ctx.send("Encoding not found!")
+
+@bot.command()
+async def encode(ctx, code, *, text):
+  if SequenceMatcher(None, code, 'base64').ratio()>0.6:
+    coder = base64.b64decode(bytes(text, encoding='utf-8'))
+    await ctx.send(coder.decode("unicode"))
+  elif SequenceMatcher(None, code, 'base32').ratio()>0.6:
+    coder = base64.b32decode(bytes(text, encoding='utf-8'))
+    await ctx.send(coder.decode("unicode"))
+  elif SequenceMatcher(None, code, 'base16').ratio()>0.6:
+    coder = base64.b16decode(bytes(text, encoding='utf-8'))
     await ctx.send(coder.decode("unicode"))
   else:
     await ctx.send("Encoding not found!")
