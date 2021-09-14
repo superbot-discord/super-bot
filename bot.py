@@ -245,7 +245,8 @@ async def on_command_error(ctx, error):
   elif isinstance(error, commands.MissingRequiredArgument):
     await ctx.send(f'You missed one or more arguments! {len(ctx.command.clean_params.keys())} argument(s) are required.\nNote: Multiline arguments are treated as one argument.')
   else:
-    print(error.original)
+    print(error.with_traceback)
+
 
 @bot.event
 async def on_message(message):
@@ -320,13 +321,13 @@ async def encode(ctx, code, *, text):
     await ctx.send(coder.hexdigest())
   elif SequenceMatcher(None, code, 'base64').ratio()>0.6:
     coder = base64.b64encode(bytes(text, encoding='utf-8'))
-    await ctx.send(coder.decode("unicode"))
+    await ctx.send(coder.decode("utf-8"))
   elif SequenceMatcher(None, code, 'base32').ratio()>0.6:
     coder = base64.b32encode(bytes(text, encoding='utf-8'))
-    await ctx.send(coder.decode("unicode"))
+    await ctx.send(coder.decode("utf-8"))
   elif SequenceMatcher(None, code, 'base16').ratio()>0.6:
     coder = base64.b16encode(bytes(text, encoding='utf-8'))
-    await ctx.send(coder.decode("unicode"))
+    await ctx.send(coder.decode("utf-8"))
   else:
     await ctx.send("Encoding not found!")
 
@@ -334,13 +335,13 @@ async def encode(ctx, code, *, text):
 async def decode(ctx, code, *, text):
   if SequenceMatcher(None, code, 'base64').ratio()>0.6:
     coder = base64.b64decode(bytes(text, encoding='utf-8'))
-    await ctx.send(coder.decode("unicode"))
+    await ctx.send(coder.decode("utf-8"))
   elif SequenceMatcher(None, code, 'base32').ratio()>0.6:
     coder = base64.b32decode(bytes(text, encoding='utf-8'))
-    await ctx.send(coder.decode("unicode"))
+    await ctx.send(coder.decode("utf-8"))
   elif SequenceMatcher(None, code, 'base16').ratio()>0.6:
     coder = base64.b16decode(bytes(text, encoding='utf-8'))
-    await ctx.send(coder.decode("unicode"))
+    await ctx.send(coder.decode("utf-8"))
   else:
     await ctx.send("Encoding not found!")
 

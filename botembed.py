@@ -65,7 +65,7 @@ def botquickembed(text):
   except:
     pass
   try:
-    embed.description      = textlist[3:]
+    embed.description      = f"\n".join(textlist[3:])
   except:
     pass
   
