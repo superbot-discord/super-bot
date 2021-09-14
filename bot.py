@@ -1,5 +1,6 @@
 import asyncio
 import datetime
+import hashlib
 import os
 import random as ra
 import re
@@ -294,6 +295,13 @@ async def unicode(ctx, *, query):
   for count, count2 in zip(allchars, range(0,25)):
     embed.add_field(name = count[1].title(), value = "U+" + count[0] + eval("u\" \\u"+count[0]+"\""))
   await ctx.send(embed=embed)
+
+@bot.command()
+async def encode(ctx, code, *, text):
+  if code.startswith('sha'):
+    a = hashlib.sha256()
+    a.update(code)
+    await ctx.send(a.hexdigest())
 
 @bot.command()
 async def redirect(ctx, *, url):
