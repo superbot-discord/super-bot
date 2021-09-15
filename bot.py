@@ -72,6 +72,7 @@ overwrite.view_channel = True
 botadmin = lambda context : context.author.id == 687474789342117900
 func = lambda pct, allvals : "{:d} ({:.1f}%)".format(int(pct/100*np.sum(allvals)), int(pct))
 number_to_emoji = lambda a: a.replace("1",":one: ").replace("2",":two: ").replace("3",":three: ").replace("4",":four: ").replace("5",":five: ").replace("6",":six: ").replace("7",":seven: ").replace("8",":eight: ").replace("9",":nine: ").replace("0",":zero: ")
+sizer = lambda bytes: f"{bytes/1024:,}KB" if bytes<1048576 else (f"{bytes/1048576:,}MB" if bytes<1073741824 else f"{bytes/1073741824:,}GB")
 
 @bot.event
 async def on_voice_state_update(member, before, after):
@@ -503,10 +504,10 @@ async def youtube(ctx, *, link):
     except:
       youtube = pytube.Search(link).results[0]
     yt = youtube.streams.filter(mime_type="video/mp4").filter(progressive="True").filter(type="video").order_by("resolution").first()
-    embed = discord.Embed(title="Download (Click here)", url=yt.url, description=f"""This video has a size of around {str(round(yt.filesize/1048.576)/1000)}MB. Make sure you use a WiFi network for large videos.
-    Note: This message will be edited with more information.""")
+    desc = f"This video has a size of around {sizer(yt.filesize)}. Make sure you use a WiFi network for large videos."
+    embed = discord.Embed(title="Download (Click here)", url=yt.url, description=f"{desc}\nNote: This message will be edited with more information.")
     ytmsg = await ctx.send(embed=embed)
-    embed = discord.Embed(title="Download (Click here)", url=yt.url, description=f"This video has a size of around {str(round(yt.filesize/1048.576)/1000)}MB. Make sure you use a WiFi network for large videos.\n")
+    embed = discord.Embed(title="Download (Click here)", url=yt.url, description=desc)
     embed.add_field(name="Title", value=youtube.title, inline=False)
     if len(youtube.description[:1023].replace(" ", "")) == 0:
       embed.add_field(name="Description", value="No description provided", inline=False)
@@ -1357,9 +1358,9 @@ async def message(ctx, message: discord.Message=None):
   f1v = ""
   for count in f1vraw:
     if count.spoiler:
-      f1v += f"[{count.filename}]({count.url}) (" + str(count.size/1024) + "MB, marked as spoiler)"
+      f1v += f"[{count.filename}]({count.url}) ({sizer(count.size)}, marked as spoiler)"
     else:
-      f1v += f"[{count.filename}]({count.url}) (" + str(count.size/1024) + "MB)"
+      f1v += f"[{count.filename}]({count.url}) ({sizer(count.size)})"
   f2vraw = message.channel_mentions
   f2v = ""
   for count in f2vraw:
