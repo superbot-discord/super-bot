@@ -486,76 +486,89 @@ async def unscramble(ctx, text, length="0"):
   await ctx.send(embed=output, file=discord.File("output.txt"))
   os.remove('output.txt')
 
+pytube.YouTube.author
+
 @bot.command()
 async def youtube(ctx, *, link):
-  try:
-    playlist = pytube.Playlist(link)
-    text = ""
-    for count in playlist.videos:
-      text=text+str(count)+"  "+count.streams.filter(mime_type="video/mp4").filter(progressive="True").filter(type="video").order_by("resolution").first().url+f"\n"
-    file = open("output.txt", "w")
-    file.write(text)
-    file.close()
-    await ctx.send(file=discord.File("output.txt"))
-    os.remove("output.txt")
-  except:
+  if link.startswith("search"):
+    videos = pytube.Search(link.replace("search ", "", 1)).results[0:20]
+    desc = ""
+    for count in videos:
+      desc+=f"**[{count.title}]({count.watch_url})**\n{count.views:,} Views | By {[pytube.Channel(count.channel_url).name](count.channel_url)}"
+    embed = discord.Embed(title="Search results", description=desc)
+    embed.set_footer(text="Use =youtube [Link] to download videos.")
+  else:
     try:
-      youtube = pytube.YouTube(link)
+      playlist = pytube.Playlist(link)
+      text = ""
+      for count in playlist.videos:
+        text=text+str(count)+"  "+count.streams.filter(mime_type="video/mp4").filter(progressive="True").filter(type="video").order_by("resolution").first().url+f"\n"
+      file = open("output.txt", "w")
+      file.write(text)
+      file.close()
+      await ctx.send(file=discord.File("output.txt"))
+      os.remove("output.txt")
     except:
-      youtube = pytube.Search(link).results[0]
-    yt_streams = youtube.streams
-    filtered1 = yt_streams.filter(progressive=True,file_extension='mp4').order_by("resolution")
-    video1 = filtered1[len(filtered1)-1]
-    additional_desc = " Warning: Do not use a small data plan for videos this large!" if video1.filesize >= 52428800 else ""
-    desc = f"This video has a size of around {sizer(video1.filesize)}.{additional_desc}"
-    embed = discord.Embed(title="Download (Click here)", url=video1.url, description=f"{desc}\nNote: This message will be edited with more information.")
-    filtered2 = yt_streams.filter(type="video").order_by("resolution")
-    video2 = filtered2[len(filtered2)-1]
-    filtered3 = yt_streams.filter(type="audio").order_by("abr")
-    video3 = filtered3[len(filtered3)-1]
-    filtered4 = yt_streams.filter(type="video").order_by("resolution")
-    video4 = filtered4[int(len(filtered4)/2)]
-    filtered5 = yt_streams.filter(type="audio").order_by("abr")
-    video5 = filtered5[len(filtered5)-1]
-    filtered6 = yt_streams.filter(type="video").order_by("filesize")
-    video6 = filtered6[0]
-    filtered7 = yt_streams.filter(type="audio").order_by("filesize")
-    video7 = filtered7[0]
-    extra_downloads=f'''[Frames only - Best quality]\t{sizer(video2.filesize)}\t{video2.url}\n\n[Audio - Best quality]\t\t{sizer(video3.filesize)}\t{video3.url}\n
-[Video - Medium quality]\t{sizer(video4.filesize)}\t{video4.url}\n\n[Audio - Medium quality\t\t{sizer(video5.filesize)}\t{video5.url}\n
-[Video - Minimum size]\t\t{sizer(video6.filesize)}\t{video6.url}\n\n[Audio - Minimum size]\t\t{sizer(video7.filesize)}\t{video7.url}'''
-    f = open('extra_downloads.txt', "w")
-    f.write(extra_downloads)
-    f.close()
-    ytmsg = await ctx.send(embed=embed, file=discord.File('extra_downloads.txt'))
-    os.remove('extra_downloads.txt')
-    embed = discord.Embed(title="Download (Click here)", url=video1.url, description=desc)
-    embed.add_field(name="Title", value=youtube.title, inline=False)
-    if len(youtube.description[:1023].replace(" ", "")) == 0:
-      embed.add_field(name="Description", value="No description provided", inline=False)
-    else:
-      embed.add_field(name="Description", value=youtube.description[:1023], inline=False)
-    if len(youtube.keywords) == 0:
-      embed.add_field(name="Tags", value="No tags provided", inline=False)
-    else:
-      embed.add_field(name="Tags", value=(", ".join(youtube.keywords))[:1023], inline=False)
-    embed.add_field(name="Views", value=f'{youtube.views:,}', inline=True)
-    embed.add_field(name="Date uploaded", value=youtube.publish_date.strftime("%d %b, %Y (%a)"), inline=True)
-    ytlen = youtube.length
-    if ytlen >= 86400:
-      ytlenformat = f"{str(ytlen//86400)} days plus {str(ytlen%21600//3600).zfill(2)}:{str(ytlen%3600//60).zfill(2)}:{str(ytlen%60).zfill(2)}"
-    elif ytlen >= 3600:
-      ytlenformat = str(ytlen//3600).zfill(2)+":"+str(ytlen%3600//60).zfill(2)+":"+str(ytlen%60).zfill(2)
-    else:
-      ytlenformat = str(ytlen//60).zfill(2)+":"+str(ytlen%60).zfill(2)
-    embed.add_field(name="Length", value=ytlenformat, inline=True)
-    chnl = pytube.Channel(youtube.channel_url)
-    embed.add_field(name="Rating", value=f"{str(round(youtube.rating, 3))}/5", inline=True)
-    embed.add_field(name="Channel", value=f"[{chnl.channel_name}]({youtube.channel_url}) ({len(chnl.videos)} videos)", inline=True)
-    if youtube.age_restricted:
-      embed.add_field(name="Restricted", value="This video is age-restricted.", inline=True)
-    embed.set_thumbnail(url=youtube.thumbnail_url)
-    await ytmsg.edit(embed=embed)
+      try:
+        youtube = pytube.YouTube(link)
+      except:
+        youtube = pytube.Search(link).results[0]
+      yt_streams = youtube.streams
+      filtered1 = yt_streams.filter(progressive=True,file_extension='mp4').order_by("resolution")
+      video1 = filtered1[len(filtered1)-1]
+      additional_desc = " Warning: Do not use a small data plan for videos this large!" if video1.filesize >= 52428800 else ""
+      desc = f"This video has a size of around {sizer(video1.filesize)}.{additional_desc}"
+      embed = discord.Embed(title="Download (Click here)", url=video1.url, description=f"{desc}\nNote: This message will be edited with more information.")
+      filtered2 = yt_streams.filter(type="video").order_by("resolution")
+      video2 = filtered2[len(filtered2)-1]
+      filtered3 = yt_streams.filter(type="audio").order_by("abr")
+      video3 = filtered3[len(filtered3)-1]
+      filtered4 = yt_streams.filter(type="video").order_by("resolution")
+      video4 = filtered4[int(len(filtered4)/2)]
+      filtered5 = yt_streams.filter(type="audio").order_by("abr")
+      video5 = filtered5[len(filtered5)-1]
+      filtered6 = yt_streams.filter(type="video").order_by("filesize")
+      video6 = filtered6[0]
+      filtered7 = yt_streams.filter(type="audio").order_by("filesize")
+      video7 = filtered7[0]
+      filtered8 = yt_streams.filter(type="video", progressive=True).order_by("filesize")
+      video8 = filtered8[0]
+      extra_downloads=f'''[Frames only - Best quality]\t{sizer(video2.filesize)}\t{video2.url}\n\n[Audio - Best quality]\t\t{sizer(video3.filesize)}\t{video3.url}\n
+  [Video - Medium quality]\t{sizer(video4.filesize)}\t{video4.url}\n\n[Audio - Medium quality\t\t{sizer(video5.filesize)}\t{video5.url}\n
+  [Video - Minimum size]\t\t{sizer(video6.filesize)}\t{video6.url}\n\n[Audio - Minimum size]\t\t{sizer(video7.filesize)}\t{video7.url}\n
+  [Video+audio - Minimum size]\t{sizer(video6.filesize)}\t{video8.url}'''
+      f = open('extra_downloads.txt', "w")
+      f.write(extra_downloads)
+      f.close()
+      ytmsg = await ctx.send(embed=embed, file=discord.File('extra_downloads.txt'))
+      os.remove('extra_downloads.txt')
+      embed = discord.Embed(title="Download (Click here)", url=video1.url, description=desc)
+      embed.add_field(name="Title", value=youtube.title, inline=False)
+      if len(youtube.description[:1023].replace(" ", "")) == 0:
+        embed.add_field(name="Description", value="No description provided", inline=False)
+      else:
+        embed.add_field(name="Description", value=youtube.description[:1023], inline=False)
+      if len(youtube.keywords) == 0:
+        embed.add_field(name="Tags", value="No tags provided", inline=False)
+      else:
+        embed.add_field(name="Tags", value=(", ".join(youtube.keywords))[:1023], inline=False)
+      embed.add_field(name="Views", value=f'{youtube.views:,}', inline=True)
+      embed.add_field(name="Date uploaded", value=youtube.publish_date.strftime("%d %b, %Y (%a)"), inline=True)
+      ytlen = youtube.length
+      if ytlen >= 86400:
+        ytlenformat = f"{str(ytlen//86400)} days plus {str(ytlen%21600//3600).zfill(2)}:{str(ytlen%3600//60).zfill(2)}:{str(ytlen%60).zfill(2)}"
+      elif ytlen >= 3600:
+        ytlenformat = str(ytlen//3600).zfill(2)+":"+str(ytlen%3600//60).zfill(2)+":"+str(ytlen%60).zfill(2)
+      else:
+        ytlenformat = str(ytlen//60).zfill(2)+":"+str(ytlen%60).zfill(2)
+      embed.add_field(name="Length", value=ytlenformat, inline=True)
+      chnl = pytube.Channel(youtube.channel_url)
+      embed.add_field(name="Rating", value=f"{str(round(youtube.rating, 3))}/5", inline=True)
+      embed.add_field(name="Channel", value=f"[{chnl.channel_name}]({youtube.channel_url}) ({len(chnl.videos)} videos)", inline=True)
+      if youtube.age_restricted:
+        embed.add_field(name="Restricted", value="This video is age-restricted.", inline=True)
+      embed.set_thumbnail(url=youtube.thumbnail_url)
+      await ytmsg.edit(embed=embed)
 
 @bot.command()
 async def clearsnipe(ctx, *, chnl : discord.TextChannel = None):
