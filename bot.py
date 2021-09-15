@@ -516,8 +516,13 @@ async def youtube(ctx, *, link):
     video4 = filtered4[int(len(filtered4)/2)]
     filtered5 = yt_streams.filter(type="audio").order_by("abr")
     video5 = filtered5[len(filtered5)-1]
-    extra_downloads=f'''[Frames only - Best quality {sizer(video2.filesize)}] {video2.url}\n\n[Audio only - Best quality{sizer(video3.filesize)}] {video3.url}\n
-    [Video - Medium quality{sizer(video4.filesize)}] {video4.url}\n\n[Audio - Medium quality{sizer(video5.filesize)}] {video5.url}'''
+    filtered6 = yt_streams.filter(type="video").order_by("filesize")
+    video6 = filtered6[0]
+    filtered7 = yt_streams.filter(type="audio").order_by("filesize")
+    video7 = filtered7[0]
+    extra_downloads=f'''[Frames only - Best quality {sizer(video2.filesize)}] {video2.url}\n\n[Audio - Best quality {sizer(video3.filesize)}] {video3.url}\n
+[Video - Medium quality {sizer(video4.filesize)}] {video4.url}\n\n[Audio - Medium quality {sizer(video5.filesize)}] {video5.url}\n
+[Video - Minimum size {sizer(video6.filesize)}] {video6.url}\n\n[Audio - Minimum size {sizer(video7.filesize)}] {video7.url}'''
     f = open('extra_downloads.txt', "w")
     f.write(extra_downloads)
     f.close()
