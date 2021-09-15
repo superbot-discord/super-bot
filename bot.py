@@ -530,18 +530,18 @@ async def youtube(ctx, *, link):
     chnl = pytube.Channel(youtube.channel_url)
     embed.add_field(name="Rating", value=f"{str(round(youtube.rating, 3))}/5", inline=True)
     embed.add_field(name="Channel", value=f"[{chnl.channel_name}]({youtube.channel_url}) ({len(chnl.videos)} videos)", inline=True)
-    extra_downloads=f'''
-    [Video - Best quality]({youtube.streams.filter(type="video").filter(progressive="False").order_by("resolution").first().url})
-    [Audio - Best quality]({youtube.streams.filter(type="audio").order_by("bitrate").first().url})
-    [Video - Data saver]({youtube.streams.filter(type="video").filter(progressive="False").order_by("resolution").last().url})
-    [Audio - Data saver]({youtube.streams.filter(type="audio").order_by("bitrate").last().url})
-    [Pictures only]({youtube.streams.filter(type="video").filter(progressive="False").order_by("resolution").first().url})
-    [Audio only]({youtube.streams.filter(type="audio").order_by("bitrate").first().url})'''
-    embed.add_field(name="Extra downloads", value=extra_downloads, inline=False)
     if youtube.age_restricted:
       embed.add_field(name="Restricted", value="This video is age-restricted.", inline=True)
+    extra_downloads=f'''[Video - Best quality] {youtube.streams.filter(type="video").filter(progressive="False").order_by("resolution").first().url}\n
+    [Audio - Best quality] {youtube.streams.filter(type="audio").order_by("bitrate").first().url}\n
+    [Video - Data saver] {youtube.streams.filter(type="video").filter(progressive="False").order_by("resolution").last().url}\n
+    [Audio - Data saver] {youtube.streams.filter(type="audio").order_by("bitrate").last().url}\n
+    [Pictures only]({youtube.streams.filter(type="video").filter(progressive="False").order_by("resolution").first().url})'''
+    f = open('extra_downloads.txt', "w")
+    f.write(extra_downloads)
+    f.close()
     embed.set_thumbnail(url=youtube.thumbnail_url)
-    await ytmsg.edit(embed=embed)
+    await ytmsg.edit(embed=embed, file=discord.File('extra_downloads.txt'))
 
 @bot.command()
 async def clearsnipe(ctx, *, chnl : discord.TextChannel = None):
