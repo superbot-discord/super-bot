@@ -542,7 +542,7 @@ async def youtube(ctx, *, link):
     if youtube.age_restricted:
       embed.add_field(name="Restricted", value="This video is age-restricted.", inline=True)
     embed.set_thumbnail(url=youtube.thumbnail_url)
-    await ytmsg.edit(embed=embed, attachments=[discord.File('extra_downloads.txt')])
+    await ytmsg.edit(embed=embed)
 
 @bot.command()
 async def clearsnipe(ctx, *, chnl : discord.TextChannel = None):
