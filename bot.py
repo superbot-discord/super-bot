@@ -532,7 +532,7 @@ async def youtube(ctx, *, link):
     embed.add_field(name="Channel", value=f"[{chnl.channel_name}]({youtube.channel_url}) ({len(chnl.videos)} videos)", inline=True)
     extra_downloads=f'''
     [Video - Best quality]({youtube.streams.filter(type="video").order_by("resolution").first().url})
-    [Audio - Best quality]({youtube.streams.filter(type="audio").order_by("resolution").first().url})
+    [Audio - Best quality]({youtube.streams.filter(type="audio").order_by("bitrate").first().url})
     [Pictures only]({youtube.streams.filter(mime_type="video/mp4").filter(progressive="False").order_by("resolution").first().url})
     [Audio only]({youtube.streams.filter(mime_type="audio/mp3").filter(progressive="False").order_by("bitrate").first().url})'''
     embed.add_field(name="Extra downloads", value=extra_downloads, inline=False)
