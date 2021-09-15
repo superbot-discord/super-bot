@@ -73,6 +73,7 @@ botadmin = lambda context : context.author.id == 687474789342117900
 func = lambda pct, allvals : "{:d} ({:.1f}%)".format(int(pct/100*np.sum(allvals)), int(pct))
 number_to_emoji = lambda a: a.replace("1",":one: ").replace("2",":two: ").replace("3",":three: ").replace("4",":four: ").replace("5",":five: ").replace("6",":six: ").replace("7",":seven: ").replace("8",":eight: ").replace("9",":nine: ").replace("0",":zero: ")
 sizer = lambda bytes: f"{round(bytes/1024,4):,}KB" if bytes<1048576 else (f"{round(bytes/1048576,4):,}MB" if bytes<1073741824 else f"{round(bytes/1073741824,4):,}GB")
+format_length=lambda secs: f"{str(secs//86400)} days plus {str(secs%21600//3600).zfill(2)}:{str(secs%3600//60).zfill(2)}:{str(secs%60).zfill(2)}" if secs >= 86400 else (f"{str(secs//3600).zfill(2)}:{str(secs%3600//60).zfill(2)}:{str(secs%60).zfill(2)}" if secs >= 3600 else f"{str(secs//60).zfill(2)}:{str(secs%60).zfill(2)}")
 
 @bot.event
 async def on_voice_state_update(member, before, after):
@@ -498,6 +499,22 @@ async def youtube(ctx, *, link):
     embed = discord.Embed(title="Search results", description=desc)
     embed.set_footer(text="Use =youtube [Link] to download videos.")
     await ctx.send(embed=embed)
+  elif link.startswith("channel"):
+    chnl = pytube.Channel(link)
+    videos = chnl.videos
+    desc = f"**Videos ({len(chnl.videos):,})**:\n"
+    for count,count2 in zip(videos, range(0,12)):
+      desc+=f"[{count.title}]({count.watch_url})\n{count.views:,} Views | {str(count.rating*20)}% Liked\n\n"
+    embed = discord.Embed(title=chnl.channel_name, description=desc, url=chnl.videos_url)
+    embed.set_footer(text=f"{chnl.views:,} Channel views | Use =youtube [Link] to download videos. | Analysing additional info…")
+    yt_msg = await ctx.send(embed=embed)
+    totallen = 0
+    totalrating = 0
+    for count in videos:
+      totallen += count.length
+      totalrating += count.rating
+    embed.add_field(name="Average length", value=format_length(round(totallen/len(videos))), inline=True)
+    embed.add_field(name="Average rating", value=round(totalrating/len(videos), 3), inline=True)
   else:
     try:
       playlist = pytube.Playlist(link)
@@ -555,16 +572,9 @@ async def youtube(ctx, *, link):
         embed.add_field(name="Tags", value=(", ".join(youtube.keywords))[:1023], inline=False)
       embed.add_field(name="Views", value=f'{youtube.views:,}', inline=True)
       embed.add_field(name="Date uploaded", value=youtube.publish_date.strftime("%d %b, %Y (%a)"), inline=True)
-      ytlen = youtube.length
-      if ytlen >= 86400:
-        ytlenformat = f"{str(ytlen//86400)} days plus {str(ytlen%21600//3600).zfill(2)}:{str(ytlen%3600//60).zfill(2)}:{str(ytlen%60).zfill(2)}"
-      elif ytlen >= 3600:
-        ytlenformat = str(ytlen//3600).zfill(2)+":"+str(ytlen%3600//60).zfill(2)+":"+str(ytlen%60).zfill(2)
-      else:
-        ytlenformat = str(ytlen//60).zfill(2)+":"+str(ytlen%60).zfill(2)
-      embed.add_field(name="Length", value=ytlenformat, inline=True)
+      embed.add_field(name="Length", value=format_length(youtube.length), inline=True)
       chnl = pytube.Channel(youtube.channel_url)
-      embed.add_field(name="Rating", value=f"{str(round(youtube.rating, 3))}/5", inline=True)
+      embed.add_field(name="Rating", value=f"{str(round(youtube.rating*20, 3))}%", inline=True)
       embed.add_field(name="Channel", value=f"[{chnl.channel_name}]({youtube.channel_url}) ({len(chnl.videos)} videos)", inline=True)
       if youtube.age_restricted:
         embed.add_field(name="Restricted", value="This video is age-restricted.", inline=True)
