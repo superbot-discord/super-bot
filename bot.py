@@ -494,7 +494,7 @@ async def youtube(ctx, *, link):
     videos = pytube.Search(link.replace("search ", "", 1)).results[0:20]
     desc = ""
     for count in videos:
-      desc+=f"**[{count.title}]({count.watch_url})**\n{count.views:,} Views | By {[pytube.Channel(count.channel_url).name](count.channel_url)}"
+      desc+=f"**[{count.title}]({count.watch_url})**\n{count.views:,} Views | By [{pytube.Channel(count.channel_url).channel_name}]({count.channel_url})"
     embed = discord.Embed(title="Search results", description=desc)
     embed.set_footer(text="Use =youtube [Link] to download videos.")
   else:
@@ -1392,7 +1392,7 @@ async def message(ctx, message: discord.Message=None):
   f1vraw = message.attachments
   f1v = ""
   for count in f1vraw:
-    if count.spoiler:
+    if count.is_spoiler:
       f1v += f"[{count.filename}]({count.url}) ({sizer(count.size)}, marked as spoiler)"
     else:
       f1v += f"[{count.filename}]({count.url}) ({sizer(count.size)})"
