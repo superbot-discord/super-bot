@@ -504,7 +504,7 @@ async def youtube(ctx, *, link):
     except:
       youtube = pytube.Search(link).results[0]
     yt_streams = youtube.streams
-    filtered1 = yt_streams.filter(progressive=True,file_extension='mp3').order_by("resolution")
+    filtered1 = yt_streams.filter(progressive=True,file_extension='mp4').order_by("resolution")
     video1 = filtered1[len(filtered1)-1]
     desc = f"This video has a size of around {sizer(video1.filesize)}. Make sure you use a WiFi network for large videos."
     embed = discord.Embed(title="Download (Click here)", url=video1.url, description=f"{desc}\nNote: This message will be edited with more information.")
@@ -523,7 +523,7 @@ async def youtube(ctx, *, link):
     f.close()
     ytmsg = await ctx.send(embed=embed, file=discord.File('extra_downloads.txt'))
     os.remove('extra_downloads.txt')
-    embed = discord.Embed(title="Download (Click here)", url=yt.url, description=desc)
+    embed = discord.Embed(title="Download (Click here)", url=filtered1.url, description=desc)
     embed.add_field(name="Title", value=youtube.title, inline=False)
     if len(youtube.description[:1023].replace(" ", "")) == 0:
       embed.add_field(name="Description", value="No description provided", inline=False)
