@@ -503,14 +503,21 @@ async def youtube(ctx, *, link):
       youtube = pytube.YouTube(link)
     except:
       youtube = pytube.Search(link).results[0]
-    yt = youtube.streams.filter(mime_type="video/mp4").filter(progressive="True").filter(type="video").order_by("resolution").first()
-    desc = f"This video has a size of around {sizer(yt.filesize)}. Make sure you use a WiFi network for large videos."
-    embed = discord.Embed(title="Download (Click here)", url=yt.url, description=f"{desc}\nNote: This message will be edited with more information.")
-    extra_downloads=f'''[Video - Best quality] {youtube.streams.filter(type="video").filter(progressive="False").order_by("resolution").first().url}\n
-[Audio - Best quality] {youtube.streams.filter(type="audio").order_by("bitrate").first().url}\n
-[Video - Data saver] {youtube.streams.filter(type="video").filter(progressive="False").order_by("resolution").last().url}\n
-[Audio - Data saver] {youtube.streams.filter(type="audio").order_by("bitrate").last().url}\n
-[Pictures only]({youtube.streams.filter(type="video").filter(progressive="False").order_by("resolution").first().url})'''
+    yt_streams = youtube.streams
+    filtered1 = yt_streams.filter(progressive=True,file_extension='mp3').order_by("resolution")
+    video1 = filtered1[len(filtered1)-1]
+    desc = f"This video has a size of around {sizer(video1.filesize)}. Make sure you use a WiFi network for large videos."
+    embed = discord.Embed(title="Download (Click here)", url=video1.url, description=f"{desc}\nNote: This message will be edited with more information.")
+    filtered2 = yt_streams.filter(type="video").order_by("resolution")
+    video2 = filtered2[len(filtered2)-1]
+    filtered3 = yt_streams.filter(type="audio").order_by("abr")
+    video3 = filtered3[len(filtered3)-1]
+    filtered4 = yt_streams.filter(type="video").order_by("resolution")
+    video4 = filtered4[int(len(filtered4)/2)]
+    filtered5 = yt_streams.filter(type="audio").order_by("abr")
+    video5 = filtered5[len(filtered5)-1]
+    extra_downloads=f'''[Frames only - Best quality] {video2.url}\n\n[Audio only - Best quality] {video3.url}\n\n[Video - Medium quality] {video4.url}\n
+[Audio - Medium quality] {video5.url}'''
     f = open('extra_downloads.txt', "w")
     f.write(extra_downloads)
     f.close()
