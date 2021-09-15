@@ -503,7 +503,10 @@ async def youtube(ctx, *, link):
     except:
       youtube = pytube.Search(link).results[0]
     yt = youtube.streams.filter(mime_type="video/mp4").filter(progressive="True").filter(type="video").order_by("resolution").first()
-    embed = discord.Embed(title="Download (Click here)", url=yt.url, description="This video has a size of around "+str(round(yt.filesize/1048.576)/1000)+"MB. Make sure you use a WiFi network for large videos.")
+    embed = discord.Embed(title="Download (Click here)", url=yt.url, description=f"""This video has a size of around {str(round(yt.filesize/1048.576)/1000)}MB. Make sure you use a WiFi network for large videos.
+    Note: This message will be edited with more information.""")
+    ytmsg = await ctx.send(embed=embed)
+    embed = discord.Embed(title="Download (Click here)", url=yt.url, description=f"This video has a size of around {str(round(yt.filesize/1048.576)/1000)}MB. Make sure you use a WiFi network for large videos.\n")
     embed.add_field(name="Title", value=youtube.title, inline=False)
     if len(youtube.description[:1023].replace(" ", "")) == 0:
       embed.add_field(name="Description", value="No description provided", inline=False)
@@ -517,7 +520,7 @@ async def youtube(ctx, *, link):
     embed.add_field(name="Date uploaded", value=youtube.publish_date.strftime("%d %b, %Y (%a)"), inline=True)
     ytlen = youtube.length
     if ytlen >= 21600:
-      ytlenformat = str(ytlen//21600)+"  days plus "+str(ytlen%21600//3600).zfill(2)+":"+str(ytlen%3600//60).zfill(2)+":"+str(ytlen%60).zfill(2)
+      ytlenformat = f"{str(ytlen//21600)} days plus {str(ytlen%21600//3600).zfill(2)}:{str(ytlen%3600//60).zfill(2)}:{str(ytlen%60).zfill(2)}"
     elif ytlen >= 3600:
       ytlenformat = str(ytlen//3600).zfill(2)+":"+str(ytlen%3600//60).zfill(2)+":"+str(ytlen%60).zfill(2)
     else:
@@ -529,7 +532,7 @@ async def youtube(ctx, *, link):
     if youtube.age_restricted:
       embed.add_field(name="Restricted", value="This video is age-restricted.", inline=True)
     embed.set_thumbnail(url=youtube.thumbnail_url)
-    await ctx.send(embed=embed)
+    await ytmsg.edit(embed=embed)
 
 @bot.command()
 async def clearsnipe(ctx, *, chnl : discord.TextChannel = None):
