@@ -506,7 +506,8 @@ async def youtube(ctx, *, link):
     yt_streams = youtube.streams
     filtered1 = yt_streams.filter(progressive=True,file_extension='mp4').order_by("resolution")
     video1 = filtered1[len(filtered1)-1]
-    desc = f"This video has a size of around {sizer(video1.filesize)}. Make sure you use a WiFi network for large videos."
+    additional_desc = " Warning: Do not use a small data plan for videos this large!" if video1.filesize >= 52428800 else ""
+    desc = f"This video has a size of around {sizer(video1.filesize)}.{additional_desc}"
     embed = discord.Embed(title="Download (Click here)", url=video1.url, description=f"{desc}\nNote: This message will be edited with more information.")
     filtered2 = yt_streams.filter(type="video").order_by("resolution")
     video2 = filtered2[len(filtered2)-1]
@@ -541,8 +542,8 @@ async def youtube(ctx, *, link):
     embed.add_field(name="Views", value=f'{youtube.views:,}', inline=True)
     embed.add_field(name="Date uploaded", value=youtube.publish_date.strftime("%d %b, %Y (%a)"), inline=True)
     ytlen = youtube.length
-    if ytlen >= 21600:
-      ytlenformat = f"{str(ytlen//21600)} days plus {str(ytlen%21600//3600).zfill(2)}:{str(ytlen%3600//60).zfill(2)}:{str(ytlen%60).zfill(2)}"
+    if ytlen >= 86400:
+      ytlenformat = f"{str(ytlen//86400)} days plus {str(ytlen%21600//3600).zfill(2)}:{str(ytlen%3600//60).zfill(2)}:{str(ytlen%60).zfill(2)}"
     elif ytlen >= 3600:
       ytlenformat = str(ytlen//3600).zfill(2)+":"+str(ytlen%3600//60).zfill(2)+":"+str(ytlen%60).zfill(2)
     else:
