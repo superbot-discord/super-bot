@@ -523,7 +523,7 @@ async def youtube(ctx, *, link):
     f.close()
     ytmsg = await ctx.send(embed=embed, file=discord.File('extra_downloads.txt'))
     os.remove('extra_downloads.txt')
-    embed = discord.Embed(title="Download (Click here)", url=filtered1.url, description=desc)
+    embed = discord.Embed(title="Download (Click here)", url=video1.url, description=desc)
     embed.add_field(name="Title", value=youtube.title, inline=False)
     if len(youtube.description[:1023].replace(" ", "")) == 0:
       embed.add_field(name="Description", value="No description provided", inline=False)
