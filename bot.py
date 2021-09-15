@@ -516,10 +516,10 @@ async def youtube(ctx, *, link):
       totallen += count.length
       totalrating += count.rating
       totalview += count.views
-    embed.add_field(name="Total views", value=str(totalview), inline=True)
+    embed.add_field(name="Total views", value=f"{totalview:,}", inline=True)
     embed.add_field(name="Total length", value=format_length(totallen), inline=True)
     embed.add_field(name="Total rating", value=f"{str(round(totalrating*20, 3))}%", inline=True)
-    embed.add_field(name="Average views", value=round(totalview/len(videos), 3), inline=True)
+    embed.add_field(name="Average views", value=f"round(totalview/len(videos), 3):,", inline=True)
     embed.add_field(name="Average length", value=format_length(round(totallen/len(videos))), inline=True)
     embed.add_field(name="Average rating", value=f"{str(round(totalrating/len(videos)*20, 3))}%", inline=True)
     embed.set_footer(text="Use =youtube [Link] to download videos.")
