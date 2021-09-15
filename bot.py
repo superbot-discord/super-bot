@@ -533,8 +533,8 @@ async def youtube(ctx, *, link):
     extra_downloads=f'''
     [Video - Best quality]({youtube.streams.filter(type="video").order_by("resolution").first().url})
     [Audio - Best quality]({youtube.streams.filter(type="audio").order_by("resolution").first().url})
-    [Pictures only]({youtube.streams.filter(mime_type="video/mp4").filter(progressive="False").filter(type="video").order_by("resolution").first().url})
-    [Audio only]({youtube.streams.filter(mime_type="video/mp3").filter(progressive="False").filter(type="audio").order_by("resolution").first().url})'''
+    [Pictures only]({youtube.streams.filter(mime_type="video/mp4").filter(progressive="False").order_by("resolution").first().url})
+    [Audio only]({youtube.streams.filter(mime_type="audio/mp3").filter(progressive="False").order_by("bitrate").first().url})'''
     embed.add_field(name="Extra downloads", value=extra_downloads, inline=False)
     if youtube.age_restricted:
       embed.add_field(name="Restricted", value="This video is age-restricted.", inline=True)
