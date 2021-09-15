@@ -506,7 +506,7 @@ async def youtube(ctx, *, link):
     for count,count2 in zip(videos, range(0,12)):
       desc+=f"[{count.title}]({count.watch_url})\n{count.views:,} Views | {round(count.rating*20, 3)}% Liked | {str(format_length(count.length))}\n\n"
     embed = discord.Embed(title=chnl.channel_name, description=desc, url=chnl.videos_url)
-    embed.add_field(name="Description", value=chnl.description, inline=True)
+    # embed.add_field(name="Description", value=chnl.description, inline=True)
     embed.set_footer(text="Use =youtube [Link] to download videos. | Analysing additional info…")
     yt_msg = await ctx.send(embed=embed)
     totallen = 0
