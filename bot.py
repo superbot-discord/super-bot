@@ -494,7 +494,7 @@ async def youtube(ctx, *, link):
     videos = pytube.Search(link.replace("search ", "", 1)).results[0:20]
     desc = ""
     for count in videos:
-      desc+=f"**[{count.title}]({count.watch_url})**\n{count.views:,} Views | By [{pytube.Channel(count.channel_url).channel_name}]({count.channel_url})"
+      desc+=f"**[{count.title}]({count.watch_url})**\n{count.views:,} Views | By [{pytube.Channel(count.channel_url).channel_name}]({count.channel_url})\n"
     embed = discord.Embed(title="Search results", description=desc)
     embed.set_footer(text="Use =youtube [Link] to download videos.")
     await ctx.send(embed=embed)
@@ -535,9 +535,9 @@ async def youtube(ctx, *, link):
       filtered8 = yt_streams.filter(type="video", progressive=True).order_by("filesize")
       video8 = filtered8[0]
       extra_downloads=f'''[Frames only - Best quality]\t{sizer(video2.filesize)}\t{video2.url}\n\n[Audio - Best quality]\t\t{sizer(video3.filesize)}\t{video3.url}\n
-  [Video - Medium quality]\t{sizer(video4.filesize)}\t{video4.url}\n\n[Audio - Medium quality\t\t{sizer(video5.filesize)}\t{video5.url}\n
-  [Video - Minimum size]\t\t{sizer(video6.filesize)}\t{video6.url}\n\n[Audio - Minimum size]\t\t{sizer(video7.filesize)}\t{video7.url}\n
-  [Video+audio - Minimum size]\t{sizer(video6.filesize)}\t{video8.url}'''
+[Video - Medium quality]\t{sizer(video4.filesize)}\t{video4.url}\n\n[Audio - Medium quality\t\t{sizer(video5.filesize)}\t{video5.url}\n
+[Video - Minimum size]\t\t{sizer(video6.filesize)}\t{video6.url}\n\n[Audio - Minimum size]\t\t{sizer(video7.filesize)}\t{video7.url}\n
+[Video+audio - Minimum size]\t{sizer(video6.filesize)}\t{video8.url}'''
       f = open('extra_downloads.txt', "w")
       f.write(extra_downloads)
       f.close()
