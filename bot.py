@@ -504,17 +504,24 @@ async def youtube(ctx, *, link):
     videos = chnl.videos
     desc = f"**Videos ({len(chnl.videos):,})**:\n"
     for count,count2 in zip(videos, range(0,12)):
-      desc+=f"[{count.title}]({count.watch_url})\n{count.views:,} Views | {str(count.rating*20)}% Liked | {str(format_length(count.length))}\n\n"
+      desc+=f"[{count.title}]({count.watch_url})\n{count.views:,} Views | {round(count.rating*20, 3)}% Liked | {str(format_length(count.length))}\n\n"
     embed = discord.Embed(title=chnl.channel_name, description=desc, url=chnl.videos_url)
+    embed.add_field(name="Description", value=chnl.description, inline=True)
     embed.set_footer(text="Use =youtube [Link] to download videos. | Analysing additional info…")
     yt_msg = await ctx.send(embed=embed)
     totallen = 0
     totalrating = 0
+    totalview = 0
     for count in videos:
       totallen += count.length
       totalrating += count.rating
+      totalview += count.views
+    embed.add_field(name="Total views", value=str(totalview), inline=True)
+    embed.add_field(name="Total length", value=format_length(totallen), inline=True)
+    embed.add_field(name="Total rating", value=f"{str(round(totalrating*20, 3))}%", inline=True)
+    embed.add_field(name="Average views", value=round(totalview/len(videos), 3), inline=True)
     embed.add_field(name="Average length", value=format_length(round(totallen/len(videos))), inline=True)
-    embed.add_field(name="Average rating", value=str(round(totalrating/len(videos), 3)), inline=True)
+    embed.add_field(name="Average rating", value=f"{str(round(totalrating/len(videos)*20, 3))}%", inline=True)
     embed.set_footer(text="Use =youtube [Link] to download videos.")
     await yt_msg.edit(embed=embed)
   else:
