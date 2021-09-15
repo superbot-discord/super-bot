@@ -497,6 +497,7 @@ async def youtube(ctx, *, link):
       desc+=f"**[{count.title}]({count.watch_url})**\n{count.views:,} Views | By [{pytube.Channel(count.channel_url).channel_name}]({count.channel_url})"
     embed = discord.Embed(title="Search results", description=desc)
     embed.set_footer(text="Use =youtube [Link] to download videos.")
+    await ctx.send(embed=embed)
   else:
     try:
       playlist = pytube.Playlist(link)
