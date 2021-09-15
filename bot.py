@@ -506,7 +506,16 @@ async def youtube(ctx, *, link):
     yt = youtube.streams.filter(mime_type="video/mp4").filter(progressive="True").filter(type="video").order_by("resolution").first()
     desc = f"This video has a size of around {sizer(yt.filesize)}. Make sure you use a WiFi network for large videos."
     embed = discord.Embed(title="Download (Click here)", url=yt.url, description=f"{desc}\nNote: This message will be edited with more information.")
-    ytmsg = await ctx.send(embed=embed)
+    extra_downloads=f'''[Video - Best quality] {youtube.streams.filter(type="video").filter(progressive="False").order_by("resolution").first().url}\n
+[Audio - Best quality] {youtube.streams.filter(type="audio").order_by("bitrate").first().url}\n
+[Video - Data saver] {youtube.streams.filter(type="video").filter(progressive="False").order_by("resolution").last().url}\n
+[Audio - Data saver] {youtube.streams.filter(type="audio").order_by("bitrate").last().url}\n
+[Pictures only]({youtube.streams.filter(type="video").filter(progressive="False").order_by("resolution").first().url})'''
+    f = open('extra_downloads.txt', "w")
+    f.write(extra_downloads)
+    f.close()
+    ytmsg = await ctx.send(embed=embed, file=discord.File('extra_downloads.txt'))
+    os.remove('extra_downloads.txt')
     embed = discord.Embed(title="Download (Click here)", url=yt.url, description=desc)
     embed.add_field(name="Title", value=youtube.title, inline=False)
     if len(youtube.description[:1023].replace(" ", "")) == 0:
@@ -532,16 +541,8 @@ async def youtube(ctx, *, link):
     embed.add_field(name="Channel", value=f"[{chnl.channel_name}]({youtube.channel_url}) ({len(chnl.videos)} videos)", inline=True)
     if youtube.age_restricted:
       embed.add_field(name="Restricted", value="This video is age-restricted.", inline=True)
-    extra_downloads=f'''[Video - Best quality] {youtube.streams.filter(type="video").filter(progressive="False").order_by("resolution").first().url}\n
-    [Audio - Best quality] {youtube.streams.filter(type="audio").order_by("bitrate").first().url}\n
-    [Video - Data saver] {youtube.streams.filter(type="video").filter(progressive="False").order_by("resolution").last().url}\n
-    [Audio - Data saver] {youtube.streams.filter(type="audio").order_by("bitrate").last().url}\n
-    [Pictures only]({youtube.streams.filter(type="video").filter(progressive="False").order_by("resolution").first().url})'''
-    f = open('extra_downloads.txt', "w")
-    f.write(extra_downloads)
-    f.close()
     embed.set_thumbnail(url=youtube.thumbnail_url)
-    await ytmsg.edit(embed=embed, file=discord.File('extra_downloads.txt'))
+    await ytmsg.edit(embed=embed, attachments=[discord.File('extra_downloads.txt')])
 
 @bot.command()
 async def clearsnipe(ctx, *, chnl : discord.TextChannel = None):
