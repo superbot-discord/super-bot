@@ -72,7 +72,7 @@ overwrite.view_channel = True
 botadmin = lambda context : context.author.id == 687474789342117900
 func = lambda pct, allvals : "{:d} ({:.1f}%)".format(int(pct/100*np.sum(allvals)), int(pct))
 number_to_emoji = lambda a: a.replace("1",":one: ").replace("2",":two: ").replace("3",":three: ").replace("4",":four: ").replace("5",":five: ").replace("6",":six: ").replace("7",":seven: ").replace("8",":eight: ").replace("9",":nine: ").replace("0",":zero: ")
-sizer = lambda bytes: f"{bytes/1024:,}KB" if bytes<1048576 else (f"{bytes/1048576:,}MB" if bytes<1073741824 else f"{bytes/1073741824:,}GB")
+sizer = lambda bytes: f"{round(bytes/1024,4):,}KB" if bytes<1048576 else (f"{round(bytes/1048576,4):,}MB" if bytes<1073741824 else f"{round(bytes/1073741824,4):,}GB")
 
 @bot.event
 async def on_voice_state_update(member, before, after):
