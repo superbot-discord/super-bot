@@ -299,11 +299,11 @@ async def unix(ctx, *, text):
     m[-1]: int(m[:-1])
     for m in re.findall(r'([\d]{1,4}[yMdhms]{1})', text)
   }
-  dt1 = datetime(1970,1,1,0,0,0)
-  if text.startswith("now"):
+  dt1 = datetime.datetime(1970,1,1,0,0,0)
+  if text.startswith("now") or SequenceMatcher(None, text, "now"):
     dt2=now
   else:
-    dt2 = datetime(
+    dt2 = datetime.datetime(
       dateParts.get('y', now.year), dateParts.get('m', now.month),
       dateParts.get('d', now.day), dateParts.get('h', now.hour),
       dateParts.get('M', now.minute), dateParts.get('s', now.second))
