@@ -294,7 +294,7 @@ async def on_message(message):
 
 @bot.command()
 async def unix(ctx, *, text):
-  now = datetime.now()
+  now = datetime.datetime.now()
   dateParts = {
     m[-1]: int(m[:-1])
     for m in re.findall(r'([\d]{1,4}[yMdhms]{1})', text)
