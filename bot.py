@@ -63,6 +63,7 @@ poll_pattern = re.compile(r'([\w]+?)(:\w{2,32}:|[\uD800-\uDBFF])')
 yt_pattern = re.compile(r'search\s[0-5]\s.*')
 UNITS = {'s':'seconds', 'm':'minutes', 'h':'hours', 'd':'days', 'w':'weeks'}
 UNITS2 = {'s':'seconds', 'm':'minutes', 'h':'hours', 'd':'days', 'm':'months', 'y':'years', 'c':'centuries'}
+dt1 = datetime.datetime(1970,1,1,0,0,0)
 image = ImageCaptcha()
 typer=0
 cmaphsv = plt.cm.hsv
@@ -299,8 +300,7 @@ async def unix(ctx, *, text):
     m[-1]: int(m[:-1])
     for m in re.findall(r'([\d]{1,4}[yMdhms]{1})', text)
   }
-  dt1 = datetime.datetime(1970,1,1,0,0,0)
-  if text.startswith("now") or SequenceMatcher(None, text, "now"):
+  if text.startswith("now") or SequenceMatcher(None, text, "now").ratio()>0.65:
     dt2=now
   else:
     dt2 = datetime.datetime(
