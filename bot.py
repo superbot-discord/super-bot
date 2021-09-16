@@ -493,7 +493,7 @@ pytube.YouTube.author
 @bot.command()
 async def youtube(ctx, *, link):
   if link.startswith("search"):
-    query = re.sub('search\s([0-5]\s)?(.*)', '\2', link)
+    query = re.sub(r'search\s([0-5]\s)?(.*)', r'\2', link)
     searching = pytube.Search(query)
     if yt_pattern.fullmatch(link):
       searches = int(link[7])
