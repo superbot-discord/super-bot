@@ -307,7 +307,7 @@ async def unix(ctx, *, text):
       dateParts.get('y', now.year), dateParts.get('m', now.month),
       dateParts.get('d', now.day), dateParts.get('h', now.hour),
       dateParts.get('M', now.minute), dateParts.get('s', now.second))
-  seconds = (dt2-dt1).total_seconds()
+  seconds = round((dt2-dt1).total_seconds())
   await ctx.send(f"<t:{seconds}> | `<t:{seconds}>`\nNote: Times are calculated in UTC+0.")
 
 @bot.command()
