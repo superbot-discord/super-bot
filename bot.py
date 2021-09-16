@@ -499,9 +499,9 @@ async def youtube(ctx, *, link):
       searches = int(link[7])
     else:
       searches = 1
-    try:
-      for count in range(0, searches+1)
+    for count in range(0, searches+1):
       searching.get_next_results()
+    try:
       videos = searching.results[20*(searches-1):20*searches]
     except:
       videos = searching.results[0:20]
