@@ -304,9 +304,9 @@ async def unix(ctx, *, text):
     dt2=now
   else:
     dt2 = datetime.datetime(
-      dateParts.get('y', now.year), dateParts.get('m', now.month),
+      dateParts.get('y', now.year), dateParts.get('M', now.month),
       dateParts.get('d', now.day), dateParts.get('h', now.hour),
-      dateParts.get('M', now.minute), dateParts.get('s', now.second))
+      dateParts.get('m', now.minute), dateParts.get('s', now.second))
   seconds = round((dt2-dt1).total_seconds())
   await ctx.send(f"<t:{seconds}> | `<t:{seconds}>`\nNote: Times are calculated in UTC+0.")
 
