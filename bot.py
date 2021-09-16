@@ -308,7 +308,7 @@ async def unix(ctx, *, text):
       dateParts.get('d', now.day), dateParts.get('h', now.hour),
       dateParts.get('m', now.minute), dateParts.get('s', now.second))
   seconds = round((dt2-dt1).total_seconds())
-  await ctx.send(f"<t:{seconds}> | `<t:{seconds}>`\nNote: Times are calculated in UTC+0.")
+  await ctx.send(f"<t:{seconds}> | `<t:{seconds}>`\nNote: Times are calculated in UTC+0.\nAdd flags `f` `F` `d` `D` `t` `T` `R` to specify **f**ull, **d**ate-only, **t**ime-only or **r**:-ago formats. Small letters stand for short form.")
 
 @bot.command()
 async def unicode(ctx, *, query):
