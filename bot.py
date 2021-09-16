@@ -492,7 +492,6 @@ pytube.YouTube.author
 
 @bot.command()
 async def youtube(ctx, *, link):
-  #yt_pattern = re.compile(r'search\s[0-5]\s.*')
   if link.startswith("search"):
     query = re.sub('search\s([0-5]\s)?(.*)', '\2', link)
     searching = pytube.Search(query)
@@ -502,7 +501,8 @@ async def youtube(ctx, *, link):
         try:
           searching = searching.get_next_results()
         except:
-          break
+          await ctx.send("There are no more videos.")
+          return
     else:
       searches = 1
     try:
