@@ -60,6 +60,7 @@ bot.load_extension("botpycalc")
 id_pattern = re.compile(r'([A-Z]{5})', re.IGNORECASE)
 verify_pattern = re.compile(r'[^ ⠀][\s\S]{0,30}?[^ ⠀]#?[\d]{4}(,|, | )?[\d+\-*/×÷%xyz()\[\]\{\}]{1,50}=[\d+\-*/×÷%xyz()\[\]\{\}]{1,50}(,|, | )?[\S ]{3,20}(,|, | )?(Red|Orange|Yellow|Green|Light( |_)?Green|Dark( |_)?Green|Cyan|Blue|Light( |_)?Blue|Dark( |_)?Blue|Purple|Pink|Brown)', re.IGNORECASE)
 poll_pattern = re.compile(r'([\w]+?)(:\w{2,32}:|[\uD800-\uDBFF])')
+yt_pattern = re.compile(r'search\s[0-5]\s.*')
 UNITS = {'s':'seconds', 'm':'minutes', 'h':'hours', 'd':'days', 'w':'weeks'}
 image = ImageCaptcha()
 typer=0
@@ -492,7 +493,20 @@ pytube.YouTube.author
 @bot.command()
 async def youtube(ctx, *, link):
   if link.startswith("search"):
-    videos = pytube.Search(link.replace("search ", "", 1)).results[0:20]
+    searching = pytube.Search(link.replace("search ", "", 1))
+    if yt_pattern.fullmatch(link):
+      searches = int(link[7])
+      for count in range(0, searches):
+        try:
+          searching.get_next_results()
+        except:
+          break
+    else:
+      searches = 1
+    try:
+      videos = searching.results[20*(searches-1):20*searches]
+    except:
+      videos = searching.results[0:20]
     desc = ""
     for count in videos:
       desc+=f"**[{count.title}]({count.watch_url})**\n{count.views:,} Views | By [{pytube.Channel(count.channel_url).channel_name}]({count.channel_url})\n"
@@ -506,7 +520,6 @@ async def youtube(ctx, *, link):
     for count,count2 in zip(videos, range(0,12)):
       desc+=f"[{count.title}]({count.watch_url})\n{count.views:,} Views | {round(count.rating*20, 3)}% Liked | {str(format_length(count.length))}\n\n"
     embed = discord.Embed(title=chnl.channel_name, description=desc, url=chnl.videos_url)
-    # embed.add_field(name="Description", value=chnl.description, inline=True)
     embed.set_footer(text="Use =youtube [Link] to download videos. | Analysing additional info…")
     yt_msg = await ctx.send(embed=embed)
     totallen = 0
