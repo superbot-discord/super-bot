@@ -13,16 +13,16 @@ def bothelp(cat):
 **Coming soon: **quickembed which eliminates the use of `{{{newline}}}` entirely
 
 **Moderation Commands**
-`kick` `ban` `unban` `slowmode` `purge` `purgeuser` `purgeregex` `purgepy` `purgepygex` `nick` `makeinvite`
+`kick` `ban` `unban` `slowmode` `purge` `purgeuser` `purgeregex` `purgepy` `purgepygex` `makeinvite`
 
 **Text Manipulation Commands**
 `poll` `insert` `spoiler` `rawspoiler` `rawrawspoiler` `reverse` `emoji`
 
 **Information Commands**
-`color` `simplecolor` `translate` `definition` `calc` `define` `time` `rtimer` `ttimer` `terminate` `minecraft` `unscramble` `unicode` `random` `choice`
+`color` `simplecolor` `translate` `definition` `calc` `define` `time` `rtimer` `ttimer` `terminate` `unscramble` `unicode` `random` `choice`
 
 **Web Commands**
-`screenshot` `youtube` `wiki` `engrave` `covid` `population` `cat` `dog`
+`screenshot` `youtube` `wiki` `minecraft` `engrave` `covid` `population` `cat` `dog`
 
 **Plot/Drawing Commands**
 `ascii` `table` `render` `captcha` `pie` `barh` `barv` `hist` `sankey` `snow` `mandelbrot`
@@ -32,7 +32,7 @@ def bothelp(cat):
 
 `hello` leads you to death
 Many slash commands are available as well
-Need help? check the [documentation](https://github.com/johann-lau/Bot#bot-documentation)!"""
+Need help? check the [documentation](https://superbot-discord.github.io/documentation)!"""
   embed=discord.Embed(title="SuperBot#4073 (ID:796686363604680755)", description=desc)
   return embed
 

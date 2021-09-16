@@ -62,6 +62,7 @@ verify_pattern = re.compile(r'[^ ⠀][\s\S]{0,30}?[^ ⠀]#?[\d]{4}(,|, | )?[\d+\
 poll_pattern = re.compile(r'([\w]+?)(:\w{2,32}:|[\uD800-\uDBFF])')
 yt_pattern = re.compile(r'search\s[0-5]\s.*')
 UNITS = {'s':'seconds', 'm':'minutes', 'h':'hours', 'd':'days', 'w':'weeks'}
+UNITS2 = {'s':'seconds', 'm':'minutes', 'h':'hours', 'd':'days', 'm':'months', 'y':'years', 'c':'centuries'}
 image = ImageCaptcha()
 typer=0
 cmaphsv = plt.cm.hsv
@@ -290,6 +291,24 @@ async def on_message(message):
       await bot.process_commands(message)
     elif message.content.startswith("="):
       await message.channel.send("You are banned from the bot. Reason: "+banned_text[banned_ids.index(message.author.id)])
+
+@bot.command()
+async def unix(ctx, *, text):
+  now = datetime.now()
+  dateParts = {
+    m[-1]: int(m[:-1])
+    for m in re.findall(r'([\d]{1,4}[yMdhms]{1})', text)
+  }
+  dt1 = datetime(1970,1,1,0,0,0)
+  if text.startswith("now"):
+    dt2=now
+  else:
+    dt2 = datetime(
+      dateParts.get('y', now.year), dateParts.get('m', now.month),
+      dateParts.get('d', now.day), dateParts.get('h', now.hour),
+      dateParts.get('M', now.minute), dateParts.get('s', now.second))
+  seconds = (dt2-dt1).total_seconds()
+  await ctx.send(f"<t:{seconds}> | `<t:{seconds}>`\nNote: Times are calculated in UTC+0.")
 
 @bot.command()
 async def unicode(ctx, *, query):
