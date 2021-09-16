@@ -497,15 +497,11 @@ async def youtube(ctx, *, link):
     searching = pytube.Search(query)
     if yt_pattern.fullmatch(link):
       searches = int(link[7])
-      for count in range(0, searches):
-        try:
-          searching = searching.get_next_results()
-        except:
-          await ctx.send("There are no more videos.")
-          return
     else:
       searches = 1
     try:
+      for count in range(0, searches+1)
+      searching.get_next_results()
       videos = searching.results[20*(searches-1):20*searches]
     except:
       videos = searching.results[0:20]
