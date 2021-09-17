@@ -78,6 +78,7 @@ func = lambda pct, allvals : "{:d} ({:.1f}%)".format(int(pct/100*np.sum(allvals)
 number_to_emoji = lambda a: a.replace("1",":one: ").replace("2",":two: ").replace("3",":three: ").replace("4",":four: ").replace("5",":five: ").replace("6",":six: ").replace("7",":seven: ").replace("8",":eight: ").replace("9",":nine: ").replace("0",":zero: ")
 sizer = lambda bytes: f"{round(bytes/1024,4):,}KB" if bytes<1048576 else (f"{round(bytes/1048576,4):,}MB" if bytes<1073741824 else f"{round(bytes/1073741824,4):,}GB")
 format_length=lambda secs: f"{str(secs//86400)} days plus {str(secs%21600//3600).zfill(2)}:{str(secs%3600//60).zfill(2)}:{str(secs%60).zfill(2)}" if secs >= 86400 else (f"{str(secs//3600).zfill(2)}:{str(secs%3600//60).zfill(2)}:{str(secs%60).zfill(2)}" if secs >= 3600 else f"{str(secs//60).zfill(2)}:{str(secs%60).zfill(2)}")
+formabr = lambda vid: vid.__getattribute__("abr")+f"\t" if vid.is_progressive else 'No audio'
 
 @bot.event
 async def on_voice_state_update(member, before, after):
@@ -604,11 +605,10 @@ async def youtube(ctx, *, link):
       video7 = filtered7[0]
       filtered8 = yt_streams.filter(type="video", progressive=True).order_by("filesize")
       video8 = filtered8[0]
-      formabr = lambda vid: vid.__getattribute__("abr") if vid.is_progressive else 'No audio'
       extra_downloads=f'''Type and quality\t\tBitrate\tResolution\tSize\tLink\n
 Frames only - Best quality\t{formabr(video2)}\t{video2.resolution}\t{sizer(video2.filesize)}\t{video2.url}
 Audio - Best quality\t\t{formabr(video3)}\t{video3.resolution}\t{sizer(video3.filesize)}\t{video3.url}
-Video - Medium quality\t{formabr(video4)}\t{video4.resolution}\t{sizer(video4.filesize)}\t{video4.url}
+Video - Medium quality\t\t{formabr(video4)}\t{video4.resolution}\t{sizer(video4.filesize)}\t{video4.url}
 Audio - Medium quality\t\t{formabr(video2)}\t{video5.resolution}\t{sizer(video5.filesize)}\t{video5.url}
 Video - Minimum size\t\t{formabr(video6)}\t{video6.resolution}\t{sizer(video6.filesize)}\t{video6.url}
 Audio - Minimum size\t\t{formabr(video7)}\t{video7.resolution}\t{sizer(video7.filesize)}\t{video7.url}
