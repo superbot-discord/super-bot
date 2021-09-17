@@ -639,8 +639,6 @@ Video+audio - Minimum size\t{formabr(video8.abr)}\t{video8.resolution}\t{sizer(v
       embed.set_thumbnail(url=youtube.thumbnail_url)
       await ytmsg.edit(embed=embed)
 
-pytube.Stream.__getattribute__(name='a')
-
 @bot.command()
 async def clearsnipe(ctx, *, chnl : discord.TextChannel = None):
   if chnl == None:

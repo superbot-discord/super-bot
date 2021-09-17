@@ -37,5 +37,5 @@ Need help? check the [documentation](https://superbot-discord.github.io/document
   return embed
 
 def botinvite():
-  embed = discord.Embed(title="Invite", description = "The bot can be invited [here](https://discord.com/api/oauth2/authorize?client_id=796686363604680755&permissions=0&scope=bot%20applications.commands).")
+  embed = discord.Embed(title="Invite", description = "The bot can be invited [here](https://discord.com/api/oauth2/authorize?client_id=796686363604680755&permissions=8&redirect_uri=https%3A%2F%2Fsuperbot-discord.github.io&scope=bot%20applications.commands).")
   return embed
