@@ -518,8 +518,6 @@ async def unscramble(ctx, text, length="0"):
   await ctx.send(embed=output, file=discord.File("output.txt"))
   os.remove('output.txt')
 
-pytube.YouTube.author
-
 @bot.command()
 async def youtube(ctx, *, link):
   if link.startswith("search"):
@@ -606,10 +604,15 @@ async def youtube(ctx, *, link):
       video7 = filtered7[0]
       filtered8 = yt_streams.filter(type="video", progressive=True).order_by("filesize")
       video8 = filtered8[0]
-      extra_downloads=f'''[Frames only - Best quality]\t{sizer(video2.filesize)}\t{video2.url}\n\n[Audio - Best quality]\t\t{sizer(video3.filesize)}\t{video3.url}\n
-[Video - Medium quality]\t{sizer(video4.filesize)}\t{video4.url}\n\n[Audio - Medium quality\t\t{sizer(video5.filesize)}\t{video5.url}\n
-[Video - Minimum size]\t\t{sizer(video6.filesize)}\t{video6.url}\n\n[Audio - Minimum size]\t\t{sizer(video7.filesize)}\t{video7.url}\n
-[Video+audio - Minimum size]\t{sizer(video6.filesize)}\t{video8.url}'''
+      formabr = lambda vid: vid.__getattribute__("abr") if vid.is_progressive else 'No audio'
+      extra_downloads=f'''Type and quality\t\tBitrate\tResolution\tSize\tLink\n
+Frames only - Best quality\t{formabr(video2.abr)}\t{video2.resolution}\t{sizer(video2.filesize)}\t{video2.url}
+Audio - Best quality\t\t{formabr(video3.abr)}\t{video3.resolution}\t{sizer(video3.filesize)}\t{video3.url}
+Video - Medium quality\t{formabr(video4.abr)}\t{video4.resolution}\t{sizer(video4.filesize)}\t{video4.url}
+Audio - Medium quality\t\t{formabr(video2.abr)}\t{video5.resolution}\t{sizer(video5.filesize)}\t{video5.url}
+Video - Minimum size\t\t{formabr(video6.abr)}\t{video6.resolution}\t{sizer(video6.filesize)}\t{video6.url}
+Audio - Minimum size\t\t{formabr(video7.abr)}\t{video7.resolution}\t{sizer(video7.filesize)}\t{video7.url}
+Video+audio - Minimum size\t{formabr(video8.abr)}\t{video8.resolution}\t{sizer(video8.filesize)}\t{video8.url}'''
       f = open('extra_downloads.txt', "w")
       f.write(extra_downloads)
       f.close()
@@ -635,6 +638,8 @@ async def youtube(ctx, *, link):
         embed.add_field(name="Restricted", value="This video is age-restricted.", inline=True)
       embed.set_thumbnail(url=youtube.thumbnail_url)
       await ytmsg.edit(embed=embed)
+
+pytube.Stream.__getattribute__(name='a')
 
 @bot.command()
 async def clearsnipe(ctx, *, chnl : discord.TextChannel = None):
