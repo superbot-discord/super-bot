@@ -313,11 +313,13 @@ async def unix(ctx, *, text):
 
 @bot.command()
 async def image(ctx, *, mode):
+  await ctx.message.attachments[0].save('input.png')
   if mode.startswith("invert"):
-    await ctx.message.attachments[0].save('input.png')
     invert()
-    await ctx.send(file=discord.File('output.png'))
-    os.remove('input.png')
+  elif mode.startswith("hue"):
+    addhue(mode.split(" ")[1])
+  await ctx.send(file=discord.File('output.png'))
+  os.remove('input.png')
 
 @bot.command()
 async def unicode(ctx, *, query):
