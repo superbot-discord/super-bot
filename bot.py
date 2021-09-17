@@ -1428,7 +1428,9 @@ async def invitelink(ctx,inviteinput: discord.Invite):
   await ctx.send(embed=task.result())
 
 @bot.command()
-async def channel(ctx, channel : typing.Union[discord.TextChannel, discord.VoiceChannel, discord.StageChannel]):
+async def channel(ctx, channel:typing.Union[discord.TextChannel, discord.VoiceChannel, discord.StageChannel]=None):
+  if not channel:
+    channel = ctx.channel
   if channel.type == discord.ChannelType.text:
     task = asyncio.create_task(bottchannel(ctx, channel))
     await task

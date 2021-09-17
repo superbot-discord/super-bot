@@ -69,6 +69,8 @@ async def bottchannel(ctx, channel):
         break
       f8v = f8v+count.name+", "
     f8v = f8v [:-2] + "…"
+  async for count in channel.history(limit=1, oldest_first=True):
+    f9v=count
   embed.add_field(name="Created", value=f0v, inline=True)
   if channel.is_nsfw()==True:
     embed.add_field(name="NSFW", value="This is an NSFW channel.", inline=True)
@@ -80,6 +82,7 @@ async def bottchannel(ctx, channel):
   if f5v:
     embed.add_field(name="Invites", value=f5v, inline=True)
   embed.add_field(name="ID", value=channel.id, inline=True)
+  embed.add_field(name="First message", value=f"[here]({f9v.jump_url})", inline=True)
   return embed
 
 async def botvchannel(channel):
