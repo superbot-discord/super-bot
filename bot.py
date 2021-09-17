@@ -606,13 +606,13 @@ async def youtube(ctx, *, link):
       video8 = filtered8[0]
       formabr = lambda vid: vid.__getattribute__("abr") if vid.is_progressive else 'No audio'
       extra_downloads=f'''Type and quality\t\tBitrate\tResolution\tSize\tLink\n
-Frames only - Best quality\t{formabr(video2.abr)}\t{video2.resolution}\t{sizer(video2.filesize)}\t{video2.url}
-Audio - Best quality\t\t{formabr(video3.abr)}\t{video3.resolution}\t{sizer(video3.filesize)}\t{video3.url}
-Video - Medium quality\t{formabr(video4.abr)}\t{video4.resolution}\t{sizer(video4.filesize)}\t{video4.url}
-Audio - Medium quality\t\t{formabr(video2.abr)}\t{video5.resolution}\t{sizer(video5.filesize)}\t{video5.url}
-Video - Minimum size\t\t{formabr(video6.abr)}\t{video6.resolution}\t{sizer(video6.filesize)}\t{video6.url}
-Audio - Minimum size\t\t{formabr(video7.abr)}\t{video7.resolution}\t{sizer(video7.filesize)}\t{video7.url}
-Video+audio - Minimum size\t{formabr(video8.abr)}\t{video8.resolution}\t{sizer(video8.filesize)}\t{video8.url}'''
+Frames only - Best quality\t{formabr(video2)}\t{video2.resolution}\t{sizer(video2.filesize)}\t{video2.url}
+Audio - Best quality\t\t{formabr(video3)}\t{video3.resolution}\t{sizer(video3.filesize)}\t{video3.url}
+Video - Medium quality\t{formabr(video4)}\t{video4.resolution}\t{sizer(video4.filesize)}\t{video4.url}
+Audio - Medium quality\t\t{formabr(video2)}\t{video5.resolution}\t{sizer(video5.filesize)}\t{video5.url}
+Video - Minimum size\t\t{formabr(video6)}\t{video6.resolution}\t{sizer(video6.filesize)}\t{video6.url}
+Audio - Minimum size\t\t{formabr(video7)}\t{video7.resolution}\t{sizer(video7.filesize)}\t{video7.url}
+Video+audio - Minimum size\t{formabr(video8)}\t{video8.resolution}\t{sizer(video8.filesize)}\t{video8.url}'''
       f = open('extra_downloads.txt', "w")
       f.write(extra_downloads)
       f.close()
