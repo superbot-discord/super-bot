@@ -78,7 +78,8 @@ func = lambda pct, allvals : "{:d} ({:.1f}%)".format(int(pct/100*np.sum(allvals)
 number_to_emoji = lambda a: a.replace("1",":one: ").replace("2",":two: ").replace("3",":three: ").replace("4",":four: ").replace("5",":five: ").replace("6",":six: ").replace("7",":seven: ").replace("8",":eight: ").replace("9",":nine: ").replace("0",":zero: ")
 sizer = lambda bytes: f"{round(bytes/1024,4):,}KB" if bytes<1048576 else (f"{round(bytes/1048576,4):,}MB" if bytes<1073741824 else f"{round(bytes/1073741824,4):,}GB")
 format_length=lambda secs: f"{str(secs//86400)} days plus {str(secs%21600//3600).zfill(2)}:{str(secs%3600//60).zfill(2)}:{str(secs%60).zfill(2)}" if secs >= 86400 else (f"{str(secs//3600).zfill(2)}:{str(secs%3600//60).zfill(2)}:{str(secs%60).zfill(2)}" if secs >= 3600 else f"{str(secs//60).zfill(2)}:{str(secs%60).zfill(2)}")
-formabr = lambda vid: vid.__getattribute__("abr")+f"\t" if vid.is_progressive else 'No audio'
+formabr = lambda vid: vid.__getattribute__("abr")+f"\t" if vid.is_progressive or vid.includes_audio_track else 'No audio'
+
 
 @bot.event
 async def on_voice_state_update(member, before, after):
@@ -255,10 +256,12 @@ async def on_reaction_remove(reaction, user):
 
 
 @bot.event
-async def on_message(message):
+async def on_message(message:discord.Message):
   if message.guild.id == 852899227004305458 and message.author.id != 796686363604680755 and message.channel.id in [856053769149874196, 864757953121878026, 864754633910255646]:
     await message.add_reaction("<:UpArrowSquare:864762633194569728>")
     await message.add_reaction("<:DownArrowSquare:864762633625534485>")
+  elif message.channel.id in [805459414001778739, 805462208414089217, 880076327783370812]:
+    await message.publish()
   if not (message.author.bot or message.author.id == 802834139728445501):
     try:
       for count in message.author.mutual_guilds:
