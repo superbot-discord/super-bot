@@ -605,7 +605,7 @@ async def youtube(ctx, *, link):
       video7 = filtered7[0]
       filtered8 = yt_streams.filter(type="video", progressive=True).order_by("filesize")
       video8 = filtered8[0]
-      extra_downloads=f'''Type and quality\t\tBitrate\tResolution\tSize\tLink\n
+      extra_downloads=f'''Type and quality\t\tBitrate\t\tRes.\tSize\t\tLink\n
 Frames only - Best quality\t{formabr(video2)}\t{video2.resolution}\t{sizer(video2.filesize)}\t{video2.url}
 Audio - Best quality\t\t{formabr(video3)}\t{video3.resolution}\t{sizer(video3.filesize)}\t{video3.url}
 Video - Medium quality\t\t{formabr(video4)}\t{video4.resolution}\t{sizer(video4.filesize)}\t{video4.url}
