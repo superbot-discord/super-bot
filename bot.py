@@ -317,7 +317,7 @@ async def image(ctx, *, mode):
   if mode.startswith("invert"):
     invert()
   elif mode.startswith("hue"):
-    addhue(mode.split(" ")[1])
+    addhue(int(mode.split(" ")[1]))
   await ctx.send(file=discord.File('output.png'))
   os.remove('input.png')
 
