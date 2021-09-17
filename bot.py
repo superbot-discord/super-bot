@@ -594,17 +594,17 @@ async def youtube(ctx, *, link):
       additional_desc = " Warning: Do not use a small data plan for videos this large!" if video1.filesize >= 52428800 else ""
       desc = f"This video has a size of around {sizer(video1.filesize)}.{additional_desc}"
       embed = discord.Embed(title="Download (Click here)", url=video1.url, description=f"{desc}\nNote: This message will be edited with more information.")
-      filtered2 = yt_streams.filter(type="video").order_by("resolution")
+      allvideos = yt_streams.filter(type="video")
+      allaudios = yt_streams.filter(only_audio=True)
+      filtered2 = allvideos.order_by("resolution")
       video2 = filtered2[len(filtered2)-1]
-      filtered3 = yt_streams.filter(type="audio").order_by("abr")
+      filtered3 = allaudios.order_by("abr")
       video3 = filtered3[len(filtered3)-1]
-      filtered4 = yt_streams.filter(type="video").order_by("resolution")
-      video4 = filtered4[int(len(filtered4)/2)]
-      filtered5 = yt_streams.filter(type="audio").order_by("abr")
-      video5 = filtered5[len(filtered5)-1]
-      filtered6 = yt_streams.filter(type="video").order_by("filesize")
+      video4 = filtered2[int(len(filtered2)/2)]
+      video5 = filtered3[len(filtered3)-1]
+      filtered6 = allvideos.order_by("filesize")
       video6 = filtered6[0]
-      filtered7 = yt_streams.filter(type="audio").order_by("filesize")
+      filtered7 = allaudios.order_by("filesize")
       video7 = filtered7[0]
       filtered8 = yt_streams.filter(type="video", progressive=True).order_by("filesize")
       video8 = filtered8[0]
