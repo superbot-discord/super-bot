@@ -526,7 +526,7 @@ async def unscramble(ctx, text, length="0"):
 @bot.command()
 async def youtube(ctx, *, link):
   await ctx.channel.trigger_typing()
-  if link.startswith("search"):
+  if link.startswith("search "):
     query = re.sub(r'search\s([0-5]\s)?(.*)', r'\2', link)
     searching = pytube.Search(query)
     if yt_pattern.fullmatch(link):
@@ -550,7 +550,7 @@ async def youtube(ctx, *, link):
     embed = discord.Embed(title="Search results", description=desc)
     embed.set_footer(text="Use =youtube [Link] to download videos.")
     await ctx.send(embed=embed)
-  elif link.startswith("channel"):
+  elif link.startswith("channel "):
     chnl = pytube.Channel(link)
     videos = chnl.videos
     desc = f"**Videos ({len(chnl.videos):,})**:\n"
@@ -569,7 +569,7 @@ async def youtube(ctx, *, link):
     embed.add_field(name="Total views", value=f"{totalview:,}", inline=True)
     embed.add_field(name="Total length", value=format_length(totallen), inline=True)
     embed.add_field(name="Total rating", value=f"{str(round(totalrating*20, 3))}%", inline=True)
-    embed.add_field(name="Average views", value=f"round(totalview/len(videos), 3):,", inline=True)
+    embed.add_field(name="Average views", value=f"{round(totalview/len(videos), 3):,}", inline=True)
     embed.add_field(name="Average length", value=format_length(round(totallen/len(videos))), inline=True)
     embed.add_field(name="Average rating", value=f"{str(round(totalrating/len(videos)*20, 3))}%", inline=True)
     embed.set_footer(text="Use =youtube [Link] to download videos.")
