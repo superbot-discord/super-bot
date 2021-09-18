@@ -318,9 +318,13 @@ async def unix(ctx, *, text):
 @bot.command()
 async def image(ctx, *, mode):
   await ctx.message.attachments[0].save('input.png')
-  if mode.startswith("analyse"):
-    analyse()
-    await ctx.send(files=[discord.File('output_amount.png'), discord.File('output_lightness.png'), discord.File('output_hue.png')])
+  if mode.startswith("analyse") or mode.startswith("analyze"):
+    try:
+      scale = int(mode.replace("analyse ", "", 1).replace("analyze ", "", 1))
+    except:
+      scale = 1000
+    dominant = analyse(scale)
+    await ctx.send(f"Images are sorted by amount, brightness and hue respectively.\nDominant color: {dominant}", files=[discord.File('output_amount.png'), discord.File('output_lightness.png'), discord.File('output_hue.png')])
   else:
     if mode.startswith("invert"):
       invert()
