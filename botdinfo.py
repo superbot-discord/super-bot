@@ -1,10 +1,162 @@
 from datetime import timedelta
 import discord
 from discord.ext import commands
+import re
+from datetime import datetime, timedelta, timezone
 
 @commands.command()
 async def role(ctx,role: discord.Role=None):
   embed = botrole(ctx, role)
+  await ctx.send(embed=embed)
+
+@commands.command()
+async def user(ctx, user: discord.Member = None, channel: discord.TextChannel = None):
+  ti="User Information"
+  if user==None:
+    user=ctx.author
+  if channel==None:
+    channel=ctx.channel
+  bottrue = user.bot
+  if bottrue == True:
+    desc=f"{user.mention} (bot)"
+  else:
+    desc=f"{user.mention} (human)"
+  embed=discord.Embed(title=ti,color=user.color, description=desc)
+  embed.set_thumbnail(url=user.avatar.url)
+  if user.name==user.display_name:
+    f0v=f"{user.name}#{user.discriminator}"
+  else:
+    f0v=f"{user.name}#{user.discriminator} (__Nickname:__  `{user.display_name}`)"
+  f1v=user.created_at.strftime("%d %b, %Y (%a) %H:%M:%S")
+  f1ts = str(datetime.datetime.now(timezone.utc) - user.created_at)
+  if f1ts.count(" days, ") == 0:
+    f1va = re.sub(r'(\d{1,2}):(\d{2}):(\d{2})', r'\1 hours \2 minutes \3 seconds', f1ts) + f"\n≈ "+f1ts.split(":")[0]+" hours"
+  else:
+    days = int(re.sub(r'([\d]+) days, [\s\S]*', r'\1', f1ts))
+    f1va = re.sub(r'([\d]+) days, (\d{1,2}):(\d{2}):(\d{2})', r'\1 days \2 hrs \3 mins \4 secs', f1ts)[:-7] + f"\n≈ "+str((int(f1ts.split(" days, ")[0]))//365) + " years " + str(int(f1ts.split(" days, ")[0]) % 365) + " days"
+  f2v=user.joined_at.strftime("%d %b, %Y (%a) %H:%M:%S")
+  f2ts = str(datetime.datetime.now(timezone.utc) - user.joined_at)
+  if f2ts.count(" days, ") == 0:
+    f2va = re.sub(r'(\d{1,2}):(\d{2}):(\d{2})', r'\1 hours \2 minutes \3 seconds', f2ts) + f"\n≈ "+f2ts.split(":")[0]+" hours"
+  else:
+    f2va = re.sub(r'([\d]+) days, (\d{1,2}):(\d{2}):(\d{2})', r'\1 days \2 hrs \3 mins \4 secs', f2ts)[:-7] + f"\n≈ "+str((int(f2ts.split(" days, ")[0]))//365) + " years " + str(int(f2ts.split(" days, ")[0]) % 365) + " days"
+  allroles=user.roles
+  f3v=""
+  f3v += ("Admin, "               if channel.permissions_for(user).administrator else "")
+  f3v += ("Manage Server, "       if channel.permissions_for(user).manage_guild else "")
+  f3v += ("Manage Roles, "        if channel.permissions_for(user).manage_roles else "")
+  f3v += ("Manage Permissions, "  if channel.permissions_for(user).administrator else "")
+  f3v += ("View Audit Logs, "     if channel.permissions_for(user).view_audit_log else "")
+  f3v += ("View Server Insights, "if channel.permissions_for(user).view_guild_insights else "")
+  f3v += ("Kick Members, "        if channel.permissions_for(user).kick_members else "")
+  f3v += ("Ban Members, "         if channel.permissions_for(user).ban_members else "")
+  f3v += ("Manage Nicknames, "    if channel.permissions_for(user).manage_nicknames else "")
+  f3v += ("Manage Webhooks, "     if channel.permissions_for(user).manage_webhooks else "")
+  f3v += ("Manage Emojis, "       if channel.permissions_for(user).manage_emojis else "")
+  f3v += ("Change Nickname, "     if channel.permissions_for(user).manage_nicknames else "")
+  f3v += ("Mention Everyone, "    if channel.permissions_for(user).mention_everyone else "")
+  f3v += ("Create Invite, "       if channel.permissions_for(user).create_instant_invite else "")
+  f3v=f3v[:-2]
+  if f3v=="":
+    f3v="No permissions"
+  f3vb=""
+  f3vb += ("View Channel, "         if channel.permissions_for(user).view_channel else "")
+  f3vb += ("Read Messages, "        if channel.permissions_for(user).read_messages else "")
+  f3vb += ("Read Message History, " if channel.permissions_for(user).read_message_history else "")
+  f3vb += ("Send Messages, "        if channel.permissions_for(user).send_messages else "")
+  f3vb += ("Send TTS Messages, "    if channel.permissions_for(user).send_tts_messages else "")
+  f3vb += ("Add Reactions, "        if channel.permissions_for(user).add_reactions else "")
+  f3vb += ("External Emojis, "      if channel.permissions_for(user).external_emojis else "")
+  f3vb += ("Attach Files, "         if channel.permissions_for(user).attach_files else "")
+  f3vb += ("Embed Links, "          if channel.permissions_for(user).embed_links else "")
+  f3vb=f3vb[:-2]
+  if f3vb=="":
+    f3vb="No permissions"
+  f3ve=""
+  f3ve += ("Connect, "            if user.guild_permissions.connect else "")
+  f3ve += ("Speak (Audio), "      if user.guild_permissions.speak else "")
+  f3ve += ("Stream (Video), "     if user.guild_permissions.stream else "")
+  f3ve += ("Use Voice Activity, " if user.guild_permissions.use_voice_activation else "")
+  f3ve += ("Priority Speaker, "   if user.guild_permissions.priority_speaker else "")
+  f3ve += ("Mute Memvers, "       if user.guild_permissions.mute_members else "")
+  f3ve += ("Deafen Members, "     if user.guild_permissions.deafen_members else "")
+  f3ve += ("Move Members, "       if user.guild_permissions.move_members else "")
+  f3ve += ("Request to Speak, "   if user.guild_permissions.request_to_speak else "")
+  f3ve=f3ve[:-2]
+  if f3ve=="":
+    f3ve="No permissions"
+  if user.status == discord.Status.online:
+    f3vd = "Online"
+  elif user.status == discord.Status.idle:
+    f3vd = "Idle"
+  elif user.status == discord.Status.dnd:
+    f3vd = "Do Not Disturb"
+  elif user.status == discord.Status.offline:
+    f3vd = "Offline"
+  else:
+    f3vd = "Unknown"
+  f3vcraw = user.activity
+  try:
+    if f3vcraw.type.playing:
+      try:
+        f3vc = f"Playing {f3vcraw.name} since "+f3vcraw.start.strftime("%d %b, %Y (%a) %H:%M:%S")+f"\n{f3vcraw.details}"
+      except:
+        f3vc = f"Playing {f3vcraw.name}"
+    elif f3vcraw.type.streaming:
+      f3vc = f"Streaming [{f3vcraw.name}({f3vcraw.game})]({f3vcraw.url}) via {f3vcraw.platform}\n{f3vcraw.details}"
+    elif f3vcraw.type.listening:
+      f3vc = f"Listening to {f3vcraw.artist} - {f3vcraw.album}: {f3vcraw.title}\nStarted: "+f3vcraw.created_at.strftime("%d %b, %Y (%a) %H:%M:%S")+f"\n{f3vcraw.details}"
+    elif f3vcraw.type.watching:
+      try:
+        f3vc = f"Watching [{f3vcraw.name}]({f3vcraw.url}) since "+f3vcraw.start.strftime("%d %b, %Y (%a) %H:%M:%S")+f"\n{f3vcraw.details}"
+      except:
+        f3vc = f"Watching {f3vcraw.name}since "+f3vcraw.start.strftime("%d %b, %Y (%a) %H:%M:%S")
+    elif f3vcraw.type.custom:
+      try:
+        f3vc = f":{f3vcraw.emoji.name}: {f3vcraw.details}"
+      except:
+        f3vc = f":{f3vcraw.emoji.name}:"
+  except:
+    pass
+  f4v=""
+  if len(allroles) > 1:
+    allroles.reverse()
+    allroles = allroles[:-1]
+    for count in allroles:
+      f4v = f4v + count.mention+" "
+    f4v = f4v[:-1]
+  else:
+    f4v="No roles"
+  f5v = ""
+  f5v = f5v + (f"**Staff:** The user is a Discord Employee.\n"                             if user.public_flags.staff else "")
+  f5v = f5v + (f"**Partner:** The user is a Discord Partner.\n"                            if user.public_flags.partner else "")
+  f5v = f5v + (f"**Hypesquad:** The user is a HypeSquad Events member.\n"                  if user.public_flags.hypesquad else "")
+  f5v = f5v + (f"**Early Support:** The user is an Early Supporter.\n"                     if user.public_flags.early_supporter else "")
+  f5v = f5v + (f"**Team User:** The user is a Team User.\n"                                if user.public_flags.team_user else "")
+  f5v = f5v + (f"**Bug Hunter:** The user is a Bug Hunter.\n"                              if user.public_flags.bug_hunter else "")
+  f5v = f5v + (f"**Bug Hunter 2:** The user is a Bug Hunter (Level 2).\n"                  if user.public_flags.bug_hunter_level_2 else "")
+  f5v = f5v + (f"**System:** The user is a system user (represents Discord officially).\n" if user.public_flags.system else "")
+  f5v = f5v + (f"**Developer:** The user is a Verified Bot Developer.\n"                   if user.public_flags.verified_bot_developer else "")
+  f5v = f5v + (f"**✔︎Bot:** The user is a Verified Bot.\n"                                  if user.public_flags.verified_bot else "")
+  f5v = f5v + (f"**Hypesquad:** The user is in the Hypesquad Bravery House.\n"             if user.public_flags.hypesquad_bravery else "")
+  f5v = f5v + (f"**Hypesquad:** The user is in the Hypesquad Brilliance House.\n"          if user.public_flags.hypesquad_brilliance else "")
+  f5v = f5v + (f"**Hypesquad:** The user is in the Hypesquad Balance House.\n"             if user.public_flags.hypesquad_balance else "")
+  f5v = "No badges" if len(f5v) == 0 else None
+  embed.add_field(name="Time since user registered", value=f1va, inline=True)
+  embed.add_field(name="Time since user joined", value=f2va, inline=True)
+  embed.add_field(name="Name", value=f0v, inline=False)
+  embed.add_field(name="Registered", value=f1v, inline=True)
+  embed.add_field(name="Joined", value=f2v, inline=True)
+  embed.add_field(name="Roles", value=f4v, inline=False)
+  embed.add_field(name="Server Permissions", value=f3v, inline=False)
+  embed.add_field(name="Channel Permissions", value=f3vb, inline=False)
+  embed.add_field(name="Channel Permissions", value=f3ve, inline=False)
+  embed.add_field(name="Status", value=f3vd, inline=True)
+  try:
+    embed.add_field(name="Activity", value=f3vc, inline=True)
+  except:
+    pass
+  embed.add_field(name="Badges", value=f5v, inline=False)
   await ctx.send(embed=embed)
 
 def botrole(ctx, role):
@@ -22,25 +174,14 @@ def botrole(ctx, role):
       f0v = f0v + count.mention + " "
     f0v = f0v[:-1]
   mention=role.mentionable
-  if mention:
-    f1v="Mentionable"
-  else:
-    f1v="Not mentionable"
-  f1v=f1v+"""
-  Mention: `<&"""+str(role.id)+">`"
-  hoisted=role.hoist
-  if hoisted:
-    f2v="Yes"
-  else:
-    f2v="No"
-  f4v=role.id
-  f5v=role.position
-  f6v=role.color
+  f1v=("Mentionable" if mention else "Not mentionable")
+  f1v=f1v+f"\nMention: `<&{str(role.id)}>`"
+  f2v="Yes" if role.hoist else "No"
   embed.add_field(name="Mentions", value=f1v, inline=True)
   embed.add_field(name="Displayed separately?", value=f2v, inline=True)
-  embed.add_field(name="Role ID", value=f4v, inline=True)
-  embed.add_field(name="Position in hierarchy", value=f5v, inline=True)
-  embed.add_field(name="Color", value=f6v, inline=True)
+  embed.add_field(name="Role ID", value=role.id, inline=True)
+  embed.add_field(name="Position in hierarchy", value=role.position, inline=True)
+  embed.add_field(name="Color", value=role.color, inline=True)
   if role.is_integration():
     f7v="This role is managed by an integration, such as a bot."
     embed.add_field(name="Integration", value=f7v, inline=False)
@@ -376,3 +517,4 @@ def botstatus(ctx, member):
 
 def setup(bot):
   bot.add_command(role)
+  bot.add_command(user)
