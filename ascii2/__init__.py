@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import math
-from ascii import asciify
-from ascii import colorize
+from ascii2 import asciify
+from ascii2 import colorize
 
 def rgb_to_hex(rgb):
 	return '%02x%02x%02x' % rgb

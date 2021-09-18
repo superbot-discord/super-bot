@@ -1,7 +1,7 @@
 import math
 pixels = ".,:;i1tfLCG08@"
 
-from ascii import colorize
+from ascii2 import colorize
 
 def asciify(r,g,b,a):
 	rawChar = getRawChar(r,g,b,a)
