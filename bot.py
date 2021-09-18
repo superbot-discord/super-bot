@@ -367,8 +367,8 @@ async def encode(ctx, code, *, text):
   elif SequenceMatcher(None, code, 'caesar').ratio()>0.6 or code.startswith("caesar"):
     encrypted = ""
     distance = int(code.replace("caesar", "", 1))
-    for char in message:
-      encrypted += chr(ord(char) + distance % 128)
+    for count in text:
+      encrypted += chr(ord(count) + distance % 128)
     await ctx.send(encrypted)
   else:
     await ctx.send("Encoding not found!")
@@ -387,8 +387,8 @@ async def decode(ctx, code, *, text):
   elif SequenceMatcher(None, code, 'caesar').ratio()>0.6 or code.startswith("caesar"):
     encrypted = ""
     distance = 128-int(code.replace("caesar", "", 1))
-    for char in message:
-      encrypted += chr(ord(char) + distance % 128)
+    for count in text:
+      encrypted += chr(ord(count) + distance % 128)
     await ctx.send(encrypted)
   else:
     await ctx.send("Encoding not found!")
