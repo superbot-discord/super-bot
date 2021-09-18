@@ -1,4 +1,4 @@
-from PIL import Image, ImageOps, ImageDraw
+from PIL import Image, ImageFilter, ImageOps, ImageDraw
 from colorthief import ColorThief
 from colorgram import extract
 import colorsys
@@ -31,6 +31,28 @@ def invert():
     inverted_image = ImageOps.invert(image)
     inverted_image.save('output.png')
 
+def resize(x, y):
+  image = Image.open('input.png')
+  newimg = image.resize((x,y), Image.NEAREST)
+  newimg.save('output1.png')
+  newimg = image.resize((x,y), Image.BOX)
+  newimg.save('output2.png')
+  newimg = image.resize((x,y), Image.BILINEAR)
+  newimg.save('output3.png')
+  newimg = image.resize((x,y), Image.HAMMING)
+  newimg.save('output4.png')
+  newimg = image.resize((x,y), Image.BICUBIC)
+  newimg.save('output5.png')
+  newimg = image.resize((x,y), Image.LANCZOS)
+  newimg.save('output6.png')
+
+def blur(distance):
+  image = Image.open('input.png')
+  newimg = image.filter(ImageFilter.BoxBlur(distance))
+  newimg.save('output1.png')
+  newimg = image.filter(ImageFilter.GaussianBlur(distance))
+  newimg.save('output2.png')
+
 def analyse(scale):
   if scale > 5000:
     scale = 1000
@@ -61,6 +83,7 @@ def analyse(scale):
     draw.rectangle((counter, 0, counter+count.proportion*scale, round(scale/3)), (count.rgb.r, count.rgb.g, count.rgb.b))
     counter += count.proportion*scale
   newimg.save('output_amount.png')
+
   dominant = ColorThief('input.png').get_color(quality=1)
   hexcode = f'#{((dominant[0] << 16) + (dominant[1] << 8) + dominant[2]):02x}'.upper()
   return hexcode

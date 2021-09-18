@@ -325,10 +325,19 @@ async def image(ctx, *, mode):
       scale = 1000
     dominant = analyse(scale)
     await ctx.send(f"Images are sorted by amount, brightness and hue respectively.\nDominant color: {dominant}", files=[discord.File('output_amount.png'), discord.File('output_lightness.png'), discord.File('output_hue.png')])
+  elif mode.startswith("blur"):
+    try:
+      blur(int(mode.split(" ")[1]))
+    except:
+      blur(2)
+    await ctx.send(files=[discord.File('output1.png'), discord.File('output2.png')])
+  elif mode.startswith("resize "):
+    resize(int(mode.split(" ")[1]), int(mode.split(" ")[2]))
+    await ctx.send(files=[discord.File('output1.png'), discord.File('output2.png'), discord.File('output3.png'), discord.File('output4.png'), discord.File('output5.png'), discord.File('output6.png')])
   else:
     if mode.startswith("invert"):
       invert()
-    elif mode.startswith("hue"):
+    elif mode.startswith("hue "):
       addhue(int(mode.split(" ")[1]))
     await ctx.send(file=discord.File('output.png'))
   os.remove('input.png')
