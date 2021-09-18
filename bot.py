@@ -12,7 +12,7 @@ from difflib import SequenceMatcher
 from math import *
 
 import aiohttp
-import ascii as asc
+import ascii2 as asc
 import emojis as ems
 import matplotlib.pyplot as plt
 import numpy as np
@@ -851,10 +851,11 @@ async def translate(ctx, langinput = "list", *, text = "Sample text"):
     await ctx.send(embed=e2)
 
 @bot.command()
-async def render(ctx, width=None):
+async def render(ctx, width:float=1):
+  att = ctx.message.attachments[0]
   for count in range(40, 4, -1):
     try:
-      output = asc.loadFromUrl(ctx.message.attachments[0].url, columns=ctx.message.attachments[0].width*count*width/10, color=True)
+      output = asc.loadFromUrl(att.url, columns=att.width*count*width/10, color=True)
       break
     except:
       pass

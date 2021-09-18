@@ -1,1 +1,1 @@
-heroku logs -a superior-dbot -t
+heroku logs -a super-dbot -t

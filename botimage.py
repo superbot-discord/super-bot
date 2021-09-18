@@ -64,6 +64,7 @@ def analyse(scale):
   if scale > 5000:
     scale = 1000
   palette = extract('input.png', 15)
+  
   palette.sort(key=lambda c: c.hsl.l)
   newimg = Image.new('RGB', (scale, round(scale/3)), (255, 255, 255))
   draw = ImageDraw.Draw(newimg)
