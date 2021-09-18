@@ -333,7 +333,18 @@ async def image(ctx, *, mode):
     await ctx.send(files=[discord.File('output1.png'), discord.File('output2.png')])
   elif mode.startswith("resize "):
     resize(int(mode.split(" ")[1]), int(mode.split(" ")[2]))
-    await ctx.send(files=[discord.File('output1.png'), discord.File('output2.png'), discord.File('output3.png'), discord.File('output4.png'), discord.File('output5.png'), discord.File('output6.png')])
+    try:
+      await ctx.send(files=[discord.File('output1.png'), discord.File('output2.png'), discord.File('output3.png'), discord.File('output4.png'), discord.File('output5.png'), discord.File('output6.png')])
+    except:
+      await ctx.send(file=discord.File('output1.png'))
+      await ctx.send(file=discord.File('output2.png'))
+      await ctx.send(file=discord.File('output3.png'))
+      await ctx.send(file=discord.File('output4.png'))
+      await ctx.send(file=discord.File('output5.png'))
+      await ctx.send(file=discord.File('output6.png'))
+  elif mode.startswith("rotate "):
+    rotate(float(mode.split(" ")[1]))
+    await ctx.send(files=[discord.File('output1.png'), discord.File('output2.png')])
   else:
     if mode.startswith("invert"):
       invert()

@@ -53,6 +53,13 @@ def blur(distance):
   newimg = image.filter(ImageFilter.GaussianBlur(distance))
   newimg.save('output2.png')
 
+def rotate(degrees):
+  image = Image.open('input.png')
+  newimg = image.rotate(angle=degrees)
+  newimg.save('output1.png')
+  newimg = image.rotate(angle=degrees, expand=True)
+  newimg.save('output2.png')
+
 def analyse(scale):
   if scale > 5000:
     scale = 1000
