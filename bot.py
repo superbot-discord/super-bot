@@ -5,6 +5,7 @@ import hashlib
 import os
 import random as ra
 import re
+import sys
 import typing
 from cmath import *
 from datetime import datetime, timedelta, timezone
@@ -12,7 +13,6 @@ from difflib import SequenceMatcher
 from math import *
 
 import aiohttp
-import ascii2 as asc
 import emojis as ems
 import matplotlib.pyplot as plt
 import numpy as np
@@ -29,6 +29,7 @@ from discord.ext import commands
 from pdf2image import convert_from_path
 from unicode_charnames import search_charnames
 
+import ascii2 as asc
 from botanimals import *
 from botbasic import *
 from botdinfo import *
@@ -855,7 +856,9 @@ async def render(ctx, width:float=1):
   att = ctx.message.attachments[0]
   for count in range(40, 4, -1):
     try:
-      output = asc.loadFromUrl(att.url, columns=att.width*count*width/10, color=True)
+      output = asc.loadFromUrl(att.url, columns=int(att.width*count*width/10), color=True)
+      if sys.getsizeof(output) > 8000000:
+        continue
       break
     except:
       pass
