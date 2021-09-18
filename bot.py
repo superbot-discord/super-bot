@@ -1617,7 +1617,5 @@ async def on_ready():
   # await slash.sync_all_commands(SlashCommand)
   print("Bot is ready!")
 
-print("Previous instance is being closed…")
-bot.clear()
 print("Bot is getting started…")
 bot.run('Nzk2Njg2MzYzNjA0NjgwNzU1.X_bh_g.6uKl_EPp5r5XZpSxCxPTIuA69aE')
