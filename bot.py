@@ -823,10 +823,10 @@ async def translate(ctx, langinput = "list", *, text = "Sample text"):
     await ctx.send(embed=e2)
 
 @bot.command()
-async def render(ctx):
+async def render(ctx, width=None):
   for count in range(40, 4, -1):
     try:
-      output = asc.loadFromUrl(ctx.message.attachments[0].url, columns=ctx.message.attachments[0].width*count/10, color=False)
+      output = asc.loadFromUrl(ctx.message.attachments[0].url, columns=ctx.message.attachments[0].width*count*width/10, color=True)
       break
     except:
       pass
