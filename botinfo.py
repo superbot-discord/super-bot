@@ -1,4 +1,5 @@
 from bs4 import BeautifulSoup
+from PIL import Image
 import emojis as em
 import requests
 import datetime
@@ -41,14 +42,11 @@ def botcolor(color):
   colors = re.split(',|\s|;|/|\||\\|&', color)
   match = hexstring_pattern.fullmatch(colors[0])
   if all(arg and arg.isdigit() and 0 <= int(arg) < 256 for arg in colors) and len(colors)>2:
-    desc = f'RGB: {colors[0]}, {colors[1]}, {colors[2]}'
     r, g, b = map(int, colors)
   elif colors[0].isdigit() and 0 <= int(colors[0]) < 2 ** 24:
-    desc = f'Decimal: {colors[0]}'
     n = int(colors[0])
     r, g, b = n >> 16, (n >> 8) & 255, n & 255
   elif match:
-    desc = f'Hex: {colors[0]}'
     r, g, b = (int(val, 16) for val in match.groups())
   else:
     return "Please specify a correct colour value."
@@ -67,7 +65,9 @@ def botcolor(color):
   embed.add_field(name='RGB', value=f'{r}, {g}, {b}\n{r1}, {g1}, {b1}', inline=True)
   embed.add_field(name='Hex Code', value=f'#{hex_}', inline=True)
   embed.add_field(name='Decimal Value', value=deci, inline=True)
-  embed.set_thumbnail(url=f'https://htmlcolors.com/color-image/{hex_}.png')
+  embed.set_thumbnail(url='attachment://color.png')
+  img = Image.new('RGB', (32, 32), (r, g, b))
+  img.save('color.png')
   return embed
 
 def botemoji(text):

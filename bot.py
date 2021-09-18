@@ -318,11 +318,15 @@ async def unix(ctx, *, text):
 @bot.command()
 async def image(ctx, *, mode):
   await ctx.message.attachments[0].save('input.png')
-  if mode.startswith("invert"):
-    invert()
-  elif mode.startswith("hue"):
-    addhue(int(mode.split(" ")[1]))
-  await ctx.send(file=discord.File('output.png'))
+  if mode.startswith("analyse"):
+    analyse()
+    await ctx.send(files=[discord.File('output_amount.png'), discord.File('output_lightness.png'), discord.File('output_hue.png')])
+  else:
+    if mode.startswith("invert"):
+      invert()
+    elif mode.startswith("hue"):
+      addhue(int(mode.split(" ")[1]))
+    await ctx.send(file=discord.File('output.png'))
   os.remove('input.png')
 
 @bot.command()
@@ -1166,7 +1170,8 @@ async def color(ctx, *, name):
     if output == "Please specify a correct colour value.":
       await ctx.send(output)
     else:
-      await ctx.send(embed=output)
+      await ctx.send(file = discord.File('color.png'), embed=output)
+      os.remove('color.png')
 
 @bot.command()
 async def time(ctx, *, timezoneinput="0"):

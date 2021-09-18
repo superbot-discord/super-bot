@@ -1,4 +1,5 @@
-from PIL import Image, ImageOps
+from PIL import Image, ImageOps, ImageDraw
+from colorgram import extract
 import colorsys
 
 def addhue(degs):
@@ -28,3 +29,32 @@ def invert():
   else:
     inverted_image = ImageOps.invert(image)
     inverted_image.save('output.png')
+
+def analyse():
+  palette = extract('input.png', 15)
+  palette.sort(key=lambda c: c.hsl.l)
+  newimg = Image.new('RGB', (1000, 500), (255, 255, 255))
+  draw = ImageDraw.Draw(newimg)
+  counter = 0
+  for count in palette:
+    draw.rectangle((counter, 0, counter+count.proportion*1000, 500), (count.rgb.r, count.rgb.g, count.rgb.b))
+    counter += count.proportion*1000
+  newimg.save('output_lightness.png')
+
+  palette.sort(key=lambda c: c.hsl.h)
+  newimg = Image.new('RGB', (1000, 500), (255, 255, 255))
+  draw = ImageDraw.Draw(newimg)
+  counter = 0
+  for count in palette:
+    draw.rectangle((counter, 0, counter+count.proportion*1000, 500), (count.rgb.r, count.rgb.g, count.rgb.b))
+    counter += count.proportion*1000
+  newimg.save('output_hue.png')
+
+  palette.sort(key=lambda c: c.proportion)
+  newimg = Image.new('RGB', (1000, 500), (255, 255, 255))
+  draw = ImageDraw.Draw(newimg)
+  counter = 0
+  for count in palette:
+    draw.rectangle((counter, 0, counter+count.proportion*1000, 500), (count.rgb.r, count.rgb.g, count.rgb.b))
+    counter += count.proportion*1000
+  newimg.save('output_amount.png')
