@@ -1612,11 +1612,12 @@ async def slowmode(ctx, sec = None, *channels:typing.Union[discord.TextChannel,s
 
 @bot.event
 async def on_ready():
-  print('Bot is preparing itself…')
   activity = discord.Activity(type=discord.ActivityType.playing, name=f"with =help in {len(bot.guilds)} servers")
   await bot.change_presence(status=discord.Status.idle, activity=activity)
   # await slash.sync_all_commands(SlashCommand)
   print("Bot is ready!")
 
+print("Previous instance is being closed…")
+bot.clear()
 print("Bot is getting started…")
 bot.run('Nzk2Njg2MzYzNjA0NjgwNzU1.X_bh_g.6uKl_EPp5r5XZpSxCxPTIuA69aE')
