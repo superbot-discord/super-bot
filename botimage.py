@@ -84,7 +84,7 @@ def analyse(scale, colors):
     desc += f"{rgb_tuple.r}\t{rgb_tuple.g}\t{rgb_tuple.b}\t{hsl_tuple.h}\t{hsl_tuple.s}\t{hsl_tuple.l}\t{str(count.proportion*100)}%\n"
     counter += count.proportion*scale
   newimg.save('output_lightness.png')
-  desc += f"Average:\n{r_total/colors}\t{g_total/colors}\t{b_total/colors}\t{h_total/colors}\t{s_total/colors}\t{l_total/colors}"
+  desc += f"Average:\n{round(r_total/colors,2)}\t{round(g_total/colors,2)}\t{round(b_total/colors,2)}\t{round(h_total/colors,2)}\t{round(s_total/colors,2)}\t{round(l_total/colors,2)}"
 
   palette.sort(key=lambda c: c.hsl.h)
   newimg = Image.new('RGB', (scale, round(scale/3)), (255, 255, 255))
