@@ -321,12 +321,12 @@ async def image(ctx, *, mode):
   if mode.startswith("analyse") or mode.startswith("analyze"):
     try:
       scale = int(mode.split(" ")[1])
-      try:
-        colors = int(mode.split(" ")[2])
-      except:
-        colors = 5
     except:
       scale = 1000
+    try:
+      colors = int(mode.split(" ")[2])
+    except:
+      colors = 5
     dominant = analyse(scale, colors)
     try:
       await ctx.send(f"Images are sorted by amount, brightness and hue respectively.\nDominant color: {dominant}", files=[discord.File('output_amount.png'), discord.File('output_lightness.png'), discord.File('output_hue.png'), discord.File('analysis.txt')])

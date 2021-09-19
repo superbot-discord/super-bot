@@ -70,13 +70,21 @@ def analyse(scale, colors):
   newimg = Image.new('RGB', (scale, round(scale/3)), (255, 255, 255))
   draw = ImageDraw.Draw(newimg)
   counter = 0
+  r_total = g_total = b_total = h_total = s_total = l_total = 0
   for count in palette:
     rgb_tuple = count.rgb
     hsl_tuple = count.hsl
+    r_total += rgb_tuple.r
+    g_total += rgb_tuple.g
+    b_total += rgb_tuple.b
+    h_total += hsl_tuple.h
+    s_total += hsl_tuple.s
+    l_total += hsl_tuple.l
     draw.rectangle((counter, 0, counter+count.proportion*scale, round(scale/3)), (rgb_tuple.r, rgb_tuple.g, rgb_tuple.b))
     desc += f"{rgb_tuple.r}\t{rgb_tuple.g}\t{rgb_tuple.b}\t{hsl_tuple.h}\t{hsl_tuple.s}\t{hsl_tuple.l}\t{str(count.proportion*100)}%\n"
     counter += count.proportion*scale
   newimg.save('output_lightness.png')
+  desc += f"Average:\n{r_total/colors}\t{g_total/colors}\t{b_total/colors}\t{h_total/colors}\t{s_total/colors}\t{l_total/colors}"
 
   palette.sort(key=lambda c: c.hsl.h)
   newimg = Image.new('RGB', (scale, round(scale/3)), (255, 255, 255))
