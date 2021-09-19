@@ -65,7 +65,7 @@ yt_pattern = re.compile(r'search\s[0-5]\s.*')
 UNITS = {'s':'seconds', 'm':'minutes', 'h':'hours', 'd':'days', 'w':'weeks'}
 UNITS2 = {'s':'seconds', 'm':'minutes', 'h':'hours', 'd':'days', 'm':'months', 'y':'years', 'c':'centuries'}
 dt1 = datetime(1970,1,1,0,0,0)
-image = ImageCaptcha()
+cimage = ImageCaptcha()
 typer=0
 cmaphsv = plt.cm.hsv
 sniper1=sniper2=sniper3=sniper4=sniper5=sniperdate1=sniperdate2=sniperdate3=sniperdate4=sniperdate5=sniperdict=sniping=poll_options={}
@@ -831,7 +831,7 @@ async def population(ctx, country="current"):
 async def captcha(ctx, *, text=None):
   if text == None:
     text = ra.choice("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789") + ra.choice("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789") + ra.choice("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789") + ra.choice("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789")
-  data = image.generate(text)
+  data = cimage.generate(text)
   image.write(text, 'captcha.png')
   await ctx.send(f"Captcha for {text}", file = discord.File('captcha.png'))
   os.remove('captcha.png')
