@@ -65,8 +65,8 @@ def analyse(scale, colors):
     scale = 1000
   palette = extract('input.png', colors)
   desc = f"Red\tGreen\tBlue\tHue\tSatur.\tLight.\tPercentage\n"
-  
-  palette.sort(key=lambda c: c.hsl.l)
+
+  palette.sort(key=lambda c: c.proportion)
   newimg = Image.new('RGB', (scale, round(scale/3)), (255, 255, 255))
   draw = ImageDraw.Draw(newimg)
   counter = 0
@@ -83,9 +83,20 @@ def analyse(scale, colors):
     draw.rectangle((counter, 0, counter+count.proportion*scale, round(scale/3)), (rgb_tuple.r, rgb_tuple.g, rgb_tuple.b))
     desc += f"{rgb_tuple.r}\t{rgb_tuple.g}\t{rgb_tuple.b}\t{hsl_tuple.h}\t{hsl_tuple.s}\t{hsl_tuple.l}\t{str(count.proportion*100)}%\n"
     counter += count.proportion*scale
-  newimg.save('output_lightness.png')
+  newimg.save('output_amount.png')
   desc += f"Average:\n{round(r_total/colors,2)}\t{round(g_total/colors,2)}\t{round(b_total/colors,2)}\t{round(h_total/colors,2)}\t{round(s_total/colors,2)}\t{round(l_total/colors,2)}"
-
+  
+  palette.sort(key=lambda c: c.hsl.l)
+  newimg = Image.new('RGB', (scale, round(scale/3)), (255, 255, 255))
+  draw = ImageDraw.Draw(newimg)
+  counter = 0
+  for count in palette:
+    rgb_tuple = count.rgb
+    hsl_tuple = count.hsl
+    draw.rectangle((counter, 0, counter+count.proportion*scale, round(scale/3)), (rgb_tuple.r, rgb_tuple.g, rgb_tuple.b))
+    counter += count.proportion*scale
+  newimg.save('output_lightness.png')
+  
   palette.sort(key=lambda c: c.hsl.h)
   newimg = Image.new('RGB', (scale, round(scale/3)), (255, 255, 255))
   draw = ImageDraw.Draw(newimg)
@@ -96,17 +107,6 @@ def analyse(scale, colors):
     draw.rectangle((counter, 0, counter+count.proportion*scale, round(scale/3)), (rgb_tuple.r, rgb_tuple.g, rgb_tuple.b))
     counter += count.proportion*scale
   newimg.save('output_hue.png')
-
-  palette.sort(key=lambda c: c.proportion)
-  newimg = Image.new('RGB', (scale, round(scale/3)), (255, 255, 255))
-  draw = ImageDraw.Draw(newimg)
-  counter = 0
-  for count in palette:
-    rgb_tuple = count.rgb
-    hsl_tuple = count.hsl
-    draw.rectangle((counter, 0, counter+count.proportion*scale, round(scale/3)), (rgb_tuple.r, rgb_tuple.g, rgb_tuple.b))
-    counter += count.proportion*scale
-  newimg.save('output_amount.png')
 
   dominant = ColorThief('input.png').get_color(quality=1)
   hexcode = f'#{((dominant[0] << 16) + (dominant[1] << 8) + dominant[2]):02x}'.upper()
