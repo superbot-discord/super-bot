@@ -832,7 +832,7 @@ async def captcha(ctx, *, text=None):
   if text == None:
     text = ra.choice("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789") + ra.choice("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789") + ra.choice("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789") + ra.choice("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789")
   data = cimage.generate(text)
-  image.write(text, 'captcha.png')
+  cimage.write(text, 'captcha.png')
   await ctx.send(f"Captcha for {text}", file = discord.File('captcha.png'))
   os.remove('captcha.png')
 
