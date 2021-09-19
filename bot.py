@@ -335,6 +335,7 @@ async def image(ctx, *, mode):
       await ctx.send(file=discord.File('output_lightness.png'))
       await ctx.send(file=discord.File('output_hue.png'))
       await ctx.send(file=discord.File('analysis.txt'))
+    os.remove('analysis.txt')
   elif mode.startswith("blur"):
     try:
       blur(int(mode.split(" ")[1]))
@@ -1432,12 +1433,16 @@ async def choice(ctx,*options):
 
 @bot.command()
 async def avatar(ctx,user: discord.Member=None):
-  ti="Avatar"
-  if user==None:
+  base_url = user.avatar.url
+  if not user:
     user=ctx.author
-  desc=f"Avatar of {user.mention}"
-  embed=discord.Embed(title=ti, description=desc)
-  embed.set_image(url=user.avatar.url)
+  desc = f"Avatar of {user.mention}\n"
+  for count in range(5, 13):
+    size = str(2**count)
+    temp = base_url.replace("?size=1024", f"?size={size}")
+    desc += f"[{size}]({temp}) "
+  embed=discord.Embed(title="Avatar", description=desc)
+  embed.set_image(url=base_url)
   await ctx.send(embed=embed)
 
 @bot.command(aliases = ["guild"])
