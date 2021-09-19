@@ -130,7 +130,7 @@ def bottime(timezoneinput):
   if timezoneinput.replace(".","").isnumeric():
     timezone=float(timezoneinput)
     if 15>timezone>-15 and timezone%0.25==0:
-      tnow = datetime.now() + datetime.timedelta(minutes = int(timezoneinput*60))
+      tnow = datetime.now() + timedelta(minutes = int(timezoneinput*60))
       return "Time in UTC " + timezoneinput + " is " + tnow.strftime("%d %b, %Y (%a) %H:%M:%S")
     else:
       return "Invalid timezone! Timezone must be below 15, above -15 and divisible by 0.25."
