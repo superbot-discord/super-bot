@@ -182,23 +182,28 @@ def botwiki(query):
   return embed
 
 def botdefinition(word):
-  try:
     ti = "Definition of "+word
     desc = ""
-    definitions = dictionary.meaning(word)
-    counter = 0
-    for count in list(definitions.keys()):
-      desc = desc + "**"+count+f"**\n"+definitions[count][counter]+f"\n"
-      counter = counter + 1
-    desc = desc + f"**Synonyms**\n"
-    for count in dictionary.synonym(word):
-      desc = desc + count + ", "
-    desc = desc[:-2]
-    desc = desc + f"\n**Antonyms**\n"
-    for count in dictionary.antonym(word):
-      desc = desc + count + ", "
-    desc = desc[:-2]
-    embed = discord.Embed(title=ti, description=desc)
+    try:
+      definitions = dictionary.meaning(word)
+    except:
+      return "Invalid word. Please try again."
+    for count in definitions.keys:
+      desc = desc + f"**{count}**\n"
+      for count2 in definitions[count]:
+        desc = desc + count2 + f"\n"
+    embed = discord.Embed(title=ti, description=desc[:1023])
+
+    try:
+      synonyms = dictionary.synonym(word)
+      embed.add_field(name="Synonyms", value=", ".join(synonyms))
+    except:
+      pass
+
+    try:
+      antonyms = dictionary.antonym(word)
+      embed.add_field(name="Antonyms", value=", ".join(antonyms))
+    except:
+      pass
+    
     return embed
-  except:
-    return "Invalid word. Please try again."
