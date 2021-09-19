@@ -60,18 +60,22 @@ def rotate(degrees):
   newimg = image.rotate(angle=degrees, expand=True)
   newimg.save('output2.png')
 
-def analyse(scale):
+def analyse(scale, colors):
   if scale > 5000:
     scale = 1000
-  palette = extract('input.png', 15)
+  palette = extract('input.png', colors)
+  desc = f"Red\tGreen\tBlue\tHue\tSatur.\tLight.\tPercentage\n"
   
   palette.sort(key=lambda c: c.hsl.l)
   newimg = Image.new('RGB', (scale, round(scale/3)), (255, 255, 255))
   draw = ImageDraw.Draw(newimg)
   counter = 0
   for count in palette:
-    draw.rectangle((counter, 0, counter+count.proportion*scale, round(scale/3)), (count.rgb.r, count.rgb.g, count.rgb.b))
+    rgb_tuple = count.rgb
+    hsl_tuple = count.hsl
+    draw.rectangle((counter, 0, counter+count.proportion*scale, round(scale/3)), (rgb_tuple.r, rgb_tuple.g, rgb_tuple.b))
     counter += count.proportion*scale
+    desc += f"{rgb_tuple.r}\t{rgb_tuple.g}\t{rgb_tuple.b}\t{hsl_tuple.h}\t{hsl_tuple.s}\t{hsl_tuple.l}\t{str(count.proportion*100)}\n"
   newimg.save('output_lightness.png')
 
   palette.sort(key=lambda c: c.hsl.h)
@@ -79,7 +83,7 @@ def analyse(scale):
   draw = ImageDraw.Draw(newimg)
   counter = 0
   for count in palette:
-    draw.rectangle((counter, 0, counter+count.proportion*scale, round(scale/3)), (count.rgb.r, count.rgb.g, count.rgb.b))
+    draw.rectangle((counter, 0, counter+count.proportion*scale, round(scale/3)), (rgb_tuple.r, rgb_tuple.g, rgb_tuple.b))
     counter += count.proportion*scale
   newimg.save('output_hue.png')
 
@@ -88,10 +92,14 @@ def analyse(scale):
   draw = ImageDraw.Draw(newimg)
   counter = 0
   for count in palette:
-    draw.rectangle((counter, 0, counter+count.proportion*scale, round(scale/3)), (count.rgb.r, count.rgb.g, count.rgb.b))
+    draw.rectangle((counter, 0, counter+count.proportion*scale, round(scale/3)), (rgb_tuple.r, rgb_tuple.g, rgb_tuple.b))
     counter += count.proportion*scale
   newimg.save('output_amount.png')
 
   dominant = ColorThief('input.png').get_color(quality=1)
   hexcode = f'#{((dominant[0] << 16) + (dominant[1] << 8) + dominant[2]):02x}'.upper()
+
+  f = open("analysis.txt", "a")
+  f.write(desc)
+  f.close()
   return hexcode

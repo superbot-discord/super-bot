@@ -320,11 +320,21 @@ async def image(ctx, *, mode):
   await ctx.message.attachments[0].save('input.png')
   if mode.startswith("analyse") or mode.startswith("analyze"):
     try:
-      scale = int(mode.replace("analyse ", "", 1).replace("analyze ", "", 1))
+      scale = int(mode.split(" ")[1])
+      try:
+        colors = int(mode.split(" ")[2])
+      except:
+        colors = 5
     except:
       scale = 1000
-    dominant = analyse(scale)
-    await ctx.send(f"Images are sorted by amount, brightness and hue respectively.\nDominant color: {dominant}", files=[discord.File('output_amount.png'), discord.File('output_lightness.png'), discord.File('output_hue.png')])
+    dominant = analyse(scale, colors)
+    try:
+      await ctx.send(f"Images are sorted by amount, brightness and hue respectively.\nDominant color: {dominant}", files=[discord.File('output_amount.png'), discord.File('output_lightness.png'), discord.File('output_hue.png'), discord.File('analysis.txt')])
+    except:
+      await ctx.send(f"Images are sorted by amount, brightness and hue respectively.\nDominant color: {dominant}", file=discord.File('output_amount.png'))
+      await ctx.send(file=discord.File('output_lightness.png'))
+      await ctx.send(file=discord.File('output_hue.png'))
+      await ctx.send(file=discord.File('analysis.txt'))
   elif mode.startswith("blur"):
     try:
       blur(int(mode.split(" ")[1]))
