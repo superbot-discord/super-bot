@@ -64,7 +64,7 @@ poll_pattern = re.compile(r'([\w]+?)(:\w{2,32}:|[\uD800-\uDBFF])')
 yt_pattern = re.compile(r'search\s[0-5]\s.*')
 UNITS = {'s':'seconds', 'm':'minutes', 'h':'hours', 'd':'days', 'w':'weeks'}
 UNITS2 = {'s':'seconds', 'm':'minutes', 'h':'hours', 'd':'days', 'm':'months', 'y':'years', 'c':'centuries'}
-dt1 = datetime.datetime(1970,1,1,0,0,0)
+dt1 = datetime(1970,1,1,0,0,0)
 image = ImageCaptcha()
 typer=0
 cmaphsv = plt.cm.hsv
@@ -300,7 +300,7 @@ async def on_message(message:discord.Message):
 
 @bot.command()
 async def unix(ctx, *, text):
-  now = datetime.datetime.now()
+  now = datetime.now()
   dateParts = {
     m[-1]: int(m[:-1])
     for m in re.findall(r'([\d]{1,4}[yMdhms]{1})', text)
@@ -308,7 +308,7 @@ async def unix(ctx, *, text):
   if text.startswith("now") or SequenceMatcher(None, text, "now").ratio()>0.65:
     dt2=now
   else:
-    dt2 = datetime.datetime(
+    dt2 = datetime(
       dateParts.get('y', now.year), dateParts.get('M', now.month),
       dateParts.get('d', now.day), dateParts.get('h', now.hour),
       dateParts.get('m', now.minute), dateParts.get('s', now.second))
@@ -892,9 +892,9 @@ async def status(ctx, member : discord.Member = None):
 
 @bot.command(aliases=["online"])
 async def ping(ctx, *, text = None):
-  now1 = datetime.datetime.now(timezone.utc)
+  now1 datetime.now(timezone.utc)
   message = await ctx.send("Pong!")
-  mcs = str(int((datetime.datetime.now(timezone.utc) - now1).microseconds)+int(((datetime.datetime.now(timezone.utc) - now1).total_seconds())%60))
+  mcs = str(int((datetime.now(timezone.utc) - now1).microseconds)+int(((datetime.now(timezone.utc) - now1).total_seconds())%60))
   await message.edit(content="Pong! "+mcs+" microseconds")
 
 @bot.command()
@@ -1274,8 +1274,8 @@ async def rtimer(ctx, timetocount,*,Text=None):
       UNITS.get(m.group('unit').lower(), 'seconds'): int(m.group('val'))
       for m in re.finditer(r'(?P<val>\d+)(?P<unit>[smhdw]?)', timetocount, flags=re.I)
     }).total_seconds())
-    end = datetime.datetime.now(timezone.utc) + timedelta(seconds = sec)
-    seconds = int((end - datetime.datetime.now(timezone.utc)).total_seconds())
+    end = datetime.now(timezone.utc) + timedelta(seconds = sec)
+    seconds = int((end - datetime.now(timezone.utc)).total_seconds())
     idcode = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"[ra.randint(0, 25)]+"ABCDEFGHIJKLMNOPQRSTUVWXYZ"[ra.randint(0, 25)]+"ABCDEFGHIJKLMNOPQRSTUVWXYZ"[ra.randint(0, 25)]+"ABCDEFGHIJKLMNOPQRSTUVWXYZ"[ra.randint(0, 25)]+"ABCDEFGHIJKLMNOPQRSTUVWXYZ"[ra.randint(0, 25)]
     exec("terminate"+idcode.lower()+str(ctx.guild.id)+"=0",globals())
     newidcode=idcode.lower()
@@ -1283,7 +1283,7 @@ async def rtimer(ctx, timetocount,*,Text=None):
     desc = "Initializing countdown…"
     message = await ctx.send(desc)
     while seconds>=1 and eval("terminate"+idcode.lower()+str(ctx.guild.id))==0:
-      seconds = int((end - datetime.datetime.now(timezone.utc)).total_seconds())
+      seconds = int((end - datetime.now(timezone.utc)).total_seconds())
       newsec=str(seconds%60)
       newmin=str((seconds%3600)//60)
       newhrs=str(seconds%86400//3600)
@@ -1334,15 +1334,15 @@ async def ttimer(ctx, timetocount,*,Text=None):
       UNITS.get(m.group('unit').lower(), 'seconds'): int(m.group('val'))
       for m in re.finditer(r'(?P<val>\d+)(?P<unit>[smhdw]?)', timetocount, flags=re.I)
     }).total_seconds())
-    end = datetime.datetime.now(timezone.utc) + timedelta(seconds = sec)
-    seconds = int((end - datetime.datetime.now(timezone.utc)).total_seconds())
+    end = datetime.now(timezone.utc) + timedelta(seconds = sec)
+    seconds = int((end - datetime.now(timezone.utc)).total_seconds())
     newidcode = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"[ra.randint(0, 25)]+"ABCDEFGHIJKLMNOPQRSTUVWXYZ"[ra.randint(0, 25)]+"ABCDEFGHIJKLMNOPQRSTUVWXYZ"[ra.randint(0, 25)]+"ABCDEFGHIJKLMNOPQRSTUVWXYZ"[ra.randint(0, 25)]+"ABCDEFGHIJKLMNOPQRSTUVWXYZ"[ra.randint(0, 25)]
     exec("terminate"+newidcode.lower()+str(ctx.guild.id)+"=0",globals())
     allid.append(newidcode+str(ctx.guild.id))
     desc = "Initializing countdown…"
     message = await ctx.send(desc)
     while seconds>=1 and eval("terminate"+newidcode.lower()+str(ctx.guild.id))==0:
-      seconds = int((end - datetime.datetime.now(timezone.utc)).total_seconds())
+      seconds = int((end - datetime.now(timezone.utc)).total_seconds())
       newsec=str(seconds%60)
       newmin=str((seconds%3600)//60)
       newhrs=str(seconds%86400//3600)
@@ -1580,7 +1580,7 @@ async def leftuser(ctx, *, userinput):
   embed.set_thumbnail(url=lfuser.avatar.url)
   f0v=f"{lfuser.name}#{lfuser.discriminator}"
   f1v=lfuser.created_at.strftime("%d %b, %Y (%a) %H:%M:%S")
-  f1ts = str(datetime.datetime.now(timezone.utc) - lfuser.created_at)
+  f1ts = str(datetime.now(timezone.utc) - lfuser.created_at)
   if f1ts.count(" days, ") == 0:
     f1va = re.sub(r'(\d{1,2}):(\d{2}):(\d{2})', r'\1 hours \2 minutes \3 seconds', f1ts) + f"\n≈ "+f1ts.split(":")[0]+" hours"
   else:
