@@ -64,7 +64,7 @@ def analyse(scale, colors):
   if scale > 5000:
     scale = 1000
   palette = extract('input.png', colors)
-  desc = f"Red\tGreen\tBlue\tHue\tSatur.\tLight.\tPercentage\n"
+  desc = f"Red\tGreen\tBlue\tHue\tSatur.\tLight.\tHex\tPercentage\n"
 
   palette.sort(key=lambda c: c.proportion)
   newimg = Image.new('RGB', (scale, round(scale/3)), (255, 255, 255))
@@ -81,10 +81,12 @@ def analyse(scale, colors):
     s_total += hsl_tuple.s
     l_total += hsl_tuple.l
     draw.rectangle((counter, 0, counter+count.proportion*scale, round(scale/3)), (rgb_tuple.r, rgb_tuple.g, rgb_tuple.b))
-    desc += f"{rgb_tuple.r}\t{rgb_tuple.g}\t{rgb_tuple.b}\t{hsl_tuple.h}\t{hsl_tuple.s}\t{hsl_tuple.l}\t{str(count.proportion*100)}%\n"
+    hexcode = f'{((rgb_tuple.r << 16) + (rgb_tuple.g << 8) + rgb_tuple.b):02x}'.upper()
+    desc += f"{rgb_tuple.r}\t{rgb_tuple.g}\t{rgb_tuple.b}\t{hsl_tuple.h}\t{hsl_tuple.s}\t{hsl_tuple.l}\t{hexcode}\t{str(count.proportion*100)}%\n"
     counter += count.proportion*scale
   newimg.save('output_amount.png')
-  desc += f"Average:\n{round(r_total/colors,2)}\t{round(g_total/colors,2)}\t{round(b_total/colors,2)}\t{round(h_total/colors,2)}\t{round(s_total/colors,2)}\t{round(l_total/colors,2)}"
+  avg_hexcode = f'#{((round(r_total/colors) << 16) + (round(g_total/colors) << 8) + round(b_total/colors)):02x}'.upper()
+  desc += f"Average:\n{round(r_total/colors,2)}\t{round(g_total/colors,2)}\t{round(b_total/colors,2)}\t{round(h_total/colors,2)}\t{round(s_total/colors,2)}\t{round(l_total/colors,2)}\t{avg_hexcode}"
   
   palette.sort(key=lambda c: c.hsl.l)
   newimg = Image.new('RGB', (scale, round(scale/3)), (255, 255, 255))
