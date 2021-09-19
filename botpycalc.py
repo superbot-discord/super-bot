@@ -92,36 +92,15 @@ async def ascii(ctx, *, text):
     answer = answer + ASCII[character]
   await ctx.send(answer)
 
-def botcalc(arg : str):
+def botcalc(arg):
   if arg == "None":
     return "Invalid format! Please use the format `=calc [formula]`."
   else:
-    arg=arg.replace("^","**").replace("÷","/").replace("×","*").replace("mod","%").replace("√(","sqrt(").replace("pi",str(pi)).replace(",","").replace("r","")
-    if arg.count("=")==0 or arg.count("==")!=0 or arg.count("!=")!=0 or arg.count(">=")!=0 or arg.count("<=")!=0 or arg.count(">")!=0 or arg.count("<")!=0 or arg.count("and")!=0 or arg.count("or")!=0 or arg.count("not")!=0:
-      lcls = locals()
-      exec("result = "+arg, globals(), lcls)
-      result = lcls["result"]
-      if result.real==result:
-        result=result.real
-      if result<=1 and result>0:
-        result=str(result)+f"\n"+str(round(result*100, 5))+"%"
-      elif len(str(result))>100:
-        result="{0:.3E}".format(float(result))
-      else:
-        if len(str(result))>400:
-          number=result
-          result=str(number)[0]+"."
-          for count in range(1,60):
-            result=result+str(number)[count]
-          result=result+"e+"+str(len(str(number))-1)
-      disp = "Result: "+str(result)
-      return disp
-    elif arg.count("=")!=0 and arg.count("==")==0 and arg.count("!=")==0 and arg.count(">=")==0 and arg.count("<=")==0 and arg.count(">")==0 and arg.count("<")==0 and arg.count("and")==0 and arg.count("or")==0 and arg.count("not")==0:
-      #lcls = locals()
-      exec(arg, globals(), globals())
-      return "Add_Reaction"
-    else:
-      return "Invalid input, please try again."
+    try:
+      arg=arg.replace("^","**").replace("÷","/").replace("×","*").replace("mod","%").replace("√(","sqrt(").replace("pi",str(pi)).replace(",","").replace("a","")
+      return f"Result: {str(eval(arg))}"
+    except:
+      return "Invalid formula!"
 
 def setup(bot):
   bot.add_command(base)

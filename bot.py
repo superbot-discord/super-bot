@@ -798,10 +798,7 @@ async def define(ctx, function = None, definition = None, *, argumentsraw = ""):
 @bot.command()
 async def calc(ctx, *, arg = None):
   output = botcalc(arg)
-  if output == "Add_Reaction":
-    await ctx.message.add_reaction("👍")
-  else:
-    await ctx.send(output)
+  await ctx.send(output)
 
 @bot.command()
 async def covid(ctx, *, country="world"):
