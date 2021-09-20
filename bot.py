@@ -1210,7 +1210,7 @@ async def color(ctx, *, name):
       os.remove('color.png')
 
 @bot.command()
-async def map(ctx, long:float, lat:float, zoom:int=10, antizoom = None):
+async def map(ctx, long:float, lat:float, zoom:int=10, antizoom = ""):
   antizoom = specialbool(antizoom)
   botmap(long, lat, zoom, antizoom)
   await ctx.send(files=[discord.File('map.html'), discord.File('map.png')])

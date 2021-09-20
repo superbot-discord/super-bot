@@ -1,3 +1,4 @@
+import asyncio
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
@@ -210,5 +211,6 @@ def botmap(long, lati, zoom, antizoom):
   m.save('map.html')
   driver = webdriver.Chrome(options=options)
   driver.get("file:///map.html")
+  asyncio.sleep(5)
   driver.get_screenshot_as_file('map.png')
   driver.quit()
