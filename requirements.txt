@@ -22,6 +22,7 @@ markdown2==2.4.1
 pytube==11.0.1
 Pillow==8.3.2
 numpy==1.21.2
+folium==0.12.1
 imgkit==1.2.2
 emojis==0.6.0
 captcha==0.3
