@@ -903,7 +903,7 @@ async def ping(ctx, *, text = None):
   now1 = datetime.now(timezone.utc)
   message = await ctx.send("Pong!")
   mcs = str(int((datetime.now(timezone.utc) - now1).microseconds)+int(((datetime.now(timezone.utc) - now1).total_seconds())%60))
-  await message.edit(content="Pong! "+mcs+" microseconds")
+  await message.edit(content="Pong! 🏓 "+mcs+" microseconds")
 
 @bot.command()
 async def screenshot(ctx, url = None, form = "all"):
