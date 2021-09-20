@@ -16,26 +16,31 @@ async def help(ctx, *, cat=None):
 `server` `invitelink` `role` `channel` `user` `avatar` `status` `leftuser` `message` `raw` `reactions` `emojiinfo` `template`
 
 **Discord Commands**
-`react` `snipe` `clearsnipe` `pretend` `pretendembed` `embed` `editembed` `simpleembed` `ett` `tts`
-**Coming soon: **quickembed which eliminates the use of `{{{newline}}}` entirely
+`react` `snipe` `clearsnipe` `pretend` `pretendembed` `embed` `editembed` `simpleembed` `quickembed` `ett` `tts`
 
 **Moderation Commands**
-`kick` `ban` `unban` `slowmode` `purge` `purgeuser` `purgeregex` `purgepy` `purgepygex` `makeinvite`
+`kick` `ban` `unban` `slowmode` `purge` `purgeuser` `purgeregex` `purgepy` `purgepygex` `purgereactions` `makeinvite`
 
 **Text Manipulation Commands**
-`poll` `insert` `spoiler` `rawspoiler` `rawrawspoiler` `reverse` `emoji`
+`poll` `insert` `spoiler` `rawspoiler` `rawrawspoiler` `reverse` `emoji` `encode` `decode`
 
 **Information Commands**
-`color` `simplecolor` `translate` `definition` `calc` `define` `time` `rtimer` `ttimer` `terminate` `unscramble` `unicode` `random` `choice`
+`color` `simplecolor` `translate` `definition` `calc` `time` `rtimer` `ttimer` `terminate` `unscramble` `unicode` `random` `choice` `unix`
 
 **Web Commands**
-`screenshot` `youtube` `wiki` `minecraft` `engrave` `covid` `population` `cat` `dog`
+`redirect` `screenshot` `youtube` `wiki` `minecraft` `engrave` `covid` `population` `map`
+bunny` `cat` `dog` `duck` `fox` `koala` `lizard` `panda` `shiba` `error`
 
 **Plot/Drawing Commands**
 `ascii` `table` `render` `captcha` `pie` `barh` `barv` `hist` `sankey` `snow` `mandelbrot`
 
 **Developer Tools and Miscellaneous Commands**
-`python` `transparent` `ocr` `text` `html` `md` `regex` `regsub`
+`html` `md` `regex` `regsub`
+
+**Image Commands**
+`analyse` `blur` `resize` `rotate` `invert` `hue`
+To use the 6 editing commands above, type `=image ` first, then upload an image. Example: `=image analyse`
+`ocr` `qr` `qrmake` `transparent` `text`
 
 `hello` leads you to death
 Many slash commands are available as well
@@ -47,6 +52,10 @@ Need help? check the [documentation](https://superbot-discord.github.io/document
 async def invite(ctx, *, text=None):
   embed = discord.Embed(title="Invite", description = "The bot can be invited [here](https://discord.com/api/oauth2/authorize?client_id=796686363604680755&permissions=8&redirect_uri=https%3A%2F%2Fsuperbot-discord.github.io&scope=bot%20applications.commands).")
   await ctx.send(embed=embed)
+
+@commands.command()
+async def prefix(ctx, *, text=None):
+  await ctx.send("The prefix for SuperBot is `=` (an equal sign).")
 
 def setup(bot):
   bot.add_command(hello)

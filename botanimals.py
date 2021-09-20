@@ -131,12 +131,12 @@ def botlizard(number):
 
 
 def setup(bot):
-  bot.add_command(dog)
-  bot.add_command(cat)
-  bot.add_command(panda)
-  bot.add_command(shiba)
-  bot.add_command(koala)
   bot.add_command(bunny)
+  bot.add_command(cat)
+  bot.add_command(dog)
   bot.add_command(duck)
   bot.add_command(fox)
+  bot.add_command(koala)
   bot.add_command(lizard)
+  bot.add_command(panda)
+  bot.add_command(shiba)
