@@ -213,6 +213,7 @@ def setup(bot):
   bot.add_command(emoji)
   bot.add_command(encode)
   bot.add_command(insert)
+  bot.add_command(raffle)
   bot.add_command(random)
   bot.add_command(rawspoiler)
   bot.add_command(rawrawspoiler)
