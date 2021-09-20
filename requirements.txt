@@ -19,10 +19,10 @@ colorthief==0.2.1
 pdf2image==1.16.0
 requests==2.26.0
 markdown2==2.4.1
+folium==0.12.1
 pytube==11.0.1
 Pillow==8.3.2
 numpy==1.21.2
-folium==0.12.1
 imgkit==1.2.2
 emojis==0.6.0
 captcha==0.3
