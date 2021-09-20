@@ -142,13 +142,21 @@ async def insert(ctx,emoji,*,text):
   await ctx.send(text)
 
 @commands.command()
-async def random(ctx,lower,upper):
+async def random(ctx,lower:int,upper:int):
   ti="Random number between "+lower+" and "+upper
-  lower=int(lower)
-  upper=int(upper)
   rand=ra.randint(lower,upper)
   rand=str(rand)
   desc="Your random number is "+rand
+  embed=discord.Embed(title=ti, description=desc)
+  await ctx.send(embed=embed)
+
+@commands.command()
+async def raffle(ctx,lower:int,upper:int,times:int):
+  ti=f"{times} random number(s) between {lower} and {upper}"
+  desc=f"Your random number(s) is/are:\n"
+  for count in range(0,times):
+    rand=ra.randint(lower,upper)
+    desc += f"||{str(rand)}||  "
   embed=discord.Embed(title=ti, description=desc)
   await ctx.send(embed=embed)
 
