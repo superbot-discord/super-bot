@@ -58,6 +58,10 @@ async def definition(ctx, *, word):
     pass
   await ctx.send(embed=embed)
 
+@commands.command(aliases=['http', 'https', 'statuscode', 'httpcat', 'httpscat', 'httpcats', 'httpscats'])
+async def error(ctx, *, code="404"):
+  await ctx.send(f'https://http.cat/{code}')
+
 @commands.command()
 async def minecraft(ctx, *, item="tnt"):
   r=requests.get('https://minecraft.fandom.com/wiki/'+item)
@@ -345,6 +349,7 @@ Video+audio - Minimum size\t{formabr(video8)}\t{video8.resolution}\t{sizer(video
 
 def setup(bot):
   bot.add_command(definition)
+  bot.add_command(error)
   bot.add_command(minecraft)
   bot.add_command(redirect)
   bot.add_command(translate)

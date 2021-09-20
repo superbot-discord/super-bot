@@ -9,8 +9,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 from discord.ext import commands
 
-from bot import sizer, getbotinstance
+from shared import *
 
+getbotinstance = None
 cmaphsv = plt.cm.hsv
 func = lambda pct, allvals : "{:d} ({:.1f}%)".format(int(pct/100*np.sum(allvals)), int(pct))
 
@@ -225,7 +226,7 @@ async def invitelink(ctx,inviteinput: discord.Invite):
 @commands.command()
 async def leftuser(ctx, *, userinput):
   global bot
-  lfuser = await getbotinstance().fetch_user(int(userinput))
+  lfuser = await getbotinstance.fetch_user(int(userinput))
   ti="Left User Information"
   if lfuser == None:
     lfuser = ctx.author
@@ -739,6 +740,7 @@ async def user(ctx, user: discord.Member = None, channel: discord.TextChannel = 
   await ctx.send(embed=embed)
 
 def setup(bot):
+  getbotinstance = bot
   bot.add_command(avatar)
   bot.add_command(channel)
   bot.add_command(emojiinfo)

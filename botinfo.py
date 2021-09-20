@@ -3,7 +3,6 @@ import re
 from datetime import datetime, timedelta
 
 import discord
-import emojis as ems
 import pytz
 import requests
 from bs4 import BeautifulSoup

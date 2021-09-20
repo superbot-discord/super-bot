@@ -1,13 +1,12 @@
 import asyncio
 import random as ra
 import re
-from cmath import *
 from datetime import datetime, timedelta, timezone
 from math import *
 import discord
 import emojis as ems
 from discord.ext import commands
-
+from shared import *
 # from discord_slash import SlashCommand, SlashContext
 # from discord_slash.utils.manage_commands import create_choice, create_option
 #from simplecolour import simple_colours_raw
@@ -19,21 +18,21 @@ from discord.ext import commands
 banned_ids = []
 banned_text = []
 bot_admins = [687474789342117900]
-bot = commands.Bot(command_prefix=commands.when_mentioned_or("="), intents=discord.Intents.all(), case_insensitive=True)
-bot.remove_command('help')
-bot.load_extension("botanimals")
-bot.load_extension("botbasic")
-bot.load_extension("botdinfo")
-bot.load_extension("botembed")
-bot.load_extension("botengrave")
-bot.load_extension("botimage")
-bot.load_extension("botinfo")
-bot.load_extension("botmoderate")
-bot.load_extension("botplot")
-bot.load_extension("botpycalc")
-bot.load_extension("bottext")
-bot.load_extension("botwebinfo")
-bot.load_extension("botwebscrape")
+bot_ = commands.Bot(command_prefix=commands.when_mentioned_or("="), intents=discord.Intents.all(), case_insensitive=True)
+bot_.remove_command('help')
+bot_.load_extension("botanimals")
+bot_.load_extension("botbasic")
+bot_.load_extension("botdinfo")
+bot_.load_extension("botembed")
+bot_.load_extension("botengrave")
+bot_.load_extension("botimage")
+bot_.load_extension("botinfo")
+bot_.load_extension("botmoderate")
+bot_.load_extension("botplot")
+bot_.load_extension("botpycalc")
+bot_.load_extension("bottext")
+bot_.load_extension("botwebinfo")
+bot_.load_extension("botwebscrape")
 # slash = SlashCommand(bot)
 id_pattern = re.compile(r'([A-Z]{5})', re.IGNORECASE)
 verify_pattern = re.compile(r'[^ ⠀][\s\S]{0,30}?[^ ⠀]#?[\d]{4}(,|, | )?[\d+\-*/×÷%xyz()\[\]\{\}]{1,50}=[\d+\-*/×÷%xyz()\[\]\{\}]{1,50}(,|, | )?[\S ]{3,20}(,|, | )?(Red|Orange|Yellow|Green|Light( |_)?Green|Dark( |_)?Green|Cyan|Blue|Light( |_)?Blue|Dark( |_)?Blue|Purple|Pink|Brown)', re.IGNORECASE)
@@ -47,16 +46,9 @@ sniper1=sniper2=sniper3=sniper4=sniper5=sniperdate1=sniperdate2=sniperdate3=snip
 snipereactions=polls=allid=[]
 overwrite = discord.PermissionOverwrite()
 overwrite.view_channel = True
+getbotinstance = lambda: bot_
 
-botadmin = lambda context : context.author.id == 687474789342117900
-number_to_emoji = lambda a: a.replace("1",":one: ").replace("2",":two: ").replace("3",":three: ").replace("4",":four: ").replace("5",":five: ").replace("6",":six: ").replace("7",":seven: ").replace("8",":eight: ").replace("9",":nine: ").replace("0",":zero: ")
-sizer = lambda bytes: f"{round(bytes/1024,4):,}KB" if bytes<1048576 else (f"{round(bytes/1048576,4):,}MB" if bytes<1073741824 else f"{round(bytes/1073741824,4):,}GB")
-format_length=lambda secs: f"{str(secs//86400)} days plus {str(secs%21600//3600).zfill(2)}:{str(secs%3600//60).zfill(2)}:{str(secs%60).zfill(2)}" if secs >= 86400 else (f"{str(secs//3600).zfill(2)}:{str(secs%3600//60).zfill(2)}:{str(secs%60).zfill(2)}" if secs >= 3600 else f"{str(secs//60).zfill(2)}:{str(secs%60).zfill(2)}")
-formabr = lambda vid: vid.__getattribute__("abr")+f"\t" if vid.__getattribute__("abr") else 'No audio'
-specialbool = lambda input: True if input.lower() in ["1","yes", "enable", "on", "enabled", "tick", "true"] else False
-getbotinstance = lambda: bot
-
-@bot.event
+@bot_.event
 async def on_voice_state_update(member, before, after):
   try:
     if before.channel.id == 822750915466493982 and after.channel == None:
@@ -73,7 +65,7 @@ async def on_voice_state_update(member, before, after):
   except:
     pass
 
-@bot.event
+@bot_.event
 async def on_message_delete(message):
   keyname = str(message.guild.id)+str(message.channel.id)
   val = message.content
@@ -116,7 +108,7 @@ async def on_message_delete(message):
     sniperdate2[keyname] = sniperdate1[keyname]
     sniperdate1[keyname] = adt
 
-@bot.event
+@bot_.event
 async def on_reaction_add(reaction, user):
   msg = reaction.message
   if msg in snipereactions and user.id != 796686363604680755:
@@ -186,7 +178,7 @@ async def on_reaction_add(reaction, user):
     cache = discord.Embed(title = cache_embed.title, description = ems.encode(desc))
     await msg.edit(embed=cache)
 
-@bot.event
+@bot_.event
 async def on_reaction_remove(reaction, user):
   msg = reaction.message
   if msg.id in polls and user.id != 796686363604680755:
@@ -207,7 +199,7 @@ async def on_reaction_remove(reaction, user):
     cache = discord.Embed(title = cache_embed.title, description = ems.encode(desc))
     await msg.edit(embed=cache)
 
-@bot.event
+@bot_.event
 async def on_message(message:discord.Message):
   if message.guild.id == 852899227004305458 and message.author.id != 796686363604680755 and message.channel.id in [856053769149874196, 864757953121878026, 864754633910255646]:
     await message.add_reaction("<:UpArrowSquare:864762633194569728>")
@@ -246,11 +238,11 @@ async def on_message(message:discord.Message):
     # except:
     #   pass
     if banned_ids.count(message.author.id)==0 and message.content.startswith("=") and message.content.startswith("==")==False:
-      await bot.process_commands(message)
+      await bot_.process_commands(message)
     elif message.content.startswith("="):
       await message.channel.send("You are banned from the bot. Reason: "+banned_text[banned_ids.index(message.author.id)])
 
-@bot.command(aliases=['sniper'])
+@bot_.command(aliases=['sniper'])
 async def snipe(ctx, *, text = None):
   chnl = ctx.channel
   keyname = str(ctx.guild.id)+str(chnl.id)
@@ -296,7 +288,7 @@ async def snipe(ctx, *, text = None):
       sniping[keyname] = False
       await ctx.send("Sniping is now disabled.")
 
-@bot.command()
+@bot_.command()
 async def poll(ctx, *, text):
   options = []
   reactions = []
@@ -322,7 +314,7 @@ async def poll(ctx, *, text):
   polls.append(poll.id)
   poll_options[poll.id] = poll_options_cache
 
-@bot.command()
+@bot_.command()
 async def clearsnipe(ctx, *, chnl : discord.TextChannel = None):
   if chnl == None:
     chnl = ctx.channel
@@ -336,11 +328,11 @@ async def clearsnipe(ctx, *, chnl : discord.TextChannel = None):
   else:
     await ctx.send("You don't have the required permission: Manage channels.")
 
-@bot.command()
+@bot_.command()
 async def tts(ctx, *, desc):
   await ctx.send(desc, tts = True)
 
-@bot.command()
+@bot_.command()
 @commands.is_owner()
 async def purgeserver(ctx, text, condition="1==1", *, nothing = None):
   text = text.lower()
@@ -351,14 +343,14 @@ async def purgeserver(ctx, text, condition="1==1", *, nothing = None):
         await _role.delete()
     await ctx.send("Role purging completed.")
 
-@bot.command()
+@bot_.command()
 @commands.is_owner()
 async def botban(ctx, user : discord.User, *, text="No reason was provided"):
   banned_ids.append(user.id)
   banned_text.append(text)
   await ctx.send("Banned user from using the bot.")
 
-@bot.command()
+@bot_.command()
 @commands.is_owner()
 async def botunban(ctx, user : discord.User):
   if banned_ids.count(user.id) == 1:
@@ -366,13 +358,13 @@ async def botunban(ctx, user : discord.User):
     banned_ids.remove(user.id)
     await ctx.send("Unbanned user from using the bot.")
 
-@bot.command()
+@bot_.command()
 @commands.is_owner()
 async def botadmin(ctx, user : discord.User):
   bot_admins.append(user.id)
   await ctx.send("Added user as bot admin.")
 
-@bot.command()
+@bot_.command()
 async def botpurge(ctx, *, num):
   try:
     await ctx.message.delete()
@@ -397,14 +389,14 @@ async def botpurge(ctx, *, num):
 #   output = botcalc(arg)
 #   await ctx.send(output)
 
-@bot.command(aliases=["online"])
+@bot_.command(aliases=["online"])
 async def ping(ctx, *, text = None):
   now1 = datetime.now(timezone.utc)
   message = await ctx.send("Pong!")
   mcs = str(int((datetime.now(timezone.utc) - now1).microseconds)+int(((datetime.now(timezone.utc) - now1).total_seconds())%60))
   await message.edit(content="Pong! 🏓 "+mcs+" microseconds")
 
-@bot.command(pass_context=True)
+@bot_.command(pass_context=True)
 async def react(ctx, message : discord.Message, emoji : discord.Emoji):
   await ctx.message.delete()
   await message.add_reaction(emoji)
@@ -412,7 +404,7 @@ async def react(ctx, message : discord.Message, emoji : discord.Emoji):
   member=ctx.guild.get_member(796686363604680755)
   await message.remove_reaction(emoji, member)
 
-@bot.command()
+@bot_.command()
 async def terminate(ctx, *, idc):
   if id_pattern.fullmatch(idc) and len(idc)==5:
     if allid.count(idc.upper()+str(ctx.guild.id))==1:
@@ -424,7 +416,7 @@ async def terminate(ctx, *, idc):
   else:
     await ctx.send("Please provide an 5-alphabet ID code. Example: `ABCDE`")
 
-@bot.command()
+@bot_.command()
 async def rtimer(ctx, timetocount,*,Text=None):
     sec = int(timedelta(**{
       UNITS.get(m.group('unit').lower(), 'seconds'): int(m.group('val'))
@@ -484,7 +476,7 @@ async def rtimer(ctx, timetocount,*,Text=None):
     else:
       await message.reply(f"Countdown complete!\n"+Text)
 
-@bot.command()
+@bot_.command()
 async def ttimer(ctx, timetocount,*,Text=None):
     sec = int(timedelta(**{
       UNITS.get(m.group('unit').lower(), 'seconds'): int(m.group('val'))
@@ -539,12 +531,12 @@ async def ttimer(ctx, timetocount,*,Text=None):
     else:
       await message.reply(f"Countdown complete!\n"+Text)
 
-@bot.event
+@bot_.event
 async def on_ready():
-  activity = discord.Activity(type=discord.ActivityType.playing, name=f"with =help in {len(bot.guilds)} servers")
-  await bot.change_presence(status=discord.Status.idle, activity=activity)
+  activity = discord.Activity(type=discord.ActivityType.playing, name=f"with =help in {len(bot_.guilds)} servers")
+  await bot_.change_presence(status=discord.Status.idle, activity=activity)
   # await slash.sync_all_commands(SlashCommand)
   print("Bot is ready!")
 
 print("Bot is getting started…")
-bot.run('Nzk2Njg2MzYzNjA0NjgwNzU1.X_bh_g.6uKl_EPp5r5XZpSxCxPTIuA69aE')
+bot_.run('Nzk2Njg2MzYzNjA0NjgwNzU1.X_bh_g.6uKl_EPp5r5XZpSxCxPTIuA69aE')
