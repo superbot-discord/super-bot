@@ -14,37 +14,6 @@ set(pytz.all_timezones_set)
 hexstring_pattern = re.compile(r'#?([0-9A-F]{2})([0-9A-F]{2})([0-9A-F]{2})', re.IGNORECASE)
 rgbtoper = lambda input: str(round(input/0.0255)/100)+"%"
 
-
-@commands.command()
-async def regex(ctx, regularexp, *, text):
-  theregex = r"(?P<LargestCapturingGroup>"+regularexp+")"
-  newtext = re.sub(theregex, "**\g<LargestCapturingGroup>**", text)
-  matches = len(re.findall(theregex, text))
-  if matches == 1:
-    ti = "There was 1 occurrence."
-  elif matches == 0:
-    ti = "There was no occurrences."
-  elif matches >= 2:
-    ti = "There were "+str(matches)+" occurrences."
-  embed = discord.Embed(title = ti, description = newtext.replace("****",""))
-  embed.set_author(name="Match Results for "+regularexp)
-  embed.set_footer(text="Match Results are highlighted in bold")
-  await ctx.send(embed=embed)
-
-@commands.command()
-async def regsub(ctx, regular1, regular2, *, text):
-  newtext = re.sub(regular1, regular2, text)
-  matches = len(re.findall(regular1, text))
-  if matches == 1:
-    ti = "There was 1 occurrence."
-  elif matches == 0:
-    ti = "There was no occurrences."
-  elif matches >= 2:
-    ti = "There were "+str(matches)+" occurrences."
-  embed = discord.Embed(title = ti, description = "`"+newtext+"`")
-  embed.set_author(name="Substitution Result for "+regular1)
-  await ctx.send(embed=embed)
-
 @commands.command(aliases=["colour"])
 async def color(ctx, *, name):
   colors = re.split(',|\s|;|/|\||\\|&', name)
@@ -81,6 +50,36 @@ async def color(ctx, *, name):
   os.remove('color.png')
 
 @commands.command()
+async def regex(ctx, regularexp, *, text):
+  theregex = r"(?P<LargestCapturingGroup>"+regularexp+")"
+  newtext = re.sub(theregex, "**\g<LargestCapturingGroup>**", text)
+  matches = len(re.findall(theregex, text))
+  if matches == 1:
+    ti = "There was 1 occurrence."
+  elif matches == 0:
+    ti = "There was no occurrences."
+  elif matches >= 2:
+    ti = "There were "+str(matches)+" occurrences."
+  embed = discord.Embed(title = ti, description = newtext.replace("****",""))
+  embed.set_author(name="Match Results for "+regularexp)
+  embed.set_footer(text="Match Results are highlighted in bold")
+  await ctx.send(embed=embed)
+
+@commands.command()
+async def regsub(ctx, regular1, regular2, *, text):
+  newtext = re.sub(regular1, regular2, text)
+  matches = len(re.findall(regular1, text))
+  if matches == 1:
+    ti = "There was 1 occurrence."
+  elif matches == 0:
+    ti = "There was no occurrences."
+  elif matches >= 2:
+    ti = "There were "+str(matches)+" occurrences."
+  embed = discord.Embed(title = ti, description = "`"+newtext+"`")
+  embed.set_author(name="Substitution Result for "+regular1)
+  await ctx.send(embed=embed)
+
+@commands.command()
 async def time(ctx, *, timezoneinput="0"):
   if timezoneinput.replace(".","").isnumeric():
     timezone=float(timezoneinput)
@@ -105,3 +104,9 @@ async def time(ctx, *, timezoneinput="0"):
       await ctx.send("Time in " + timezoneinput + " is " + datetime.now(tz=tz).strftime("%d %b, %Y (%a) %H:%M:%S"))
     except:
       await ctx.send("Timezone not found. Please use `=time all` for a list of all timezones.")
+
+def setup(bot):
+  bot.add_command(color)
+  bot.add_command(regex)
+  bot.add_command(regsub)
+  bot.add_command(time)

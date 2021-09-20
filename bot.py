@@ -4,17 +4,12 @@ import re
 from cmath import *
 from datetime import datetime, timedelta, timezone
 from math import *
-
+import discord
 import emojis as ems
 from discord.ext import commands
+
 # from discord_slash import SlashCommand, SlashContext
 # from discord_slash.utils.manage_commands import create_choice, create_option
-
-from botplot import *
-from botpycalc import *
-from botwebinfo import *
-from botwebscrape import *
-
 #from simplecolour import simple_colours_raw
 
 # simple_colours_options = []
@@ -396,10 +391,10 @@ async def botpurge(ctx, *, num):
   else:
     await ctx.send("You don't have the required permission: Manage messages.")
 
-@bot.command()
-async def calc(ctx, *, arg = None):
-  output = botcalc(arg)
-  await ctx.send(output)
+# @bot.command()
+# async def calc(ctx, *, arg = None):
+#   output = botcalc(arg)
+#   await ctx.send(output)
 
 @bot.command(aliases=["online"])
 async def ping(ctx, *, text = None):
