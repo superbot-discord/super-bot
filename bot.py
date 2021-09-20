@@ -1,47 +1,21 @@
 import asyncio
-import base64
-import hashlib
-import os
 import random as ra
 import re
-import sys
-import typing
 from cmath import *
 from datetime import datetime, timedelta, timezone
-from difflib import SequenceMatcher
 from math import *
 
-import aiohttp
 import emojis as ems
-import matplotlib.pyplot as plt
-import numpy as np
-import PIL
-import pytesseract
-import pytube
-import qr_img
-import requests
-from captcha.image import ImageCaptcha
-from discord import Webhook
 from discord.ext import commands
 # from discord_slash import SlashCommand, SlashContext
 # from discord_slash.utils.manage_commands import create_choice, create_option
-from pdf2image import convert_from_path
-from unicode_charnames import search_charnames
 
-import ascii2 as asc
-from botanimals import *
-from botbasic import *
-from botdinfo import *
-from botembed import *
-from botengrave import *
-from botimage import *
-from botinfo import *
-from botmoderate import *
 from botplot import *
 from botpycalc import *
 from botwebinfo import *
 from botwebscrape import *
-from simplecolour import simple_colours_raw
+
+#from simplecolour import simple_colours_raw
 
 # simple_colours_options = []
 # for count in simple_colours_raw:
@@ -52,11 +26,19 @@ banned_text = []
 bot_admins = [687474789342117900]
 bot = commands.Bot(command_prefix=commands.when_mentioned_or("="), intents=discord.Intents.all(), case_insensitive=True)
 bot.remove_command('help')
-bot.load_extension("botdinfo")
-bot.load_extension("botplot")
 bot.load_extension("botanimals")
+bot.load_extension("botbasic")
+bot.load_extension("botdinfo")
+bot.load_extension("botembed")
 bot.load_extension("botengrave")
+bot.load_extension("botimage")
+bot.load_extension("botinfo")
+bot.load_extension("botmoderate")
+bot.load_extension("botplot")
 bot.load_extension("botpycalc")
+bot.load_extension("bottext")
+bot.load_extension("botwebinfo")
+bot.load_extension("botwebscrape")
 # slash = SlashCommand(bot)
 id_pattern = re.compile(r'([A-Z]{5})', re.IGNORECASE)
 verify_pattern = re.compile(r'[^ ⠀][\s\S]{0,30}?[^ ⠀]#?[\d]{4}(,|, | )?[\d+\-*/×÷%xyz()\[\]\{\}]{1,50}=[\d+\-*/×÷%xyz()\[\]\{\}]{1,50}(,|, | )?[\S ]{3,20}(,|, | )?(Red|Orange|Yellow|Green|Light( |_)?Green|Dark( |_)?Green|Cyan|Blue|Light( |_)?Blue|Dark( |_)?Blue|Purple|Pink|Brown)', re.IGNORECASE)
@@ -64,17 +46,14 @@ poll_pattern = re.compile(r'([\w]+?)(:\w{2,32}:|[\uD800-\uDBFF])')
 yt_pattern = re.compile(r'search\s[0-5]\s.*')
 UNITS = {'s':'seconds', 'm':'minutes', 'h':'hours', 'd':'days', 'w':'weeks'}
 UNITS2 = {'s':'seconds', 'm':'minutes', 'h':'hours', 'd':'days', 'm':'months', 'y':'years', 'c':'centuries'}
-dt1 = datetime(1970,1,1,0,0,0)
-cimage = ImageCaptcha()
+
 typer=0
-cmaphsv = plt.cm.hsv
 sniper1=sniper2=sniper3=sniper4=sniper5=sniperdate1=sniperdate2=sniperdate3=sniperdate4=sniperdate5=sniperdict=sniping=poll_options={}
 snipereactions=polls=allid=[]
 overwrite = discord.PermissionOverwrite()
 overwrite.view_channel = True
 
 botadmin = lambda context : context.author.id == 687474789342117900
-func = lambda pct, allvals : "{:d} ({:.1f}%)".format(int(pct/100*np.sum(allvals)), int(pct))
 number_to_emoji = lambda a: a.replace("1",":one: ").replace("2",":two: ").replace("3",":three: ").replace("4",":four: ").replace("5",":five: ").replace("6",":six: ").replace("7",":seven: ").replace("8",":eight: ").replace("9",":nine: ").replace("0",":zero: ")
 sizer = lambda bytes: f"{round(bytes/1024,4):,}KB" if bytes<1048576 else (f"{round(bytes/1048576,4):,}MB" if bytes<1073741824 else f"{round(bytes/1073741824,4):,}GB")
 format_length=lambda secs: f"{str(secs//86400)} days plus {str(secs%21600//3600).zfill(2)}:{str(secs%3600//60).zfill(2)}:{str(secs%60).zfill(2)}" if secs >= 86400 else (f"{str(secs//3600).zfill(2)}:{str(secs%3600//60).zfill(2)}:{str(secs%60).zfill(2)}" if secs >= 3600 else f"{str(secs//60).zfill(2)}:{str(secs%60).zfill(2)}")
@@ -208,7 +187,7 @@ async def on_reaction_add(reaction, user):
             if count3.id != 796686363604680755:
               counter = counter + 1
           desc = desc + f"{count2.emoji} {count} ("+ str(counter) +f")\n"
-    cache = discord.Embed(title = cache_embed.title, description = em.encode(desc))
+    cache = discord.Embed(title = cache_embed.title, description = ems.encode(desc))
     await msg.edit(embed=cache)
 
 @bot.event
@@ -229,31 +208,8 @@ async def on_reaction_remove(reaction, user):
             if count3.id != 796686363604680755:
               counter = counter + 1
           desc = desc + f"{count2.emoji} {count} ("+ str(counter) +f")\n"
-    cache = discord.Embed(title = cache_embed.title, description = em.encode(desc))
+    cache = discord.Embed(title = cache_embed.title, description = ems.encode(desc))
     await msg.edit(embed=cache)
-
-# @bot.event
-# async def on_command_error(ctx, error):
-#   if isinstance(error, commands.CommandNotFound):
-#     message = ctx.message
-#     used_prefix = ctx.prefix
-#     used_command = message.content.split()[0][len(used_prefix):]
-#     available_commands = [cmd.name for cmd in bot.commands]
-#     matches = {cmd: SequenceMatcher(None, cmd, used_command).ratio() for cmd in available_commands}
-#     command = max(matches.items(), key=lambda item: item[1])[0]
-#     try:
-#       arguments = message.content.split(" ", 1)[1]
-#     except IndexError:
-#       arguments = ""
-#     new_content = f"{used_prefix}{command} {arguments}".strip()
-#     message.content = new_content
-#     await ctx.send(f'Your might have made a typo and your command has been interpreted as {command}.', delete_after=4)
-#     await bot.process_commands(message)
-#   elif isinstance(error, commands.MissingRequiredArgument):
-#     await ctx.send(f'You missed one or more arguments! {len(ctx.command.clean_params.keys())} argument(s) are required.\nNote: Multiline arguments are treated as one argument.')
-#   else:
-#     print(error.with_traceback(error.__traceback__))
-
 
 @bot.event
 async def on_message(message:discord.Message):
@@ -263,226 +219,40 @@ async def on_message(message:discord.Message):
   elif message.channel.id in [805459414001778739, 805462208414089217, 880076327783370812]:
     await message.publish()
   if not (message.author.bot or message.author.id == 802834139728445501):
-    try:
-      for count in message.author.mutual_guilds:
-        for count2 in count.emojis:
-          if message.content.count(f":{count2.name}:") and count2.animated:
-            desc = message.content
-            gid = message.guild.id
-            desc = re.sub(r'(:[a-zA-Z_-]{2,32}:)', r"\<\1"+str(gid)+"\>", desc)
-            desc = desc.replace("{nothing}", "")
-            whl = await message.channel.webhooks()
-            ourweb = False
-            for count3 in whl:
-              if count3.name == "AnimatedEmoji":
-                ourweb = True
-                token = count3.token
-                identify = count3.id
-                break
-            if len(whl) == 0 or ourweb == False:
-              wh = await message.channel.create_webhook(name = "AnimatedEmoji")
-              token = wh.token
-              identify = wh.id
-            try:
-              await message.delete()
-            except:
-              pass
-            async with aiohttp.ClientSession() as session:
-              webhook = Webhook.partial(identify, token, session=session)
-              await webhook.send(desc, username=message.author.name, avatar_url=message.author.avatar.url)
-            break
-    except:
-      pass
+    # try:
+    #   for count in message.author.mutual_guilds:
+    #     for count2 in count.emojis:
+    #       if message.content.count(f":{count2.name}:") and count2.animated:
+    #         desc = message.content
+    #         gid = message.guild.id
+    #         desc = re.sub(r'(:[a-zA-Z_-]{2,32}:)', r"\<\1"+str(gid)+"\>", desc)
+    #         desc = desc.replace("{nothing}", "")
+    #         whl = await message.channel.webhooks()
+    #         ourweb = False
+    #         for count3 in whl:
+    #           if count3.name == "AnimatedEmoji":
+    #             ourweb = True
+    #             token = count3.token
+    #             identify = count3.id
+    #             break
+    #         if len(whl) == 0 or ourweb == False:
+    #           wh = await message.channel.create_webhook(name = "AnimatedEmoji")
+    #           token = wh.token
+    #           identify = wh.id
+    #         try:
+    #           await message.delete()
+    #         except:
+    #           pass
+    #         async with aiohttp.ClientSession() as session:
+    #           webhook = Webhook.partial(identify, token, session=session)
+    #           await webhook.send(desc, username=message.author.name, avatar_url=message.author.avatar.url)
+    #         break
+    # except:
+    #   pass
     if banned_ids.count(message.author.id)==0 and message.content.startswith("=") and message.content.startswith("==")==False:
       await bot.process_commands(message)
     elif message.content.startswith("="):
       await message.channel.send("You are banned from the bot. Reason: "+banned_text[banned_ids.index(message.author.id)])
-
-@bot.command()
-async def unix(ctx, *, text):
-  now = datetime.now()
-  dateParts = {
-    m[-1]: int(m[:-1])
-    for m in re.findall(r'([\d]{1,4}[yMdhms]{1})', text)
-  }
-  if text.startswith("now") or SequenceMatcher(None, text, "now").ratio()>0.65:
-    dt2=now
-  else:
-    dt2 = datetime(
-      dateParts.get('y', now.year), dateParts.get('M', now.month),
-      dateParts.get('d', now.day), dateParts.get('h', now.hour),
-      dateParts.get('m', now.minute), dateParts.get('s', now.second))
-  seconds = round((dt2-dt1).total_seconds())
-  await ctx.send(f"<t:{seconds}> | `<t:{seconds}>` Note: Times are calculated in UTC+0.\n<t:{seconds}:F> | `<t:{seconds}:F>`\n<t:{seconds}:f> | `<t:{seconds}:f>`\n<t:{seconds}:D> | `<t:{seconds}:D>`\n<t:{seconds}:d> | `<t:{seconds}:d>`\n<t:{seconds}:T> | `<t:{seconds}:T>`\n<t:{seconds}:t> | `<t:{seconds}:t>`\n<t:{seconds}:R> | `<t:{seconds}:R>`\n")
-
-@bot.command()
-async def image(ctx, *, mode):
-  await ctx.message.attachments[0].save('input.png')
-  if mode.startswith("analyse") or mode.startswith("analyze"):
-    try:
-      scale = int(mode.split(" ")[1])
-    except:
-      scale = 1000
-    try:
-      colors = int(mode.split(" ")[2])
-    except:
-      colors = 5
-    dominant = analyse(scale, colors)
-    try:
-      await ctx.send(f"Images are sorted by amount, brightness and hue respectively.\nDominant color: {dominant}", files=[discord.File('output_amount.png'), discord.File('output_lightness.png'), discord.File('output_hue.png'), discord.File('analysis.txt')])
-    except:
-      await ctx.send(f"Images are sorted by amount, brightness and hue respectively.\nDominant color: {dominant}", file=discord.File('output_amount.png'))
-      await ctx.send(file=discord.File('output_lightness.png'))
-      await ctx.send(file=discord.File('output_hue.png'))
-      await ctx.send(file=discord.File('analysis.txt'))
-    os.remove('analysis.txt')
-  elif mode.startswith("blur"):
-    try:
-      blur(int(mode.split(" ")[1]))
-    except:
-      blur(2)
-    await ctx.send(files=[discord.File('output1.png'), discord.File('output2.png')])
-  elif mode.startswith("resize "):
-    resize(int(mode.split(" ")[1]), int(mode.split(" ")[2]))
-    try:
-      await ctx.send(files=[discord.File('output1.png'), discord.File('output2.png'), discord.File('output3.png'), discord.File('output4.png'), discord.File('output5.png'), discord.File('output6.png')])
-    except:
-      await ctx.send(file=discord.File('output1.png'))
-      await ctx.send(file=discord.File('output2.png'))
-      await ctx.send(file=discord.File('output3.png'))
-      await ctx.send(file=discord.File('output4.png'))
-      await ctx.send(file=discord.File('output5.png'))
-      await ctx.send(file=discord.File('output6.png'))
-  elif mode.startswith("rotate "):
-    rotate(float(mode.split(" ")[1]))
-    await ctx.send(files=[discord.File('output1.png'), discord.File('output2.png')])
-  else:
-    if mode.startswith("invert"):
-      invert()
-    elif mode.startswith("hue "):
-      addhue(int(mode.split(" ")[1]))
-    await ctx.send(file=discord.File('output.png'))
-  os.remove('input.png')
-
-@bot.command()
-async def unicode(ctx, *, query):
-  allchars = search_charnames(query)
-  embed = discord.Embed(title = "Search results for: "+query)
-  for count, count2 in zip(allchars, range(0,25)):
-    embed.add_field(name = count[1].title(), value = "U+" + count[0] + eval("u\" \\u"+count[0]+"\""))
-  await ctx.send(embed=embed)
-
-@bot.command()
-async def encode(ctx, code, *, text):
-  if SequenceMatcher(None, code, 'sha512').ratio()>0.6:
-    coder = hashlib.sha512()
-    coder.update(bytes(text, encoding='utf-8'))
-    await ctx.send(coder.hexdigest())
-  elif SequenceMatcher(None, code, 'sha384').ratio()>0.6:
-    coder = hashlib.sha384()
-    coder.update(bytes(text, encoding='utf-8'))
-    await ctx.send(coder.hexdigest())
-  elif SequenceMatcher(None, code, 'sha256').ratio()>0.6:
-    coder = hashlib.sha256()
-    coder.update(bytes(text, encoding='utf-8'))
-    await ctx.send(coder.hexdigest())
-  elif SequenceMatcher(None, code, 'sha224').ratio()>0.6:
-    coder = hashlib.sha224()
-    coder.update(bytes(text, encoding='utf-8'))
-    await ctx.send(coder.hexdigest())
-  elif SequenceMatcher(None, code, 'sha128').ratio()>0.6:
-    coder = hashlib.sha1()
-    coder.update(bytes(text, encoding='utf-8'))
-    await ctx.send(coder.hexdigest())
-  elif SequenceMatcher(None, code, 'base64').ratio()>0.6:
-    coder = base64.b64encode(bytes(text, encoding='utf-8'))
-    await ctx.send(coder.decode("utf-8"))
-  elif SequenceMatcher(None, code, 'base32').ratio()>0.6:
-    coder = base64.b32encode(bytes(text, encoding='utf-8'))
-    await ctx.send(coder.decode("utf-8"))
-  elif SequenceMatcher(None, code, 'base16').ratio()>0.6:
-    coder = base64.b16encode(bytes(text, encoding='utf-8'))
-    await ctx.send(coder.decode("utf-8"))
-  elif SequenceMatcher(None, code, 'caesar').ratio()>0.6 or code.startswith("caesar"):
-    encrypted = ""
-    distance = int(code.replace("caesar", "", 1))
-    for count in text:
-      encrypted += chr(ord(count) + distance % 128)
-    await ctx.send(encrypted)
-  else:
-    await ctx.send("Encoding not found!")
-
-@bot.command()
-async def decode(ctx, code, *, text):
-  if SequenceMatcher(None, code, 'base64').ratio()>0.6:
-    coder = base64.b64decode(bytes(text, encoding='utf-8'))
-    await ctx.send(coder.decode("utf-8"))
-  elif SequenceMatcher(None, code, 'base32').ratio()>0.6:
-    coder = base64.b32decode(bytes(text, encoding='utf-8'))
-    await ctx.send(coder.decode("utf-8"))
-  elif SequenceMatcher(None, code, 'base16').ratio()>0.6:
-    coder = base64.b16decode(bytes(text, encoding='utf-8'))
-    await ctx.send(coder.decode("utf-8"))
-  elif SequenceMatcher(None, code, 'caesar').ratio()>0.6 or code.startswith("caesar"):
-    encrypted = ""
-    distance = 128-int(code.replace("caesar", "", 1))
-    for count in text:
-      encrypted += chr(ord(count) + distance % 128)
-    await ctx.send(encrypted)
-  else:
-    await ctx.send("Encoding not found!")
-
-@bot.command()
-async def redirect(ctx, *, url):
-  await ctx.send(botredirect(url))
-
-@bot.command()
-async def qr(ctx, *, text=None):
-  for count in ctx.message.attachments:
-    await count.save('qrcode.png')
-    await ctx.send(qr_img.qr_decode('qrcode.png'))
-    os.remove('qrcode.png')
-
-@bot.command()
-async def qrmake(ctx, *, text):
-  output = botqrencode(text)
-  try:
-    await ctx.send(file=discord.File("QRCode.png"))
-    os.remove("QRCode.png")
-  except:
-    await ctx.send(output)
-
-@bot.command()
-async def makeinvite(ctx, timetocount, uses : int = 0):
-  seconds = int(timedelta(**{
-    UNITS.get(m.group('unit').lower(), 'seconds'): int(m.group('val'))
-    for m in re.finditer(r'(?P<val>\d+)(?P<unit>[smhdw]?)', timetocount, flags=re.I)
-  }).total_seconds())
-  theinvite = await ctx.channel.create_invite(max_age = seconds, max_uses = uses)
-  await ctx.send("An invite was generated with "+str(seconds)+" seconds of valid duration: "+theinvite.url)
-
-@bot.command()
-async def reactions(ctx, *, msg : discord.Message):
-  reactions = msg.reactions
-  numlist = []
-  labels = []
-  for counter in reactions:
-    numlist.append(counter.count)
-    try:
-      labels.append(em.decode(counter.emoji))
-    except:
-      labels.append("*"+counter.emoji.name)
-  labels = tuple(labels)
-  y = np.array(numlist)
-  mycolors = []
-  for count in range(0, len(numlist)):
-    mycolors.append(cmaphsv(count/len(numlist)))
-  plt.pie(y, labels=labels, colors=mycolors, autopct=lambda pct: func(pct, y), textprops = {'color':"w"})
-  plt.legend(loc="lower right")
-  plt.title("Reaction Status")
-  plt.savefig("reactions.png", transparent=True)
-  await ctx.send(file = discord.File('reactions.png'))
-  plt.clf()
 
 @bot.command(aliases=['sniper'])
 async def snipe(ctx, *, text = None):
@@ -539,7 +309,7 @@ async def poll(ctx, *, text):
   desc = ""
   poll_options_cache = {}
   for count in textlist: # ([\w]+?)(:\w{2,32}:|[\uD800-\uDBFF])
-    match = poll_pattern.fullmatch(em.decode(count))
+    match = poll_pattern.fullmatch(ems.decode(count))
     if match:
       optn = re.sub(poll_pattern, r'\1', ems.decode(count))
       rect = re.sub(poll_pattern, r'\2', ems.decode(count))
@@ -549,139 +319,12 @@ async def poll(ctx, *, text):
       reactions.append(ems.encode(rect))
     else:
       ti = ti + count + " "
-  embed = discord.Embed(title = ti, description = em.encode(desc))
+  embed = discord.Embed(title = ti, description = ems.encode(desc))
   poll = await ctx.send(embed=embed)
   for count in reactions:
     await poll.add_reaction(count)
   polls.append(poll.id)
   poll_options[poll.id] = poll_options_cache
-
-@bot.command()
-async def unscramble(ctx, text, length="0"):
-  output = botunscramble(text, length)
-  await ctx.send(embed=output, file=discord.File("output.txt"))
-  os.remove('output.txt')
-
-@bot.command()
-async def youtube(ctx, *, link):
-  await ctx.channel.trigger_typing()
-  if link.startswith("search "):
-    query = re.sub(r'search\s([0-5]\s)?(.*)', r'\2', link)
-    searching = pytube.Search(query)
-    if yt_pattern.fullmatch(link):
-      searches = int(link[7])
-    else:
-      searches = 1
-    print(searches)
-    try:
-      for count in range(0, searches+1):
-        print(len(searching.results))
-        searching.get_next_results()
-    except:
-      pass
-    try:
-      videos = searching.results[20*(searches-1):20*searches]
-    except:
-      videos = searching.results[0:20]
-    desc = ""
-    for count in videos:
-      desc+=f"**[{count.title}]({count.watch_url})**\n{count.views:,} Views | By [{pytube.Channel(count.channel_url).channel_name}]({count.channel_url})\n"
-    embed = discord.Embed(title="Search results", description=desc)
-    embed.set_footer(text="Use =youtube [Link] to download videos.")
-    await ctx.send(embed=embed)
-  elif link.startswith("channel "):
-    chnl = pytube.Channel(link)
-    videos = chnl.videos
-    desc = f"**Videos ({len(chnl.videos):,})**:\n"
-    for count,count2 in zip(videos, range(0,12)):
-      desc+=f"[{count.title}]({count.watch_url})\n{count.views:,} Views | {round(count.rating*20, 3)}% Liked | {str(format_length(count.length))}\n\n"
-    embed = discord.Embed(title=chnl.channel_name, description=desc, url=chnl.videos_url)
-    embed.set_footer(text="Use =youtube [Link] to download videos. | Analysing additional info…")
-    yt_msg = await ctx.send(embed=embed)
-    totallen = 0
-    totalrating = 0
-    totalview = 0
-    for count in videos:
-      totallen += count.length
-      totalrating += count.rating
-      totalview += count.views
-    embed.add_field(name="Total views", value=f"{totalview:,}", inline=True)
-    embed.add_field(name="Total length", value=format_length(totallen), inline=True)
-    embed.add_field(name="Total rating", value=f"{str(round(totalrating*20, 3))}%", inline=True)
-    embed.add_field(name="Average views", value=f"{round(totalview/len(videos), 3):,}", inline=True)
-    embed.add_field(name="Average length", value=format_length(round(totallen/len(videos))), inline=True)
-    embed.add_field(name="Average rating", value=f"{str(round(totalrating/len(videos)*20, 3))}%", inline=True)
-    embed.set_footer(text="Use =youtube [Link] to download videos.")
-    await yt_msg.edit(embed=embed)
-  else:
-    try:
-      playlist = pytube.Playlist(link)
-      text = ""
-      for count in playlist.videos:
-        text=text+str(count)+"  "+count.streams.filter(mime_type="video/mp4").filter(progressive="True").filter(type="video").order_by("resolution").first().url+f"\n"
-      file = open("output.txt", "w")
-      file.write(text)
-      file.close()
-      await ctx.send(file=discord.File("output.txt"))
-      os.remove("output.txt")
-    except:
-      try:
-        youtube = pytube.YouTube(link)
-      except:
-        youtube = pytube.Search(link).results[0]
-      yt_streams = youtube.streams
-      filtered1 = yt_streams.filter(progressive=True,file_extension='mp4').order_by("resolution")
-      video1 = filtered1[len(filtered1)-1]
-      additional_desc = " Warning: Do not use a small data plan for videos this large!" if video1.filesize >= 52428800 else ""
-      desc = f"This video has a size of around {sizer(video1.filesize)}.{additional_desc}"
-      embed = discord.Embed(title="Download (Click here)", url=video1.url, description=f"{desc}\nNote: This message will be edited with more information.")
-      allvideos = yt_streams.filter(type="video")
-      allaudios = yt_streams.filter(only_audio=True)
-      filtered2 = allvideos.order_by("resolution")
-      video2 = filtered2[len(filtered2)-1]
-      filtered3 = allaudios.order_by("abr")
-      video3 = filtered3[len(filtered3)-1]
-      video4 = filtered2[int(len(filtered2)/2)]
-      video5 = filtered3[len(filtered3)-1]
-      filtered6 = allvideos.order_by("filesize")
-      video6 = filtered6[0]
-      filtered7 = allaudios.order_by("filesize")
-      video7 = filtered7[0]
-      filtered8 = yt_streams.filter(type="video", progressive=True).order_by("filesize")
-      video8 = filtered8[0]
-      extra_downloads=f'''Type and quality\t\tBitrate\t\tRes.\tSize\t\tLink\n
-Frames only - Best quality\t{formabr(video2)}\t{video2.resolution}\t{sizer(video2.filesize)}\t{video2.url}
-Audio - Best quality\t\t{formabr(video3)}\t{video3.resolution}\t{sizer(video3.filesize)}\t{video3.url}
-Video - Medium quality\t\t{formabr(video4)}\t{video4.resolution}\t{sizer(video4.filesize)}\t{video4.url}
-Audio - Medium quality\t\t{formabr(video2)}\t{video5.resolution}\t{sizer(video5.filesize)}\t{video5.url}
-Video - Minimum size\t\t{formabr(video6)}\t{video6.resolution}\t{sizer(video6.filesize)}\t{video6.url}
-Audio - Minimum size\t\t{formabr(video7)}\t{video7.resolution}\t{sizer(video7.filesize)}\t{video7.url}
-Video+audio - Minimum size\t{formabr(video8)}\t{video8.resolution}\t{sizer(video8.filesize)}\t{video8.url}'''
-      f = open('extra_downloads.txt', "w")
-      f.write(extra_downloads)
-      f.close()
-      ytmsg = await ctx.send(embed=embed, file=discord.File('extra_downloads.txt'))
-      os.remove('extra_downloads.txt')
-      embed = discord.Embed(title="Download (Click here)", url=video1.url, description=desc)
-      embed.add_field(name="Title", value=youtube.title, inline=False)
-      if len(youtube.description[:1023].replace(" ", "")) == 0:
-        embed.add_field(name="Description", value="No description provided", inline=False)
-      else:
-        embed.add_field(name="Description", value=youtube.description[:1023], inline=False)
-      if len(youtube.keywords) == 0:
-        embed.add_field(name="Tags", value="No tags provided", inline=False)
-      else:
-        embed.add_field(name="Tags", value=(", ".join(youtube.keywords))[:1023], inline=False)
-      embed.add_field(name="Views", value=f'{youtube.views:,}', inline=True)
-      embed.add_field(name="Date uploaded", value=youtube.publish_date.strftime("%d %b, %Y (%a)"), inline=True)
-      embed.add_field(name="Length", value=format_length(youtube.length), inline=True)
-      chnl = pytube.Channel(youtube.channel_url)
-      embed.add_field(name="Rating", value=f"{str(round(youtube.rating*20, 3))}%", inline=True)
-      embed.add_field(name="Channel", value=f"[{chnl.channel_name}]({youtube.channel_url}) ({len(chnl.videos)} videos)", inline=True)
-      if youtube.age_restricted:
-        embed.add_field(name="Restricted", value="This video is age-restricted.", inline=True)
-      embed.set_thumbnail(url=youtube.thumbnail_url)
-      await ytmsg.edit(embed=embed)
 
 @bot.command()
 async def clearsnipe(ctx, *, chnl : discord.TextChannel = None):
@@ -698,32 +341,12 @@ async def clearsnipe(ctx, *, chnl : discord.TextChannel = None):
     await ctx.send("You don't have the required permission: Manage channels.")
 
 @bot.command()
-async def nick(ctx, *, newnick):
-  if ctx.channel.permissions_for(ctx.author).manage_nicknames:
-    await ctx.guild.get_member(796686363604680755).edit(nick = newnick)
-    await ctx.send("Nickname changed.")
-
-@bot.command()
 async def tts(ctx, *, desc):
   await ctx.send(desc, tts = True)
 
 @bot.command()
-async def raw(ctx, msg : discord.Message):
-  embed = discord.Embed(title = "Raw message", url = msg.jump_url, description = "```"+discord.utils.escape_markdown(msg.content, as_needed=True)+"```")
-  await ctx.send(embed=embed)
-
-@bot.command(aliases=["commands"])
-async def help(ctx, *, cat=None):
-  embed = bothelp(cat)
-  await ctx.send(embed=embed)
-
-@bot.command()
-async def invite(ctx, *, text=None):
-  await ctx.send(embed=botinvite())
-
-@bot.command()
 @commands.is_owner()
-async def purgeserver(ctx, text, condition="1==1", *, nothing):
+async def purgeserver(ctx, text, condition="1==1", *, nothing = None):
   text = text.lower()
   if text.startswith("role"):
     allroles = ctx.guild.roles()
@@ -774,129 +397,9 @@ async def botpurge(ctx, *, num):
     await ctx.send("You don't have the required permission: Manage messages.")
 
 @bot.command()
-async def python(ctx, *, script):
-  output = botpython(script)
-  await ctx.send(output)
-
-@bot.command()
-async def regex(ctx, regularexp, *, text):
-  embed = botregex(regularexp, text)
-  await ctx.send(embed=embed)
-
-@bot.command()
-async def regsub(ctx, regular1, regular2, *, text):
-  embed = botregsub(regular1, regular2, text)
-  await ctx.send(embed=embed)
-
-@bot.command()
-async def define(ctx, function = None, definition = None, *, argumentsraw = ""):
-  if botdefine(function, definition, argumentsraw) == "Not enough args":
-    await ctx.send("Invalid usage! Please use the format `=define [name] [definition] {arguments separated by spaces}`.")
-  else:
-    await ctx.message.add_reaction("👍")
-
-@bot.command()
 async def calc(ctx, *, arg = None):
   output = botcalc(arg)
   await ctx.send(output)
-
-@bot.command()
-async def covid(ctx, *, country="world"):
-  output = botcovid(country)
-  if output == "Invalid country. Please try again.":
-    await ctx.send(output)
-  else:
-    await ctx.send(files=output[0], embed=output[1])
-
-@bot.command()
-async def minecraft(ctx, *, item="tnt"):
-  output = botminecraft(item)
-  if output == "No Wiki page with that name found.":
-    await ctx.send(output)
-  else:
-    await ctx.send(embed=output)
-
-@bot.command()
-async def population(ctx, country="current"):
-  output = botpopulation(country)
-  if output == "Invalid country. Please try again.":
-    await ctx.send(output)
-  else:
-    await ctx.send(embed=output)
-
-@bot.command()
-async def captcha(ctx, *, text=None):
-  if text == None:
-    text = ra.choice("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789") + ra.choice("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789") + ra.choice("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789") + ra.choice("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789")
-  data = cimage.generate(text)
-  cimage.write(text, 'captcha.png')
-  await ctx.send(f"Captcha for {text}", file = discord.File('captcha.png'))
-  os.remove('captcha.png')
-
-@bot.command()
-async def hello(ctx, *, text=None):
-  embed = discord.Embed(title="Leaderboard", description="We upload the leaderboard to YouTube every week. You can find the leaderboard [here](https://youtu.be/4spCNEPawyQ).")
-  await ctx.send(embed=embed)
-
-@bot.command()
-async def draw(ctx, *, text):
-  output = botdraw(text)
-  if len(output) > 1994:
-    await ctx.send(file=discord.File('drawing.txt'))
-  else:
-    await ctx.send(f"```{output}```", file=discord.File('drawing.txt'))
-  os.remove('drawing.txt')
-
-@bot.command()
-async def translate(ctx, langinput = "list", *, text = "Sample text"):
-  output = bottranslate(langinput, text)
-  if output[0] == "*" or output[0] == "L":
-    await ctx.send(output)
-  else:
-    e1 = output[0]
-    e2 = output[1]
-    await ctx.send(embed=e1)
-    await ctx.send(embed=e2)
-
-@bot.command()
-async def render(ctx, width:float=1):
-  att = ctx.message.attachments[0]
-  for count in range(40, 4, -1):
-    try:
-      output = asc.loadFromUrl(att.url, columns=int(att.width*count*width/10), color=True)
-      if sys.getsizeof(output) > 8000000:
-        continue
-      break
-    except:
-      pass
-  file = open('Output.txt', 'w')
-  file.write(output)
-  file.close()
-  await ctx.send(file = discord.File('Output.txt'))
-  os.remove('Output.txt')
-
-@bot.command()
-async def transparent(ctx, alpha = 128):
-  await ctx.message.attachments[0].save("Not_Transparent.png")
-  img = PIL.Image.open("Not_Transparent.png")
-  img2 = img.copy()
-  img2.putalpha(int(alpha))
-  img.paste(img2, img)
-  img.save('Transparent.png')
-  await ctx.send(file = discord.File('Transparent.png'))
-  os.remove('Transparent.png')
-
-@bot.command()
-async def mandelbrot(ctx, size = 1024):
-  img = PIL.Image.effect_mandelbrot((int(size), int(size)), (-1.5, -2.5, 3.5, 2.5), 95)
-  img.save('Mandelbrot.png')
-  await ctx.send(file = discord.File('Mandelbrot.png'))
-  os.remove('Mandelbrot.png')
-
-@bot.command()
-async def status(ctx, member : discord.Member = None):
-  embed = botstatus(ctx, member)
-  await ctx.send(embed=embed)
 
 @bot.command(aliases=["online"])
 async def ping(ctx, *, text = None):
@@ -905,96 +408,6 @@ async def ping(ctx, *, text = None):
   mcs = str(int((datetime.now(timezone.utc) - now1).microseconds)+int(((datetime.now(timezone.utc) - now1).total_seconds())%60))
   await message.edit(content="Pong! 🏓 "+mcs+" microseconds")
 
-@bot.command()
-async def screenshot(ctx, url = None, form = "all"):
-  a = botscreenshot(url, form)
-  if a == "Invalid format! Please use the format `=screenshot [url]`.":
-    await ctx.send(a)
-    return
-  else:
-    try:
-      await ctx.send(file=discord.File('web_screenshot1.png'))
-      os.remove('web_screenshot1.png')
-    except:
-      pass
-    try:
-      await ctx.send(file=discord.File('web_screenshot2.png'))
-      os.remove('web_screenshot2.png')
-    except:
-      pass
-
-@bot.command()
-async def ocr(ctx, lang="eng", *, text = None):
-  images = ctx.message.attachments
-  for count in range(0,len(images)):
-    r = requests.get(images[count].url, stream=True)
-    r.raise_for_status()
-    r.raw.decode_content = True
-    with PIL.Image.open(r.raw) as img:
-      desc=pytesseract.image_to_string(img, lang=lang)
-    r.close()
-    if desc.replace(" ","")=="":
-      desc="There was no text."
-    await ctx.send(desc)
-
-@bot.command()
-async def text(ctx, *, text = None):
-  files = ctx.message.attachments
-  for count in range(0,len(files)):
-    r = requests.get(files[count].url, stream=True)
-    r.raise_for_status()
-    r.raw.decode_content = True
-    if files[count].filename.endswith(".pdf"):
-      open('pdf.pdf', 'wb').write(r.content)
-      images = convert_from_path('pdf.pdf')
-      for count in images:
-        desc=pytesseract.image_to_string(count)
-      os.remove('pdf.pdf')
-    elif files[count].endswith(".txt"):
-      open('txt.txt', 'wb').write(r.content)
-      with open('data.txt', 'r') as file:
-        desc = file.read().replace('\n', '')
-      os.remove('txt.txt')
-    else:
-      desc = "Unsupported format. Please use .pdf or .txt."
-    if desc=="":
-      desc="There was no text."
-    await ctx.send(desc)
-
-@bot.command()
-async def html(ctx, *, code = None):
-  bothtml(code)
-  await ctx.send(file=discord.File('html_screenshot.png'))
-  os.remove('html_screenshot.png')
-
-@bot.command(aliases=['md'])
-async def markdown(ctx, *, mdcode = None):
-  botmd(mdcode)
-  await ctx.send(file=discord.File('md_screenshot.png'))
-  os.remove('md_screenshot.png')
-
-@bot.command()
-async def definition(ctx, *, word):
-  output = botdefinition(word)
-  if output == "Invalid word. Please try again.":
-    await ctx.send(output)
-  else:
-    await ctx.send(embed=output)
-
-@bot.command()
-async def wiki(ctx, *, query):
-  embed = botwiki(query)
-  await ctx.send(embed=embed)
-  
-@bot.command()
-async def purgereactions(ctx, messages, emoji: discord.Emoji = None):
-  if emoji == None:
-    async for message in ctx.channel.history(limit=int(messages)+1):
-      await message.clear_reactions()
-  else:
-    async for message in ctx.channel.history(limit=int(messages)+1):
-      await message.clear_reaction(emoji)
-
 @bot.command(pass_context=True)
 async def react(ctx, message : discord.Message, emoji : discord.Emoji):
   await ctx.message.delete()
@@ -1002,274 +415,6 @@ async def react(ctx, message : discord.Message, emoji : discord.Emoji):
   await asyncio.sleep(3)
   member=ctx.guild.get_member(796686363604680755)
   await message.remove_reaction(emoji, member)
-
-@bot.command(pass_context=True)
-async def pretend(ctx, member : discord.Member, *, message):
-  try:
-    await ctx.message.delete()
-  except:
-    pass
-  whl = await ctx.channel.webhooks()
-  ourweb = False
-  for count in whl:
-    if count.name == "Pretender":
-      ourweb = True
-      token = count.token
-      identify = count.id
-  if len(whl) == 0 or ourweb == False:
-    wh = await ctx.channel.create_webhook(name = "Pretender")
-    token = wh.token
-    identify = wh.id
-  async with aiohttp.ClientSession() as session:
-    webhook = Webhook.partial(identify, token, session=session)
-    await webhook.send(message, username=member.name, avatar_url=member.avatar.url)
-
-@bot.command(pass_context=True)
-async def pretendembed(ctx, member : discord.Member, *, text):
-  try:
-    await ctx.message.delete()
-  except:
-    pass
-  whl = await ctx.channel.webhooks()
-  ourweb = False
-  for count in whl:
-    if count.name == "Pretender":
-      ourweb = True
-      token = count.token
-      identify = count.id
-  if len(whl) == 0 or ourweb == False:
-    wh = await ctx.channel.create_webhook(name = "Pretender")
-    token = wh.token
-    identify = wh.id
-  async with aiohttp.ClientSession() as session:
-    webhook = Webhook.partial(identify, token, session=session)
-  embed = botembed(text)
-  await webhook.send(embed=embed, username=member.name, avatar_url=member.avatar.url)
-
-@bot.command()
-async def type(ctx):
-  global typer
-  if typer==0:
-    channel=ctx.channel
-    await ctx.send("Started typing")
-    async with channel.typing():
-      typer=1
-      var=0
-  else:
-    typer=0
-    await ctx.send("Stopped typing")
-
-@bot.command()
-async def ett(ctx, msg : discord.Message):
-  text = botett(msg)
-  await ctx.send("```"+text+"```")
-
-@bot.command(aliases=["fastembed", "qe"])
-async def quickembed(ctx, *, text):
-  embed = botquickembed(text)
-  await ctx.send(embed=embed)
-
-@bot.command(aliases=["simpleembed", "simplembed"])
-async def simpembed(ctx, *, text):
-  embed = botsimpembed(text)
-  await ctx.send(embed=embed)
-
-@bot.command()
-async def embed(ctx,*,text):
-  embed = botembed(text)
-  await ctx.send(embed=embed)
-
-@bot.command()
-async def editembed(ctx, message : discord.Message, *,text):
-  embed = botembed(text)
-  await message.edit(embed=embed)
-
-@bot.command()
-async def insert(ctx,emoji,*,text):
-  text=text.replace(" "," "+emoji+" ")
-  await ctx.send(text)
-
-@bot.command()
-async def purge(ctx, num):
-  if ctx.channel.permissions_for(ctx.author).manage_messages or bot_admins.count(ctx.author.id)!=0:
-    num=int(num)
-    deleted = await ctx.channel.purge(limit=num+1)
-    msg = await ctx.send("Purging completed.")
-    desc = ""
-    authors = [count.author.name + count.author.discriminator for count in deleted]
-    authors = list(dict.fromkeys(authors))
-    counter = 0
-    for count in deleted:
-      contents = count.content
-      if 'fuck' in contents or 'shit' in contents or 'asshole' in contents or 'dick' in contents:
-        counter = counter + 1
-    await msg.edit(f"Purging completed.\nDeleted {counter} messages with bad words", delete_after = 5)
-  else:
-    await ctx.send("You don't have the required permission: Manage messages.")
-
-@bot.command()
-async def purgeregex(ctx, num, *, regex):
-  try:
-    await ctx.message.delete()
-  except:
-    pass
-  if ctx.channel.permissions_for(ctx.author).manage_messages or bot_admins.count(ctx.author.id)!=0:
-    purge_pattern = eval("re.compile(r'"+regex+"')")
-    num = int(num)
-    purged = 0
-    async for count in ctx.channel.history(limit=1000):
-      match = match = purge_pattern.fullmatch(count.content)
-      try:
-        if match:
-          await count.delete()
-          purged = purged + 1
-          if purged >= num:
-            break
-      except:
-        await ctx.send("The bot doesn't have the required permission (Manage messages) or the regex was malformed.")
-        break
-    await ctx.send("Regex purging completed.", delete_after = 5)
-  else:
-    await ctx.send("You don't have the required permission: Manage messages.")
-
-@bot.command()
-async def purgepygex(ctx, num, regex, *, pyscript):
-  try:
-    await ctx.message.delete()
-  except:
-    pass
-  if ctx.channel.permissions_for(ctx.author).manage_messages or bot_admins.count(ctx.author.id)!=0:
-    purge_pattern = eval("re.compile(r'"+regex+"'")
-    num = int(num)
-    purged = 0
-    async for count in ctx.channel.history(limit=1000):
-      match = match = purge_pattern.fullmatch(count.content)
-      try:
-        if match and eval(pyscript) == True:
-          await count.delete()
-          purged = purged + 1
-          if purged >= num:
-            break
-      except:
-        await ctx.send("The bot doesn't have the required permission (Manage messages) or the regex/script was malformed.")
-        break
-    await ctx.send("Python Regex purging completed.", delete_after = 5)
-  else:
-    await ctx.send("You don't have the required permission: Manage messages.")
-
-@bot.command()
-async def purgepy(ctx, num, pyscript):
-  try:
-    await ctx.message.delete()
-  except:
-    pass
-  if ctx.channel.permissions_for(ctx.author).manage_messages or bot_admins.count(ctx.author.id)!=0:
-    num = int(num)
-    purged = 0
-    async for msg in ctx.channel.history(limit=1000):
-      try:
-        if eval(pyscript) == True:
-          await msg.delete()
-          purged = purged + 1
-          if purged >= num:
-            break
-      except:
-        await ctx.send("The bot doesn't have the required permission (Manage messages) or the script was malformed.")
-        break
-    await ctx.send("Python purging completed.", delete_after = 5)
-  else:
-    await ctx.send("You don't have the required permission: Manage messages.")
-
-@bot.command()
-async def purgeuser(ctx, num, userinput : discord.User):
-  try:
-    await ctx.message.delete()
-  except:
-    pass
-  if ctx.channel.permissions_for(ctx.author).manage_messages or bot_admins.count(ctx.author.id)!=0:
-    num = int(num)
-    purged = 0
-    async for count in ctx.channel.history(limit=1000):
-      if count.author == userinput:
-        await count.delete()
-        purged = purged + 1
-        if purged >= num:
-          break
-        
-    await ctx.send("User purging completed.", delete_after = 5)
-  else:
-    await ctx.send("You don't have the required permission: Manage messages.")
-
-@bot.command(aliases=["colour"])
-async def color(ctx, *, name):
-    output = botcolor(name)
-    if output == "Please specify a correct colour value.":
-      await ctx.send(output)
-    else:
-      await ctx.send(file = discord.File('color.png'), embed=output)
-      os.remove('color.png')
-
-@bot.command()
-async def map(ctx, long:float, lat:float, zoom:int=10, antizoom = ""):
-  antizoom = specialbool(antizoom)
-  botmap(long, lat, zoom, antizoom)
-  await ctx.send(files=[discord.File('map.html'), discord.File('map.png')])
-
-@bot.command()
-async def time(ctx, *, timezoneinput="0"):
-  output = bottime(timezoneinput)
-  if type(output) == str:
-    await ctx.send(output)
-  else:
-    await ctx.send(embed=output)
-
-@bot.command()
-async def spoiler(ctx,*,text):
-  text="||||".join(text)
-  text="||"+text+"||"
-  await ctx.send(text)
-
-@bot.command()
-async def rawspoiler(ctx, *, text):
-  text="\|\|\|\|".join(text)
-  text="\|\|"+text+"\|\|"
-  await ctx.send(text)
-
-@bot.command()
-async def rawrawspoiler(ctx, *, text):
-  text="\\\|\\\|\\\|\\\|".join(text)
-  text="\\\|\\\|"+text+"\\\|\\\|"
-  await ctx.send(text)
-
-@bot.command()
-async def emojiinfo(ctx,emojiarg : typing.Union[discord.Emoji, str]):
-  try:
-    try:
-      creator = await ctx.guild.fetch_emoji(emojiarg.id)
-      desc = str(emojiarg)+emojiarg.name+"\nCreated by "+str(creator.user.mention)+" at "+str(emojiarg.created_at.strftime("%d %b, %Y (%a) %H:%M:%S"))
-    except:
-      desc = str(emojiarg)+"\n`Created by` field can only be retrieved with the manage-emojis permission.\nCreated at "+str(emojiarg.created_at.strftime("%d %b, %Y (%a) %H:%M:%S"))
-    embed = discord.Embed(title=f"Emoji Info: {emojiarg.name}", description=desc)
-    embed.add_field(name="ID", value=emojiarg.id, inline=True)
-    embed.set_image(url = emojiarg.url)
-  except:
-    cemoji = ems.db.get_emoji_by_alias(emojiarg)
-    if cemoji == None:
-      cemoji = ems.db.get_emoji_by_code(emojiarg)
-    embed = discord.Embed(title="Emoji Info", description = (cemoji[1] + " :" + ":, :".join(cemoji[0]) + ":"))
-    embed.add_field(name="Category", value=cemoji[3], inline=True)
-    embed.add_field(name="Unicode Version", value=cemoji[4], inline=True)
-    if len(cemoji[2]) > 0:
-      embed.add_field(name="Tags", value=", ".join(cemoji[2]), inline=True)
-  await ctx.send(embed=embed)
-
-@bot.command()
-async def reverse(ctx, *, text):
-  await ctx.send(text[::-1])
-
-@bot.command()
-async def emoji(ctx, *, text):
-  await ctx.send(botemoji(text))
 
 @bot.command()
 async def terminate(ctx, *, idc):
@@ -1397,264 +542,6 @@ async def ttimer(ctx, timetocount,*,Text=None):
       await message.reply("Countdown complete!")
     else:
       await message.reply(f"Countdown complete!\n"+Text)
-
-@bot.command()
-async def getrole(ctx, role : discord.Role, member : discord.Member = None):
-  if member == None:
-    member = ctx.author
-  #if ctx.channel.permissions_for(ctx.author).manage_roles or bot_admins.count(ctx.author.id)!=0:
-  if ctx.channel.permissions_for(ctx.author).manage_roles or ctx.author.id == 687474789342117900 or role.id == 805462470604095539 or role.id == 805462557472194581 or role.id == 822743463883702302:
-    roles=member.roles
-    if roles.count(role)==1:
-      await member.remove_roles(role)
-      await ctx.send("Removed "+str(role)+" role from "+str(member)+".")
-    else:
-      await member.add_roles(role)
-      await ctx.send("Added "+str(role)+" role to "+str(member)+".")
-    
-  else:
-    await ctx.send("You don't have the required permission: Manage roles.")
-
-@bot.command()
-async def random(ctx,lower,upper):
-  ti="Random number between "+lower+" and "+upper
-  lower=int(lower)
-  upper=int(upper)
-  rand=ra.randint(lower,upper)
-  rand=str(rand)
-  desc="Your random number is "+rand
-  embed=discord.Embed(title=ti, description=desc)
-  await ctx.send(embed=embed)
-
-@bot.command()
-async def choice(ctx,*options):
-  ti="Random choice"
-  rand=ra.choice(options)
-  desc="Your random option is "+rand
-  embed=discord.Embed(title=ti, description=desc)
-  await ctx.send(embed=embed)
-
-@bot.command()
-async def avatar(ctx,user: discord.Member=None):
-  base_url = user.avatar.url
-  if not user:
-    user=ctx.author
-  desc = f"Avatar of {user.mention}\n"
-  for count in range(5, 13):
-    size = str(2**count)
-    temp = base_url.replace("?size=1024", f"?size={size}")
-    desc += f"[{size}]({temp}) "
-  embed=discord.Embed(title="Avatar", description=desc)
-  embed.set_image(url=base_url)
-  await ctx.send(embed=embed)
-
-@bot.command(aliases = ["guild"])
-async def server(ctx, text = "regular"):
-  task = asyncio.create_task(botserver(ctx, text))
-  await task
-  await ctx.send(embed=task.result())
-
-@bot.command()
-async def template(ctx, *, tempinput):
-  try:
-    temp = bot.fetch_template(tempinput)
-  except:
-    await ctx.send("Invalid input. Please try again.")
-    return
-  ti="Template Information: "+temp.name+" ("+temp.code+")"
-  desc="Created at "+temp.created_at.strftime("%d %b, %Y (%a) %H:%M:%S")+" by "+str(temp.creator)
-  embed=discord.Embed(title=ti, description=desc)
-  f0v=temp.description
-  f1v=temp.uses
-  f2v=temp.updated_at.strftime("%d %b, %Y (%a) %H:%M:%S")
-  f3v=temp.source_guild
-  embed.add_field(name="Description", value=f0v, inline=False)
-  embed.add_field(name="Uses", value=f1v, inline=True)
-  embed.add_field(name="Synced", value=f2v, inline=True)
-  embed.add_field(name="Original Server", value=f3v, inline=True)
-  await ctx.send(embed=embed)
-
-@bot.command()
-async def invitelink(ctx,inviteinput: discord.Invite):
-  task = asyncio.create_task(botinvitel(inviteinput))
-  await task
-  await ctx.send(embed=task.result())
-
-@bot.command()
-async def channel(ctx, channel:typing.Union[discord.TextChannel, discord.VoiceChannel, discord.StageChannel]=None):
-  if not channel:
-    channel = ctx.channel
-  if channel.type == discord.ChannelType.text:
-    task = asyncio.create_task(bottchannel(ctx, channel))
-    await task
-    await ctx.send(embed=task.result())
-  elif channel.type == discord.ChannelType.voice:
-    task = asyncio.create_task(botvchannel(channel))
-    await task
-    await ctx.send(embed=task.result())
-  elif channel.type == discord.ChannelType.stage:
-    task = asyncio.create_task(botstagec(channel))
-    await task
-    await ctx.send(embed=task.result())
-  else:
-    embed = discord.Embed(desc = "Invalid input.")
-    await ctx.send(embed=embed)
-
-@bot.command(aliases=["msg"])
-async def message(ctx, message: discord.Message=None):
-  if message==None:
-    message=ctx.message
-  ti="Message Information"
-  
-  desc=f"Sent by {message.author.mention} at {message.created_at.strftime('%d %b, %Y (%a) %H:%M:%S')}"
-  if message.edited_at != None:
-    desc += f"Edited at {message.edited_at.strftime('%d %b, %Y (%a) %H:%M:%S')}"
-  f0vraw = message.reactions
-  f0v = ""
-  for count in f0vraw:
-    if count.custom_emoji:
-      f0v += f":{count.emoji}:   ("+str(count.count)+")"
-    else:
-      f0v += f"{count.emoji}   ("+str(count.count)+")"
-  f1vraw = message.attachments
-  f1v = ""
-  for count in f1vraw:
-    if count.is_spoiler:
-      f1v += f"[{count.filename}]({count.url}) ({sizer(count.size)}, marked as spoiler)"
-    else:
-      f1v += f"[{count.filename}]({count.url}) ({sizer(count.size)})"
-  f2vraw = message.channel_mentions
-  f2v = ""
-  for count in f2vraw:
-    f2v += count.mention + " "
-  f3vraw = message.role_mentions
-  f3v = ""
-  for count in f3vraw:
-    f3v += count.mention + " "
-  f4vraw = message.mentions
-  f4v = ""
-  for count in f4vraw:
-    f4v += count.mention + " "
-  embed=discord.Embed(title=ti, description=desc, url=message.jump_url)
-  embed.add_field(name="Content", value=message.content[:500], inline=False)
-  embed.add_field(name="From channel", value=message.channel.mention, inline=True)
-  if message.webhook_id != None:
-    embed.add_field(name="Webhook message", value="This message is sent by a webhook.", inline=True)
-  if message.pinned:
-    embed.add_field(name="Pinned", value="This message is pinned.", inline=True)
-  if message.mention_everyone:
-    embed.add_field(name="@everyone", value="This message mentioned everyone.", inline=True)
-  embed.add_field(name="ID", value=str(message.id), inline=True)
-  if message.type == discord.MessageType.recipient_add:
-    embed.add_field(name="System message", value="This is a system message indicating that a recipient has been added to the group.", inline=False)
-  elif message.type == discord.MessageType.recipient_remove:
-    embed.add_field(name="System message", value="This is a system message indicating that a recipient has been removed from the group.", inline=False)
-  elif message.type == discord.MessageType.call:
-    embed.add_field(name="System message", value="This is a system message indicating that someone missed or started a call.", inline=False)
-  elif message.type == discord.MessageType.channel_name_change:
-    embed.add_field(name="System message", value="This is a system message indicating that someone changed the group's name.", inline=False)
-  elif message.type == discord.MessageType.channel_icon_change:
-    embed.add_field(name="System message", value="This is a system message indicating that someone changed the group's icon.", inline=False)
-  elif message.type == discord.MessageType.pins_add:
-    embed.add_field(name="System message", value="This is a system message indicating that someone pinned a message.", inline=False)
-  elif message.type == discord.MessageType.new_member:
-    embed.add_field(name="System message", value="This is a system message indicating that someone joined the server.", inline=False)
-  elif message.type == discord.MessageType.premium_guild_subscription:
-    embed.add_field(name="System message", value="This is a system message indicating that someone nitro-boosted the server.", inline=False)
-  elif message.type == discord.MessageType.premium_guild_tier_1:
-    embed.add_field(name="System message", value="This is a system message indicating that someone nitro-boosted the server. It is now level 1.", inline=False)
-  elif message.type == discord.MessageType.premium_guild_tier_2:
-    embed.add_field(name="System message", value="This is a system message indicating that someone nitro-boosted the server. It is now level 2.", inline=False)
-  elif message.type == discord.MessageType.premium_guild_tier_3:
-    embed.add_field(name="System message", value="This is a system message indicating that someone nitro-boosted the server. It is now level 3.", inline=False)
-  elif message.type == discord.MessageType.channel_follow_add:
-    embed.add_field(name="System message", value="This is a system message indicating that someone followed another server's announcement.", inline=False)
-  if message.application != None:
-    embed.add_field(name=message.application["name"], value=f"This message is created by {message.application['name']}.\n{message.application['description']}", inline=False)
-  if len(f0vraw) != 0:
-    embed.add_field(name="Reactions ("+str(len(f0vraw))+")", value=f0v, inline=False)
-  if len(f1vraw) != 0:
-    embed.add_field(name="Attachments ("+str(len(f1vraw))+")", value=f1v, inline=False)
-  if len(f2vraw) != 0:
-    embed.add_field(name="Channel mentions ("+str(len(f2vraw))+")", value=f2v, inline=False)
-  if len(f3vraw) != 0:
-    embed.add_field(name="Role mentions ("+str(len(f3vraw))+")", value=f3v, inline=False)
-  if len(f4vraw) != 0:
-    embed.add_field(name="User mentions ("+str(len(f4vraw))+")", value=f4v, inline=False)
-  await ctx.send(embed=embed)
-
-@bot.command()
-async def leftuser(ctx, *, userinput):
-  global bot
-  lfuser = await bot.fetch_user(int(userinput))
-  ti="Left User Information"
-  if lfuser == None:
-    lfuser = ctx.author
-  bottrue = lfuser.bot
-  if bottrue == True:
-    desc = f"{lfuser.mention} (bot)"
-  else:
-    desc = f"{lfuser.mention} (human)"
-  embed=discord.Embed(title=ti,color=lfuser.color, description=desc)
-  embed.set_thumbnail(url=lfuser.avatar.url)
-  f0v=f"{lfuser.name}#{lfuser.discriminator}"
-  f1v=lfuser.created_at.strftime("%d %b, %Y (%a) %H:%M:%S")
-  f1ts = str(datetime.now(timezone.utc) - lfuser.created_at)
-  if f1ts.count(" days, ") == 0:
-    f1va = re.sub(r'(\d{1,2}):(\d{2}):(\d{2})', r'\1 hours \2 minutes \3 seconds', f1ts) + f"\n≈ "+f1ts.split(":")[0]+" hours"
-  else:
-    days = int(re.sub(r'([\d]+) days, [\s\S]*', r'\1', f1ts))
-    f1va = re.sub(r'([\d]+) days, (\d{1,2}):(\d{2}):(\d{2})', r'\1 days \2 hrs \3 mins \4 secs', f1ts)[:-7] + f"\n≈ "+str((int(f1ts.split(" days, ")[0]))//365) + " years " + str(int(f1ts.split(" days, ")[0]) % 365) + " days"
-  embed.add_field(name="Name", value=f0v, inline=False)
-  embed.add_field(name="Time since user registered", value=f1va, inline=True)
-  embed.add_field(name="Registered", value=f1v, inline=True)
-  await ctx.send(embed=embed)
-
-@bot.command()
-async def ban(ctx, user: discord.User, delete : int =0, *, reason="No reason provided"):
-  task = asyncio.create_task(botban(ctx, user, delete, reason))
-  await task
-
-@bot.command()
-async def unban(ctx, user: discord.User, *, reason="No reason provided"):
-  task = asyncio.create_task(botunban(ctx, user, reason))
-  await task
-
-@bot.command()
-async def kick(ctx, user: discord.Member, *, reason="No reason provided"):
-  task = asyncio.create_task(botkick(ctx, user, reason))
-  await task
-
-@bot.command()
-async def slowmode(ctx, sec = None, *channels:typing.Union[discord.TextChannel,str]):
-  if sec != None:
-    if sec.isdigit() == False:
-      sec = 0
-    if int(sec) < 0 or int(sec) > 21600 or int(sec)%1 != 0:
-      await ctx.send("Invalid input! Please enter an integer below or equal to 21600.")
-      return
-    if len(channels) == 0:
-      allchannel = [ctx.channel]
-    elif channels[0] == ("all"):
-      allchannel = ctx.guild.text_channels
-    else:
-      allchannel = channels
-    channellist = []
-    for count in allchannel:
-      if type(count) == str:
-        continue
-      if count.permissions_for(ctx.author).manage_channels or bot_admins.count(ctx.author.id)!=0:
-        orsec = str(count.slowmode_delay)
-        await count.edit(slowmode_delay = sec)
-        channellist.append(count.mention)
-    if len(channellist)==0:
-      await ctx.send("You don't have the required permission: Manage channels.")
-    elif len(channellist)==1:
-      await ctx.send("Set slowmode from "+orsec+" second(s) to "+sec+" second(s) for "+" ".join(channellist)+".")
-    else:
-      await ctx.send("Set slowmode to "+sec+" second(s) for these channels: "+" ".join(channellist)+".")
-  elif sec == None:
-    await ctx.send("The current slowmode is "+str(ctx.channel.slowmode_delay)+" second(s).")
 
 @bot.event
 async def on_ready():

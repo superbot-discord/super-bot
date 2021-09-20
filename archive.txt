@@ -1,3 +1,26 @@
+@bot.event
+async def on_command_error(ctx, error):
+  if isinstance(error, commands.CommandNotFound):
+    message = ctx.message
+    used_prefix = ctx.prefix
+    used_command = message.content.split()[0][len(used_prefix):]
+    available_commands = [cmd.name for cmd in bot.commands]
+    matches = {cmd: SequenceMatcher(None, cmd, used_command).ratio() for cmd in available_commands}
+    command = max(matches.items(), key=lambda item: item[1])[0]
+    try:
+      arguments = message.content.split(" ", 1)[1]
+    except IndexError:
+      arguments = ""
+    new_content = f"{used_prefix}{command} {arguments}".strip()
+    message.content = new_content
+    await ctx.send(f'Your might have made a typo and your command has been interpreted as {command}.', delete_after=4)
+    await bot.process_commands(message)
+  elif isinstance(error, commands.MissingRequiredArgument):
+    await ctx.send(f'You missed one or more arguments! {len(ctx.command.clean_params.keys())} argument(s) are required.\nNote: Multiline arguments are treated as one argument.')
+  else:
+    print(error.with_traceback(error.__traceback__))
+
+
 @bot.command()
 async def verify(ctx):
   if ctx.message.guild.id == 823405852131328001 and ctx.author.roles.count(ctx.guild.get_role(823407479303569419))==1:

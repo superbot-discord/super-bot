@@ -1,7 +1,78 @@
-from PIL import Image, ImageFilter, ImageOps, ImageDraw
-from colorthief import ColorThief
-from colorgram import extract
 import colorsys
+import os
+import random as ra
+import sys
+
+import discord
+import pytesseract
+import qr_img
+from captcha.image import ImageCaptcha
+from colorgram import extract
+from colorthief import ColorThief
+from discord.ext import commands
+from pdf2image import convert_from_path
+from PIL import Image, ImageDraw, ImageFilter, ImageOps
+
+import ascii2 as asc
+
+cimage = ImageCaptcha()
+@commands.command()
+async def captcha(ctx, *, text=None):
+  if text == None:
+    text = ra.choice("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789") + ra.choice("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789") + ra.choice("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789") + ra.choice("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789")
+  data = cimage.generate(text)
+  cimage.write(text, 'captcha.png')
+  await ctx.send(f"Captcha for {text}", file = discord.File('captcha.png'))
+  os.remove('captcha.png')
+
+@commands.command()
+async def image(ctx, *, mode):
+  await ctx.message.attachments[0].save('input.png')
+  if mode.startswith("analyse") or mode.startswith("analyze"):
+    try:
+      scale = int(mode.split(" ")[1])
+    except:
+      scale = 1000
+    try:
+      colors = int(mode.split(" ")[2])
+    except:
+      colors = 5
+    dominant = analyse(scale, colors)
+    try:
+      await ctx.send(f"Images are sorted by amount, brightness and hue respectively.\nDominant color: {dominant}", files=[discord.File('output_amount.png'), discord.File('output_lightness.png'), discord.File('output_hue.png'), discord.File('analysis.txt')])
+    except:
+      await ctx.send(f"Images are sorted by amount, brightness and hue respectively.\nDominant color: {dominant}", file=discord.File('output_amount.png'))
+      await ctx.send(file=discord.File('output_lightness.png'))
+      await ctx.send(file=discord.File('output_hue.png'))
+      await ctx.send(file=discord.File('analysis.txt'))
+    os.remove('analysis.txt')
+  elif mode.startswith("blur"):
+    try:
+      blur(int(mode.split(" ")[1]))
+    except:
+      blur(2)
+    await ctx.send(files=[discord.File('output1.png'), discord.File('output2.png')])
+  elif mode.startswith("resize "):
+    resize(int(mode.split(" ")[1]), int(mode.split(" ")[2]))
+    try:
+      await ctx.send(files=[discord.File('output1.png'), discord.File('output2.png'), discord.File('output3.png'), discord.File('output4.png'), discord.File('output5.png'), discord.File('output6.png')])
+    except:
+      await ctx.send(file=discord.File('output1.png'))
+      await ctx.send(file=discord.File('output2.png'))
+      await ctx.send(file=discord.File('output3.png'))
+      await ctx.send(file=discord.File('output4.png'))
+      await ctx.send(file=discord.File('output5.png'))
+      await ctx.send(file=discord.File('output6.png'))
+  elif mode.startswith("rotate "):
+    rotate(float(mode.split(" ")[1]))
+    await ctx.send(files=[discord.File('output1.png'), discord.File('output2.png')])
+  else:
+    if mode.startswith("invert"):
+      invert()
+    elif mode.startswith("hue "):
+      addhue(int(mode.split(" ")[1]))
+    await ctx.send(file=discord.File('output.png'))
+  os.remove('input.png')
 
 def addhue(degs):
   im = Image.open('input.png')
@@ -117,3 +188,87 @@ def analyse(scale, colors):
   f.write(desc)
   f.close()
   return hexcode
+
+@commands.command()
+async def mandelbrot(ctx, size:int = 1024):
+  img = Image.effect_mandelbrot((size, size), (-1.5, -2.5, 3.5, 2.5), 95)
+  img.save('Mandelbrot.png')
+  await ctx.send(file = discord.File('Mandelbrot.png'))
+  os.remove('Mandelbrot.png')
+
+@commands.command()
+async def ocr(ctx, lang="eng", *, text = None):
+  images = ctx.message.attachments
+  for count in range(0,len(images)):
+    await count.save('input.png')
+    img = Image.open('input.png')
+    desc=pytesseract.image_to_string(img, lang=lang)
+    if desc.replace(" ","")=="":
+      desc="There was no text."
+    await ctx.send(desc)
+
+@commands.command()
+async def qr(ctx, *, text=None):
+  for count in ctx.message.attachments:
+    await count.save('qrcode.png')
+    await ctx.send(qr_img.qr_decode('qrcode.png'))
+    os.remove('qrcode.png')
+
+@commands.command()
+async def render(ctx, width:float=1):
+  att = ctx.message.attachments[0]
+  for count in range(40, 4, -1):
+    try:
+      output = asc.loadFromUrl(att.url, columns=int(att.width*count*width/10), color=True)
+      if sys.getsizeof(output) > 8000000:
+        continue
+      break
+    except:
+      pass
+  file = open('Output.txt', 'w')
+  file.write(output)
+  file.close()
+  await ctx.send(file = discord.File('Output.txt'))
+  os.remove('Output.txt')
+
+@commands.command()
+async def text(ctx, *, text = None):
+  files = ctx.message.attachments
+  for count in files:
+    cname = count.filename
+    await count.save(cname)
+    if cname.endswith(".pdf"):
+      images = convert_from_path(cname)
+      for count in images:
+        desc=pytesseract.image_to_string(count)
+      os.remove(cname)
+    elif cname.endswith(".txt"):
+      file = open('data.txt', 'r')
+      desc = file.read().replace('\n', '')
+      file.close()
+      os.remove(cname)
+    else:
+      desc = "Unsupported format. Please use .pdf or .txt."
+    if desc=="":
+      desc="There was no text."
+    await ctx.send(desc)
+
+@commands.command()
+async def transparent(ctx, alpha = 128):
+  await ctx.message.attachments[0].save("Not_Transparent.png")
+  img = Image.open("Not_Transparent.png")
+  img2 = img.copy()
+  img2.putalpha(int(alpha))
+  img.paste(img2, img)
+  img.save('Transparent.png')
+  await ctx.send(file = discord.File('Transparent.png'))
+  os.remove('Transparent.png')
+
+def setup(bot):
+  bot.add_command(image)
+  bot.add_command(mandelbrot)
+  bot.add_command(ocr)
+  bot.add_command(qr)
+  bot.add_command(render)
+  bot.add_command(text)
+  bot.add_command(transparent)

@@ -1,0 +1,214 @@
+import base64
+import hashlib
+import random as ra
+import re
+from datetime import datetime
+from difflib import SequenceMatcher
+
+import discord
+import emojis as em
+from discord.ext import commands
+from unicode_charnames import search_charnames
+
+dt1 = datetime(1970,1,1,0,0,0)
+@commands.command()
+async def choice(ctx,*options):
+  ti="Random choice"
+  rand=ra.choice(options)
+  desc="Your random option is "+rand
+  embed=discord.Embed(title=ti, description=desc)
+  await ctx.send(embed=embed)
+
+@commands.command()
+async def decode(ctx, code, *, text):
+  if SequenceMatcher(None, code, 'base64').ratio()>0.6:
+    coder = base64.b64decode(bytes(text, encoding='utf-8'))
+    await ctx.send(coder.decode("utf-8"))
+  elif SequenceMatcher(None, code, 'base32').ratio()>0.6:
+    coder = base64.b32decode(bytes(text, encoding='utf-8'))
+    await ctx.send(coder.decode("utf-8"))
+  elif SequenceMatcher(None, code, 'base16').ratio()>0.6:
+    coder = base64.b16decode(bytes(text, encoding='utf-8'))
+    await ctx.send(coder.decode("utf-8"))
+  elif SequenceMatcher(None, code, 'caesar').ratio()>0.6 or code.startswith("caesar"):
+    encrypted = ""
+    distance = 128-int(code.replace("caesar", "", 1))
+    for count in text:
+      encrypted += chr(ord(count) + distance % 128)
+    await ctx.send(encrypted)
+  else:
+    await ctx.send("Encoding not found!")
+
+@commands.command()
+async def emoji(ctx, *, text):
+  text = text.lower()
+  text = text.replace(" ","   ")
+  text = text.replace(" wc","🚾")
+  text = text.replace(" ng","🆖")
+  text = text.replace(" ok","🆗")
+  text = text.replace(" up!","🆙")
+  text = text.replace(" cool","🆒")
+  text = text.replace(" new","🆕")
+  text = text.replace(" free","🆓")
+  text = text.replace(" tm","™️")
+  text = text.replace(" id","🆔")
+  text = text.replace(" vs","🆚")
+  text = text.replace(" sos","🆘")
+  text = text.replace(" (c)","©️")
+  text = text.replace(" (r)","®️")
+  text = text.replace("a","🇦 ").replace("b","🇧 ").replace("c","🇨 ").replace("d","🇩 ").replace("e","🇪 ")
+  text = text.replace("f","🇫 ").replace("g","🇬 ").replace("h","🇭 ").replace("i","🇮 ").replace("j","🇯 ")
+  text = text.replace("k","🇰 ").replace("l","🇱 ").replace("m","🇲 ").replace("n","🇳 ").replace("o","🇴 ")
+  text = text.replace("p","🇵 ").replace("q","🇶 ").replace("r","🇷 ").replace("s","🇸 ").replace("t","🇹 ")
+  text = text.replace("u","🇺 ").replace("v","🇻 ").replace("w","🇼 ").replace("x","🇽 ").replace("y","🇾 ").replace("z","🇿 ")
+  text = text.replace(">||",":play_pause:")
+  text = text.replace(">>|",":track_next:")
+  text = text.replace("|<<",":track_previous:")
+  text = text.replace("<->",":left_right_arrow:")
+  text = text.replace("->",":arrow_right:")
+  text = text.replace("<-",":arrow_left:")
+  text = text.replace(">>",":fast_forward:")
+  text = text.replace("<<",":rewind:")
+  text = text.replace("||",":pause_button:")
+  text = text.replace(">",":arrow_forward:")
+  text = text.replace("<",":arrow_backward:")
+  text = text.replace("!",":exclamation:")
+  text = text.replace("?",":question:")
+  text = text.replace("!!",":bangbang:")
+  text = text.replace("!?",":interrobang:")
+  text = text.replace("$",":heavy_dollar_sign:")
+  text = text.replace("#",":hash:")
+  text = text.replace("*",":asterisk:")
+  text = text.replace("+",":heavy_plus_sign:")
+  text = text.replace("-",":heavy_minus_sign:")
+  text = text.replace("×",":heavy_multiplication_x:")
+  text = text.replace("÷",":heavy_division_sign:")
+  text = text.replace("1",":one:")
+  text = text.replace("2",":two:")
+  text = text.replace("3",":three:")
+  text = text.replace("4",":four:")
+  text = text.replace("5",":five:")
+  text = text.replace("6",":six:")
+  text = text.replace("7",":seven:")
+  text = text.replace("8",":eight:")
+  text = text.replace("9",":nine:")
+  text = text.replace("0",":zero:")
+  text = em.encode(text)
+  await ctx.send(text)
+
+@commands.command()
+async def encode(ctx, code, *, text):
+  if SequenceMatcher(None, code, 'sha512').ratio()>0.6:
+    coder = hashlib.sha512()
+    coder.update(bytes(text, encoding='utf-8'))
+    await ctx.send(coder.hexdigest())
+  elif SequenceMatcher(None, code, 'sha384').ratio()>0.6:
+    coder = hashlib.sha384()
+    coder.update(bytes(text, encoding='utf-8'))
+    await ctx.send(coder.hexdigest())
+  elif SequenceMatcher(None, code, 'sha256').ratio()>0.6:
+    coder = hashlib.sha256()
+    coder.update(bytes(text, encoding='utf-8'))
+    await ctx.send(coder.hexdigest())
+  elif SequenceMatcher(None, code, 'sha224').ratio()>0.6:
+    coder = hashlib.sha224()
+    coder.update(bytes(text, encoding='utf-8'))
+    await ctx.send(coder.hexdigest())
+  elif SequenceMatcher(None, code, 'sha128').ratio()>0.6:
+    coder = hashlib.sha1()
+    coder.update(bytes(text, encoding='utf-8'))
+    await ctx.send(coder.hexdigest())
+  elif SequenceMatcher(None, code, 'base64').ratio()>0.6:
+    coder = base64.b64encode(bytes(text, encoding='utf-8'))
+    await ctx.send(coder.decode("utf-8"))
+  elif SequenceMatcher(None, code, 'base32').ratio()>0.6:
+    coder = base64.b32encode(bytes(text, encoding='utf-8'))
+    await ctx.send(coder.decode("utf-8"))
+  elif SequenceMatcher(None, code, 'base16').ratio()>0.6:
+    coder = base64.b16encode(bytes(text, encoding='utf-8'))
+    await ctx.send(coder.decode("utf-8"))
+  elif SequenceMatcher(None, code, 'caesar').ratio()>0.6 or code.startswith("caesar"):
+    encrypted = ""
+    distance = int(code.replace("caesar", "", 1))
+    for count in text:
+      encrypted += chr(ord(count) + distance % 128)
+    await ctx.send(encrypted)
+  else:
+    await ctx.send("Encoding not found!")
+  
+@commands.command()
+async def insert(ctx,emoji,*,text):
+  text=text.replace(" "," "+emoji+" ")
+  await ctx.send(text)
+
+@commands.command()
+async def random(ctx,lower,upper):
+  ti="Random number between "+lower+" and "+upper
+  lower=int(lower)
+  upper=int(upper)
+  rand=ra.randint(lower,upper)
+  rand=str(rand)
+  desc="Your random number is "+rand
+  embed=discord.Embed(title=ti, description=desc)
+  await ctx.send(embed=embed)
+
+@commands.command()
+async def rawspoiler(ctx, *, text):
+  text="\|\|\|\|".join(text)
+  text="\|\|"+text+"\|\|"
+  await ctx.send(text)
+
+@commands.command()
+async def rawrawspoiler(ctx, *, text):
+  text="\\\|\\\|\\\|\\\|".join(text)
+  text="\\\|\\\|"+text+"\\\|\\\|"
+  await ctx.send(text)
+
+@commands.command()
+async def reverse(ctx, *, text):
+  await ctx.send(text[::-1])
+
+@commands.command()
+async def spoiler(ctx,*,text):
+  text="||||".join(text)
+  text="||"+text+"||"
+  await ctx.send(text)
+
+@commands.command()
+async def unicode(ctx, *, query):
+  allchars = search_charnames(query)
+  embed = discord.Embed(title = "Search results for: "+query)
+  for count, count2 in zip(allchars, range(0,25)):
+    embed.add_field(name = count[1].title(), value = "U+" + count[0] + eval("u\" \\u"+count[0]+"\""))
+  await ctx.send(embed=embed)
+
+@commands.command()
+async def unix(ctx, *, text):
+  now = datetime.now()
+  dateParts = {
+    m[-1]: int(m[:-1])
+    for m in re.findall(r'([\d]{1,4}[yMdhms]{1})', text)
+  }
+  if text.startswith("now") or SequenceMatcher(None, text, "now").ratio()>0.65:
+    dt2=now
+  else:
+    dt2 = datetime(
+      dateParts.get('y', now.year), dateParts.get('M', now.month),
+      dateParts.get('d', now.day), dateParts.get('h', now.hour),
+      dateParts.get('m', now.minute), dateParts.get('s', now.second))
+  seconds = round((dt2-dt1).total_seconds())
+  await ctx.send(f"<t:{seconds}> | `<t:{seconds}>` Note: Times are calculated in UTC+0.\n<t:{seconds}:F> | `<t:{seconds}:F>`\n<t:{seconds}:f> | `<t:{seconds}:f>`\n<t:{seconds}:D> | `<t:{seconds}:D>`\n<t:{seconds}:d> | `<t:{seconds}:d>`\n<t:{seconds}:T> | `<t:{seconds}:T>`\n<t:{seconds}:t> | `<t:{seconds}:t>`\n<t:{seconds}:R> | `<t:{seconds}:R>`\n")
+
+def setup(bot):
+  bot.add_command(choice)
+  bot.add_command(decode)
+  bot.add_command(emoji)
+  bot.add_command(encode)
+  bot.add_command(insert)
+  bot.add_command(random)
+  bot.add_command(rawspoiler)
+  bot.add_command(rawrawspoiler)
+  bot.add_command(reverse)
+  bot.add_command(spoiler)
+  bot.add_command(unicode)
+  bot.add_command(unix)

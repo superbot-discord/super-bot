@@ -1,6 +1,13 @@
 import discord
+from discord.ext import commands
 
-def bothelp(cat):
+@commands.command()
+async def hello(ctx, *, text=None):
+  embed = discord.Embed(title="Leaderboard", description="We upload the leaderboard to YouTube every week. You can find the leaderboard [here](https://youtu.be/4spCNEPawyQ).")
+  await ctx.send(embed=embed)
+
+@commands.command(aliases=["commands"])
+async def help(ctx, *, cat=None):
   desc = """**Prefix: **`=`
 **Basic Commands**
 `help` `invite` `prefix` `ping` `botpurge`
@@ -34,8 +41,14 @@ def bothelp(cat):
 Many slash commands are available as well
 Need help? check the [documentation](https://superbot-discord.github.io/documentation)!"""
   embed=discord.Embed(title="SuperBot#4073 (ID:796686363604680755)", description=desc)
-  return embed
+  await ctx.send(embed=embed)
 
-def botinvite():
+@commands.command()
+async def invite(ctx, *, text=None):
   embed = discord.Embed(title="Invite", description = "The bot can be invited [here](https://discord.com/api/oauth2/authorize?client_id=796686363604680755&permissions=8&redirect_uri=https%3A%2F%2Fsuperbot-discord.github.io&scope=bot%20applications.commands).")
-  return embed
+  await ctx.send(embed=embed)
+
+def setup(bot):
+  bot.add_command(hello)
+  bot.add_command(help)
+  bot.add_command(invite)

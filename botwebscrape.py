@@ -1,22 +1,26 @@
 import asyncio
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.common.by import By
-from discord.ext.commands import *
+import os
+import re
+
+import discord
+import folium
 import matplotlib.pyplot as plt
-from markdown2 import Markdown
-from selenium import webdriver
-from bs4 import BeautifulSoup
 import numpy as np
 import requests
 import selenium
-import discord
-import folium
-import re
+from bs4 import BeautifulSoup
+from discord.ext import commands
+from markdown2 import Markdown
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
+
 markdowner = Markdown(extras=["strike", "footnotes"])
 html_pattern = re.compile(r'^\`\`\`(html)?\n([\s\S]*)\`\`\`$')
 md_pattern = re.compile(r'^\`\`\`(md|markdown)?\n([\s\S]*)\`\`\`$')
 country_pattern = ""
+specialbool = lambda input: True if input.lower() in ["1","yes", "enable", "on", "enabled", "tick", "true"] else False
 
 def func(pct, allvals):
   absolute = int(pct/100*np.sum(allvals))
@@ -28,55 +32,8 @@ options.add_argument('--no-sandbox')
 options.add_argument('--disable-dev-shm-usage')
 options.add_argument("–lang=zh-TW")
 
-def botmd(ctx, code):
-  match = md_pattern.fullmatch(code)
-  if match:
-    code = re.sub(md_pattern, r"\2", code)
-  if code == None:
-    r = requests.get(ctx.message.attachments[0].url, stream=True)
-    r.raise_for_status()
-    r.raw.decode_content = True
-    mdcode = r.content
-  code = str(markdowner.convert(mdcode)).lstrip("'u").rstrip("'")
-  driver = webdriver.Chrome(options=options)
-  driver.get(f"data:text/html;charset=utf-8,{code}")
-  S = lambda X: driver.execute_script('return document.body.parentNode.scroll'+X)
-  driver.set_window_size(S('Width'),S('Height'))
-  driver.save_screenshot('md_screenshot.png')
-  driver.quit()
-
-def bothtml(ctx, code):
-  match = html_pattern.fullmatch(code)
-  if match:
-    code = re.sub(html_pattern, r"\2", code)
-  if code == None:
-    r = requests.get(ctx.message.attachments[0].url, stream=True)
-    r.raise_for_status()
-    r.raw.decode_content = True
-    code = r.content
-  driver = webdriver.Chrome(options=options)
-  driver.get(f"data:text/html;charset=utf-8,{code}")
-  S = lambda X: driver.execute_script('return document.body.parentNode.scroll'+X)
-  driver.set_window_size(S('Width'),S('Height'))
-  driver.save_screenshot('html_screenshot.png')
-  driver.quit()
-
-def botscreenshot(url, form):
-  driver = webdriver.Chrome(options=options)
-  if url == None:
-    return "Invalid format! Please use the format `=screenshot [url]`."
-  else:
-    driver.get(url)
-    if form == "short" or form == "first" or form == "normal" or form == "regular" or form == "basic" or form == "general" or form == "all":
-      driver.set_window_size(1440,900)
-      driver.get_screenshot_as_file('web_screenshot1.png')
-    if form == "everything" or form == "full" or form == "entire" or form == "whole" or form == "all":
-      S = lambda X: driver.execute_script('return document.body.parentNode.scroll'+X)
-      driver.set_window_size(S('Width'),S('Height'))
-      driver.get_screenshot_as_file('web_screenshot2.png')
-    driver.quit()
-
-def botcovid(country : str):
+@commands.command()
+async def covid(ctx, *, country="world"):
   driver = webdriver.Chrome(options=options)
   if country.lower() == "world" or country.lower() == "global" or country.lower() == "worldwide" or country.lower() == "everywhere" or country.lower() == "anywhere" or country.lower() == "international" or country.lower() == "internationally" or country.lower() == "globally" or country.lower() == "current":
     country = "world"
@@ -148,11 +105,67 @@ def botcovid(country : str):
     filelist = [discord.File("pc1.png"), discord.File("pc2.png")]
     embed.set_thumbnail(url="attachment://pc2.png")
     embed.set_image(url="attachment://pc1.png")
-    return [filelist, embed]
+    await ctx.send(files=filelist, embed=embed)
   else:
-    return "Invalid country. Please try again."
+    await ctx.send("Invalid country. Please try again.")
 
-def botpopulation(country : str):
+@commands.command()
+async def html(ctx, *, htmlcode = None):
+  match = html_pattern.fullmatch(htmlcode)
+  if match:
+    code = re.sub(html_pattern, r"\2", htmlcode)
+  if code == None:
+    r = requests.get(ctx.message.attachments[0].url, stream=True)
+    r.raise_for_status()
+    r.raw.decode_content = True
+    code = r.content
+  driver = webdriver.Chrome(options=options)
+  driver.get(f"data:text/html;charset=utf-8,{code}")
+  S = lambda X: driver.execute_script('return document.body.parentNode.scroll'+X)
+  driver.set_window_size(S('Width'),S('Height'))
+  driver.save_screenshot('html_screenshot.png')
+  await ctx.send(file=discord.File('html_screenshot.png'))
+  os.remove('html_screenshot.png')
+  driver.quit()
+
+@commands.command()
+async def map(ctx, long:float, lati:float, zoom:int=10, antizoom = ""):
+  antizoom = specialbool(antizoom)
+  if antizoom:
+    m = folium.Map(location=[long, lati], zoom_start=zoom, min_zoom=zoom, max_zoom=zoom)
+  else:
+    m = folium.Map(location=[long, lati], zoom_start=zoom)
+  m.save('map.html')
+  await ctx.send(file=discord.File('map.html'))
+  driver = webdriver.Chrome(options=options)
+  driver.get("file:///map.html")
+  await asyncio.sleep(5)
+  driver.get_screenshot_as_file('map.png')
+  await ctx.send(file=discord.File('map.png'))
+  driver.quit()
+
+@commands.command(aliases=['md'])
+async def markdown(ctx, *, mdcode = None):
+  match = md_pattern.fullmatch(mdcode)
+  if match:
+    code = re.sub(md_pattern, r"\2", mdcode)
+  if code == None:
+    r = requests.get(ctx.message.attachments[0].url, stream=True)
+    r.raise_for_status()
+    r.raw.decode_content = True
+    mdcode = r.content
+  code = str(markdowner.convert(mdcode)).lstrip("'u").rstrip("'")
+  driver = webdriver.Chrome(options=options)
+  driver.get(f"data:text/html;charset=utf-8,{code}")
+  S = lambda X: driver.execute_script('return document.body.parentNode.scroll'+X)
+  driver.set_window_size(S('Width'),S('Height'))
+  driver.save_screenshot('md_screenshot.png')
+  await ctx.send(file=discord.File('md_screenshot.png'))
+  os.remove('md_screenshot.png')
+  driver.quit()
+
+@commands.command()
+async def population(ctx, country="current"):
   driver = webdriver.Chrome(options=options)
   if country.lower() == "world" or country.lower() == "global" or country.lower() == "worldwide" or country.lower() == "everywhere" or country.lower() == "anywhere" or country.lower() == "international" or country.lower() == "internationally" or country.lower() == "globally" or country.lower() == "current":
     country = "current_"
@@ -199,18 +212,34 @@ def botpopulation(country : str):
         if "retrieving data" not in item:
           break
       embed.add_field(name="Net Growth", value=item, inline=True)
-    return embed
+    await ctx.send(embed=embed)
   except selenium.common.exceptions.TimeoutException:
-    return "Invalid country. Please try again."
+    await ctx.send("Invalid country. Please try again.")
 
-def botmap(long, lati, zoom, antizoom):
-  if antizoom:
-    m = folium.Map(location=[long, lati], zoom_start=zoom, min_zoom=zoom, max_zoom=zoom)
-  else:
-    m = folium.Map(location=[long, lati], zoom_start=zoom)
-  m.save('map.html')
+@commands.command()
+async def screenshot(ctx, url = None, form = "all"):
   driver = webdriver.Chrome(options=options)
-  driver.get("file:///map.html")
-  asyncio.sleep(5)
-  driver.get_screenshot_as_file('map.png')
-  driver.quit()
+  if url == None:
+    await ctx.send("Invalid format! Please use the format `=screenshot [url]`.")
+  else:
+    driver.get(url)
+    if form == "short" or form == "first" or form == "normal" or form == "regular" or form == "basic" or form == "general" or form == "all":
+      driver.set_window_size(1440,900)
+      driver.get_screenshot_as_file('web_screenshot1.png')
+      await ctx.send(file=discord.File('web_screenshot1.png'))
+      os.remove('web_screenshot1.png')
+    if form == "everything" or form == "full" or form == "entire" or form == "whole" or form == "all":
+      S = lambda X: driver.execute_script('return document.body.parentNode.scroll'+X)
+      driver.set_window_size(S('Width'),S('Height'))
+      driver.get_screenshot_as_file('web_screenshot2.png')
+      await ctx.send(file=discord.File('web_screenshot2.png'))
+      os.remove('web_screenshot2.png')
+    driver.quit()
+
+def setup(bot):
+  bot.add_command(covid)
+  bot.add_command(html)
+  bot.add_command(map)
+  bot.add_command(markdown)
+  bot.add_command(population)
+  bot.add_command(screenshot)
