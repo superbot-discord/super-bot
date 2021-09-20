@@ -10,6 +10,7 @@ import numpy as np
 import requests
 import selenium
 import discord
+import folium
 import re
 markdowner = Markdown(extras=["strike", "footnotes"])
 html_pattern = re.compile(r'^\`\`\`(html)?\n([\s\S]*)\`\`\`$')
@@ -200,3 +201,14 @@ def botpopulation(country : str):
     return embed
   except selenium.common.exceptions.TimeoutException:
     return "Invalid country. Please try again."
+
+def botmap(long, lati, zoom, antizoom):
+  if antizoom:
+    m = folium.Map(location=[long, lati], zoom_start=zoom, min_zoom=zoom, max_zoom=zoom)
+  else:
+    m = folium.Map(location=[long, lati], zoom_start=zoom)
+  m.save('map.html')
+  driver = webdriver.Chrome(options=options)
+  driver.get("file:///map.html")
+  driver.get_screenshot_as_file('map.png')
+  driver.quit()
