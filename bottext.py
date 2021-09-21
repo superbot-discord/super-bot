@@ -156,7 +156,7 @@ async def raffle(ctx,lower:int,upper:int,times:int):
   desc=f"Your random number(s) is/are:\n"
   for count in range(0,times):
     rand=ra.randint(lower,upper)
-    desc += f"||{str(rand)}||  "
+    desc += f"||`{rand.zfill(2)}`||  "
   embed=discord.Embed(title=ti, description=desc)
   await ctx.send(embed=embed)
 
