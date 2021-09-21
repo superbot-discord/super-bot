@@ -3,17 +3,12 @@ import random as ra
 import re
 from datetime import datetime, timedelta, timezone
 from math import *
+
 import discord
 import emojis as ems
 from discord.ext import commands
-from shared import *
-# from discord_slash import SlashCommand, SlashContext
-# from discord_slash.utils.manage_commands import create_choice, create_option
-#from simplecolour import simple_colours_raw
 
-# simple_colours_options = []
-# for count in simple_colours_raw:
-  # simple_colours_options.append(create_choice(value=count[1], name=count[0]))
+from shared import *
 
 banned_ids = []
 banned_text = []
@@ -33,13 +28,11 @@ bot_.load_extension("botpycalc")
 bot_.load_extension("bottext")
 bot_.load_extension("botwebinfo")
 bot_.load_extension("botwebscrape")
-# slash = SlashCommand(bot)
 id_pattern = re.compile(r'([A-Z]{5})', re.IGNORECASE)
 verify_pattern = re.compile(r'[^ ⠀][\s\S]{0,30}?[^ ⠀]#?[\d]{4}(,|, | )?[\d+\-*/×÷%xyz()\[\]\{\}]{1,50}=[\d+\-*/×÷%xyz()\[\]\{\}]{1,50}(,|, | )?[\S ]{3,20}(,|, | )?(Red|Orange|Yellow|Green|Light( |_)?Green|Dark( |_)?Green|Cyan|Blue|Light( |_)?Blue|Dark( |_)?Blue|Purple|Pink|Brown)', re.IGNORECASE)
 poll_pattern = re.compile(r'([\w]+?)(:\w{2,32}:|[\uD800-\uDBFF])')
 yt_pattern = re.compile(r'search\s[0-5]\s.*')
 UNITS = {'s':'seconds', 'm':'minutes', 'h':'hours', 'd':'days', 'w':'weeks'}
-UNITS2 = {'s':'seconds', 'm':'minutes', 'h':'hours', 'd':'days', 'm':'months', 'y':'years', 'c':'centuries'}
 
 typer=0
 sniper1=sniper2=sniper3=sniper4=sniper5=sniperdate1=sniperdate2=sniperdate3=sniperdate4=sniperdate5=sniperdict=sniping=poll_options={}
@@ -206,37 +199,6 @@ async def on_message(message:discord.Message):
     await message.add_reaction("<:DownArrowSquare:864762633625534485>")
   elif message.channel.id in [805459414001778739, 805462208414089217, 880076327783370812]:
     await message.publish()
-  if not (message.author.bot or message.author.id == 802834139728445501):
-    # try:
-    #   for count in message.author.mutual_guilds:
-    #     for count2 in count.emojis:
-    #       if message.content.count(f":{count2.name}:") and count2.animated:
-    #         desc = message.content
-    #         gid = message.guild.id
-    #         desc = re.sub(r'(:[a-zA-Z_-]{2,32}:)', r"\<\1"+str(gid)+"\>", desc)
-    #         desc = desc.replace("{nothing}", "")
-    #         whl = await message.channel.webhooks()
-    #         ourweb = False
-    #         for count3 in whl:
-    #           if count3.name == "AnimatedEmoji":
-    #             ourweb = True
-    #             token = count3.token
-    #             identify = count3.id
-    #             break
-    #         if len(whl) == 0 or ourweb == False:
-    #           wh = await message.channel.create_webhook(name = "AnimatedEmoji")
-    #           token = wh.token
-    #           identify = wh.id
-    #         try:
-    #           await message.delete()
-    #         except:
-    #           pass
-    #         async with aiohttp.ClientSession() as session:
-    #           webhook = Webhook.partial(identify, token, session=session)
-    #           await webhook.send(desc, username=message.author.name, avatar_url=message.author.avatar.url)
-    #         break
-    # except:
-    #   pass
     if banned_ids.count(message.author.id)==0 and message.content.startswith("=") and message.content.startswith("==")==False:
       await bot_.process_commands(message)
     elif message.content.startswith("="):
@@ -384,11 +346,6 @@ async def botpurge(ctx, *, num):
   else:
     await ctx.send("You don't have the required permission: Manage messages.")
 
-# @bot.command()
-# async def calc(ctx, *, arg = None):
-#   output = botcalc(arg)
-#   await ctx.send(output)
-
 @bot_.command(aliases=["online"])
 async def ping(ctx, *, text = None):
   now1 = datetime.now(timezone.utc)
@@ -535,7 +492,6 @@ async def ttimer(ctx, timetocount,*,Text=None):
 async def on_ready():
   activity = discord.Activity(type=discord.ActivityType.playing, name=f"with =help in {len(bot_.guilds)} servers")
   await bot_.change_presence(status=discord.Status.idle, activity=activity)
-  # await slash.sync_all_commands(SlashCommand)
   print("Bot is ready!")
 
 print("Bot is getting started…")

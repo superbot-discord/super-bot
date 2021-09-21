@@ -25,11 +25,11 @@ async def help(ctx, *, cat=None):
 `poll` `insert` `spoiler` `rawspoiler` `rawrawspoiler` `reverse` `emoji` `encode` `decode`
 
 **Information Commands**
-`color` `simplecolor` `translate` `definition` `calc` `time` `rtimer` `ttimer` `terminate` `unscramble` `unicode` `random` `choice` `unix`
+`color` `simplecolor` `translate` `definition` `unix` `time` `rtimer` `ttimer` `terminate` `unscramble` `unicode` `random` `choice`
 
 **Web Commands**
 `redirect` `screenshot` `youtube` `wiki` `minecraft` `engrave` `covid` `population` `map`
-bunny` `cat` `dog` `duck` `fox` `koala` `lizard` `panda` `shiba` `error`
+bunny` `cat` `dog` `duck` `fox` `koala` `lizard` `panda` `shiba` `error` `errorcat` `errordog`
 
 **Plot/Drawing Commands**
 `ascii` `table` `render` `captcha` `pie` `barh` `barv` `hist` `sankey` `snow` `mandelbrot`
@@ -61,3 +61,4 @@ def setup(bot):
   bot.add_command(hello)
   bot.add_command(help)
   bot.add_command(invite)
+  bot.add_command(prefix)

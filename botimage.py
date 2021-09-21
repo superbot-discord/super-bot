@@ -11,7 +11,7 @@ from colorgram import extract
 from colorthief import ColorThief
 from discord.ext import commands
 from pdf2image import convert_from_path
-from PIL import Image, ImageDraw, ImageFilter, ImageOps
+from PIL import Image, ImageDraw, ImageEnhance, ImageFilter, ImageOps
 
 import ascii2 as asc
 
@@ -71,6 +71,26 @@ async def image(ctx, *, mode):
       invert()
     elif mode.startswith("hue "):
       addhue(int(mode.split(" ")[1]))
+    elif mode.startswith("greyscale"):
+      try:
+        greyscale(float(mode.split(" ")[1]))
+      except:
+        greyscale(0)
+    elif mode.startswith("contrast"):
+      try:
+        contrast(float(mode.split(" ")[1]))
+      except:
+        contrast(50)
+    elif mode.startswith("bright"):
+      try:
+        contrast(float(mode.split(" ")[1]))
+      except:
+        contrast(50)
+    elif mode.startswith("sharp"):
+      try:
+        contrast(float(mode.split(" ")[1]))
+      except:
+        contrast(200)
     await ctx.send(file=discord.File('output.png'))
   os.remove('input.png')
 
@@ -88,48 +108,6 @@ def addhue(degs):
       d=(c1,c2,c3,a[3])
       pixels[i,j] = d
   im.save('output.png')
-
-def invert():
-  image = Image.open('input.png')
-  if image.mode == 'RGBA':
-    r,g,b,a = image.split()
-    rgb_image = Image.merge('RGB', (r,g,b))
-    inverted_image = ImageOps.invert(rgb_image)
-    r2,g2,b2 = inverted_image.split()
-    final_transparent_image = Image.merge('RGBA', (r2,g2,b2,a))
-    final_transparent_image.save('output.png')
-  else:
-    inverted_image = ImageOps.invert(image)
-    inverted_image.save('output.png')
-
-def resize(x, y):
-  image = Image.open('input.png')
-  newimg = image.resize((x,y), Image.NEAREST)
-  newimg.save('output1.png')
-  newimg = image.resize((x,y), Image.BOX)
-  newimg.save('output2.png')
-  newimg = image.resize((x,y), Image.BILINEAR)
-  newimg.save('output3.png')
-  newimg = image.resize((x,y), Image.HAMMING)
-  newimg.save('output4.png')
-  newimg = image.resize((x,y), Image.BICUBIC)
-  newimg.save('output5.png')
-  newimg = image.resize((x,y), Image.LANCZOS)
-  newimg.save('output6.png')
-
-def blur(distance):
-  image = Image.open('input.png')
-  newimg = image.filter(ImageFilter.BoxBlur(distance))
-  newimg.save('output1.png')
-  newimg = image.filter(ImageFilter.GaussianBlur(distance))
-  newimg.save('output2.png')
-
-def rotate(degrees):
-  image = Image.open('input.png')
-  newimg = image.rotate(angle=degrees)
-  newimg.save('output1.png')
-  newimg = image.rotate(angle=degrees, expand=True)
-  newimg.save('output2.png')
 
 def analyse(scale, colors):
   if scale > 5000:
@@ -188,6 +166,68 @@ def analyse(scale, colors):
   f.write(desc)
   f.close()
   return hexcode
+
+def blur(distance):
+  image = Image.open('input.png')
+  newimg = image.filter(ImageFilter.BoxBlur(distance))
+  newimg.save('output1.png')
+  newimg = image.filter(ImageFilter.GaussianBlur(distance))
+  newimg.save('output2.png')
+
+def brightness(percent):
+  image = Image.open('input.png')
+  newimg = ImageEnhance.Brightness(image).enhance(percent/100)
+  newimg.save('output.png')
+
+def contrast(percent):
+  image = Image.open('input.png')
+  newimg = ImageEnhance.Contrast(image).enhance(percent/100)
+  newimg.save('output.png')
+
+def greyscale(percent):
+  image = Image.open('input.png')
+  newimg = ImageEnhance.Color(image).enhance(percent/100)
+  newimg.save('output.png')
+
+def invert():
+  image = Image.open('input.png')
+  if image.mode == 'RGBA':
+    r,g,b,a = image.split()
+    rgb_image = Image.merge('RGB', (r,g,b))
+    inverted_image = ImageOps.invert(rgb_image)
+    r2,g2,b2 = inverted_image.split()
+    final_transparent_image = Image.merge('RGBA', (r2,g2,b2,a))
+    final_transparent_image.save('output.png')
+  else:
+    inverted_image = ImageOps.invert(image)
+    inverted_image.save('output.png')
+
+def resize(x, y):
+  image = Image.open('input.png')
+  newimg = image.resize((x,y), Image.NEAREST)
+  newimg.save('output1.png')
+  newimg = image.resize((x,y), Image.BOX)
+  newimg.save('output2.png')
+  newimg = image.resize((x,y), Image.BILINEAR)
+  newimg.save('output3.png')
+  newimg = image.resize((x,y), Image.HAMMING)
+  newimg.save('output4.png')
+  newimg = image.resize((x,y), Image.BICUBIC)
+  newimg.save('output5.png')
+  newimg = image.resize((x,y), Image.LANCZOS)
+  newimg.save('output6.png')
+
+def rotate(degrees):
+  image = Image.open('input.png')
+  newimg = image.rotate(angle=degrees)
+  newimg.save('output1.png')
+  newimg = image.rotate(angle=degrees, expand=True)
+  newimg.save('output2.png')
+
+def sharpness(percent):
+  image = Image.open('input.png')
+  newimg = ImageEnhance.Sharpness(image).enhance(percent/100)
+  newimg.save('output.png')
 
 @commands.command()
 async def mandelbrot(ctx, size:int = 1024):

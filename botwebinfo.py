@@ -373,6 +373,8 @@ Video+audio - Minimum size\t{formabr(video8)}\t{video8.resolution}\t{sizer(video
 def setup(bot):
   bot.add_command(definition)
   bot.add_command(error)
+  bot.add_command(errorcat)
+  bot.add_command(errordog)
   bot.add_command(minecraft)
   bot.add_command(redirect)
   bot.add_command(translate)
