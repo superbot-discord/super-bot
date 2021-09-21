@@ -10,6 +10,8 @@ from discord.ext import commands
 from PyDictionary import PyDictionary
 from pygoogletranslation import Translator
 
+from shared import db
+
 dictionary=PyDictionary()
 translatorvar = Translator()
 unsortedlangdict = translatorvar.glanguage().get("tl")
@@ -58,9 +60,30 @@ async def definition(ctx, *, word):
     pass
   await ctx.send(embed=embed)
 
-@commands.command(aliases=['http', 'https', 'statuscode', 'httpcat', 'httpscat', 'httpcats', 'httpscats'])
+@commands.command(aliases=['http', 'https', 'statuscode'])
 async def error(ctx, *, code="404"):
-  await ctx.send(f'https://http.cat/{code}')
+  try:
+    code = int(code)
+    if code in (db["httpcat"]+db["httpdog"]):
+      await ctx.send(f'https://http.cat/{code}\nhttps://httpstatusdogs.com/img/{code}.jpg')
+    else:
+      await ctx.send("Invalid code!")
+  except:
+    await ctx.send("Invalid code!")
+
+@commands.command(aliases=['httpcat', 'httpscat', 'httpcats', 'httpscats'])
+async def errorcat(ctx, *, code="404"):
+  if code in db["httpcat"]:
+    await ctx.send(f'https://http.cat/{code}')
+  else:
+    await ctx.send("Invalid code!")
+
+@commands.command(aliases=['httpdog', 'httpsdog', 'httpdogs', 'httpsdogs'])
+async def errordog(ctx, *, code="404"):
+  if code in db["httpdog"]:
+    await ctx.send(f'https://httpstatusdogs.com/img/{code}.jpg')
+  else:
+    await ctx.send("Invalid code!")
 
 @commands.command()
 async def minecraft(ctx, *, item="tnt"):

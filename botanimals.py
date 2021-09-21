@@ -1,6 +1,5 @@
 from discord.ext import commands
 import requests
-import re
 
 @commands.command()
 async def dog(ctx, number=1):

@@ -1,18 +1,16 @@
-from discord.ext import commands
-from math import *
-from cmath import *
 import random as ra
-import numpy as np
-from math import *
-import subprocess
 import re
-import json
+import subprocess
+from cmath import *
+from math import *
 
-f = open('database.json', 'r')
-db = json.loads(f.read())
-f.close()
-SY2VA = db[1]
-ASCII = db[0]
+import numpy as np
+from discord.ext import commands
+
+from shared import db
+
+SY2VA = db["decoder"]
+ASCII = db["encoder"]
 
 def botpython(script : str):
   python_pattern = re.compile(r'^\`\`\`(py|python)?\n[\s\S]*\`\`\`$')
