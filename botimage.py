@@ -6,6 +6,7 @@ import sys
 import discord
 import pytesseract
 import qr_img
+import requests
 from captcha.image import ImageCaptcha
 from colorgram import extract
 from colorthief import ColorThief
@@ -27,7 +28,15 @@ async def captcha(ctx, *, text=None):
 
 @commands.command()
 async def image(ctx, *, mode):
-  await ctx.message.attachments[0].save('input.png')
+  try:
+    await ctx.message.attachments[0].save('input.png')
+  except:
+    user_input = mode.split(" ")[0]
+    mode = mode.split(" ")[1:]
+    image_user = await commands.UserConverter.convert(user_input)
+    downloaded_obj = requests.get(image_user.display_avatar.url)
+    with open("input.png", "wb") as file:
+      file.write(downloaded_obj.content)
   if mode.startswith("analyse") or mode.startswith("analyze"):
     try:
       scale = int(mode.split(" ")[1])
@@ -71,7 +80,7 @@ async def image(ctx, *, mode):
       invert()
     elif mode.startswith("hue "):
       addhue(int(mode.split(" ")[1]))
-    elif mode.startswith("greyscale"):
+    elif mode.startswith("grey") or mode.startswith("gray"):
       try:
         greyscale(float(mode.split(" ")[1]))
       except:
