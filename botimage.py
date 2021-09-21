@@ -33,7 +33,7 @@ async def image(ctx, *, mode):
   except:
     user_input = mode.split(" ")[0]
     mode = mode.split(" ")[1:]
-    image_user = await commands.UserConverter.convert(ctx, user_input)
+    image_user = await commands.UserConverter().convert(ctx, user_input)
     downloaded_obj = requests.get(image_user.display_avatar.url)
     with open("input.png", "wb") as file:
       file.write(downloaded_obj.content)
