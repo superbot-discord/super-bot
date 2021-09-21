@@ -34,5 +34,5 @@ async def base(ctx, frombase : int, tobase : int, *, text):
   await ctx.send(answer)
 
 def setup(bot):
-  bot.add_command(ascii)
+  #bot.add_command(ascii)
   bot.add_command(base)
