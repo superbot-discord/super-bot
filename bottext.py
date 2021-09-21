@@ -142,6 +142,20 @@ async def insert(ctx,emoji,*,text):
   await ctx.send(text)
 
 @commands.command()
+async def pick(ctx,lower:int,upper:int,times:int):
+  ti=f"{times} random number(s) between {lower} and {upper}"
+  desc=f"Your random number(s) is/are:\n"
+  randoms = []
+  for count in range(0,times):
+    rand=ra.randint(lower,upper)
+    while rand in randoms:
+      rand=ra.randint(lower,upper)
+    desc += f"||`{str(rand).zfill(len(str(upper)))}`||  "
+    randoms.append(rand)
+  embed=discord.Embed(title=ti, description=desc)
+  await ctx.send(embed=embed)
+
+@commands.command()
 async def random(ctx,lower:int,upper:int):
   ti="Random number between "+lower+" and "+upper
   rand=ra.randint(lower,upper)
@@ -156,7 +170,7 @@ async def raffle(ctx,lower:int,upper:int,times:int):
   desc=f"Your random number(s) is/are:\n"
   for count in range(0,times):
     rand=ra.randint(lower,upper)
-    desc += f"||`{str(rand).zfill(2)}`||  "
+    desc += f"||`{str(rand).zfill(len(str(upper)))}`||  "
   embed=discord.Embed(title=ti, description=desc)
   await ctx.send(embed=embed)
 
@@ -213,6 +227,7 @@ def setup(bot):
   bot.add_command(emoji)
   bot.add_command(encode)
   bot.add_command(insert)
+  bot.add_command(pick)
   bot.add_command(raffle)
   bot.add_command(random)
   bot.add_command(rawspoiler)
