@@ -63,6 +63,8 @@ async def image(ctx, *, mode):
     except:
       blur(2)
     await ctx.send(files=[discord.File('output1.png'), discord.File('output2.png')])
+    os.remove('output1.png')
+    os.remove('output2.png')
   elif mode.startswith("resize "):
     resize(int(mode.split(" ")[1]), int(mode.split(" ")[2]))
     try:
@@ -74,6 +76,12 @@ async def image(ctx, *, mode):
       await ctx.send(file=discord.File('output4.png'))
       await ctx.send(file=discord.File('output5.png'))
       await ctx.send(file=discord.File('output6.png'))
+      os.remove('output1.png')
+      os.remove('output2.png')
+      os.remove('output3.png')
+      os.remove('output4.png')
+      os.remove('output5.png')
+      os.remove('output6.png')
   elif mode.startswith("edge"):
     edge()
     try:
@@ -81,9 +89,13 @@ async def image(ctx, *, mode):
     except:
       await ctx.send(file=discord.File('output1.png'))
       await ctx.send(file=discord.File('output2.png'))
+      os.remove('output1.png')
+      os.remove('output2.png')
   elif mode.startswith("rotate "):
     rotate(float(mode.split(" ")[1]))
     await ctx.send(files=[discord.File('output1.png'), discord.File('output2.png')])
+    os.remove('output1.png')
+    os.remove('output2.png')
   else:
     if mode.startswith("invert"):
       invert()
@@ -125,6 +137,7 @@ async def image(ctx, *, mode):
         except:
           recolor((0,0,0), (255,0,0))
     await ctx.send(file=discord.File('output.png'))
+    os.remove('output.png')
   os.remove('input.png')
 
 def addhue(degs):
@@ -138,7 +151,10 @@ def addhue(degs):
       c1 = round(c[0]*255)
       c2 = round(c[1]*255)
       c3 = round(c[2]*255)
-      d=(c1,c2,c3,a[3])
+      try:
+        d=(c1,c2,c3,a[3])
+      except:
+        d=(c1,c2,c3)
       pixels[i,j] = d
   im.save('output.png')
 
