@@ -4,8 +4,10 @@ from datetime import timedelta
 
 import discord
 from discord.ext import commands
+from discord.ext.commands.core import command
 
 from bot import bot_admins
+from shared import custom_permissions
 
 UNITS = {'s':'seconds', 'm':'minutes', 'h':'hours', 'd':'days', 'w':'weeks'}
 
@@ -70,6 +72,21 @@ async def makeinvite(ctx, timetocount, uses : int = 0):
   }).total_seconds())
   theinvite = await ctx.channel.create_invite(max_age = seconds, max_uses = uses)
   await ctx.send("An invite was generated with "+str(seconds)+" seconds of valid duration: "+theinvite.url)
+
+@commands.command(aliases=['makerole'])
+async def makeroles(ctx, times:int=1):
+  for count in range(0,times):
+    await ctx.guild.create_role(name=f"Sample role {str(count+1)}")
+
+@commands.command(aliases=['setperms', 'setpermission', 'setpermissions', 'rolepermission', 'rolespermission', 'rolepermissions', 'rolespermissions'])
+async def setperm(ctx, permission_input:typing.Union[int, str], *objs:discord.Role):
+  if type(permission_input) == int:
+    permission = discord.Permissions(permission_input)
+  else:
+    permission = permission_input.lower()
+    permission = custom_permissions[re.sub(r'[^A-z]|\^', '', permission)]
+  for count in objs:
+    await count.edit(permissions=permission)
 
 @commands.command()
 async def slowmode(ctx, sec = None, *channels:typing.Union[discord.TextChannel,str]):
@@ -173,6 +190,25 @@ async def purgeregex(ctx, num, *, regex):
     await ctx.send("You don't have the required permission: Manage messages.")
 
 @commands.command()
+async def purgerole(ctx, num, roleinput : discord.Role):
+  try:
+    await ctx.message.delete()
+  except:
+    pass
+  if ctx.channel.permissions_for(ctx.author).manage_messages or bot_admins.count(ctx.author.id)!=0:
+    num = int(num)
+    purged = 0
+    async for count in ctx.channel.history(limit=1000):
+      if roleinput in count.author.roles:
+        await count.delete()
+        purged = purged + 1
+        if purged >= num:
+          break
+    await ctx.send("User purging completed.", delete_after = 5)
+  else:
+    await ctx.send("You don't have the required permission: Manage messages.")
+
+@commands.command()
 async def purgeuser(ctx, num, userinput : discord.User):
   try:
     await ctx.message.delete()
@@ -187,7 +223,6 @@ async def purgeuser(ctx, num, userinput : discord.User):
         purged = purged + 1
         if purged >= num:
           break
-        
     await ctx.send("User purging completed.", delete_after = 5)
   else:
     await ctx.send("You don't have the required permission: Manage messages.")
@@ -244,11 +279,15 @@ def setup(bot):
   bot.add_command(ban)
   bot.add_command(getrole)
   bot.add_command(kick)
+  bot.add_command(makeinvite)
+  bot.add_command(makeroles)
+  bot.add_command(setperm)
   bot.add_command(slowmode)
   bot.add_command(unban)
   bot.add_command(purge)
   bot.add_command(purgereactions)
   bot.add_command(purgeregex)
+  bot.add_command(purgerole)
   bot.add_command(purgeuser)
   bot.add_command(purgepy)
   bot.add_command(purgepygex)
