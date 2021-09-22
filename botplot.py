@@ -63,9 +63,10 @@ async def barh(ctx, numbers, label, *, title="No_title_required"):
     plt.rcdefaults()
     fig, ax = plt.subplots()
     ax.barh(np.arange(len(labels)), numlist, align='center')
-    #ax.set_yticks(y_pos)
+    ax.set_yticks(y_pos)
     ax.set_yticklabels(labels)
     ax.invert_yaxis()
+    ax.set_xscale('linear')
     if title != "No_title_required":
       plt.title(title)
     plt.savefig("horizontalbarchart.png", transparent=True)
@@ -75,7 +76,7 @@ async def barh(ctx, numbers, label, *, title="No_title_required"):
   except:
     await ctx.send("Invalid input. Please try again.")
 
-@commands.command()
+@commands.command(aliases=["bar", "barchart"])
 async def barv(ctx, numbers, label, *, title="No_title_required"):
   try:
     numlist = numbers.split(",")
@@ -88,8 +89,9 @@ async def barv(ctx, numbers, label, *, title="No_title_required"):
     plt.rcdefaults()
     fig, ax = plt.subplots()
     ax.bar(np.arange(len(labels)), numlist, align='center')
-    #ax.set_xticks(x_pos)
+    ax.set_xticks(x_pos)
     ax.set_xticklabels(labels)
+    ax.set_yscale('linear')
     if title != "No_title_required":
       plt.title(title)
     plt.savefig("verticalbarchart.png", transparent=True)
