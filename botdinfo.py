@@ -609,9 +609,9 @@ async def user(ctx, user: discord.Member = None, channel: discord.TextChannel = 
     desc=f"{user.mention} (bot)"
   else:
     desc=f"{user.mention} (human)"
-  client_fetched = getbotinstance.fetch_user(user.id)
-  embed=discord.Embed(title=ti,color=client_fetched.accent_color, description=desc)
+  embed=discord.Embed(title=ti,color=user.color, description=desc)
   embed.set_thumbnail(url=user.avatar.url)
+  embed.set_image(url=user.banner.url)
   if user.name==user.display_name:
     f0v=f"{user.name}#{user.discriminator}"
   else:
@@ -735,10 +735,6 @@ async def user(ctx, user: discord.Member = None, channel: discord.TextChannel = 
     pass
   embed.add_field(name="Permission integer", value=f3vf, inline=True)
   embed.add_field(name="Badges", value=f5v, inline=False)
-  try:
-    embed.set_image(url=client_fetched.banner.url)
-  except:
-    pass
   await ctx.send(embed=embed)
 
 def setup(bot):
