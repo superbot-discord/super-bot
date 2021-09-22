@@ -31,8 +31,9 @@ async def image(ctx, *, mode):
   try:
     await ctx.message.attachments[0].save('input.png')
   except:
-    user_input = mode.split(" ")[0]
-    mode = mode.split(" ")[1:]
+    mode_split = mode.split(" ")
+    user_input = mode_split[0]
+    mode = " ".join(mode_split[1:])
     image_user = await commands.UserConverter().convert(ctx, user_input)
     downloaded_obj = requests.get(image_user.display_avatar.url)
     with open("input.png", "wb") as file:
