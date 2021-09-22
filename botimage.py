@@ -208,9 +208,9 @@ def greyscale(percent):
 def hist():
   image = Image.open("input.png")
   split_image = image.split()
-  plt.hist(split_image[0].histogram(), color="#FF0000")
-  plt.hist(split_image[1].histogram(), color="#00FF00")
-  plt.hist(split_image[2].histogram(), color="#0000FF")
+  plt.hist(split_image[0].histogram(), color="#FF000055")
+  plt.hist(split_image[1].histogram(), color="#00FF0055")
+  plt.hist(split_image[2].histogram(), color="#0000FF55")
   plt.title("Image histogram")
   plt.savefig("output.png", transparent=True)
   plt.clf()

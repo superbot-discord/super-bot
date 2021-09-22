@@ -54,6 +54,7 @@ async def ascii(ctx, *, text):
 async def barh(ctx, numbers, label, *, title="No_title_required"):
   try:
     numlist = numbers.split(",")
+    numlist = list(map(int, numlist))
     labels = tuple(label.split(","))
     if len(labels) > len(numlist):
       labels = labels[:len(numlist)-1]
@@ -66,7 +67,8 @@ async def barh(ctx, numbers, label, *, title="No_title_required"):
     ax.set_yticks(y_pos)
     ax.set_yticklabels(labels)
     ax.invert_yaxis()
-    ax.set_xscale('linear')
+    #ax.set_xscale('linear')
+    #plt.xticks(range(min(numlist)))
     if title != "No_title_required":
       plt.title(title)
     plt.savefig("horizontalbarchart.png", transparent=True)
@@ -80,6 +82,7 @@ async def barh(ctx, numbers, label, *, title="No_title_required"):
 async def barv(ctx, numbers, label, *, title="No_title_required"):
   try:
     numlist = numbers.split(",")
+    numlist = list(map(int, numlist))
     labels = tuple(label.split(","))
     if len(labels) > len(numlist):
       labels = labels[:len(numlist)-1]
@@ -91,7 +94,7 @@ async def barv(ctx, numbers, label, *, title="No_title_required"):
     ax.bar(np.arange(len(labels)), numlist, align='center')
     ax.set_xticks(x_pos)
     ax.set_xticklabels(labels)
-    ax.set_yscale('linear')
+    #ax.set_yscale('linear')
     if title != "No_title_required":
       plt.title(title)
     plt.savefig("verticalbarchart.png", transparent=True)
