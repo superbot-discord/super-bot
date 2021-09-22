@@ -62,7 +62,7 @@ Index Permission
 18    Use External Emojis
 37    Use External Stickers
 31    Use Slash Commands
-"""
+```"""
 
 vc_permtext = """```
 Index Permission
@@ -80,9 +80,9 @@ perms_guide = Embed(title="Permission integers", description="""
 Permission integers allow you to store permissions quickly. To represent some permissions, calculate the sum of 2 to the power of the permission index.
 For example, to specify kick members, manage channels and stream, calculate `2^1+2^4+2^9`, which is 530.
 Alternatively, if you know binary, put a `1` in the permission indices' places, which is `100001001`. Then run `=base 2 10 [Your binary]` to get the decimal equivalent.""")
-perms_guide.add_field(name="Server permissions", value=server_permtext)
-perms_guide.add_field(name="Text channel permissions", value=tc_permtext)
-perms_guide.add_field(name="Voice channel permissions", value=vc_permtext)
+perms_guide.add_field(name="Server permissions", value=server_permtext, inline=False)
+perms_guide.add_field(name="Text channel permissions", value=tc_permtext, inline=False)
+perms_guide.add_field(name="Voice channel permissions", value=vc_permtext, inline=False)
 
 server_real = {
   3 : "Administrator",
