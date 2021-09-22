@@ -63,7 +63,7 @@ async def barh(ctx, numbers, label, *, title="No_title_required"):
     plt.rcdefaults()
     fig, ax = plt.subplots()
     ax.barh(np.arange(len(labels)), numlist, align='center')
-    ax.set_yticks(y_pos)
+    #ax.set_yticks(y_pos)
     ax.set_yticklabels(labels)
     ax.invert_yaxis()
     if title != "No_title_required":
@@ -88,7 +88,7 @@ async def barv(ctx, numbers, label, *, title="No_title_required"):
     plt.rcdefaults()
     fig, ax = plt.subplots()
     ax.bar(np.arange(len(labels)), numlist, align='center')
-    ax.set_xticks(x_pos)
+    #ax.set_xticks(x_pos)
     ax.set_xticklabels(labels)
     if title != "No_title_required":
       plt.title(title)

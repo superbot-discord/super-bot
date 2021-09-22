@@ -38,8 +38,8 @@ bunny` `cat` `dog` `duck` `fox` `koala` `lizard` `panda` `shiba` `error` `errorc
 `html` `md` `regex` `regsub`
 
 **Image Commands**
-`analyse` `blur` `resize` `rotate` `invert` `hue`
-To use the 6 editing commands above, type `=image ` first, then upload an image. Example: `=image analyse`
+`analyse` `histogram` `resize` `rotate` `brightness` `contrast` `sharpen` `blur` `invert` `hue`
+To use the 9 commands above, type `=image ` first, then upload an image. Example: `=image analyse`. Supply a user name to work on his avatar, e.g. `=image SuperBot#4073 analyse`
 `ocr` `qr` `qrmake` `transparent` `text`
 
 `hello` leads you to death

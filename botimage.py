@@ -4,6 +4,7 @@ import random as ra
 import sys
 
 import discord
+import matplotlib.pyplot as plt
 import pytesseract
 import qr_img
 import requests
@@ -35,7 +36,7 @@ async def image(ctx, *, mode):
     user_input = mode_split[0]
     mode = " ".join(mode_split[1:])
     image_user = await commands.UserConverter().convert(ctx, user_input)
-    downloaded_obj = requests.get(image_user.display_avatar.url)
+    downloaded_obj = requests.get(image_user.display_avatar.url.replace("?size=1024", "?size=4096"))
     with open("input.png", "wb") as file:
       file.write(downloaded_obj.content)
   if mode.startswith("analyse") or mode.startswith("analyze"):
@@ -79,8 +80,11 @@ async def image(ctx, *, mode):
   else:
     if mode.startswith("invert"):
       invert()
-    elif mode.startswith("hue "):
-      addhue(int(mode.split(" ")[1]))
+    elif mode.startswith("hue"):
+      try:
+        addhue(int(mode.split(" ")[1]))
+      except:
+        addhue(180)
     elif mode.startswith("grey") or mode.startswith("gray"):
       try:
         greyscale(float(mode.split(" ")[1]))
@@ -101,6 +105,8 @@ async def image(ctx, *, mode):
         contrast(float(mode.split(" ")[1]))
       except:
         contrast(200)
+    elif mode.startswith("hist"):
+      hist()
     await ctx.send(file=discord.File('output.png'))
   os.remove('input.png')
 
@@ -198,6 +204,16 @@ def greyscale(percent):
   image = Image.open('input.png')
   newimg = ImageEnhance.Color(image).enhance(percent/100)
   newimg.save('output.png')
+
+def hist():
+  image = Image.open("input.png")
+  r, g, b = image.split()
+  plt.hist(r.histogram(), color="#FF0000")
+  plt.hist(g.histogram(), color="#00FF00")
+  plt.hist(b.histogram(), color="#0000FF")
+  plt.title("Image histogram")
+  plt.savefig("output.png", transparent=True)
+  plt.clf()
 
 def invert():
   image = Image.open('input.png')
