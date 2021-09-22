@@ -54,7 +54,7 @@ async def ascii(ctx, *, text):
 async def barh(ctx, numbers, label, *, title="No_title_required"):
   try:
     numlist = numbers.split(",")
-    numlist = list(map(int, numlist))
+    numlist = list(map(float, numlist))
     labels = tuple(label.split(","))
     if len(labels) > len(numlist):
       labels = labels[:len(numlist)-1]
@@ -67,8 +67,6 @@ async def barh(ctx, numbers, label, *, title="No_title_required"):
     ax.set_yticks(y_pos)
     ax.set_yticklabels(labels)
     ax.invert_yaxis()
-    #ax.set_xscale('linear')
-    #plt.xticks(range(min(numlist)))
     if title != "No_title_required":
       plt.title(title)
     plt.savefig("horizontalbarchart.png", transparent=True)
@@ -82,7 +80,7 @@ async def barh(ctx, numbers, label, *, title="No_title_required"):
 async def barv(ctx, numbers, label, *, title="No_title_required"):
   try:
     numlist = numbers.split(",")
-    numlist = list(map(int, numlist))
+    numlist = list(map(float, numlist))
     labels = tuple(label.split(","))
     if len(labels) > len(numlist):
       labels = labels[:len(numlist)-1]
@@ -94,7 +92,6 @@ async def barv(ctx, numbers, label, *, title="No_title_required"):
     ax.bar(np.arange(len(labels)), numlist, align='center')
     ax.set_xticks(x_pos)
     ax.set_xticklabels(labels)
-    #ax.set_yscale('linear')
     if title != "No_title_required":
       plt.title(title)
     plt.savefig("verticalbarchart.png", transparent=True)
@@ -135,12 +132,8 @@ async def draw(ctx, *, text):
 @commands.command(aliases=["histogram", "histograms"])
 async def hist(ctx, numbers, *, title="No_title_required"):
   try:
-    numlist = []
-    for count in numbers.split(","):
-      if float(count)%1 == 0:
-        numlist.append(int(count))
-      else:
-        numlist.append(float(count))
+    numlist = numbers.split(",")
+    numlist = list(map(float, numlist))
     plt.hist(numlist)
     if title != "No_title_required":
       plt.title(title)
@@ -155,6 +148,7 @@ async def hist(ctx, numbers, *, title="No_title_required"):
 async def pie(ctx, numbers, label, *, title="No_title_required"):
   try:
     numlist = numbers.split(",")
+    numlist = list(map(float, numlist))
     mycolors = []
     labels = label.split(",")
     if len(labels) > len(numlist):
@@ -344,7 +338,7 @@ async def sankey(ctx, innumber, inlabel, outnumber, outlabel, title="No_title_re
     Sankey(flows=[innumber].extend(innumber).append(outnumber),labels=[inlabel].extend(inlabel).append(outlabel),orientations=[0].extend([1]*halflen).extend([-1]*(len(innumber)-halflen))).finish()
     if title != "No_title_required":
       plt.title(title)
-    plt.savefig("verticalbarchart.png", transparent=True)
+    plt.savefig("sankey.png", transparent=True)
     plt.clf()
     await ctx.send(file=discord.File("sankey.png"))
   else:
