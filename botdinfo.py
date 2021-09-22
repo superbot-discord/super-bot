@@ -335,40 +335,10 @@ async def message(ctx, message: discord.Message=None):
 
 @commands.command()
 async def permissions(ctx, integer:int):
-  cache = integer
-  f1v=""
-  for count,count2 in server_permissions.items():
-    if cache >= count:
-      f1v += count2 + ", "
-      cache -= count
-  f1v=f1v[:-2]
-  if f1v=="":
-    f1v="No server permissions"
-
-  cache = integer
-  f2v=""
-  for count,count2 in tc_permissions.items():
-    if cache >= count:
-      f2v += count2 + ", "
-      cache -= count
-  f2v=f2v[:-2]
-  if f2v=="":
-    f2v="No text permissions"
-
-  cache = integer
-  f3v=""
-  for count,count2 in vc_permissions.items():
-    if cache >= count:
-      f3v += count2 + ", "
-      cache -= count
-  f3v=f3v[:-2]
-  if f3v=="":
-    f3v="No voice permissions"
-  
   embed = discord.Embed(title = f"Permission integer {str(integer)}")
-  embed.add_field(name = "Server permissions", value=f1v, inline=False)
-  embed.add_field(name = "Text permissions", value=f2v, inline=False)
-  embed.add_field(name = "Voice permissions", value=f3v, inline=False)
+  embed.add_field(name = "Server permissions", value=server_itop(integer), inline=False)
+  embed.add_field(name = "Text permissions", value=tc_itop(integer), inline=False)
+  embed.add_field(name = "Voice permissions", value=vc_itop(integer), inline=False)
   await ctx.send(embed=embed)
 
 @commands.command()
