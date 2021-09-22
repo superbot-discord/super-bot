@@ -580,7 +580,7 @@ async def status(ctx, member : discord.Member = None):
 @commands.command()
 async def template(ctx, *, tempinput):
   try:
-    temp = getbotinstance.fetch_template(tempinput)
+    temp = getbotinstance().fetch_template(tempinput)
   except:
     await ctx.send("Invalid input. Please try again.")
     return
@@ -631,36 +631,6 @@ async def user(ctx, user: discord.Member = None, channel: discord.TextChannel = 
   allroles=user.roles
   f3v_raw1 = channel.permissions_for(user).value
   f3v_raw2 = user.guild_permissions.value
-
-  f3v=""
-  for count,count2 in server_permissions.items():
-    if f3v_raw2 >= count:
-      f3v += count2 + ", "
-      f3v_raw2 -= count
-  f3v=f3v[:-2]
-  if f3v=="":
-    f3v="No server permissions"
-
-  f3vb=""
-  for count,count2 in tc_permissions.items():
-    if f3v_raw1 >= count:
-      f3vb += count2 + ", "
-      f3v_raw1 -= count
-  f3vb=f3vb[:-2]
-  if f3vb=="":
-    f3vb="No text permissions"
-
-  f3v_raw2 = user.guild_permissions.value
-  f3ve=""
-  for count,count2 in vc_permissions.items():
-    if f3v_raw2 >= count:
-      f3ve += count2 + ", "
-      f3v_raw2 -= count
-  f3ve=f3ve[:-2]
-  if f3ve=="":
-    f3ve="No voice permissions"
-  
-  f3vf = str(f3v_raw2)
   if user.status == discord.Status.online:
     f3vd = "Online"
   elif user.status == discord.Status.idle:
@@ -724,20 +694,21 @@ async def user(ctx, user: discord.Member = None, channel: discord.TextChannel = 
   embed.add_field(name="Registered", value=f1v, inline=True)
   embed.add_field(name="Joined", value=f2v, inline=True)
   embed.add_field(name="Roles", value=f4v, inline=False)
-  embed.add_field(name="Server Permissions", value=f3v, inline=False)
-  embed.add_field(name="Text Channel Permissions", value=f3vb, inline=False)
-  embed.add_field(name="Voice/Stage Channel Permissions", value=f3ve, inline=False)
+  embed.add_field(name="Server Permissions", value=server_itop(f3v_raw2), inline=False)
+  embed.add_field(name="Text Channel Permissions", value=tc_itop(f3v_raw1), inline=False)
+  embed.add_field(name="Voice/Stage Channel Permissions", value=vc_itop(f3v_raw2), inline=False)
   embed.add_field(name="Status", value=f3vd, inline=True)
   try:
     embed.add_field(name="Activity", value=f3vc, inline=True)
   except:
     pass
-  embed.add_field(name="Permission integer", value=f3vf, inline=True)
+  embed.add_field(name="Permission integer", value=str(f3v_raw2), inline=True)
   embed.add_field(name="Badges", value=f5v, inline=False)
   await ctx.send(embed=embed)
 
 def setup(bot):
-  getbotinstance = bot
+  def getbotinstance():
+    return bot
   bot.add_command(avatar)
   bot.add_command(channel)
   bot.add_command(emojiinfo)

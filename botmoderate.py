@@ -1,10 +1,9 @@
 import re
 import typing
 from datetime import timedelta
-
+from difflib import SequenceMatcher
 import discord
 from discord.ext import commands
-from discord.ext.commands.core import command
 
 from bot import bot_admins
 from shared import custom_permissions
@@ -79,13 +78,17 @@ async def makeroles(ctx, times:int=1):
     await ctx.guild.create_role(name=f"Sample role {str(count+1)}")
 
 @commands.command(aliases=['setperms', 'setpermission', 'setpermissions', 'rolepermission', 'rolespermission', 'rolepermissions', 'rolespermissions'])
-async def setperm(ctx, permission_input:typing.Union[int, str], *objs:discord.Role):
+async def setperm(ctx, permission_input:typing.Union[int, str], *roles:discord.Role):
   if type(permission_input) == int:
     permission = discord.Permissions(permission_input)
   else:
-    permission = permission_input.lower()
-    permission = custom_permissions[re.sub(r'[^A-z]|\^', '', permission)]
-  for count in objs:
+    permission_input = permission_input.lower()
+    permission = re.sub(r'[^A-z]|\^', '', permission_input)
+    for count, count2 in custom_permissions.items():
+      if SequenceMatcher(None, permission).ratio >= 0.6:
+        permission = count2
+        break
+  for count in roles:
     await count.edit(permissions=permission)
 
 @commands.command()
