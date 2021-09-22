@@ -134,12 +134,12 @@ def server_itop(integer):
   cache1 = trysubtract(integer, 274877906944, 137438953472, 68719476736, 34359738368, 17179869184, 8589934592, 4294967296, 2147483648, 1073741824, 33554432, 16777216, 8388608, 4194304, 2097152, 1048576, 262144, 131072, 65536, 32768, 16384, 8192, 4096, 2048, 512, 256, 64)
   cache2 = 0
   for count, count2 in server_permissions_raw.items():
-    if cache1 > count:
+    if cache1 >= count:
       cache1 -= count
       cache2 += count2
   cache3 = ""
   for count, count2 in server_permissions.items():
-    if cache2 > count:
+    if cache2 >= count:
       cache2 -= count
       cache3 += count2 + ", "
   if len(cache3) > 2:
@@ -151,12 +151,12 @@ def vc_itop(integer):
   cache1 = trysubtract(integer, 274877906944, 137438953472, 68719476736, 34359738368, 17179869184, 8589934592, 4294967296, 2147483648, 1073741824, 536870912, 268435456, 134217728, 67108864, 524288, 262144, 131072, 65536, 32768, 16384, 8192, 4096, 2048, 1024, 128, 64, 32, 16, 8, 4, 2, 1)
   cache2 = 0
   for count, count2 in vc_permissions_raw.items():
-    if cache1 > count:
+    if cache1 >= count:
       cache1 -= count
       cache2 += count2
   cache3 = ""
   for count, count2 in vc_permissions.items():
-    if cache2 > count:
+    if cache2 >= count:
       cache2 -= count
       cache3 += count2 + ", "
   if len(cache3) > 2:
@@ -168,12 +168,12 @@ def tc_itop(integer):
   cache1 = trysubtract(integer, 8589934592, 4294967296, 1073741824, 536870912, 268435456, 134217728, 67108864, 33554432, 16777216, 8388608, 4194304, 2097152, 1048576, 524288, 1024, 512, 256, 128, 32, 16, 8, 4, 2, 1)
   cache2 = 0
   for count, count2 in tc_permissions_raw.items():
-    if cache1 > count:
+    if cache1 >= count:
       cache1 -= count
       cache2 += count2
   cache3 = ""
   for count, count2 in tc_permissions.items():
-    if cache2 > count:
+    if cache2 >= count:
       cache2 -= count
       cache3 += count2 + ", "
   if len(cache3) > 2:

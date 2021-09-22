@@ -404,9 +404,9 @@ async def role(ctx,role: discord.Role=None):
 async def server(ctx, text = "regular"):
   guild=ctx.guild
   ti=guild.name
-  desc="Created at "+guild.created_at.strftime("%d %b, %Y (%a) %H:%M:%S")+" by "+str(guild.owner.mention)+f"\nRegion: "+str(guild.region)+f"\n[Server Icon]("+str(guild.icon_url)+")"
+  desc="Created at "+guild.created_at.strftime("%d %b, %Y (%a) %H:%M:%S")+" by "+str(guild.owner.mention)+f"\nRegion: "+str(guild.region)+f"\n[Server Icon]("+str(guild.icon.url)+")"
   embed=discord.Embed(title=ti, description=desc)
-  embed.set_author(name="Server Information",icon_url=guild.icon_url)
+  embed.set_author(name="Server Information",icon_url=guild.icon.url)
   if text == "mod":
     try:
       f1vlist=await guild.bans()
@@ -611,6 +611,7 @@ async def user(ctx, user: discord.Member = None, channel: discord.TextChannel = 
     desc=f"{user.mention} (human)"
   embed=discord.Embed(title=ti,color=user.color, description=desc)
   embed.set_thumbnail(url=user.avatar.url)
+  embed.set_image(url=user.banner.url)
   if user.name==user.display_name:
     f0v=f"{user.name}#{user.discriminator}"
   else:
@@ -660,7 +661,7 @@ async def user(ctx, user: discord.Member = None, channel: discord.TextChannel = 
   if f3ve=="":
     f3ve="No voice permissions"
   
-  f3vf = str(f3v_raw2.value)
+  f3vf = str(f3v_raw2)
   if user.status == discord.Status.online:
     f3vd = "Online"
   elif user.status == discord.Status.idle:
