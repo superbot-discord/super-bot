@@ -333,12 +333,16 @@ async def message(ctx, message: discord.Message=None):
     embed.add_field(name="User mentions ("+str(len(f4vraw))+")", value=f4v, inline=False)
   await ctx.send(embed=embed)
 
-@commands.command()
-async def permissions(ctx, integer:int):
-  embed = discord.Embed(title = f"Permission integer {str(integer)}")
-  embed.add_field(name = "Server permissions", value=server_itop(integer), inline=False)
-  embed.add_field(name = "Text permissions", value=tc_itop(integer), inline=False)
-  embed.add_field(name = "Voice permissions", value=vc_itop(integer), inline=False)
+@commands.command(aliases = ['perm', 'perms', 'permission'])
+async def permissions(ctx, integer="help"):
+  try:
+    int(integer)
+    embed = discord.Embed(title = f"Permission integer {integer}")
+    embed.add_field(name = "Server permissions", value=server_itop(int(integer)), inline=False)
+    embed.add_field(name = "Text permissions", value=tc_itop(int(integer)), inline=False)
+    embed.add_field(name = "Voice permissions", value=vc_itop(int(integer)), inline=False)
+  except:
+    embed = perms_guide
   await ctx.send(embed=embed)
 
 @commands.command()

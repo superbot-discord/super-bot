@@ -1,6 +1,6 @@
 import json
 
-from discord import Permissions
+from discord import Embed, Permissions
 
 f = open('database.json', 'r')
 db = json.loads(f.read())
@@ -11,14 +11,14 @@ number_to_emoji = lambda a: a.replace("1",":one: ").replace("2",":two: ").replac
 sizer = lambda bytes: f"{round(bytes/1024,4):,}KB" if bytes<1048576 else (f"{round(bytes/1048576,4):,}MB" if bytes<1073741824 else f"{round(bytes/1073741824,4):,}GB")
 format_length=lambda secs: f"{str(secs//86400)} days plus {str(secs%21600//3600).zfill(2)}:{str(secs%3600//60).zfill(2)}:{str(secs%60).zfill(2)}" if secs >= 86400 else (f"{str(secs//3600).zfill(2)}:{str(secs%3600//60).zfill(2)}:{str(secs%60).zfill(2)}" if secs >= 3600 else f"{str(secs//60).zfill(2)}:{str(secs%60).zfill(2)}")
 formabr = lambda vid: vid.__getattribute__("abr")+f"\t" if vid.__getattribute__("abr") else 'No audio'
-specialbool = lambda input: True if input.lower() in ["1","yes", "enable", "on", "enabled", "tick", "true"] else False
+specialbool = lambda input: True if input.lower() in ["1", "ok", "yes", "ye", "yeah", "enable", "on", "enabled", "tick", "true"] else False
 
 
 custom_permissions = {
   "admin"       : Permissions(8),
   "semiadmin"   : Permissions(536870911991),
-  "mod"         : Permissions(467882999523),
-  "manager"     : Permissions(534974561879),
+  "mod"         : Permissions(536602476259),
+  "manager"     : Permissions(466255085123),
   "member"      : Permissions(414568664129),
   "semimember"  : Permissions(277129449025),
   "restrict"    : Permissions(274914675777),
@@ -27,99 +27,62 @@ custom_permissions = {
   "none"        : Permissions(0),
 }
 
-server_permissions_raw = {
-  1073741824: 8,
-  536870912:  16,
-  268435456:  1024,
-  134217728:  32,
-  67108864:   4,
-  524288:     256,
-  1024:       1,
-  128:        512,
-  32:         4096,
-  16:         2048,
-  8:          8192,
-  4:          64,
-  2:          128,
-  1:          2
-}
+server_permtext = """```
+Index Permission
+3     Administrator
+5     Manage Server
+28    Manage Roles
+4     Manage Channels
+1     Kick Members
+2     Ban Members
+0     Generate Invites
+27    Manage Nicknames
+26    Change Nickname
+30    Manage Emojis and Stickers
+29    Manage Webhooks
+7     View Audit Logs
+19    View Server Insights
+10    View Channels
+```"""
 
-tc_permissions_raw = {
-  274877906944: 268435456,
-  137438953472: 2097152,
-  68719476736:  134217728,
-  34359738368:  67108864,
-  17179869184:  33554432,
-  2147483648:   16777216,
-  262144:       1048576,
-  131072:       262144,
-  65536:        32768,
-  32768:        8388608,
-  16384:        4194304,
-  8192:         16384,
-  4096:         131072,
-  2048:         65536,
-  64:           524288
-}
+tc_permtext = """```
+Index Permission
+11    Send Messages
+38    Send Messages in Threads
+35    Create Public Threads
+36    Create Private Threads
+12    Send TTS Messages
+13    Manage Messages
+32    Manage Threads
+14    Embed Links
+15    Attach Files
+16    Read Message History
+17    Mention Everyone
+6     Add Reactions
+18    Use External Emojis
+37    Use External Stickers
+31    Use Slash Commands
+"""
 
-vc_permissions_raw = {
-  33554432: 1073741824,
-  16777216: 2147483648,
-  8388608:  4294967296,
-  4194304:  8589934592,
-  2097152:  34359738368,
-  1048576:  68719476736,
-  512:      17179869184,
-  256:      536870912
-}
+vc_permtext = """```
+Index Permission
+20    Connect to Voice
+21    Speak (Audio)
+9     Stream (Video)
+22    Mute Members
+23    Deafen Members
+24    Move Members
+25    Use Voice Activity
+8     Priority Speaker
+```"""
 
-server_permissions = {
-  8192: "Administrator",
-  4096: "Manage Server",
-  2048: "Manage Channels",
-  1024: "Manage Roles",
-  512:  "View Audit Logs",
-  256:  "View Server Insights",
-  128:  "Kick Members",
-  64:   "Ban Members",
-  32:   "Manage Nicknames",
-  16:   "Manage Webhooks",
-  8:    "Manage Emojis and Stickers",
-  4:    "Change Nickname",
-  2:    "Generate Invites",
-  1:    "View Channels"
-}
-
-tc_permissions = {
-  268435456: "Manage threads",
-  134217728: "Embed Links",
-  67108864 : "Create Private Threads",
-  33554432 : "Create Public Threads",
-  16777216 : "Use External Stickers",
-  8388608  : "Send Messages in Threads",
-  4194304  : "Use External Emojis",
-  2097152  : "Read Message History",
-  1048576  : "Use Slash Commands",
-  524288   : "Attach Files",
-  262144   : "Add Reactions",
-  131072   : "Mention Everyone",
-  65536    : "Send TTS Messages",
-  32768    : "Send Messages",
-  16384    : "Manage Messages",
-}
-
-vc_permissions = {
-  68719476736: "Connect to Voice",
-  34359738368: "Speak (Audio)",
-  17179869184: "Stream (Video)",
-  8589934592:  "Mute Members",
-  4294967296:  "Deafen Members",
-  2147483648:  "Move Members",
-  1073741824:  "Use Voice Activity",
-  536870912:   "Priority Speaker"
-}
-
-
+perms_guide = Embed(title="Permission integers", description="""
+Permission integers allow you to store permissions quickly. To represent some permissions, calculate the sum of 2 to the power of the permission index.
+For example, to specify kick members, manage channels and stream, calculate `2^1+2^4+2^9`, which is 530.
+Alternatively, if you know binary, put a `1` in the permission indices' places, which is `100001001`. Then run `=base 2 10 [Your binary]` to get the decimal equivalent.""")
+perms_guide.add_field(name="Server permissions", value=server_permtext)
+perms_guide.add_field(name="Text channel permissions", value=tc_permtext)
+perms_guide.add_field(name="Voice channel permissions", value=vc_permtext)
 
 server_real = {
   3 : "Administrator",
@@ -166,18 +129,6 @@ voice_channel_real = {
   25: "Use Voice Activity",
   8 : "Priority Speaker"
 }
-
-
-permissions_list = ["Generate Invites","Kick Members","Ban Members","Administrator","Manage Channels","Manage Server","Add Reactions","View Audit Logs",
-"Priority Speaker","Stream (Video)","View Channels","Send Messages","Send TTS Messages","Manage Messages","Embed Links","Attach Files","Read Message History",
-"Mention Everyone","Use External Emojis","View Server Insights","Connect to Voice","Speak (Audio)","Mute Members","Deafen Members","Move Members",
-"Use Voice Activity","Change Nickname","Manage Nicknames","Manage Roles","Manage Webhooks","Manage Emojis and Stickers","Use Slash Commands","Manage threads",
-"Create Public Threads","Create Private Threads","Use External Stickers","Send Messages in Threads"]
-
-all_permissions = server_permissions
-all_permissions.update(tc_permissions)
-all_permissions.update(vc_permissions)
-
 def trysubtract(original, *subtractors):
   for count in subtractors:
     print(original)
@@ -215,97 +166,3 @@ def vc_itop(integer):
     return cache3[:-2]
   else:
     return "No server permissions"
-
-"""def server_itop(integer):
-  cache1 = trysubtract(integer, 274877906944, 137438953472, 68719476736, 34359738368, 17179869184, 8589934592, 4294967296, 2147483648, 1073741824, 33554432, 16777216, 8388608, 4194304, 2097152, 1048576, 262144, 131072, 65536, 32768, 16384, 8192, 4096, 2048, 512, 256, 64)
-  print(cache1)
-  cache2 = 0
-  for count, count2 in server_permissions_raw.items():
-    if cache1 >= count:
-      cache1 -= count
-      cache2 += count2
-  print(cache2)
-  cache3 = ""
-  for count, count2 in server_permissions.items():
-    if cache2 >= count:
-      cache2 -= count
-      cache3 += count2 + ", "
-  print(cache3)
-  if len(cache3) > 2:
-    return cache3[:-2]
-  else:
-    return "No server permissions"
-
-def vc_itop(integer):
-  cache1 = trysubtract(integer, 274877906944, 137438953472, 68719476736, 34359738368, 17179869184, 8589934592, 4294967296, 2147483648, 1073741824, 536870912, 268435456, 134217728, 67108864, 524288, 262144, 131072, 65536, 32768, 16384, 8192, 4096, 2048, 1024, 128, 64, 32, 16, 8, 4, 2, 1)
-  cache2 = 0
-  for count, count2 in vc_permissions_raw.items():
-    if cache1 >= count:
-      cache1 -= count
-      cache2 += count2
-  cache3 = ""
-  for count, count2 in vc_permissions.items():
-    if cache2 >= count:
-      cache2 -= count
-      cache3 += count2 + ", "
-  if len(cache3) > 2:
-    return cache3[:-2]
-  else:
-    return "No voice channel permissions"
-
-def tc_itop(integer):
-  cache1 = trysubtract(integer, 8589934592, 4294967296, 1073741824, 536870912, 268435456, 134217728, 67108864, 33554432, 16777216, 8388608, 4194304, 2097152, 1048576, 524288, 1024, 512, 256, 128, 32, 16, 8, 4, 2, 1)
-  cache2 = 0
-  for count, count2 in tc_permissions_raw.items():
-    if cache1 >= count:
-      cache1 -= count
-      cache2 += count2
-  cache3 = ""
-  for count, count2 in tc_permissions.items():
-    if cache2 >= count:
-      cache2 -= count
-      cache3 += count2 + ", "
-  if len(cache3) > 2:
-    return cache3[:-2]
-  else:
-    return "No text channel permissions"""
-
-{
-  1:            "Generate Invites",
-  2:            "Kick Members",
-  4:            "Ban Members",
-  8:            "Administrator",
-  16:           "Manage Channels",
-  32:           "Manage Server",
-  64:           "Add Reactions",
-  128:          "View Audit Logs",
-  256:          "Priority Speaker",
-  512:          "Stream (Video)",
-  1024:         "View Channels",
-  2048:         "Send Messages",
-  4096:         "Send TTS Messages",
-  8192:         "Manage Messages",
-  16384:        "Embed Links",
-  32768:        "Attach Files",
-  65536:        "Read Message History",
-  131072:       "Mention Everyone",
-  262144:       "Use External Emojis",
-  524288:       "View Server Insights",
-  1048576:      "Connect to Voice",
-  2097152:      "Speak (Audio)",
-  4194304:      "Mute Members",
-  8388608:      "Deafen Members",
-  16777216:     "Move Members",
-  33554432:     "Use Voice Activity",
-  67108864:     "Change Nickname",
-  134217728:    "Manage Nicknames",
-  268435456:    "Manage Roles",
-  536870912:    "Manage Webhooks",
-  1073741824:   "Manage Emojis and Stickers",
-  2147483648:   "Use Slash Commands",
-  17179869184:  "Manage threads",
-  34359738368:  "Create Public Threads",
-  68719476736:  "Create Private Threads",
-  137438953472: "Use External Stickers",
-  274877906944: "Send Messages in Threads"
-}
