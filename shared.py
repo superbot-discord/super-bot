@@ -119,6 +119,61 @@ vc_permissions = {
   536870912:   "Priority Speaker"
 }
 
+
+
+server_real = {
+  3 : "Administrator",
+  5 : "Manage Server",
+  28: "Manage Roles",
+  4 : "Manage Channels",
+  1 : "Kick Members",
+  2 : "Ban Members",
+  0 : "Generate Invites",
+  27: "Manage Nicknames",
+  26: "Change Nickname",
+  30: "Manage Emojis and Stickers",
+  29: "Manage Webhooks",
+  7 : "View Audit Logs",
+  19: "View Server Insights",
+  10: "View Channels"
+}
+
+text_channel_real = {
+  11: "Send Messages",
+  38: "Send Messages in Threads",
+  35: "Create Public Threads",
+  36: "Create Private Threads",
+  12: "Send TTS Messages",
+  13: "Manage Messages",
+  32: "Manage Threads",
+  14: "Embed Links",
+  15: "Attach Files",
+  16: "Read Message History",
+  17: "Mention Everyone",
+  6 : "Add Reactions",
+  18: "Use External Emojis",
+  37: "Use External Stickers",
+  31: "Use Slash Commands"
+}
+
+voice_channel_real = {
+  20: "Connect to Voice",
+  21: "Speak (Audio)",
+  9 : "Stream (Video)",
+  22: "Mute Members",
+  23: "Deafen Members",
+  24: "Move Members",
+  25: "Use Voice Activity",
+  8 : "Priority Speaker"
+}
+
+
+permissions_list = ["Generate Invites","Kick Members","Ban Members","Administrator","Manage Channels","Manage Server","Add Reactions","View Audit Logs",
+"Priority Speaker","Stream (Video)","View Channels","Send Messages","Send TTS Messages","Manage Messages","Embed Links","Attach Files","Read Message History",
+"Mention Everyone","Use External Emojis","View Server Insights","Connect to Voice","Speak (Audio)","Mute Members","Deafen Members","Move Members",
+"Use Voice Activity","Change Nickname","Manage Nicknames","Manage Roles","Manage Webhooks","Manage Emojis and Stickers","Use Slash Commands","Manage threads",
+"Create Public Threads","Create Private Threads","Use External Stickers","Send Messages in Threads"]
+
 all_permissions = server_permissions
 all_permissions.update(tc_permissions)
 all_permissions.update(vc_permissions)
@@ -132,6 +187,36 @@ def trysubtract(original, *subtractors):
   return original
 
 def server_itop(integer):
+  cache3 = ""
+  for count, count2 in server_real.items():
+    if integer & 1 << count:
+      cache3 += count2 + ", "
+  if len(cache3) > 2:
+    return cache3[:-2]
+  else:
+    return "No server permissions"
+
+def tc_itop(integer):
+  cache3 = ""
+  for count, count2 in text_channel_real.items():
+    if integer & 1 << count:
+      cache3 += count2 + ", "
+  if len(cache3) > 2:
+    return cache3[:-2]
+  else:
+    return "No server permissions"
+
+def vc_itop(integer):
+  cache3 = ""
+  for count, count2 in voice_channel_real.items():
+    if integer & 1 << count:
+      cache3 += count2 + ", "
+  if len(cache3) > 2:
+    return cache3[:-2]
+  else:
+    return "No server permissions"
+
+"""def server_itop(integer):
   cache1 = trysubtract(integer, 274877906944, 137438953472, 68719476736, 34359738368, 17179869184, 8589934592, 4294967296, 2147483648, 1073741824, 33554432, 16777216, 8388608, 4194304, 2097152, 1048576, 262144, 131072, 65536, 32768, 16384, 8192, 4096, 2048, 512, 256, 64)
   print(cache1)
   cache2 = 0
@@ -183,9 +268,7 @@ def tc_itop(integer):
   if len(cache3) > 2:
     return cache3[:-2]
   else:
-    return "No text channel permissions"
-
-
+    return "No text channel permissions"""
 
 {
   1:            "Generate Invites",
