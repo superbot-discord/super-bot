@@ -29,7 +29,7 @@ async def help(ctx, *, cat=None):
 
 **Web Commands**
 `redirect` `screenshot` `youtube` `wiki` `minecraft` `engrave` `covid` `population` `map`
-bunny` `cat` `dog` `duck` `fox` `koala` `lizard` `panda` `shiba` `error` `errorcat` `errordog`
+`bunny` `cat` `dog` `duck` `fox` `koala` `lizard` `panda` `shiba` `error` `errorcat` `errordog`
 
 **Plot/Drawing Commands**
 `ascii` `table` `render` `captcha` `pie` `barh` `barv` `hist` `sankey` `snow` `mandelbrot`
@@ -38,7 +38,7 @@ bunny` `cat` `dog` `duck` `fox` `koala` `lizard` `panda` `shiba` `error` `errorc
 `html` `md` `regex` `regsub`
 
 **Image Commands**
-`analyse` `histogram` `resize` `rotate` `brightness` `contrast` `sharpen` `blur` `invert` `hue`
+`analyse` `histogram` `resize` `rotate` `brightness` `contrast` `sharpen` `edge` `contour` `blur` `invert` `hue` `recolor`
 To use the 9 commands above, type `=image ` first, then upload an image. Example: `=image analyse`. Supply a user name to work on his avatar, e.g. `=image SuperBot#4073 analyse`
 `ocr` `qr` `qrmake` `transparent` `text`
 

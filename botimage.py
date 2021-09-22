@@ -74,13 +74,20 @@ async def image(ctx, *, mode):
       await ctx.send(file=discord.File('output4.png'))
       await ctx.send(file=discord.File('output5.png'))
       await ctx.send(file=discord.File('output6.png'))
+  elif mode.startswith("edge"):
+    edge()
+    try:
+      await ctx.send(files=[discord.File('output1.png'), discord.File('output2.png')])
+    except:
+      await ctx.send(file=discord.File('output1.png'))
+      await ctx.send(file=discord.File('output2.png'))
   elif mode.startswith("rotate "):
     rotate(float(mode.split(" ")[1]))
     await ctx.send(files=[discord.File('output1.png'), discord.File('output2.png')])
   else:
     if mode.startswith("invert"):
       invert()
-    elif mode.startswith("hue"):
+    elif mode.startswith("hue") or mode.startswith("color"):
       try:
         addhue(int(mode.split(" ")[1]))
       except:
@@ -107,6 +114,16 @@ async def image(ctx, *, mode):
         contrast(200)
     elif mode.startswith("hist"):
       hist()
+    elif mode.startswith("contour"):
+      contour()
+    elif mode.startswith("recolo"):
+      try:
+        recolor(mode.split(" ")[1], mode.split(" ")[2])
+      except:
+        try:
+          recolor(mode.split(" ")[1], (255,0,0))
+        except:
+          recolor((0,0,0), (255,0,0))
     await ctx.send(file=discord.File('output.png'))
   os.remove('input.png')
 
@@ -195,10 +212,22 @@ def brightness(percent):
   newimg = ImageEnhance.Brightness(image).enhance(percent/100)
   newimg.save('output.png')
 
+def contour():
+  image = Image.open('input.png')
+  newimg = image.filter(ImageFilter.CONTOUR)
+  newimg.save('output.png')
+
 def contrast(percent):
   image = Image.open('input.png')
   newimg = ImageEnhance.Contrast(image).enhance(percent/100)
   newimg.save('output.png')
+
+def edge():
+  image = Image.open('input.png')
+  newimg = image.filter(ImageFilter.EDGE_ENHANCE)
+  newimg.save('output1.png')
+  newimg = image.filter(ImageFilter.EDGE_ENHANCE_MORE)
+  newimg.save('output2.png')
 
 def greyscale(percent):
   image = Image.open('input.png')
@@ -220,13 +249,18 @@ def invert():
   if image.mode == 'RGBA':
     r,g,b,a = image.split()
     rgb_image = Image.merge('RGB', (r,g,b))
-    inverted_image = ImageOps.invert(rgb_image)
-    r2,g2,b2 = inverted_image.split()
-    final_transparent_image = Image.merge('RGBA', (r2,g2,b2,a))
-    final_transparent_image.save('output.png')
+    newimg = ImageOps.invert(rgb_image)
+    r2,g2,b2 = newimg.split()
+    newimg2 = Image.merge('RGBA', (r2,g2,b2,a))
+    newimg2.save('output.png')
   else:
-    inverted_image = ImageOps.invert(image)
-    inverted_image.save('output.png')
+    newimg = ImageOps.invert(image)
+    newimg.save('output.png')
+
+def recolor(black_color, white_color):
+  image = Image.open('input.png')
+  newimg = ImageOps.colorize(image, black_color, white_color)
+  newimg.save('output.png')
 
 def resize(x, y):
   image = Image.open('input.png')
