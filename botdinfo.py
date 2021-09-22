@@ -621,50 +621,62 @@ async def user(ctx, user: discord.Member = None, channel: discord.TextChannel = 
   else:
     f2va = re.sub(r'([\d]+) days, (\d{1,2}):(\d{2}):(\d{2})', r'\1 days \2 hrs \3 mins \4 secs', f2ts)[:-7] + f"\n≈ "+str((int(f2ts.split(" days, ")[0]))//365) + " years " + str(int(f2ts.split(" days, ")[0]) % 365) + " days"
   allroles=user.roles
+  f3v_raw1 = channel.permissions_for(user)
+  f3v_raw2 = user.guild_permissions
   f3v=""
-  f3v += ("Admin, "               if channel.permissions_for(user).administrator else "")
-  f3v += ("Manage Server, "       if channel.permissions_for(user).manage_guild else "")
-  f3v += ("Manage Roles, "        if channel.permissions_for(user).manage_roles else "")
-  f3v += ("Manage Permissions, "  if channel.permissions_for(user).administrator else "")
-  f3v += ("View Audit Logs, "     if channel.permissions_for(user).view_audit_log else "")
-  f3v += ("View Server Insights, "if channel.permissions_for(user).view_guild_insights else "")
-  f3v += ("Kick Members, "        if channel.permissions_for(user).kick_members else "")
-  f3v += ("Ban Members, "         if channel.permissions_for(user).ban_members else "")
-  f3v += ("Manage Nicknames, "    if channel.permissions_for(user).manage_nicknames else "")
-  f3v += ("Manage Webhooks, "     if channel.permissions_for(user).manage_webhooks else "")
-  f3v += ("Manage Emojis, "       if channel.permissions_for(user).manage_emojis else "")
-  f3v += ("Change Nickname, "     if channel.permissions_for(user).manage_nicknames else "")
-  f3v += ("Mention Everyone, "    if channel.permissions_for(user).mention_everyone else "")
-  f3v += ("Create Invite, "       if channel.permissions_for(user).create_instant_invite else "")
+  f3v += ("Admin, "                   if f3v_raw1.administrator else "")
+  f3v += ("Manage Server, "           if f3v_raw1.manage_guild else "")
+  f3v += ("Manage Channels, "         if f3v_raw1.manage_channels else "")
+  f3v += ("Manage Roles, "            if f3v_raw1.manage_roles else "")
+  f3v += ("Manage Permissions, "      if f3v_raw1.administrator else "")
+  f3v += ("View Audit Logs, "         if f3v_raw1.view_audit_log else "")
+  f3v += ("View Server Insights, "    if f3v_raw1.view_guild_insights else "")
+  f3v += ("Kick Members, "            if f3v_raw1.kick_members else "")
+  f3v += ("Ban Members, "             if f3v_raw1.ban_members else "")
+  f3v += ("Manage Nicknames, "        if f3v_raw1.manage_nicknames else "")
+  f3v += ("Manage Webhooks, "         if f3v_raw1.manage_webhooks else "")
+  f3v += ("Manage Emojis & Stickers, "if f3v_raw1.manage_emojis else "")
+  f3v += ("Change Nickname, "         if f3v_raw1.manage_nicknames else "")
+  f3v += ("Mention Everyone, "        if f3v_raw1.mention_everyone else "")
+  f3v += ("Create Invite, "           if f3v_raw1.create_instant_invite else "")
   f3v=f3v[:-2]
   if f3v=="":
     f3v="No permissions"
   f3vb=""
-  f3vb += ("View Channel, "         if channel.permissions_for(user).view_channel else "")
-  f3vb += ("Read Messages, "        if channel.permissions_for(user).read_messages else "")
-  f3vb += ("Read Message History, " if channel.permissions_for(user).read_message_history else "")
-  f3vb += ("Send Messages, "        if channel.permissions_for(user).send_messages else "")
-  f3vb += ("Send TTS Messages, "    if channel.permissions_for(user).send_tts_messages else "")
-  f3vb += ("Add Reactions, "        if channel.permissions_for(user).add_reactions else "")
-  f3vb += ("External Emojis, "      if channel.permissions_for(user).external_emojis else "")
-  f3vb += ("Attach Files, "         if channel.permissions_for(user).attach_files else "")
-  f3vb += ("Embed Links, "          if channel.permissions_for(user).embed_links else "")
+  f3vb += ("View Channel, "          if f3v_raw1.view_channel else "")
+  f3vb += ("Read Messages, "         if f3v_raw1.read_messages else "")
+  f3vb += ("Read Message History, "  if f3v_raw1.read_message_history else "")
+  f3vb += ("Send Messages, "         if f3v_raw1.send_messages else "")
+  f3vb += ("Send TTS Messages, "     if f3v_raw1.send_tts_messages else "")
+  f3vb += ("Add Reactions, "         if f3v_raw1.add_reactions else "")
+  f3vb += ("Use External Emojis, "   if f3v_raw1.external_emojis else "")
+  f3vb += ("Use External Stickers, " if f3v_raw1.external_stickers else "")
+  f3vb += ("Use Slash Commands, "    if f3v_raw1.use_slash_commands else "")
+  f3vb += ("Attach Files, "          if f3v_raw1.attach_files else "")
+  f3vb += ("Embed Links, "           if f3v_raw1.embed_links else "")
+  f3vb += ("Manage messages, "       if f3v_raw1.manage_messages else "")
+  f3vb += ("Create public threads, " if f3v_raw1.create_public_threads else "")
+  f3vb += ("Create private threads, "if f3v_raw1.create_private_threads else "")
+  f3vb += ("Send in threads, "       if f3v_raw1.send_messages_in_threads else "")
+  f3vb += ("Manage threads, "        if f3v_raw1.manage_threads else "")
   f3vb=f3vb[:-2]
   if f3vb=="":
     f3vb="No permissions"
   f3ve=""
-  f3ve += ("Connect, "            if user.guild_permissions.connect else "")
-  f3ve += ("Speak (Audio), "      if user.guild_permissions.speak else "")
-  f3ve += ("Stream (Video), "     if user.guild_permissions.stream else "")
-  f3ve += ("Use Voice Activity, " if user.guild_permissions.use_voice_activation else "")
-  f3ve += ("Priority Speaker, "   if user.guild_permissions.priority_speaker else "")
-  f3ve += ("Mute Memvers, "       if user.guild_permissions.mute_members else "")
-  f3ve += ("Deafen Members, "     if user.guild_permissions.deafen_members else "")
-  f3ve += ("Move Members, "       if user.guild_permissions.move_members else "")
-  f3ve += ("Request to Speak, "   if user.guild_permissions.request_to_speak else "")
+  f3ve += ("Connect, "           if f3v_raw2.connect else "")
+  f3ve += ("Speak (Audio), "     if f3v_raw2.speak else "")
+  f3ve += ("Stream (Video), "    if f3v_raw2.stream else "")
+  f3ve += ("Use Voice Activity, "if f3v_raw2.use_voice_activation else "")
+  f3ve += ("Priority Speaker, "  if f3v_raw2.priority_speaker else "")
+  f3ve += ("Mute Memvers, "      if f3v_raw2.mute_members else "")
+  f3ve += ("Deafen Members, "    if f3v_raw2.deafen_members else "")
+  f3ve += ("Move Members, "      if f3v_raw2.move_members else "")
+  f3ve += ("Request to Speak, "  if f3v_raw2.request_to_speak else "")
+  f3ve += ("Manage events, "     if f3v_raw2.manage_events else "")
   f3ve=f3ve[:-2]
   if f3ve=="":
     f3ve="No permissions"
+  f3vf = str(f3v_raw2.value)
   if user.status == discord.Status.online:
     f3vd = "Online"
   elif user.status == discord.Status.idle:
@@ -729,13 +741,14 @@ async def user(ctx, user: discord.Member = None, channel: discord.TextChannel = 
   embed.add_field(name="Joined", value=f2v, inline=True)
   embed.add_field(name="Roles", value=f4v, inline=False)
   embed.add_field(name="Server Permissions", value=f3v, inline=False)
-  embed.add_field(name="Channel Permissions", value=f3vb, inline=False)
-  embed.add_field(name="Channel Permissions", value=f3ve, inline=False)
+  embed.add_field(name="Text Channel Permissions", value=f3vb, inline=False)
+  embed.add_field(name="Voice/Stage Channel Permissions", value=f3ve, inline=False)
   embed.add_field(name="Status", value=f3vd, inline=True)
   try:
     embed.add_field(name="Activity", value=f3vc, inline=True)
   except:
     pass
+  embed.add_field(name="Permission integer", value=f3vf, inline=True)
   embed.add_field(name="Badges", value=f5v, inline=False)
   await ctx.send(embed=embed)
 
