@@ -132,16 +132,19 @@ def trysubtract(original, *subtractors):
 
 def server_itop(integer):
   cache1 = trysubtract(integer, 274877906944, 137438953472, 68719476736, 34359738368, 17179869184, 8589934592, 4294967296, 2147483648, 1073741824, 33554432, 16777216, 8388608, 4194304, 2097152, 1048576, 262144, 131072, 65536, 32768, 16384, 8192, 4096, 2048, 512, 256, 64)
+  print(cache1)
   cache2 = 0
   for count, count2 in server_permissions_raw.items():
     if cache1 >= count:
       cache1 -= count
       cache2 += count2
+  print(cache2)
   cache3 = ""
   for count, count2 in server_permissions.items():
     if cache2 >= count:
       cache2 -= count
       cache3 += count2 + ", "
+  print(cache3)
   if len(cache3) > 2:
     return cache3[:-2]
   else:

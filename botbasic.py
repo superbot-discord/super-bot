@@ -39,7 +39,7 @@ async def help(ctx, *, cat=None):
 
 **Image Commands**
 `analyse` `histogram` `resize` `rotate` `brightness` `contrast` `sharpen` `edge` `contour` `blur` `invert` `hue` `recolor`
-To use the 9 commands above, type `=image ` first, then upload an image. Example: `=image analyse`. Supply a user name to work on his avatar, e.g. `=image SuperBot#4073 analyse`
+To use the 13 commands above, type `=image ` first, then upload an image. Example: `=image analyse`. Supply a user name to work on his avatar, e.g. `=image SuperBot#4073 analyse`
 `ocr` `qr` `qrmake` `transparent` `text`
 
 `hello` leads you to death
