@@ -213,7 +213,7 @@ async def unicode(ctx, *, query):
   await ctx.send(embed=embed)
 
 @commands.command()
-async def unix(ctx, *, text):
+async def unix(ctx, *, text = "now"):
   now = datetime.now()
   dateParts = {
     m[-1]: int(m[:-1])
@@ -227,7 +227,7 @@ async def unix(ctx, *, text):
       dateParts.get('d', now.day), dateParts.get('h', now.hour),
       dateParts.get('m', now.minute), dateParts.get('s', now.second))
   seconds = round((dt2-dt1).total_seconds())
-  await ctx.send(f"<t:{seconds}> | `<t:{seconds}>` Note: Times are calculated in UTC+0.\n<t:{seconds}:F> | `<t:{seconds}:F>`\n<t:{seconds}:f> | `<t:{seconds}:f>`\n<t:{seconds}:D> | `<t:{seconds}:D>`\n<t:{seconds}:d> | `<t:{seconds}:d>`\n<t:{seconds}:T> | `<t:{seconds}:T>`\n<t:{seconds}:t> | `<t:{seconds}:t>`\n<t:{seconds}:R> | `<t:{seconds}:R>`\n")
+  await ctx.send(f"`<t:{seconds}>` | <t:{seconds}> Note: Times are calculated in UTC+0.\n`<t:{seconds}:F>` | <t:{seconds}:F>\n`<t:{seconds}:f>` | <t:{seconds}:f>\n`<t:{seconds}:D>` | <t:{seconds}:D>\n`<t:{seconds}:d>` | <t:{seconds}:d>\n`<t:{seconds}:T>` | <t:{seconds}:T>\n`<t:{seconds}:t>` | <t:{seconds}:t>\n`<t:{seconds}:R>` | <t:{seconds}:R>")
 
 def setup(bot):
   bot.add_command(choice)

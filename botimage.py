@@ -35,8 +35,11 @@ async def image(ctx, *, mode):
     mode_split = mode.split(" ")
     user_input = mode_split[0]
     mode = " ".join(mode_split[1:])
-    image_user = await commands.UserConverter().convert(ctx, user_input)
-    downloaded_obj = requests.get(image_user.display_avatar.url.replace("?size=1024", "?size=4096"))
+    try:
+      image_user = await commands.UserConverter().convert(ctx, user_input)
+      downloaded_obj = requests.get(image_user.display_avatar.url.replace("?size=1024", "?size=4096"))
+    except:
+      downloaded_obj = requests.get(user_input)
     with open("input.png", "wb") as file:
       file.write(downloaded_obj.content)
   if mode.startswith("analyse") or mode.startswith("analyze"):
