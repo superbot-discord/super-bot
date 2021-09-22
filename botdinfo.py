@@ -702,7 +702,7 @@ async def user(ctx, user: discord.Member = None, channel: discord.TextChannel = 
     embed.add_field(name="Activity", value=f3vc, inline=True)
   except:
     pass
-  embed.add_field(name="Permission integer", value=str(f3v_raw2), inline=True)
+  embed.add_field(name="Permission integer", value=str(f3v_raw1), inline=True)
   embed.add_field(name="Badges", value=f5v, inline=False)
   await ctx.send(embed=embed)
 

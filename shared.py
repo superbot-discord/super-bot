@@ -125,6 +125,7 @@ all_permissions.update(vc_permissions)
 
 def trysubtract(original, *subtractors):
   for count in subtractors:
+    print(original)
     cache = original - count
     if cache >= 0:
       original = cache
