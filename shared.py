@@ -129,13 +129,6 @@ voice_channel_real = {
   25: "Use Voice Activity",
   8 : "Priority Speaker"
 }
-def trysubtract(original, *subtractors):
-  for count in subtractors:
-    print(original)
-    cache = original - count
-    if cache >= 0:
-      original = cache
-  return original
 
 def server_itop(integer):
   cache3 = ""

@@ -2,6 +2,7 @@ import asyncio
 import re
 import typing
 from datetime import datetime, timedelta, timezone
+from difflib import SequenceMatcher
 
 import discord
 import emojis as em
@@ -342,7 +343,16 @@ async def permissions(ctx, integer="help"):
     embed.add_field(name = "Text permissions", value=tc_itop(int(integer)), inline=False)
     embed.add_field(name = "Voice permissions", value=vc_itop(int(integer)), inline=False)
   except:
-    embed = perms_guide
+    try:
+      for count,count2 in custom_permissions.items():
+        if SequenceMatcher(None, integer, count).ratio >= 0.7:
+          embed = discord.Embed(title = f"Custom permission {integer}")
+          embed.add_field(name = "Server permissions", value=server_itop(count2.value), inline=False)
+          embed.add_field(name = "Text permissions", value=tc_itop(count2.value), inline=False)
+          embed.add_field(name = "Voice permissions", value=vc_itop(count2.value), inline=False)
+          break
+    except:
+      embed = perms_guide
   await ctx.send(embed=embed)
 
 @commands.command()
