@@ -45,7 +45,7 @@ async def color(ctx, *, name):
   embed.set_thumbnail(url='attachment://color.png')
   img = Image.new('RGB', (64, 64), (r, g, b))
   img.save('color.png')
-  await ctx.send(embed=embed)
+  await ctx.send(embed=embed, file=discord.File('color.png'))
   os.remove('color.png')
 
 @commands.command()

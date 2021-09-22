@@ -258,7 +258,7 @@ def invert():
     newimg.save('output.png')
 
 def recolor(black_color, white_color):
-  image = Image.open('input.png')
+  image = Image.open('input.png').convert('L')
   newimg = ImageOps.colorize(image, black_color, white_color)
   newimg.save('output.png')
 
