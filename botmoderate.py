@@ -11,7 +11,7 @@ UNITS = {'s':'seconds', 'm':'minutes', 'h':'hours', 'd':'days', 'w':'weeks'}
 
 @commands.command()
 async def ban(ctx, user: discord.User, delete : int =0, *, reason="No reason provided"):
-  if ctx.author.permissions_in(ctx.channel).ban_members or bot_admins.count(ctx.author.id) != 0:
+  if ctx.channel.permissions_for(ctx.author).ban_members or bot_admins.count(ctx.author.id) != 0:
     try:
       await ctx.guild.ban(user, delete_message_days=delete, reason=reason)
     except:
@@ -46,7 +46,7 @@ async def getrole(ctx, role : discord.Role, member : discord.Member = None):
 
 @commands.command()
 async def kick(ctx, user: discord.Member, *, reason="No reason provided"):
-  if ctx.author.permissions_in(ctx.channel).kick_members or bot_admins.count(ctx.author.id) != 0:
+  if ctx.channel.permissions_for(ctx.author).kick_members or bot_admins.count(ctx.author.id) != 0:
     try:
       await user.kick(reason=reason)
     except:
@@ -104,7 +104,7 @@ async def slowmode(ctx, sec = None, *channels:typing.Union[discord.TextChannel,s
 
 @commands.command()
 async def unban(ctx, user: discord.User, *, reason="No reason provided"):
-  if ctx.author.permissions_in(ctx.channel).ban_members or bot_admins.count(ctx.author.id) != 0:
+  if ctx.channel.permissions_for(ctx.author).ban_members or bot_admins.count(ctx.author.id) != 0:
     try:
       await ctx.guild.unban(user, reason=reason)
     except:
