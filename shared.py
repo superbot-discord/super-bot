@@ -1,6 +1,7 @@
 import json
 
-from discord import Permissions
+from discord import Permissions, channel, threads
+from discord.types.member import Nickname
 
 f = open('database.json', 'r')
 db = json.loads(f.read())
@@ -22,5 +23,97 @@ custom_permissions = {
   "member"      : Permissions(414568664129),
   "semimember"  : Permissions(277129449025),
   "restrict"    : Permissions(274914675777),
+  "mute"        : Permissions(67175425),
+  "freeze"      : Permissions(66560),
   "none"        : Permissions(0),
+}
+
+server_permissions = {
+  8:            "Administrator",
+  32:           "Manage Server",
+  16:           "Manage Channels",
+  268435456:    "Manage Roles",
+  128:          "View Audit Logs",
+  524288:       "View Server Insights",
+  2:            "Kick Members", 
+  4:            "Ban Members",
+  134217728:    "Manage Nicknames",
+  536870912:    "Manage Webhooks",
+  1073741824:   "Manage Emojis and Stickers",
+  67108864:     "Change Nickname",
+  1:            "Generate Invites",
+  1024:         "View Channels",
+}
+
+tc_permissions = {
+  8192:         "Manage Messages",
+  65536:        "Read Message History",
+  2048:         "Send Messages",
+  4096:         "Send TTS Messages",
+  131072:       "Mention Everyone",
+  64:           "Add Reactions",
+  262144:       "Use External Emojis",
+  137438953472: "Use External Stickers",
+  16384:        "Embed Links",
+  32768:        "Attach Files",
+  2147483648:   "Use Slash Commands",
+  17179869184:  "Manage threads",
+  34359738368:  "Create Public Threads",
+  68719476736:  "Create Private Threads",
+  274877906944: "Send Messages in Threads",
+}
+
+vc_permissions = {
+  1048576:      "Connect to Voice",
+  2097152:      "Speak (Audio)",
+  512:          "Stream (Video)",
+  4194304:      "Mute Members",
+  8388608:      "Deafen Members",
+  16777216:     "Move Members",
+  33554432:     "Use Voice Activity",
+  256:          "Priority Speaker"
+}
+
+all_permissions = server_permissions
+all_permissions.update(tc_permissions)
+all_permissions.update(vc_permissions)
+
+{
+  1:            "Generate Invites",
+  2:            "Kick Members", 
+  4:            "Ban Members",
+  8:            "Administrator",
+  16:           "Manage Channels",
+  32:           "Manage Server",
+  64:           "Add Reactions",
+  128:          "View Audit Logs",
+  256:          "Priority Speaker",
+  512:          "Stream (Video)",
+  1024:         "View Channels",
+  2048:         "Send Messages",
+  4096:         "Send TTS Messages",
+  8192:         "Manage Messages",
+  16384:        "Embed Links",
+  32768:        "Attach Files",
+  65536:        "Read Message History",
+  131072:       "Mention Everyone",
+  262144:       "Use External Emojis",
+  524288:       "View Server Insights",
+  1048576:      "Connect to Voice",
+  2097152:      "Speak (Audio)",
+  4194304:      "Mute Members",
+  8388608:      "Deafen Members",
+  16777216:     "Move Members",
+  33554432:     "Use Voice Activity",
+  67108864:     "Change Nickname",
+  134217728:    "Manage Nicknames",
+  268435456:    "Manage Roles",
+  536870912:    "Manage Webhooks",
+  1073741824:   "Manage Emojis and Stickers",
+  2147483648:   "Use Slash Commands",
+  17179869184:  "Manage threads",
+  34359738368:  "Create Public Threads",
+  68719476736:  "Create Private Threads",
+  137438953472: "Use External Stickers",
+  274877906944: "Send Messages in Threads"
 }

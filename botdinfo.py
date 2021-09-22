@@ -334,6 +334,44 @@ async def message(ctx, message: discord.Message=None):
   await ctx.send(embed=embed)
 
 @commands.command()
+async def permissions(ctx, integer:int):
+  cache = integer
+  f1v=""
+  for count,count2 in server_permissions.items():
+    if cache >= count:
+      f1v += count2 + ", "
+      cache -= count
+  f1v=f1v[:-2]
+  if f1v=="":
+    f1v="No server permissions"
+
+  cache = integer
+  f2v=""
+  for count,count2 in tc_permissions.items():
+    if cache >= count:
+      f2v += count2 + ", "
+      cache -= count
+  f2v=f2v[:-2]
+  if f2v=="":
+    f2v="No text permissions"
+
+  cache = integer
+  f3v=""
+  for count,count2 in vc_permissions.items():
+    if cache >= count:
+      f3v += count2 + ", "
+      cache -= count
+  f3v=f3v[:-2]
+  if f3v=="":
+    f3v="No voice permissions"
+  
+  embed = discord.Embed(title = f"Permission integer {str(integer)}")
+  embed.add_field(name = "Server permissions", value=f1v, inline=False)
+  embed.add_field(name = "Text permissions", value=f2v, inline=False)
+  embed.add_field(name = "Voice permissions", value=f3v, inline=False)
+  await ctx.send(embed=embed)
+
+@commands.command()
 async def raw(ctx, msg : discord.Message):
   embed = discord.Embed(title = "Raw message", url = msg.jump_url, description = "```"+discord.utils.escape_markdown(msg.content, as_needed=True)+"```")
   await ctx.send(embed=embed)
@@ -589,7 +627,7 @@ async def template(ctx, *, tempinput):
   embed.add_field(name="Original Server", value=f3v, inline=True)
   await ctx.send(embed=embed)
 
-@commands.command()
+@commands.command(aliases=["member"])
 async def user(ctx, user: discord.Member = None, channel: discord.TextChannel = None):
   ti="User Information"
   if user==None:
@@ -621,61 +659,37 @@ async def user(ctx, user: discord.Member = None, channel: discord.TextChannel = 
   else:
     f2va = re.sub(r'([\d]+) days, (\d{1,2}):(\d{2}):(\d{2})', r'\1 days \2 hrs \3 mins \4 secs', f2ts)[:-7] + f"\n≈ "+str((int(f2ts.split(" days, ")[0]))//365) + " years " + str(int(f2ts.split(" days, ")[0]) % 365) + " days"
   allroles=user.roles
-  f3v_raw1 = channel.permissions_for(user)
-  f3v_raw2 = user.guild_permissions
+  f3v_raw1 = channel.permissions_for(user).value
+  f3v_raw2 = user.guild_permissions.value
+
   f3v=""
-  f3v += ("Admin, "                   if f3v_raw1.administrator else "")
-  f3v += ("Manage Server, "           if f3v_raw1.manage_guild else "")
-  f3v += ("Manage Channels, "         if f3v_raw1.manage_channels else "")
-  f3v += ("Manage Roles, "            if f3v_raw1.manage_roles else "")
-  f3v += ("Manage Permissions, "      if f3v_raw1.administrator else "")
-  f3v += ("View Audit Logs, "         if f3v_raw1.view_audit_log else "")
-  f3v += ("View Server Insights, "    if f3v_raw1.view_guild_insights else "")
-  f3v += ("Kick Members, "            if f3v_raw1.kick_members else "")
-  f3v += ("Ban Members, "             if f3v_raw1.ban_members else "")
-  f3v += ("Manage Nicknames, "        if f3v_raw1.manage_nicknames else "")
-  f3v += ("Manage Webhooks, "         if f3v_raw1.manage_webhooks else "")
-  f3v += ("Manage Emojis & Stickers, "if f3v_raw1.manage_emojis else "")
-  f3v += ("Change Nickname, "         if f3v_raw1.manage_nicknames else "")
-  f3v += ("Mention Everyone, "        if f3v_raw1.mention_everyone else "")
-  f3v += ("Create Invite, "           if f3v_raw1.create_instant_invite else "")
+  for count,count2 in server_permissions.items():
+    if f3v_raw2 >= count:
+      f3v += count2 + ", "
+      f3v_raw2 -= count
   f3v=f3v[:-2]
   if f3v=="":
-    f3v="No permissions"
+    f3v="No server permissions"
+
   f3vb=""
-  f3vb += ("View Channel, "          if f3v_raw1.view_channel else "")
-  f3vb += ("Read Messages, "         if f3v_raw1.read_messages else "")
-  f3vb += ("Read Message History, "  if f3v_raw1.read_message_history else "")
-  f3vb += ("Send Messages, "         if f3v_raw1.send_messages else "")
-  f3vb += ("Send TTS Messages, "     if f3v_raw1.send_tts_messages else "")
-  f3vb += ("Add Reactions, "         if f3v_raw1.add_reactions else "")
-  f3vb += ("Use External Emojis, "   if f3v_raw1.external_emojis else "")
-  f3vb += ("Use External Stickers, " if f3v_raw1.external_stickers else "")
-  f3vb += ("Use Slash Commands, "    if f3v_raw1.use_slash_commands else "")
-  f3vb += ("Attach Files, "          if f3v_raw1.attach_files else "")
-  f3vb += ("Embed Links, "           if f3v_raw1.embed_links else "")
-  f3vb += ("Manage messages, "       if f3v_raw1.manage_messages else "")
-  f3vb += ("Create public threads, " if f3v_raw1.create_public_threads else "")
-  f3vb += ("Create private threads, "if f3v_raw1.create_private_threads else "")
-  f3vb += ("Send in threads, "       if f3v_raw1.send_messages_in_threads else "")
-  f3vb += ("Manage threads, "        if f3v_raw1.manage_threads else "")
+  for count,count2 in tc_permissions.items():
+    if f3v_raw1 >= count:
+      f3vb += count2 + ", "
+      f3v_raw1 -= count
   f3vb=f3vb[:-2]
   if f3vb=="":
-    f3vb="No permissions"
+    f3vb="No text permissions"
+
+  f3v_raw2 = user.guild_permissions.value
   f3ve=""
-  f3ve += ("Connect, "           if f3v_raw2.connect else "")
-  f3ve += ("Speak (Audio), "     if f3v_raw2.speak else "")
-  f3ve += ("Stream (Video), "    if f3v_raw2.stream else "")
-  f3ve += ("Use Voice Activity, "if f3v_raw2.use_voice_activation else "")
-  f3ve += ("Priority Speaker, "  if f3v_raw2.priority_speaker else "")
-  f3ve += ("Mute Memvers, "      if f3v_raw2.mute_members else "")
-  f3ve += ("Deafen Members, "    if f3v_raw2.deafen_members else "")
-  f3ve += ("Move Members, "      if f3v_raw2.move_members else "")
-  f3ve += ("Request to Speak, "  if f3v_raw2.request_to_speak else "")
-  f3ve += ("Manage events, "     if f3v_raw2.manage_events else "")
+  for count,count2 in vc_permissions.items():
+    if f3v_raw2 >= count:
+      f3ve += count2 + ", "
+      f3v_raw2 -= count
   f3ve=f3ve[:-2]
   if f3ve=="":
-    f3ve="No permissions"
+    f3ve="No voice permissions"
+  
   f3vf = str(f3v_raw2.value)
   if user.status == discord.Status.online:
     f3vd = "Online"
@@ -760,6 +774,7 @@ def setup(bot):
   bot.add_command(invitelink)
   bot.add_command(leftuser)
   bot.add_command(message)
+  bot.add_command(permissions)
   bot.add_command(raw)
   bot.add_command(reactions)
   bot.add_command(role)
