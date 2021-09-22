@@ -155,7 +155,7 @@ def tc_itop(integer):
   if len(cache3) > 2:
     return cache3[:-2]
   else:
-    return "No server permissions"
+    return "No text channel permissions"
 
 def vc_itop(integer):
   cache3 = ""
@@ -165,4 +165,4 @@ def vc_itop(integer):
   if len(cache3) > 2:
     return cache3[:-2]
   else:
-    return "No server permissions"
+    return "No voice channel permissions"
