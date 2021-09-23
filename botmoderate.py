@@ -47,7 +47,7 @@ async def getrole(ctx, role : discord.Role, member : discord.Member = None):
 
 @commands.command()
 async def kick(ctx, user: discord.Member, *, reason="No reason provided"):
-  if ctx.channel.permissions_for(ctx.author).kick_members or bot_admins.count(ctx.author.id) != 0:
+  if has_perms(ctx.channel, ctx.author, 1):
     try:
       await user.kick(reason=reason)
     except:
@@ -65,7 +65,7 @@ async def kick(ctx, user: discord.Member, *, reason="No reason provided"):
 
 @commands.command()
 async def makeinvite(ctx, timetocount, uses : int = 0):
-  if has_perms(ctx.channel, ctx.author, discord.Permissions(1)):
+  if has_perms(ctx.channel, ctx.author, 0):
     seconds = int(timedelta(**{
       UNITS.get(m.group('unit').lower(), 'seconds'): int(m.group('val'))
       for m in re.finditer(r'(?P<val>\d+)(?P<unit>[smhdw]?)', timetocount, flags=re.I)
@@ -77,7 +77,7 @@ async def makeinvite(ctx, timetocount, uses : int = 0):
 
 @commands.command(aliases=['makerole'])
 async def makeroles(ctx, times:int=1):
-  if has_perms(ctx.channel, ctx.author, discord.Permissions(10000000000000000000000000000)):
+  if has_perms(ctx.channel, ctx.author, 28):
     for count in range(0,times):
       await ctx.guild.create_role(name=f"Sample role {str(count+1)}")
     await ctx.send("Successfully created roles.")
@@ -86,7 +86,7 @@ async def makeroles(ctx, times:int=1):
 
 @commands.command(aliases=['setperms', 'setpermission', 'setpermissions', 'rolepermission', 'rolespermission', 'rolepermissions', 'rolespermissions'])
 async def setperm(ctx, permission_input:typing.Union[int, str], *roles:discord.Role):
-  if has_perms(ctx.channel, ctx.author, discord.Permissions(10000000000000000000000000000)):
+  if has_perms(ctx.channel, ctx.author, 28):
     if type(permission_input) == int:
       permission = discord.Permissions(permission_input)
     else:

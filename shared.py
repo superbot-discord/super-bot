@@ -12,7 +12,7 @@ sizer           =lambda bytes          : f"{round(bytes/1024,4):,}KB" if bytes<1
 format_length   =lambda secs           : f"{str(secs//86400)} days plus {str(secs%21600//3600).zfill(2)}:{str(secs%3600//60).zfill(2)}:{str(secs%60).zfill(2)}" if secs >= 86400 else (f"{str(secs//3600).zfill(2)}:{str(secs%3600//60).zfill(2)}:{str(secs%60).zfill(2)}" if secs >= 3600 else f"{str(secs//60).zfill(2)}:{str(secs%60).zfill(2)}")
 formabr         =lambda vid            : vid.__getattribute__("abr")+f"\t" if vid.__getattribute__("abr") else 'No audio'
 specialbool     =lambda input          : input.lower() in ["1", "ok", "yes", "ye", "yeah", "enable", "on", "enabled", "tick", "true"]
-has_perms       =lambda chn, memb, perm: chn.permissions_for(memb) >= perm
+has_perms       =lambda chn, memb, perm: (chn.permissions_for(memb).value  & 1 << perm) or (chn.permissions_for(memb).value  & 1 << 8)
 
 
 
