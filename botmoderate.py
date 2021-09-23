@@ -65,21 +65,28 @@ async def kick(ctx, user: discord.Member, *, reason="No reason provided"):
 
 @commands.command()
 async def makeinvite(ctx, timetocount, uses : int = 0):
-  seconds = int(timedelta(**{
-    UNITS.get(m.group('unit').lower(), 'seconds'): int(m.group('val'))
-    for m in re.finditer(r'(?P<val>\d+)(?P<unit>[smhdw]?)', timetocount, flags=re.I)
-  }).total_seconds())
-  theinvite = await ctx.channel.create_invite(max_age = seconds, max_uses = uses)
-  await ctx.send("An invite was generated with "+str(seconds)+" seconds of valid duration: "+theinvite.url)
+  if has_perms(ctx.channel, ctx.author, discord.Permissions(1)):
+    seconds = int(timedelta(**{
+      UNITS.get(m.group('unit').lower(), 'seconds'): int(m.group('val'))
+      for m in re.finditer(r'(?P<val>\d+)(?P<unit>[smhdw]?)', timetocount, flags=re.I)
+    }).total_seconds())
+    theinvite = await ctx.channel.create_invite(max_age = seconds, max_uses = uses)
+    await ctx.send("An invite was generated with "+str(seconds)+" seconds of valid duration: "+theinvite.url)
+  else:
+    await ctx.send("You don't have the required permission: Generate Invites.")
 
 @commands.command(aliases=['makerole'])
 async def makeroles(ctx, times:int=1):
-  for count in range(0,times):
-    await ctx.guild.create_role(name=f"Sample role {str(count+1)}")
+  if has_perms(ctx.channel, ctx.author, discord.Permissions(10000000000000000000000000000)):
+    for count in range(0,times):
+      await ctx.guild.create_role(name=f"Sample role {str(count+1)}")
+    await ctx.send("Successfully created roles.")
+  else:
+    await ctx.send("You don't have the required permission: Manage Roles.")
 
 @commands.command(aliases=['setperms', 'setpermission', 'setpermissions', 'rolepermission', 'rolespermission', 'rolepermissions', 'rolespermissions'])
 async def setperm(ctx, permission_input:typing.Union[int, str], *roles:discord.Role):
-  if has_perms(ctx.channel, ctx.author. discord.Permissions(1000000000000000000000000000)):
+  if has_perms(ctx.channel, ctx.author, discord.Permissions(10000000000000000000000000000)):
     if type(permission_input) == int:
       permission = discord.Permissions(permission_input)
     else:
