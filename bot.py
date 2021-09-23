@@ -350,7 +350,7 @@ async def ping(ctx, *, text = None):
   now1 = datetime.now(timezone.utc)
   message = await ctx.send("Pong!")
   mcs = str(int((datetime.now(timezone.utc) - now1).microseconds)+int(((datetime.now(timezone.utc) - now1).total_seconds())%60))
-  await message.edit(content=f"Pong! 🏓```\nMessage delay: {mcs} microseconds\nBot latency  : {round(bot_.latency*1000000, 2)} microseconds")
+  await message.edit(content=f"Pong! 🏓\n```Message delay: {mcs} microseconds\nBot latency  : {round(bot_.latency*1000000, 2)} microseconds```")
 
 @bot_.command(pass_context=True)
 async def react(ctx, message : discord.Message, emoji : discord.Emoji):
