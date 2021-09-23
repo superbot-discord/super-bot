@@ -21,13 +21,32 @@ def sample_buttons(ctx):
   ui.Button(style=discord.ButtonStyle.secondary, row=0, emoji=ctx.bot.get_emoji(824680026858717234), label="Secondary (grey)"),
   ui.Button(style=discord.ButtonStyle.success,   row=0, label="Success (green)"),
   ui.Button(style=discord.ButtonStyle.danger,    row=0, label="Danger (red)"),
-  ui.Button(style=discord.ButtonStyle.url,       row=0, label="URL (grey)", url="https://youtube.com/watch?v=dQw4w9WgXcQ"),
+  ui.Button(style=discord.ButtonStyle.url,       row=0, label="URL (grey)", url=ctx.message.jump_url),
   ui.Button(style=discord.ButtonStyle.primary,   row=1, emoji="🟢", disabled=True, label="Primary (blurple)"),
   ui.Button(style=discord.ButtonStyle.secondary, row=1, emoji=ctx.bot.get_emoji(824680026858717234), disabled=True, label="Secondary (grey)"),
   ui.Button(style=discord.ButtonStyle.success,   row=1, disabled=True, label="Success (green)"),
   ui.Button(style=discord.ButtonStyle.danger,    row=1, disabled=True, label="Danger (red)"),
-  ui.Button(style=discord.ButtonStyle.url,       row=1, disabled=True, label="URL (grey)", url="https://youtube.com/watch?v=dQw4w9WgXcQ"),
+  ui.Button(style=discord.ButtonStyle.url,       row=1, disabled=True, label="URL (grey)", url=ctx.message.jump_url),
 ]
+
+sample_options = [
+  discord.SelectOption(label="Red"      , description="Roses are red"              , emoji="🔴"),
+  discord.SelectOption(label="Orange"   , description="Oranges are orange"         , emoji="🟠"),
+  discord.SelectOption(label="Yellow"   , description="Sunflowers are yellow"      , emoji="🟡"),
+  discord.SelectOption(label="Green"    , description="Cabbages are green"         , emoji="🟢"),
+  discord.SelectOption(label="Blue"     , description="Violets are blue (and cool)", emoji="🔵", default=True),
+  discord.SelectOption(label="Purple"   , description="Discord is purple"          , emoji="🟣"),
+  discord.SelectOption(label="Brown"    , description="Dry plants are brown"       , emoji="🟤"),
+  discord.SelectOption(label="Black"    , description="Blackberries are black"     , emoji="⚫️"),
+]
+
+def sample_menus():
+  return [
+    ui.Select(placeholder="Select one option",          row=0, options=sample_options),
+    ui.Select(placeholder="Select two to five options", row=0, min_values=2, max_values=5, options=sample_options),
+    ui.Select(placeholder="Select one option",          row=1, disabled=True, options=sample_options),
+    ui.Select(placeholder="Select two to five options", row=1, disabled=True, min_values=2, max_values=5, options=sample_options)
+  ]
 
 custom_permissions = {
   "admin"       : Permissions(8),
