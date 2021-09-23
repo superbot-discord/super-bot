@@ -6,7 +6,7 @@ import discord
 from discord.ext import commands
 
 from bot import bot_admins
-from shared import custom_permissions
+from shared import *
 
 UNITS = {'s':'seconds', 'm':'minutes', 'h':'hours', 'd':'days', 'w':'weeks'}
 
@@ -79,18 +79,21 @@ async def makeroles(ctx, times:int=1):
 
 @commands.command(aliases=['setperms', 'setpermission', 'setpermissions', 'rolepermission', 'rolespermission', 'rolepermissions', 'rolespermissions'])
 async def setperm(ctx, permission_input:typing.Union[int, str], *roles:discord.Role):
-  if type(permission_input) == int:
-    permission = discord.Permissions(permission_input)
+  if has_perms(ctx.channel, ctx.author. discord.Permissions(1000000000000000000000000000)):
+    if type(permission_input) == int:
+      permission = discord.Permissions(permission_input)
+    else:
+      permission_input = permission_input.lower()
+      permission = re.sub(r'[^A-z]|\^', '', permission_input)
+      for count, count2 in custom_permissions.items():
+        if SequenceMatcher(None, permission).ratio() >= 0.6:
+          permission = count2
+          break
+    for count in roles:
+      await count.edit(permissions=permission)
+    await ctx.send("Successfully set permissions.")
   else:
-    permission_input = permission_input.lower()
-    permission = re.sub(r'[^A-z]|\^', '', permission_input)
-    for count, count2 in custom_permissions.items():
-      if SequenceMatcher(None, permission).ratio >= 0.6:
-        permission = count2
-        break
-  for count in roles:
-    await count.edit(permissions=permission)
-  await ctx.send("Successfully set permissions.")
+    await ctx.send("You don't have the required permission: Manage Roles.")
 
 @commands.command()
 async def slowmode(ctx, sec = None, *channels:typing.Union[discord.TextChannel,str]):
