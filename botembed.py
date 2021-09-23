@@ -162,7 +162,7 @@ def botett(msg):
   desc = desc + f"\n"
   if ekeys.count('fields') == 1:
     for count in edict['fields']:
-      desc = desc + count['name'] + f"\n" + count['value'].replace(f"\n", "{{{newline}}}") + f"\n" + str(count['inline']) + f"\n"
+      desc = desc + str(count['inline']) + f"\n" + count['name'] + f"\n" + count['value'].replace(f"\n", "{{{newline}}}") + f"\n"
   return desc
 
 def botembed(text):
