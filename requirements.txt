@@ -1,5 +1,4 @@
 git+git://github.com/Rapptz/discord.py
-discord-py-interactions==3.0.2
 pygoogletranslation==2.0.5
 wikipedia-sections==2.0.0
 unicode-charnames==13.0.0
@@ -22,7 +21,6 @@ markdown2==2.4.1
 pytube3==9.6.4
 folium==0.12.1
 Pillow==8.3.2
-numpy==1.21.2
 imgkit==1.2.2
 emojis==0.6.0
 captcha==0.3
