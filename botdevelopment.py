@@ -5,9 +5,9 @@ from shared import *
 @commands.command(aliases=['buttons'])
 async def button(ctx, *, text=None):
   sample_buttons_view = ui.View()
-  for count in sample_buttons():
+  for count in sample_buttons(ctx):
     sample_buttons_view.add_item(count)
-  await ctx.send("All buttons are automatically timed-out and they will not work.", view = sample_buttons_view(ctx))
+  await ctx.send("All buttons are automatically timed-out and they will not work.", view = sample_buttons_view)
   sample_buttons_view.stop()
 
 def setup(bot):
