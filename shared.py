@@ -21,7 +21,7 @@ def sample_buttons(ctx):
   ui.Button(style=discord.ButtonStyle.secondary, row=0, emoji=ctx.bot.get_emoji(824680026858717234), label="Secondary (grey)"),
   ui.Button(style=discord.ButtonStyle.success,   row=0, label="Success (green)"),
   ui.Button(style=discord.ButtonStyle.danger,    row=0, label="Danger (red)"),
-  ui.Button(style=discord.ButtonStyle.url,       row=0, label="URL (grey)", url=""),#https://youtube.com/watch?v=dQw4w9WgXcQ"),
+  ui.Button(style=discord.ButtonStyle.url,       row=0, label="URL (grey)", url="https://youtube.com/watch?v=dQw4w9WgXcQ"),
   ui.Button(style=discord.ButtonStyle.primary,   row=1, emoji="🟢", disabled=True, label="Primary (blurple)"),
   ui.Button(style=discord.ButtonStyle.secondary, row=1, emoji=ctx.bot.get_emoji(824680026858717234), disabled=True, label="Secondary (grey)"),
   ui.Button(style=discord.ButtonStyle.success,   row=1, disabled=True, label="Success (green)"),
@@ -175,7 +175,3 @@ def vc_itop(integer):
     return cache3[:-2]
   else:
     return "No voice channel permissions"
-
-# Versions
-# ascii2             : 3.6
-# discord            : master (2.0)
