@@ -1,7 +1,9 @@
+import asyncio
 import re
 import typing
 from datetime import timedelta
 from difflib import SequenceMatcher
+
 import discord
 from discord.ext import commands
 
@@ -32,7 +34,7 @@ async def ban(ctx, user: discord.User, delete : int =0, *, reason="No reason pro
 async def getrole(ctx, roles : commands.Greedy[discord.Role], member: discord.Member = None):
   if member == None:
     member = ctx.author
-  if has_perms(ctx.channel, ctx.author, 28):
+  if has_perms(ctx.channel, ctx.author, 28) or False not in [count in db["getrole_bypass_ids"] for count in roles]:
     member_roles=member.roles
     addrole_count = removerole_count = 0
     for count in roles:
@@ -92,6 +94,13 @@ async def makeroles(ctx, times:int=1):
   else:
     await ctx.send("You don't have the required permission: Manage Roles.")
 
+@commands.command()
+async def react(ctx, message : discord.Message, emoji : discord.Emoji):
+  await ctx.message.delete()
+  await message.add_reaction(emoji)
+  await asyncio.sleep(3)
+  await message.remove_reaction(emoji, ctx.guild.get_member(796686363604680755))
+
 @commands.command(aliases=['setperms', 'setpermission', 'setpermissions', 'rolepermission', 'rolespermission', 'rolepermissions', 'rolespermissions'])
 async def setperm(ctx, permission_input:typing.Union[int, str], *roles:discord.Role):
   if has_perms(ctx.channel, ctx.author, 28):
@@ -140,6 +149,10 @@ async def slowmode(ctx, sec = None, *channels:typing.Union[discord.TextChannel,s
       await ctx.send("Set slowmode to "+sec+" second(s) for these channels: "+" ".join(channellist)+".")
   elif sec == None:
     await ctx.send("The current slowmode is "+str(ctx.channel.slowmode_delay)+" second(s).")
+
+@commands.command()
+async def tts(ctx, *, desc):
+  await ctx.send(desc, tts = True)
 
 @commands.command()
 async def unban(ctx, user: discord.User, *, reason="No reason provided"):
@@ -303,8 +316,10 @@ def setup(bot):
   bot.add_command(kick)
   bot.add_command(makeinvite)
   bot.add_command(makeroles)
+  bot.add_command(react)
   bot.add_command(setperm)
   bot.add_command(slowmode)
+  bot.add_command(tts)
   bot.add_command(unban)
   bot.add_command(purge)
   bot.add_command(purgereactions)

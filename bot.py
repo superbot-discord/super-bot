@@ -290,10 +290,6 @@ async def clearsnipe(ctx, *, chnl : discord.TextChannel = None):
     await ctx.send("You don't have the required permission: Manage channels.")
 
 @bot_.command()
-async def tts(ctx, *, desc):
-  await ctx.send(desc, tts = True)
-
-@bot_.command()
 @commands.is_owner()
 async def purgeserver(ctx, text, condition="1==1", *, nothing = None):
   text = text.lower()
@@ -351,14 +347,6 @@ async def ping(ctx, *, text = None):
   message = await ctx.send("Pong!")
   mcs = str(int((datetime.now(timezone.utc) - now1).microseconds)+int(((datetime.now(timezone.utc) - now1).total_seconds())%60))
   await message.edit(content=f"Pong! 🏓\n```Message delay: {mcs} microseconds\nBot latency  : {round(bot_.latency*1000000, 2)} microseconds```")
-
-@bot_.command(pass_context=True)
-async def react(ctx, message : discord.Message, emoji : discord.Emoji):
-  await ctx.message.delete()
-  await message.add_reaction(emoji)
-  await asyncio.sleep(3)
-  member=ctx.guild.get_member(796686363604680755)
-  await message.remove_reaction(emoji, member)
 
 @bot_.command()
 async def terminate(ctx, *, idc):
@@ -494,4 +482,7 @@ async def on_ready():
   print("Bot is ready!")
 
 print("Bot is getting started…")
-bot_.run('Nzk2Njg2MzYzNjA0NjgwNzU1.X_bh_g.6uKl_EPp5r5XZpSxCxPTIuA69aE')
+try:
+  bot_.run('Nzk2Njg2MzYzNjA0NjgwNzU1.X_bh_g.6uKl_EPp5r5XZpSxCxPTIuA69aE')
+except:
+  pass
