@@ -29,7 +29,7 @@ async def ban(ctx, user: discord.User, delete : int =0, *, reason="No reason pro
     await ctx.send("You don't have the required permission: Ban members.")
 
 @commands.command()
-async def getrole(ctx, *roles : discord.Role, member : discord.Member = None):
+async def getrole(ctx, roles : commands.Greedy[discord.Role], member: discord.Member = None):
   if member == None:
     member = ctx.author
   if has_perms(ctx.channel, ctx.author, 28):
