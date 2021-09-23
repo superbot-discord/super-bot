@@ -149,6 +149,8 @@ async def markdown(ctx, *, mdcode = None):
   match = md_pattern.fullmatch(mdcode)
   if match:
     code = re.sub(md_pattern, r"\2", mdcode)
+  else:
+    code = mdcode
   if code == None:
     r = requests.get(ctx.message.attachments[0].url, stream=True)
     r.raise_for_status()

@@ -12,7 +12,6 @@ from discord.ext import commands
 
 from shared import *
 
-getbotinstance = None
 cmaphsv = plt.cm.hsv
 func = lambda pct, allvals : "{:d} ({:.1f}%)".format(int(pct/100*np.sum(allvals)), int(pct))
 
@@ -227,7 +226,7 @@ async def invitelink(ctx,inviteinput: discord.Invite):
 @commands.command()
 async def leftuser(ctx, *, userinput):
   global bot
-  lfuser = await getbotinstance.fetch_user(int(userinput))
+  lfuser = await ctx.bot.fetch_user(int(userinput))
   ti="Left User Information"
   if lfuser == None:
     lfuser = ctx.author
@@ -601,7 +600,7 @@ async def status(ctx, member : discord.Member = None):
 @commands.command()
 async def template(ctx, *, tempinput):
   try:
-    temp = getbotinstance().fetch_template(tempinput)
+    temp = ctx.bot.fetch_template(tempinput)
   except:
     await ctx.send("Invalid input. Please try again.")
     return
@@ -728,8 +727,6 @@ async def user(ctx, user: discord.Member = None, channel: discord.TextChannel = 
   await ctx.send(embed=embed)
 
 def setup(bot):
-  def getbotinstance():
-    return bot
   bot.add_command(avatar)
   bot.add_command(channel)
   bot.add_command(emojiinfo)

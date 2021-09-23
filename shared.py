@@ -15,14 +15,15 @@ formabr         =lambda vid            : vid.__getattribute__("abr")+f"\t" if vi
 specialbool     =lambda input          : input.lower() in ["1", "ok", "yes", "ye", "yeah", "enable", "on", "enabled", "tick", "true"]
 has_perms       =lambda chn, memb, perm: (chn.permissions_for(memb).value  & 1 << perm) or (chn.permissions_for(memb).value  & 1 << 8) or memb.id in db["botadmins"]
 
-sample_buttons = [
-  ui.Button(style=discord.ButtonStyle.primary,   row=0, label="Primary (blurple)"),
-  ui.Button(style=discord.ButtonStyle.secondary, row=0, label="Secondary (grey)"),
+def sample_buttons(ctx):
+  return [
+  ui.Button(style=discord.ButtonStyle.primary,   row=0, emoji="🟢", label="Primary (blurple)"),
+  ui.Button(style=discord.ButtonStyle.secondary, row=0, emoji=ctx.bot.get_emoji(824680026858717234), label="Secondary (grey)"),
   ui.Button(style=discord.ButtonStyle.success,   row=0, label="Success (green)"),
   ui.Button(style=discord.ButtonStyle.danger,    row=0, label="Danger (red)"),
   ui.Button(style=discord.ButtonStyle.url,       row=0, label="URL (grey)", url="https://youtube.com/watch?v=dQw4w9WgXcQ"),
-  ui.Button(style=discord.ButtonStyle.primary,   row=1, disabled=True, label="Primary (blurple)"),
-  ui.Button(style=discord.ButtonStyle.secondary, row=1, disabled=True, label="Secondary (grey)"),
+  ui.Button(style=discord.ButtonStyle.primary,   row=1, emoji="🟢", disabled=True, label="Primary (blurple)"),
+  ui.Button(style=discord.ButtonStyle.secondary, row=1, emoji=ctx.bot.get_emoji(824680026858717234), disabled=True, label="Secondary (grey)"),
   ui.Button(style=discord.ButtonStyle.success,   row=1, disabled=True, label="Success (green)"),
   ui.Button(style=discord.ButtonStyle.danger,    row=1, disabled=True, label="Danger (red)"),
   ui.Button(style=discord.ButtonStyle.url,       row=1, disabled=True, label="URL (grey)", url="https://youtube.com/watch?v=dQw4w9WgXcQ"),
@@ -174,3 +175,7 @@ def vc_itop(integer):
     return cache3[:-2]
   else:
     return "No voice channel permissions"
+
+# Versions
+# ascii2: 3.6
+# pytube: 11.0.1
