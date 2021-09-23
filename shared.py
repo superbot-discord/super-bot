@@ -1,7 +1,8 @@
 import json
+import re
 
-from discord import Embed, Permissions, ui
 import discord
+from discord import Embed, Permissions, ui
 
 f = open('database.json', 'r')
 db = json.loads(f.read())
@@ -15,13 +16,20 @@ formabr         =lambda vid            : vid.__getattribute__("abr")+f"\t" if vi
 specialbool     =lambda input          : input.lower() in ["1", "ok", "yes", "ye", "yeah", "enable", "on", "enabled", "tick", "true"]
 has_perms       =lambda chn, memb, perm: (chn.permissions_for(memb).value  & 1 << perm) or (chn.permissions_for(memb).value  & 1 << 8) or memb.id in db["botadmins"]
 
+verify_pattern = re.compile(r'[^ ⠀][\s\S]{0,30}?[^ ⠀]#?[\d]{4}(,|, | )?[\d+\-*/×÷%xyz()\[\]\{\}]{1,50}=[\d+\-*/×÷%xyz()\[\]\{\}]{1,50}(,|, | )?[\S ]{3,20}(,|, | )?(Red|Orange|Yellow|Green|Light( |_)?Green|Dark( |_)?Green|Cyan|Blue|Light( |_)?Blue|Dark( |_)?Blue|Purple|Pink|Brown)', re.IGNORECASE)
+id_pattern = re.compile(r'([A-Z]{5})', re.IGNORECASE)
+poll_pattern = re.compile(r'([\w]+?)(:\w{2,32}:|[\uD800-\uDBFF])')
+UNITS = {'s':'seconds', 'm':'minutes', 'h':'hours', 'd':'days', 'w':'weeks'}
+view_overwrite = discord.PermissionOverwrite()
+view_overwrite.view_channel = True
+
 def sample_buttons(ctx):
   return [
-  ui.Button(style=discord.ButtonStyle.primary,   row=0, emoji="🟢", label="Primary (blurple)"),
-  ui.Button(style=discord.ButtonStyle.secondary, row=0, emoji=ctx.bot.get_emoji(824680026858717234), label="Secondary (grey)"),
-  ui.Button(style=discord.ButtonStyle.success,   row=0, label="Success (green)"),
-  ui.Button(style=discord.ButtonStyle.danger,    row=0, label="Danger (red)"),
-  ui.Button(style=discord.ButtonStyle.url,       row=0, label="URL (grey)", url=ctx.message.jump_url),
+  ui.Button(style=discord.ButtonStyle.primary,   row=0, custom_id="primary",   emoji="🟢", label="Primary (blurple)"),
+  ui.Button(style=discord.ButtonStyle.secondary, row=0, custom_id="secondary", emoji=ctx.bot.get_emoji(824680026858717234), label="Secondary (grey)"),
+  ui.Button(style=discord.ButtonStyle.success,   row=0, custom_id="green",     label="Success (green)"),
+  ui.Button(style=discord.ButtonStyle.danger,    row=0, custom_id="red",       label="Danger (red)"),
+  ui.Button(style=discord.ButtonStyle.url,       row=0,                        label="URL (grey)", url=ctx.message.jump_url),
   ui.Button(style=discord.ButtonStyle.primary,   row=1, emoji="🟢", disabled=True, label="Primary (blurple)"),
   ui.Button(style=discord.ButtonStyle.secondary, row=1, emoji=ctx.bot.get_emoji(824680026858717234), disabled=True, label="Secondary (grey)"),
   ui.Button(style=discord.ButtonStyle.success,   row=1, disabled=True, label="Success (green)"),
@@ -34,11 +42,10 @@ sample_options = [
   discord.SelectOption(label="Orange"   , description="Oranges are orange"         , emoji="🟠"),
   discord.SelectOption(label="Yellow"   , description="Sunflowers are yellow"      , emoji="🟡"),
   discord.SelectOption(label="Green"    , description="Cabbages are green"         , emoji="🟢"),
-  discord.SelectOption(label="Blue"     , description="Violets are blue (and cool)", emoji="🔵", default=True),
-  discord.SelectOption(label="Purple"   , description="Discord is purple"          , emoji="🟣"),
+  discord.SelectOption(label="Blue"     , description="Discord is blue (and cool)" , emoji="🔵", default=True),
+  discord.SelectOption(label="Purple"   , description="Violets are blurple"        , emoji="🟣"),
   discord.SelectOption(label="Brown"    , description="Dry plants are brown"       , emoji="🟤"),
 ]
-
 def sample_menus():
   return [
     ui.Select(placeholder="Select one option",          row=0, options=sample_options),

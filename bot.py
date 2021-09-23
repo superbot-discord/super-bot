@@ -28,17 +28,9 @@ bot_.load_extension("botcalc")
 bot_.load_extension("bottext")
 bot_.load_extension("botwebinfo")
 bot_.load_extension("botwebscrape")
-id_pattern = re.compile(r'([A-Z]{5})', re.IGNORECASE)
-verify_pattern = re.compile(r'[^ ⠀][\s\S]{0,30}?[^ ⠀]#?[\d]{4}(,|, | )?[\d+\-*/×÷%xyz()\[\]\{\}]{1,50}=[\d+\-*/×÷%xyz()\[\]\{\}]{1,50}(,|, | )?[\S ]{3,20}(,|, | )?(Red|Orange|Yellow|Green|Light( |_)?Green|Dark( |_)?Green|Cyan|Blue|Light( |_)?Blue|Dark( |_)?Blue|Purple|Pink|Brown)', re.IGNORECASE)
-poll_pattern = re.compile(r'([\w]+?)(:\w{2,32}:|[\uD800-\uDBFF])')
-UNITS = {'s':'seconds', 'm':'minutes', 'h':'hours', 'd':'days', 'w':'weeks'}
 
-typer=0
 sniper1=sniper2=sniper3=sniper4=sniper5=sniperdate1=sniperdate2=sniperdate3=sniperdate4=sniperdate5=sniperdict=sniping=poll_options={}
 snipereactions=polls=allid=[]
-overwrite = discord.PermissionOverwrite()
-overwrite.view_channel = True
-getbotinstance = lambda: bot_
 
 @bot_.event
 async def on_voice_state_update(member, before, after):
@@ -53,7 +45,7 @@ async def on_voice_state_update(member, before, after):
     if before.channel == None and after.channel.id == 822750915466493982:
       supchat = member.guild.get_channel(822753048510070784)
       await supchat.purge(limit=1000)
-      await supchat.set_permissions(member, overwrite=overwrite)
+      await supchat.set_permissions(member, overwrite=view_overwrite)
   except:
     pass
 
@@ -202,6 +194,13 @@ async def on_message(message:discord.Message):
     await bot_.process_commands(message)
   elif message.author.id in banned_ids and message.content.startswith("=") and message.content.startswith("==")==False:
     await message.channel.send("You are banned from the bot. Reason: "+banned_text[banned_ids.index(message.author.id)])
+
+@bot_.event
+async def on_interaction(interaction : discord.Interaction):
+  if interaction.type == discord.InteractionType.component:
+    customid = interaction.data["custom_id"]
+    if customid in ["primary", "secondary", "green", "red"]:
+      await interaction.response.send_message(f"You pressed on the {customid} button.", ephemeral=True)
 
 @bot_.command(aliases=['sniper'])
 async def snipe(ctx, *, text = None):
