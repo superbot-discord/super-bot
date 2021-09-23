@@ -20,3 +20,4 @@ async def select(ctx, *, text=None):
 
 def setup(bot):
   bot.add_command(button)
+  bot.add_command(select)
