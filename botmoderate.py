@@ -29,19 +29,25 @@ async def ban(ctx, user: discord.User, delete : int =0, *, reason="No reason pro
     await ctx.send("You don't have the required permission: Ban members.")
 
 @commands.command()
-async def getrole(ctx, role : discord.Role, member : discord.Member = None):
+async def getrole(ctx, *roles : discord.Role, member : discord.Member = None):
   if member == None:
     member = ctx.author
-  #if ctx.channel.permissions_for(ctx.author).manage_roles or bot_admins.count(ctx.author.id)!=0:
-  if ctx.channel.permissions_for(ctx.author).manage_roles or ctx.author.id == 687474789342117900 or role.id == 805462470604095539 or role.id == 805462557472194581 or role.id == 822743463883702302:
+  if has_perms(ctx.channel, ctx.author, 28):
     roles=member.roles
-    if roles.count(role)==1:
-      await member.remove_roles(role)
-      await ctx.send("Removed "+str(role)+" role from "+str(member)+".")
+    addrole_count = removerole_count = 0
+    for count in roles:
+      if roles.count(count)==1:
+        await member.remove_roles(count)
+      else:
+        await member.add_roles(count)
+    if addrole_count and removerole_count:
+      await ctx.send(f"Added {str(addrole_count)} and removed {str(removerole_count)} roles to {str(member)}.")
+    elif addrole_count:
+      await ctx.send(f"Added {str(addrole_count)} roles to {str(member)}.")
+    elif removerole_count:
+      await ctx.send(f"Removed {str(removerole_count)} roles to {str(member)}.")
     else:
-      await member.add_roles(role)
-      await ctx.send("Added "+str(role)+" role to "+str(member)+".")
-    
+      await ctx.send("No roles had been manipulated.")
   else:
     await ctx.send("You don't have the required permission: Manage roles.")
 
