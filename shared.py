@@ -37,7 +37,6 @@ sample_options = [
   discord.SelectOption(label="Blue"     , description="Violets are blue (and cool)", emoji="🔵", default=True),
   discord.SelectOption(label="Purple"   , description="Discord is purple"          , emoji="🟣"),
   discord.SelectOption(label="Brown"    , description="Dry plants are brown"       , emoji="🟤"),
-  discord.SelectOption(label="Black"    , description="Blackberries are black"     , emoji="⚫️"),
 ]
 
 def sample_menus():
