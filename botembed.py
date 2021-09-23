@@ -109,7 +109,7 @@ async def simpleembed(ctx, *, text):
   for count in range(0, (len(textlist)-3)//3):
     inline = textlist[3*count+4].lower()
     inline = inline.startswith("y") or inline.startswith("1") or inline.startswith("e") or inline.startswith("on")
-    embed.add_field(name=textlist[3*count+5], value=textlist[3*count+6], inline=inline)
+    embed.add_field(name=textlist[3*count+5], value=textlist[3*count+6].replace("{{{newline}}}", f"\n"), inline=inline)
   await ctx.send(embed=embed)
 
 def botett(msg):
@@ -121,41 +121,45 @@ def botett(msg):
   if ekeys.count('title') == 1:
     desc = desc + edict['title']
   desc = desc + f"\n"
-  if ekeys.count('url') == 1:
-    desc = desc + edict['url']
-  desc = desc + f"\n"
   if ekeys.count('description') == 1:
     desc = desc + edict['description'].replace(f"\n", "{{{newline}}}")
   desc = desc + f"\n"
   if ekeys.count('color') == 1:
     desc = desc + str(edict['color'])
   desc = desc + f"\n"
+  if ekeys.count('url') == 1:
+    desc = desc + edict['url']
+  desc = desc + f"\n"
   if ekeys.count('author') == 1:
     eauthor = edict['author']
     authorkeys = list(eauthor)
     if authorkeys.count('name') == 1:
-      desc = desc + eauthor['name'] + f"\n"
-    if authorkeys.count('url') == 1:
-      desc = desc + eauthor['url'] + f"\n"
-    if authorkeys.count('icon_url') == 1:
-      desc = desc + eauthor['icon_url'] + f"\n"
-  else:
-    desc = desc + f"\n" + f"\n" + f"\n"
+      desc = desc + eauthor['name']
+  desc = desc + f"\n"
   if ekeys.count('footer') == 1:
     efooter = edict['footer']
     footerkeys = list(efooter)
     if footerkeys.count('text') == 1:
       desc = desc + efooter['text']
-    desc = desc + f"\n"
+  desc = desc + f"\n"
+  if ekeys.count('author') == 1:
+    if authorkeys.count('url') == 1:
+      desc = desc + eauthor['url']
+  desc = desc + f"\n"
+  if ekeys.count('image') == 1:
+    desc = desc + (edict['image'])['url']
+  desc = desc + f"\n"
+  if ekeys.count('thumbnail') == 1:
+    desc = desc + (edict['thumbnail'])['url']
+  desc = desc + f"\n"
+  if ekeys.count('author') == 1:
+    if authorkeys.count('icon_url') == 1:
+      desc = desc + eauthor['icon_url']
+  desc = desc + f"\n"
+  if ekeys.count('footer') == 1:
     if footerkeys.count('icon_url') == 1:
       desc = desc + efooter['icon_url']
-    desc = desc + f"\n"
-  else:
-    desc = desc + f"\n" + f"\n"
-  if ekeys.count('thumbnail') == 1:
-    desc = desc + (edict['thumbnail'])['url'] + f"\n"
-  if ekeys.count('image') == 1:
-    desc = desc + (edict['image'])['url'] + f"\n"
+  desc = desc + f"\n"
   if ekeys.count('fields') == 1:
     for count in edict['fields']:
       desc = desc + count['name'] + f"\n" + count['value'].replace(f"\n", "{{{newline}}}") + f"\n" + str(count['inline']) + f"\n"
@@ -211,7 +215,7 @@ def botembed(text):
   for count in range(0, (len(textlist)-11)//3):
     inline = textlist[3*count+11].lower()
     inline = inline.startswith("y") or inline.startswith("1") or inline.startswith("e") or inline.startswith("on")
-    embed.add_field(name=textlist[3*count+12], value=textlist[3*count+13], inline=inline)
+    embed.add_field(name=textlist[3*count+12], value=textlist[3*count+13].replace("{{{newline}}}", f"\n"), inline=inline)
   return embed
 
 def setup(bot):
