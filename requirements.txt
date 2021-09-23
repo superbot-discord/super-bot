@@ -19,6 +19,7 @@ pytube3==9.6.4
 folium==0.12.1
 Pillow==8.3.2
 imgkit==1.2.2
+numpy==1.21.2
 emojis==0.6.0
 captcha==0.3
 emoji==1.5.0

@@ -179,4 +179,3 @@ def vc_itop(integer):
 # Versions
 # ascii2             : 3.6
 # discord            : master (2.0)
-# numpy              : 1.21.2
