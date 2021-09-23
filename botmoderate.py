@@ -93,7 +93,7 @@ async def setperm(ctx, permission_input:typing.Union[int, str], *roles:discord.R
       permission_input = permission_input.lower()
       permission = re.sub(r'[^A-z]|\^', '', permission_input)
       for count, count2 in custom_permissions.items():
-        if SequenceMatcher(None, permission, count).ratio() >= 0.6:
+        if SequenceMatcher(None, permission, count).ratio() >= 0.75:
           permission = count2
           break
     for count in roles:
