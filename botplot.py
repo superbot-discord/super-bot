@@ -8,9 +8,9 @@ from ascii_canvas import canvas, item
 from matplotlib.sankey import Sankey
 from table2ascii import PresetStyle, table2ascii
 
-import assets.discord as discord
+import discord as discord
 import numpy as np
-from assets.discord.ext import commands
+from discord.ext import commands
 
 cmaphsv = plt.cm.hsv
 def func(pct, allvals):

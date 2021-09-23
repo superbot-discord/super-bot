@@ -3,7 +3,7 @@ import re
 from datetime import datetime, timedelta, timezone
 from math import *
 
-import assets.discord as discord
+import discord as discord
 import emojis as ems
 from discord.ext import commands
 

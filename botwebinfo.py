@@ -7,9 +7,9 @@ from bs4 import BeautifulSoup
 from PyDictionary import PyDictionary
 from pygoogletranslation import Translator
 
-import assets.discord as discord
-import assets.requests as requests
-from assets.discord.ext import commands
+import discord
+import requests
+from discord.ext import commands
 from shared import db
 
 dictionary=PyDictionary()

@@ -6,9 +6,9 @@ import pytz
 from bs4 import BeautifulSoup
 from PIL import Image
 
-import assets.discord as discord
-import assets.requests as requests
-from assets.discord.ext import commands
+import discord as discord
+import requests as requests
+from discord.ext import commands
 
 set(pytz.all_timezones_set)
 hexstring_pattern = re.compile(r'#?([0-9A-F]{2})([0-9A-F]{2})([0-9A-F]{2})', re.IGNORECASE)

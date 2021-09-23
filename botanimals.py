@@ -1,5 +1,5 @@
-from assets.discord.ext import commands
-import assets.requests as requests
+from discord.ext import commands
+import requests as requests
 
 @commands.command()
 async def dog(ctx, number=1):

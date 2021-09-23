@@ -1,3 +1,4 @@
+git+git://github.com/Rapptz/discord.py
 pygoogletranslation==2.0.5
 wikipedia-sections==2.0.0
 unicode-charnames==13.0.0

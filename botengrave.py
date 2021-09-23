@@ -1,5 +1,5 @@
-from assets.discord.ext import commands
-import assets.discord as discord
+from discord.ext import commands
+import discord as discord
 
 @commands.command()
 async def engrave(ctx, product = "list", *, text = "Your text goes here."):

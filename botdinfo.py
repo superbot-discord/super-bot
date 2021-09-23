@@ -8,8 +8,8 @@ import emojis as em
 import matplotlib.pyplot as plt
 import numpy as np
 
-import assets.discord as discord
-from assets.discord.ext import commands
+import discord as discord
+from discord.ext import commands
 from shared import *
 
 cmaphsv = plt.cm.hsv

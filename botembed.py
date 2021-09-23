@@ -1,7 +1,7 @@
 import aiohttp
-import assets.discord as discord
-from assets.discord import Webhook
-from assets.discord.ext import commands
+import discord as discord
+from discord import Webhook
+from discord.ext import commands
 
 
 @commands.command()

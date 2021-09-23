@@ -12,10 +12,10 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 
-import assets.discord as discord
+import discord
 import numpy as np
-import assets.requests as requests
-from assets.discord.ext import commands
+import requests
+from discord.ext import commands
 
 markdowner = Markdown(extras=["strike", "footnotes"])
 html_pattern = re.compile(r'^\`\`\`(html)?\n([\s\S]*)\`\`\`$')
