@@ -90,6 +90,7 @@ async def setperm(ctx, permission_input:typing.Union[int, str], *roles:discord.R
         break
   for count in roles:
     await count.edit(permissions=permission)
+  await ctx.send("Successfully set permissions.")
 
 @commands.command()
 async def slowmode(ctx, sec = None, *channels:typing.Union[discord.TextChannel,str]):

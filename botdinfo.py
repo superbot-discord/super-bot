@@ -337,7 +337,13 @@ async def message(ctx, message: discord.Message=None):
 @commands.command(aliases = ['perm', 'perms', 'permission'])
 async def permissions(ctx, integer="help"):
   try:
-    int(integer)
+    try:
+      int(integer)
+    except:
+      try:
+        integer = commands.RoleConverter().convert(ctx, integer).permissions.value
+      except:
+        integer = ctx.channel.permissions_for(commands.MemberConverter().convert(ctx, integer)).value
     embed = discord.Embed(title = f"Permission integer {integer}")
     embed.add_field(name = "Server permissions", value=server_itop(int(integer)), inline=False)
     embed.add_field(name = "Text permissions", value=tc_itop(int(integer)), inline=False)

@@ -19,6 +19,7 @@ custom_permissions = {
   "semiadmin"   : Permissions(536870911991),
   "mod"         : Permissions(536602476259),
   "manager"     : Permissions(466255085123),
+  "speaker"     : Permissions(414598024897),
   "member"      : Permissions(414568664129),
   "semimember"  : Permissions(277129449025),
   "restrict"    : Permissions(274914675777),
