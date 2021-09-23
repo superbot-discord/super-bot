@@ -1,4 +1,3 @@
-import asyncio
 import random as ra
 import re
 from datetime import datetime, timedelta, timezone
@@ -17,6 +16,7 @@ bot_ = commands.Bot(command_prefix=commands.when_mentioned_or("="), intents=disc
 bot_.remove_command('help')
 bot_.load_extension("botanimals")
 bot_.load_extension("botbasic")
+bot_.load_extension("botdevelopment")
 bot_.load_extension("botdinfo")
 bot_.load_extension("botembed")
 bot_.load_extension("botengrave")
