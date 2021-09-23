@@ -3,7 +3,17 @@
     687474789342117900,
     752335217339007067
   ],
-  "getrole_bypass_ids": [],
+  "getrole_bypass_ids": [
+    "LSC Bots Python & JS Professor",
+    890238783306477600,
+    890238836813234239,
+    "LSC Bots Python & JS Help",
+    890230397793861662,
+    890230477733113866,
+    "SuperBot Support New features, Downtimes notification",
+    805462557472194581,
+    822743463883702302
+  ],
   "httpdog": [
     100,
     200,
