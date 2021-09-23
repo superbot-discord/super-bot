@@ -38,7 +38,9 @@ async def getrole(ctx, roles : commands.Greedy[discord.Role], member: discord.Me
     for count in roles:
       if member_roles.count(count)==1:
         await member.remove_roles(count)
+        removerole_count -= 1
       else:
+        addrole_count    += 1
         await member.add_roles(count)
     if addrole_count and removerole_count:
       await ctx.send(f"Added {str(addrole_count)} and removed {str(removerole_count)} roles to {str(member)}.")
