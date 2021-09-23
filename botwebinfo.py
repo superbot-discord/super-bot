@@ -1,15 +1,15 @@
 import os
 import re
 
-import discord
 import pytube
-import requests
 import wikipedia
 from bs4 import BeautifulSoup
-from discord.ext import commands
 from PyDictionary import PyDictionary
 from pygoogletranslation import Translator
 
+import assets.discord as discord
+import assets.requests as requests
+from assets.discord.ext import commands
 from shared import db
 
 dictionary=PyDictionary()

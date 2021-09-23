@@ -5,9 +5,9 @@ import re
 from datetime import datetime
 from difflib import SequenceMatcher
 
-import discord
+import assets.discord as discord
 import emojis as em
-from discord.ext import commands
+from assets.discord.ext import commands
 from unicode_charnames import search_charnames
 
 dt1 = datetime(1970,1,1,0,0,0)

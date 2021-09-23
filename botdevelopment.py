@@ -1,8 +1,6 @@
-
+from assets.discord.ext import commands
 from shared import *
-from discord.ext import commands
 
-from shared import *
 
 @commands.command(aliases=['buttons'])
 async def button(ctx, *, text=None):

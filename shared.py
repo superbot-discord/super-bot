@@ -177,5 +177,6 @@ def vc_itop(integer):
     return "No voice channel permissions"
 
 # Versions
-# ascii2: 3.6
-# numpy: 1.21.2
+# ascii2             : 3.6
+# discord            : master (2.0)
+# numpy              : 1.21.2

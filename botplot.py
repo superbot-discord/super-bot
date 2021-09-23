@@ -1,14 +1,16 @@
-from table2ascii import table2ascii, PresetStyle
+import os
+import re
+
+import matplotlib.pyplot as plt
+import qrcode
+from art import *
 from ascii_canvas import canvas, item
 from matplotlib.sankey import Sankey
-from discord.ext import commands
-import matplotlib.pyplot as plt
+from table2ascii import PresetStyle, table2ascii
+
+import assets.discord as discord
 import numpy as np
-from art import *
-import discord
-import qrcode
-import re
-import os
+from assets.discord.ext import commands
 
 cmaphsv = plt.cm.hsv
 def func(pct, allvals):

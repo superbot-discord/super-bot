@@ -1,4 +1,4 @@
-from discord.ext import commands
+from assets.discord.ext import commands
 
 from shared import db
 

@@ -4,12 +4,12 @@ import typing
 from datetime import datetime, timedelta, timezone
 from difflib import SequenceMatcher
 
-import discord
 import emojis as em
 import matplotlib.pyplot as plt
 import numpy as np
-from discord.ext import commands
 
+import assets.discord as discord
+from assets.discord.ext import commands
 from shared import *
 
 cmaphsv = plt.cm.hsv

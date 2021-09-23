@@ -2,19 +2,20 @@ import asyncio
 import os
 import re
 
-import discord
 import folium
 import matplotlib.pyplot as plt
-import numpy as np
-import requests
 import selenium
 from bs4 import BeautifulSoup
-from discord.ext import commands
 from markdown2 import Markdown
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
+
+import assets.discord as discord
+import numpy as np
+import assets.requests as requests
+from assets.discord.ext import commands
 
 markdowner = Markdown(extras=["strike", "footnotes"])
 html_pattern = re.compile(r'^\`\`\`(html)?\n([\s\S]*)\`\`\`$')
