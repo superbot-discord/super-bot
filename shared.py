@@ -27,9 +27,6 @@ sample_buttons = [
   ui.Button(style=discord.ButtonStyle.danger,    row=1, disabled=True, label="Danger (red)"),
   ui.Button(style=discord.ButtonStyle.url,       row=1, disabled=True, label="URL (grey)", url="https://youtube.com/watch?v=dQw4w9WgXcQ"),
 ]
-sample_buttons_view = ui.View()
-for count in sample_buttons:
-  sample_buttons_view.add_item(count)
 
 custom_permissions = {
   "admin"       : Permissions(8),
