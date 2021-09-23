@@ -33,10 +33,10 @@ async def getrole(ctx, roles : commands.Greedy[discord.Role], member: discord.Me
   if member == None:
     member = ctx.author
   if has_perms(ctx.channel, ctx.author, 28):
-    roles=member.roles
+    member_roles=member.roles
     addrole_count = removerole_count = 0
     for count in roles:
-      if roles.count(count)==1:
+      if member_roles.count(count)==1:
         await member.remove_roles(count)
       else:
         await member.add_roles(count)
