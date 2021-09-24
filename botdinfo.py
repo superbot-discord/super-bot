@@ -424,7 +424,19 @@ async def role(ctx,role: discord.Role=None):
 async def server(ctx, text = "regular"):
   guild=ctx.guild
   ti=guild.name
-  desc="Created at "+guild.created_at.strftime("%d %b, %Y (%a) %H:%M:%S")+" by "+str(guild.owner.mention)+f"\nRegion: "+str(guild.region)+f"\n[Server Icon]("+str(guild.icon.url)+")"
+  desc="Created at "+guild.created_at.strftime("%d %b, %Y (%a) %H:%M:%S")+" by "+str(guild.owner.mention)+f"\nRegion: "+str(guild.region)+f"\nServer Icon: "
+  base_url = guild.icon.url
+  for count in range(5, 13):
+    size = str(2**count)
+    temp = base_url.replace("?size=1024", f"?size={size}")
+    desc += f"[{size}]({temp}) "
+  base_url = guild.banner.url
+  if base_url:
+    desc += "\nServer Banner: "
+    for count in range(4, 13):
+      size = str(2**count)
+      temp = base_url.replace("?size=1024", f"?size={size}")
+      desc += f"[{size}]({temp}) "
   embed=discord.Embed(title=ti, description=desc)
   embed.set_author(name="Server Information",icon_url=guild.icon.url)
   if text == "mod":
@@ -569,10 +581,6 @@ async def server(ctx, text = "regular"):
       f11v=" ".join(guild.emojis)
       if len(f11v)!=0:
         embed.add_field(name="Emojis", value=f11v, inline=True)
-    except:
-      pass
-    try:
-      embed.set_image(url=guild.banner.url)
     except:
       pass
   try:
