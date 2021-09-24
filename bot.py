@@ -196,7 +196,7 @@ async def on_message(message:discord.Message):
     await message.channel.send("You are banned from the bot. Reason: "+banned_text[banned_ids.index(message.author.id)])
 
 @bot_.event
-async def on_interaction(interaction : discord.Interaction):
+async def on_interaction(interaction):
   if interaction.type == discord.InteractionType.component:
     customid = interaction.data["custom_id"]
     if customid in ["primary", "secondary", "green", "red"]:
