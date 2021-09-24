@@ -86,6 +86,7 @@ async def errordog(ctx, *, code="404"):
 
 @commands.command()
 async def minecraft(ctx, *, item="tnt"):
+  await ctx.channel.trigger_typing()
   r=requests.get('https://minecraft.fandom.com/wiki/'+item)
   soup=BeautifulSoup(r.content, features="html.parser")
   table = soup.findAll('table')[0].findAll('tbody')[0]
@@ -169,6 +170,7 @@ async def translate(ctx, langinput = "list", *, text = "Sample text"):
 
 @commands.command()
 async def unscramble(ctx, text, length="0"):
+  await ctx.channel.trigger_typing()
   try:
     ilength = int(length)
   except:
@@ -222,6 +224,7 @@ async def unscramble(ctx, text, length="0"):
 
 @commands.command()
 async def wiki(ctx, *, query):
+  await ctx.channel.trigger_typing()
   totallen = 0
   #try:
   desc = wikipedia.summary(query)[:2047]
