@@ -200,7 +200,7 @@ async def on_interaction(interaction):
   if interaction.type == discord.InteractionType.component:
     customid = interaction.data["custom_id"]
     if customid in ["primary", "secondary", "green", "red"]:
-      await interaction.response.send_message(f"You pressed on the {customid} button.", ephemeral=True)
+      await interaction.message.followup.send(f"You pressed on the {customid} button.", ephemeral=True)
 
 @bot_.command(aliases=['sniper'])
 async def snipe(ctx, *, text = None):
