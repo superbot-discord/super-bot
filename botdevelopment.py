@@ -1,7 +1,5 @@
-from datetime import time
 from discord.ext import commands
 from shared import *
-
 
 @commands.command(aliases=['buttons'])
 async def button(ctx, *, text=None):
@@ -10,15 +8,14 @@ async def button(ctx, *, text=None):
     sample_buttons_view.add_item(count)
   await ctx.send("All buttons will not timeout.", view = sample_buttons_view)
 
-# @commands.command()
-# async def clicker(ctx, *, text = None):
-#   clicker_view = ui.View(timeout=5)
-#   clicker_view.add_item(clicker_button)
-#   msg = await ctx.send("Click the button for as many times as possible! Anyone in the server can participate.", view=clicker_view)
-#   clickers[msg.id] = {}
-#   @clicker_view.on_timeout
-#   async def clicker_timeout():
-#     await ctx.send('Test')
+@commands.command()
+@commands.cooldown(2, 10, commands.BucketType.user)
+async def patience(ctx, *, text=None):
+  await ctx.send("Success!")
+
+@patience.error
+async def patience_error(ctx, error):
+  await ctx.send("This command is on cooldown! You can only use it twice per 10 seconds.")
 
 @commands.command(aliases=['selectmenu', 'menu', 'option', 'options'])
 async def select(ctx, *, text=None):
@@ -29,5 +26,5 @@ async def select(ctx, *, text=None):
 
 def setup(bot):
   bot.add_command(button)
-  #bot.add_command(clicker)
+  bot.add_command(patience)
   bot.add_command(select)
