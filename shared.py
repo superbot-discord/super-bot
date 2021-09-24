@@ -59,18 +59,18 @@ def sample_menus():
 
 def help_menu_options(ctx):
   return [
-    discord.SelectOption(label="All", description="Rough list of all commands",                                         value="help_all"), #emoji=ctx.bot.get_emoji(), 
-    discord.SelectOption(label="Basic", description="Fundamental commands, e.g. help, ping",                            value="help_basic"), #emoji=ctx.bot.get_emoji(), 
-    discord.SelectOption(label="Discord info", description="Discord information viewer, e.g. server. user",             value="help_dinfo"), #emoji=ctx.bot.get_emoji(), 
-    discord.SelectOption(label="Discord", description="Commands that interact with Discord, e.g. snipe",                value="help_discord"), #emoji=ctx.bot.get_emoji(), 
-    discord.SelectOption(label="Moderation", description="Commands to simply server moderation, e.g. purge, makeinvite",value="help_mod"), #emoji=ctx.bot.get_emoji(), 
-    discord.SelectOption(label="Text", description="Have fun with your text, e.g. reverse, encode",                     value="help_text"), #emoji=ctx.bot.get_emoji(), 
-    discord.SelectOption(label="Information", description="Informative commands, e.g. color, unix",                     value="help_info"), #emoji=ctx.bot.get_emoji(), 
-    discord.SelectOption(label="Web", description="Commands that interact with the Internet, e.g. youtube, wiki",       value="help_web"), #emoji=ctx.bot.get_emoji(), 
-    discord.SelectOption(label="Plot", description="Commands to draw graphs, e.g. pie, bar",                            value="help_plot"), #emoji=ctx.bot.get_emoji(), 
-    discord.SelectOption(label="Developer", description="Developer-oriented commands, e.g. html, regex",                value="help_dev"), #emoji=ctx.bot.get_emoji(), 
-    discord.SelectOption(label="Image", description="Image-editing or analysing commands, e.g. analyse, ocr",           value="help_img"), #emoji=ctx.bot.get_emoji(), 
-    discord.SelectOption(label="General Documentation", description="Quick links and documentation website",            value="help_general"), #emoji=ctx.bot.get_emoji(), 
+    discord.SelectOption(label="All", description="Rough list of all commands",                                           value="help_all"), #emoji=ctx.bot.get_emoji(), 
+    discord.SelectOption(label="Basic", description="Fundamental commands, e.g. help, ping",                              value="help_basic"), #emoji=ctx.bot.get_emoji(), 
+    discord.SelectOption(label="Discord info", description="Discord information viewer, e.g. server. user",               value="help_dinfo"), #emoji=ctx.bot.get_emoji(), 
+    discord.SelectOption(label="Discord", description="Commands that interact with Discord, e.g. snipe",                  value="help_discord"), #emoji=ctx.bot.get_emoji(), 
+    discord.SelectOption(label="Moderation", description="Commands to simplify server moderation, e.g. purge, makeinvite",value="help_mod"), #emoji=ctx.bot.get_emoji(), 
+    discord.SelectOption(label="Text", description="Have fun with your text, e.g. reverse, encode",                       value="help_text"), #emoji=ctx.bot.get_emoji(), 
+    discord.SelectOption(label="Information", description="Informative commands, e.g. color, unix",                       value="help_info"), #emoji=ctx.bot.get_emoji(), 
+    discord.SelectOption(label="Web", description="Commands that interact with the Internet, e.g. youtube, wiki",         value="help_web"), #emoji=ctx.bot.get_emoji(), 
+    discord.SelectOption(label="Plot", description="Commands to draw graphs, e.g. pie, bar",                              value="help_plot"), #emoji=ctx.bot.get_emoji(), 
+    discord.SelectOption(label="Developer", description="Developer-oriented commands, e.g. html, regex",                  value="help_dev"), #emoji=ctx.bot.get_emoji(), 
+    discord.SelectOption(label="Image", description="Image-editing or analysing commands, e.g. analyse, ocr",             value="help_img"), #emoji=ctx.bot.get_emoji(), 
+    discord.SelectOption(label="General Documentation", description="Quick links and documentation website",              value="help_general"), #emoji=ctx.bot.get_emoji(), 
   ]
 
 custom_permissions = {
@@ -273,4 +273,20 @@ help_dinfo = discord.Embed(title="SuperBot Discord Information Commands", descri
 **emojiinfo** Views information about an emoji.
 **template** Views information about a server template.\n
 You need to supply arguments for most commands.
+Need help? check the [documentation](https://superbot-discord.github.io/documentation)!""")
+
+help_discord = discord.Embed(title="SuperBot Discord Commands", description=f"""
+**react [Message] [Emoji ID]** Temporarily reacts with an emoji. Replaces Nitro.
+**snipe** Snipes the 5 most recently deleted messages.
+**snipe [0/1]** Enables or disables sniping in the current channel. Requires `Manage Messages`.
+**clearsnipe** Enables or disables sniping in the current channel. Requires `Manage Channels`.
+**pretend [User] [Content]** Pretends as a user and sends something. Bot needs `Manage Webhooks`.
+**pretendembed [User] [Embed]** Pretends as a user and sends an embed. Bot needs `Manage Webhooks`.
+**embed [Embed]** Sends an embed.
+**editembed [Message] [Embed]** Edits an embed.
+**simpleembed [Simple Embed]** Sends an embed with a simpler interface.
+**quickembed [Quick Embeds]** Sends an embed with an extremely intuitive interface.
+**ett [Message]** Converts an embed into `=embed`-compatible format.
+**tts [Content]** Sends a message with TTS. Bot and you need `Send TTS Messages`.\n
+Check [how to supply embeds](https://superbot-discord.github.io/Appendices/A1/). `=pretendembed` and `=editembed` takes the same arguments as `=embed`.
 Need help? check the [documentation](https://superbot-discord.github.io/documentation)!""")
