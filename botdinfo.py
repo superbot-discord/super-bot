@@ -259,6 +259,7 @@ async def message(ctx, message: discord.Message=None):
   desc=f"Sent by {message.author.mention} at {message.created_at.strftime('%d %b, %Y (%a) %H:%M:%S')}"
   if message.edited_at != None:
     desc += f"Edited at {message.edited_at.strftime('%d %b, %Y (%a) %H:%M:%S')}"
+  desc += f"**Message content: **\n{message.content}"
   f0vraw = message.reactions
   f0v = ""
   for count in f0vraw:
@@ -285,8 +286,15 @@ async def message(ctx, message: discord.Message=None):
   f4v = ""
   for count in f4vraw:
     f4v += count.mention + " "
-  embed=discord.Embed(title=ti, description=desc, url=message.jump_url)
-  embed.add_field(name="Content", value=message.content[:500], inline=False)
+  f5vraw = message.components
+  msg_components = 0
+  for count in f5vraw:
+    if count.type == discord.ComponentType.action_row:
+      for count2 in count.children:
+        msg_components+=1
+    else:
+      msg_components+=1
+  embed=discord.Embed(title=ti, description=desc[:2047], url=message.jump_url)
   embed.add_field(name="From channel", value=message.channel.mention, inline=True)
   if message.webhook_id != None:
     embed.add_field(name="Webhook message", value="This message is sent by a webhook.", inline=True)
@@ -325,6 +333,10 @@ async def message(ctx, message: discord.Message=None):
     embed.add_field(name="Reactions ("+str(len(f0vraw))+")", value=f0v, inline=False)
   if len(f1vraw) != 0:
     embed.add_field(name="Attachments ("+str(len(f1vraw))+")", value=f1v, inline=False)
+  if len(message.embeds) != 0:
+    embed.add_field(name="Embeds", value=f"{len(message.embeds)} embeds are added to the message.", inline=False)
+  if len(f5vraw) != 0:
+    embed.add_field(name="Components", value=f"{msg_components} components are added to the message.", inline=False)
   if len(f2vraw) != 0:
     embed.add_field(name="Channel mentions ("+str(len(f2vraw))+")", value=f2v, inline=False)
   if len(f3vraw) != 0:
