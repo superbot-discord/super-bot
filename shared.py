@@ -59,18 +59,18 @@ def sample_menus():
 
 def help_menu_options(ctx):
   return [
-    discord.SelectOption(label="All", description="Rough list of all commands",                                          emoji=ctx.bot.get_emoji()),
-    discord.SelectOption(label="Basic", description="Fundamental commands, e.g. help, ping",                             emoji=ctx.bot.get_emoji()),
-    discord.SelectOption(label="Discord info", description="Discord information viewer, e.g. server. user",              emoji=ctx.bot.get_emoji()),
-    discord.SelectOption(label="Discord", description="Commands that interact with Discord, e.g. snipe",                 emoji=ctx.bot.get_emoji()),
-    discord.SelectOption(label="Moderation", description="Commands to simply server moderation, e.g. purge, makeinvite", emoji=ctx.bot.get_emoji()),
-    discord.SelectOption(label="Text", description="Have fun with your text, e.g. reverse, encode",                      emoji=ctx.bot.get_emoji()),
-    discord.SelectOption(label="Information", description="Informative commands, e.g. color, unix",                      emoji=ctx.bot.get_emoji()),
-    discord.SelectOption(label="Web", description="Commands that interact with the Internet, e.g. youtube, wiki",        emoji=ctx.bot.get_emoji()),
-    discord.SelectOption(label="Plot", description="Commands to draw graphs, e.g. pie, bar",                             emoji=ctx.bot.get_emoji()),
-    discord.SelectOption(label="Developer", description="Developer-oriented commands, e.g. html, regex",                 emoji=ctx.bot.get_emoji()),
-    discord.SelectOption(label="Image", description="Image-editing or analysing commands, e.g. analyse, ocr",            emoji=ctx.bot.get_emoji()),
-    discord.SelectOption(label="General Documentation", description="Quick links and documentation website",             emoji=ctx.bot.get_emoji()),
+    discord.SelectOption(label="All", description="Rough list of all commands",                                         emoji=ctx.bot.get_emoji(), custom_id="help_all"),
+    discord.SelectOption(label="Basic", description="Fundamental commands, e.g. help, ping",                            emoji=ctx.bot.get_emoji(), custom_id="help_basic"),
+    discord.SelectOption(label="Discord info", description="Discord information viewer, e.g. server. user",             emoji=ctx.bot.get_emoji(), custom_id="help_dinfo"),
+    discord.SelectOption(label="Discord", description="Commands that interact with Discord, e.g. snipe",                emoji=ctx.bot.get_emoji(), custom_id="help_discord"),
+    discord.SelectOption(label="Moderation", description="Commands to simply server moderation, e.g. purge, makeinvite",emoji=ctx.bot.get_emoji(), custom_id="help_mod"),
+    discord.SelectOption(label="Text", description="Have fun with your text, e.g. reverse, encode",                     emoji=ctx.bot.get_emoji(), custom_id="help_text"),
+    discord.SelectOption(label="Information", description="Informative commands, e.g. color, unix",                     emoji=ctx.bot.get_emoji(), custom_id="help_info"),
+    discord.SelectOption(label="Web", description="Commands that interact with the Internet, e.g. youtube, wiki",       emoji=ctx.bot.get_emoji(), custom_id="help_web"),
+    discord.SelectOption(label="Plot", description="Commands to draw graphs, e.g. pie, bar",                            emoji=ctx.bot.get_emoji(), custom_id="help_plot"),
+    discord.SelectOption(label="Developer", description="Developer-oriented commands, e.g. html, regex",                emoji=ctx.bot.get_emoji(), custom_id="help_dev"),
+    discord.SelectOption(label="Image", description="Image-editing or analysing commands, e.g. analyse, ocr",           emoji=ctx.bot.get_emoji(), custom_id="help_img"),
+    discord.SelectOption(label="General Documentation", description="Quick links and documentation website",            emoji=ctx.bot.get_emoji(), custom_id="help_general"),
   ]
 
 custom_permissions = {
@@ -219,3 +219,5 @@ def vc_itop(integer):
     return cache3[:-2]
   else:
     return "No voice channel permissions"
+
+invite_embed = discord.Embed(title="Invite", description = "The bot can be invited [here](https://discord.com/api/oauth2/authorize?client_id=796686363604680755&permissions=8&redirect_uri=https%3A%2F%2Fsuperbot-discord.github.io&scope=bot%20applications.commands).")

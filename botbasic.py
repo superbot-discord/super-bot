@@ -1,5 +1,6 @@
 import discord as discord
 from discord.ext import commands
+from shared import *
 
 @commands.command()
 async def hello(ctx, *, text=None):
@@ -49,9 +50,15 @@ Need help? check the [documentation](https://superbot-discord.github.io/document
   await ctx.send(embed=embed)
 
 @commands.command()
+async def interactive_help(ctx, *, text=None):
+  help_menu_view = ui.View(timeout=None)
+  help_menu = ui.Select(options=help_menu_options(ctx), placeholder="Select a category…")
+  help_menu_view.add_item(help_menu)
+  await ctx.send("Please select a category to continue.", view = help_menu_view)
+
+@commands.command()
 async def invite(ctx, *, text=None):
-  embed = discord.Embed(title="Invite", description = "The bot can be invited [here](https://discord.com/api/oauth2/authorize?client_id=796686363604680755&permissions=8&redirect_uri=https%3A%2F%2Fsuperbot-discord.github.io&scope=bot%20applications.commands).")
-  await ctx.send(embed=embed)
+  await ctx.send(embed=invite_embed)
 
 @commands.command()
 async def prefix(ctx, *, text=None):
