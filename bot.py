@@ -200,7 +200,6 @@ async def on_message(message):
 
 @bot_.event
 async def on_interaction(interaction):
-  print(interaction.data)
   interaction_select_option = interaction.data.get("values", None)
   if interaction.type == discord.InteractionType.component:
     interaction_custom_id = interaction.data["custom_id"]

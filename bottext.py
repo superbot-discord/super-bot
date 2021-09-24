@@ -146,14 +146,11 @@ async def pick(ctx,lower:int,upper:int,times:int):
   ti=f"{times} random number(s) between {lower} and {upper}"
   desc=f"Your random number(s) is/are:\n"
   randoms = []
-  print(randoms)
   if times <= (upper-lower+1):
     for count in range(0,times):
       rand=ra.randint(lower,upper)
-      print('\t'+rand)
       while rand in randoms:
         rand=ra.randint(lower,upper)
-        print('\t'+rand)
       desc += f"||`{str(rand).zfill(len(str(upper)))}`||  "
       randoms.append(rand)
   else:

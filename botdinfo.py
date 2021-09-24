@@ -430,13 +430,15 @@ async def server(ctx, text = "regular"):
     size = str(2**count)
     temp = base_url.replace("?size=1024", f"?size={size}")
     desc += f"[{size}]({temp}) "
-  base_url = guild.banner.url
-  if base_url:
-    desc += "\nServer Banner: "
+  try:
+    base_url = guild.banner.url
+    desc += f"\nServer Banner: "
     for count in range(4, 13):
       size = str(2**count)
       temp = base_url.replace("?size=1024", f"?size={size}")
       desc += f"[{size}]({temp}) "
+  except:
+    pass
   embed=discord.Embed(title=ti, description=desc)
   embed.set_author(name="Server Information",icon_url=guild.icon.url)
   if text == "mod":

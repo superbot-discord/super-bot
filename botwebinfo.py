@@ -261,10 +261,8 @@ async def youtube(ctx, *, link):
       searches = int(link[7])
     else:
       searches = 1
-    print(searches)
     try:
       for count in range(0, searches+1):
-        print(len(searching.results))
         searching.get_next_results()
     except:
       pass
