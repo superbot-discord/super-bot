@@ -209,7 +209,7 @@ async def on_interaction(interaction):
     elif interaction_select_option:
       interaction_first_option = interaction_select_option[0]
       if interaction_first_option.startswith("help_"):
-        await interaction.edit_original_message(eval(interaction_first_option))
+        await interaction.edit_original_message(embed=eval(interaction_first_option))
       else:
         await interaction.followup.send("You selected "+", ".join(interaction.data["values"])+f" in the {interaction_custom_id} menu.", ephemeral=True)
 
