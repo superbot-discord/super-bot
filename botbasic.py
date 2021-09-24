@@ -67,5 +67,6 @@ async def prefix(ctx, *, text=None):
 def setup(bot):
   bot.add_command(hello)
   bot.add_command(help)
+  bot.add_command(interactive_help)
   bot.add_command(invite)
   bot.add_command(prefix)
