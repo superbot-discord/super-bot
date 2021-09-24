@@ -37,16 +37,16 @@ def sample_buttons(ctx):
   ui.Button(style=discord.ButtonStyle.url,       row=1, disabled=True, label="URL (grey)", url=ctx.message.jump_url),
 ]
 
-clicker_button = ui.Button(style=discord.ButtonStyle.primary, row=0, custom_id="clicker", label="Click me!")
+#clicker_button = ui.Button(style=discord.ButtonStyle.primary, row=0, custom_id="clicker", label="Click me!")
 
 sample_options = [
-  discord.SelectOption(label="Red"      , description="Roses are red"              , emoji="🔴"),
-  discord.SelectOption(label="Orange"   , description="Oranges are orange"         , emoji="🟠"),
-  discord.SelectOption(label="Yellow"   , description="Sunflowers are yellow"      , emoji="🟡"),
-  discord.SelectOption(label="Green"    , description="Cabbages are green"         , emoji="🟢"),
-  discord.SelectOption(label="Blue"     , description="Discord is blue (and cool)" , emoji="🔵", default=True),
-  discord.SelectOption(label="Purple"   , description="Violets are blurple"        , emoji="🟣"),
-  discord.SelectOption(label="Brown"    , description="Dry plants are brown"       , emoji="🟤"),
+  discord.SelectOption(label="Red"   , description="Roses are red"              , emoji="🔴"),
+  discord.SelectOption(label="Orange", description="Oranges are orange"         , emoji="🟠"),
+  discord.SelectOption(label="Yellow", description="Sunflowers are yellow"      , emoji="🟡"),
+  discord.SelectOption(label="Green" , description="Cabbages are green"         , emoji="🟢"),
+  discord.SelectOption(label="Blue"  , description="Discord is blue (and cool)" , emoji="🔵", default=True),
+  discord.SelectOption(label="Purple", description="Violets are blurple"        , emoji="🟣"),
+  discord.SelectOption(label="Brown" , description="Dry plants are brown"       , emoji="🟤"),
 ]
 def sample_menus():
   return [

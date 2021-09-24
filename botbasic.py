@@ -35,7 +35,7 @@ async def help(ctx, *, cat=None):
 `ascii` `table` `render` `captcha` `pie` `barh` `barv` `hist` `sankey` `snow` `mandelbrot`
 
 **Developer Tools and Miscellaneous Commands**
-`html` `md` `regex` `regsub`
+`html` `md` `regex` `regsub` `button` `menu`
 
 **Image Commands**
 `analyse` `histogram` `resize` `rotate` `brightness` `contrast` `sharpen` `edge` `contour` `blur` `invert` `hue` `recolor`
