@@ -472,6 +472,20 @@ async def server(ctx, text = "regular"):
             break
           f1v = f1v+count.name+", "
         f1v = f1v [:-2] + "…"
+    if len(guild.stage_channels)==0:
+      f1vc="No Voice Channels"
+    else:
+      f1vc = ""
+      for count in guild.stage_channels:
+        f1vc = f1vc + count.name + ", "
+      f1vc = f1vc[:-2]
+      if len(f1vc) > 500:
+        f1vc = ""
+        for count in guild.stage_channels:
+          if len(f1vc + count.name) > 500:
+            break
+          f1vc = f1vc+count.name+", "
+        f1vc = f1vc [:-2] + "…"
     f1vb=""
     if len(guild.categories)==0:
       f1vb="No Categories"
@@ -517,8 +531,9 @@ async def server(ctx, text = "regular"):
     if f13v == None:
       f13v = "No description"
     embed.add_field(name="Text Channels ("+str(len(guild.text_channels))+")", value=f0v, inline=False)
+    embed.add_field(name="Categories ("+str(len(guild.categories))+")", value=f1vb, inline=False)
     embed.add_field(name="Voice Channels ("+str(len(guild.voice_channels))+")", value=f1v, inline=True)
-    embed.add_field(name="Categories ("+str(len(guild.categories))+")", value=f1vb, inline=True)
+    embed.add_field(name="Stage Channels ("+str(len(guild.stage_channels))+")", value=f1vc, inline=True)
     embed.add_field(name="Roles ("+str(len(guild.roles))+")", value=f1va, inline=False)
     embed.add_field(name="Members ("+str(len(guild.members))+")", value=f8v, inline=False)
     embed.add_field(name="Max bitrate", value=f2v, inline=True)
@@ -537,19 +552,29 @@ async def server(ctx, text = "regular"):
     #  embed.add_field(name="Default Notifications", value="Members receive notifications for every message by default.", inline=True)
     #else:
     #  embed.add_field(name="Default Notifications", value="Members only receive notifications for messages they are mentioned in by default.", inline=True)
-    if guild.features.count("COMMUNITY")==1:
-      embed.add_field(name="Community", value="This is a community server.", inline=True)
-    if guild.features.count("WELCOME_SCREEN_ENABLED")==1:
+    if "WELCOME_SCREEN_ENABLED" in guild.features:
       embed.add_field(name="Welcome Screen", value="The server has enabled the welcome screen.", inline=True)
-    if guild.features.count("PUBLIC")==1:
+    if "MEMBER_VERIFICATION_GATE_ENABLED" in guild.features:
+      embed.add_field(name="Membership Screening", value="The server has enabled membership screening.", inline=True)
+    if "COMMUNITY" in guild.features:
+      embed.add_field(name="Community", value="This is a community server.", inline=True)
+    if "PUBLIC" in guild.features:
       embed.add_field(name="Public", value="This is a public server.", inline=True)
+    if "PARTNERED" in guild.features:
+      embed.add_field(name="Partnered", value="This is a partnered (with Discord) server.", inline=True)
+    if "VERIFIED" in guild.features:
+      embed.add_field(name="Verified", value="This is a verified server.", inline=True)
     embed.add_field(name="Description", value=f13v, inline=False)
     try:
       f11v=" ".join(guild.emojis)
       if len(f11v)!=0:
         embed.add_field(name="Emojis", value=f11v, inline=True)
     except:
-      1
+      pass
+    try:
+      embed.set_image(url=guild.banner.url)
+    except:
+      pass
   try:
     await ctx.send(embed=embed)
   except:
