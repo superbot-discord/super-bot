@@ -184,23 +184,30 @@ async def on_reaction_remove(reaction, user):
     await msg.edit(embed=cache)
 
 @bot_.event
-async def on_message(message:discord.Message):
-  if message.guild.id == 852899227004305458 and message.author.id != 796686363604680755 and message.channel.id in [856053769149874196, 864757953121878026, 864754633910255646]:
-    await message.add_reaction("<:UpArrowSquare:864762633194569728>")
-    await message.add_reaction("<:DownArrowSquare:864762633625534485>")
-  elif message.channel.id in [805459414001778739, 805462208414089217, 880076327783370812]:
-    await message.publish()
-  if message.author.id not in banned_ids and message.content.startswith("=") and message.content.startswith("==")==False:
-    await bot_.process_commands(message)
-  elif message.author.id in banned_ids and message.content.startswith("=") and message.content.startswith("==")==False:
-    await message.channel.send("You are banned from the bot. Reason: "+banned_text[banned_ids.index(message.author.id)])
+async def on_message(message):
+  try:
+    if message.guild.id == 852899227004305458 and message.author.id != 796686363604680755 and message.channel.id in [856053769149874196, 864757953121878026, 864754633910255646]:
+      await message.add_reaction("<:UpArrowSquare:864762633194569728>")
+      await message.add_reaction("<:DownArrowSquare:864762633625534485>")
+    elif message.channel.id in [805459414001778739, 805462208414089217, 880076327783370812]:
+      await message.publish()
+    if message.author.id not in banned_ids and message.content.startswith("=") and message.content.startswith("==")==False:
+      await bot_.process_commands(message)
+    elif message.author.id in banned_ids and message.content.startswith("=") and message.content.startswith("==")==False:
+      await message.channel.send("You are banned from the bot. Reason: "+banned_text[banned_ids.index(message.author.id)])
+  except:
+    pass
 
 @bot_.event
 async def on_interaction(interaction):
+  print(interaction.data)
   if interaction.type == discord.InteractionType.component:
-    customid = interaction.data["custom_id"]
-    if customid in ["primary", "secondary", "green", "red"]:
-      await interaction.followup.send(f"You pressed on the {customid} button.", ephemeral=True)
+    interaction_custom_id = interaction.data["custom_id"]
+    interaction_user_id = interaction.user.id
+    if interaction_custom_id in ["primary", "secondary", "green", "red"]:
+      await interaction.followup.send(f"You pressed on the {interaction_custom_id} button.", ephemeral=True)
+    elif interaction_custom_id == "clicker":
+      clickers[interaction.message.id][interaction_user_id] = clickers[interaction.message.id].get(interaction_user_id, 0) + 1
 
 @bot_.command(aliases=['sniper'])
 async def snipe(ctx, *, text = None):

@@ -22,7 +22,7 @@ poll_pattern = re.compile(r'([\w]+?)(:\w{2,32}:|[\uD800-\uDBFF])')
 UNITS = {'s':'seconds', 'm':'minutes', 'h':'hours', 'd':'days', 'w':'weeks'}
 view_overwrite = discord.PermissionOverwrite()
 view_overwrite.view_channel = True
-
+clickers = {}
 def sample_buttons(ctx):
   return [
   ui.Button(style=discord.ButtonStyle.primary,   row=0, custom_id="primary",   emoji="🟢", label="Primary (blurple)"),
@@ -36,6 +36,8 @@ def sample_buttons(ctx):
   ui.Button(style=discord.ButtonStyle.danger,    row=1, disabled=True, label="Danger (red)"),
   ui.Button(style=discord.ButtonStyle.url,       row=1, disabled=True, label="URL (grey)", url=ctx.message.jump_url),
 ]
+
+clicker_button = ui.Button(style=discord.ButtonStyle.primary, row=0, custom_id="clicker", label="Click me!")
 
 sample_options = [
   discord.SelectOption(label="Red"      , description="Roses are red"              , emoji="🔴"),
