@@ -50,8 +50,8 @@ sample_options = [
 ]
 def sample_menus():
   return [
-    ui.Select(placeholder="Select one option",          row=0, options=sample_options),
-    ui.Select(placeholder="Select two to five options", row=1, min_values=2, max_values=5, options=sample_options),
+    ui.Select(placeholder="Select one option",          custom_id="single-selection", row=0, options=sample_options),
+    ui.Select(placeholder="Select two to five options", custom_id="multi-selection" ,row=1, min_values=2, max_values=5, options=sample_options),
     ui.Select(placeholder="Select one option",          row=2, disabled=True, options=sample_options),
     ui.Select(placeholder="Select two to five options", row=3, disabled=True, min_values=2, max_values=5, options=sample_options)
   ]
