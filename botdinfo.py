@@ -414,8 +414,11 @@ async def role(ctx,role: discord.Role=None):
   embed.add_field(name="Position in hierarchy", value=role.position, inline=True)
   embed.add_field(name="Color", value=role.color, inline=True)
   if role.is_integration():
-    f7v="This role is managed by an integration, such as a bot."
-    embed.add_field(name="Integration", value=f7v, inline=False)
+    embed.add_field(name="Integration", value="This role is managed by an integration.", inline=False)
+  if role.is_bot_managed():
+    embed.add_field(name="Bot", value="This is a bot role.", inline=False)
+  if role.is_premium_subscriber():
+    embed.add_field(name="Bot", value="This is the Discord Booster role.", inline=False)
   embed.add_field(name="Members ("+str(len(memberlist))+")", value=f0v, inline=False)
   #embed.add_field(name="Channel Permissions", value=f3vb, inline=False)
   await ctx.send(embed=embed)
@@ -549,7 +552,7 @@ async def server(ctx, text = "regular"):
     embed.add_field(name="Voice Channels ("+str(len(guild.voice_channels))+")", value=f1v, inline=True)
     embed.add_field(name="Stage Channels ("+str(len(guild.stage_channels))+")", value=f1vc, inline=True)
     embed.add_field(name="Roles ("+str(len(guild.roles))+")", value=f1va, inline=False)
-    embed.add_field(name="Members ("+str(len(guild.members))+")", value=f8v, inline=False)
+    embed.add_field(name="Members ("+str(guild.member_count)+")", value=f8v, inline=False)
     embed.add_field(name="Max bitrate", value=f2v, inline=True)
     embed.add_field(name="Max filesize", value=f3v, inline=True)
     embed.add_field(name="Max emojis", value=f4v, inline=True)
@@ -561,11 +564,12 @@ async def server(ctx, text = "regular"):
       f10v=guild.afk_channel
       embed.add_field(name="AFK Timeout", value=f9v, inline=True)
       embed.add_field(name="AFK Channel", value=f10v, inline=True)
+    embed.add_field(name="Server boosts", value=str(guild.premium_subscription_count), inline=True)
+    if guild.default_notifications == discord.NotificationLevel.all_messages:
+      embed.add_field(name="Default Notifications", value="All messages", inline=True)
+    else:
+      embed.add_field(name="Default Notifications", value="Mentions only", inline=True)
     embed.add_field(name="ID", value=f10va, inline=True)
-    #if guild.default_notifications.all_messages:
-    #  embed.add_field(name="Default Notifications", value="Members receive notifications for every message by default.", inline=True)
-    #else:
-    #  embed.add_field(name="Default Notifications", value="Members only receive notifications for messages they are mentioned in by default.", inline=True)
     if "WELCOME_SCREEN_ENABLED" in guild.features:
       embed.add_field(name="Welcome Screen", value="The server has enabled the welcome screen.", inline=True)
     if "MEMBER_VERIFICATION_GATE_ENABLED" in guild.features:
