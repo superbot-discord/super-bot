@@ -201,14 +201,16 @@ async def on_message(message):
 @bot_.event
 async def on_interaction(interaction):
   print(interaction.data)
+  interaction_select_option = interaction.data.get("values", None)
   if interaction.type == discord.InteractionType.component:
     interaction_custom_id = interaction.data["custom_id"]
     if interaction_custom_id in ["primary", "secondary", "green", "red"]:
       await interaction.followup.send(f"You pressed on the {interaction_custom_id} button.", ephemeral=True)
-    elif interaction.data.get("values", None):
-      await interaction.followup.send("You selected "+", ".join(interaction.data["values"])+f" in the {interaction_custom_id} menu.", ephemeral=True)
-    elif interaction_custom_id.startswith("help_"):
-      await interaction.edit_original_message(eval(interaction_custom_id))
+    elif interaction_select_option:
+      if interaction_select_option.startswith("help_"):
+        await interaction.edit_original_message(eval(interaction_custom_id))
+      else:
+        await interaction.followup.send("You selected "+", ".join(interaction.data["values"])+f" in the {interaction_custom_id} menu.", ephemeral=True)
 
 @bot_.command(aliases=['sniper'])
 async def snipe(ctx, *, text = None):
