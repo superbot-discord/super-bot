@@ -246,6 +246,7 @@ help_all = discord.Embed(title="SuperBot#4073 (ID:796686363604680755)", descript
 To use the 13 commands above, type `=image ` first, then upload an image. Example: `=image analyse`. Supply a user name to work on his avatar, e.g. `=image SuperBot#4073 analyse`
 `ocr` `qr` `qrmake` `transparent` `text`\n
 `hello` leads you to death\nNeed help? check the [documentation](https://superbot-discord.github.io/documentation)!""")
+
 help_basic = discord.Embed(title="SuperBot Basic Commands", description=f"""
 **help** Views a rough list of all commands.
 **interactive_help** Interactive version of `help` with fancy buttons.
@@ -254,3 +255,22 @@ help_basic = discord.Embed(title="SuperBot Basic Commands", description=f"""
 **ping** Checks whether the bot is online and shows the latency.
 **botpurge [Number]** Purges messages sent by the bot. Requires `Manage Messages`.
 \nNeed help? check the [documentation](https://superbot-discord.github.io/documentation)!""")
+
+help_dinfo = discord.Embed(title="SuperBot Discord Information Commands", description=f"""
+**Discord Information Commands**
+**server** Views information about the current server.
+**server mod** Views banned members and invite links of the current server.
+**invitelink** Views information about an invite link.
+**role** Views information about a role.
+**channel** Views information about a text, voice or stage channel.
+**user** Views information about a user.
+**avatar** Views the avatar of a user.
+**status** Views the status of a user.
+**leftuser** Views limited information about a user not in the current server.
+**message** Views information about a message.
+**raw** Views the content of a message.
+**reactions** Views information about the reactions of a message.
+**emojiinfo** Views information about an emoji.
+**template** Views information about a server template.\n
+You need to supply arguments for most commands.
+Need help? check the [documentation](https://superbot-discord.github.io/documentation)!""")
