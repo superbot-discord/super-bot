@@ -221,3 +221,36 @@ def vc_itop(integer):
     return "No voice channel permissions"
 
 invite_embed = discord.Embed(title="Invite", description = "The bot can be invited [here](https://discord.com/api/oauth2/authorize?client_id=796686363604680755&permissions=8&redirect_uri=https%3A%2F%2Fsuperbot-discord.github.io&scope=bot%20applications.commands).")
+help_all = discord.Embed(title="SuperBot#4073 (ID:796686363604680755)", description=f"""**Prefix: **`=`
+**Basic Commands**
+`help` `interactive_help` `invite` `prefix` `ping` `botpurge`\n
+**Discord Information Commands**
+`server` `invitelink` `role` `channel` `user` `avatar` `status` `leftuser` `message` `raw` `reactions` `emojiinfo` `template`\n
+**Discord Commands**
+`react` `snipe` `clearsnipe` `pretend` `pretendembed` `embed` `editembed` `simpleembed` `quickembed` `ett` `tts`\n
+**Moderation Commands**
+`kick` `ban` `unban` `slowmode` `purge` `purgeuser` `purgeregex` `purgepy` `purgepygex` `purgereactions` `makeinvite`\n
+**Text Manipulation Commands**
+`poll` `insert` `spoiler` `rawspoiler` `rawrawspoiler` `reverse` `emoji` `encode` `decode`\n
+**Information Commands**
+`color` `simplecolor` `translate` `definition` `unix` `time` `rtimer` `ttimer` `terminate` `unscramble` `unicode` `random` `choice`\n
+**Web Commands**
+`redirect` `screenshot` `youtube` `wiki` `minecraft` `engrave` `covid` `population` `map`
+`bunny` `cat` `dog` `duck` `fox` `koala` `lizard` `panda` `shiba` `error` `errorcat` `errordog`\n
+**Plot/Drawing Commands**
+`ascii` `table` `render` `captcha` `pie` `barh` `barv` `hist` `sankey` `snow` `mandelbrot`\n
+**Developer Tools and Miscellaneous Commands**
+`html` `md` `regex` `regsub` `button` `menu`\n
+**Image Commands**
+`analyse` `histogram` `resize` `rotate` `brightness` `contrast` `sharpen` `edge` `contour` `blur` `invert` `hue` `recolor`
+To use the 13 commands above, type `=image ` first, then upload an image. Example: `=image analyse`. Supply a user name to work on his avatar, e.g. `=image SuperBot#4073 analyse`
+`ocr` `qr` `qrmake` `transparent` `text`\n
+`hello` leads you to death\nNeed help? check the [documentation](https://superbot-discord.github.io/documentation)!""")
+help_basic = discord.Embed(title="SuperBot Basic Commands", description=f"""
+**help** Views a rough list of all commands.
+**interactive_help** Interactive version of `help` with fancy buttons.
+**invite** Gets a link to invite the bot.
+**prefix** Views the prefix of the bot (`=`).
+**ping** Checks whether the bot is online and shows the latency.
+**botpurge [Number]** Purges messages sent by the bot. Requires `Manage Messages`.
+\nNeed help? check the [documentation](https://superbot-discord.github.io/documentation)!""")

@@ -208,7 +208,7 @@ async def on_interaction(interaction):
     elif interaction.data.get("values", None):
       await interaction.followup.send("You selected "+", ".join(interaction.data["values"])+f" in the {interaction_custom_id} menu.", ephemeral=True)
     elif interaction_custom_id.startswith("help_"):
-      await interaction.edit_original_message("Test")
+      await interaction.edit_original_message(eval(interaction_custom_id))
 
 @bot_.command(aliases=['sniper'])
 async def snipe(ctx, *, text = None):
