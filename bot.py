@@ -207,8 +207,9 @@ async def on_interaction(interaction):
     if interaction_custom_id in ["primary", "secondary", "green", "red"]:
       await interaction.followup.send(f"You pressed on the {interaction_custom_id} button.", ephemeral=True)
     elif interaction_select_option:
-      if interaction_select_option.startswith("help_"):
-        await interaction.edit_original_message(eval(interaction_custom_id))
+      interaction_first_option = interaction_select_option[0]
+      if interaction_first_option.startswith("help_"):
+        await interaction.edit_original_message(eval(interaction_first_option))
       else:
         await interaction.followup.send("You selected "+", ".join(interaction.data["values"])+f" in the {interaction_custom_id} menu.", ephemeral=True)
 
