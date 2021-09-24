@@ -48,12 +48,29 @@ sample_options = [
   discord.SelectOption(label="Purple", description="Violets are blurple"        , emoji="🟣"),
   discord.SelectOption(label="Brown" , description="Dry plants are brown"       , emoji="🟤"),
 ]
+
 def sample_menus():
   return [
     ui.Select(placeholder="Select one option",          custom_id="single-selection", row=0, options=sample_options),
     ui.Select(placeholder="Select two to five options", custom_id="multi-selection" ,row=1, min_values=2, max_values=5, options=sample_options),
     ui.Select(placeholder="Select one option",          row=2, disabled=True, options=sample_options),
     ui.Select(placeholder="Select two to five options", row=3, disabled=True, min_values=2, max_values=5, options=sample_options)
+  ]
+
+def help_menu_options(ctx):
+  return [
+    discord.SelectOption(label="All", description="Rough list of all commands",                                          emoji=ctx.bot.get_emoji()),
+    discord.SelectOption(label="Basic", description="Fundamental commands, e.g. help, ping",                             emoji=ctx.bot.get_emoji()),
+    discord.SelectOption(label="Discord info", description="Discord information viewer, e.g. server. user",              emoji=ctx.bot.get_emoji()),
+    discord.SelectOption(label="Discord", description="Commands that interact with Discord, e.g. snipe",                 emoji=ctx.bot.get_emoji()),
+    discord.SelectOption(label="Moderation", description="Commands to simply server moderation, e.g. purge, makeinvite", emoji=ctx.bot.get_emoji()),
+    discord.SelectOption(label="Text", description="Have fun with your text, e.g. reverse, encode",                      emoji=ctx.bot.get_emoji()),
+    discord.SelectOption(label="Information", description="Informative commands, e.g. color, unix",                      emoji=ctx.bot.get_emoji()),
+    discord.SelectOption(label="Web", description="Commands that interact with the Internet, e.g. youtube, wiki",        emoji=ctx.bot.get_emoji()),
+    discord.SelectOption(label="Plot", description="Commands to draw graphs, e.g. pie, bar",                             emoji=ctx.bot.get_emoji()),
+    discord.SelectOption(label="Developer", description="Developer-oriented commands, e.g. html, regex",                 emoji=ctx.bot.get_emoji()),
+    discord.SelectOption(label="Image", description="Image-editing or analysing commands, e.g. analyse, ocr",            emoji=ctx.bot.get_emoji()),
+    discord.SelectOption(label="General Documentation", description="Quick links and documentation website",             emoji=ctx.bot.get_emoji()),
   ]
 
 custom_permissions = {

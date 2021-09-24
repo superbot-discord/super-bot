@@ -5,10 +5,10 @@ from shared import *
 
 @commands.command(aliases=['buttons'])
 async def button(ctx, *, text=None):
-  sample_buttons_view = ui.View(timeout=300)
+  sample_buttons_view = ui.View(timeout=None)
   for count in sample_buttons(ctx):
     sample_buttons_view.add_item(count)
-  await ctx.send("All buttons will automatically timeout in 5 minutes.", view = sample_buttons_view)
+  await ctx.send("All buttons will not timeout.", view = sample_buttons_view)
 
 # @commands.command()
 # async def clicker(ctx, *, text = None):
@@ -22,10 +22,10 @@ async def button(ctx, *, text=None):
 
 @commands.command(aliases=['selectmenu', 'menu', 'option', 'options'])
 async def select(ctx, *, text=None):
-  sample_select_view = ui.View(timeout=300)
+  sample_select_view = ui.View(timeout=None)
   for count in sample_menus():
     sample_select_view.add_item(count)
-  await ctx.send("All menus will automatically timeout in 5 minutes.", view = sample_select_view)
+  await ctx.send("All menus will not timeout.", view = sample_select_view)
 
 def setup(bot):
   bot.add_command(button)
