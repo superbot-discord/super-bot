@@ -1,4 +1,3 @@
-import asyncio
 from difflib import SequenceMatcher
 
 from discord.ext import commands
@@ -39,7 +38,9 @@ async def play(ctx, *, song):
     vclients[ctx.guild] = vc
   if SequenceMatcher(None, song, "rickroll").ratio() > 0.7:
     audio_source = discord.FFmpegPCMAudio('songs/rickroll.mp3')
-  player = vc.play(audio_source)
+  if SequenceMatcher(None, song, "stickbug").ratio() > 0.7:
+    audio_source = discord.FFmpegPCMAudio('songs/stickbug.mp3')
+  player = vc.play(audio_source, after=await vc.disconnect())
 
 @commands.command(aliases=['selectmenu', 'menu', 'option', 'options'])
 async def select(ctx, *, text=None):
