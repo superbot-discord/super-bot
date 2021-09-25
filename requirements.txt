@@ -16,7 +16,7 @@ matplotlib==3.4.3
 colorthief==0.2.1
 pdf2image==1.16.0
 markdown2==2.4.1
-pytube3==9.6.4
+pytube==11.0.1
 folium==0.12.1
 Pillow==8.3.2
 imgkit==1.2.2

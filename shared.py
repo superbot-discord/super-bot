@@ -26,6 +26,7 @@ UNITS = {'s':'seconds', 'm':'minutes', 'h':'hours', 'd':'days', 'w':'weeks'}
 view_overwrite = discord.PermissionOverwrite()
 view_overwrite.view_channel = True
 clickers = {}
+vclients={}
 dt1 = datetime(1970,1,1,0,0,0,0,pytz.timezone('GMT'))
 
 def sample_buttons(ctx):
