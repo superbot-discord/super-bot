@@ -187,7 +187,7 @@ async def emojis(ctx, *, text=None):
   f = open('output.txt', 'w')
   f.write(desc)
   f.close()
-  await ctx.send(desc, file=discord.File('output.txt'))
+  await ctx.send(file=discord.File('output.txt'))
 
 @commands.command()
 async def invitelink(ctx,inviteinput: discord.Invite):
@@ -687,6 +687,16 @@ async def status(ctx, member : discord.Member = None):
   await ctx.send(embed=embed)
 
 @commands.command()
+async def stickers(ctx, *, text=None):
+  desc = ""
+  for count in ctx.guild.stickers:
+    desc += f"{count.emoji} {count.name} (ID: {count.id})\n  {count.description}\n"
+  f = open('output.txt', 'w')
+  f.write(desc)
+  f.close()
+  await ctx.send(file=discord.File('output.txt'))
+
+@commands.command()
 async def template(ctx, *, tempinput):
   try:
     temp = ctx.bot.fetch_template(tempinput)
@@ -827,6 +837,7 @@ def setup(bot):
   bot.add_command(reactions)
   bot.add_command(role)
   bot.add_command(server)
+  bot.add_command(stickers)
   bot.add_command(status)
   bot.add_command(template)
   bot.add_command(user)
