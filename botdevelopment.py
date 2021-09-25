@@ -1,4 +1,5 @@
 from difflib import SequenceMatcher
+import typing
 
 from discord.ext import commands
 
@@ -35,13 +36,13 @@ async def patience_error(ctx, error):
   await ctx.send("This command is on cooldown! You can only use it twice per 10 seconds.")
 
 @commands.command()
-async def play(ctx, *, song):
+async def play(ctx, volume: typing.Optional[int]=100, *, song):
   vc = vclients.get(ctx.guild, None)
   if not vc:
     vc = await ctx.author.voice.channel.connect()
     vclients[ctx.guild] = vc
   if SequenceMatcher(None, song, "rickroll").ratio() > 0.7:
-    audio_source = discord.FFmpegPCMAudio('songs/rickroll.mp3', options="volume:1.5")
+    audio_source = discord.FFmpegPCMAudio('songs/rickroll.mp3', options=f'-filter:a "volume={volume/100}"')
   if SequenceMatcher(None, song, "stickbug").ratio() > 0.7:
     audio_source = discord.FFmpegPCMAudio('songs/stickbug.mp3')
   vc.play(audio_source)
