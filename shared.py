@@ -63,22 +63,6 @@ def sample_menus():
     ui.Select(placeholder="Select two to five options", row=3, disabled=True, min_values=2, max_values=5, options=sample_options)
   ]
 
-def help_menu_options(ctx):
-  return [
-    discord.SelectOption(label="All", description="Rough list of all commands",                                           value="help_all"), #emoji=ctx.bot.get_emoji(), 
-    discord.SelectOption(label="Basic", description="Fundamental commands, e.g. help, ping",                              value="help_basic"), #emoji=ctx.bot.get_emoji(), 
-    discord.SelectOption(label="Discord info", description="Discord information viewer, e.g. server. user",               value="help_dinfo"), #emoji=ctx.bot.get_emoji(), 
-    discord.SelectOption(label="Discord", description="Commands that interact with Discord, e.g. snipe",                  value="help_discord"), #emoji=ctx.bot.get_emoji(), 
-    discord.SelectOption(label="Moderation", description="Commands to simplify server moderation, e.g. purge, makeinvite",value="help_mod"), #emoji=ctx.bot.get_emoji(), 
-    discord.SelectOption(label="Text", description="Have fun with your text, e.g. reverse, encode",                       value="help_text"), #emoji=ctx.bot.get_emoji(), 
-    discord.SelectOption(label="Information", description="Informative commands, e.g. color, unix",                       value="help_info"), #emoji=ctx.bot.get_emoji(), 
-    discord.SelectOption(label="Web", description="Commands that interact with the Internet, e.g. youtube, wiki",         value="help_web"), #emoji=ctx.bot.get_emoji(), 
-    discord.SelectOption(label="Plot", description="Commands to draw graphs, e.g. pie, bar",                              value="help_plot"), #emoji=ctx.bot.get_emoji(), 
-    discord.SelectOption(label="Developer", description="Developer-oriented commands, e.g. html, regex",                  value="help_dev"), #emoji=ctx.bot.get_emoji(), 
-    discord.SelectOption(label="Image", description="Image-editing or analysing commands, e.g. analyse, ocr",             value="help_img"), #emoji=ctx.bot.get_emoji(), 
-    discord.SelectOption(label="General Documentation", description="Quick links and documentation website",              value="help_general"), #emoji=ctx.bot.get_emoji(), 
-  ]
-
 custom_permissions = {
   "admin"       : Permissions(8),
   "semiadmin"   : Permissions(536870911991),
@@ -237,12 +221,11 @@ help_all = discord.Embed(title="SuperBot#4073 (ID:796686363604680755)", descript
 **Moderation Commands**
 `kick` `ban` `unban` `slowmode` `purge` `purgeuser` `purgeregex` `purgepy` `purgepygex` `purgereactions` `makeinvite`\n
 **Text Manipulation Commands**
-`poll` `insert` `spoiler` `rawspoiler` `rawrawspoiler` `reverse` `emoji` `encode` `decode`\n
+`poll` `insert` `spoiler` `rawspoiler` `rawrawspoiler` `reverse` `emoji` `base` `encode` `decode`\n
 **Information Commands**
 `color` `simplecolor` `translate` `definition` `unix` `time` `rtimer` `ttimer` `terminate` `unscramble` `unicode` `random` `choice`\n
 **Web Commands**
-`redirect` `screenshot` `youtube` `wiki` `minecraft` `engrave` `covid` `population` `map`
-`bunny` `cat` `dog` `duck` `fox` `koala` `lizard` `panda` `shiba` `error` `errorcat` `errordog`\n
+`redirect` `screenshot` `youtube` `wiki` `minecraft` `engrave` `covid` `population` `map` `bunny` `cat` `dog` `duck` `fox` `koala` `lizard` `panda` `shiba` `error` `errorcat` `errordog`\n
 **Plot/Drawing Commands**
 `ascii` `table` `render` `captcha` `pie` `barh` `barv` `hist` `sankey` `snow` `mandelbrot`\n
 **Developer Tools and Miscellaneous Commands**
@@ -252,6 +235,22 @@ help_all = discord.Embed(title="SuperBot#4073 (ID:796686363604680755)", descript
 To use the 13 commands above, type `=image ` first, then upload an image. Example: `=image analyse`. Supply a user name to work on his avatar, e.g. `=image SuperBot#4073 analyse`
 `ocr` `qr` `qrmake` `transparent` `text`\n
 `hello` leads you to death\nNeed help? check the [documentation](https://superbot-discord.github.io/documentation)!""")
+
+def help_menu_options(ctx):
+  return [
+    discord.SelectOption(label="All", description="Rough list of all commands",                                           value="help_all"), #emoji=ctx.bot.get_emoji(), 
+    discord.SelectOption(label="Basic", description="Fundamental commands, e.g. help, ping",                              value="help_basic"), #emoji=ctx.bot.get_emoji(), 
+    discord.SelectOption(label="Discord info", description="Discord information viewer, e.g. server. user",               value="help_dinfo"), #emoji=ctx.bot.get_emoji(), 
+    discord.SelectOption(label="Discord", description="Commands that interact with Discord, e.g. snipe",                  value="help_discord"), #emoji=ctx.bot.get_emoji(), 
+    discord.SelectOption(label="Moderation", description="Commands to simplify server moderation, e.g. purge, makeinvite",value="help_mod"), #emoji=ctx.bot.get_emoji(), 
+    discord.SelectOption(label="Text", description="Have fun with your text, e.g. reverse, encode",                       value="help_text"), #emoji=ctx.bot.get_emoji(), 
+    discord.SelectOption(label="Information", description="Informative commands, e.g. color, unix",                       value="help_info"), #emoji=ctx.bot.get_emoji(), 
+    discord.SelectOption(label="Web", description="Commands that interact with the Internet, e.g. youtube, wiki",         value="help_web"), #emoji=ctx.bot.get_emoji(), 
+    discord.SelectOption(label="Plot", description="Commands to draw graphs, e.g. pie, bar",                              value="help_plot"), #emoji=ctx.bot.get_emoji(), 
+    discord.SelectOption(label="Developer", description="Developer-oriented commands, e.g. html, regex",                  value="help_dev"), #emoji=ctx.bot.get_emoji(), 
+    discord.SelectOption(label="Image", description="Image-editing or analysing commands, e.g. analyse, ocr",             value="help_img"), #emoji=ctx.bot.get_emoji(), 
+    discord.SelectOption(label="General Documentation", description="Quick links and documentation website",              value="help_general"), #emoji=ctx.bot.get_emoji(), 
+  ]
 
 help_basic = discord.Embed(title="SuperBot Basic Commands", description=f"""
 **help** Views a rough list of all commands.
@@ -296,6 +295,22 @@ help_discord = discord.Embed(title="SuperBot Discord Commands", description=f"""
 **tts [Content]** Sends a message with TTS. Bot and you need `Send TTS Messages`.\n
 Check [how to supply embeds](https://superbot-discord.github.io/Appendices/A1/). `=pretendembed` and `=editembed` takes the same arguments as `=embed`.
 Need help? check the [documentation](https://superbot-discord.github.io/documentation)!""")
+
+help_mod = discord.Embed(title="SuperBot Moderation Commands", description=f"""
+**kick [User] {{Reason}}** Kicks a user. Bot and you need `Kick members`.
+**ban [User] {{Days}} {{Reason}}** Bans a user and delete 0-7 (default: 0) days of messages. Bot and you need `Ban members`.
+**unban [User] {{Reason}}** Unbans a user. Bot and you need `Ban members`.
+**slowmode [Seconds] {{Channels}}** Sets the slowmode of several (default: current) channels.
+**purge [No.]** Purges [No.] of the most recent message(s) in the same channel.¹
+**purgeuser [No.] [User]** Purges [No.] of the most recent message(s) in the same channel.¹
+**purgeregex [No.] [Regex]** Purges [No.] of the most recent message(s) based on a [regular expression](https://superbot-discord.github.io/Appendices/A2/).¹
+**purgepy [No.] [Py. script]** Purges [No.] of the most recent message(s) based on a Python function.¹
+**purgepygex** Purges [No.] of the most recent message(s) based on a regular expression and a Python function.¹
+**purgereactions [No.]** Purges all reactions from [No.] of the most recent messages.¹
+**makeinvite [Valid duration (secs)] {{Max. uses}}** Creates an invite link with a maximum number of uses (default: infinity). Bot and you need `Create invites`.\n
+1: Bot and you need `Manage messages`.
+Need help? check the [documentation](https://superbot-discord.github.io/documentation)!
+""")
 
 craftbot_embed = discord.Embed(title="CraftBot", description=f"""
 CraftBot is a fun-oriented bot developed by me (Johann, also developer of SuperBot) and Murvon (my real-life friend).

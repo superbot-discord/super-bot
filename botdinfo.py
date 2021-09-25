@@ -180,6 +180,16 @@ async def emojiinfo(ctx,emojiarg : typing.Union[discord.Emoji, str]):
   await ctx.send(embed=embed)
 
 @commands.command()
+async def emojis(ctx, *, text=None):
+  desc = ""
+  for count in ctx.guild.emojis:
+    desc += f":{count.name}: `<:{count.name}:{count.id}>`{' (Animated)' if count.animated else ''}\n"
+  f = open('output.txt', 'w')
+  f.write(desc)
+  f.close()
+  await ctx.send(desc, file=discord.File('output.txt'))
+
+@commands.command()
 async def invitelink(ctx,inviteinput: discord.Invite):
   allinvites=await inviteinput.channel.invites()
   for count in allinvites:
@@ -463,12 +473,16 @@ async def role(ctx,role: discord.Role=None):
 async def server(ctx, text = "regular"):
   guild=ctx.guild
   ti=guild.name
-  desc=f"Created at <t:{round((guild.created_at-dt1).total_seconds())}:F> by {guild.owner.mention}\nRegion: {guild.region}\nServer Icon: "
-  base_url = guild.icon.url
-  for count in range(5, 13):
-    size = str(2**count)
-    temp = base_url.replace("?size=1024", f"?size={size}")
-    desc += f"[{size}]({temp}) "
+  desc=f"Created at <t:{round((guild.created_at-dt1).total_seconds())}:F> by {guild.owner.mention}\nRegion: {guild.region}"
+  try:
+    base_url = guild.icon.url
+    desc += f"\nServer Icon: "
+    for count in range(5, 13):
+      size = str(2**count)
+      temp = base_url.replace("?size=1024", f"?size={size}")
+      desc += f"[{size}]({temp}) "
+  except:
+    pass
   try:
     base_url = guild.banner.url
     desc += f"\nServer Banner: "
@@ -804,6 +818,7 @@ def setup(bot):
   bot.add_command(avatar)
   bot.add_command(channel)
   bot.add_command(emojiinfo)
+  bot.add_command(emojis)
   bot.add_command(invitelink)
   bot.add_command(leftuser)
   bot.add_command(message)
