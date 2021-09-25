@@ -1,15 +1,16 @@
 import os
 import re
 
+import discord
 import pytube
 import wikipedia
 from bs4 import BeautifulSoup
+from discord.ext import commands
 from PyDictionary import PyDictionary
 from pygoogletranslation import Translator
 
-import discord
 import requests
-from discord.ext import commands
+from shared import *
 from shared import db
 
 dictionary=PyDictionary()
@@ -360,7 +361,7 @@ Video+audio - Minimum size\t{formabr(video8)}\t{video8.resolution}\t{sizer(video
       else:
         embed.add_field(name="Tags", value=(", ".join(youtube.keywords))[:1023], inline=False)
       embed.add_field(name="Views", value=f'{youtube.views:,}', inline=True)
-      embed.add_field(name="Date uploaded", value=youtube.publish_date.strftime("%d %b, %Y (%a)"), inline=True)
+      embed.add_field(name="Date uploaded", value=f"<t:{(youtube.publish_date-dt1).total_seconds()}:D>", inline=True)
       embed.add_field(name="Length", value=format_length(youtube.length), inline=True)
       chnl = pytube.Channel(youtube.channel_url)
       embed.add_field(name="Rating", value=f"{str(round(youtube.rating*20, 3))}%", inline=True)

@@ -84,8 +84,8 @@ async def time(ctx, *, timezoneinput="0"):
   if timezoneinput.replace(".","").isnumeric():
     timezone=float(timezoneinput)
     if 15>timezone>-15 and timezone%0.25==0:
-      tnow = datetime.now() + timedelta(minutes = int(timezoneinput*60))
-      await ctx.send("Time in UTC " + str(timezoneinput) + " is " + tnow.strftime("%d %b, %Y (%a) %H:%M:%S"))
+      tnow = datetime.now() + timedelta(minutes = int(timezone*60))
+      await ctx.send(f"Time in UTC {timezoneinput} is {tnow.strftime('%d %B %Y (%A), %H:%M:%S')}")
     else:
       return "Invalid timezone! Timezone must be below 15, above -15 and divisible by 0.25."
   elif timezoneinput=="all":
@@ -95,13 +95,13 @@ async def time(ctx, *, timezoneinput="0"):
   elif len(timezoneinput)==2 and timezoneinput.isalpha():
     try:
       tz = pytz.timezone(pytz.country_timezones[timezoneinput][0])
-      await ctx.send("Time in " + pytz.country_timezones(timezoneinput)[0] + " is " + datetime.now(tz=tz).strftime("%d %b, %Y (%a) %H:%M:%S"))
+      await ctx.send(f"Time in {pytz.country_timezones(timezoneinput)[0]} is {datetime.now(tz=tz).strftime('%d %B %Y (%A), %H:%M:%S')}")
     except:
       await ctx.send("Timezone not found. Please use `=time all` for a list of all timezones.")
   else:
     try:
       tz = pytz.timezone(timezoneinput)
-      await ctx.send("Time in " + timezoneinput + " is " + datetime.now(tz=tz).strftime("%d %b, %Y (%a) %H:%M:%S"))
+      await ctx.send(f"Time in {timezoneinput} is {datetime.now(tz=tz).strftime('%d %B %Y (%A), %H:%M:%S')}")
     except:
       await ctx.send("Timezone not found. Please use `=time all` for a list of all timezones.")
 

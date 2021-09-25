@@ -55,7 +55,7 @@ async def on_message_delete(message):
   val = message.content
   if val.replace(" ","") == "":
     return
-  adt = "By "+message.author.name+"#"+str(message.author.discriminator)+" at "+message.created_at.strftime("%d %b, %Y (%a) %H:%M:%S")
+  adt = f"By {message.author.name}#{str(message.author.discriminator)} at <t:{(message.created_at-dt1).total_seconds()}>"
   if sniper1.get(keyname, 1) == 1:
     sniper1[keyname] = val
     sniperdate1[keyname] = adt

@@ -55,7 +55,7 @@ async def bottchannel(ctx, channel):
   ti="Channel Information: "+channel.name
   desc=channel.mention
   embed=discord.Embed(title=ti, description=desc)
-  f0v=channel.created_at.strftime("%d %b, %Y (%a) %H:%M:%S")
+  f0v=f"<t:{(channel.created_at-dt1).total_seconds()}:F>"
   f3v=str(channel.topic)
   f4v=str(channel.category)
   f5v=" ".join(await channel.invites())
@@ -90,7 +90,7 @@ async def botvchannel(channel):
   ti="Voice Channel Information"
   desc=channel.name
   embed=discord.Embed(title=ti, description=desc)
-  f0v=channel.created_at.strftime("%d %b, %Y (%a) %H:%M:%S")
+  f0v=f"<t:{(channel.created_at-dt1).total_seconds()}:F>"
   f1v=str(channel.category)
   f2vlist=await channel.invites()
   f2v=""
@@ -124,7 +124,7 @@ async def botstagec(channel):
   except:
     desc=channel.name
   embed=discord.Embed(title=ti, description=desc)
-  f0v=channel.created_at.strftime("%d %b, %Y (%a) %H:%M:%S")
+  f0v=f"<t:{(channel.created_at-dt1).total_seconds()}:F"
   f1v=str(channel.category)
   f2vlist=await channel.invites()
   f2v=""
@@ -162,9 +162,9 @@ async def emojiinfo(ctx,emojiarg : typing.Union[discord.Emoji, str]):
   try:
     try:
       creator = await ctx.guild.fetch_emoji(emojiarg.id)
-      desc = str(emojiarg)+emojiarg.name+"\nCreated by "+str(creator.user.mention)+" at "+str(emojiarg.created_at.strftime("%d %b, %Y (%a) %H:%M:%S"))
+      desc = f"{str(emojiarg)} {emojiarg.name}\nCreated by {str(creator.user.mention)} at <t:{(emojiarg.created_at-dt1).total_seconds()}:F>"
     except:
-      desc = str(emojiarg)+"\n`Created by` field can only be retrieved with the manage-emojis permission.\nCreated at "+str(emojiarg.created_at.strftime("%d %b, %Y (%a) %H:%M:%S"))
+      desc = f"emojiarg\n`Created by` field can only be retrieved with the manage-emojis permission.\nCreated at {(emojiarg.created_at-dt1).total_seconds()}"
     embed = discord.Embed(title=f"Emoji Info: {emojiarg.name}", description=desc)
     embed.add_field(name="ID", value=emojiarg.id, inline=True)
     embed.set_image(url = emojiarg.url)
@@ -186,8 +186,8 @@ async def invitelink(ctx,inviteinput: discord.Invite):
     if count==inviteinput:
       invite=count
       break
-  ti="Invite Information: "+invite.code
-  desc="Created at "+invite.created_at.strftime("%d %b, %Y (%a) %H:%M:%S")+" by "+str(invite.inviter)
+  ti=f"Invite Information: {invite.code}"
+  desc=f"Created at {(invite.created_at-dt1).total_seconds()} by {invite.inviter}"
   embed=discord.Embed(title=ti, description=desc)
   f00v=invite.guild
   if invite.max_uses == 0:
@@ -202,16 +202,16 @@ async def invitelink(ctx,inviteinput: discord.Invite):
   if age==0:
     f5v="Never Expires"
   elif age>86400:
-    f5v=str(age/86400)+" day"
+    f5v=f"{age/86400} day"
   elif age>3600:
-    f5v=str(age/3600)+" hr"
+    f5v=f"{age/3600} hr"
   else:
-    f5v=str(age/60)+" min"
+    f5v=f"{age/60} min"
   f6v=str(invite.revoked)
   if f5v == "Never Expires":
     f7v = "Never"
   else:
-    f7v=(invite.created_at + timedelta(seconds=age)).strftime("%d %b, %Y (%a) %H:%M:%S")
+    f7v=f"<t:{(invite.created_at+timedelta(seconds=age)-dt1).total_seconds()}:F>"
   embed.add_field(name="Server", value=f00v, inline=True)
   embed.add_field(name="Uses", value=f0v, inline=True)
   embed.add_field(name="Temporary?", value=f1v, inline=True)
@@ -238,7 +238,7 @@ async def leftuser(ctx, *, userinput):
   embed=discord.Embed(title=ti,color=lfuser.color, description=desc)
   embed.set_thumbnail(url=lfuser.avatar.url)
   f0v=f"{lfuser.name}#{lfuser.discriminator}"
-  f1v=lfuser.created_at.strftime("%d %b, %Y (%a) %H:%M:%S")
+  f1v=f"<t:{(lfuser.created_at-dt1).total_seconds()}:F>"
   f1ts = str(datetime.now(timezone.utc) - lfuser.created_at)
   if f1ts.count(" days, ") == 0:
     f1va = re.sub(r'(\d{1,2}):(\d{2}):(\d{2})', r'\1 hours \2 minutes \3 seconds', f1ts) + f"\n≈ "+f1ts.split(":")[0]+" hours"
@@ -253,12 +253,17 @@ async def leftuser(ctx, *, userinput):
 @commands.command(aliases=["msg", "ms"])
 async def message(ctx, message: discord.Message=None):
   if message==None:
-    message=ctx.message
+    potential_reference = ctx.message.reference
+    if potential_reference:
+      message=potential_reference
+    else:
+      await ctx.send("Please reply to a message or add a message ID/Link.")
+      return
   ti="Message Information"
   
-  desc=f"Sent by {message.author.mention} at {message.created_at.strftime('%d %b, %Y (%a) %H:%M:%S')}"
+  desc=f"Sent by {message.author.mention} at {(message.created_at-dt1).total_seconds()}"
   if message.edited_at != None:
-    desc += f"Edited at {message.edited_at.strftime('%d %b, %Y (%a) %H:%M:%S')}"
+    desc += f"Edited at {(message.edited_at-dt1).total_seconds()}"
   contents = message.content
   if contents:
     desc += f"\n**Message content: **\n{contents}"
@@ -425,8 +430,8 @@ async def reactions(ctx, *, msg : discord.Message):
 async def role(ctx,role: discord.Role=None):
   if role==None:
     role=ctx.author.top_role
-  ti="Role Information: "+role.name
-  desc=role.mention + " created at " + role.created_at.strftime("%d %b, %Y (%a) %H:%M:%S")
+  ti=f"Role Information: {role.name}"
+  desc=f"{role.mention} created at <t:{(role.created_at-dt1).total_seconds()}:F>"
   embed=discord.Embed(title=ti,color=role.color, description=desc)
   memberlist=role.members
   if len(memberlist) == 0:
@@ -459,7 +464,7 @@ async def role(ctx,role: discord.Role=None):
 async def server(ctx, text = "regular"):
   guild=ctx.guild
   ti=guild.name
-  desc="Created at "+guild.created_at.strftime("%d %b, %Y (%a) %H:%M:%S")+" by "+str(guild.owner.mention)+f"\nRegion: "+str(guild.region)+f"\nServer Icon: "
+  desc=f"Created at <t:{(guild.created_at-dt1).total_seconds()}:F> by {guild.owner.mention}\nRegion: {guild.region}\nServer Icon: "
   base_url = guild.icon.url
   for count in range(5, 13):
     size = str(2**count)
@@ -656,15 +661,15 @@ async def status(ctx, member : discord.Member = None):
             field=":"+count.emoji.name+":"
       embed.add_field(name="Status", value=field, inline=False)
     if str(count.type)=="ActivityType.playing":
-      field=count.name+f"\nStarted: "+str(count.start.strftime("%d %b, %Y (%a) %H:%M:%S"))
+      field=count.name+f"\nStarted: {(count.start-dt1).total_seconds()}"
       embed.add_field(name="Game", value=field, inline=False)
     if str(count.type)=="ActivityType.streaming":
-      field="["+count.platform+":"+count.name+"]("+count.url+f")\nStarted: "+count.start.strftime("%d %b, %Y (%a) %H:%M:%S")
+      field=f"[{count.platform}: {count.name}]({count.url})\nStarted: <t:{(count.start-dt1).total_seconds()}:F>"
       embed.add_field(name="Game", value=field, inline=False)
       embed.set_thumbnail(url=count.large_image_url)
     if str(count.type)=="ActivityType.listening":
-      field=count.artist+" : "+count.title+f"\nStarted: "+count.created_at.strftime("%d %b, %Y (%a) %H:%M:%S")
-      embed.add_field(name="Spotify : "+count.album, value=field, inline=False)
+      field=f"{count.artist}: {count.title}\nStarted: {(count.created_at-dt1).total_seconds()}"
+      embed.add_field(name=f"Spotify: {count.album}", value=field, inline=False)
       embed.set_thumbnail(url=count.album_cover_url)
   await ctx.send(embed=embed)
 
@@ -675,12 +680,12 @@ async def template(ctx, *, tempinput):
   except:
     await ctx.send("Invalid input. Please try again.")
     return
-  ti="Template Information: "+temp.name+" ("+temp.code+")"
-  desc="Created at "+temp.created_at.strftime("%d %b, %Y (%a) %H:%M:%S")+" by "+str(temp.creator)
+  ti=f"Template Information: {temp.name} ({temp.code})"
+  desc=f"Created at <t:{(temp.created_at-dt1).total_seconds()}:F> by {temp.creator.mention}"
   embed=discord.Embed(title=ti, description=desc)
   f0v=temp.description
   f1v=temp.uses
-  f2v=temp.updated_at.strftime("%d %b, %Y (%a) %H:%M:%S")
+  f2v=f"<t:{(temp.updated_at-dt1).total_seconds()}:F>"
   f3v=temp.source_guild
   embed.add_field(name="Description", value=f0v, inline=False)
   embed.add_field(name="Uses", value=f1v, inline=True)
@@ -690,7 +695,6 @@ async def template(ctx, *, tempinput):
 
 @commands.command(aliases=["member", "mem", "us"])
 async def user(ctx, user: discord.Member = None, channel: discord.TextChannel = None):
-  ti="User Information"
   if user==None:
     user=ctx.author
   if channel==None:
@@ -700,20 +704,20 @@ async def user(ctx, user: discord.Member = None, channel: discord.TextChannel = 
     desc=f"{user.mention} (bot)"
   else:
     desc=f"{user.mention} (human)"
-  embed=discord.Embed(title=ti,color=user.color, description=desc)
+  embed=discord.Embed(title="User Information",color=user.color, description=desc)
   embed.set_thumbnail(url=user.avatar.url)
   if user.name==user.display_name:
     f0v=f"{user.name}#{user.discriminator}"
   else:
     f0v=f"{user.name}#{user.discriminator} (__Nickname:__  `{user.display_name}`)"
-  f1v=user.created_at.strftime("%d %b, %Y (%a) %H:%M:%S")
+  f1v=f"<t:{(user.created_at-dt1).total_seconds()}:F>"
   f1ts = str(datetime.now(timezone.utc) - user.created_at)
   if f1ts.count(" days, ") == 0:
     f1va = re.sub(r'(\d{1,2}):(\d{2}):(\d{2})', r'\1 hours \2 minutes \3 seconds', f1ts) + f"\n≈ "+f1ts.split(":")[0]+" hours"
   else:
     days = int(re.sub(r'([\d]+) days, [\s\S]*', r'\1', f1ts))
     f1va = re.sub(r'([\d]+) days, (\d{1,2}):(\d{2}):(\d{2})', r'\1 days \2 hrs \3 mins \4 secs', f1ts)[:-7] + f"\n≈ "+str((int(f1ts.split(" days, ")[0]))//365) + " years " + str(int(f1ts.split(" days, ")[0]) % 365) + " days"
-  f2v=user.joined_at.strftime("%d %b, %Y (%a) %H:%M:%S")
+  f2v=f"<t:{(user.joined_at-dt1).total_seconds()}"
   f2ts = str(datetime.now(timezone.utc) - user.joined_at)
   if f2ts.count(" days, ") == 0:
     f2va = re.sub(r'(\d{1,2}):(\d{2}):(\d{2})', r'\1 hours \2 minutes \3 seconds', f2ts) + f"\n≈ "+f2ts.split(":")[0]+" hours"
@@ -736,18 +740,18 @@ async def user(ctx, user: discord.Member = None, channel: discord.TextChannel = 
   try:
     if f3vcraw.type.playing:
       try:
-        f3vc = f"Playing {f3vcraw.name} since "+f3vcraw.start.strftime("%d %b, %Y (%a) %H:%M:%S")+f"\n{f3vcraw.details}"
+        f3vc = f"Playing {f3vcraw.name} since <t:{(f3vcraw.start-dt1).total_seconds()}\n{f3vcraw.details}"
       except:
         f3vc = f"Playing {f3vcraw.name}"
     elif f3vcraw.type.streaming:
       f3vc = f"Streaming [{f3vcraw.name}({f3vcraw.game})]({f3vcraw.url}) via {f3vcraw.platform}\n{f3vcraw.details}"
     elif f3vcraw.type.listening:
-      f3vc = f"Listening to {f3vcraw.artist} - {f3vcraw.album}: {f3vcraw.title}\nStarted: "+f3vcraw.created_at.strftime("%d %b, %Y (%a) %H:%M:%S")+f"\n{f3vcraw.details}"
+      f3vc = f"Listening to {f3vcraw.artist}: {f3vcraw.album}: {f3vcraw.title}\nStarted: <t:{(f3vcraw.created_at-dt1).total_seconds()}:F>\n{f3vcraw.details}"
     elif f3vcraw.type.watching:
       try:
-        f3vc = f"Watching [{f3vcraw.name}]({f3vcraw.url}) since "+f3vcraw.start.strftime("%d %b, %Y (%a) %H:%M:%S")+f"\n{f3vcraw.details}"
+        f3vc = f"Watching [{f3vcraw.name}]({f3vcraw.url}) since <t:{(f3vcraw.start-dt1).total_seconds()}:F>\n{f3vcraw.details}"
       except:
-        f3vc = f"Watching {f3vcraw.name}since "+f3vcraw.start.strftime("%d %b, %Y (%a) %H:%M:%S")
+        f3vc = f"Watching {f3vcraw.name} since <t:{(f3vcraw.start-dt1).total_seconds()}:F>"
     elif f3vcraw.type.custom:
       try:
         f3vc = f":{f3vcraw.emoji.name}: {f3vcraw.details}"

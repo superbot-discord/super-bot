@@ -1,5 +1,6 @@
 import json
 import re
+from datetime import datetime
 
 import discord
 from discord import Embed, Permissions, ui
@@ -23,6 +24,8 @@ UNITS = {'s':'seconds', 'm':'minutes', 'h':'hours', 'd':'days', 'w':'weeks'}
 view_overwrite = discord.PermissionOverwrite()
 view_overwrite.view_channel = True
 clickers = {}
+dt1 = datetime(1970,1,1,0,0,0)
+
 def sample_buttons(ctx):
   return [
   ui.Button(style=discord.ButtonStyle.primary,   row=0, custom_id="primary",   emoji="🟢", label="Primary (blurple)"),
