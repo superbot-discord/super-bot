@@ -15,8 +15,7 @@ async def button(ctx, *, text=None):
 
 @commands.command()
 async def join(ctx, vc:discord.VoiceChannel, *, text=None):
-  await vc.connect()
-  vclients[ctx.guild] = vc
+  vclients[ctx.guild] = await vc.connect()
 
 @commands.command()
 async def leave(ctx, *, text=None):
@@ -36,13 +35,11 @@ async def patience_error(ctx, error):
 async def play(ctx, *, song):
   vc = vclients.get(ctx.guild, None)
   if not vc:
-    vc = ctx.author.voice.channel
+    vc = await ctx.author.voice.channel.connect()
+    vclients[ctx.guild] = vc
   if SequenceMatcher(None, song, "rickroll").ratio() > 0.7:
-    player = vc.create_ffmpeg_player('songs/rickroll.mp3')
-  player.start()
-  while not player.is_done():
-    await asyncio.sleep(1)
-  player.stop()
+    audio_source = discord.FFmpegPCMAudio('songs/rickroll.mp3')
+  player = vc.play(audio_source)
 
 @commands.command(aliases=['selectmenu', 'menu', 'option', 'options'])
 async def select(ctx, *, text=None):
