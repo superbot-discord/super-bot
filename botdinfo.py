@@ -255,7 +255,7 @@ async def message(ctx, message: discord.Message=None):
   if message==None:
     potential_reference = ctx.message.reference
     if potential_reference:
-      message=potential_reference
+      message=await ctx.bot.get_channel(potential_reference.channel_id).fetch_message(potential_reference.message_id)
     else:
       await ctx.send("Please reply to a message or add a message ID/Link.")
       return
