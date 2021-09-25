@@ -261,9 +261,9 @@ async def message(ctx, message: discord.Message=None):
       return
   ti="Message Information"
   
-  desc=f"Sent by {message.author.mention} at {round((message.created_at-dt1).total_seconds())}"
+  desc=f"Sent by {message.author.mention} at <t:{round((message.created_at-dt1).total_seconds())}:F>"
   if message.edited_at != None:
-    desc += f"Edited at {(message.edited_at-dt1).total_seconds()}"
+    desc += f"Edited at <t:{round((message.edited_at-dt1).total_seconds())}:F>"
   contents = message.content
   if contents:
     desc += f"\n**Message content: **\n{contents}"
