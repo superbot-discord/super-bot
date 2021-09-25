@@ -40,7 +40,7 @@ async def play(ctx, *, song):
     audio_source = discord.FFmpegPCMAudio('songs/rickroll.mp3')
   if SequenceMatcher(None, song, "stickbug").ratio() > 0.7:
     audio_source = discord.FFmpegPCMAudio('songs/stickbug.mp3')
-  player = vc.play(audio_source, after=await vc.disconnect())
+  player = vc.play(audio_source)
 
 @commands.command(aliases=['selectmenu', 'menu', 'option', 'options'])
 async def select(ctx, *, text=None):
