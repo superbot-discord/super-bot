@@ -135,7 +135,7 @@ async def minecraft(ctx, *, item="tnt"):
 async def redirect(ctx, *, url):
   await ctx.channel.trigger_typing()
   try:
-    r = requests.get(url)
+    r = requests.get(url, allow_redirects=True)
     urllist = r.history
     if len(urllist) == 0:
       await ctx.send("Invalid URL. Please try again.")
