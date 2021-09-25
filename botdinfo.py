@@ -223,7 +223,7 @@ async def invitelink(ctx,inviteinput: discord.Invite):
   embed.add_field(name="Expired?", value=f6v, inline=True)
   await ctx.send(embed=embed)
 
-@commands.command()
+@commands.command(aliases=["lu"])
 async def leftuser(ctx, *, userinput):
   global bot
   lfuser = await ctx.bot.fetch_user(int(userinput))
@@ -250,7 +250,7 @@ async def leftuser(ctx, *, userinput):
   embed.add_field(name="Registered", value=f1v, inline=True)
   await ctx.send(embed=embed)
 
-@commands.command(aliases=["msg"])
+@commands.command(aliases=["msg", "ms"])
 async def message(ctx, message: discord.Message=None):
   if message==None:
     message=ctx.message
@@ -259,7 +259,9 @@ async def message(ctx, message: discord.Message=None):
   desc=f"Sent by {message.author.mention} at {message.created_at.strftime('%d %b, %Y (%a) %H:%M:%S')}"
   if message.edited_at != None:
     desc += f"Edited at {message.edited_at.strftime('%d %b, %Y (%a) %H:%M:%S')}"
-  desc += f"**Message content: **\n{message.content}"
+  contents = message.content
+  if contents:
+    desc += f"\n**Message content: **\n{contents}"
   f0vraw = message.reactions
   f0v = ""
   for count in f0vraw:
@@ -287,13 +289,31 @@ async def message(ctx, message: discord.Message=None):
   for count in f4vraw:
     f4v += count.mention + " "
   f5vraw = message.components
-  msg_components = 0
+  msg_buttons = msg_menus = msg_dbuttons = msg_dmenus = 0
   for count in f5vraw:
     if count.type == discord.ComponentType.action_row:
       for count2 in count.children:
-        msg_components+=1
+        if count2.type == discord.ComponentType.button:
+          if count2.disabled:
+            msg_dbuttons += 1
+          else:
+            msg_buttons += 1
+        else:
+          if count2.disabled:
+            msg_dmenus += 1
+          else:
+            msg_menus += 1
     else:
-      msg_components+=1
+      if count.type == discord.ComponentType.button:
+        if count.disabled:
+          msg_dbuttons += 1
+        else:
+          msg_buttons += 1
+      else:
+        if count.disabled:
+          msg_dmenus += 1
+        else:
+          msg_menus += 1
   embed=discord.Embed(title=ti, description=desc[:2047], url=message.jump_url)
   embed.add_field(name="From channel", value=message.channel.mention, inline=True)
   if message.webhook_id != None:
@@ -334,9 +354,9 @@ async def message(ctx, message: discord.Message=None):
   if len(f1vraw) != 0:
     embed.add_field(name="Attachments ("+str(len(f1vraw))+")", value=f1v, inline=False)
   if len(message.embeds) != 0:
-    embed.add_field(name="Embeds", value=f"{len(message.embeds)} embeds are added to the message.", inline=False)
+    embed.add_field(name="Embeds", value=f"{len(message.embeds)} embed(s) are added to the message.", inline=False)
   if len(f5vraw) != 0:
-    embed.add_field(name="Components", value=f"{msg_components} components are added to the message.", inline=False)
+    embed.add_field(name="Components", value=f"Working buttons & menus: {msg_buttons}, {msg_menus}\nDisabled buttons & menus: {msg_dbuttons}, {msg_dmenus}", inline=False)
   if len(f2vraw) != 0:
     embed.add_field(name="Channel mentions ("+str(len(f2vraw))+")", value=f2v, inline=False)
   if len(f3vraw) != 0:
@@ -378,7 +398,7 @@ async def raw(ctx, msg : discord.Message):
   embed = discord.Embed(title = "Raw message", url = msg.jump_url, description = "```"+discord.utils.escape_markdown(msg.content, as_needed=True)+"```")
   await ctx.send(embed=embed)
 
-@commands.command()
+@commands.command(aliases = ["rea"])
 async def reactions(ctx, *, msg : discord.Message):
   reactions = msg.reactions
   numlist = []
@@ -401,7 +421,7 @@ async def reactions(ctx, *, msg : discord.Message):
   await ctx.send(file = discord.File('reactions.png'))
   plt.clf()
 
-@commands.command()
+@commands.command(aliases=["ro"])
 async def role(ctx,role: discord.Role=None):
   if role==None:
     role=ctx.author.top_role
@@ -435,7 +455,7 @@ async def role(ctx,role: discord.Role=None):
   #embed.add_field(name="Channel Permissions", value=f3vb, inline=False)
   await ctx.send(embed=embed)
 
-@commands.command(aliases = ["guild"])
+@commands.command(aliases = ["guild", "se"])
 async def server(ctx, text = "regular"):
   guild=ctx.guild
   ti=guild.name
@@ -668,7 +688,7 @@ async def template(ctx, *, tempinput):
   embed.add_field(name="Original Server", value=f3v, inline=True)
   await ctx.send(embed=embed)
 
-@commands.command(aliases=["member"])
+@commands.command(aliases=["member", "mem", "us"])
 async def user(ctx, user: discord.Member = None, channel: discord.TextChannel = None):
   ti="User Information"
   if user==None:
