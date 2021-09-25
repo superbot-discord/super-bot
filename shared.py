@@ -1,6 +1,7 @@
 import json
 import re
-from datetime import datetime, timezone
+from datetime import datetime
+import pytz
 
 import discord
 from discord import Embed, Permissions, ui
@@ -16,6 +17,7 @@ format_length   =lambda secs           : f"{str(secs//86400)} days plus {str(sec
 formabr         =lambda vid            : vid.__getattribute__("abr")+f"\t" if vid.__getattribute__("abr") else 'No audio'
 specialbool     =lambda input          : input.lower() in ["1", "ok", "yes", "ye", "yeah", "enable", "on", "enabled", "tick", "true"]
 has_perms       =lambda chn, memb, perm: (chn.permissions_for(memb).value  & 1 << perm) or (chn.permissions_for(memb).value  & 1 << 8) or memb.id in db["botadmins"]
+naiveness       =lambda dt             : "Naive" if (dt.tzinfo is None or dt.tzinfo.utcoffset(dt) is None) else "Not Naive"
 
 verify_pattern = re.compile(r'[^ ⠀][\s\S]{0,30}?[^ ⠀]#?[\d]{4}(,|, | )?[\d+\-*/×÷%xyz()\[\]\{\}]{1,50}=[\d+\-*/×÷%xyz()\[\]\{\}]{1,50}(,|, | )?[\S ]{3,20}(,|, | )?(Red|Orange|Yellow|Green|Light( |_)?Green|Dark( |_)?Green|Cyan|Blue|Light( |_)?Blue|Dark( |_)?Blue|Purple|Pink|Brown)', re.IGNORECASE)
 id_pattern = re.compile(r'([A-Z]{5})', re.IGNORECASE)
@@ -24,7 +26,7 @@ UNITS = {'s':'seconds', 'm':'minutes', 'h':'hours', 'd':'days', 'w':'weeks'}
 view_overwrite = discord.PermissionOverwrite()
 view_overwrite.view_channel = True
 clickers = {}
-dt1 = datetime(1970,1,1,0,0,0,0,timezone.utc)
+dt1 = datetime(1970,1,1,0,0,0,0,pytz.timezone('GMT'))
 
 def sample_buttons(ctx):
   return [

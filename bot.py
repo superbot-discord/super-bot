@@ -1,6 +1,6 @@
 import random as ra
 import re
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timedelta
 from math import *
 
 import discord as discord

@@ -260,7 +260,6 @@ async def message(ctx, message: discord.Message=None):
       await ctx.send("Please reply to a message or add a message ID/Link.")
       return
   ti="Message Information"
-  
   desc=f"Sent by {message.author.mention} at <t:{round((message.created_at-dt1).total_seconds())}:F>"
   if message.edited_at != None:
     desc += f"Edited at <t:{round((message.edited_at-dt1).total_seconds())}:F>"
