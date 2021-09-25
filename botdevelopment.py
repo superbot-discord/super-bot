@@ -13,7 +13,9 @@ async def button(ctx, *, text=None):
   await ctx.send("All buttons will not timeout.", view = sample_buttons_view)
 
 @commands.command()
-async def join(ctx, vc:discord.VoiceChannel, *, text=None):
+async def join(ctx, vc:discord.VoiceChannel = None, *, text=None):
+  if not vc:
+    vc = ctx.author.voice.channel
   vclients[ctx.guild] = await vc.connect()
 
 @commands.command()
