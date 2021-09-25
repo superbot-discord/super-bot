@@ -56,4 +56,5 @@ def setup(bot):
   bot.add_command(join)
   bot.add_command(leave)
   bot.add_command(patience)
+  bot.add_command(play)
   bot.add_command(select)
