@@ -169,19 +169,19 @@ def botembed(text):
   textlist=text.splitlines()
   embed = discord.Embed()
   try:
-    embed.title            = textlist[0]
+    embed.title        = textlist[0]
   except:
     pass
   try:
-    embed.description      = textlist[1].replace("{{{newline}}}", f"\n")
+    embed.description  = textlist[1].replace("{{{newline}}}", f"\n")
   except:
     pass
   try:
-    embed.color          = int(textlist[2])
+    embed.color        = int(textlist[2])
   except:
     pass
   try:
-    embed.url              = textlist[3]
+    embed.url          = textlist[3]
   except:
     pass
   try:
