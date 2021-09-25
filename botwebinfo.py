@@ -44,9 +44,9 @@ async def definition(ctx, *, word):
     definitions = dictionary.meaning(word)
   except:
     await ctx.send("Invalid word. Please try again.")
-  for count in definitions.keys:
+  for count, count3 in definitions.items():
     desc = desc + f"**{count}**\n"
-    for count2 in definitions[count]:
+    for count2 in count3:
       desc = desc + count2 + f"\n"
   embed = discord.Embed(title=ti, description=desc[:1023])
   try:
@@ -133,17 +133,19 @@ async def minecraft(ctx, *, item="tnt"):
 
 @commands.command()
 async def redirect(ctx, *, url):
+  await ctx.channel.trigger_typing()
   try:
-    urllist = requests.get(url).history
+    r = requests.get(url)
+    urllist = r.history
     if len(urllist) == 0:
       await ctx.send("Invalid URL. Please try again.")
     elif len(urllist) == 1:
       await ctx.send("No redirects found for that URL.")
     elif len(urllist) == 2:
-      await ctx.send("URL redirected to: "+urllist[1])
+      await ctx.send("URL redirected to: "+urllist[1].url+" with status code "+str(urllist[1].status_code))
     else:
       urlend = len(urllist)-2
-      await ctx.send("Initial URL: "+urllist[0]+f"\n"+f"\n".join(urllist[1:urlend])+"Final URL: "+urllist[len(urllist)-1])
+      await ctx.send("Initial URL: "+urllist[0]+f"\n"+f"\n".join([f"{i.status_code}: {i.url}" for i in urllist[1:urlend]])+"Final URL: "+urllist[len(urllist)-1])
   except:
     await ctx.send("Invalid URL. Please try again.")
 
@@ -227,29 +229,27 @@ async def unscramble(ctx, text, length="0"):
 async def wiki(ctx, *, query):
   await ctx.channel.trigger_typing()
   totallen = 0
-  #try:
-  desc = wikipedia.summary(query)[:2047]
-  totallen = totallen + len(wikipedia.summary(query)) + len(desc) + len(query)
-  wpage = wikipedia.page(title=query, auto_suggest=True, redirect=True, preload=False)
-  embed = discord.Embed(title=wpage.title, url="https://en.wikipedia.org/wiki/"+wpage.title.replace(" ","_"), description=desc)
-  counter = 0
-  for count in wpage.sections:
-    if counter >=4 or totallen + len(wpage.section(count)) >= 6000:
-      break
-    if len(wpage.section(count))!=0:
-      embed.add_field(name=count, value=wpage.section(count)[:499], inline=False)
-      totallen = totallen + len(wpage.section(count))
-      counter = counter + 1
-  if len(wpage.images)>=1:
-    embed.set_image(url = wpage.images[1])
-  if len(wpage.images)>=2:
-    embed.set_thumbnail(url = wpage.images[0])
-  # except:
-  #   results = wikipedia.search(query, results=20, suggestion=False)
-  #   desc = "**Please make one of these searches:**"
-  #   for count in results:
-  #     desc = desc + "`"+str(count)+"` "
-  #   embed = discord.Embed(title=query, description=desc)
+  try:
+    desc = wikipedia.summary(query)[:2047]
+    totallen = totallen + len(wikipedia.summary(query)) + len(desc) + len(query)
+    wpage = wikipedia.page(title=query, auto_suggest=True, redirect=True, preload=False)
+    embed = discord.Embed(title=wpage.title, url="https://en.wikipedia.org/wiki/"+wpage.title.replace(" ","_"), description=desc)
+    counter = 0
+    for count in wpage.sections:
+      if counter >=4 or totallen + len(wpage.section(count)) >= 6000:
+        break
+      if len(wpage.section(count))!=0:
+        embed.add_field(name=count, value=wpage.section(count)[:499], inline=False)
+        totallen = totallen + len(wpage.section(count))
+        counter = counter + 1
+    if len(wpage.images)>=1:
+      embed.set_image(url = wpage.images[1])
+    if len(wpage.images)>=2:
+      embed.set_thumbnail(url = wpage.images[0])
+  except:
+    results = wikipedia.search(query, results=20, suggestion=False)
+    desc = f"**Please make one of these searches:**\n`{'` `'.join(results)}`"
+    embed = discord.Embed(title=query, description=desc)
   await ctx.send(embed=embed)
 
 @commands.command()
