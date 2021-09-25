@@ -2,7 +2,7 @@ import base64
 import hashlib
 import random as ra
 import re
-from datetime import datetime
+from datetime import datetime, timezone
 from difflib import SequenceMatcher
 
 import discord as discord
@@ -224,7 +224,7 @@ async def unix(ctx, *, text = "now"):
     dt2 = datetime(
       dateParts.get('y', now.year),   dateParts.get('M', now.month),
       dateParts.get('d', now.day),    dateParts.get('h', now.hour),
-      dateParts.get('m', now.minute), dateParts.get('s', now.second))
+      dateParts.get('m', now.minute), dateParts.get('s', now.second), timezone.utc)
   seconds = round((dt2-dt1).total_seconds())
   await ctx.send(f"`<t:{seconds}>` | <t:{seconds}>\n`<t:{seconds}:F>` | <t:{seconds}:F>\n`<t:{seconds}:f>` | <t:{seconds}:f>\n`<t:{seconds}:D>` | <t:{seconds}:D>\n`<t:{seconds}:d>` | <t:{seconds}:d>\n`<t:{seconds}:T>` | <t:{seconds}:T>\n`<t:{seconds}:t>` | <t:{seconds}:t>\n`<t:{seconds}:R>` | <t:{seconds}:R>")
 
