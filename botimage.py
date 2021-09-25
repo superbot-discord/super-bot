@@ -182,11 +182,11 @@ def analyse(scale, colors):
     s_total += hsl_tuple.s
     l_total += hsl_tuple.l
     draw.rectangle((counter, 0, counter+count.proportion*scale, round(scale/3)), (rgb_tuple.r, rgb_tuple.g, rgb_tuple.b))
-    hexcode = f'{((rgb_tuple.r << 16) + (rgb_tuple.g << 8) + rgb_tuple.b):02x}'.upper()
+    hexcode = f'{((rgb_tuple.r << 16) + (rgb_tuple.g << 8) + rgb_tuple.b):02x}'.upper().zfill(6)
     desc += f"{rgb_tuple.r}\t{rgb_tuple.g}\t{rgb_tuple.b}\t{hsl_tuple.h}\t{hsl_tuple.s}\t{hsl_tuple.l}\t{hexcode}\t{str(count.proportion*100)}%\n"
     counter += count.proportion*scale
   newimg.save('output_amount.png')
-  avg_hexcode = f'#{((round(r_total/colors) << 16) + (round(g_total/colors) << 8) + round(b_total/colors)):02x}'.upper()
+  avg_hexcode = f'#{((round(r_total/colors) << 16) + (round(g_total/colors) << 8) + round(b_total/colors)):02x}'.upper().zfill(6)
   desc += f"Average:\n{round(r_total/colors,2)}\t{round(g_total/colors,2)}\t{round(b_total/colors,2)}\t{round(h_total/colors,2)}\t{round(s_total/colors,2)}\t{round(l_total/colors,2)}\t{avg_hexcode}"
   
   palette.sort(key=lambda c: c.hsl.l)
@@ -212,7 +212,7 @@ def analyse(scale, colors):
   newimg.save('output_hue.png')
 
   dominant = ColorThief('input.png').get_color(quality=1)
-  hexcode = f'#{((dominant[0] << 16) + (dominant[1] << 8) + dominant[2]):02x}'.upper()
+  hexcode = f'#{((dominant[0] << 16) + (dominant[1] << 8) + dominant[2]):02x}'.upper().zfill(6)
 
   f = open("analysis.txt", "a")
   f.write(desc)
