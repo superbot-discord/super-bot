@@ -38,7 +38,7 @@ formabr = lambda vid: vid.__getattribute__("abr")+f"\t" if vid.__getattribute__(
 
 @commands.command()
 async def definition(ctx, *, word):
-  ti = "Definition of "+word
+  await ctx.channel.trigger_typing()
   desc = ""
   try:
     definitions = dictionary.meaning(word)
@@ -48,7 +48,7 @@ async def definition(ctx, *, word):
     desc = desc + f"**{count}**\n"
     for count2 in count3:
       desc = desc + count2 + f"\n"
-  embed = discord.Embed(title=ti, description=desc[:1023])
+  embed = discord.Embed(title=f"Definition of {word}", description=desc[:1023])
   try:
     synonyms = dictionary.synonym(word)
     embed.add_field(name="Synonyms", value=", ".join(synonyms))
@@ -131,7 +131,7 @@ async def minecraft(ctx, *, item="tnt"):
   except:
     await ctx.send("No Wiki page with that name found.")
 
-@commands.command()
+@commands.command(aliaes=["redir", "redirs", "redirects", "red"])
 async def redirect(ctx, *, url):
   await ctx.channel.trigger_typing()
   try:
