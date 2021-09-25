@@ -238,18 +238,18 @@ To use the 13 commands above, type `=image ` first, then upload an image. Exampl
 
 def help_menu_options(ctx):
   return [
-    discord.SelectOption(label="All", description="Rough list of all commands",                                           value="help_all"), #emoji=ctx.bot.get_emoji(), 
-    discord.SelectOption(label="Basic", description="Fundamental commands, e.g. help, ping",                              value="help_basic"), #emoji=ctx.bot.get_emoji(), 
-    discord.SelectOption(label="Discord info", description="Discord information viewer, e.g. server. user",               value="help_dinfo"), #emoji=ctx.bot.get_emoji(), 
-    discord.SelectOption(label="Discord", description="Commands that interact with Discord, e.g. snipe",                  value="help_discord"), #emoji=ctx.bot.get_emoji(), 
-    discord.SelectOption(label="Moderation", description="Commands to simplify server moderation, e.g. purge, makeinvite",value="help_mod"), #emoji=ctx.bot.get_emoji(), 
-    discord.SelectOption(label="Text", description="Have fun with your text, e.g. reverse, encode",                       value="help_text"), #emoji=ctx.bot.get_emoji(), 
-    discord.SelectOption(label="Information", description="Informative commands, e.g. color, unix",                       value="help_info"), #emoji=ctx.bot.get_emoji(), 
-    discord.SelectOption(label="Web", description="Commands that interact with the Internet, e.g. youtube, wiki",         value="help_web"), #emoji=ctx.bot.get_emoji(), 
-    discord.SelectOption(label="Plot", description="Commands to draw graphs, e.g. pie, bar",                              value="help_plot"), #emoji=ctx.bot.get_emoji(), 
-    discord.SelectOption(label="Developer", description="Developer-oriented commands, e.g. html, regex",                  value="help_dev"), #emoji=ctx.bot.get_emoji(), 
-    discord.SelectOption(label="Image", description="Image-editing or analysing commands, e.g. analyse, ocr",             value="help_img"), #emoji=ctx.bot.get_emoji(), 
-    discord.SelectOption(label="General Documentation", description="Quick links and documentation website",              value="help_general"), #emoji=ctx.bot.get_emoji(), 
+    discord.SelectOption(label="All", description="Rough list of all commands",                                           value="help_all", emoji=ctx.bot.get_emoji(891363286589780058)), # :HelpDocs: <:HelpDocs:>
+    discord.SelectOption(label="Basic", description="Fundamental commands, e.g. help, ping",                              value="help_basic", emoji=ctx.bot.get_emoji(891363286661087272)), # :HelpAll: <:HelpAll:>
+    discord.SelectOption(label="Discord info", description="Discord information viewer, e.g. server. user",               value="help_dinfo", emoji=ctx.bot.get_emoji(891363286656905246)), # :HelpText: <:HelpText:>
+    discord.SelectOption(label="Discord", description="Commands that interact with Discord, e.g. snipe",                  value="help_discord", emoji=ctx.bot.get_emoji(891363286761734264)), # :HelpPlot: <:HelpPlot:>
+    discord.SelectOption(label="Moderation", description="Commands to simplify server moderation, e.g. purge, makeinvite",value="help_mod", emoji=ctx.bot.get_emoji(891363286786928650)), # :HelpDiscordInfo: <:HelpDiscordInfo:>
+    discord.SelectOption(label="Text", description="Have fun with your text, e.g. reverse, encode",                       value="help_text", emoji=ctx.bot.get_emoji(891363286614949898)), # :HelpBasic: <:HelpBasic:>
+    discord.SelectOption(label="Information", description="Informative commands, e.g. color, unix",                       value="help_info", emoji=ctx.bot.get_emoji(891363286694625342)), # :HelpDeveloper: <:HelpDeveloper:>
+    discord.SelectOption(label="Web", description="Commands that interact with the Internet, e.g. youtube, wiki",         value="help_web", emoji=ctx.bot.get_emoji(891363286761734265)), # :HelpImage: <:HelpImage:>
+    discord.SelectOption(label="Plot", description="Commands to draw graphs, e.g. pie, bar",                              value="help_plot", emoji=ctx.bot.get_emoji(891363286631743618)), # :HelpInfo: <:HelpInfo:>
+    discord.SelectOption(label="Developer", description="Developer-oriented commands, e.g. html, regex",                  value="help_dev", emoji=ctx.bot.get_emoji(891363286665265183)), # :HelpDiscord: <:HelpDiscord:>
+    discord.SelectOption(label="Image", description="Image-editing or analysing commands, e.g. analyse, ocr",             value="help_img", emoji=ctx.bot.get_emoji(891363286694625341)), # :HelpWeb: <:HelpWeb:>
+    discord.SelectOption(label="General Documentation", description="Quick links and documentation website",              value="help_general", emoji=ctx.bot.get_emoji(891363286078066749)), # :HelpModeration: <:HelpModeration:>
   ]
 
 help_basic = discord.Embed(title="SuperBot Basic Commands", description=f"""
