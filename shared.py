@@ -295,3 +295,12 @@ help_discord = discord.Embed(title="SuperBot Discord Commands", description=f"""
 **tts [Content]** Sends a message with TTS. Bot and you need `Send TTS Messages`.\n
 Check [how to supply embeds](https://superbot-discord.github.io/Appendices/A1/). `=pretendembed` and `=editembed` takes the same arguments as `=embed`.
 Need help? check the [documentation](https://superbot-discord.github.io/documentation)!""")
+
+craftbot_embed = discord.Embed(title="CraftBot", description=f"""
+CraftBot is a fun-oriented bot developed by me (Johann, also developer of SuperBot) and Murvon (my real-life friend).
+Its commands are highly related to Minecraft; though non-players will be entertained by the bot as well.
+The most important fact is that it does not have "votewalls" (vote-for-rewards) or excessive "paywalls" (pay-for-features).
+Note: The button allows you to invite CraftBot without opening a browser.
+""".replace(f"\n", " "))
+def craftbot_buttons(ctx):
+  return ui.Button(style=discord.ButtonStyle.url, row=0, label="Invite!", url="https://discord.com/api/oauth2/authorize?client_id=814444200946434069&permissions=909631057&scope=bot", emoji=ctx.bot.get_emoji(891265683801923604))

@@ -1,6 +1,6 @@
 import random as ra
 import re
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from math import *
 
 import discord as discord
@@ -23,6 +23,7 @@ bot_.load_extension("botengrave")
 bot_.load_extension("botimage")
 bot_.load_extension("botinfo")
 bot_.load_extension("botmoderate")
+bot_.load_extension("botpartners")
 bot_.load_extension("botplot")
 bot_.load_extension("botcalc")
 bot_.load_extension("bottext")
