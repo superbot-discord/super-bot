@@ -201,8 +201,11 @@ async def reverse(ctx, *, text):
 @commands.command()
 async def spoiler(ctx,*,text):
   text="||||".join(text)
-  text="||"+text+"||"
-  await ctx.send(text)
+  await ctx.send(f"||{text}||")
+
+@commands.command(aliases=['antispoiler', 'antispoilers', 'aspoiler', 'aspoilers', 'spoils'])
+async def spoil(ctx, *, text):
+  await ctx.send(text.replace("||", ""))
 
 @commands.command()
 async def unicode(ctx, *, query):
@@ -243,5 +246,6 @@ def setup(bot):
   bot.add_command(rawrawspoiler)
   bot.add_command(reverse)
   bot.add_command(spoiler)
+  bot.add_command(spoil)
   bot.add_command(unicode)
   bot.add_command(unix)
