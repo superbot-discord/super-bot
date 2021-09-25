@@ -17,13 +17,13 @@ async def join(ctx, vc:discord.VoiceChannel = None, *, text=None):
   if not vc:
     vc = ctx.author.voice.channel
   vclients[ctx.guild] = await vc.connect()
-  await ctx.send("Left the channel.")
+  await ctx.send("Joined the channel.")
 
 @commands.command()
 async def leave(ctx, *, text=None):
   await ctx.guild.voice_client.disconnect()
   del vclients[ctx.guild]
-  await ctx.send("Joined the channel.")
+  await ctx.send("Left the channel.")
 
 @commands.command()
 @commands.cooldown(2, 10, commands.BucketType.user)
@@ -41,7 +41,7 @@ async def play(ctx, *, song):
     vc = await ctx.author.voice.channel.connect()
     vclients[ctx.guild] = vc
   if SequenceMatcher(None, song, "rickroll").ratio() > 0.7:
-    audio_source = discord.FFmpegPCMAudio('songs/rickroll.mp3')
+    audio_source = discord.FFmpegPCMAudio('songs/rickroll.mp3', options="volume:1.5")
   if SequenceMatcher(None, song, "stickbug").ratio() > 0.7:
     audio_source = discord.FFmpegPCMAudio('songs/stickbug.mp3')
   vc.play(audio_source)
