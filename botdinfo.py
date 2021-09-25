@@ -278,9 +278,9 @@ async def message(ctx, message: discord.Message=None):
   f1v = ""
   for count in f1vraw:
     if count.is_spoiler:
-      f1v += f"[{count.filename}]({count.url}) ({sizer(count.size)}, marked as spoiler)"
+      f1v += f"[{count.filename}]({count.url}) ({sizer(count.size)}, marked as spoiler)\n"
     else:
-      f1v += f"[{count.filename}]({count.url}) ({sizer(count.size)})"
+      f1v += f"[{count.filename}]({count.url}) ({sizer(count.size)})\n"
   f2vraw = message.channel_mentions
   f2v = ""
   for count in f2vraw:
