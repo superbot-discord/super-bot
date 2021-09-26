@@ -910,6 +910,7 @@ async def user(ctx, user: discord.Member = None, channel: discord.TextChannel = 
 
 def setup(bot):
   bot.add_command(avatar)
+  bot.add_command(banner)
   bot.add_command(channel)
   bot.add_command(emojiinfo)
   bot.add_command(emojis)
