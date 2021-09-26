@@ -34,30 +34,32 @@ async def channel(ctx, channel:typing.Union[discord.TextChannel, discord.VoiceCh
   if not channel:
     channel = ctx.channel
   if channel.type == discord.ChannelType.text:
-    task = asyncio.create_task(bottchannel(ctx, channel))
+    task = asyncio.create_task(bottchannel(channel))
     await task
     await ctx.send(embed=task.result())
   elif channel.type == discord.ChannelType.voice:
     task = asyncio.create_task(botvchannel(channel))
     await task
     await ctx.send(embed=task.result())
-  elif channel.type == discord.ChannelType.stage:
+  elif channel.type == discord.ChannelType.stage_voice:
     task = asyncio.create_task(botstagec(channel))
+    await task
+    await ctx.send(embed=task.result())
+  elif channel.type in [discord.ChannelType.public_thread, discord.ChannelType.private_thread]:
+    task = asyncio.create_task(botthread(channel))
     await task
     await ctx.send(embed=task.result())
   else:
     embed = discord.Embed(desc = "Invalid input.")
     await ctx.send(embed=embed)
 
-async def bottchannel(ctx, channel):
-  if channel==None:
-    channel=ctx.channel
+async def bottchannel(channel):
   ti="Channel Information: "+channel.name
-  desc=channel.mention
+  desc=f"{channel.mention} Created at <t:{round((channel.created_at-dt1).total_seconds())}:F>"
   embed=discord.Embed(title=ti, description=desc)
-  f0v=f"<t:{round((channel.created_at-dt1).total_seconds())}:F>"
+  f1v = channel.slowmode_delay
+  f2v = [count.name for count in channel.threads]
   f3v=str(channel.topic)
-  f4v=str(channel.category)
   try:
     f5v=" ".join(await channel.invites())
   except:
@@ -75,31 +77,40 @@ async def bottchannel(ctx, channel):
     f8v = f8v [:-2] + "…"
   async for count in channel.history(limit=1, oldest_first=True):
     f9v=count
-  embed.add_field(name="Created", value=f0v, inline=True)
-  if channel.is_nsfw()==True:
-    embed.add_field(name="NSFW", value="This is an NSFW channel.", inline=True)
-  if channel.is_news()==True:
-    embed.add_field(name="News", value="This is a news channel.", inline=True)
-  embed.add_field(name="Topic", value=f3v, inline=True)
-  embed.add_field(name="Category", value=f4v, inline=True)
+  if len(f3v)>=45:
+    embed.add_field(name="Topic", value=f3v, inline=False)
+  else:
+    embed.add_field(name="Topic", value=f3v, inline=True)
+  embed.add_field(name="Category", value=str(channel.category), inline=True)
+  if f1v:
+    embed.add_field(name="Slowmode delay", value=f"{f1v} seconds", inline=True)
   embed.add_field(name="Members", value=f8v, inline=False)
+  if f2v:
+    embed.add_field(name="Threads", value=f2v, inline=False)
   if f5v:
     embed.add_field(name="Invites", value=f5v, inline=True)
   embed.add_field(name="ID", value=channel.id, inline=True)
   embed.add_field(name="First message", value=f"[here]({f9v.jump_url})", inline=True)
+  if channel.is_nsfw()==True:
+    embed.add_field(name="NSFW", value="This is an NSFW channel.", inline=True)
+  if channel.is_news()==True:
+    embed.add_field(name="News", value="This is a news channel.", inline=True)
   return embed
 
 async def botvchannel(channel):
-  ti="Voice Channel Information"
-  desc=channel.name
+  print(str(channel.rtc_region).title())
+  ti=f"Voice Channel Information: {channel.name}"
+  desc=f"{channel.mention} created at <t:{round((channel.created_at-dt1).total_seconds())}:F>"
   embed=discord.Embed(title=ti, description=desc)
-  f0v=f"<t:{round((channel.created_at-dt1).total_seconds())}:F>"
-  f1v=str(channel.category)
-  f2vlist=await channel.invites()
-  f2v=""
-  for count in f2vlist:
-    f2v=f2v+count.url+"  "
-  f2v=f2v[:-2]
+  f1v = channel.video_quality_mode
+  try:
+    f2vlist=await channel.invites()
+    f2v=""
+    for count in f2vlist:
+      f2v=f2v+count.url+"  "
+    f2v=f2v[:-2]
+  except:
+    f2v = "Cannot get invites without Manage Invites permission."
   f5vlist=channel.members
   f5v=""
   for count in f5vlist:
@@ -109,26 +120,29 @@ async def botvchannel(channel):
   if str(channel.user_limit)=="0":
     f4v="Infinite"
   else:
-    f4v=str(channel.user_limit)+" members"
-  embed.add_field(name="Created", value=f0v, inline=True)
-  embed.add_field(name="Category", value=f1v, inline=True)
+    f4v=f"{len(f5vlist)}/{channel.user_limit} members"
+  f6v = channel.rtc_region
+  embed.add_field(name="Category", value=str(channel.category), inline=True)
   if len(f2vlist)!=0:
     embed.add_field(name="Invites", value=f2v, inline=False)
   embed.add_field(name="Bitrate", value=f3v, inline=True)
   embed.add_field(name="Max. Members", value=f4v, inline=True)
+  embed.add_field(name="Server region", value=voice_region_format(channel.rtc_region), inline=True)
+  if f1v == discord.VideoQualityMode.auto:
+    embed.add_field(name="Video quality", value="Auto", inline=True)
+  else:
+    embed.add_field(name="Video quality", value="Full (720p)", inline=True)
   if len(f5vlist)!=0:
     embed.add_field(name="Current Members", value=f5v, inline=True)
   return embed
 
 async def botstagec(channel):
-  ti="Stage Channel Information"
-  try:
-    desc=channel.name + "  " + channel.topic
-  except:
-    desc=channel.name
+  ti=f"Stage Channel Information: {channel.name}"
+  if channel.topic:
+    desc=f"{channel.mention}  {channel.topic}\nCreated at <t:{round((channel.created_at-dt1).total_seconds())}:F>"
+  else:
+    desc=f"{channel.name}\nCreated at <t:{round((channel.created_at-dt1).total_seconds())}:F>"
   embed=discord.Embed(title=ti, description=desc)
-  f0v=f"<t:{round((channel.created_at-dt1).total_seconds())}:F"
-  f1v=str(channel.category)
   f2vlist=await channel.invites()
   f2v=""
   for count in f2vlist:
@@ -144,13 +158,12 @@ async def botstagec(channel):
   for count in f6vlist:
     f6v=f6v+count.mention+"  "
   f6v=f6v[:-2]
-  f3v=str(channel.bitrate//1000)+" kbps"
-  if str(channel.user_limit)=="0":
-    f4v="Infinite"
-  else:
+  f3v=str(channel.bitrate//1024)+" kbps"
+  if channel.user_limit:
     f4v=str(channel.user_limit)+" members"
-  embed.add_field(name="Created", value=f0v, inline=True)
-  embed.add_field(name="Category", value=f1v, inline=True)
+  else:
+    f4v="Infinite"
+  embed.add_field(name="Category", value=str(channel.category), inline=True)
   if len(f2vlist)!=0:
     embed.add_field(name="Invites", value=f2v, inline=False)
   embed.add_field(name="Bitrate", value=f3v, inline=True)
@@ -159,6 +172,32 @@ async def botstagec(channel):
     embed.add_field(name="Current Members", value=f5v, inline=True)
   if len(f6vlist)!=0:
     embed.add_field(name="Members requesting to speak", value=f6v, inline=True)
+
+async def botthread(channel):
+  ti=f"Thread Information: {channel.name}"
+  desc=f"{channel.mention} Created by {channel.owner.mention}\nArchives at <t:{round((channel.archive_timestamp-dt1).total_seconds())}:F>"
+  embed=discord.Embed(title=ti, description=desc)
+  f1v = channel.slowmode_delay
+  f8v = ""
+  for count in channel.members:
+    if len(f8v+ f"<@{count.id}> ") >= 500:
+      f8v += "…"
+    f8v+= f"<@{count.id}> "
+  async for count in channel.history(limit=1, oldest_first=True):
+    f9v=count
+  embed.add_field(name="Category", value=str(channel.category), inline=True)
+  if f1v:
+    embed.add_field(name="Slowmode delay", value=f"{f1v} seconds", inline=True)
+  embed.add_field(name="Members", value=f8v, inline=False)
+  embed.add_field(name="ID", value=channel.id, inline=True)
+  embed.add_field(name="First message", value=f"[here]({f9v.jump_url})", inline=True)
+  if channel.is_nsfw():
+    embed.add_field(name="NSFW", value="This is an NSFW thread.", inline=True)
+  if channel.is_news():
+    embed.add_field(name="News", value="This is a news thread.", inline=True)
+  if channel.is_private():
+    embed.add_field(name="Private", value="This is a private thread.", inline=True)
+  return embed
 
 @commands.command()
 async def emojiinfo(ctx,emojiarg : typing.Union[discord.Emoji, str]):

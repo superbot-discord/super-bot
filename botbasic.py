@@ -26,6 +26,13 @@ async def invite(ctx, *, text=None):
 async def prefix(ctx, *, text=None):
   await ctx.send("The prefix for SuperBot is `=` (an equal sign).")
 
+@commands.command(aliases=['supportserver', 'supports', 'johann', 'johannlau', 'supporting', 'team', 'dev', 'developer'])
+async def support(ctx, *, text=None):
+  support_view = ui.View(timeout=0)
+  for count in support_buttons:
+    support_view.add_item(count)
+  await ctx.send(embed=support_embed, view=support_view)
+
 def setup(bot):
   bot.add_command(hello)
   bot.add_command(help)

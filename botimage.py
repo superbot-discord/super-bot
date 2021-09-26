@@ -318,11 +318,11 @@ async def mandelbrot(ctx, size:int = 1024):
 @commands.command()
 async def ocr(ctx, lang="eng", *, text = None):
   images = ctx.message.attachments
-  for count in range(0,len(images)):
+  for count in images:
     await count.save('input.png')
     img = Image.open('input.png')
     desc=pytesseract.image_to_string(img, lang=lang)
-    if desc.replace(" ","")=="":
+    if not desc.replace(" ",""):
       desc="There was no text."
     await ctx.send(desc)
 

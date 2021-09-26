@@ -1,6 +1,7 @@
 import json
 import re
 from datetime import datetime
+from discord.enums import VoiceRegion
 import pytz
 
 import discord
@@ -18,6 +19,33 @@ formabr         =lambda vid            : vid.__getattribute__("abr")+f"\t" if vi
 specialbool     =lambda input          : input.lower() in ["1", "ok", "yes", "ye", "yeah", "enable", "on", "enabled", "tick", "true"]
 has_perms       =lambda chn, memb, perm: (chn.permissions_for(memb).value  & 1 << perm) or (chn.permissions_for(memb).value  & 1 << 8) or memb.id in db["botadmins"]
 naiveness       =lambda dt             : "Naive" if (dt.tzinfo is None or dt.tzinfo.utcoffset(dt) is None) else "Not Naive"
+
+def voice_region_format(region):
+  if not region: return "Auto"
+  if region == discord.VoiceRegion.amsterdam  : return "Amsterdam"
+  if region == discord.VoiceRegion.brazil     : return "Brazil"
+  if region == discord.VoiceRegion.dubai      : return "Dubai"
+  if region == discord.VoiceRegion.eu_central : return "Europe (Central)"
+  if region == discord.VoiceRegion.eu_west    : return "Europe (West)"
+  if region == discord.VoiceRegion.europe     : return "Europe"
+  if region == discord.VoiceRegion.frankfurt  : return "Frankfurt"
+  if region == discord.VoiceRegion.hongkong   : return "Hong Kong"
+  if region == discord.VoiceRegion.india      : return "India"
+  if region == discord.VoiceRegion.japan      : return "Japan"
+  if region == discord.VoiceRegion.london     : return "London"
+  if region == discord.VoiceRegion.russia     : return "Russia"
+  if region == discord.VoiceRegion.singapore  : return "Singapore"
+  if region == discord.VoiceRegion.southafrica: return "South Africa"
+  if region == discord.VoiceRegion.south_korea: return "South Korea"
+  if region == discord.VoiceRegion.sydney     : return "Sydney"
+  if region == discord.VoiceRegion.us_central : return "USA (Central)"
+  if region == discord.VoiceRegion.us_east    : return "USA (East)"
+  if region == discord.VoiceRegion.us_south   : return "USA (South)"
+  if region == discord.VoiceRegion.us_west    : return "USA (West)"
+  if region == discord.VoiceRegion.vip_amsterdam: return "Amsterdam (VIP)"
+  if region == discord.VoiceRegion.vip_us_east  : return "USA (East) (VIP)"
+  if region == discord.VoiceRegion.vip_us_west  : return "USA (West) (VIP)"
+  return "An error occured."
 
 verify_pattern = re.compile(r'[^ ⠀][\s\S]{0,30}?[^ ⠀]#?[\d]{4}(,|, | )?[\d+\-*/×÷%xyz()\[\]\{\}]{1,50}=[\d+\-*/×÷%xyz()\[\]\{\}]{1,50}(,|, | )?[\S ]{3,20}(,|, | )?(Red|Orange|Yellow|Green|Light( |_)?Green|Dark( |_)?Green|Cyan|Blue|Light( |_)?Blue|Dark( |_)?Blue|Purple|Pink|Brown)', re.IGNORECASE)
 id_pattern = re.compile(r'([A-Z]{5})', re.IGNORECASE)
@@ -43,6 +71,13 @@ def sample_buttons(ctx):
   ui.Button(style=discord.ButtonStyle.url,       row=1, disabled=True, label="URL (grey)", url=ctx.message.jump_url),
 ]
 
+support_embed = discord.Embed(title="Support", description=f"""
+If you need support, please kindly join the support server or directly contact JohannLau#6541.
+""".replace(f"\n", " "))
+support_buttons = [
+  ui.Button(style=discord.ButtonStyle.url, row=0, label="Support server", url="https://discord.gg/sesedKMWHH"),
+  ui.Button(style=discord.ButtonStyle.url, row=0, label="Bot creator", url="https://discord.com/channels/@me/752345200029859871"),
+]
 #clicker_button = ui.Button(style=discord.ButtonStyle.primary, row=0, custom_id="clicker", label="Click me!")
 
 sample_options = [

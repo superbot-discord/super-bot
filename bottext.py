@@ -145,6 +145,10 @@ async def insert(ctx,emoji,*,text):
   await ctx.send(text)
 
 @commands.command()
+async def length(ctx, *, text):
+  await ctx.send(f"The piece of text contains {len(text)} characters.")
+
+@commands.command()
 async def pick(ctx,lower:int,upper:int,times:int):
   ti=f"{times} random number(s) between {lower} and {upper}"
   desc=f"Your random number(s) is/are:\n"
