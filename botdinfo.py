@@ -1,14 +1,14 @@
 import asyncio
+import os
 import re
 import typing
 from datetime import datetime, timedelta, timezone
 from difflib import SequenceMatcher
 
+import discord as discord
 import emojis as em
 import matplotlib.pyplot as plt
 import numpy as np
-
-import discord as discord
 from discord.ext import commands
 from shared import *
 
@@ -496,7 +496,7 @@ async def raw(ctx, msg : discord.Message):
   embed = discord.Embed(title = "Raw message", url = msg.jump_url, description = "```"+discord.utils.escape_markdown(msg.content, as_needed=True)+"```")
   await ctx.send(embed=embed)
 
-@commands.command(aliases = ["rea"])
+@commands.command(aliases=["rea"])
 async def reactions(ctx, *, msg : discord.Message):
   reactions = msg.reactions
   numlist = []
@@ -512,7 +512,8 @@ async def reactions(ctx, *, msg : discord.Message):
   mycolors = []
   for count in range(0, len(numlist)):
     mycolors.append(cmaphsv(count/len(numlist)))
-  plt.pie(y, labels=labels, colors=mycolors, autopct=lambda pct: func(pct, y), textprops = {'color':"w"})
+  plt.pie(y, labels=labels, colors=mycolors, autopct=lambda pct: func(pct, y),
+  textprops = {'color':"w"}, rotatelabels=True)
   plt.legend(loc="lower right")
   plt.title("Reaction Status")
   plt.savefig("reactions.png", transparent=True)
@@ -549,12 +550,11 @@ async def role(ctx,role: discord.Role=None):
     embed.add_field(name="Bot", value="This is a bot role.", inline=False)
   if role.is_premium_subscriber():
     embed.add_field(name="Bot", value="This is the Discord Booster role.", inline=False)
-  if len(embed)<=4000:
-    embed.add_field(name="Members ("+str(len(memberlist))+")", value=f0v, inline=False)
+  embed.add_field(name="Members ("+str(len(memberlist))+")", value=f0v[:5950-len(embed)], inline=False)
   #embed.add_field(name="Channel Permissions", value=f3vb, inline=False)
   await ctx.send(embed=embed)
 
-@commands.command(aliases = ["guild", "se"])
+@commands.command(aliases=["guild", "se"])
 async def server(ctx, text = "regular"):
   guild=ctx.guild
   ti=guild.name
@@ -736,7 +736,7 @@ async def server(ctx, text = "regular"):
     embed.set_field_at(3, name="Roles ("+str(len(guild.roles))+")", value=f1va, inline=False)
     await ctx.send(embed=embed)
 
-@commands.command()
+@commands.command(aliases=["sta"])
 async def status(ctx, member : discord.Member = None):
   if member==None:
     member=ctx.author
@@ -759,7 +759,7 @@ async def status(ctx, member : discord.Member = None):
             field=":"+count.emoji.name+":"
       embed.add_field(name="Status", value=field, inline=False)
     if str(count.type)=="ActivityType.playing":
-      field=count.name+f"\nStarted: {(count.start-dt1).total_seconds()}"
+      field=count.name+f"\nStarted: <t:{round((count.start-dt1).total_seconds())}:F>"
       embed.add_field(name="Game", value=field, inline=False)
     if str(count.type)=="ActivityType.streaming":
       field=f"[{count.platform}: {count.name}]({count.url})\nStarted: <t:{round((count.start-dt1).total_seconds())}:F>"
@@ -770,6 +770,31 @@ async def status(ctx, member : discord.Member = None):
       embed.add_field(name=f"Spotify: {count.album}", value=field, inline=False)
       embed.set_thumbnail(url=count.album_cover_url)
   await ctx.send(embed=embed)
+
+@commands.command(aliases=["sts"])
+async def statuses(ctx, *, text = None):
+  onlines = dnds = idles = offlines = 0
+  for count in ctx.guild.members:
+    if count.status == discord.Status.online:
+      onlines += 1
+    elif count.status == discord.Status.dnd:
+      dnds += 1
+    elif count.status == discord.Status.idle:
+      idles += 1
+    else:
+      offlines += 1
+  numlist = [onlines, dnds, idles, offlines]
+  patches, labels, pct_texts = plt.pie(np.array(numlist), labels=("Online", "DND", "Idle", "Offline"),
+    colors=["#3ba55d", "#ed4245", "#faa91a", "#747f8d"], rotatelabels=True, pctdistance=0.6,
+  autopct=lambda pct: func(pct, numlist), textprops = {'color':"w"})
+  for label, pct_text in zip(labels, pct_texts):
+    pct_text.set_rotation(label.get_rotation())
+  plt.legend(loc="upper left")
+  plt.title("Statuses Analysis")
+  plt.savefig("statuses.png", transparent=True)
+  await ctx.send(file = discord.File('statuses.png'))
+  plt.clf()
+  os.remove('statuses.png')
 
 @commands.command()
 async def stickers(ctx, *, text=None):
@@ -925,5 +950,6 @@ def setup(bot):
   bot.add_command(server)
   bot.add_command(stickers)
   bot.add_command(status)
+  bot.add_command(statuses)
   bot.add_command(template)
   bot.add_command(user)
