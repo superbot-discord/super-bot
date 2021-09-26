@@ -166,8 +166,7 @@ async def botvchannel(channel):
     f4v=f"{len(f5vlist)}/{channel.user_limit} members"
   f6v = channel.rtc_region
   embed.add_field(name="Category", value=str(channel.category), inline=True)
-  if len(f2vlist)!=0:
-    embed.add_field(name="Invites", value=f2v, inline=False)
+  embed.add_field(name="Invites", value=f2v, inline=False)
   embed.add_field(name="Bitrate", value=f3v, inline=True)
   embed.add_field(name="Max. Members", value=f4v, inline=True)
   embed.add_field(name="Server region", value=voice_region_format(channel.rtc_region), inline=True)
