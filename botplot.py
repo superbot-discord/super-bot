@@ -70,7 +70,7 @@ async def barh(ctx, numbers, label, *, title="No_title_required"):
     ax.set_yticklabels(labels)
     ax.invert_yaxis()
     if title != "No_title_required":
-      plt.title(title)
+      plt.title(title, fontdict={'color':'w'})
     plt.savefig("horizontalbarchart.png", transparent=True)
     plt.clf()
     await ctx.send(file=discord.File("horizontalbarchart.png"))
@@ -95,7 +95,7 @@ async def barv(ctx, numbers, label, *, title="No_title_required"):
     ax.set_xticks(x_pos)
     ax.set_xticklabels(labels)
     if title != "No_title_required":
-      plt.title(title)
+      plt.title(title, fontdict={'color':'w'})
     plt.savefig("verticalbarchart.png", transparent=True)
     plt.clf()
     await ctx.send(file=discord.File("verticalbarchart.png"))
@@ -138,7 +138,7 @@ async def hist(ctx, numbers, *, title="No_title_required"):
     numlist = list(map(float, numlist))
     plt.hist(numlist)
     if title != "No_title_required":
-      plt.title(title)
+      plt.title(title, fontdict={'color':'w'})
     plt.savefig("histogram.png", transparent=True)
     plt.clf()
     await ctx.send(file=discord.File("histogram.png"))
@@ -166,7 +166,7 @@ async def pie(ctx, numbers, label="", *, title="No_title_required"):
       pct_text.set_rotation(label.get_rotation())
     plt.legend(loc="lower right")
     if title != "No_title_required":
-      plt.title(title)
+      plt.title(title, fontdict={'color':'w'})
     plt.savefig("piechart.png", transparent=True)
     plt.clf()
     await ctx.send(file=discord.File("piechart.png"))
@@ -338,11 +338,12 @@ async def table(ctx, *, text):
 
 @commands.command()
 async def sankey(ctx, innumber, inlabel, outnumber, outlabel, title="No_title_required"):
+  innumber, inlabel, outnumber, outlabel = [count.split(',') for count in [innumber, inlabel, outnumber, outlabel]]
   if len(innumber) == len(inlabel) and len(outnumber) == len(outlabel):
     halflen = (len(innumber)-1)//2
     Sankey(flows=[innumber].extend(innumber).append(outnumber),labels=[inlabel].extend(inlabel).append(outlabel),orientations=[0].extend([1]*halflen).extend([-1]*(len(innumber)-halflen))).finish()
     if title != "No_title_required":
-      plt.title(title)
+      plt.title(title, fontdict={'color':'w'})
     plt.savefig("sankey.png", transparent=True)
     plt.clf()
     await ctx.send(file=discord.File("sankey.png"))

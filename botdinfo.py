@@ -516,8 +516,8 @@ async def reactions(ctx, *, msg : discord.Message):
   pctdistance=0.6, autopct=lambda pct: func(pct, y),textprops = {'color':"w"})
   for label, pct_text in zip(labels, pct_texts):
     pct_text.set_rotation(label.get_rotation())
-  plt.legend(loc="lower right")
-  plt.title("Reaction Status")
+  plt.legend()
+  plt.title("Reaction Status", fontdict={'color':'w'})
   plt.savefig("reactions.png", transparent=True)
   await ctx.send(file = discord.File('reactions.png'))
   plt.clf()
