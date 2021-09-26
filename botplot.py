@@ -69,6 +69,9 @@ async def barh(ctx, numbers, label, *, title="No_title_required"):
     ax.set_yticks(y_pos)
     ax.set_yticklabels(labels)
     ax.invert_yaxis()
+    for count in ['top', 'bottom', 'left', 'right']:
+      ax.spines[count].set_color("w")
+    ax.tick_params(axis='both', colors='w')
     if title != "No_title_required":
       plt.title(title, fontdict={'color':'w'})
     plt.savefig("horizontalbarchart.png", transparent=True)
@@ -94,12 +97,58 @@ async def barv(ctx, numbers, label, *, title="No_title_required"):
     ax.bar(np.arange(len(labels)), numlist, align='center')
     ax.set_xticks(x_pos)
     ax.set_xticklabels(labels)
+    for count in ['top', 'bottom', 'left', 'right']:
+      ax.spines[count].set_color("w")
+    ax.tick_params(axis='both', colors='w')
     if title != "No_title_required":
       plt.title(title, fontdict={'color':'w'})
     plt.savefig("verticalbarchart.png", transparent=True)
     plt.clf()
     await ctx.send(file=discord.File("verticalbarchart.png"))
     os.remove('verticalbarchart.png')
+  except:
+    await ctx.send("Invalid input. Please try again.")
+
+@commands.command(aliases=["brokenl", "brokel", "breakl", "brokenline"])
+async def bline(ctx, numbers, *, title="No_title_required"):
+  try:
+    numlist = numbers.split(",")
+    numlist = list(map(float, numlist))
+    plt.rcdefaults()
+    fig, ax = plt.subplots()
+    ax.plot(numlist)
+    for count in ['top', 'bottom', 'left', 'right']:
+      ax.spines[count].set_color("w")
+    ax.tick_params(axis='both', colors='w')
+    if title != "No_title_required":
+      plt.title(title, fontdict={'color':'w'})
+    plt.savefig("brokenline.png", transparent=True)
+    plt.clf()
+    await ctx.send(file=discord.File("brokenline.png"))
+    os.remove('brokenline.png')
+  except:
+    await ctx.send("Invalid input. Please try again.")
+
+@commands.command(aliases=["multibrokenl", "multibrokel", "multibreakl", "multibrokenline"])
+async def multibline(ctx, numbers, labels, *, title="No_title_required"):
+  try:
+    lines = numbers.split(";")
+    plt.rcdefaults()
+    fig, ax = plt.subplots()
+    labels = labels.split(",")
+    for count1 in range(len(lines)):
+      numlist = lines[count1].split(",")
+      numlist = list(map(float, numlist))
+      ax.plot(numlist, label=labels[count1])
+    for count in ['top', 'bottom', 'left', 'right']:
+      ax.spines[count].set_color("w")
+    ax.tick_params(axis='both', colors='w')
+    if title != "No_title_required":
+      plt.title(title, fontdict={'color':'w'})
+    plt.savefig("brokenline.png", transparent=True)
+    plt.clf()
+    await ctx.send(file=discord.File("brokenline.png"))
+    os.remove('brokenline.png')
   except:
     await ctx.send("Invalid input. Please try again.")
 
@@ -137,6 +186,10 @@ async def hist(ctx, numbers, *, title="No_title_required"):
     numlist = numbers.split(",")
     numlist = list(map(float, numlist))
     plt.hist(numlist)
+    fig, ax = plt.subplots()
+    for count in ['top', 'bottom', 'left', 'right']:
+      ax.spines[count].set_color("w")
+    ax.tick_params(axis='both', colors='w')
     if title != "No_title_required":
       plt.title(title, fontdict={'color':'w'})
     plt.savefig("histogram.png", transparent=True)
@@ -336,12 +389,11 @@ async def table(ctx, *, text):
   await ctx.send(f"```{output}```", file=discord.File('table.txt'))
   os.remove('table.txt')
 
-
-
 def setup(bot):
   bot.add_command(ascii)
   bot.add_command(barh)
   bot.add_command(barv)
+  bot.add_command(bline)
   bot.add_command(hist)
   bot.add_command(pie)
   bot.add_command(qrmake)
