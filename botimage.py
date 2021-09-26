@@ -338,17 +338,17 @@ async def render(ctx, width:float=1):
   att = ctx.message.attachments[0]
   for count in range(40, 4, -1):
     try:
-      output = asc.loadFromUrl(att.url, columns=int(att.width*count*width/10), color=True)
+      output = asc.loadFromUrl(att.url, columns=int(att.width*count*width/10))
       if sys.getsizeof(output) > 8000000:
         continue
       break
     except:
       pass
-  file = open('Output.txt', 'w')
+  file = open('output.txt', 'w')
   file.write(output)
   file.close()
-  await ctx.send(file = discord.File('Output.txt'))
-  os.remove('Output.txt')
+  await ctx.send(file = discord.File('output.txt'))
+  os.remove('output.txt')
 
 @commands.command()
 async def text(ctx, *, text = None):
