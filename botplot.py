@@ -185,8 +185,8 @@ async def hist(ctx, numbers, *, title="No_title_required"):
   try:
     numlist = numbers.split(",")
     numlist = list(map(float, numlist))
-    plt.hist(numlist)
     fig, ax = plt.subplots()
+    plt.hist(numlist)
     for count in ['top', 'bottom', 'left', 'right']:
       ax.spines[count].set_color("w")
     ax.tick_params(axis='both', colors='w')
@@ -394,6 +394,7 @@ def setup(bot):
   bot.add_command(barh)
   bot.add_command(barv)
   bot.add_command(bline)
+  bot.add_command(multibline)
   bot.add_command(hist)
   bot.add_command(pie)
   bot.add_command(qrmake)
