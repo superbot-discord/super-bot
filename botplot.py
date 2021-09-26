@@ -117,6 +117,7 @@ async def bline(ctx, numbers, *, title="No_title_required"):
     plt.rcdefaults()
     fig, ax = plt.subplots()
     ax.plot(numlist)
+    ax.legend()
     for count in ['top', 'bottom', 'left', 'right']:
       ax.spines[count].set_color("w")
     ax.tick_params(axis='both', colors='w')
@@ -143,6 +144,7 @@ async def multibline(ctx, numbers, labels, *, title="No_title_required"):
     for count in ['top', 'bottom', 'left', 'right']:
       ax.spines[count].set_color("w")
     ax.tick_params(axis='both', colors='w')
+    ax.legend()
     if title != "No_title_required":
       plt.title(title, fontdict={'color':'w'})
     plt.savefig("brokenline.png", transparent=True)
