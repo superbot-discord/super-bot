@@ -34,22 +34,23 @@ async def avatar(ctx,user: discord.Member=None):
   await ctx.send(embed=embed)
 
 @commands.command()
-async def banner(ctx,user: discord.User=None):
+async def banner(ctx, user: typing.Union[discord.User, discord.Member]=None):
   if user:
     try:
-      base_url = ctx.bot.fetch_user(user.id).banner.url
+      user = await ctx.bot.fetch_user(user.id)
+      base_url = user.banner.url
     except:
       await ctx.send("The user does not have a banner.")
       return
     desc = f"Banner of {user.mention}\n"
     embed=discord.Embed(title="Banner", description=desc)
-    embed.set_image(url=user.banner.url)
+    embed.set_image(url=base_url)
     for count1 in ['png', 'jpg', 'webp']:
       desc = ""
-      base_url = user.banner.url.replace('.png', f'.{count1}')
-      for count in range(5, 13):
+      second_base_url = base_url.replace('.png', f'.{count1}')
+      for count in range(4, 13):
         size = str(2**count)
-        temp = base_url.replace("?size=1024", f"?size={size}")
+        temp = second_base_url.replace("?size=512", f"?size={size}")
         desc += f"[{size}]({temp}) "
       embed.add_field(name=f"{count1.upper()}s", value=desc)
   else:
@@ -64,7 +65,7 @@ async def banner(ctx,user: discord.User=None):
     for count1 in ['png', 'jpg', 'webp']:
       desc = ""
       base_url = ctx.guild.banner.url.replace('.png', f'.{count1}')
-      for count in range(5, 13):
+      for count in range(4, 13):
         size = str(2**count)
         temp = base_url.replace("?size=1024", f"?size={size}")
         desc += f"[{size}]({temp}) "
