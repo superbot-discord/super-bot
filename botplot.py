@@ -147,7 +147,7 @@ async def hist(ctx, numbers, *, title="No_title_required"):
     await ctx.send("Invalid input. Please try again.")
 
 @commands.command(aliases=["piechart", "circlechart"])
-async def pie(ctx, numbers, label, *, title="No_title_required"):
+async def pie(ctx, numbers, label="", *, title="No_title_required"):
   try:
     numlist = numbers.split(",")
     numlist = list(map(float, numlist))
