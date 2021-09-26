@@ -762,7 +762,7 @@ async def status(ctx, member : discord.Member = None):
       field=count.name+f"\nStarted: {(count.start-dt1).total_seconds()}"
       embed.add_field(name="Game", value=field, inline=False)
     if str(count.type)=="ActivityType.streaming":
-      field=f"[{count.platform}: {count.name}]({count.url})\nStarted: <t:{(count.start-dt1).total_seconds()}:F>"
+      field=f"[{count.platform}: {count.name}]({count.url})\nStarted: <t:{round((count.start-dt1).total_seconds())}:F>"
       embed.add_field(name="Game", value=field, inline=False)
       embed.set_thumbnail(url=count.large_image_url)
     if str(count.type)=="ActivityType.listening":
@@ -848,7 +848,7 @@ async def user(ctx, user: discord.Member = None, channel: discord.TextChannel = 
   try:
     if f3vcraw.type.playing:
       try:
-        f3vc = f"Playing {f3vcraw.name} since <t:{(f3vcraw.start-dt1).total_seconds()}\n{f3vcraw.details}"
+        f3vc = f"Playing {f3vcraw.name} since <t:{round((f3vcraw.start-dt1).total_seconds())}\n{f3vcraw.details}"
       except:
         f3vc = f"Playing {f3vcraw.name}"
     elif f3vcraw.type.streaming:
