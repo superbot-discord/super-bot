@@ -169,7 +169,7 @@ async def pick(ctx,lower:int,upper:int,times:int):
 
 @commands.command()
 async def random(ctx,lower:int,upper:int):
-  ti="Random number between "+lower+" and "+upper
+  ti=f"Random number between {lower} and {upper}"
   rand=ra.randint(lower,upper)
   rand=str(rand)
   desc="Your random number is "+rand

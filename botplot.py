@@ -324,10 +324,10 @@ async def simpcolor(ctx, *, name):
   os.remove('color.svg')
 
 @commands.command(alias=["snowgraph", "snowflake"])
-async def snow(ctx, recursion = 10):  
+async def snow(ctx, recursion = 7):  
   try:
-    if float(recursion) > 10:
-      await ctx.send("We are sorry, the maximum recursion we can process is 10.")
+    if float(recursion) > 11:
+      await ctx.send("We are sorry, the maximum recursion we can process is 11.")
     else:
       x, y = koch_snowflake(recursion)
       plt.figure(figsize=(8, 8))
@@ -341,9 +341,11 @@ async def snow(ctx, recursion = 10):
       ax.spines['left'].set_visible(False)
       ax.spines['right'].set_visible(False)
       plt.savefig("snow.png", transparent=True)
-      plt.savefig("snow.svg", transparent=True)
+      if float(recursion) < 8:
+        plt.savefig("snow.svg", transparent=True)
+        await ctx.send(file=discord.File("snow.svg"))
+      await ctx.send(file=discord.File("snow.png"))
       plt.clf()
-      await ctx.send(files=[discord.File("snow.png"), discord.File("snow.svg")])
       os.remove('snow.png')
       os.remove('snow.svg')
   except:
