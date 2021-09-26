@@ -217,9 +217,9 @@ async def on_message(message):
       await message.add_reaction("<:DownArrowSquare:864762633625534485>")
     elif message.channel.id in [805459414001778739, 805462208414089217, 880076327783370812]:
       await message.publish()
-    if message.author.id not in banned_ids and message.content.startswith("=") and message.content.startswith("==")==False:
+    if message.author.id not in banned_ids and message.content.startswith("==")==False:
       await bot_.process_commands(message)
-    elif message.author.id in banned_ids and message.content.startswith("=") and message.content.startswith("==")==False:
+    elif message.author.id in banned_ids and message.content.startswith("==")==False:
       await message.channel.send("You are banned from the bot. Reason: "+banned_text[banned_ids.index(message.author.id)])
   except:
     pass
