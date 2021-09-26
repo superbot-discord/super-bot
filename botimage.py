@@ -336,19 +336,18 @@ async def qr(ctx, *, text=None):
 @commands.command()
 async def render(ctx, width:float=1):
   att = ctx.message.attachments[0]
-  for count in range(40, 4, -1):
+  att_width = att.width
+  for count in range(1,0, -0.05):
     try:
-      output = asc.loadFromUrl(att.url, columns=int(att.width*count*width/10))
-      if sys.getsizeof(output) > 8000000:
-        continue
+      output = asc.loadFromUrl(att.url, columns=int(att_width*count*width), color=False)
+      file = open('output.txt', 'w')
+      file.write(output)
+      file.close()
+      await ctx.send(file = discord.File('output.txt'))
+      os.remove('output.txt')
       break
     except:
       pass
-  file = open('output.txt', 'w')
-  file.write(output)
-  file.close()
-  await ctx.send(file = discord.File('output.txt'))
-  os.remove('output.txt')
 
 @commands.command()
 async def text(ctx, *, text = None):
