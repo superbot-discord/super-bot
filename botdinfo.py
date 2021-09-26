@@ -550,7 +550,8 @@ async def role(ctx,role: discord.Role=None):
     embed.add_field(name="Bot", value="This is a bot role.", inline=False)
   if role.is_premium_subscriber():
     embed.add_field(name="Bot", value="This is the Discord Booster role.", inline=False)
-  embed.add_field(name="Members ("+str(len(memberlist))+")", value=f0v, inline=False)
+  if len(embed)<=4000:
+    embed.add_field(name="Members ("+str(len(memberlist))+")", value=f0v, inline=False)
   #embed.add_field(name="Channel Permissions", value=f3vb, inline=False)
   await ctx.send(embed=embed)
 
