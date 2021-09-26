@@ -39,3 +39,4 @@ def setup(bot):
   bot.add_command(interactive_help)
   bot.add_command(invite)
   bot.add_command(prefix)
+  bot.add_command(support)
