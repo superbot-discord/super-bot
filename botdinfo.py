@@ -21,12 +21,54 @@ async def avatar(ctx,user: discord.Member=None):
   if not user:
     user=ctx.author
   desc = f"Avatar of {user.mention}\n"
-  for count in range(5, 13):
-    size = str(2**count)
-    temp = base_url.replace("?size=1024", f"?size={size}")
-    desc += f"[{size}]({temp}) "
   embed=discord.Embed(title="Avatar", description=desc)
-  embed.set_image(url=base_url)
+  for count1 in ['png', 'jpg', 'webp']:
+    desc = ""
+    base_url = user.avatar.url.replace('.png', f'.{count1}')
+    for count in range(5, 13):
+      size = str(2**count)
+      temp = base_url.replace("?size=1024", f"?size={size}")
+      desc += f"[{size}]({temp}) "
+    embed.add_field(name=f"{count1.upper()}s", value=desc)
+  embed.set_image(url=user.avatar.url)
+  await ctx.send(embed=embed)
+
+@commands.command()
+async def banner(ctx,user: discord.User=None):
+  if user:
+    try:
+      base_url = ctx.bot.fetch_user(user.id).banner.url
+    except:
+      await ctx.send("The user does not have a banner.")
+      return
+    desc = f"Banner of {user.mention}\n"
+    embed=discord.Embed(title="Banner", description=desc)
+    embed.set_image(url=user.banner.url)
+    for count1 in ['png', 'jpg', 'webp']:
+      desc = ""
+      base_url = user.banner.url.replace('.png', f'.{count1}')
+      for count in range(5, 13):
+        size = str(2**count)
+        temp = base_url.replace("?size=1024", f"?size={size}")
+        desc += f"[{size}]({temp}) "
+      embed.add_field(name=f"{count1.upper()}s", value=desc)
+  else:
+    try:
+      base_url = ctx.guild.banner.url
+    except:
+      await ctx.send("The server does not have a banner.")
+      return
+    desc = f"Banner of the server\n"
+    embed=discord.Embed(title="Banner", description=desc)
+    embed.set_image(url=ctx.guild.banner.url)
+    for count1 in ['png', 'jpg', 'webp']:
+      desc = ""
+      base_url = ctx.guild.banner.url.replace('.png', f'.{count1}')
+      for count in range(5, 13):
+        size = str(2**count)
+        temp = base_url.replace("?size=1024", f"?size={size}")
+        desc += f"[{size}]({temp}) "
+      embed.add_field(name=f"{count1.upper()}s", value=desc)
   await ctx.send(embed=embed)
 
 @commands.command()
