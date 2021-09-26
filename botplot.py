@@ -324,9 +324,9 @@ async def snow(ctx, recursion = 10):
       ax.spines['left'].set_visible(False)
       ax.spines['right'].set_visible(False)
       plt.savefig("snow.png", transparent=True)
+      plt.savefig("snow.svg", transparent=True)
       plt.clf()
-      file = discord.File("snow.png")
-      await ctx.send(file=file)
+      await ctx.send(files=[discord.File("snow.png"), discord.File("snow.svg")])
       os.remove('snow.png')
   except:
     await ctx.send("Invalid input. Please try again.")
