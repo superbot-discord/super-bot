@@ -1,6 +1,7 @@
 import random as ra
 import re
 from datetime import datetime, timedelta, timezone
+from difflib import SequenceMatcher
 from math import *
 
 import discord as discord
@@ -12,7 +13,7 @@ from shared import *
 banned_ids = []
 banned_text = []
 bot_admins = [687474789342117900]
-bot_ = commands.Bot(command_prefix=commands.when_mentioned_or("="), intents=discord.Intents.all(), case_insensitive=True)
+bot_ = commands.Bot(command_prefix=commands.when_mentioned_or("="), intents=discord.Intents.all(), case_insensitive=True, strip_after_prefix=True)
 bot_.remove_command('help')
 bot_.load_extension("botanimals")
 bot_.load_extension("botbasic")
@@ -32,6 +33,30 @@ bot_.load_extension("botwebscrape")
 
 sniper1=sniper2=sniper3=sniper4=sniper5=sniperdate1=sniperdate2=sniperdate3=sniperdate4=sniperdate5=sniperdict=sniping=poll_options={}
 snipereactions=polls=allid=[]
+
+
+@bot_.event
+async def on_command_error(ctx, error):
+  if isinstance(error, commands.CommandNotFound):
+    message = ctx.message
+    used_prefix = ctx.prefix
+    used_command = message.content.split()[0][len(used_prefix):]
+    available_commands = [cmd.name for cmd in bot_.commands]
+    matches = {cmd: SequenceMatcher(None, cmd, used_command).ratio() for cmd in available_commands}
+    command = max(matches.items(), key=lambda item: item[1])[0]
+    try:
+      arguments = message.content.split(" ", 1)[1]
+    except IndexError:
+      arguments = ""
+    new_content = f"{used_prefix}{command} {arguments}".strip()
+    message.content = new_content
+    await ctx.send(f'Your might have made a typo and your command has been interpreted as `{command}`.', delete_after=4)
+    await bot_.process_commands(message)
+  elif isinstance(error, commands.MissingRequiredArgument):
+    await ctx.send(f'You missed one or more arguments! {len(ctx.command.clean_params.keys())} argument(s) are required.\nNote: Multiline arguments are treated as one argument.')
+  else:
+    print(error.with_traceback(error.__traceback__))
+    await ctx.send(f"An error occured:\n```{error.with_traceback(error.__traceback__)}```\nPlease kindly inform JohannLau#6541 about this issue.")
 
 @bot_.event
 async def on_voice_state_update(member, before, after):

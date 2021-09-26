@@ -58,7 +58,10 @@ async def bottchannel(ctx, channel):
   f0v=f"<t:{round((channel.created_at-dt1).total_seconds())}:F>"
   f3v=str(channel.topic)
   f4v=str(channel.category)
-  f5v=" ".join(await channel.invites())
+  try:
+    f5v=" ".join(await channel.invites())
+  except:
+    f5v="Cannot get invites without Manage Invites permission."
   f8v = ""
   for count in channel.members:
     f8v=f8v+count.mention+" "
