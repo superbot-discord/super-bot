@@ -336,19 +336,7 @@ async def table(ctx, *, text):
   await ctx.send(f"```{output}```", file=discord.File('table.txt'))
   os.remove('table.txt')
 
-@commands.command()
-async def sankey(ctx, innumber, inlabel, outnumber, outlabel, title="No_title_required"):
-  innumber, inlabel, outnumber, outlabel = [count.split(',') for count in [innumber, inlabel, outnumber, outlabel]]
-  if len(innumber) == len(inlabel) and len(outnumber) == len(outlabel):
-    halflen = (len(innumber)-1)//2
-    Sankey(flows=[innumber].extend(innumber).append(outnumber),labels=[inlabel].extend(inlabel).append(outlabel),orientations=[0].extend([1]*halflen).extend([-1]*(len(innumber)-halflen))).finish()
-    if title != "No_title_required":
-      plt.title(title, fontdict={'color':'w'})
-    plt.savefig("sankey.png", transparent=True)
-    plt.clf()
-    await ctx.send(file=discord.File("sankey.png"))
-  else:
-    await ctx.send("Invalid input. Please try again.")
+
 
 def setup(bot):
   bot.add_command(ascii)
@@ -359,5 +347,4 @@ def setup(bot):
   bot.add_command(qrmake)
   bot.add_command(simpcolor)
   bot.add_command(snow)
-  bot.add_command(sankey)
   bot.add_command(table)
