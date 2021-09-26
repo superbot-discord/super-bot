@@ -512,8 +512,10 @@ async def reactions(ctx, *, msg : discord.Message):
   mycolors = []
   for count in range(0, len(numlist)):
     mycolors.append(cmaphsv(count/len(numlist)))
-  plt.pie(y, labels=labels, colors=mycolors, autopct=lambda pct: func(pct, y),
-  textprops = {'color':"w"}, rotatelabels=True)
+  patches, labels, pct_texts = plt.pie(y, labels=labels, colors=mycolors, rotatelabels=True,
+  pctdistance=0.6, autopct=lambda pct: func(pct, y),textprops = {'color':"w"}, rotatelabels=True)
+  for label, pct_text in zip(labels, pct_texts):
+    pct_text.set_rotation(label.get_rotation())
   plt.legend(loc="lower right")
   plt.title("Reaction Status")
   plt.savefig("reactions.png", transparent=True)
@@ -789,7 +791,7 @@ async def statuses(ctx, *, text = None):
   autopct=lambda pct: func(pct, numlist), textprops = {'color':"w"})
   for label, pct_text in zip(labels, pct_texts):
     pct_text.set_rotation(label.get_rotation())
-  plt.legend(loc="upper left")
+  plt.legend()#loc="upper left")
   plt.title("Statuses Analysis")
   plt.savefig("statuses.png", transparent=True)
   await ctx.send(file = discord.File('statuses.png'))

@@ -160,7 +160,10 @@ async def pie(ctx, numbers, label, *, title="No_title_required"):
     y = np.array(numlist)
     for count in range(0, len(numlist)):
       mycolors.append(cmaphsv(count/len(numlist)))
-    plt.pie(y, labels=labels, colors=mycolors, autopct=lambda pct: func(pct, y), textprops = {'color':"w"})
+    patches, labels, pct_texts = plt.pie(y, labels=labels, colors=mycolors, autopct=lambda pct: func(pct, y),
+    rotatelabels=True, pctdistance=0.6, textprops = {'color':"w"})
+    for label, pct_text in zip(labels, pct_texts):
+      pct_text.set_rotation(label.get_rotation())
     plt.legend(loc="lower right")
     if title != "No_title_required":
       plt.title(title)
