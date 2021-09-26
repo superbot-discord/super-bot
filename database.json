@@ -1,4 +1,11 @@
 {
+  "status_buttons" : [
+    {"label":"New website", "url":"https://superbot-discord.github.io/"},
+    {"label":"Old website", "url":"https://github.com/johann-lau/bot"}
+  ],
+  "status_timestamps" : {
+    "start":1610000820
+  },
   "botadmins": [
     687474789342117900,
     752335217339007067

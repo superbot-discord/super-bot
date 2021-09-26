@@ -512,7 +512,11 @@ async def ttimer(ctx, timetocount,*,Text=None):
 
 @bot_.event
 async def on_ready():
-  activity = discord.Activity(type=discord.ActivityType.playing, name=f"with =help in {len(bot_.guilds)} servers")
+  activity = discord.Activity(
+    type=discord.ActivityType.playing,
+    name=f"with =help in {len(bot_.guilds)} servers",
+    buttons=db["status_buttons"],
+    timestamps = db["status_timestamps"])
   await bot_.change_presence(status=discord.Status.idle, activity=activity)
   print("Bot is ready!")
 
