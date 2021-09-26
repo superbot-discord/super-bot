@@ -115,6 +115,8 @@ async def html(ctx, *, htmlcode = None):
   match = html_pattern.fullmatch(htmlcode)
   if match:
     code = re.sub(html_pattern, r"\2", htmlcode)
+  else:
+    code = htmlcode
   if code == None:
     r = requests.get(ctx.message.attachments[0].url, stream=True)
     r.raise_for_status()

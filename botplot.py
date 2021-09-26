@@ -75,9 +75,11 @@ async def barh(ctx, numbers, label, *, title="No_title_required"):
     if title != "No_title_required":
       plt.title(title, fontdict={'color':'w'})
     plt.savefig("horizontalbarchart.png", transparent=True)
+    plt.savefig("horizontalbarchart.svg", transparent=True)
     plt.clf()
-    await ctx.send(file=discord.File("horizontalbarchart.png"))
+    await ctx.send(files=[discord.File("horizontalbarchart.png"), discord.File("horizontalbarchart.svg")])
     os.remove('horizontalbarchart.png')
+    os.remove('horizontalbarchart.svg')
   except:
     await ctx.send("Invalid input. Please try again.")
 
@@ -103,9 +105,11 @@ async def barv(ctx, numbers, label, *, title="No_title_required"):
     if title != "No_title_required":
       plt.title(title, fontdict={'color':'w'})
     plt.savefig("verticalbarchart.png", transparent=True)
+    plt.savefig("verticalbarchart.svg", transparent=True)
     plt.clf()
-    await ctx.send(file=discord.File("verticalbarchart.png"))
+    await ctx.send(files=[discord.File("verticalbarchart.png"), discord.File("verticalbarchart.svg")])
     os.remove('verticalbarchart.png')
+    os.remove('verticalbarchart.svg')
   except:
     await ctx.send("Invalid input. Please try again.")
 
@@ -124,9 +128,11 @@ async def bline(ctx, numbers, *, title="No_title_required"):
     if title != "No_title_required":
       plt.title(title, fontdict={'color':'w'})
     plt.savefig("brokenline.png", transparent=True)
+    plt.savefig("brokenline.svg", transparent=True)
     plt.clf()
-    await ctx.send(file=discord.File("brokenline.png"))
+    await ctx.send(files=[discord.File("brokenline.png"), discord.File("brokenline.svg")])
     os.remove('brokenline.png')
+    os.remove('brokenline.svg')
   except:
     await ctx.send("Invalid input. Please try again.")
 
@@ -148,9 +154,11 @@ async def multibline(ctx, numbers, labels, *, title="No_title_required"):
     if title != "No_title_required":
       plt.title(title, fontdict={'color':'w'})
     plt.savefig("brokenline.png", transparent=True)
+    plt.savefig("brokenline.svg", transparent=True)
     plt.clf()
-    await ctx.send(file=discord.File("brokenline.png"))
+    await ctx.send(files=[discord.File("brokenline.png"), discord.File("brokenline.svg")])
     os.remove('brokenline.png')
+    os.remove('brokenline.svg')
   except:
     await ctx.send("Invalid input. Please try again.")
 
@@ -195,9 +203,11 @@ async def hist(ctx, numbers, *, title="No_title_required"):
     if title != "No_title_required":
       plt.title(title, fontdict={'color':'w'})
     plt.savefig("histogram.png", transparent=True)
+    plt.savefig("histogram.svg", transparent=True)
     plt.clf()
-    await ctx.send(file=discord.File("histogram.png"))
+    await ctx.send(files=[discord.File("histogram.png"), discord.File("histogram.svg")])
     os.remove('histogram.png')
+    os.remove('histogram.svg')
   except:
     await ctx.send("Invalid input. Please try again.")
 
@@ -223,9 +233,11 @@ async def pie(ctx, numbers, label="", *, title="No_title_required"):
     if title != "No_title_required":
       plt.title(title, fontdict={'color':'w'})
     plt.savefig("piechart.png", transparent=True)
+    plt.savefig("piechart.svg", transparent=True)
     plt.clf()
-    await ctx.send(file=discord.File("piechart.png"))
+    await ctx.send(files=[discord.File("piechart.png"), discord.File("piechart.svg")])
     os.remove('piechart.png')
+    os.remove('piechart.svg')
   except:
     await ctx.send("Invalid input. Please try again.")
 
@@ -299,12 +311,17 @@ async def simpcolor(ctx, *, name):
     plt.axis('off')
     plt.subplots_adjust(top = 1, right = 1, bottom = 0, left = 0)
     plt.savefig("color.png", transparent=True)
+    plt.savefig("color.svg", transparent=True)
   except:
     bcs = plt.gca()
     plt.setp(ax.spines.values(), color=name)
     ax.set_facecolor(name)
     fig.set_facecolor(name)
     plt.savefig("color.png", transparent=True)
+    plt.savefig("color.svg", transparent=True)
+  await ctx.send(files=[discord.File("color.png"), discord.File("color.svg")])
+  os.remove('color.png')
+  os.remove('color.svg')
 
 @commands.command(alias=["snowgraph", "snowflake"])
 async def snow(ctx, recursion = 10):  
@@ -328,6 +345,7 @@ async def snow(ctx, recursion = 10):
       plt.clf()
       await ctx.send(files=[discord.File("snow.png"), discord.File("snow.svg")])
       os.remove('snow.png')
+      os.remove('snow.svg')
   except:
     await ctx.send("Invalid input. Please try again.")
 
