@@ -513,7 +513,7 @@ async def reactions(ctx, *, msg : discord.Message):
   for count in range(0, len(numlist)):
     mycolors.append(cmaphsv(count/len(numlist)))
   patches, labels, pct_texts = plt.pie(y, labels=labels, colors=mycolors, rotatelabels=True,
-  pctdistance=0.6, autopct=lambda pct: func(pct, y),textprops = {'color':"w"}, rotatelabels=True)
+  pctdistance=0.6, autopct=lambda pct: func(pct, y),textprops = {'color':"w"})
   for label, pct_text in zip(labels, pct_texts):
     pct_text.set_rotation(label.get_rotation())
   plt.legend(loc="lower right")
