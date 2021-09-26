@@ -337,9 +337,9 @@ async def qr(ctx, *, text=None):
 async def render(ctx, width:float=1):
   att = ctx.message.attachments[0]
   att_width = att.width
-  for count in range(1,0, -0.05):
+  for count in range(100,0, -5):
     try:
-      output = asc.loadFromUrl(att.url, columns=int(att_width*count*width), color=False)
+      output = asc.loadFromUrl(att.url, columns=int(att_width*count/100*width), color=False)
       file = open('output.txt', 'w')
       file.write(output)
       file.close()
