@@ -1,3 +1,4 @@
+import random
 from difflib import SequenceMatcher
 import typing
 
@@ -43,8 +44,12 @@ async def play(ctx, volume: typing.Optional[int]=100, *, song):
     vclients[ctx.guild] = vc
   if SequenceMatcher(None, song, "rickroll").ratio() > 0.7:
     audio_source = discord.FFmpegPCMAudio('songs/rickroll.mp3', options=f'-filter:a "volume={volume/100}"')
-  if SequenceMatcher(None, song, "stickbug").ratio() > 0.7:
+  elif SequenceMatcher(None, song, "stickbug").ratio() > 0.7:
     audio_source = discord.FFmpegPCMAudio('songs/stickbug.mp3')
+  else:
+    random_play_id = random.randint(1000000,9999999)
+    await ctx.message.attachments[0].save(f'music_{random_play_id}.mp3')
+    audio_source = discord.FFmpegPCMAudio(f'music_{random_play_id}.mp3')
   vc.play(audio_source)
   await ctx.send("Now playing the song.")
 
@@ -54,7 +59,6 @@ async def select(ctx, *, text=None):
   for count in sample_menus():
     sample_select_view.add_item(count)
   await ctx.send("All menus will not timeout.", view = sample_select_view)
-
 def setup(bot):
   bot.add_command(button)
   bot.add_command(join)
