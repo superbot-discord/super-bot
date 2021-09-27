@@ -30,10 +30,10 @@ async def leave(ctx, *, text=None):
 @commands.command()
 async def loop(ctx, *, text=None):
   if ctx.voice_state.loop:
-    ctx.voice_state.loop = False
+    vclients.get(ctx.guild, None).is_playing.loop = False
     await ctx.send('Disabled loop.')
   elif not ctx.voice_state.loop:
-    ctx.voice_state.loop = True
+    vclients.get(ctx.guild, None).is_playing.loop = True
     await ctx.send('Enabled loop.')
 
 @commands.command()
@@ -47,11 +47,11 @@ async def patience_error(ctx, error):
 
 @commands.command(aliases=['continue', 'resume', 'paused'])
 async def pause(ctx, *, text=None):
-  if ctx.voice_state.is_playing and ctx.voice_state.voice.is_playing():
-    ctx.voice_state.voice.pause()
+  if vclients.get(ctx.guild, None).is_playing:
+    vclients.get(ctx.guild, None).is_playing.pause()
     await ctx.send("Paused the song.")
   else:
-    ctx.voice_state.voice.resume()
+    vclients.get(ctx.guild, None).is_playing.resume()
     await ctx.send("Resumed the song.")
 
 @commands.command()
