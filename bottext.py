@@ -152,7 +152,7 @@ async def length(ctx, *, text):
   length_analysis = {}
   for count in text:
     length_analysis[count] = length_analysis.get(count, 0) + 1
-  length_analysis = {count1: count2 for count1, count2 in sorted(length_analysis.items(), key=lambda item: item[1])}
+  length_analysis = {count1: count2 for count1, count2 in sorted(length_analysis.items(), key=lambda item: item[1], reversed=True)}
   for (count1, count2),count3 in zip(length_analysis.items(), range(10)):
     desc += f"`{count1}` ({count2})\n"
   await length_msg.edit(desc)

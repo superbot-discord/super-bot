@@ -158,32 +158,6 @@ async def bline2(ctx, numbers, xnumbers, *, title="No_title_required"):
   except:
     await ctx.send("Invalid input. Please try again.")
 
-@commands.command(aliases=["multibrokenl", "multibrokel", "multibreakl", "multibrokenline"])
-async def multibline(ctx, numbers, labels, *, title="No_title_required"):
-  try:
-    lines = numbers.split(";")
-    plt.rcdefaults()
-    fig, ax = plt.subplots()
-    labels = labels.split(",")
-    for count1 in range(len(lines)):
-      numlist = lines[count1].split(",")
-      numlist = list(map(float, numlist))
-      ax.plot(numlist, label=labels[count1])
-    for count in ['top', 'bottom', 'left', 'right']:
-      ax.spines[count].set_color("w")
-    ax.tick_params(axis='both', colors='w')
-    ax.legend()
-    if title != "No_title_required":
-      plt.title(title, fontdict={'color':'w'})
-    plt.savefig("brokenline.png", transparent=True)
-    plt.savefig("brokenline.svg", transparent=True)
-    plt.clf()
-    await ctx.send(files=[discord.File("brokenline.png"), discord.File("brokenline.svg")])
-    os.remove('brokenline.png')
-    os.remove('brokenline.svg')
-  except:
-    await ctx.send("Invalid input. Please try again.")
-
 @commands.command()
 async def draw(ctx, *, text):
   canvas_ = canvas.Canvas()
@@ -212,6 +186,27 @@ async def draw(ctx, *, text):
     await ctx.send(f"```{output}```", file=discord.File('drawing.txt'))
   os.remove('drawing.txt')
 
+@commands.command(aliases=["mathplot", "mathgraph"])
+async def graph(ctx, func, range_low:float=-10.0, range_high:float=10.0, *, title="No_title_required"):
+  try:
+    x_ = np.linspace(range_low, range_high, 200)
+    y_axis = eval(func)
+    fig, ax = plt.subplots()
+    plt.plot(x_, y_axis)
+    for count in ['top', 'bottom', 'left', 'right']:
+      ax.spines[count].set_color("w")
+    ax.tick_params(axis='both', colors='w')
+    if title != "No_title_required":
+      plt.title(title, fontdict={'color':'w'})
+    plt.savefig("graph.png", transparent=True)
+    plt.savefig("graph.svg", transparent=True)
+    plt.clf()
+    await ctx.send(files=[discord.File("graph.png"), discord.File("graph.svg")])
+    os.remove('graph.png')
+    os.remove('graph.svg')
+  except:
+    await ctx.send("Invalid input. Please try again.")
+
 @commands.command(aliases=["histogram", "histograms"])
 async def hist(ctx, numbers, *, title="No_title_required"):
   try:
@@ -230,6 +225,32 @@ async def hist(ctx, numbers, *, title="No_title_required"):
     await ctx.send(files=[discord.File("histogram.png"), discord.File("histogram.svg")])
     os.remove('histogram.png')
     os.remove('histogram.svg')
+  except:
+    await ctx.send("Invalid input. Please try again.")
+
+@commands.command(aliases=["multibrokenl", "multibrokel", "multibreakl", "multibrokenline"])
+async def multibline(ctx, numbers, labels, *, title="No_title_required"):
+  try:
+    lines = numbers.split(";")
+    plt.rcdefaults()
+    fig, ax = plt.subplots()
+    labels = labels.split(",")
+    for count1 in range(len(lines)):
+      numlist = lines[count1].split(",")
+      numlist = list(map(float, numlist))
+      ax.plot(numlist, label=labels[count1])
+    for count in ['top', 'bottom', 'left', 'right']:
+      ax.spines[count].set_color("w")
+    ax.tick_params(axis='both', colors='w')
+    ax.legend()
+    if title != "No_title_required":
+      plt.title(title, fontdict={'color':'w'})
+    plt.savefig("brokenline.png", transparent=True)
+    plt.savefig("brokenline.svg", transparent=True)
+    plt.clf()
+    await ctx.send(files=[discord.File("brokenline.png"), discord.File("brokenline.svg")])
+    os.remove('brokenline.png')
+    os.remove('brokenline.svg')
   except:
     await ctx.send("Invalid input. Please try again.")
 
@@ -440,8 +461,9 @@ def setup(bot):
   bot.add_command(barv)
   bot.add_command(bline)
   bot.add_command(bline2)
-  bot.add_command(multibline)
+  bot.add_command(graph)
   bot.add_command(hist)
+  bot.add_command(multibline)
   bot.add_command(pie)
   bot.add_command(qrmake)
   bot.add_command(simpcolor)
