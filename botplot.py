@@ -136,6 +136,31 @@ async def bline(ctx, numbers, *, title="No_title_required"):
   except:
     await ctx.send("Invalid input. Please try again.")
 
+@commands.command(aliases=["brokenl2", "brokel2", "breakl2", "brokenline2"])
+async def bline2(ctx, numbers, xnumbers, *, title="No_title_required"):
+  try:
+    numlist = numbers.split(",")
+    numlist = list(map(float, numlist))
+    xnumbers = numbers.split(",")
+    xnumbers = list(map(float, xnumbers))
+    plt.rcdefaults()
+    fig, ax = plt.subplots()
+    ax.plot(xnumbers, numlist)
+    ax.legend()
+    for count in ['top', 'bottom', 'left', 'right']:
+      ax.spines[count].set_color("w")
+    ax.tick_params(axis='both', colors='w')
+    if title != "No_title_required":
+      plt.title(title, fontdict={'color':'w'})
+    plt.savefig("brokenline.png", transparent=True)
+    plt.savefig("brokenline.svg", transparent=True)
+    plt.clf()
+    await ctx.send(files=[discord.File("brokenline.png"), discord.File("brokenline.svg")])
+    os.remove('brokenline.png')
+    os.remove('brokenline.svg')
+  except:
+    await ctx.send("Invalid input. Please try again.")
+
 @commands.command(aliases=["multibrokenl", "multibrokel", "multibreakl", "multibrokenline"])
 async def multibline(ctx, numbers, labels, *, title="No_title_required"):
   try:

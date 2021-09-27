@@ -3,6 +3,7 @@ from difflib import SequenceMatcher
 import typing
 
 from discord.ext import commands
+from discord.voice_client import VoiceClient
 
 from shared import *
 
@@ -29,11 +30,11 @@ async def leave(ctx, *, text=None):
 
 @commands.command()
 async def loop(ctx, *, text=None):
-  if ctx.voice_state.loop:
-    vclients.get(ctx.guild, None).is_playing.loop = False
+  if vclients.get(ctx.guild, None).loop:
+    vclients.get(ctx.guild, None).loop = False
     await ctx.send('Disabled loop.')
-  elif not ctx.voice_state.loop:
-    vclients.get(ctx.guild, None).is_playing.loop = True
+  elif not vclients.get(ctx.guild, None).loop:
+    vclients.get(ctx.guild, None).loop = True
     await ctx.send('Enabled loop.')
 
 @commands.command()
@@ -47,7 +48,7 @@ async def patience_error(ctx, error):
 
 @commands.command(aliases=['continue', 'resume', 'paused'])
 async def pause(ctx, *, text=None):
-  if vclients.get(ctx.guild, None).is_playing:
+  if vclients.get(ctx.guild, None).is_playing():
     vclients.get(ctx.guild, None).pause()
     await ctx.send("Paused the song.")
   else:
