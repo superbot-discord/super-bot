@@ -120,7 +120,6 @@ async def bline(ctx, numbers, *, title="No_title_required"):
     plt.rcdefaults()
     fig, ax = plt.subplots()
     ax.plot(numlist)
-    ax.legend()
     for count in ['top', 'bottom', 'left', 'right']:
       ax.spines[count].set_color("w")
     ax.tick_params(axis='both', colors='w')
@@ -241,10 +240,11 @@ async def pie(ctx, numbers, label="", *, title="No_title_required"):
     numlist = list(map(float, numlist))
     mycolors = []
     labels = label.split(",")
-    if len(labels) > len(numlist):
-      labels = labels[:len(numlist)-1]
-    elif len(numlist) > len(labels):
-      numlist = numlist[:len(labels)-1]
+    if label:
+      if len(labels) > len(numlist):
+        labels = labels[:len(numlist)-1]
+      elif len(numlist) > len(labels):
+        numlist = numlist[:len(labels)-1]
     y = np.array(numlist)
     for count in range(0, len(numlist)):
       mycolors.append(cmaphsv(count/len(numlist)))

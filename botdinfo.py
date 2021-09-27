@@ -791,8 +791,8 @@ async def statuses(ctx, *, text = None):
   autopct=lambda pct: func(pct, numlist), textprops = {'color':"w"})
   for label, pct_text in zip(labels, pct_texts):
     pct_text.set_rotation(label.get_rotation())
-  plt.legend()#loc="upper left")
-  plt.title("Statuses Analysis")
+  plt.legend()
+  plt.title("Statuses Analysis", fontdict={'color':'w'})
   plt.savefig("statuses.png", transparent=True)
   await ctx.send(file = discord.File('statuses.png'))
   plt.clf()

@@ -146,7 +146,16 @@ async def insert(ctx,emoji,*,text):
 
 @commands.command()
 async def length(ctx, *, text):
-  await ctx.send(f"The piece of text contains {len(text)} characters.")
+  desc = f"The piece of text contains {len(text)} characters."
+  length_msg = await ctx.send(desc)
+  desc += f"\n**Most common characters:**\n"
+  length_analysis = {}
+  for count in text:
+    length_analysis[count] = length_analysis.get(count, 0) + 1
+  length_analysis = {count1: count2 for count1, count2 in sorted(length_analysis.items(), key=lambda item: item[1])}
+  for (count1, count2),count3 in zip(length_analysis.items(), range(10)):
+    desc += f"`{count1}` ({count2})\n"
+  await length_msg.edit(desc)
 
 @commands.command()
 async def pick(ctx,lower:int,upper:int,times:int):
@@ -243,6 +252,7 @@ def setup(bot):
   bot.add_command(emoji)
   bot.add_command(encode)
   bot.add_command(insert)
+  bot.add_command(length)
   bot.add_command(pick)
   bot.add_command(raffle)
   bot.add_command(random)
