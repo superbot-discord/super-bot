@@ -441,6 +441,7 @@ def setup(bot):
   bot.add_command(barh)
   bot.add_command(barv)
   bot.add_command(bline)
+  bot.add_command(bline2)
   bot.add_command(multibline)
   bot.add_command(hist)
   bot.add_command(pie)
