@@ -48,10 +48,10 @@ async def patience_error(ctx, error):
 @commands.command(aliases=['continue', 'resume', 'paused'])
 async def pause(ctx, *, text=None):
   if vclients.get(ctx.guild, None).is_playing:
-    vclients.get(ctx.guild, None).is_playing.pause()
+    vclients.get(ctx.guild, None).pause()
     await ctx.send("Paused the song.")
   else:
-    vclients.get(ctx.guild, None).is_playing.resume()
+    vclients.get(ctx.guild, None).resume()
     await ctx.send("Resumed the song.")
 
 @commands.command()
@@ -60,14 +60,14 @@ async def play(ctx, volume: typing.Optional[int]=100, *, song="rickroll"):
   if not vc:
     vc = await ctx.author.voice.channel.connect()
     vclients[ctx.guild] = vc
-  if SequenceMatcher(None, song, "rickroll").ratio() > 0.7:
-    audio_source = discord.FFmpegPCMAudio('songs/rickroll.mp3', options=f'-filter:a "volume={volume/100}"')
-  elif SequenceMatcher(None, song, "stickbug").ratio() > 0.7:
-    audio_source = discord.FFmpegPCMAudio('songs/stickbug.mp3')
-  elif len(ctx.message.attachments):
+  if len(ctx.message.attachments):
     random_play_id = random.randint(1000000,9999999)
     await ctx.message.attachments[0].save(f'music_{random_play_id}.mp3')
     audio_source = discord.FFmpegPCMAudio(f'music_{random_play_id}.mp3')
+  elif SequenceMatcher(None, song, "rickroll").ratio() > 0.7:
+    audio_source = discord.FFmpegPCMAudio('songs/rickroll.mp3', options=f'-filter:a "volume={volume/100}"')
+  elif SequenceMatcher(None, song, "stickbug").ratio() > 0.7:
+    audio_source = discord.FFmpegPCMAudio('songs/stickbug.mp3')
   vc.play(audio_source)
   await ctx.send("Playing the song.")
 
