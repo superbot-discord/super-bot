@@ -144,8 +144,7 @@ async def bline2(ctx, numbers, xnumbers, *, title="No_title_required"):
     xnumlist = list(map(float, xnumlist))
     plt.rcdefaults()
     fig, ax = plt.subplots()
-    ax.plot(xnumbers, numlist)
-    ax.legend()
+    ax.plot(xnumlist, numlist)
     for count in ['top', 'bottom', 'left', 'right']:
       ax.spines[count].set_color("w")
     ax.tick_params(axis='both', colors='w')
@@ -368,10 +367,10 @@ async def snow(ctx, recursion = 7):
       if float(recursion) < 8:
         plt.savefig("snow.svg", transparent=True)
         await ctx.send(file=discord.File("snow.svg"))
+        os.remove('snow.svg')
       await ctx.send(file=discord.File("snow.png"))
       plt.clf()
       os.remove('snow.png')
-      os.remove('snow.svg')
   except:
     await ctx.send("Invalid input. Please try again.")
 
