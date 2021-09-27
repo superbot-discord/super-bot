@@ -254,6 +254,28 @@ async def multibline(ctx, numbers, labels, *, title="No_title_required"):
   except:
     await ctx.send("Invalid input. Please try again.")
 
+@commands.command(aliases=["multimathplot", "multimathgraph"])
+async def multigraph(ctx, func, range_low:float=-10.0, range_high:float=10.0, *, title="No_title_required"):
+  try:
+    x_ = np.linspace(range_low, range_high, 200)
+    fig, ax = plt.subplots()
+    for count in func.split(";"):
+      y_axis = eval(count)
+      plt.plot(x_, y_axis)
+    for count in ['top', 'bottom', 'left', 'right']:
+      ax.spines[count].set_color("w")
+    ax.tick_params(axis='both', colors='w')
+    if title != "No_title_required":
+      plt.title(title, fontdict={'color':'w'})
+    plt.savefig("graph.png", transparent=True)
+    plt.savefig("graph.svg", transparent=True)
+    plt.clf()
+    await ctx.send(files=[discord.File("graph.png"), discord.File("graph.svg")])
+    os.remove('graph.png')
+    os.remove('graph.svg')
+  except:
+    await ctx.send("Invalid input. Please try again.")
+
 @commands.command(aliases=["piechart", "circlechart"])
 async def pie(ctx, numbers, label="", *, title="No_title_required"):
   try:

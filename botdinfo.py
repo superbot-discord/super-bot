@@ -843,7 +843,7 @@ async def user(ctx, user: discord.Member = None, channel: discord.TextChannel = 
   else:
     desc=f"{user.mention} (human)"
   embed=discord.Embed(title="User Information",color=user.color, description=desc)
-        embed.set_thumbnail(url=user.avatar.url)
+  embed.set_thumbnail(url=user.avatar.url)
   if user.name==user.display_name:
     f0v=f"{user.name}#{user.discriminator}"
   else:
