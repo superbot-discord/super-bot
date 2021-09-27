@@ -5,7 +5,6 @@ import matplotlib.pyplot as plt
 import qrcode
 from art import *
 from ascii_canvas import canvas, item
-from matplotlib.sankey import Sankey
 from table2ascii import PresetStyle, table2ascii
 
 import discord as discord
@@ -141,8 +140,8 @@ async def bline2(ctx, numbers, xnumbers, *, title="No_title_required"):
   try:
     numlist = numbers.split(",")
     numlist = list(map(float, numlist))
-    xnumbers = numbers.split(",")
-    xnumbers = list(map(float, xnumbers))
+    xnumlist = xnumbers.split(",")
+    xnumlist = list(map(float, xnumlist))
     plt.rcdefaults()
     fig, ax = plt.subplots()
     ax.plot(xnumbers, numlist)
