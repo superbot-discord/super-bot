@@ -580,7 +580,10 @@ async def server(ctx, text = "regular"):
   except:
     pass
   embed=discord.Embed(title=ti, description=desc)
-  embed.set_author(name="Server Information",icon_url=guild.icon.url)
+  try:
+    embed.set_author(name="Server Information",icon_url=guild.icon.url)
+  except:
+    embed.set_author(name="Server Information")
   if text == "mod":
     try:
       f1vlist=await guild.bans()
@@ -840,7 +843,7 @@ async def user(ctx, user: discord.Member = None, channel: discord.TextChannel = 
   else:
     desc=f"{user.mention} (human)"
   embed=discord.Embed(title="User Information",color=user.color, description=desc)
-  embed.set_thumbnail(url=user.avatar.url)
+        embed.set_thumbnail(url=user.avatar.url)
   if user.name==user.display_name:
     f0v=f"{user.name}#{user.discriminator}"
   else:
