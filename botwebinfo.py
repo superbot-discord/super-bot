@@ -273,7 +273,7 @@ async def youtube(ctx, *, link):
       videos = searching.results[0:20]
     desc = ""
     for count in videos:
-      desc+=f"**[{count.title}]({count.watch_url})**\n{count.views:,} Views | By [{pytube.Channel(count.channel_url).channel_name}]({count.channel_url})\n"
+      desc+=f"**[{count.title}]({count.watch_url})**\n{format_length(count.length)} | {count.views:,} Views | By [{pytube.Channel(count.channel_url).channel_name}]({count.channel_url})\n"
     embed = discord.Embed(title="Search results", description=desc)
     embed.set_footer(text="Use =youtube [Link] to download videos.")
     await ctx.send(embed=embed)
@@ -282,7 +282,7 @@ async def youtube(ctx, *, link):
     videos = chnl.videos
     desc = f"**Videos ({len(chnl.videos):,})**:\n"
     for count,count2 in zip(videos, range(0,12)):
-      desc+=f"[{count.title}]({count.watch_url})\n{count.views:,} Views | {round(count.rating*20, 3)}% Liked | {str(format_length(count.length))}\n\n"
+      desc+=f"[{count.title}]({count.watch_url})\n{count.views:,} Views | {round(count.rating*20, 3)}% Liked | {format_length(count.length)}\n\n"
     embed = discord.Embed(title=chnl.channel_name, description=desc, url=chnl.videos_url)
     embed.set_footer(text="Use =youtube [Link] to download videos. | Analysing additional info…")
     yt_msg = await ctx.send(embed=embed)

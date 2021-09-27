@@ -284,6 +284,11 @@ async def snipe(ctx, *, text = None):
       sniping[keyname] = False
       await ctx.send("Sniping is now disabled.")
 
+@bot_.event
+async def on_voice_state_update(member, before, after):
+  if member.id == 796686363604680755:
+    pass
+
 @bot_.command()
 async def poll(ctx, *, text):
   options = []
