@@ -128,7 +128,7 @@ async def search(ctx, *, flags : SearchFlags):
   timestamps       = flags.timestamp
   embeds           = flags.embeds
   files            = flags.files
-
+  desc = f"Length\tURL"
   if not flags.channel:
     flags.channel = (ctx.channel)
   for channel_count in flags.channel:
@@ -175,6 +175,12 @@ async def search(ctx, *, flags : SearchFlags):
       if (timestamps and not timestamp_pattern.search(contents)) or (timestamps == False and timestamp_pattern.search(contents)):
         match = False
         continue
+      if match:
+        desc += f"{len(contents)}\t{message_count.jump_url}\t{message_count.channel.name}\n"
+  f = open('search.txt', 'w')
+  f.write(desc)
+  f.close()
+  await ctx.send(file=discord.File('search.txt'))
 
 @commands.command(aliases=['setperms', 'setpermission', 'setpermissions', 'rolepermission', 'rolespermission', 'rolepermissions', 'rolespermissions'])
 async def setperm(ctx, permission_input:typing.Union[int, str], *roles:discord.Role):
