@@ -12,7 +12,7 @@ from shared import *
 
 UNITS = {'s':'seconds', 'm':'minutes', 'h':'hours', 'd':'days', 'w':'weeks'}
 class SearchFlags(commands.FlagConverter):
-  channel          : typing.Tuple[discord.TextChannel] = ()
+  channels         : typing.Tuple[discord.TextChannel] = ()
   search           : typing.Tuple[str]                 = ()
   exact_search     : str                               = ""
   maximum          : int                               = 100
@@ -129,9 +129,11 @@ async def search(ctx, *, flags : SearchFlags):
   embeds           = flags.embeds
   files            = flags.files
   desc = f"Length\tURL"
-  if not flags.channel:
-    flags.channel = (ctx.channel)
-  for channel_count in flags.channel:
+  if not flags.channels:
+    channels = (ctx.channel)
+  else:
+    channels = flags.channels
+  for channel_count in channels:
     async for message_count in flags.channel.history(limit=flags.maximum):
       contents     = message_count.content
       match        = True
