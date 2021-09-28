@@ -654,6 +654,8 @@ async def server(ctx, text = "regular"):
     f1valist = guild.roles
     f1valist.reverse()
     for count in f1valist:
+      if len(f1va + count.mention) > 1024:
+        break
       f1va = f1va + count.mention+" "
     f1va = f1va[:-1]
     f2v = str(guild.bitrate_limit//1000)+" kbps"
