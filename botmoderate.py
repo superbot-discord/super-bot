@@ -12,19 +12,19 @@ from shared import *
 
 UNITS = {'s':'seconds', 'm':'minutes', 'h':'hours', 'd':'days', 'w':'weeks'}
 class SearchFlags(commands.FlagConverter):
-  channels         : typing.Tuple[discord.TextChannel] = []
-  search           : typing.Tuple[str]                 = []
-  exact_search     : str                               = ""
-  maximum          : int                               = 100
-  pinned           : specialbool                       = None
-  mention_everyone : specialbool                       = None
-  mention_role     : specialbool                       = None
-  mention_member   : specialbool                       = None
-  mention_channel  : specialbool                       = None
-  invite_links     : specialbool                       = None
-  timestamp        : specialbool                       = None
-  embeds           : specialbool                       = None
-  files            : specialbool                       = None
+  channels         : typing.Tuple[discord.TextChannel,...] = []
+  search           : typing.Tuple[str,...]                 = []
+  exact_search     : str                                   = ""
+  maximum          : int                                   = 100
+  pinned           : specialbool                           = None
+  mention_everyone : specialbool                           = None
+  mention_role     : specialbool                           = None
+  mention_member   : specialbool                           = None
+  mention_channel  : specialbool                           = None
+  invite_links     : specialbool                           = None
+  timestamp        : specialbool                           = None
+  embeds           : specialbool                           = None
+  files            : specialbool                           = None
 
 @commands.command()
 async def ban(ctx, user: discord.User, delete : int =0, *, reason="No reason provided"):
@@ -130,9 +130,10 @@ async def search(ctx, *, flags : SearchFlags):
   files            = flags.files
   desc = f"Length\tURL\n"
   if not flags.channels:
-    channels = [ctx.channel]
+    channels = ctx.channel
   else:
     channels = flags.channels
+  print(channels)
   if len(channels) == 1:
     channels = [channels[0]]
   if len(query) == 1:
