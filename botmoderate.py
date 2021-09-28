@@ -12,8 +12,8 @@ from shared import *
 
 UNITS = {'s':'seconds', 'm':'minutes', 'h':'hours', 'd':'days', 'w':'weeks'}
 class SearchFlags(commands.FlagConverter):
-  channels         : typing.Tuple[discord.TextChannel] = ()
-  search           : typing.Tuple[str]                 = ()
+  channels         : typing.List[discord.TextChannel]  = []
+  search           : typing.List[str]                  = []
   exact_search     : str                               = ""
   maximum          : int                               = 100
   pinned           : specialbool                       = None
@@ -130,7 +130,7 @@ async def search(ctx, *, flags : SearchFlags):
   files            = flags.files
   desc = f"Length\tURL"
   if not flags.channels:
-    channels = (ctx.channel)
+    channels = [ctx.channel]
   else:
     channels = flags.channels
   for channel_count in channels:
