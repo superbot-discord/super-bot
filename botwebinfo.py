@@ -118,9 +118,7 @@ async def minecraft(ctx, *, item="tnt"):
         desc = re.sub(r'<([a-z]+?)( ([a-z]+?)=".*?")*?>([\s\S]*?)<\/\1>', '', desc)
         desc = re.sub(r'\s', '', desc)
         try:
-          print(desc)
           if len(desc.replace(" ", "").replace(f"\n", "").replace("[edit]", "")) != 0:
-            print("Check")
             embed.add_field(name=count.text.replace("[edit]", ""), value=desc, inline=False)
         except:
           1

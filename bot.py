@@ -56,7 +56,7 @@ async def on_command_error(ctx, error):
     await ctx.send(f'You missed one or more arguments! {len(ctx.command.clean_params.keys())} argument(s) are required.\nNote: Multiline arguments are treated as one argument.')
   else:
     print(error.with_traceback(error.__traceback__))
-    await ctx.send(f"An error occured:\n```{error.with_traceback(error.__traceback__)}```\nPlease kindly inform JohannLau#6541 about this issue.")
+    await ctx.send(f"An error occured:\n```{error.with_traceback(error.__traceback__)}```\nIf you think that this is an issue with the bot, please kindly inform JohannLau#6541 about this issue.")
 
 @bot_.event
 async def on_voice_state_update(member, before, after):

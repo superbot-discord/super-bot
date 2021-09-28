@@ -141,7 +141,6 @@ async def bottchannel(channel):
   return embed
 
 async def botvchannel(channel):
-  print(str(channel.rtc_region).title())
   ti=f"Voice Channel Information: {channel.name}"
   desc=f"{channel.mention} created at <t:{round((channel.created_at-dt1).total_seconds())}:F>"
   embed=discord.Embed(title=ti, description=desc)
@@ -604,15 +603,15 @@ async def server(ctx, text = "regular"):
   else:
     f0v=""
     for count in guild.text_channels:
-      if len(f0v+str(count.mention)+" ") > 1024:
+      if len(f0v+str(count.mention)+", ") > 1024:
         f0v = ""
         for count2 in guild.text_channels:
-          if len(f0v+count2.name+" ") > 1024:
+          if len(f0v+count2.name+", ") > 1024:
             f0v = f0v + "… "
             break
-          f0v = f0v + count2.name + " "
+          f0v = f0v + count2.name + ", "
         break
-      f0v=f0v+str(count.mention)+" "
+      f0v=f0v+str(count.mention)+", "
     f1v=""
     f0v=f0v[:-1]
     if len(guild.voice_channels)==0:
@@ -702,10 +701,9 @@ async def server(ctx, text = "regular"):
     embed.add_field(name="Verification Level", value=f6v, inline=True)
     embed.add_field(name="Explict Content Filter", value=f7v, inline=True)
     if guild.afk_channel!=None:
-      f9v=str(guild.afk_timeout//60)+" mins"
-      f10v=guild.afk_channel
+      f9v=str(guild.afk_timeout//60)+" minute(s)"
       embed.add_field(name="AFK Timeout", value=f9v, inline=True)
-      embed.add_field(name="AFK Channel", value=f10v, inline=True)
+      embed.add_field(name="AFK Channel", value=guild.afk_channel.mention, inline=True)
     embed.add_field(name="Server boosts", value=str(guild.premium_subscription_count), inline=True)
     if guild.default_notifications == discord.NotificationLevel.all_messages:
       embed.add_field(name="Default Notifications", value="All messages", inline=True)
