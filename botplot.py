@@ -10,7 +10,7 @@ from table2ascii import PresetStyle, table2ascii
 import discord as discord
 import numpy as np
 from discord.ext import commands
-
+from shared import *
 cmaphsv = plt.cm.hsv
 def func(pct, allvals):
   absolute = int(pct/100*np.sum(allvals))
@@ -187,7 +187,7 @@ async def draw(ctx, *, text):
   os.remove('drawing.txt')
 
 @commands.command(aliases=["mathplot", "mathgraph"])
-async def graph(ctx, func, range_low:float=-10.0, range_high:float=10.0, *, title="No_title_required"):
+async def graph(ctx, func, range_low:float=-10.0, range_high:float=10.0, equalize:specialbool=False,*, title="No_title_required"):
   try:
     x_ = np.linspace(range_low, range_high, 200)
     y_axis = eval(func)
