@@ -486,6 +486,7 @@ def setup(bot):
   bot.add_command(graph)
   bot.add_command(hist)
   bot.add_command(multibline)
+  bot.add_command(multigraph)
   bot.add_command(pie)
   bot.add_command(qrmake)
   bot.add_command(simpcolor)

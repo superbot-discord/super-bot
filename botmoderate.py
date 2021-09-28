@@ -11,6 +11,20 @@ from bot import bot_admins
 from shared import *
 
 UNITS = {'s':'seconds', 'm':'minutes', 'h':'hours', 'd':'days', 'w':'weeks'}
+class SearchFlags(commands.FlagConverter):
+  channel          : typing.Tuple[discord.TextChannel] = ()
+  search           : typing.Tuple[str]                 = ()
+  exact_search     : str                               = ""
+  maximum          : int                               = 100
+  pinned           : specialbool                       = None
+  mention_everyone : specialbool                       = None
+  mention_role     : specialbool                       = None
+  mention_member   : specialbool                       = None
+  mention_channel  : specialbool                       = None
+  invite_links     : specialbool                       = None
+  timestamp        : specialbool                       = None
+  embeds           : specialbool                       = None
+  files            : specialbool                       = None
 
 @commands.command()
 async def ban(ctx, user: discord.User, delete : int =0, *, reason="No reason provided"):
@@ -100,6 +114,67 @@ async def react(ctx, message : discord.Message, emoji : discord.Emoji):
   await message.add_reaction(emoji)
   await asyncio.sleep(3)
   await message.remove_reaction(emoji, ctx.guild.get_member(796686363604680755))
+
+@commands.command()
+async def search(ctx, *, flags : SearchFlags):
+  exact_search     = flags.exact_search
+  query            = flags.search
+  pinned           = flags.pinned
+  mention_everyone = flags.mention_everyone
+  mention_role     = flags.mention_role
+  mention_member   = flags.mention_member
+  mention_channel  = flags.mention_channel
+  invite_links     = flags.invite_links
+  timestamps       = flags.timestamp
+  embeds           = flags.embeds
+  files            = flags.files
+
+  if not flags.channel:
+    flags.channel = (ctx.channel)
+  for channel_count in flags.channel:
+    async for message_count in flags.channel.history(limit=flags.maximum):
+      contents     = message_count.content
+      match        = True
+      if embeds and message_count.embeds:
+        embed    = message_count.embeds[0].to_dict()
+      elif embeds or (embeds == False and message_count.embeds):
+        match = False
+        break
+      else:
+        embed    = {}
+      if (files and message_count.pinned) or (files == False and not message_count.pinned):
+        match = False
+        continue
+      for query_count in query:
+        if query_count not in contents and query_count not in embed:
+          match = False
+          break
+        else:
+          continue
+      if exact_search not in contents and exact_search not in embed:
+        match = False
+        continue
+      if (pinned and not message_count.pinned) or (pinned == False and message_count.pinned):
+        match = False
+        continue
+      if (mention_everyone and message_count.mention_everyone) or (mention_everyone == False and not message_count.mention_everyone):
+        match = False
+        continue
+      if (mention_role and not len(message_count.role_mentions)) or (mention_role == False and len(message_count.role_mentions)):
+        match = False
+        continue
+      if (mention_member and not len(message_count.mentions)) or (mention_member == False and len(message_count.mentions)):
+        match = False
+        continue
+      if (mention_channel and not len(message_count.channel_mentions)) or (mention_channel == False and len(message_count.channel_mentions)):
+        match = False
+        continue
+      if (invite_links and not "https://discord.gg/" in contents) or (invite_links == False and "https://discord.gg/" in contents):
+        match = False
+        continue
+      if (timestamps and not timestamp_pattern.search(contents)) or (timestamps == False and timestamp_pattern.search(contents)):
+        match = False
+        continue
 
 @commands.command(aliases=['setperms', 'setpermission', 'setpermissions', 'rolepermission', 'rolespermission', 'rolepermissions', 'rolespermissions'])
 async def setperm(ctx, permission_input:typing.Union[int, str], *roles:discord.Role):
@@ -317,6 +392,7 @@ def setup(bot):
   bot.add_command(makeinvite)
   bot.add_command(makeroles)
   bot.add_command(react)
+  bot.add_command(search)
   bot.add_command(setperm)
   bot.add_command(slowmode)
   bot.add_command(tts)

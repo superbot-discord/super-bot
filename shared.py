@@ -56,7 +56,7 @@ view_overwrite.view_channel = True
 clickers = {}
 vclients={}
 dt1 = datetime(1970,1,1,0,0,0,0,pytz.timezone('GMT'))
-
+timestamp_pattern = re.compile(r'<t:-?[\d]{1,13}(:[FfDdTtR])?>')
 
 def sample_buttons(ctx):
   return [
