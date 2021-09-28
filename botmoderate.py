@@ -134,7 +134,7 @@ async def search(ctx, *, flags : SearchFlags):
   else:
     channels = flags.channels
   for channel_count in channels:
-    async for message_count in flags.channel.history(limit=flags.maximum):
+    async for message_count in channel_count.history(limit=flags.maximum):
       contents     = message_count.content
       match        = True
       if embeds and message_count.embeds:
