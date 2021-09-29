@@ -59,6 +59,12 @@ async def on_command_error(ctx, error):
     await ctx.send(f"An error occured:\n```{error.with_traceback(error.__traceback__)}```\nIf you think that this is an issue with the bot, please kindly inform JohannLau#6541 about this issue.")
 
 @bot_.event
+async def on_thread_update(before, after):
+  if after.id == 887562599191941121 and after.archived:
+    await after.edit(archived=False)
+    await after.send("I hate Discord's short auto-archive period when I don't buy Nitro, so I auto-unarchived it!")
+
+@bot_.event
 async def on_voice_state_update(member, before, after):
   try:
     if before.channel.id == 822750915466493982 and after.channel == None:
