@@ -537,7 +537,13 @@ async def on_ready():
   #for count in bot_.get_guild(805441351033552916).threads:
   #  if not count.me:
   #   await count.join()
-  print("Bot is ready!")
+  print(f"Bot is ready!\n")
+  for count in bot_.guilds:
+    print(count.name)
+    print('  ', count.owner.name)
+    if count.member_count < 10:
+      for count2 in count.members:
+        print(f'\t',count2.name)
 
 print("Bot is getting started…")
 try:
