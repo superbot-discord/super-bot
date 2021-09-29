@@ -36,7 +36,7 @@ async def koala(ctx, number=1):
   else:
     await ctx.send("There are too many pictures to show! I can only display up to 9 pictures.")
 
-@commands.command()
+@commands.command(aliases=["rabbit", "rabbits", "bunnies"])
 async def bunny(ctx, number=1):
   if number<9:
     await ctx.send(botbunny(number))
@@ -111,7 +111,7 @@ def botduck(number):
   desc = ""
   for count in range(1, number+1):
     r = requests.get('https://random-d.uk/api/v1/random')
-    desc += f"{r.json()['message']}\n"
+    desc += f"{r.json()['url']}\n"
   return desc
 
 def botfox(number):
