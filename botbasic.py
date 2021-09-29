@@ -11,7 +11,7 @@ async def hello(ctx, *, text=None):
 async def help(ctx, *, cat=None):
   await ctx.send(embed=help_all)
 
-@commands.command()
+@commands.command(aliases=["inter_help", "interactive"])
 async def interactive_help(ctx, *, text=None):
   help_menu_view = ui.View(timeout=None)
   help_menu = ui.Select(options=help_menu_options(ctx), placeholder="Select a category…")

@@ -10,8 +10,8 @@ from discord.ext import commands
 
 from shared import *
 
-banned_ids = []
-banned_text = []
+banned_ids =  [755416776581578813]
+banned_text = ["Searching for inappropriate content"]
 bot_admins = [687474789342117900]
 bot_ = commands.Bot(command_prefix=commands.when_mentioned_or("="), intents=discord.Intents.all(), case_insensitive=True, strip_after_prefix=True)
 bot_.remove_command('help')
@@ -230,7 +230,7 @@ async def on_message(message):
       await message.publish()
     if message.author.id not in banned_ids and message.content.startswith("==")==False:
       await bot_.process_commands(message)
-    elif message.author.id in banned_ids and message.content.startswith("==")==False:
+    elif message.author.id in banned_ids and (message.content.startswith("=") or message.content.startswith("<@796686363604680755>")):
       await message.channel.send("You are banned from the bot. Reason: "+banned_text[banned_ids.index(message.author.id)])
   except:
     pass

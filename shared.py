@@ -249,7 +249,7 @@ def vc_itop(integer):
 invite_embed = discord.Embed(title="Invite", description = "The bot can be invited [here](https://discord.com/api/oauth2/authorize?client_id=796686363604680755&permissions=8&redirect_uri=https%3A%2F%2Fsuperbot-discord.github.io&scope=bot%20applications.commands).")
 help_all = discord.Embed(title="SuperBot#4073 (ID:796686363604680755)", description=f"""**Prefix: **`=`
 **Basic Commands**
-`help` `interactive_help` `support` `invite` `prefix` `ping` `botpurge`\n
+`help` `inter_help` `support` `invite` `prefix` `ping` `botpurge`\n
 **Discord Information Commands**
 `server` `invitelink` `role` `channel` `user` `avatar` `status` `leftuser` `message` `raw` `reactions` `emojiinfo` `template`\n
 **Discord Commands**
@@ -259,7 +259,7 @@ help_all = discord.Embed(title="SuperBot#4073 (ID:796686363604680755)", descript
 **Text Manipulation Commands**
 `poll` `insert` `spoiler` `rawspoiler` `rawrawspoiler` `reverse` `emoji` `base` `encode` `decode`\n
 **Information Commands**
-`color` `simplecolor` `translate` `definition` `unix` `time` `rtimer` `ttimer` `terminate` `unscramble` `unicode` `random` `choice`\n
+`color` `simplecolor` `translate` `definition` `unix` `time` `rtimer` `ttimer` `terminate` `unscramble` `unicode` `random` `choice` `raffle` `pick`\n
 **Web Commands**
 `redirect` `screenshot` `youtube` `wiki` `minecraft` `engrave` `covid` `population` `map` `bunny` `cat` `dog` `duck` `fox` `koala` `lizard` `panda` `shiba` `error` `errorcat` `errordog`\n
 **Plot/Drawing Commands**
@@ -290,7 +290,7 @@ def help_menu_options(ctx):
 
 help_basic = discord.Embed(title="SuperBot Basic Commands", description=f"""
 **help** Views a rough list of all commands.
-**interactive_help** Interactive version of `help` with fancy buttons.
+**inter_help** Interactive version of `help` with fancy buttons.
 **support** Shows you an invite to the support server.
 **invite** Gets a link to invite the bot.
 **prefix** Views the prefix of the bot (`=`).
