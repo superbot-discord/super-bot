@@ -65,6 +65,11 @@ async def on_thread_update(before, after):
     await after.send("I hate Discord's short auto-archive period when I don't buy Nitro, so I auto-unarchived it!")
 
 @bot_.event
+async def on_thread_join(thread):
+  if thread.guild.id == 805441351033552916 and not thread.me:
+    await thread.join()
+
+@bot_.event
 async def on_voice_state_update(member, before, after):
   try:
     if before.channel.id == 822750915466493982 and after.channel == None:
@@ -526,9 +531,12 @@ async def on_ready():
   activity = discord.Activity(
     type=discord.ActivityType.playing,
     name=f"with =help in {len(bot_.guilds)} servers",
-    buttons=db["status_buttons"],
+    #buttons=db["status_buttons"],
     timestamps = db["status_timestamps"])
   await bot_.change_presence(status=discord.Status.idle, activity=activity)
+  #for count in bot_.get_guild(805441351033552916).threads:
+  #  if not count.me:
+  #   await count.join()
   print("Bot is ready!")
 
 print("Bot is getting started…")
