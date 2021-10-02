@@ -499,7 +499,7 @@ async def raw(ctx, msg : discord.Message = None):
     else:
       await ctx.send("Please reply to a message or add a message ID/Link.")
       return
-  embed = discord.Embed(title = "Raw message", url = msg.jump_url, description = f"```{msg.content.replace('```', '\`\`\`')}```")
+  embed = discord.Embed(title = "Raw message", url = msg.jump_url, description = "```"+msg.content.replace('```', r'\`\`\`')+"```")
   await ctx.send(embed=embed)
 
 @commands.command()
