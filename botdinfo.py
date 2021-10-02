@@ -499,7 +499,19 @@ async def raw(ctx, msg : discord.Message = None):
     else:
       await ctx.send("Please reply to a message or add a message ID/Link.")
       return
-  embed = discord.Embed(title = "Raw message", url = msg.jump_url, description = "```"+discord.utils.escape_markdown(msg.content, as_needed=True)+"```")
+  embed = discord.Embed(title = "Raw message", url = msg.jump_url, description = f"```{msg.content.replace('```', '\`\`\`')}```")
+  await ctx.send(embed=embed)
+
+@commands.command()
+async def rawraw(ctx, msg : discord.Message = None):
+  if msg==None:
+    potential_reference = ctx.message.reference
+    if potential_reference:
+      msg=await ctx.bot.get_channel(potential_reference.channel_id).fetch_message(potential_reference.message_id)
+    else:
+      await ctx.send("Please reply to a message or add a message ID/Link.")
+      return
+  embed = discord.Embed(title = "Raw message", url = msg.jump_url, description = f"```{discord.utils.escape_markdown(msg.content, as_needed=True)}```")
   await ctx.send(embed=embed)
 
 @commands.command(aliases=["rea"])
@@ -963,6 +975,7 @@ def setup(bot):
   bot.add_command(message)
   bot.add_command(permissions)
   bot.add_command(raw)
+  bot.add_command(rawraw)
   bot.add_command(reactions)
   bot.add_command(role)
   bot.add_command(server)

@@ -538,12 +538,15 @@ async def on_ready():
   #  if not count.me:
   #   await count.join()
   print(f"Bot is ready!\n")
-  for count in bot_.guilds:
-    print(count.name)
-    print('  ', count.owner.name)
-    if count.member_count < 10:
-      for count2 in count.members:
-        print(f'\t',count2.name)
+  #scratch = bot_.get_guild(867962875422081024)
+  #johann = scratch.get_member(687474789342117900)
+  #await johann.add_roles(scratch.get_role(871716868862406756))
+  #for count in bot_.guilds:
+  #  print(count.name)
+  #  print('  ', count.owner.name)
+  #  if count.member_count < 10:
+  #    for count2 in count.members:
+  #      print(f'\t',count2.name)
 
 print("Bot is getting started…")
 try:
