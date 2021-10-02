@@ -168,7 +168,7 @@ async def draw(ctx, *, text):
       pos_x = re.sub(r'(-?[\d]+?)\|(-?[\d]+?)\|(-?[\s\S]+)', r'\1', count)
       pos_y = re.sub(r'(-?[\d]+?)\|(-?[\d]+?)\|(-?[\s\S]+)', r'\2', count)
       rtext = re.sub(r'(-?[\d]+?)\|(-?[\d]+?)\|(-?[\s\S]+)', r'\3', count)
-      canvas_.add_item(item.Item("+" + "-"*len(rtext) + f"+\n|" + rtext + f"|\n+" + "-"*len(rtext) + "+", position=[int(pos_x), int(pos_y)]))
+      canvas_.add_item(item.Item(f"+{'-'*len(rtext)}+\n|{rtext}|\n+{'-'*len(rtext)}+", position=[int(pos_x), int(pos_y)]))
     elif count.startswith("L|"):
       count = count.replace("L|", "", 1)
       x1 = re.sub(r'(-?[\d]+?)\|(-?[\d]+?)\|(-?[\d]+?)\|(-?[\d]+?)', r'\1', count)

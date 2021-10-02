@@ -209,10 +209,14 @@ async def setperm(ctx, permission_input:typing.Union[int, str], *roles:discord.R
 @commands.command()
 async def slowmode(ctx, sec = None, *channels:typing.Union[discord.TextChannel,str]):
   if sec != None:
+    sec = int(timedelta(**{
+      UNITS.get(m.group('unit').lower(), 'seconds'): int(m.group('val'))
+      for m in re.finditer(r'(?P<val>\d+)(?P<unit>[smhdw]?)', sec, flags=re.I)
+    }).total_seconds())
     if sec.isdigit() == False:
       sec = 0
     if int(sec) < 0 or int(sec) > 21600 or int(sec)%1 != 0:
-      await ctx.send("Invalid input! Please enter an integer below or equal to 21600.")
+      await ctx.send("Invalid input! Please enter a duration below or equal to 21600 seconds (6 hours).")
       return
     if len(channels) == 0:
       allchannel = [ctx.channel]
@@ -231,11 +235,11 @@ async def slowmode(ctx, sec = None, *channels:typing.Union[discord.TextChannel,s
     if len(channellist)==0:
       await ctx.send("You don't have the required permission: Manage channels.")
     elif len(channellist)==1:
-      await ctx.send("Set slowmode from "+orsec+" second(s) to "+sec+" second(s) for "+" ".join(channellist)+".")
+      await ctx.send(f"Set slowmode from {orsec} second(s) to {sec} second(s) for {channellist[0]}.")
     else:
-      await ctx.send("Set slowmode to "+sec+" second(s) for these channels: "+" ".join(channellist)+".")
-  elif sec == None:
-    await ctx.send("The current slowmode is "+str(ctx.channel.slowmode_delay)+" second(s).")
+      await ctx.send(f"Set slowmode to {sec} second(s) for these channels: {' '.join(channellist)}.")
+  else:
+    await ctx.send(f"The current slowmode is {ctx.channel.slowmode_delay} second(s).")
 
 @commands.command()
 async def tts(ctx, *, desc):

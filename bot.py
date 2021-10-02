@@ -247,7 +247,7 @@ async def on_interaction(interaction):
       if interaction_first_option.startswith("help_"):
         await interaction.edit_original_message(embed=eval(interaction_first_option))
       else:
-        await interaction.followup.send("You selected "+", ".join(interaction.data["values"])+f" in the {interaction_custom_id} menu.", ephemeral=True)
+        await interaction.followup.send(f"You selected {', '.join(interaction_select_option)} in the {interaction_custom_id} menu.", ephemeral=True)
 
 @bot_.command(aliases=['sniper'])
 async def snipe(ctx, *, text = None):

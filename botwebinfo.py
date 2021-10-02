@@ -150,8 +150,8 @@ async def redirect(ctx, *, url):
 @commands.command()
 async def translate(ctx, langinput = "list", *, text = "Sample text"):
   if langinput == "list" or langinput == "all":
-    await ctx.send(embed=discord.Embed(description = f"**List of Language Input (Abbreviations)**\n`"+"  ".join(list(langdict.keys()))+f"`\n\n**List of Language Input (Full Names)**\n`"+"` `".join(list(langdict.values()))))
-    await ctx.send(embed=discord.Embed(description = f"**List of Language Output (Abbreviations)**\n`"+"  ".join(list(srclangdict.keys()))+f"`\n\n**List of Language Output (Full Names)**\n`"+"` `".join(list(srclangdict.values()))+"`"))
+    await ctx.send(embed=discord.Embed(description = f"**List of Language Input (Abbreviations)**\n`{'  '.join(list(langdict.keys()))}`\n\n**List of Language Input (Full Names)**\n`{'` `'.join(list(langdict.values()))}`"))
+    await ctx.send(embed=discord.Embed(description = f"**List of Language Output (Abbreviations)**\n`{'  '.join(list(srclangdict.keys()))}`\n\n**List of Language Output (Full Names)**\n`{'` `'.join(list(srclangdict.values()))}`"))
   else:
     if langinput.count(",")==1:
       lang = langinput.split(",")[0]

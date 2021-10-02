@@ -255,7 +255,7 @@ async def emojiinfo(ctx,emojiarg : typing.Union[discord.Emoji, str]):
     cemoji = em.db.get_emoji_by_alias(emojiarg)
     if cemoji == None:
       cemoji = em.db.get_emoji_by_code(emojiarg)
-    embed = discord.Embed(title="Emoji Info", description = (cemoji[1] + " :" + ":, :".join(cemoji[0]) + ":"))
+    embed = discord.Embed(title="Emoji Info", description = (f"{cemoji[1]} :{':, :'.join(cemoji[0])}:"))
     embed.add_field(name="Category", value=cemoji[3], inline=True)
     embed.add_field(name="Unicode Version", value=cemoji[4], inline=True)
     if len(cemoji[2]) > 0:
@@ -491,12 +491,26 @@ async def permissions(ctx, integer="help"):
   await ctx.send(embed=embed)
 
 @commands.command()
-async def raw(ctx, msg : discord.Message):
+async def raw(ctx, msg : discord.Message = None):
+  if msg==None:
+    potential_reference = ctx.message.reference
+    if potential_reference:
+      msg=await ctx.bot.get_channel(potential_reference.channel_id).fetch_message(potential_reference.message_id)
+    else:
+      await ctx.send("Please reply to a message or add a message ID/Link.")
+      return
   embed = discord.Embed(title = "Raw message", url = msg.jump_url, description = "```"+discord.utils.escape_markdown(msg.content, as_needed=True)+"```")
   await ctx.send(embed=embed)
 
 @commands.command(aliases=["rea"])
-async def reactions(ctx, *, msg : discord.Message):
+async def reactions(ctx, *, msg : discord.Message = None):
+  if msg==None:
+    potential_reference = ctx.message.reference
+    if potential_reference:
+      msg=await ctx.bot.get_channel(potential_reference.channel_id).fetch_message(potential_reference.message_id)
+    else:
+      await ctx.send("Please reply to a message or add a message ID/Link.")
+      return
   reactions = msg.reactions
   numlist = []
   labels = []
