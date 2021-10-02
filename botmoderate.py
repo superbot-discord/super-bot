@@ -109,10 +109,16 @@ async def makeroles(ctx, times:int=1):
     await ctx.send("You don't have the required permission: Manage Roles.")
 
 @commands.command()
-async def react(ctx, message : discord.Message, emoji : discord.Emoji):
-  await ctx.message.delete()
+async def react(ctx, emoji : discord.Emoji, message : discord.Message = None):
+  if message==None:
+    potential_reference = ctx.message.reference
+    if potential_reference:
+      message=await ctx.bot.get_channel(potential_reference.channel_id).fetch_message(potential_reference.message_id)
+    else:
+      await ctx.send("Please reply to a message or add a message ID/Link.")
+      return
   await message.add_reaction(emoji)
-  await asyncio.sleep(3)
+  await asyncio.sleep(5)
   await message.remove_reaction(emoji, ctx.guild.get_member(796686363604680755))
 
 @commands.command()

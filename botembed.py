@@ -5,7 +5,14 @@ from discord.ext import commands
 
 
 @commands.command()
-async def editembed(ctx, message : discord.Message, *,text):
+async def editembed(ctx, message : discord.Message = None, *,text):
+  if message==None:
+    potential_reference = ctx.message.reference
+    if potential_reference:
+      message=await ctx.bot.get_channel(potential_reference.channel_id).fetch_message(potential_reference.message_id)
+    else:
+      await ctx.send("Please reply to a message or add a message ID/Link.")
+      return
   embed = botembed(text)
   await message.edit(embed=embed)
 
@@ -15,7 +22,14 @@ async def embed(ctx, *, text):
   await ctx.send(embed=embed)
 
 @commands.command()
-async def ett(ctx, msg : discord.Message):
+async def ett(ctx, msg : discord.Message = None):
+  if msg==None:
+    potential_reference = ctx.message.reference
+    if potential_reference:
+      msg=await ctx.bot.get_channel(potential_reference.channel_id).fetch_message(potential_reference.message_id)
+    else:
+      await ctx.send("Please reply to a message or add a message ID/Link.")
+      return
   text = botett(msg)
   await ctx.send("```"+text+"```")
 
