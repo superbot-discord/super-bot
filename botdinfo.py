@@ -1,19 +1,6 @@
-import asyncio
-import os
-import re
-import typing
-from datetime import datetime, timedelta, timezone
-from difflib import SequenceMatcher
-
-import discord as discord
-import emojis as em
-import matplotlib.pyplot as plt
-import numpy as np
-from discord.ext import commands
 from shared import *
 
 cmaphsv = plt.cm.hsv
-func = lambda pct, allvals : "{:d} ({:.1f}%)".format(int(pct/100*np.sum(allvals)), int(pct))
 
 @commands.command()
 async def avatar(ctx,user: discord.Member=None):
@@ -252,9 +239,9 @@ async def emojiinfo(ctx,emojiarg : typing.Union[discord.Emoji, str]):
     embed.add_field(name="ID", value=emojiarg.id, inline=True)
     embed.set_image(url = emojiarg.url)
   except:
-    cemoji = em.db.get_emoji_by_alias(emojiarg)
+    cemoji = ems.db.get_emoji_by_alias(emojiarg)
     if cemoji == None:
-      cemoji = em.db.get_emoji_by_code(emojiarg)
+      cemoji = ems.db.get_emoji_by_code(emojiarg)
     embed = discord.Embed(title="Emoji Info", description = (f"{cemoji[1]} :{':, :'.join(cemoji[0])}:"))
     embed.add_field(name="Category", value=cemoji[3], inline=True)
     embed.add_field(name="Unicode Version", value=cemoji[4], inline=True)
@@ -529,7 +516,7 @@ async def reactions(ctx, *, msg : discord.Message = None):
   for counter in reactions:
     numlist.append(counter.count)
     try:
-      labels.append(em.decode(counter.emoji))
+      labels.append(ems.decode(counter.emoji))
     except:
       labels.append("*"+counter.emoji.name)
   labels = tuple(labels)
@@ -804,24 +791,57 @@ async def status(ctx, member : discord.Member = None):
 
 @commands.command(aliases=["sts"])
 async def statuses(ctx, *, text = None):
-  onlines = dnds = idles = offlines = 0
+  bot_onlines = bot_dnds = bot_idles = bot_offlines = 0
+  usr_onlines = usr_dnds = usr_idles = usr_offlines = 0
   for count in ctx.guild.members:
-    if count.status == discord.Status.online:
-      onlines += 1
-    elif count.status == discord.Status.dnd:
-      dnds += 1
-    elif count.status == discord.Status.idle:
-      idles += 1
+    if count.bot:
+      if count.status == discord.Status.online:
+        bot_onlines += 1
+      elif count.status == discord.Status.dnd:
+        bot_dnds += 1
+      elif count.status == discord.Status.idle:
+        bot_idles += 1
+      else:
+        bot_offlines += 1
     else:
-      offlines += 1
-  numlist = [onlines, dnds, idles, offlines]
-  patches, labels, pct_texts = plt.pie(np.array(numlist), labels=("Online", "DND", "Idle", "Offline"),
+      if count.status == discord.Status.online:
+        usr_onlines += 1
+      elif count.status == discord.Status.dnd:
+        usr_dnds += 1
+      elif count.status == discord.Status.idle:
+        usr_idles += 1
+      else:
+        usr_offlines += 1
+  fig = plt.figure(tight_layout=True)
+  statuses_grid = gridspec.GridSpec(2,3)
+  ax1 = fig.add_subplot(statuses_grid[0, 0])
+  ax2 = fig.add_subplot(statuses_grid[0, 1])
+  ax3 = fig.add_subplot(statuses_grid[1:,2:])
+  #Bots
+  numlist = [bot_onlines, bot_dnds, bot_idles, bot_offlines]
+  patches, labels, pct_texts = ax1.pie(np.array(numlist), labels=("Online", "DND", "Idle", "Offline"),
     colors=["#3ba55d", "#ed4245", "#faa91a", "#747f8d"], rotatelabels=True, pctdistance=0.6,
   autopct=lambda pct: func(pct, numlist), textprops = {'color':"w"})
   for label, pct_text in zip(labels, pct_texts):
     pct_text.set_rotation(label.get_rotation())
-  plt.legend()
-  plt.title("Statuses Analysis", fontdict={'color':'w'})
+  ax1.title("Bot statuses", fontdict={'color':'w'})
+  #Humans
+  numlist = [usr_onlines, usr_dnds, usr_idles, usr_offlines]
+  patches, labels, pct_texts = ax2.pie(np.array(numlist), labels=("Online", "DND", "Idle", "Offline"),
+    colors=["#3ba55d", "#ed4245", "#faa91a", "#747f8d"], rotatelabels=True, pctdistance=0.6,
+  autopct=lambda pct: func(pct, numlist), textprops = {'color':"w"})
+  for label, pct_text in zip(labels, pct_texts):
+    pct_text.set_rotation(label.get_rotation())
+  ax2.title("Human statuses", fontdict={'color':'w'})
+  #Sum
+  numlist = [bot_onlines + usr_onlines, bot_dnds + usr_dnds, bot_idles + usr_idles, bot_offlines + usr_offlines]
+  patches, labels, pct_texts = ax3.pie(np.array(numlist), labels=("Online", "DND", "Idle", "Offline"),
+    colors=["#3ba55d", "#ed4245", "#faa91a", "#747f8d"], rotatelabels=True, pctdistance=0.6,
+  autopct=lambda pct: func(pct, numlist), textprops = {'color':"w"})
+  for label, pct_text in zip(labels, pct_texts):
+    pct_text.set_rotation(label.get_rotation())
+  ax3.title("All statuses", fontdict={'color':'w'})
+  ax3.legend()
   plt.savefig("statuses.png", transparent=True)
   await ctx.send(file = discord.File('statuses.png'))
   plt.clf()

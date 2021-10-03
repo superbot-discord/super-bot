@@ -1,16 +1,29 @@
+import asyncio
 import json
+import os
+import random as ra
 import re
-from datetime import datetime
-from discord.enums import VoiceRegion
-import pytz
+import typing
+from datetime import datetime, timedelta, timezone
+from difflib import SequenceMatcher
+from math import *
 
 import discord
+import discord as discord
+import emojis as ems
+import matplotlib.gridspec as gridspec
+import matplotlib.pyplot as plt
+import numpy as np
+import pytz
 from discord import Embed, Permissions, ui
+from discord.enums import VoiceRegion
+from discord.ext import commands
 
 f = open('database.json', 'r')
 db = json.loads(f.read())
 f.close()
 
+func            =lambda pct, allvals   : "{:d} ({:.1f}%)".format(round(pct/100*np.sum(allvals), 1), int(pct))
 botadmin        =lambda context        : context.author.id in db["botadmins"]
 number_to_emoji =lambda a              : a.replace("1",":one: ").replace("2",":two: ").replace("3",":three: ").replace("4",":four: ").replace("5",":five: ").replace("6",":six: ").replace("7",":seven: ").replace("8",":eight: ").replace("9",":nine: ").replace("0",":zero: ")
 sizer           =lambda bytes          : f"{round(bytes,4):,} Bytes" if bytes<1024 else (f"{round(bytes/1024,4):,}KB" if bytes<1048576 else (f"{round(bytes/1048576,4):,}MB" if bytes<1073741824 else f"{round(bytes/1073741824,4):,}GB"))
@@ -22,29 +35,29 @@ naiveness       =lambda dt             : "Naive" if (dt.tzinfo is None or dt.tzi
 
 def voice_region_format(region):
   if not region: return "Auto"
-  if region == discord.VoiceRegion.amsterdam  : return "Amsterdam"
-  if region == discord.VoiceRegion.brazil     : return "Brazil"
-  if region == discord.VoiceRegion.dubai      : return "Dubai"
-  if region == discord.VoiceRegion.eu_central : return "Europe (Central)"
-  if region == discord.VoiceRegion.eu_west    : return "Europe (West)"
-  if region == discord.VoiceRegion.europe     : return "Europe"
-  if region == discord.VoiceRegion.frankfurt  : return "Frankfurt"
-  if region == discord.VoiceRegion.hongkong   : return "Hong Kong"
-  if region == discord.VoiceRegion.india      : return "India"
-  if region == discord.VoiceRegion.japan      : return "Japan"
-  if region == discord.VoiceRegion.london     : return "London"
-  if region == discord.VoiceRegion.russia     : return "Russia"
-  if region == discord.VoiceRegion.singapore  : return "Singapore"
-  if region == discord.VoiceRegion.southafrica: return "South Africa"
-  if region == discord.VoiceRegion.south_korea: return "South Korea"
-  if region == discord.VoiceRegion.sydney     : return "Sydney"
-  if region == discord.VoiceRegion.us_central : return "USA (Central)"
-  if region == discord.VoiceRegion.us_east    : return "USA (East)"
-  if region == discord.VoiceRegion.us_south   : return "USA (South)"
-  if region == discord.VoiceRegion.us_west    : return "USA (West)"
-  if region == discord.VoiceRegion.vip_amsterdam: return "Amsterdam (VIP)"
-  if region == discord.VoiceRegion.vip_us_east  : return "USA (East) (VIP)"
-  if region == discord.VoiceRegion.vip_us_west  : return "USA (West) (VIP)"
+  if region == VoiceRegion.amsterdam  : return "Amsterdam"
+  if region == VoiceRegion.brazil     : return "Brazil"
+  if region == VoiceRegion.dubai      : return "Dubai"
+  if region == VoiceRegion.eu_central : return "Europe (Central)"
+  if region == VoiceRegion.eu_west    : return "Europe (West)"
+  if region == VoiceRegion.europe     : return "Europe"
+  if region == VoiceRegion.frankfurt  : return "Frankfurt"
+  if region == VoiceRegion.hongkong   : return "Hong Kong"
+  if region == VoiceRegion.india      : return "India"
+  if region == VoiceRegion.japan      : return "Japan"
+  if region == VoiceRegion.london     : return "London"
+  if region == VoiceRegion.russia     : return "Russia"
+  if region == VoiceRegion.singapore  : return "Singapore"
+  if region == VoiceRegion.southafrica: return "South Africa"
+  if region == VoiceRegion.south_korea: return "South Korea"
+  if region == VoiceRegion.sydney     : return "Sydney"
+  if region == VoiceRegion.us_central : return "USA (Central)"
+  if region == VoiceRegion.us_east    : return "USA (East)"
+  if region == VoiceRegion.us_south   : return "USA (South)"
+  if region == VoiceRegion.us_west    : return "USA (West)"
+  if region == VoiceRegion.vip_amsterdam: return "Amsterdam (VIP)"
+  if region == VoiceRegion.vip_us_east  : return "USA (East) (VIP)"
+  if region == VoiceRegion.vip_us_west  : return "USA (West) (VIP)"
   return "An error occured."
 
 verify_pattern = re.compile(r'[^ ⠀][\s\S]{0,30}?[^ ⠀]#?[\d]{4}(,|, | )?[\d+\-*/×÷%xyz()\[\]\{\}]{1,50}=[\d+\-*/×÷%xyz()\[\]\{\}]{1,50}(,|, | )?[\S ]{3,20}(,|, | )?(Red|Orange|Yellow|Green|Light( |_)?Green|Dark( |_)?Green|Cyan|Blue|Light( |_)?Blue|Dark( |_)?Blue|Purple|Pink|Brown)', re.IGNORECASE)

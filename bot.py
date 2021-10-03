@@ -1,13 +1,3 @@
-import random as ra
-import re
-from datetime import datetime, timedelta, timezone
-from difflib import SequenceMatcher
-from math import *
-
-import discord as discord
-import emojis as ems
-from discord.ext import commands
-
 from shared import *
 
 banned_ids =  [755416776581578813]
