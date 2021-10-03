@@ -812,7 +812,7 @@ async def statuses(ctx, *, text = None):
         usr_idles += 1
       else:
         usr_offlines += 1
-  fig = plt.figure(tight_layout=True)
+  fig = plt.figure(tight_layout=False)
   statuses_grid = gridspec.GridSpec(2,3)
   ax1 = fig.add_subplot(statuses_grid[0, 0])
   ax2 = fig.add_subplot(statuses_grid[0, 1])
