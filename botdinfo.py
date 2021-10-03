@@ -821,7 +821,7 @@ async def statuses(ctx, *, text = None):
   #Bots
   numlist = [bot_onlines, bot_dnds, bot_idles, bot_offlines]
   patches, labels, pct_texts = ax1.pie(np.array(numlist), labels=("Online", "DND", "Idle", "Offline"),
-    colors=["#3ba55d", "#ed4245", "#faa91a", "#747f8d"], rotatelabels=True, pctdistance=0.6,
+    colors=["#3ba55d", "#ed4245", "#faa91a", "#747f8d"], rotatelabels=True, pctdistance=0.65,
   autopct=lambda pct: func(pct, numlist), textprops = db["font_dicts"]["tiny"])
   for label, pct_text in zip(labels, pct_texts):
     pct_text.set_rotation(label.get_rotation())
@@ -830,7 +830,7 @@ async def statuses(ctx, *, text = None):
   #Humans
   numlist = [usr_onlines, usr_dnds, usr_idles, usr_offlines]
   patches, labels, pct_texts = ax2.pie(np.array(numlist), labels=("Online", "DND", "Idle", "Offline"),
-    colors=["#3ba55d", "#ed4245", "#faa91a", "#747f8d"], rotatelabels=True, pctdistance=0.6,
+    colors=["#3ba55d", "#ed4245", "#faa91a", "#747f8d"], rotatelabels=True, pctdistance=0.65,
   autopct=lambda pct: func(pct, numlist), textprops = db["font_dicts"]["tiny"])
   for label, pct_text in zip(labels, pct_texts):
     pct_text.set_rotation(label.get_rotation())
@@ -839,7 +839,7 @@ async def statuses(ctx, *, text = None):
   #Sum
   numlist = [bot_onlines + usr_onlines, bot_dnds + usr_dnds, bot_idles + usr_idles, bot_offlines + usr_offlines]
   patches, labels, pct_texts = ax3.pie(np.array(numlist), labels=("Online", "DND", "Idle", "Offline"),
-    colors=["#3ba55d", "#ed4245", "#faa91a", "#747f8d"], rotatelabels=True, pctdistance=0.6,
+    colors=["#3ba55d", "#ed4245", "#faa91a", "#747f8d"], rotatelabels=True, pctdistance=0.5,
   autopct=lambda pct: func(pct, numlist), textprops = db["font_dicts"]["label"])
   for label, pct_text in zip(labels, pct_texts):
     pct_text.set_rotation(label.get_rotation())
