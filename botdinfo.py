@@ -845,7 +845,7 @@ async def statuses(ctx, *, text = None):
     pct_text.set_rotation(label.get_rotation())
     pct_text.update(db["font_dicts"]["light_label"])
   ax3.set_title("All statuses", fontdict=db["font_dicts"]["semi_title"])
-  fig.legend()
+  fig.legend(["Online", "DND", "Idle", "Offline"], labelcolor = ["#3ba55d", "#ed4245", "#faa91a", "#747f8d"], )
   plt.savefig("statuses.png", transparent=True)
   plt.savefig("statuses.svg", transparent=True)
   await ctx.send(files = [discord.File('statuses.png'), discord.File('statuses.svg')])
