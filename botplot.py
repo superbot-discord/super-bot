@@ -295,6 +295,7 @@ async def pie(ctx, numbers, label="", *, title="No_title_required"):
     rotatelabels=True, pctdistance=0.6, textprops = db["font_dicts"]["label"])
     for label, pct_text in zip(labels, pct_texts):
       pct_text.set_rotation(label.get_rotation())
+      pct_text.update(db["font_dicts"]["light_label"])
     plt.legend(loc="lower right")
     if title != "No_title_required":
       plt.title(title, fontdict=db["font_dicts"]["title"])

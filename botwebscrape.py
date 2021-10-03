@@ -18,6 +18,7 @@ options.add_argument("–lang=zh-TW")
 
 @commands.command()
 async def covid(ctx, *, country="world"):
+  await ctx.channel.trigger_typing()
   driver = webdriver.Chrome(options=options)
   if country.lower() == "world" or country.lower() == "global" or country.lower() == "worldwide" or country.lower() == "everywhere" or country.lower() == "anywhere" or country.lower() == "international" or country.lower() == "internationally" or country.lower() == "globally" or country.lower() == "current":
     country = "world"
@@ -75,14 +76,17 @@ async def covid(ctx, *, country="world"):
     mylabels = ["Active (Mild)", "Active (Serious)", "Recovered", "Died"]
     mycolors = ["#4287F5", "#FF5252", "#CAFF99", "#A1A1A1"]
     y = np.array([int(tactive.replace(",",""))-int(tserious.replace(",","")), int(tserious.replace(",","")), int(trecovered.replace(",","")), int(tdeath.replace(",",""))])
-    plt.pie(y, labels = mylabels, colors = mycolors, autopct=lambda pct: func(pct, y), textprops = db["font_dicts"]["label"], pctdistance=0.7)
+    patches, labels, pct_texts = plt.pie(y, labels = mylabels, colors = mycolors, autopct=lambda pct: func(pct, y), rotatelabels=True, pctdistance=0.5, textprops = db["font_dicts"]["label"])
+    for label, pct_text in zip(labels, pct_texts):
+      pct_text.set_rotation(label.get_rotation())
+      pct_text.update(db["font_dicts"]["light_label"])
     plt.legend(loc="lower right")
     plt.savefig("pc1.png", transparent=True)
     plt.clf()
     mylabels = ["Non-infected", "Infected"]
     mycolors = ["#A0A0A0", "#FF5252"]
     y = np.array([int(tpopulation.replace(",",""))-int(tcases.replace(",","")), int(tcases.replace(",",""))])
-    plt.pie(y, labels = mylabels, colors = mycolors, autopct=lambda pct: func(pct, y), textprops = db["font_dicts"]["tiny"], pctdistance=0.5)
+    plt.pie(y, labels = mylabels, colors = mycolors, autopct=lambda pct: func(pct, y), textprops = db["font_dicts"]["light_tiny"], pctdistance=0.5)
     plt.legend(loc="lower right")
     plt.savefig("pc2.png", transparent=True)
     plt.clf()
@@ -95,6 +99,7 @@ async def covid(ctx, *, country="world"):
 
 @commands.command()
 async def html(ctx, *, htmlcode = None):
+  await ctx.channel.trigger_typing()
   match = html_pattern.fullmatch(htmlcode)
   if match:
     code = re.sub(html_pattern, r"\2", htmlcode)
@@ -116,6 +121,7 @@ async def html(ctx, *, htmlcode = None):
 
 @commands.command()
 async def map(ctx, long:float, lati:float, zoom:int=10, antizoom = ""):
+  await ctx.channel.trigger_typing()
   antizoom = specialbool(antizoom)
   if antizoom:
     m = folium.Map(location=[long, lati], zoom_start=zoom, min_zoom=zoom, max_zoom=zoom)
@@ -125,6 +131,7 @@ async def map(ctx, long:float, lati:float, zoom:int=10, antizoom = ""):
   await ctx.send(file=discord.File('map.html'))
   driver = webdriver.Chrome(options=options)
   driver.get("file:///map.html")
+  await ctx.channel.trigger_typing()
   await asyncio.sleep(5)
   driver.get_screenshot_as_file('map.png')
   await ctx.send(file=discord.File('map.png'))
@@ -132,6 +139,7 @@ async def map(ctx, long:float, lati:float, zoom:int=10, antizoom = ""):
 
 @commands.command(aliases=['md'])
 async def markdown(ctx, *, mdcode = None):
+  await ctx.channel.trigger_typing()
   match = md_pattern.fullmatch(mdcode)
   if match:
     code = re.sub(md_pattern, r"\2", mdcode)
@@ -154,6 +162,7 @@ async def markdown(ctx, *, mdcode = None):
 
 @commands.command()
 async def population(ctx, country="current"):
+  await ctx.channel.trigger_typing()
   driver = webdriver.Chrome(options=options)
   if country.lower() == "world" or country.lower() == "global" or country.lower() == "worldwide" or country.lower() == "everywhere" or country.lower() == "anywhere" or country.lower() == "international" or country.lower() == "internationally" or country.lower() == "globally" or country.lower() == "current":
     country = "current_"
@@ -206,6 +215,7 @@ async def population(ctx, country="current"):
 
 @commands.command()
 async def screenshot(ctx, url = None, form = "all"):
+  await ctx.channel.trigger_typing()
   driver = webdriver.Chrome(options=options)
   if url == None:
     await ctx.send("Invalid format! Please use the format `=screenshot [url]`.")
