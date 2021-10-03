@@ -825,7 +825,7 @@ async def statuses(ctx, *, text = None):
   autopct=lambda pct: func(pct, numlist), textprops = db["font_dicts"]["tiny"])
   for label, pct_text in zip(labels, pct_texts):
     pct_text.set_rotation(label.get_rotation())
-    pct_text.update(db["font_dicts"]["light_tiny"])
+    pct_text.update(db["font_dicts"]["light_mini"])
   ax1.set_title("Bot statuses", fontdict=db["font_dicts"]["semi_title"])
   #Humans
   numlist = [usr_onlines, usr_dnds, usr_idles, usr_offlines]
@@ -834,7 +834,7 @@ async def statuses(ctx, *, text = None):
   autopct=lambda pct: func(pct, numlist), textprops = db["font_dicts"]["tiny"])
   for label, pct_text in zip(labels, pct_texts):
     pct_text.set_rotation(label.get_rotation())
-    pct_text.update(db["font_dicts"]["light_tiny"])
+    pct_text.update(db["font_dicts"]["light_mini"])
   ax2.set_title("Human statuses", fontdict=db["font_dicts"]["semi_title"])
   #Sum
   numlist = [bot_onlines + usr_onlines, bot_dnds + usr_dnds, bot_idles + usr_idles, bot_offlines + usr_offlines]

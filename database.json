@@ -1,12 +1,14 @@
 {
   "font_dicts" : {
-    "title"      :{"color":"#AAA", "fontsize":15, "fontweight":"bold"},
-    "semi_title" :{"color":"#AAA", "fontsize":10, "fontweight":"demi"},
-    "label"      :{"color":"#AAA", "fontsize":8 , "fontweight":"book"},
-    "tiny"       :{"color":"#AAA", "fontsize":5 , "fontweight":"light"},
-    "light_label":{"color":"#FFF", "fontsize":8 , "fontweight":"book"},
-    "light_tiny" :{"color":"#FFF", "fontsize":5 , "fontweight":"light"},
-    "legend"     :{"color":"#111", "fontsize":8 , "fontweight":"semibold"}
+    "title"      :{"color":"#AAA", "fontsize":15  , "fontweight":"bold"},
+    "semi_title" :{"color":"#AAA", "fontsize":10  , "fontweight":"demi"},
+    "label"      :{"color":"#AAA", "fontsize":8   , "fontweight":"book"},
+    "tiny"       :{"color":"#AAA", "fontsize":5   , "fontweight":"light"},
+    "mini"       :{"color":"#AAA", "fontsize":4   , "fontweight":"light"},
+    "light_label":{"color":"#FFF", "fontsize":8   , "fontweight":"book"},
+    "light_tiny" :{"color":"#FFF", "fontsize":5   , "fontweight":"light"},
+    "light_mini" :{"color":"#FFF", "fontsize":4   , "fontweight":"light"},
+    "legend"     :{"color":"#111", "fontsize":8   , "fontweight":"semibold"}
   },
   "status_buttons" : [
     {"label":"New website", "url":"https://superbot-discord.github.io/"},
