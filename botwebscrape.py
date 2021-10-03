@@ -74,7 +74,7 @@ async def covid(ctx, *, country="world"):
       embed.add_field(name="Total Tests", value=ttest, inline=True)
       embed.add_field(name="Tests/1M", value=needrow.findAll('td')[13].string, inline=True)
     mylabels = ["Active (Mild)", "Active (Serious)", "Recovered", "Died"]
-    mycolors = ["#4287F5", "#FF5252", "#CAFF99", "#A1A1A1"]
+    mycolors = ["#5865F2", "#ED4245", "#3BA55D", "#747F8D"]
     y = np.array([int(tactive.replace(",",""))-int(tserious.replace(",","")), int(tserious.replace(",","")), int(trecovered.replace(",","")), int(tdeath.replace(",",""))])
     patches, labels, pct_texts = plt.pie(y, labels = mylabels, colors = mycolors, autopct=lambda pct: func(pct, y), rotatelabels=True, pctdistance=0.5, textprops = db["font_dicts"]["label"])
     for label, pct_text in zip(labels, pct_texts):
@@ -86,7 +86,10 @@ async def covid(ctx, *, country="world"):
     mylabels = ["Non-infected", "Infected"]
     mycolors = ["#A0A0A0", "#FF5252"]
     y = np.array([int(tpopulation.replace(",",""))-int(tcases.replace(",","")), int(tcases.replace(",",""))])
-    plt.pie(y, labels = mylabels, colors = mycolors, autopct=lambda pct: func(pct, y), textprops = db["font_dicts"]["light_tiny"], pctdistance=0.5)
+    patches, labels, pct_texts = plt.pie(y, labels = mylabels, colors = mycolors, autopct=lambda pct: func(pct, y), textprops = db["font_dicts"]["label"], pctdistance=0.5)
+    for label, pct_text in zip(labels, pct_texts):
+      pct_text.set_rotation(label.get_rotation())
+      pct_text.update(db["font_dicts"]["light_label"])
     plt.legend(loc="lower right")
     plt.savefig("pc2.png", transparent=True)
     plt.clf()
