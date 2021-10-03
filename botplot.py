@@ -296,7 +296,7 @@ async def pie(ctx, numbers, label="", *, title="No_title_required"):
     for label, pct_text in zip(labels, pct_texts):
       pct_text.set_rotation(label.get_rotation())
       pct_text.update(db["font_dicts"]["light_label"])
-    plt.legend(loc="lower right")
+    plt.legend(prop=db["font_dicts"]["legend"])
     if title != "No_title_required":
       plt.title(title, fontdict=db["font_dicts"]["title"])
     plt.savefig("piechart.png", transparent=True)

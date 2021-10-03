@@ -529,7 +529,7 @@ async def reactions(ctx, *, msg : discord.Message = None):
   for label, pct_text in zip(labels, pct_texts):
     pct_text.set_rotation(label.get_rotation())
     pct_text.update(db["font_dicts"]["light_label"])
-  plt.legend()
+  plt.legend(prop=db["font_dicts"]["legend"])
   plt.title("Reaction Status", fontdict=db["font_dicts"]["title"])
   plt.savefig("reactions.png", transparent=True)
   await ctx.send(file = discord.File('reactions.png'))

@@ -5,7 +5,8 @@
     "label"      :{"color":"#AAA", "fontsize":8 , "fontweight":"book"},
     "tiny"       :{"color":"#AAA", "fontsize":5 , "fontweight":"light"},
     "light_label":{"color":"#FFF", "fontsize":8 , "fontweight":"book"},
-    "light_tiny" :{"color":"#FFF", "fontsize":5 , "fontweight":"light"}
+    "light_tiny" :{"color":"#FFF", "fontsize":5 , "fontweight":"light"},
+    "legend"     :{"color":"#111", "fontsize":8 , "fontweight":"semibold"}
   },
   "status_buttons" : [
     {"label":"New website", "url":"https://superbot-discord.github.io/"},

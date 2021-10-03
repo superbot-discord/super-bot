@@ -80,7 +80,7 @@ async def covid(ctx, *, country="world"):
     for label, pct_text in zip(labels, pct_texts):
       pct_text.set_rotation(label.get_rotation())
       pct_text.update(db["font_dicts"]["light_label"])
-    plt.legend(loc="lower right")
+    plt.legend(prop=db["font_dicts"]["legend"])
     plt.savefig("pc1.png", transparent=True)
     plt.clf()
     mylabels = ["Non-infected", "Infected"]
@@ -90,7 +90,7 @@ async def covid(ctx, *, country="world"):
     for label, pct_text in zip(labels, pct_texts):
       pct_text.set_rotation(label.get_rotation())
       pct_text.update(db["font_dicts"]["light_label"])
-    plt.legend(loc="lower right")
+    plt.legend(prop=db["font_dicts"]["legend"])
     plt.savefig("pc2.png", transparent=True)
     plt.clf()
     filelist = [discord.File("pc1.png"), discord.File("pc2.png")]
