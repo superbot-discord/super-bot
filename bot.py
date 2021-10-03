@@ -25,7 +25,7 @@ sniper1=sniper2=sniper3=sniper4=sniper5=sniperdate1=sniperdate2=sniperdate3=snip
 snipereactions=polls=allid=[]
 
 
-@bot_.event
+"""@bot_.event
 async def on_command_error(ctx, error):
   if isinstance(error, commands.CommandNotFound):
     message = ctx.message
@@ -47,7 +47,7 @@ async def on_command_error(ctx, error):
   else:
     print(error.with_traceback(error.__traceback__))
     await ctx.send(f"An error occured:\n```{error.with_traceback(error.__traceback__)}```\nIf you think that this is an issue with the bot, please kindly inform JohannLau#6541 about this issue.")
-
+"""
 @bot_.event
 async def on_thread_update(before, after):
   if after.id == 887562599191941121 and after.archived:

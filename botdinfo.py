@@ -525,11 +525,11 @@ async def reactions(ctx, *, msg : discord.Message = None):
   for count in range(0, len(numlist)):
     mycolors.append(cmaphsv(count/len(numlist)))
   patches, labels, pct_texts = plt.pie(y, labels=labels, colors=mycolors, rotatelabels=True,
-  pctdistance=0.6, autopct=lambda pct: func(pct, y),textprops = {'color':"w"})
+  pctdistance=0.6, autopct=lambda pct: func(pct, y),textprops = db["font_dicts"]["label"])
   for label, pct_text in zip(labels, pct_texts):
     pct_text.set_rotation(label.get_rotation())
   plt.legend()
-  plt.title("Reaction Status", fontdict={'color':'w'})
+  plt.title("Reaction Status", fontdict=db["font_dicts"]["title"])
   plt.savefig("reactions.png", transparent=True)
   await ctx.send(file = discord.File('reactions.png'))
   plt.clf()
@@ -813,39 +813,41 @@ async def statuses(ctx, *, text = None):
       else:
         usr_offlines += 1
   fig = plt.figure(tight_layout=False)
-  statuses_grid = gridspec.GridSpec(2,3)
+  statuses_grid = gridspec.GridSpec(3,2)
   ax1 = fig.add_subplot(statuses_grid[0, 0])
   ax2 = fig.add_subplot(statuses_grid[0, 1])
-  ax3 = fig.add_subplot(statuses_grid[1:,2:])
+  ax3 = fig.add_subplot(statuses_grid[1:,0:])
   #Bots
   numlist = [bot_onlines, bot_dnds, bot_idles, bot_offlines]
   patches, labels, pct_texts = ax1.pie(np.array(numlist), labels=("Online", "DND", "Idle", "Offline"),
     colors=["#3ba55d", "#ed4245", "#faa91a", "#747f8d"], rotatelabels=True, pctdistance=0.6,
-  autopct=lambda pct: func(pct, numlist), textprops = {'color':"w"})
+  autopct=lambda pct: func(pct, numlist), textprops = db["font_dicts"]["tiny"])
   for label, pct_text in zip(labels, pct_texts):
     pct_text.set_rotation(label.get_rotation())
-  ax1.title("Bot statuses", fontdict={'color':'w'})
+  ax1.set_title("Bot statuses", fontdict=db["font_dicts"]["semi_title"])
   #Humans
   numlist = [usr_onlines, usr_dnds, usr_idles, usr_offlines]
   patches, labels, pct_texts = ax2.pie(np.array(numlist), labels=("Online", "DND", "Idle", "Offline"),
     colors=["#3ba55d", "#ed4245", "#faa91a", "#747f8d"], rotatelabels=True, pctdistance=0.6,
-  autopct=lambda pct: func(pct, numlist), textprops = {'color':"w"})
+  autopct=lambda pct: func(pct, numlist), textprops = db["font_dicts"]["tiny"])
   for label, pct_text in zip(labels, pct_texts):
     pct_text.set_rotation(label.get_rotation())
-  ax2.title("Human statuses", fontdict={'color':'w'})
+  ax2.set_title("Human statuses", fontdict=db["font_dicts"]["semi_title"])
   #Sum
   numlist = [bot_onlines + usr_onlines, bot_dnds + usr_dnds, bot_idles + usr_idles, bot_offlines + usr_offlines]
   patches, labels, pct_texts = ax3.pie(np.array(numlist), labels=("Online", "DND", "Idle", "Offline"),
     colors=["#3ba55d", "#ed4245", "#faa91a", "#747f8d"], rotatelabels=True, pctdistance=0.6,
-  autopct=lambda pct: func(pct, numlist), textprops = {'color':"w"})
+  autopct=lambda pct: func(pct, numlist), textprops = db["font_dicts"]["label"])
   for label, pct_text in zip(labels, pct_texts):
     pct_text.set_rotation(label.get_rotation())
-  ax3.title("All statuses", fontdict={'color':'w'})
+  ax3.set_title("All statuses", fontdict=db["font_dicts"]["semi_title"])
   ax3.legend()
   plt.savefig("statuses.png", transparent=True)
-  await ctx.send(file = discord.File('statuses.png'))
+  plt.savefig("statuses.svg", transparent=True)
+  await ctx.send(files = [discord.File('statuses.png'), discord.File('statuses.svg')])
   plt.clf()
   os.remove('statuses.png')
+  os.remove('statuses.svg')
 
 @commands.command()
 async def stickers(ctx, *, text=None):

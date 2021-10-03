@@ -72,7 +72,7 @@ async def barh(ctx, numbers, label, *, title="No_title_required"):
       ax.spines[count].set_color("w")
     ax.tick_params(axis='both', colors='w')
     if title != "No_title_required":
-      plt.title(title, fontdict={'color':'w'})
+      plt.title(title, fontdict=db["font_dicts"]["title"])
     plt.savefig("horizontalbarchart.png", transparent=True)
     plt.savefig("horizontalbarchart.svg", transparent=True)
     plt.clf()
@@ -102,7 +102,7 @@ async def barv(ctx, numbers, label, *, title="No_title_required"):
       ax.spines[count].set_color("w")
     ax.tick_params(axis='both', colors='w')
     if title != "No_title_required":
-      plt.title(title, fontdict={'color':'w'})
+      plt.title(title, fontdict=db["font_dicts"]["title"])
     plt.savefig("verticalbarchart.png", transparent=True)
     plt.savefig("verticalbarchart.svg", transparent=True)
     plt.clf()
@@ -124,7 +124,7 @@ async def bline(ctx, numbers, *, title="No_title_required"):
       ax.spines[count].set_color("w")
     ax.tick_params(axis='both', colors='w')
     if title != "No_title_required":
-      plt.title(title, fontdict={'color':'w'})
+      plt.title(title, fontdict=db["font_dicts"]["title"])
     plt.savefig("brokenline.png", transparent=True)
     plt.savefig("brokenline.svg", transparent=True)
     plt.clf()
@@ -148,7 +148,7 @@ async def bline2(ctx, numbers, xnumbers, *, title="No_title_required"):
       ax.spines[count].set_color("w")
     ax.tick_params(axis='both', colors='w')
     if title != "No_title_required":
-      plt.title(title, fontdict={'color':'w'})
+      plt.title(title, fontdict=db["font_dicts"]["title"])
     plt.savefig("brokenline.png", transparent=True)
     plt.savefig("brokenline.svg", transparent=True)
     plt.clf()
@@ -197,7 +197,7 @@ async def graph(ctx, func, range_low:float=-10.0, range_high:float=10.0, equaliz
       ax.spines[count].set_color("w")
     ax.tick_params(axis='both', colors='w')
     if title != "No_title_required":
-      plt.title(title, fontdict={'color':'w'})
+      plt.title(title, fontdict=db["font_dicts"]["title"])
     plt.savefig("graph.png", transparent=True)
     plt.savefig("graph.svg", transparent=True)
     plt.clf()
@@ -218,7 +218,7 @@ async def hist(ctx, numbers, *, title="No_title_required"):
       ax.spines[count].set_color("w")
     ax.tick_params(axis='both', colors='w')
     if title != "No_title_required":
-      plt.title(title, fontdict={'color':'w'})
+      plt.title(title, fontdict=db["font_dicts"]["title"])
     plt.savefig("histogram.png", transparent=True)
     plt.savefig("histogram.svg", transparent=True)
     plt.clf()
@@ -244,7 +244,7 @@ async def multibline(ctx, numbers, labels, *, title="No_title_required"):
     ax.tick_params(axis='both', colors='w')
     ax.legend()
     if title != "No_title_required":
-      plt.title(title, fontdict={'color':'w'})
+      plt.title(title, fontdict=db["font_dicts"]["title"])
     plt.savefig("brokenline.png", transparent=True)
     plt.savefig("brokenline.svg", transparent=True)
     plt.clf()
@@ -266,7 +266,7 @@ async def multigraph(ctx, func, range_low:float=-10.0, range_high:float=10.0, *,
       ax.spines[count].set_color("w")
     ax.tick_params(axis='both', colors='w')
     if title != "No_title_required":
-      plt.title(title, fontdict={'color':'w'})
+      plt.title(title, fontdict=db["font_dicts"]["title"])
     plt.savefig("graph.png", transparent=True)
     plt.savefig("graph.svg", transparent=True)
     plt.clf()
@@ -292,12 +292,12 @@ async def pie(ctx, numbers, label="", *, title="No_title_required"):
     for count in range(0, len(numlist)):
       mycolors.append(cmaphsv(count/len(numlist)))
     patches, labels, pct_texts = plt.pie(y, labels=labels, colors=mycolors, autopct=lambda pct: func(pct, y),
-    rotatelabels=True, pctdistance=0.6, textprops = {'color':"w"})
+    rotatelabels=True, pctdistance=0.6, textprops = db["font_dicts"]["label"])
     for label, pct_text in zip(labels, pct_texts):
       pct_text.set_rotation(label.get_rotation())
     plt.legend(loc="lower right")
     if title != "No_title_required":
-      plt.title(title, fontdict={'color':'w'})
+      plt.title(title, fontdict=db["font_dicts"]["title"])
     plt.savefig("piechart.png", transparent=True)
     plt.savefig("piechart.svg", transparent=True)
     plt.clf()

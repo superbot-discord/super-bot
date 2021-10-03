@@ -1,21 +1,4 @@
-import asyncio
-import os
-import re
-
-import folium
-import matplotlib.pyplot as plt
-import selenium
-from bs4 import BeautifulSoup
-from markdown2 import Markdown
-from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.support.ui import WebDriverWait
-
-import discord
-import numpy as np
-import requests
-from discord.ext import commands
+from shared import *
 
 markdowner = Markdown(extras=["strike", "footnotes"])
 html_pattern = re.compile(r'^\`\`\`(html)?\n([\s\S]*)\`\`\`$')
@@ -92,14 +75,14 @@ async def covid(ctx, *, country="world"):
     mylabels = ["Active (Mild)", "Active (Serious)", "Recovered", "Died"]
     mycolors = ["#4287F5", "#FF5252", "#CAFF99", "#A1A1A1"]
     y = np.array([int(tactive.replace(",",""))-int(tserious.replace(",","")), int(tserious.replace(",","")), int(trecovered.replace(",","")), int(tdeath.replace(",",""))])
-    plt.pie(y, labels = mylabels, colors = mycolors, autopct=lambda pct: func(pct, y), textprops = {'color':"#707070"}, pctdistance=0.7)
+    plt.pie(y, labels = mylabels, colors = mycolors, autopct=lambda pct: func(pct, y), textprops = db["font_dicts"]["label"], pctdistance=0.7)
     plt.legend(loc="lower right")
     plt.savefig("pc1.png", transparent=True)
     plt.clf()
     mylabels = ["Non-infected", "Infected"]
     mycolors = ["#A0A0A0", "#FF5252"]
     y = np.array([int(tpopulation.replace(",",""))-int(tcases.replace(",","")), int(tcases.replace(",",""))])
-    plt.pie(y, labels = mylabels, colors = mycolors, autopct=lambda pct: func(pct, y), textprops = {'color':"#707070"}, pctdistance=0.5)
+    plt.pie(y, labels = mylabels, colors = mycolors, autopct=lambda pct: func(pct, y), textprops = db["font_dicts"]["tiny"], pctdistance=0.5)
     plt.legend(loc="lower right")
     plt.savefig("pc2.png", transparent=True)
     plt.clf()

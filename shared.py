@@ -9,15 +9,24 @@ from difflib import SequenceMatcher
 from math import *
 
 import discord
-import discord as discord
 import emojis as ems
+import folium
 import matplotlib.gridspec as gridspec
 import matplotlib.pyplot as plt
 import numpy as np
 import pytz
+import selenium
+from bs4 import BeautifulSoup
 from discord import Embed, Permissions, ui
 from discord.enums import VoiceRegion
 from discord.ext import commands
+from markdown2 import Markdown
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
+
+import requests
 
 f = open('database.json', 'r')
 db = json.loads(f.read())
