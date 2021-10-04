@@ -3,7 +3,8 @@ from shared import *
 banned_ids =  [755416776581578813]
 banned_text = ["Searching for inappropriate content"]
 bot_admins = [687474789342117900]
-bot_ = commands.Bot(command_prefix=commands.when_mentioned_or("="), intents=discord.Intents.all(), case_insensitive=True, strip_after_prefix=True)
+bot_ = commands.Bot(command_prefix=commands.when_mentioned_or("="), intents=discord.Intents.all(), allowed_mentions=discord.AllowedMentions(everyone=False, users=True, roles=False, replied_user=False),
+  case_insensitive=True, strip_after_prefix=True)
 bot_.remove_command('help')
 bot_.load_extension("botanimals")
 bot_.load_extension("botbasic")
@@ -30,7 +31,7 @@ async def on_command_error(ctx, error):
   if isinstance(error, commands.CommandNotFound):
     message = ctx.message
     used_prefix = ctx.prefix
-    used_command = message.content.split()[0][len(used_prefix):]
+    used_command = message.content.split()[0][len(used_prefix):].lower()
     available_commands = [cmd.name for cmd in bot_.commands]
     matches = {cmd: SequenceMatcher(None, cmd, used_command).ratio() for cmd in available_commands}
     command = max(matches.items(), key=lambda item: item[1])[0]
@@ -40,13 +41,13 @@ async def on_command_error(ctx, error):
       arguments = ""
     new_content = f"{used_prefix}{command} {arguments}".strip()
     message.content = new_content
-    await ctx.send(f'Your might have made a typo and your command has been interpreted as `{command}`.', delete_after=4)
+    await ctx.reply(f'Your might have made a typo and your command has been interpreted as `{command}`.', delete_after=4)
     await bot_.process_commands(message)
   elif isinstance(error, commands.MissingRequiredArgument):
-    await ctx.send(f'You missed one or more arguments! {len(ctx.command.clean_params.keys())} argument(s) are required.\nNote: Multiline arguments are treated as one argument.')
+    await ctx.reply(f'You missed one or more arguments! {len(ctx.command.clean_params.keys())} argument(s) are required.\nNote: Multiline arguments are treated as one argument.')
   else:
     print(error.with_traceback(error.__traceback__))
-    await ctx.send(f"An error occured:\n```{error.with_traceback(error.__traceback__)}```\nIf you think that this is an issue with the bot, please kindly inform JohannLau#6541 about this issue.")
+    await ctx.reply(f"An error occured:\n```{error.with_traceback(error.__traceback__)}```\nIf you think that this is an issue with the bot, please kindly inform JohannLau#6541 about this issue.")
 
 @bot_.event
 async def on_thread_update(before, after):
@@ -249,7 +250,7 @@ async def snipe(ctx, *, text = None):
         ti = "Error"
         desc = "Nothing to snipe from this channel."
         embed = discord.Embed(title=ti, description=desc)
-        await ctx.send(embed=embed)
+        await ctx.reply(embed=embed)
         return
       else:
         if sniper2.get(keyname, 1) == 1:
@@ -267,7 +268,7 @@ async def snipe(ctx, *, text = None):
         foot = sniperdate1[keyname]
       embed = discord.Embed(title=ti, description=desc)
       embed.set_footer(text=foot)
-      cmsg = await ctx.send(embed=embed)
+      cmsg = await ctx.reply(embed=embed)
       sniperdict[cmsg] = 1
       await cmsg.add_reaction('⏪')
       await cmsg.add_reaction('⬅️')
@@ -276,14 +277,14 @@ async def snipe(ctx, *, text = None):
       await cmsg.add_reaction('⏩')
       snipereactions.append(cmsg)
     else:
-      await ctx.send("Snipping is disabled. Please ask someone with manage messages permission to re-enable it.")
+      await ctx.reply("Snipping is disabled. Please ask someone with manage messages permission to re-enable it.")
   elif has_perms(ctx.channel, ctx.author, 13):
     if text.startswith("y") or text.startswith("t") or text.startswith("e") or text.replace(" ","")=="1":
       sniping[keyname] = True
-      await ctx.send("Sniping is now enabled.")
+      await ctx.reply("Sniping is now enabled.")
     else:
       sniping[keyname] = False
-      await ctx.send("Sniping is now disabled.")
+      await ctx.reply("Sniping is now disabled.")
 
 @bot_.event
 async def on_voice_state_update(member, before, after):
@@ -310,7 +311,7 @@ async def poll(ctx, *, text):
     else:
       ti = ti + count + " "
   embed = discord.Embed(title = ti, description = ems.encode(desc))
-  poll = await ctx.send(embed=embed)
+  poll = await ctx.reply(embed=embed)
   for count in reactions:
     await poll.add_reaction(count)
   polls.append(poll.id)
@@ -326,9 +327,9 @@ async def clearsnipe(ctx, *, chnl : discord.TextChannel = None):
     sniper3.pop(str(ctx.guild.id)+str(chnl.id))
     sniper4.pop(str(ctx.guild.id)+str(chnl.id))
     sniper5.pop(str(ctx.guild.id)+str(chnl.id))
-    await ctx.send('Cleared snipe database for '+chnl.mention+'.')
+    await ctx.reply('Cleared snipe database for '+chnl.mention+'.')
   else:
-    await ctx.send("You don't have the required permission: Manage channels.")
+    await ctx.reply("You don't have the required permission: Manage channels.")
 
 @bot_.command()
 @commands.is_owner()
@@ -339,14 +340,14 @@ async def purgeserver(ctx, text, condition="1==1", *, nothing = None):
     for _role in allroles:
       if condition:
         await _role.delete()
-    await ctx.send("Role purging completed.")
+    await ctx.reply("Role purging completed.")
 
 @bot_.command()
 @commands.is_owner()
 async def botban(ctx, user : discord.User, *, text="No reason was provided"):
   banned_ids.append(user.id)
   banned_text.append(text)
-  await ctx.send("Banned user from using the bot.")
+  await ctx.reply("Banned user from using the bot.")
 
 @bot_.command()
 @commands.is_owner()
@@ -354,13 +355,13 @@ async def botunban(ctx, user : discord.User):
   if banned_ids.count(user.id) == 1:
     banned_text.remove(banned_text[banned_ids.index(user.id)])
     banned_ids.remove(user.id)
-    await ctx.send("Unbanned user from using the bot.")
+    await ctx.reply("Unbanned user from using the bot.")
 
 @bot_.command()
 @commands.is_owner()
 async def botadmin(ctx, user : discord.User):
   bot_admins.append(user.id)
-  await ctx.send("Added user as bot admin.")
+  await ctx.reply("Added user as bot admin.")
 
 @bot_.command()
 async def botpurge(ctx, *, num):
@@ -378,14 +379,14 @@ async def botpurge(ctx, *, num):
         if purged >= num:
           break
         
-    await ctx.send("Bot purging completed.", delete_after = 5)
+    await ctx.reply("Bot purging completed.", delete_after = 5)
   else:
-    await ctx.send("You don't have the required permission: Manage messages.")
+    await ctx.reply("You don't have the required permission: Manage messages.")
 
 @bot_.command(aliases=["online"])
 async def ping(ctx, *, text = None):
   now1 = datetime.now(timezone.utc)
-  message = await ctx.send("Pong!")
+  message = await ctx.reply("Pong!")
   mcs = str(int((datetime.now(timezone.utc) - now1).microseconds)+int(((datetime.now(timezone.utc) - now1).total_seconds())%60))
   await message.edit(content=f"Pong! 🏓\n```Message delay: {mcs} microseconds\nBot latency  : {round(bot_.latency*1000000, 2)} microseconds```")
 
@@ -395,11 +396,11 @@ async def terminate(ctx, *, idc):
     if allid.count(idc.upper()+str(ctx.guild.id))==1:
       exec("terminate"+idc.lower()+str(ctx.guild.id)+"=1",globals())
       allid.remove(idc.upper()+str(ctx.guild.id))
-      await ctx.send("Timer terminated!")
+      await ctx.reply("Timer terminated!")
     else:
-      await ctx.send("Please provide a valid timer code. A timer code could be found at the beginning of a running timer.")
+      await ctx.reply("Please provide a valid timer code. A timer code could be found at the beginning of a running timer.")
   else:
-    await ctx.send("Please provide an 5-alphabet ID code. Example: `ABCDE`")
+    await ctx.reply("Please provide an 5-alphabet ID code. Example: `ABCDE`")
 
 @bot_.command()
 async def rtimer(ctx, timetocount,*,Text=None):
