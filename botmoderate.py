@@ -139,10 +139,10 @@ async def search(ctx, *, flags : SearchFlags):
     channels = ctx.channel
   else:
     channels = flags.channels
-  if type(channels) == tuple:
-    channels = [channels[0]]
-  if type(query) == tuple:
-    query = [query[0]]
+  if type(channels) != tuple:
+    channels = [channels]
+  if type(query) != tuple:
+    query = [query]
   for channel_count in channels:
     async for message_count in channel_count.history(limit=flags.maximum):
       contents     = message_count.content
