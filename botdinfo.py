@@ -339,7 +339,6 @@ async def message(ctx, message: discord.Message=None):
     else:
       await ctx.reply("Please reply to a message or add a message ID/Link.")
       return
-  ti="Message Information"
   desc=f"Sent by {message.author.mention} at <t:{round((message.created_at-dt1).total_seconds())}:F>"
   if message.edited_at != None:
     desc += f"Edited at <t:{round((message.edited_at-dt1).total_seconds())}:F>"
@@ -398,8 +397,8 @@ async def message(ctx, message: discord.Message=None):
           msg_dmenus += 1
         else:
           msg_menus += 1
-  embed=discord.Embed(title=ti, description=desc[:2047], url=message.jump_url)
-  embed.add_field(name="From channel", value=message.channel.mention, inline=True)
+  embed=discord.Embed(title="Message Information", description=desc[:2047], url=message.jump_url)
+  embed.add_field(name="In channel", value=message.channel.mention, inline=True)
   if message.webhook_id != None:
     embed.add_field(name="Webhook message", value="This message is sent by a webhook.", inline=True)
   if message.pinned:
@@ -418,7 +417,7 @@ async def message(ctx, message: discord.Message=None):
   elif message.type == discord.MessageType.channel_icon_change:
     embed.add_field(name="System message", value="This is a system message indicating that someone changed the group's icon.", inline=False)
   elif message.type == discord.MessageType.pins_add:
-    embed.add_field(name="System message", value="This is a system message indicating that someone pinned a message.", inline=False)
+    embed.add_field(name="System message", value=f"This is a system message indicating that someone pinned [a message]({message.reference.jump_url}).", inline=False)
   elif message.type == discord.MessageType.new_member:
     embed.add_field(name="System message", value="This is a system message indicating that someone joined the server.", inline=False)
   elif message.type == discord.MessageType.premium_guild_subscription:
@@ -431,22 +430,36 @@ async def message(ctx, message: discord.Message=None):
     embed.add_field(name="System message", value="This is a system message indicating that someone nitro-boosted the server. It is now level 3.", inline=False)
   elif message.type == discord.MessageType.channel_follow_add:
     embed.add_field(name="System message", value="This is a system message indicating that someone followed another server's announcement.", inline=False)
+  if message.flags.urgent:
+    embed.add_field(name="Special message", value="This message is sent by Discord's Trust and Safety Team and is urgent.", inline=False)
+  if message.flags.ephemeral:
+    embed.add_field(name="Ephemeral message", value="This is an ephemeral message (can only be seen by you).", inline=False)
+  if message.flags.is_crossposted:
+    embed.add_field(name="Followed message", value="This is a message followed from an announcement channel in another server.", inline=False)
+  if message.flags.crossposted:
+    embed.add_field(name="Published message", value="This is a published message in an announcement channel.", inline=False)
+  if message.flags.source_message_deleted:
+    embed.add_field(name="Source deleted", value="This message's original source has been deleted.", inline=False)
+  if message.flags.has_thread:
+    embed.add_field(name="Thread", value="This message is associated with a thread.", inline=False)
+  if message.flags.suppress_embeds:
+    embed.add_field(name="Suppresed embeds", value="This message's embed(s) are suppressed.", inline=False)
   if message.application != None:
     embed.add_field(name=message.application["name"], value=f"This message is created by {message.application['name']}.\n{message.application['description']}", inline=False)
   if len(f0vraw) != 0:
-    embed.add_field(name="Reactions ("+str(len(f0vraw))+")", value=f0v, inline=False)
+    embed.add_field(name=f"Reactions ({len(f0vraw)})", value=f0v, inline=False)
   if len(f1vraw) != 0:
-    embed.add_field(name="Attachments ("+str(len(f1vraw))+")", value=f1v, inline=False)
+    embed.add_field(name=f"Attachments ({len(f1vraw)})", value=f1v, inline=False)
   if len(message.embeds) != 0:
     embed.add_field(name="Embeds", value=f"{len(message.embeds)} embed(s) are added to the message.", inline=False)
   if len(f5vraw) != 0:
     embed.add_field(name="Components", value=f"Working buttons & menus: {msg_buttons}, {msg_menus}\nDisabled buttons & menus: {msg_dbuttons}, {msg_dmenus}", inline=False)
   if len(f2vraw) != 0:
-    embed.add_field(name="Channel mentions ("+str(len(f2vraw))+")", value=f2v, inline=False)
+    embed.add_field(name=f"Channel mentions ({len(f2vraw)})", value=f2v, inline=False)
   if len(f3vraw) != 0:
-    embed.add_field(name="Role mentions ("+str(len(f3vraw))+")", value=f3v, inline=False)
+    embed.add_field(name=f"Role mentions ({len(f3vraw)})", value=f3v, inline=False)
   if len(f4vraw) != 0:
-    embed.add_field(name="User mentions ("+str(len(f4vraw))+")", value=f4v, inline=False)
+    embed.add_field(name=f"User mentions ({len(f4vraw)})", value=f4v, inline=False)
   await ctx.reply(embed=embed)
 
 @commands.command(aliases = ['perm', 'perms', 'permission'])
