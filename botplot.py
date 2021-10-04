@@ -282,17 +282,20 @@ async def pie(ctx, numbers, label="", *, title="No_title_required"):
     numlist = numbers.split(",")
     numlist = list(map(float, numlist))
     mycolors = []
-    labels = label.split(",")
+    y = np.array(numlist)
+    for count in range(0, len(numlist)):
+      mycolors.append(cmaphsv(count/len(numlist)))
     if label:
+      labels = label.split(",")
       if len(labels) > len(numlist):
         labels = labels[:len(numlist)-1]
       elif len(numlist) > len(labels):
         numlist = numlist[:len(labels)-1]
-    y = np.array(numlist)
-    for count in range(0, len(numlist)):
-      mycolors.append(cmaphsv(count/len(numlist)))
-    patches, labels, pct_texts = plt.pie(y, labels=labels, colors=mycolors, autopct=lambda pct: func(pct, y),
-    rotatelabels=True, pctdistance=0.6, textprops = db["font_dicts"]["label"])
+      patches, labels, pct_texts = plt.pie(y, labels=labels, colors=mycolors, autopct=lambda pct: func(pct, y),
+      rotatelabels=True, pctdistance=0.6, textprops = db["font_dicts"]["label"])
+    else:
+      patches, labels, pct_texts = plt.pie(y, colors=mycolors, autopct=lambda pct: func(pct, y),
+      rotatelabels=True, pctdistance=0.6, textprops = db["font_dicts"]["label"])
     for label, pct_text in zip(labels, pct_texts):
       pct_text.set_rotation(label.get_rotation())
       pct_text.update(db["font_dicts"]["light_label"])

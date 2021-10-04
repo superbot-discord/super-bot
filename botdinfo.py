@@ -512,27 +512,28 @@ async def reactions(ctx, *, msg : discord.Message = None):
       return
   reactions = msg.reactions
   numlist = []
-  labels = []
+  mylabels = []
   for counter in reactions:
     numlist.append(counter.count)
     try:
-      labels.append(ems.decode(counter.emoji))
+      mylabels.append(ems.decode(counter.emoji))
     except:
-      labels.append("*"+counter.emoji.name)
-  labels = tuple(labels)
+      mylabels.append(f"*{counter.emoji.name}")
+  mylabels = tuple(mylabels)
   y = np.array(numlist)
   mycolors = []
-  for count in range(0, len(numlist)):
+  for count in range(len(numlist)):
     mycolors.append(cmaphsv(count/len(numlist)))
-  patches, labels, pct_texts = plt.pie(y, labels=labels, colors=mycolors, rotatelabels=True,
+  patches, labels, pct_texts = plt.pie(y, labels=mylabels, colors=mycolors, rotatelabels=True,
   pctdistance=0.6, autopct=lambda pct: func(pct, y),textprops = db["font_dicts"]["label"])
   for label, pct_text in zip(labels, pct_texts):
     pct_text.set_rotation(label.get_rotation())
     pct_text.update(db["font_dicts"]["light_label"])
-  plt.legend(prop=db["font_dicts"]["legend"])
+  #plt.legend(labels, list(mylabels), prop=db["font_dicts"]["legend"])#, labelcolor=mycolors)
   plt.title("Reaction Status", fontdict=db["font_dicts"]["title"])
   plt.savefig("reactions.png", transparent=True)
-  await ctx.send(file = discord.File('reactions.png'))
+  plt.savefig("reactions.svg", transparent=True)
+  await ctx.send(files = [discord.File('reactions.png'), discord.File('reactions.svg')])
   plt.clf()
 
 @commands.command(aliases=["ro"])
