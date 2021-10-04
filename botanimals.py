@@ -4,65 +4,65 @@ import requests as requests
 @commands.command()
 async def dog(ctx, number=1):
   if number<9:
-    await ctx.send(botdog(number))
+    await ctx.reply(botdog(number))
   else:
-    await ctx.send("There are too many pictures to show! I can only display up to 9 pictures.")
+    await ctx.reply("There are too many pictures to show! I can only display up to 9 pictures.")
 
 @commands.command()
 async def cat(ctx, number=1):
   if number<9:
-    await ctx.send(botcat(number))
+    await ctx.reply(botcat(number))
   else:
-    await ctx.send("There are too many pictures to show! I can only display up to 9 pictures.")
+    await ctx.reply("There are too many pictures to show! I can only display up to 9 pictures.")
 
 @commands.command()
 async def panda(ctx, number=1):
   if number<9:
-    await ctx.send(botpanda(number))
+    await ctx.reply(botpanda(number))
   else:
-    await ctx.send("There are too many pictures to show! I can only display up to 9 pictures.")
+    await ctx.reply("There are too many pictures to show! I can only display up to 9 pictures.")
 
 @commands.command()
 async def shiba(ctx, number=1):
   if number<9:
-    await ctx.send(botshiba(number))
+    await ctx.reply(botshiba(number))
   else:
-    await ctx.send("There are too many pictures to show! I can only display up to 9 pictures.")
+    await ctx.reply("There are too many pictures to show! I can only display up to 9 pictures.")
 
 @commands.command()
 async def koala(ctx, number=1):
   if number<9:
-    await ctx.send(botkoala(number))
+    await ctx.reply(botkoala(number))
   else:
-    await ctx.send("There are too many pictures to show! I can only display up to 9 pictures.")
+    await ctx.reply("There are too many pictures to show! I can only display up to 9 pictures.")
 
 @commands.command(aliases=["rabbit", "rabbits", "bunnies"])
 async def bunny(ctx, number=1):
   if number<9:
-    await ctx.send(botbunny(number))
+    await ctx.reply(botbunny(number))
   else:
-    await ctx.send("There are too many pictures to show! I can only display up to 9 pictures.")
+    await ctx.reply("There are too many pictures to show! I can only display up to 9 pictures.")
 
 @commands.command()
 async def duck(ctx, number=1):
   if number<9:
-    await ctx.send(botduck(number))
+    await ctx.reply(botduck(number))
   else:
-    await ctx.send("There are too many pictures to show! I can only display up to 9 pictures.")
+    await ctx.reply("There are too many pictures to show! I can only display up to 9 pictures.")
 
 @commands.command()
 async def fox(ctx, number=1):
   if number<9:
-    await ctx.send(botfox(number))
+    await ctx.reply(botfox(number))
   else:
-    await ctx.send("There are too many pictures to show! I can only display up to 9 pictures.")
+    await ctx.reply("There are too many pictures to show! I can only display up to 9 pictures.")
 
 @commands.command()
 async def lizard(ctx, number=1):
   if number<9:
-    await ctx.send(botlizard(number))
+    await ctx.reply(botlizard(number))
   else:
-    await ctx.send("There are too many pictures to show! I can only display up to 9 pictures.")
+    await ctx.reply("There are too many pictures to show! I can only display up to 9 pictures.")
 
 
 def botdog(number):

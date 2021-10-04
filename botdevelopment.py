@@ -13,47 +13,47 @@ async def button(ctx, *, text=None):
   sample_buttons_view = ui.View(timeout=None)
   for count in sample_buttons(ctx):
     sample_buttons_view.add_item(count)
-  await ctx.send("All buttons will not timeout.", view = sample_buttons_view)
+  await ctx.reply("All buttons will not timeout.", view = sample_buttons_view)
 
 @commands.command()
 async def join(ctx, vc:discord.VoiceChannel = None, *, text=None):
   if not vc:
     vc = ctx.author.voice.channel
   vclients[ctx.guild] = await vc.connect()
-  await ctx.send("Joined the channel.")
+  await ctx.reply("Joined the channel.")
 
 @commands.command()
 async def leave(ctx, *, text=None):
   await ctx.guild.voice_client.disconnect()
   del vclients[ctx.guild]
-  await ctx.send("Left the channel.")
+  await ctx.reply("Left the channel.")
 
 @commands.command()
 async def loop(ctx, *, text=None):
   if vclients.get(ctx.guild, None).loop:
     vclients.get(ctx.guild, None).loop = False
-    await ctx.send('Disabled loop.')
+    await ctx.reply('Disabled loop.')
   elif not vclients.get(ctx.guild, None).loop:
     vclients.get(ctx.guild, None).loop = True
-    await ctx.send('Enabled loop.')
+    await ctx.reply('Enabled loop.')
 
 @commands.command()
 @commands.cooldown(2, 10, commands.BucketType.user)
 async def patience(ctx, *, text=None):
-  await ctx.send("Success!")
+  await ctx.reply("Success!")
 
 @patience.error
 async def patience_error(ctx, error):
-  await ctx.send("This command is on cooldown! You can only use it twice per 10 seconds.")
+  await ctx.reply("This command is on cooldown! You can only use it twice per 10 seconds.")
 
 @commands.command(aliases=['continue', 'resume', 'paused'])
 async def pause(ctx, *, text=None):
   if vclients.get(ctx.guild, None).is_playing():
     vclients.get(ctx.guild, None).pause()
-    await ctx.send("Paused the song.")
+    await ctx.reply("Paused the song.")
   else:
     vclients.get(ctx.guild, None).resume()
-    await ctx.send("Resumed the song.")
+    await ctx.reply("Resumed the song.")
 
 @commands.command()
 async def play(ctx, volume: typing.Optional[int]=100, *, song="rickroll"):
@@ -70,14 +70,14 @@ async def play(ctx, volume: typing.Optional[int]=100, *, song="rickroll"):
   elif SequenceMatcher(None, song, "stickbug").ratio() > 0.7:
     audio_source = discord.FFmpegPCMAudio('songs/stickbug.mp3')
   vc.play(audio_source)
-  await ctx.send("Playing the song.")
+  await ctx.reply("Playing the song.")
 
 @commands.command(aliases=['selectmenu', 'menu', 'option', 'options'])
 async def select(ctx, *, text=None):
   sample_select_view = ui.View(timeout=None)
   for count in sample_menus():
     sample_select_view.add_item(count)
-  await ctx.send("All menus will not timeout.", view = sample_select_view)
+  await ctx.reply("All menus will not timeout.", view = sample_select_view)
 def setup(bot):
   bot.add_command(button)
   bot.add_command(join)

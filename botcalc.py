@@ -10,18 +10,18 @@ async def ascii(ctx, *, text):
   answer = ""
   for character in text:
     answer = answer + ASCII[character]
-  await ctx.send(answer)
+  await ctx.reply(answer)
 
 @commands.command()
 async def base(ctx, frombase : int, tobase : int, *, text):
   integer = 0
   for character in text:
     if character not in SY2VA:
-      await ctx.send('Found unknown character!')
+      await ctx.reply('Found unknown character!')
       return
     value = SY2VA[character]
     if value >= frombase:
-      await ctx.send(f'Found digit outside base! {value} is greater than {frombase}.')
+      await ctx.reply(f'Found digit outside base! {value} is greater than {frombase}.')
       return
     integer *= frombase
     integer += value
@@ -31,7 +31,7 @@ async def base(ctx, frombase : int, tobase : int, *, text):
     integer, value = divmod(integer, tobase)
     array.append(VA2SY[value])
   answer = ''.join(reversed(array))
-  await ctx.send(answer)
+  await ctx.reply(answer)
 
 def setup(bot):
   #bot.add_command(ascii)

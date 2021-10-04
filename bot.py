@@ -386,7 +386,7 @@ async def botpurge(ctx, *, num):
 @bot_.command(aliases=["online"])
 async def ping(ctx, *, text = None):
   now1 = datetime.now(timezone.utc)
-  message = await ctx.reply("Pong!")
+  message = await ctx.send("Pong!")
   mcs = str(int((datetime.now(timezone.utc) - now1).microseconds)+int(((datetime.now(timezone.utc) - now1).total_seconds())%60))
   await message.edit(content=f"Pong! 🏓\n```Message delay: {mcs} microseconds\nBot latency  : {round(bot_.latency*1000000, 2)} microseconds```")
 
@@ -415,7 +415,7 @@ async def rtimer(ctx, timetocount,*,Text=None):
     newidcode=idcode.lower()
     allid.append(idcode+str(ctx.guild.id))
     desc = "Initializing countdown…"
-    message = await ctx.send(desc)
+    message = await ctx.reply(desc)
     while seconds>=1 and eval("terminate"+idcode.lower()+str(ctx.guild.id))==0:
       seconds = int((end - datetime.now(timezone.utc)).total_seconds())
       newsec=str(seconds%60)
@@ -474,7 +474,7 @@ async def ttimer(ctx, timetocount,*,Text=None):
     exec("terminate"+newidcode.lower()+str(ctx.guild.id)+"=0",globals())
     allid.append(newidcode+str(ctx.guild.id))
     desc = "Initializing countdown…"
-    message = await ctx.send(desc)
+    message = await ctx.reply(desc)
     while seconds>=1 and eval("terminate"+newidcode.lower()+str(ctx.guild.id))==0:
       seconds = int((end - datetime.now(timezone.utc)).total_seconds())
       newsec=str(seconds%60)

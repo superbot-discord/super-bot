@@ -24,7 +24,7 @@ async def captcha(ctx, *, text=None):
     text = ra.choice("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789") + ra.choice("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789") + ra.choice("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789") + ra.choice("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789")
   data = cimage.generate(text)
   cimage.write(text, 'captcha.png')
-  await ctx.send(f"Captcha for {text}", file = discord.File('captcha.png'))
+  await ctx.reply(f"Captcha for {text}", file = discord.File('captcha.png'))
   os.remove('captcha.png')
 
 @commands.command()
@@ -53,32 +53,32 @@ async def image(ctx, *, mode):
       colors = 5
     dominant = analyse(scale, colors)
     try:
-      await ctx.send(f"Images are sorted by amount, brightness and hue respectively.\nDominant color: {dominant}", files=[discord.File('output_amount.png'), discord.File('output_lightness.png'), discord.File('output_hue.png'), discord.File('analysis.txt')])
+      await ctx.reply(f"Images are sorted by amount, brightness and hue respectively.\nDominant color: {dominant}", files=[discord.File('output_amount.png'), discord.File('output_lightness.png'), discord.File('output_hue.png'), discord.File('analysis.txt')])
     except:
-      await ctx.send(f"Images are sorted by amount, brightness and hue respectively.\nDominant color: {dominant}", file=discord.File('output_amount.png'))
-      await ctx.send(file=discord.File('output_lightness.png'))
-      await ctx.send(file=discord.File('output_hue.png'))
-      await ctx.send(file=discord.File('analysis.txt'))
+      await ctx.reply(f"Images are sorted by amount, brightness and hue respectively.\nDominant color: {dominant}", file=discord.File('output_amount.png'))
+      await ctx.reply(file=discord.File('output_lightness.png'))
+      await ctx.reply(file=discord.File('output_hue.png'))
+      await ctx.reply(file=discord.File('analysis.txt'))
     os.remove('analysis.txt')
   elif mode.startswith("blur"):
     try:
       blur(int(mode.split(" ")[1]))
     except:
       blur(2)
-    await ctx.send(files=[discord.File('output1.png'), discord.File('output2.png')])
+    await ctx.reply(files=[discord.File('output1.png'), discord.File('output2.png')])
     os.remove('output1.png')
     os.remove('output2.png')
   elif mode.startswith("resize "):
     resize(int(mode.split(" ")[1]), int(mode.split(" ")[2]))
     try:
-      await ctx.send(files=[discord.File('output1.png'), discord.File('output2.png'), discord.File('output3.png'), discord.File('output4.png'), discord.File('output5.png'), discord.File('output6.png')])
+      await ctx.reply(files=[discord.File('output1.png'), discord.File('output2.png'), discord.File('output3.png'), discord.File('output4.png'), discord.File('output5.png'), discord.File('output6.png')])
     except:
-      await ctx.send(file=discord.File('output1.png'))
-      await ctx.send(file=discord.File('output2.png'))
-      await ctx.send(file=discord.File('output3.png'))
-      await ctx.send(file=discord.File('output4.png'))
-      await ctx.send(file=discord.File('output5.png'))
-      await ctx.send(file=discord.File('output6.png'))
+      await ctx.reply(file=discord.File('output1.png'))
+      await ctx.reply(file=discord.File('output2.png'))
+      await ctx.reply(file=discord.File('output3.png'))
+      await ctx.reply(file=discord.File('output4.png'))
+      await ctx.reply(file=discord.File('output5.png'))
+      await ctx.reply(file=discord.File('output6.png'))
       os.remove('output1.png')
       os.remove('output2.png')
       os.remove('output3.png')
@@ -88,15 +88,15 @@ async def image(ctx, *, mode):
   elif mode.startswith("edge"):
     edge()
     try:
-      await ctx.send(files=[discord.File('output1.png'), discord.File('output2.png')])
+      await ctx.reply(files=[discord.File('output1.png'), discord.File('output2.png')])
     except:
-      await ctx.send(file=discord.File('output1.png'))
-      await ctx.send(file=discord.File('output2.png'))
+      await ctx.reply(file=discord.File('output1.png'))
+      await ctx.reply(file=discord.File('output2.png'))
       os.remove('output1.png')
       os.remove('output2.png')
   elif mode.startswith("rotate "):
     rotate(float(mode.split(" ")[1]))
-    await ctx.send(files=[discord.File('output1.png'), discord.File('output2.png')])
+    await ctx.reply(files=[discord.File('output1.png'), discord.File('output2.png')])
     os.remove('output1.png')
     os.remove('output2.png')
   else:
@@ -139,7 +139,7 @@ async def image(ctx, *, mode):
           recolor(mode.split(" ")[1], (255,0,0))
         except:
           recolor((0,0,0), (255,0,0))
-    await ctx.send(file=discord.File('output.png'))
+    await ctx.reply(file=discord.File('output.png'))
     os.remove('output.png')
   os.remove('input.png')
 
@@ -312,7 +312,7 @@ def sharpness(percent):
 async def mandelbrot(ctx, size:int = 1024):
   img = Image.effect_mandelbrot((size, size), (-1.5, -2.5, 3.5, 2.5), 95)
   img.save('Mandelbrot.png')
-  await ctx.send(file = discord.File('Mandelbrot.png'))
+  await ctx.reply(file = discord.File('Mandelbrot.png'))
   os.remove('Mandelbrot.png')
 
 @commands.command()
@@ -324,13 +324,13 @@ async def ocr(ctx, lang="eng", *, text = None):
     desc=pytesseract.image_to_string(img, lang=lang)
     if not desc.replace(" ",""):
       desc="There was no text."
-    await ctx.send(desc)
+    await ctx.reply(desc)
 
 @commands.command()
 async def qr(ctx, *, text=None):
   for count in ctx.message.attachments:
     await count.save('qrcode.png')
-    await ctx.send(qr_img.qr_decode('qrcode.png'))
+    await ctx.reply(qr_img.qr_decode('qrcode.png'))
     os.remove('qrcode.png')
 
 @commands.command()
@@ -343,7 +343,7 @@ async def render(ctx, width:float=1):
       file = open('output.txt', 'w')
       file.write(output)
       file.close()
-      await ctx.send(file = discord.File('output.txt'))
+      await ctx.reply(file = discord.File('output.txt'))
       os.remove('output.txt')
       break
     except:
@@ -369,7 +369,7 @@ async def text(ctx, *, text = None):
       desc = "Unsupported format. Please use .pdf or .txt."
     if desc=="":
       desc="There was no text."
-    await ctx.send(desc)
+    await ctx.reply(desc)
 
 @commands.command()
 async def transparent(ctx, alpha = 128):
@@ -379,7 +379,7 @@ async def transparent(ctx, alpha = 128):
   img2.putalpha(int(alpha))
   img.paste(img2, img)
   img.save('Transparent.png')
-  await ctx.send(file = discord.File('Transparent.png'))
+  await ctx.reply(file = discord.File('Transparent.png'))
   os.remove('Transparent.png')
 
 def setup(bot):

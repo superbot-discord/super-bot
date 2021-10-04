@@ -96,9 +96,9 @@ async def covid(ctx, *, country="world"):
     filelist = [discord.File("pc1.png"), discord.File("pc2.png")]
     embed.set_thumbnail(url="attachment://pc2.png")
     embed.set_image(url="attachment://pc1.png")
-    await ctx.send(files=filelist, embed=embed)
+    await ctx.reply(files=filelist, embed=embed)
   else:
-    await ctx.send("Invalid country. Please try again.")
+    await ctx.reply("Invalid country. Please try again.")
 
 @commands.command()
 async def html(ctx, *, htmlcode = None):
@@ -118,7 +118,7 @@ async def html(ctx, *, htmlcode = None):
   S = lambda X: driver.execute_script('return document.body.parentNode.scroll'+X)
   driver.set_window_size(S('Width'),S('Height'))
   driver.save_screenshot('html_screenshot.png')
-  await ctx.send(file=discord.File('html_screenshot.png'))
+  await ctx.reply(file=discord.File('html_screenshot.png'))
   os.remove('html_screenshot.png')
   driver.quit()
 
@@ -131,13 +131,13 @@ async def map(ctx, long:float, lati:float, zoom:int=10, antizoom = ""):
   else:
     m = folium.Map(location=[long, lati], zoom_start=zoom)
   m.save('map.html')
-  await ctx.send(file=discord.File('map.html'))
+  await ctx.reply(file=discord.File('map.html'))
   driver = webdriver.Chrome(options=options)
   driver.get("file:///map.html")
   await ctx.channel.trigger_typing()
   await asyncio.sleep(5)
   driver.get_screenshot_as_file('map.png')
-  await ctx.send(file=discord.File('map.png'))
+  await ctx.reply(file=discord.File('map.png'))
   driver.quit()
 
 @commands.command(aliases=['md'])
@@ -159,7 +159,7 @@ async def markdown(ctx, *, mdcode = None):
   S = lambda X: driver.execute_script('return document.body.parentNode.scroll'+X)
   driver.set_window_size(S('Width'),S('Height'))
   driver.save_screenshot('md_screenshot.png')
-  await ctx.send(file=discord.File('md_screenshot.png'))
+  await ctx.reply(file=discord.File('md_screenshot.png'))
   os.remove('md_screenshot.png')
   driver.quit()
 
@@ -212,28 +212,28 @@ async def population(ctx, country="current"):
         if "retrieving data" not in item:
           break
       embed.add_field(name="Net Growth", value=item, inline=True)
-    await ctx.send(embed=embed)
+    await ctx.reply(embed=embed)
   except selenium.common.exceptions.TimeoutException:
-    await ctx.send("Invalid country. Please try again.")
+    await ctx.reply("Invalid country. Please try again.")
 
 @commands.command()
 async def screenshot(ctx, url = None, form = "all"):
   await ctx.channel.trigger_typing()
   driver = webdriver.Chrome(options=options)
   if url == None:
-    await ctx.send("Invalid format! Please use the format `=screenshot [url]`.")
+    await ctx.reply("Invalid format! Please use the format `=screenshot [url]`.")
   else:
     driver.get(url)
     if form == "short" or form == "first" or form == "normal" or form == "regular" or form == "basic" or form == "general" or form == "all":
       driver.set_window_size(1440,900)
       driver.get_screenshot_as_file('web_screenshot1.png')
-      await ctx.send(file=discord.File('web_screenshot1.png'))
+      await ctx.reply(file=discord.File('web_screenshot1.png'))
       os.remove('web_screenshot1.png')
     if form == "everything" or form == "full" or form == "entire" or form == "whole" or form == "all":
       S = lambda X: driver.execute_script('return document.body.parentNode.scroll'+X)
       driver.set_window_size(S('Width'),S('Height'))
       driver.get_screenshot_as_file('web_screenshot2.png')
-      await ctx.send(file=discord.File('web_screenshot2.png'))
+      await ctx.reply(file=discord.File('web_screenshot2.png'))
       os.remove('web_screenshot2.png')
     driver.quit()
 

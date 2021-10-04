@@ -26,7 +26,7 @@ async def color(ctx, *, name):
   elif match:
     r, g, b = (int(val, 16) for val in match.groups())
   else:
-    await ctx.send("Please specify a correct colour value.")
+    await ctx.reply("Please specify a correct colour value.")
     return
   r1, g1, b1 = (rgbtoper(r), rgbtoper(g), rgbtoper(b))
   deci = (r << 16) + (g << 8) + b
@@ -46,7 +46,7 @@ async def color(ctx, *, name):
   embed.set_thumbnail(url='attachment://color.png')
   img = Image.new('RGB', (64, 64), (r, g, b))
   img.save('color.png')
-  await ctx.send(embed=embed, file=discord.File('color.png'))
+  await ctx.reply(embed=embed, file=discord.File('color.png'))
   os.remove('color.png')
 
 @commands.command()
@@ -63,7 +63,7 @@ async def regex(ctx, regularexp, *, text):
   embed = discord.Embed(title = ti, description = newtext.replace("****",""))
   embed.set_author(name="Match Results for "+regularexp)
   embed.set_footer(text="Match Results are highlighted in bold")
-  await ctx.send(embed=embed)
+  await ctx.reply(embed=embed)
 
 @commands.command()
 async def regsub(ctx, regular1, regular2, *, text):
@@ -77,7 +77,7 @@ async def regsub(ctx, regular1, regular2, *, text):
     ti = "There were "+str(matches)+" occurrences."
   embed = discord.Embed(title = ti, description = "`"+newtext+"`")
   embed.set_author(name="Substitution Result for "+regular1)
-  await ctx.send(embed=embed)
+  await ctx.reply(embed=embed)
 
 @commands.command()
 async def time(ctx, *, timezoneinput="0"):
@@ -85,25 +85,25 @@ async def time(ctx, *, timezoneinput="0"):
     timezone=float(timezoneinput)
     if 15>timezone>-15 and timezone%0.25==0:
       tnow = datetime.now() + timedelta(minutes = int(timezone*60))
-      await ctx.send(f"Time in UTC {timezoneinput} is {tnow.strftime('%d %B %Y (%A), %H:%M:%S')}")
+      await ctx.reply(f"Time in UTC {timezoneinput} is {tnow.strftime('%d %B %Y (%A), %H:%M:%S')}")
     else:
       return "Invalid timezone! Timezone must be below 15, above -15 and divisible by 0.25."
   elif timezoneinput=="all":
     desc = f"**[ISO 3166 Country Codes](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2#Officially_assigned_code_elements)**:\n```AD AE AF AG AI AL AM AO AQ AR AS AT AU AW AX AZ BA BB BD BE BF BG BH BI BJ BL BM BN BO BQ BR BS BT BV BW BY BZ CA CC CD CF CG CH CI CK CL CM CN CO CR CU CV CW CX CY CZ DE DJ DK DM DO DZ EC EE EG EH ER ES ET FI FJ FK FM FO FR GA GB GD GE GF GG GH GI GL GM GN GP GQ GR GS GT GU GW GY HK HM HN HR HT HU ID IE IL IM IN IO IQ IR IS IT JE JM JO JP KE KG KH KI KM KN KP KR KW KY KZ LA LB LC LI LK LR LS LT LU LV LY MA MC MD ME MF MG MH MK ML MM MN MO MP MQ MR MS MT MU MV MW MX MY MZ NA NC NE NF NG NI NL NO NP NR NU NZ OM PA PE PF PG PH PK PL PM PN PR PS PT PW PY QA RE RO RS RU RW SA SB SC SD SE SG SH SI SJ SK SL SM SN SO SR SS ST SV SX SY SZ TC TD TF TG TH TJ TK TL TM TN TO TR TT TV TW TZ UA UG UM US UY UZ VA VC VE VG VI VN VU WF WS YE YT ZA ZM ZW```\nIn addition, **[TZ Database Names](http://worldtimeapi.org/api/timezone.txt)** and **UTC Timezone Numbers** (between -15 and 15, divisible by 0.25) are supported."
     embed = discord.Embed(title="All Timezones", description=desc)
-    await ctx.send(embed=embed)
+    await ctx.reply(embed=embed)
   elif len(timezoneinput)==2 and timezoneinput.isalpha():
     try:
       tz = pytz.timezone(pytz.country_timezones[timezoneinput][0])
-      await ctx.send(f"Time in {pytz.country_timezones(timezoneinput)[0]} is {datetime.now(tz=tz).strftime('%d %B %Y (%A), %H:%M:%S')}")
+      await ctx.reply(f"Time in {pytz.country_timezones(timezoneinput)[0]} is {datetime.now(tz=tz).strftime('%d %B %Y (%A), %H:%M:%S')}")
     except:
-      await ctx.send("Timezone not found. Please use `=time all` for a list of all timezones.")
+      await ctx.reply("Timezone not found. Please use `=time all` for a list of all timezones.")
   else:
     try:
       tz = pytz.timezone(timezoneinput)
-      await ctx.send(f"Time in {timezoneinput} is {datetime.now(tz=tz).strftime('%d %B %Y (%A), %H:%M:%S')}")
+      await ctx.reply(f"Time in {timezoneinput} is {datetime.now(tz=tz).strftime('%d %B %Y (%A), %H:%M:%S')}")
     except:
-      await ctx.send("Timezone not found. Please use `=time all` for a list of all timezones.")
+      await ctx.reply("Timezone not found. Please use `=time all` for a list of all timezones.")
 
 def setup(bot):
   bot.add_command(color)

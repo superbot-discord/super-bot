@@ -43,7 +43,7 @@ async def definition(ctx, *, word):
   try:
     definitions = dictionary.meaning(word)
   except:
-    await ctx.send("Invalid word. Please try again.")
+    await ctx.reply("Invalid word. Please try again.")
   for count, count3 in definitions.items():
     desc = desc + f"**{count}**\n"
     for count2 in count3:
@@ -59,31 +59,31 @@ async def definition(ctx, *, word):
     embed.add_field(name="Antonyms", value=", ".join(antonyms))
   except:
     pass
-  await ctx.send(embed=embed)
+  await ctx.reply(embed=embed)
 
 @commands.command(aliases=['http', 'https', 'statuscode'])
 async def error(ctx, code="404", *, text=None):
   try:
     if int(code) in (db["httpcat"]+db["httpdog"]):
-      await ctx.send(f'https://http.cat/{code}\nhttps://httpstatusdogs.com/img/{code}.jpg')
+      await ctx.reply(f'https://http.cat/{code}\nhttps://httpstatusdogs.com/img/{code}.jpg')
     else:
-      await ctx.send("Invalid code!")
+      await ctx.reply("Invalid code!")
   except:
-    await ctx.send("Invalid code!")
+    await ctx.reply("Invalid code!")
 
 @commands.command(aliases=['httpcat', 'httpscat', 'httpcats', 'httpscats'])
 async def errorcat(ctx, code="404", *, text=None):
   if int(code) in db["httpcat"]:
-    await ctx.send(f'https://http.cat/{code}')
+    await ctx.reply(f'https://http.cat/{code}')
   else:
-    await ctx.send("Invalid code!")
+    await ctx.reply("Invalid code!")
 
 @commands.command(aliases=['httpdog', 'httpsdog', 'httpdogs', 'httpsdogs'])
 async def errordog(ctx, code="404", *, text=None):
   if int(code) in db["httpdog"]:
-    await ctx.send(f'https://httpstatusdogs.com/img/{code}.jpg')
+    await ctx.reply(f'https://httpstatusdogs.com/img/{code}.jpg')
   else:
-    await ctx.send("Invalid code!")
+    await ctx.reply("Invalid code!")
 
 @commands.command()
 async def minecraft(ctx, *, item="tnt"):
@@ -125,9 +125,9 @@ async def minecraft(ctx, *, item="tnt"):
     """
     image = soup.findAll("img")[2]['data-src']
     embed.set_image(url = image)
-    await ctx.send(embed=embed)
+    await ctx.reply(embed=embed)
   except:
-    await ctx.send("No Wiki page with that name found.")
+    await ctx.reply("No Wiki page with that name found.")
 
 @commands.command(aliaes=["redir", "redirs", "redirects", "red"])
 async def redirect(ctx, *, url):
@@ -136,22 +136,22 @@ async def redirect(ctx, *, url):
     r = requests.get(url, allow_redirects=True)
     urllist = r.history
     if len(urllist) == 0:
-      await ctx.send("Invalid URL. Please try again.")
+      await ctx.reply("Invalid URL. Please try again.")
     elif len(urllist) == 1:
-      await ctx.send("No redirects found for that URL.")
+      await ctx.reply("No redirects found for that URL.")
     elif len(urllist) == 2:
-      await ctx.send("URL redirected to: "+urllist[1].url+" with status code "+str(urllist[1].status_code))
+      await ctx.reply("URL redirected to: "+urllist[1].url+" with status code "+str(urllist[1].status_code))
     else:
       urlend = len(urllist)-2
-      await ctx.send("Initial URL: "+urllist[0]+f"\n"+f"\n".join([f"{i.status_code}: {i.url}" for i in urllist[1:urlend]])+"Final URL: "+urllist[len(urllist)-1])
+      await ctx.reply("Initial URL: "+urllist[0]+f"\n"+f"\n".join([f"{i.status_code}: {i.url}" for i in urllist[1:urlend]])+"Final URL: "+urllist[len(urllist)-1])
   except:
-    await ctx.send("Invalid URL. Please try again.")
+    await ctx.reply("Invalid URL. Please try again.")
 
 @commands.command()
 async def translate(ctx, langinput = "list", *, text = "Sample text"):
   if langinput == "list" or langinput == "all":
-    await ctx.send(embed=discord.Embed(description = f"**List of Language Input (Abbreviations)**\n`{'  '.join(list(langdict.keys()))}`\n\n**List of Language Input (Full Names)**\n`{'` `'.join(list(langdict.values()))}`"))
-    await ctx.send(embed=discord.Embed(description = f"**List of Language Output (Abbreviations)**\n`{'  '.join(list(srclangdict.keys()))}`\n\n**List of Language Output (Full Names)**\n`{'` `'.join(list(srclangdict.values()))}`"))
+    await ctx.reply(embed=discord.Embed(description = f"**List of Language Input (Abbreviations)**\n`{'  '.join(list(langdict.keys()))}`\n\n**List of Language Input (Full Names)**\n`{'` `'.join(list(langdict.values()))}`"))
+    await ctx.reply(embed=discord.Embed(description = f"**List of Language Output (Abbreviations)**\n`{'  '.join(list(srclangdict.keys()))}`\n\n**List of Language Output (Full Names)**\n`{'` `'.join(list(srclangdict.values()))}`"))
   else:
     if langinput.count(",")==1:
       lang = langinput.split(",")[0]
@@ -165,7 +165,7 @@ async def translate(ctx, langinput = "list", *, text = "Sample text"):
       lang = list(langdict.keys())[list(langdict.values()).index(lang)]
     translation = translatorvar.translate(text, src=fromlang, dest=lang)
     try:
-      await ctx.send("**Translation from "+srclangdict[fromlang]+" to "+langdict[lang]+f":**\n"+translation.text.replace("u003c", "<").replace("u003e", ">").replace("u0026", "&"))
+      await ctx.reply("**Translation from "+srclangdict[fromlang]+" to "+langdict[lang]+f":**\n"+translation.text.replace("u003c", "<").replace("u003e", ">").replace("u0026", "&"))
     except:
       return "Language not found! Please use `=translate list` to get a list of languages."
 
@@ -220,7 +220,7 @@ async def unscramble(ctx, text, length="0"):
   file = open("output.txt", "w")
   file.write(text)
   file.close()
-  await ctx.send(embed=output, file=discord.File("output.txt"))
+  await ctx.reply(embed=output, file=discord.File("output.txt"))
   os.remove('output.txt')
 
 @commands.command()
@@ -248,7 +248,7 @@ async def wiki(ctx, *, query):
     results = wikipedia.search(query, results=20, suggestion=False)
     desc = f"**Please make one of these searches:**\n`{'` `'.join(results)}`"
     embed = discord.Embed(title=query, description=desc)
-  await ctx.send(embed=embed)
+  await ctx.reply(embed=embed)
 
 @commands.command()
 async def youtube(ctx, *, link):
@@ -274,7 +274,7 @@ async def youtube(ctx, *, link):
       desc+=f"**[{count.title}]({count.watch_url})**\n{format_length(count.length)} | {count.views:,} Views | By [{pytube.Channel(count.channel_url).channel_name}]({count.channel_url})\n"
     embed = discord.Embed(title="Search results", description=desc)
     embed.set_footer(text="Use =youtube [Link] to download videos.")
-    await ctx.send(embed=embed)
+    await ctx.reply(embed=embed)
   elif link.startswith("channel "):
     chnl = pytube.Channel(link)
     videos = chnl.videos
@@ -283,7 +283,7 @@ async def youtube(ctx, *, link):
       desc+=f"[{count.title}]({count.watch_url})\n{count.views:,} Views | {round(count.rating*20, 3)}% Liked | {format_length(count.length)}\n\n"
     embed = discord.Embed(title=chnl.channel_name, description=desc, url=chnl.videos_url)
     embed.set_footer(text="Use =youtube [Link] to download videos. | Analysing additional info…")
-    yt_msg = await ctx.send(embed=embed)
+    yt_msg = await ctx.reply(embed=embed)
     totallen = 0
     totalrating = 0
     totalview = 0
@@ -308,7 +308,7 @@ async def youtube(ctx, *, link):
       file = open("output.txt", "w")
       file.write(text)
       file.close()
-      await ctx.send(file=discord.File("output.txt"))
+      await ctx.reply(file=discord.File("output.txt"))
       os.remove("output.txt")
     except:
       try:
@@ -346,7 +346,7 @@ Video+audio - Minimum size\t{formabr(video8)}\t{video8.resolution}\t{sizer(video
       f = open('extra_downloads.txt', "w")
       f.write(extra_downloads)
       f.close()
-      ytmsg = await ctx.send(embed=embed, file=discord.File('extra_downloads.txt'))
+      ytmsg = await ctx.reply(embed=embed, file=discord.File('extra_downloads.txt'))
       os.remove('extra_downloads.txt')
       embed = discord.Embed(title="Download (Click here)", url=video1.url, description=desc)
       embed.add_field(name="Title", value=youtube.title, inline=False)

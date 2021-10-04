@@ -8,14 +8,14 @@ UNITS = {'s':'seconds', 'm':'minutes', 'h':'hours', 'd':'days', 'w':'weeks'}
 async def craftbot(ctx, *, text=None):
   craftbot_view = ui.View(timeout=0)
   craftbot_view.add_item(craftbot_buttons(ctx))
-  await ctx.send(embed=craftbot_embed, view=craftbot_view)
+  await ctx.reply(embed=craftbot_embed, view=craftbot_view)
 
 @commands.command(aliases=['partners', 'otherbots', 'otherbot', 'bots'])
 async def partner(ctx, *, text=None):
   partners_view = ui.View(timeout=0)
   for count in partners_buttons(ctx):
     partners_view.add_item(count)
-  await ctx.send(embed=partners_embed, view=partners_view)
+  await ctx.reply(embed=partners_embed, view=partners_view)
 
 def setup(bot):
   bot.add_command(craftbot)

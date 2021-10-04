@@ -11,7 +11,7 @@ async def editembed(ctx, message : discord.Message = None, *,text):
     if potential_reference:
       message=await ctx.bot.get_channel(potential_reference.channel_id).fetch_message(potential_reference.message_id)
     else:
-      await ctx.send("Please reply to a message or add a message ID/Link.")
+      await ctx.reply("Please reply to a message or add a message ID/Link.")
       return
   embed = botembed(text)
   await message.edit(embed=embed)
@@ -19,7 +19,7 @@ async def editembed(ctx, message : discord.Message = None, *,text):
 @commands.command()
 async def embed(ctx, *, text):
   embed = botembed(text)
-  await ctx.send(embed=embed)
+  await ctx.reply(embed=embed)
 
 @commands.command()
 async def ett(ctx, msg : discord.Message = None):
@@ -28,10 +28,10 @@ async def ett(ctx, msg : discord.Message = None):
     if potential_reference:
       msg=await ctx.bot.get_channel(potential_reference.channel_id).fetch_message(potential_reference.message_id)
     else:
-      await ctx.send("Please reply to a message or add a message ID/Link.")
+      await ctx.reply("Please reply to a message or add a message ID/Link.")
       return
   text = botett(msg)
-  await ctx.send("```"+text+"```")
+  await ctx.reply("```"+text+"```")
 
 
 @commands.command(pass_context=True)
@@ -98,7 +98,7 @@ async def quickembed(ctx, *, text):
     embed.description      = f"\n".join(textlist[3:])
   except:
     pass
-  await ctx.send(embed=embed)
+  await ctx.reply(embed=embed)
 
 @commands.command(aliases=['simpembed', 'simplembed', 'sembed'])
 async def simpleembed(ctx, *, text):
@@ -124,7 +124,7 @@ async def simpleembed(ctx, *, text):
     inline = textlist[3*count+4].lower()
     inline = inline.startswith("y") or inline.startswith("1") or inline.startswith("e") or inline.startswith("on")
     embed.add_field(name=textlist[3*count+5], value=textlist[3*count+6].replace("{{{newline}}}", f"\n"), inline=inline)
-  await ctx.send(embed=embed)
+  await ctx.reply(embed=embed)
 
 def botett(msg):
   #for count in msg.embeds:

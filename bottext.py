@@ -20,27 +20,27 @@ async def choice(ctx,*options):
   rand=ra.choice(options)
   desc="Your random option is "+rand
   embed=discord.Embed(title=ti, description=desc)
-  await ctx.send(embed=embed)
+  await ctx.reply(embed=embed)
 
 @commands.command()
 async def decode(ctx, code, *, text):
   if SequenceMatcher(None, code, 'base64').ratio()>0.6:
     coder = base64.b64decode(bytes(text, encoding='utf-8'))
-    await ctx.send(coder.decode("utf-8"))
+    await ctx.reply(coder.decode("utf-8"))
   elif SequenceMatcher(None, code, 'base32').ratio()>0.6:
     coder = base64.b32decode(bytes(text, encoding='utf-8'))
-    await ctx.send(coder.decode("utf-8"))
+    await ctx.reply(coder.decode("utf-8"))
   elif SequenceMatcher(None, code, 'base16').ratio()>0.6:
     coder = base64.b16decode(bytes(text, encoding='utf-8'))
-    await ctx.send(coder.decode("utf-8"))
+    await ctx.reply(coder.decode("utf-8"))
   elif SequenceMatcher(None, code, 'caesar').ratio()>0.6 or code.startswith("caesar"):
     encrypted = ""
     distance = int(code.replace("caesar", "", 1))
     for count in text:
       encrypted += chr(ord(count) - distance % 128)
-    await ctx.send(encrypted)
+    await ctx.reply(encrypted)
   else:
-    await ctx.send("Encoding not found!")
+    await ctx.reply("Encoding not found!")
 
 @commands.command()
 async def emoji(ctx, *, text):
@@ -97,57 +97,57 @@ async def emoji(ctx, *, text):
   text = text.replace("9",":nine:")
   text = text.replace("0",":zero:")
   text = em.encode(text)
-  await ctx.send(text)
+  await ctx.reply(text)
 
 @commands.command()
 async def encode(ctx, code, *, text):
   if SequenceMatcher(None, code, 'sha512').ratio()>0.6:
     coder = hashlib.sha512()
     coder.update(bytes(text, encoding='utf-8'))
-    await ctx.send(coder.hexdigest())
+    await ctx.reply(coder.hexdigest())
   elif SequenceMatcher(None, code, 'sha384').ratio()>0.6:
     coder = hashlib.sha384()
     coder.update(bytes(text, encoding='utf-8'))
-    await ctx.send(coder.hexdigest())
+    await ctx.reply(coder.hexdigest())
   elif SequenceMatcher(None, code, 'sha256').ratio()>0.6:
     coder = hashlib.sha256()
     coder.update(bytes(text, encoding='utf-8'))
-    await ctx.send(coder.hexdigest())
+    await ctx.reply(coder.hexdigest())
   elif SequenceMatcher(None, code, 'sha224').ratio()>0.6:
     coder = hashlib.sha224()
     coder.update(bytes(text, encoding='utf-8'))
-    await ctx.send(coder.hexdigest())
+    await ctx.reply(coder.hexdigest())
   elif SequenceMatcher(None, code, 'sha128').ratio()>0.6:
     coder = hashlib.sha1()
     coder.update(bytes(text, encoding='utf-8'))
-    await ctx.send(coder.hexdigest())
+    await ctx.reply(coder.hexdigest())
   elif SequenceMatcher(None, code, 'base64').ratio()>0.6:
     coder = base64.b64encode(bytes(text, encoding='utf-8'))
-    await ctx.send(coder.decode("utf-8"))
+    await ctx.reply(coder.decode("utf-8"))
   elif SequenceMatcher(None, code, 'base32').ratio()>0.6:
     coder = base64.b32encode(bytes(text, encoding='utf-8'))
-    await ctx.send(coder.decode("utf-8"))
+    await ctx.reply(coder.decode("utf-8"))
   elif SequenceMatcher(None, code, 'base16').ratio()>0.6:
     coder = base64.b16encode(bytes(text, encoding='utf-8'))
-    await ctx.send(coder.decode("utf-8"))
+    await ctx.reply(coder.decode("utf-8"))
   elif SequenceMatcher(None, code, 'caesar').ratio()>0.6 or code.startswith("caesar"):
     encrypted = ""
     distance = int(code.replace("caesar", "", 1))
     for count in text:
       encrypted += chr(ord(count) + distance % 128)
-    await ctx.send(encrypted)
+    await ctx.reply(encrypted)
   else:
-    await ctx.send("Encoding not found!")
+    await ctx.reply("Encoding not found!")
   
 @commands.command()
 async def insert(ctx,emoji,*,text):
   text=text.replace(" "," "+emoji+" ")
-  await ctx.send(text)
+  await ctx.reply(text)
 
 @commands.command()
 async def length(ctx, *, text):
   desc = f"The piece of text contains {len(text)} characters."
-  length_msg = await ctx.send(desc)
+  length_msg = await ctx.reply(desc)
   desc += f"\n**Most common characters:**\n"
   length_analysis = {}
   for count in text:
@@ -174,7 +174,7 @@ async def pick(ctx,lower:int,upper:int,times:int):
       rand=ra.randint(lower,upper)
       desc += f"||`{str(rand).zfill(len(str(upper)))}`||  "
   embed=discord.Embed(title=ti, description=desc)
-  await ctx.send(embed=embed)
+  await ctx.reply(embed=embed)
 
 @commands.command()
 async def random(ctx,lower:int,upper:int):
@@ -183,7 +183,7 @@ async def random(ctx,lower:int,upper:int):
   rand=str(rand)
   desc="Your random number is "+rand
   embed=discord.Embed(title=ti, description=desc)
-  await ctx.send(embed=embed)
+  await ctx.reply(embed=embed)
 
 @commands.command()
 async def raffle(ctx,lower:int,upper:int,times:int):
@@ -193,32 +193,32 @@ async def raffle(ctx,lower:int,upper:int,times:int):
     rand=ra.randint(lower,upper)
     desc += f"||`{str(rand).zfill(len(str(upper)))}`||  "
   embed=discord.Embed(title=ti, description=desc)
-  await ctx.send(embed=embed)
+  await ctx.reply(embed=embed)
 
 @commands.command()
 async def rawspoiler(ctx, *, text):
   text="\|\|\|\|".join(text)
   text="\|\|"+text+"\|\|"
-  await ctx.send(text)
+  await ctx.reply(text)
 
 @commands.command()
 async def rawrawspoiler(ctx, *, text):
   text="\\\|\\\|\\\|\\\|".join(text)
   text="\\\|\\\|"+text+"\\\|\\\|"
-  await ctx.send(text)
+  await ctx.reply(text)
 
 @commands.command()
 async def reverse(ctx, *, text):
-  await ctx.send(text[::-1])
+  await ctx.reply(text[::-1])
 
 @commands.command()
 async def spoiler(ctx,*,text):
   text="||||".join(text)
-  await ctx.send(f"||{text}||")
+  await ctx.reply(f"||{text}||")
 
 @commands.command(aliases=['antispoiler', 'antispoilers', 'aspoiler', 'aspoilers', 'spoils'])
 async def spoil(ctx, *, text):
-  await ctx.send(text.replace("||", ""))
+  await ctx.reply(text.replace("||", ""))
 
 @commands.command()
 async def unicode(ctx, *, query):
@@ -226,7 +226,7 @@ async def unicode(ctx, *, query):
   embed = discord.Embed(title = "Search results for: "+query)
   for count, count2 in zip(allchars, range(0,25)):
     embed.add_field(name = count[1].title(), value = "U+" + count[0] + eval("u\" \\u"+count[0]+"\""))
-  await ctx.send(embed=embed)
+  await ctx.reply(embed=embed)
 
 @commands.command()
 async def unix(ctx, *, text = "now"):
@@ -244,7 +244,7 @@ async def unix(ctx, *, text = "now"):
       dateParts.get('m', now.minute), dateParts.get('s', now.second))
   dt2 = pytz.timezone('UTC').localize(dt2)
   seconds = round((dt2-dt1).total_seconds())
-  await ctx.send(f"`<t:{seconds}>` | <t:{seconds}>\n`<t:{seconds}:F>` | <t:{seconds}:F>\n`<t:{seconds}:f>` | <t:{seconds}:f>\n`<t:{seconds}:D>` | <t:{seconds}:D>\n`<t:{seconds}:d>` | <t:{seconds}:d>\n`<t:{seconds}:T>` | <t:{seconds}:T>\n`<t:{seconds}:t>` | <t:{seconds}:t>\n`<t:{seconds}:R>` | <t:{seconds}:R>")
+  await ctx.reply(f"`<t:{seconds}>` | <t:{seconds}>\n`<t:{seconds}:F>` | <t:{seconds}:F>\n`<t:{seconds}:f>` | <t:{seconds}:f>\n`<t:{seconds}:D>` | <t:{seconds}:D>\n`<t:{seconds}:d>` | <t:{seconds}:d>\n`<t:{seconds}:T>` | <t:{seconds}:T>\n`<t:{seconds}:t>` | <t:{seconds}:t>\n`<t:{seconds}:R>` | <t:{seconds}:R>")
 
 def setup(bot):
   bot.add_command(choice)

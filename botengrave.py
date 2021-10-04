@@ -183,7 +183,7 @@ async def engrave(ctx, product = "list", *, text = "Your text goes here."):
     
   else:
     embed = discord.Embed(title="Invalid product", description="")
-  await ctx.send(embed = embed)
+  await ctx.reply(embed = embed)
 
 def setup(bot):
   bot.add_command(engrave)

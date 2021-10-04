@@ -18,7 +18,7 @@ async def avatar(ctx,user: discord.Member=None):
       desc += f"[{size}]({temp}) "
     embed.add_field(name=f"{count1.upper()}s", value=desc)
   embed.set_image(url=user.avatar.url)
-  await ctx.send(embed=embed)
+  await ctx.reply(embed=embed)
 
 @commands.command()
 async def banner(ctx, user: typing.Union[discord.User, discord.Member]=None):
@@ -27,7 +27,7 @@ async def banner(ctx, user: typing.Union[discord.User, discord.Member]=None):
       user = await ctx.bot.fetch_user(user.id)
       base_url = user.banner.url
     except:
-      await ctx.send("The user does not have a banner.")
+      await ctx.reply("The user does not have a banner.")
       return
     desc = f"Banner of {user.mention}\n"
     embed=discord.Embed(title="Banner", description=desc)
@@ -44,7 +44,7 @@ async def banner(ctx, user: typing.Union[discord.User, discord.Member]=None):
     try:
       base_url = ctx.guild.banner.url
     except:
-      await ctx.send("The server does not have a banner.")
+      await ctx.reply("The server does not have a banner.")
       return
     desc = f"Banner of the server\n"
     embed=discord.Embed(title="Banner", description=desc)
@@ -57,7 +57,7 @@ async def banner(ctx, user: typing.Union[discord.User, discord.Member]=None):
         temp = base_url.replace("?size=1024", f"?size={size}")
         desc += f"[{size}]({temp}) "
       embed.add_field(name=f"{count1.upper()}s", value=desc)
-  await ctx.send(embed=embed)
+  await ctx.reply(embed=embed)
 
 @commands.command()
 async def channel(ctx, channel:typing.Union[discord.TextChannel, discord.VoiceChannel, discord.StageChannel]=None):
@@ -66,22 +66,22 @@ async def channel(ctx, channel:typing.Union[discord.TextChannel, discord.VoiceCh
   if channel.type == discord.ChannelType.text:
     task = asyncio.create_task(bottchannel(channel))
     await task
-    await ctx.send(embed=task.result())
+    await ctx.reply(embed=task.result())
   elif channel.type == discord.ChannelType.voice:
     task = asyncio.create_task(botvchannel(channel))
     await task
-    await ctx.send(embed=task.result())
+    await ctx.reply(embed=task.result())
   elif channel.type == discord.ChannelType.stage_voice:
     task = asyncio.create_task(botstagec(channel))
     await task
-    await ctx.send(embed=task.result())
+    await ctx.reply(embed=task.result())
   elif channel.type in [discord.ChannelType.public_thread, discord.ChannelType.private_thread]:
     task = asyncio.create_task(botthread(channel))
     await task
-    await ctx.send(embed=task.result())
+    await ctx.reply(embed=task.result())
   else:
     embed = discord.Embed(desc = "Invalid input.")
-    await ctx.send(embed=embed)
+    await ctx.reply(embed=embed)
 
 async def bottchannel(channel):
   ti="Channel Information: "+channel.name
@@ -247,7 +247,7 @@ async def emojiinfo(ctx,emojiarg : typing.Union[discord.Emoji, str]):
     embed.add_field(name="Unicode Version", value=cemoji[4], inline=True)
     if len(cemoji[2]) > 0:
       embed.add_field(name="Tags", value=", ".join(cemoji[2]), inline=True)
-  await ctx.send(embed=embed)
+  await ctx.reply(embed=embed)
 
 @commands.command()
 async def emojis(ctx, *, text=None):
@@ -257,7 +257,7 @@ async def emojis(ctx, *, text=None):
   f = open('output.txt', 'w')
   f.write(desc)
   f.close()
-  await ctx.send(file=discord.File('output.txt'))
+  await ctx.reply(file=discord.File('output.txt'))
 
 @commands.command()
 async def invitelink(ctx,inviteinput: discord.Invite):
@@ -301,7 +301,7 @@ async def invitelink(ctx,inviteinput: discord.Invite):
   embed.add_field(name="Expires", value=f7v, inline=True)
   embed.add_field(name="Valid Duration", value=f5v, inline=True)
   embed.add_field(name="Expired?", value=f6v, inline=True)
-  await ctx.send(embed=embed)
+  await ctx.reply(embed=embed)
 
 @commands.command(aliases=["lu"])
 async def leftuser(ctx, *, userinput):
@@ -328,7 +328,7 @@ async def leftuser(ctx, *, userinput):
   embed.add_field(name="Name", value=f0v, inline=False)
   embed.add_field(name="Time since user registered", value=f1va, inline=True)
   embed.add_field(name="Registered", value=f1v, inline=True)
-  await ctx.send(embed=embed)
+  await ctx.reply(embed=embed)
 
 @commands.command(aliases=["msg", "ms"])
 async def message(ctx, message: discord.Message=None):
@@ -337,7 +337,7 @@ async def message(ctx, message: discord.Message=None):
     if potential_reference:
       message=await ctx.bot.get_channel(potential_reference.channel_id).fetch_message(potential_reference.message_id)
     else:
-      await ctx.send("Please reply to a message or add a message ID/Link.")
+      await ctx.reply("Please reply to a message or add a message ID/Link.")
       return
   ti="Message Information"
   desc=f"Sent by {message.author.mention} at <t:{round((message.created_at-dt1).total_seconds())}:F>"
@@ -447,7 +447,7 @@ async def message(ctx, message: discord.Message=None):
     embed.add_field(name="Role mentions ("+str(len(f3vraw))+")", value=f3v, inline=False)
   if len(f4vraw) != 0:
     embed.add_field(name="User mentions ("+str(len(f4vraw))+")", value=f4v, inline=False)
-  await ctx.send(embed=embed)
+  await ctx.reply(embed=embed)
 
 @commands.command(aliases = ['perm', 'perms', 'permission'])
 async def permissions(ctx, integer="help"):
@@ -475,7 +475,7 @@ async def permissions(ctx, integer="help"):
       embed
     except:
       embed = perms_guide
-  await ctx.send(embed=embed)
+  await ctx.reply(embed=embed)
 
 @commands.command()
 async def raw(ctx, msg : discord.Message = None):
@@ -484,10 +484,10 @@ async def raw(ctx, msg : discord.Message = None):
     if potential_reference:
       msg=await ctx.bot.get_channel(potential_reference.channel_id).fetch_message(potential_reference.message_id)
     else:
-      await ctx.send("Please reply to a message or add a message ID/Link.")
+      await ctx.reply("Please reply to a message or add a message ID/Link.")
       return
   embed = discord.Embed(title = "Raw message", url = msg.jump_url, description = "```"+msg.content.replace('```', r'\`\`\`')+"```")
-  await ctx.send(embed=embed)
+  await ctx.reply(embed=embed)
 
 @commands.command()
 async def rawraw(ctx, msg : discord.Message = None):
@@ -496,10 +496,10 @@ async def rawraw(ctx, msg : discord.Message = None):
     if potential_reference:
       msg=await ctx.bot.get_channel(potential_reference.channel_id).fetch_message(potential_reference.message_id)
     else:
-      await ctx.send("Please reply to a message or add a message ID/Link.")
+      await ctx.reply("Please reply to a message or add a message ID/Link.")
       return
   embed = discord.Embed(title = "Raw message", url = msg.jump_url, description = f"```{discord.utils.escape_markdown(msg.content, as_needed=True)}```")
-  await ctx.send(embed=embed)
+  await ctx.reply(embed=embed)
 
 @commands.command(aliases=["rea"])
 async def reactions(ctx, *, msg : discord.Message = None):
@@ -508,7 +508,7 @@ async def reactions(ctx, *, msg : discord.Message = None):
     if potential_reference:
       msg=await ctx.bot.get_channel(potential_reference.channel_id).fetch_message(potential_reference.message_id)
     else:
-      await ctx.send("Please reply to a message or add a message ID/Link.")
+      await ctx.reply("Please reply to a message or add a message ID/Link.")
       return
   reactions = msg.reactions
   numlist = []
@@ -533,7 +533,7 @@ async def reactions(ctx, *, msg : discord.Message = None):
   plt.title("Reaction Status", fontdict=db["font_dicts"]["title"])
   plt.savefig("reactions.png", transparent=True)
   plt.savefig("reactions.svg", transparent=True)
-  await ctx.send(files = [discord.File('reactions.png'), discord.File('reactions.svg')])
+  await ctx.reply(files = [discord.File('reactions.png'), discord.File('reactions.svg')])
   plt.clf()
 
 @commands.command(aliases=["ro"])
@@ -568,7 +568,7 @@ async def role(ctx,role: discord.Role=None):
     embed.add_field(name="Bot", value="This is the Discord Booster role.", inline=False)
   embed.add_field(name="Members ("+str(len(memberlist))+")", value=f0v[:5950-len(embed)], inline=False)
   #embed.add_field(name="Channel Permissions", value=f3vb, inline=False)
-  await ctx.send(embed=embed)
+  await ctx.reply(embed=embed)
 
 @commands.command(aliases=["guild", "se"])
 async def server(ctx, text = "regular"):
@@ -745,7 +745,7 @@ async def server(ctx, text = "regular"):
     except:
       pass
   try:
-    await ctx.send(embed=embed)
+    await ctx.reply(embed=embed)
   except:
     f1va = ""
     for count in f1valist:
@@ -754,7 +754,7 @@ async def server(ctx, text = "regular"):
       f1va = f1va + count.name+", "
     f1va = f1va [:-2] + "…"
     embed.set_field_at(3, name="Roles ("+str(len(guild.roles))+")", value=f1va, inline=False)
-    await ctx.send(embed=embed)
+    await ctx.reply(embed=embed)
 
 @commands.command(aliases=["sta"])
 async def status(ctx, member : discord.Member = None):
@@ -789,7 +789,7 @@ async def status(ctx, member : discord.Member = None):
       field=f"{count.artist}: {count.title}\nStarted: "
       embed.add_field(name=f"Spotify: {count.album}", value=field, inline=False)
       embed.set_thumbnail(url=count.album_cover_url)
-  await ctx.send(embed=embed)
+  await ctx.reply(embed=embed)
 
 @commands.command(aliases=["sts"])
 async def statuses(ctx, *, text = None):
@@ -849,7 +849,7 @@ async def statuses(ctx, *, text = None):
   fig.legend(["Online", "DND", "Idle", "Offline"], labelcolor = ["#3ba55d", "#ed4245", "#faa91a", "#747f8d"], )
   plt.savefig("statuses.png", transparent=True)
   plt.savefig("statuses.svg", transparent=True)
-  await ctx.send(files = [discord.File('statuses.png'), discord.File('statuses.svg')])
+  await ctx.reply(files = [discord.File('statuses.png'), discord.File('statuses.svg')])
   plt.clf()
   os.remove('statuses.png')
   os.remove('statuses.svg')
@@ -862,14 +862,14 @@ async def stickers(ctx, *, text=None):
   f = open('output.txt', 'w')
   f.write(desc)
   f.close()
-  await ctx.send(file=discord.File('output.txt'))
+  await ctx.reply(file=discord.File('output.txt'))
 
 @commands.command()
 async def template(ctx, *, tempinput):
   try:
     temp = ctx.bot.fetch_template(tempinput)
   except:
-    await ctx.send("Invalid input. Please try again.")
+    await ctx.reply("Invalid input. Please try again.")
     return
   ti=f"Template Information: {temp.name} ({temp.code})"
   desc=f"Created at <t:{round((temp.created_at-dt1).total_seconds())}:F> by {temp.creator.mention}"
@@ -882,7 +882,7 @@ async def template(ctx, *, tempinput):
   embed.add_field(name="Uses", value=f1v, inline=True)
   embed.add_field(name="Synced", value=f2v, inline=True)
   embed.add_field(name="Original Server", value=f3v, inline=True)
-  await ctx.send(embed=embed)
+  await ctx.reply(embed=embed)
 
 @commands.command(aliases=["member", "mem", "us"])
 async def user(ctx, user: discord.Member = None, channel: discord.TextChannel = None):
@@ -989,7 +989,7 @@ async def user(ctx, user: discord.Member = None, channel: discord.TextChannel = 
     pass
   embed.add_field(name="Permission integer", value=str(f3v_raw2), inline=True)
   embed.add_field(name="Badges", value=f5v, inline=False)
-  await ctx.send(embed=embed)
+  await ctx.reply(embed=embed)
 
 def setup(bot):
   bot.add_command(avatar)
