@@ -99,7 +99,7 @@ If you need support, please kindly join the support server or directly contact J
 """.replace(f"\n", " "))
 support_buttons = [
   ui.Button(style=discord.ButtonStyle.url, row=0, label="Support server", url="https://discord.gg/sesedKMWHH"),
-  ui.Button(style=discord.ButtonStyle.url, row=0, label="Bot creator", url="https://discord.com/channels/@me/752345200029859871"),
+  ui.Button(style=discord.ButtonStyle.url, row=0, label="Bot creator", url="https://discord.com/channels/@me/843455131798601738"),
 ]
 #clicker_button = ui.Button(style=discord.ButtonStyle.primary, row=0, custom_id="clicker", label="Click me!")
 
