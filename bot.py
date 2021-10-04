@@ -22,7 +22,19 @@ bot_.load_extension("bottext")
 bot_.load_extension("botwebinfo")
 bot_.load_extension("botwebscrape")
 
-sniper1=sniper2=sniper3=sniper4=sniper5=sniperdate1=sniperdate2=sniperdate3=sniperdate4=sniperdate5=sniperdict=sniping=poll_options={}
+sniper1={}
+sniper2={}
+sniper3={}
+sniper4={}
+sniper5={}
+sniperdate1={}
+sniperdate2={}
+sniperdate3={}
+sniperdate4={}
+sniperdate5={}
+sniperdict={}
+sniping={}
+poll_options={}
 snipereactions=polls=allid=[]
 
 
@@ -247,9 +259,7 @@ async def snipe(ctx, *, text = None):
   if text == None:
     if sniping.get(keyname, 1) == 1 or sniping[keyname] == True:
       if sniper1.get(keyname, 1) == 1:
-        ti = "Error"
-        desc = "Nothing to snipe from this channel."
-        embed = discord.Embed(title=ti, description=desc)
+        embed = discord.Embed(title="Rrror", description="Nothing to snipe from this channel.")
         await ctx.reply(embed=embed)
         return
       else:
@@ -263,7 +273,7 @@ async def snipe(ctx, *, text = None):
           maxc = 4
         else:
           maxc = 5
-        ti = "Snipped message (1/"+str(maxc)+")"
+        ti = f"Snipped message (1/{maxc})"
         desc = sniper1[keyname]
         foot = sniperdate1[keyname]
       embed = discord.Embed(title=ti, description=desc)
