@@ -139,9 +139,9 @@ async def search(ctx, *, flags : SearchFlags):
     channels = ctx.channel
   else:
     channels = flags.channels
-  if type(channels) != tuple:
+  if type(channels) == tuple:
     channels = [channels[0]]
-  if type(query) != tuple:
+  if type(query) == tuple:
     query = [query[0]]
   for channel_count in channels:
     async for message_count in channel_count.history(limit=flags.maximum):
@@ -154,7 +154,7 @@ async def search(ctx, *, flags : SearchFlags):
         break
       else:
         embed    = {}
-      if (files and message_count.pinned) or (files == False and not message_count.pinned):
+      if (files and len(message_count.attachments)) or (files == False and not len(message_count.attachments)):
         match = False
         continue
       for query_count in query:
