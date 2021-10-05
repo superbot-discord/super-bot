@@ -165,7 +165,7 @@ async def pick(ctx,lower:int,upper:int,times:int):
     lower, upper = upper, lower
   upper_length = len(str(upper))
   if times <= (upper-lower+1):
-    rand = range(lower, upper+1)
+    rand = list(range(lower, upper+1))
     ra.shuffle(rand)
     for count,count2 in zip(range(times), rand):
       desc += f"||`{count2.zfill(upper_length)}`||  "
