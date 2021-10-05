@@ -312,7 +312,7 @@ async def youtube(ctx, *, link):
       os.remove("output.txt")
     except:
       try:
-        youtube = pytube.YouTube(link)
+        youtube = pytube.YouTube(link, allow_oauth_cache=False)
       except:
         youtube = pytube.Search(link).results[0]
       yt_streams = youtube.streams
