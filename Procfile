@@ -1,2 +1,2 @@
 worker: python bot.py
-web   : php -S https://superdbot.herokuapp.com/
+web: vendor/bin/heroku-php-apache2 web/
