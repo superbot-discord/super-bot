@@ -336,13 +336,13 @@ async def youtube(ctx, *, link):
       filtered8 = yt_streams.filter(type="video", progressive=True).order_by("filesize")
       video8 = filtered8[0]
       extra_downloads=f'''Type and quality\t\tBitrate\t\tRes.\tSize\t\tLink\n
-Frames only - Best quality\t{formabr(video2)}\t{video2.resolution}\t{sizer(video2.filesize)}\t{video2.url}
-Audio - Best quality\t\t{formabr(video3)}\t{video3.resolution}\t{sizer(video3.filesize)}\t{video3.url}
-Video - Medium quality\t\t{formabr(video4)}\t{video4.resolution}\t{sizer(video4.filesize)}\t{video4.url}
-Audio - Medium quality\t\t{formabr(video5)}\t{video5.resolution}\t{sizer(video5.filesize)}\t{video5.url}
-Video - Minimum size\t\t{formabr(video6)}\t{video6.resolution}\t{sizer(video6.filesize)}\t{video6.url}
-Audio - Minimum size\t\t{formabr(video7)}\t{video7.resolution}\t{sizer(video7.filesize)}\t{video7.url}
-Video+audio - Minimum size\t{formabr(video8)}\t{video8.resolution}\t{sizer(video8.filesize)}\t{video8.url}'''
+Frames only - Best quality\t{formabr(video2)}\t{video2.resolution}\t{sizer2(video2.filesize)}\t{video2.url}
+Audio - Best quality\t\t{formabr(video3)}\t{video3.resolution}\t{sizer2(video3.filesize)}\t{video3.url}
+Video - Medium quality\t\t{formabr(video4)}\t{video4.resolution}\t{sizer2(video4.filesize)}\t{video4.url}
+Audio - Medium quality\t\t{formabr(video5)}\t{video5.resolution}\t{sizer2(video5.filesize)}\t{video5.url}
+Video - Minimum size\t\t{formabr(video6)}\t{video6.resolution}\t{sizer2(video6.filesize)}\t{video6.url}
+Audio - Minimum size\t\t{formabr(video7)}\t{video7.resolution}\t{sizer2(video7.filesize)}\t{video7.url}
+Video+audio - Minimum size\t{formabr(video8)}\t{video8.resolution}\t{sizer2(video8.filesize)}\t{video8.url}'''
       f = open('extra_downloads.txt', "w")
       f.write(extra_downloads)
       f.close()
