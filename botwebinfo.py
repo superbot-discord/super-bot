@@ -3,6 +3,7 @@ import re
 
 import discord
 import pytube
+from pytube.query import StreamQuery
 import wikipedia
 from bs4 import BeautifulSoup
 from discord.ext import commands
@@ -338,23 +339,20 @@ async def youtube(ctx, *, link):
       filtered8 = filtered2b.order_by("filesize")
       video6 = filtered8[0]
 
-      filtered6.reverse()
-      filtered7.reverse()
-      filtered8.reverse()
       videox1 = None
-      for count in filtered8:
+      for count in filtered8.__reversed__():
         if count.filesize < 8000000:
           videox1 = count
           break
       
       videox2 = None
-      for count in filtered7:
+      for count in filtered7.__reversed__():
         if count.filesize < 8000000:
           videox2 = count
           break
       
       videox3 = None
-      for count in filtered6:
+      for count in filtered6.__reversed__():
         if count.filesize < 8000000:
           videox3 = count
           break
