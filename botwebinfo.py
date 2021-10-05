@@ -262,7 +262,7 @@ async def youtube(ctx, *, link):
     else:
       searches = 1
     try:
-      for count in range(0, searches+1):
+      for count in range(searches+1):
         searching.get_next_results()
     except:
       pass
@@ -280,7 +280,7 @@ async def youtube(ctx, *, link):
     chnl = pytube.Channel(link)
     videos = chnl.videos
     desc = f"**Videos ({len(chnl.videos):,})**:\n"
-    for count,count2 in zip(videos, range(0,12)):
+    for count,count2 in zip(videos, range(12)):
       desc+=f"[{count.title}]({count.watch_url})\n{count.views:,} Views | {round(count.rating*20, 3)}% Liked | {format_length(count.length)}\n\n"
     embed = discord.Embed(title=chnl.channel_name, description=desc, url=chnl.videos_url)
     embed.set_footer(text="Use =youtube [Link] to download videos. | Analysing additional info…")

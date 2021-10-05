@@ -283,7 +283,7 @@ async def pie(ctx, numbers, label="", *, title="No_title_required"):
     numlist = list(map(float, numlist))
     mycolors = []
     y = np.array(numlist)
-    for count in range(0, len(numlist)):
+    for count in range(len(numlist)):
       mycolors.append(cmaphsv(count/len(numlist)))
     if label:
       labels = label.split(",")

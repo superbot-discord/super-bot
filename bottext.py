@@ -155,6 +155,10 @@ async def length(ctx, *, text):
   length_analysis = {count1: count2 for count1, count2 in sorted(length_analysis.items(), key=lambda item: item[1], reverse=True)}
   for (count1, count2),count3 in zip(length_analysis.items(), range(10)):
     desc += f"`{count1}` ({count2})\n"
+  length_analysis.reverse()
+  desc += f"\n**Least common characters:**\n"
+  for (count1, count2),count3 in zip(length_analysis.items(), range(5)):
+    desc += f"`{count1}` ({count2})\n"
   await length_msg.edit(desc)
 
 @commands.command()
@@ -170,7 +174,7 @@ async def pick(ctx,lower:int,upper:int,times:int):
     for count,count2 in zip(range(times), rand):
       desc += f"||`{str(count2).zfill(upper_length)}`||  "
   else:
-    for count in range(0,times):
+    for count in range(times):
       desc += f"||`{str(ra.randint(lower,upper)).zfill(upper_length)}`||  "
   embed=discord.Embed(title=ti, description=desc)
   await ctx.reply(embed=embed)
@@ -188,7 +192,7 @@ async def random(ctx,lower:int,upper:int):
 async def raffle(ctx,lower:int,upper:int,times:int):
   ti=f"{times} random number(s) between {lower} and {upper}"
   desc=f"Your random number(s) is/are:\n"
-  for count in range(0,times):
+  for count in range(times):
     rand=ra.randint(lower,upper)
     desc += f"||`{str(rand).zfill(len(str(upper)))}`||  "
   embed=discord.Embed(title=ti, description=desc)
@@ -223,7 +227,7 @@ async def spoil(ctx, *, text):
 async def unicode(ctx, *, query):
   allchars = search_charnames(query)
   embed = discord.Embed(title = "Search results for: "+query)
-  for count, count2 in zip(allchars, range(0,25)):
+  for count, count2 in zip(allchars, range(25)):
     embed.add_field(name = count[1].title(), value = "U+" + count[0] + eval("u\" \\u"+count[0]+"\""))
   await ctx.reply(embed=embed)
 

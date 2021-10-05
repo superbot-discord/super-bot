@@ -120,7 +120,7 @@ async def simpleembed(ctx, *, text):
     embed.set_image    (url =textlist[3])
   except:
     pass
-  for count in range(0, (len(textlist)-3)//3):
+  for count in range((len(textlist)-3)//3):
     inline = textlist[3*count+4].lower()
     inline = inline.startswith("y") or inline.startswith("1") or inline.startswith("e") or inline.startswith("on")
     embed.add_field(name=textlist[3*count+5], value=textlist[3*count+6].replace("{{{newline}}}", f"\n"), inline=inline)
@@ -226,7 +226,7 @@ def botembed(text):
     embed.set_footer   (text=textlist[5], icon_url=textlist[10])
   except:
     pass
-  for count in range(0, (len(textlist)-11)//3):
+  for count in range((len(textlist)-11)//3):
     inline = textlist[3*count+11].lower()
     inline = inline.startswith("y") or inline.startswith("1") or inline.startswith("e") or inline.startswith("on")
     embed.add_field(name=textlist[3*count+12], value=textlist[3*count+13].replace("{{{newline}}}", f"\n"), inline=inline)
