@@ -323,26 +323,60 @@ async def youtube(ctx, *, link):
       embed = discord.Embed(title="Download (Click here)", url=video1.url, description=f"{desc}\nNote: This message will be edited with more information.")
       allvideos = yt_streams.filter(type="video")
       allaudios = yt_streams.filter(only_audio=True)
-      filtered2 = allvideos.filter(progressive=True).order_by("resolution")
+      filtered2 = allvideos.order_by("resolution")
+      filtered2b = filtered2.filter(progressive=True)
       video2 = filtered2[len(filtered2)-1]
       filtered3 = allaudios.order_by("abr")
       video3 = filtered3[len(filtered3)-1]
-      video4 = filtered2[int(len(filtered2)/2)]
+      video4 = filtered2b[int(len(filtered2)/2)]
+      video4b = filtered2[int(len(filtered2)/2)]
       video5 = filtered3[len(filtered3)-1]
       filtered6 = allvideos.order_by("filesize")
-      video6 = filtered6[0]
+      video7 = filtered6[0]
       filtered7 = allaudios.order_by("filesize")
-      video7 = filtered7[0]
-      filtered8 = yt_streams.filter(type="video", progressive=True).order_by("filesize")
-      video8 = filtered8[0]
-      extra_downloads=f'''Type and quality\t\tBitrate\t\tRes.\tSize\t\tLink\n
-Frames only - Best quality\t{formabr(video2)}\t{video2.resolution}\t{sizer2(video2.filesize)}\t{video2.url}
+      video8 = filtered7[0]
+      filtered8 = filtered2b.order_by("filesize")
+      video6 = filtered8[0]
+
+      filtered6.reverse()
+      filtered7.reverse()
+      filtered8.reverse()
+      videox1 = None
+      for count in filtered8:
+        if count.filesize < 8000000:
+          videox1 = count
+          break
+      
+      videox2 = None
+      for count in filtered7:
+        if count.filesize < 8000000:
+          videox2 = count
+          break
+      
+      videox3 = None
+      for count in filtered6:
+        if count.filesize < 8000000:
+          videox3 = count
+          break
+      
+      videox1_text = f"{formabr(videox1)}\t{videox1.resolution}\t{sizer2(videox1.filesize)}\t{videox1.url}" if videox1 else "There is no progressive video less than 8MB."
+      videox2_text = f"{formabr(videox2)}\t{videox2.resolution}\t{sizer2(videox2.filesize)}\t{videox2.url}" if videox2 else "There is no audio less than 8MB."
+      videox3_text = f"{formabr(videox3)}\t{videox3.resolution}\t{sizer2(videox3.filesize)}\t{videox3.url}" if videox3 else "There is no video less than 8MB."
+
+      extra_downloads=f'''Note: the embed title's URL links to 'Vi+Au - Best quality'.\n
+Type and quality\t\tBitrate\t\tRes.\tSize\t\tLink\n
+Vi+Au - Best quality\t{formabr(video1)}\t{video1.resolution}\t{sizer2(video1.filesize)}\t{video1.url}
+Video - Best quality\t{formabr(video2)}\t{video2.resolution}\t{sizer2(video2.filesize)}\t{video2.url}
 Audio - Best quality\t\t{formabr(video3)}\t{video3.resolution}\t{sizer2(video3.filesize)}\t{video3.url}
-Video - Medium quality\t\t{formabr(video4)}\t{video4.resolution}\t{sizer2(video4.filesize)}\t{video4.url}
+Vi+Au - Medium quality\t\t{formabr(video4)}\t{video4.resolution}\t{sizer2(video4.filesize)}\t{video4.url}
+Video - Medium quality\t\t{formabr(video4b)}\t{video4b.resolution}\t{sizer2(video4b.filesize)}\t{video4b.url}
 Audio - Medium quality\t\t{formabr(video5)}\t{video5.resolution}\t{sizer2(video5.filesize)}\t{video5.url}
-Video - Minimum size\t\t{formabr(video6)}\t{video6.resolution}\t{sizer2(video6.filesize)}\t{video6.url}
-Audio - Minimum size\t\t{formabr(video7)}\t{video7.resolution}\t{sizer2(video7.filesize)}\t{video7.url}
-Video+audio - Minimum size\t{formabr(video8)}\t{video8.resolution}\t{sizer2(video8.filesize)}\t{video8.url}'''
+Vi+Au - Less than 8MB\t\t{videox1_text}
+Video - Less than 8MB\t\t{videox3_text}
+Audio - Less than 8MB\t\t{videox2_text}
+Vi+Au - Minimum size\t{formabr(video6)}\t{video6.resolution}\t{sizer2(video6.filesize)}\t{video6.url}
+Video - Minimum size\t\t{formabr(video7)}\t{video7.resolution}\t{sizer2(video7.filesize)}\t{video7.url}
+Audio - Minimum size\t\t{formabr(video8)}\t{video8.resolution}\t{sizer2(video8.filesize)}\t{video8.url}'''
       f = open('extra_downloads.txt', "w")
       f.write(extra_downloads)
       f.close()
