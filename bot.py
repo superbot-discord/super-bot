@@ -59,7 +59,7 @@ async def on_command_error(ctx, error):
     await ctx.reply(f'You missed one or more arguments! {len(ctx.command.clean_params.keys())} argument(s) are required.\nNote: Multiline arguments are treated as one argument.')
   else:
     print(error.with_traceback(error.__traceback__))
-    await ctx.reply(f"An error occured on line number `{sys.exc_info()[2].tb_lineno}`:\n```{error.with_traceback(error.__traceback__)}```\nIf you think that this is an issue with the bot, please kindly inform JohannLau#6541 about this issue.")
+    await ctx.reply(f"An error occured:\n```{error.with_traceback(error.__traceback__)}```\nIf you think that this is an issue with the bot, please kindly inform JohannLau#6541 about this issue.")
 
 @bot_.event
 async def on_thread_update(before, after):
