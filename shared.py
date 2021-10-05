@@ -39,9 +39,10 @@ number_to_emoji =lambda a              : a.replace("1",":one: ").replace("2",":t
 sizer           =lambda bytes          : f"{round(bytes,4):,} Bytes" if bytes<1024 else (f"{round(bytes/1024,4):,}KB" if bytes<1048576 else (f"{round(bytes/1048576,4):,}MB" if bytes<1073741824 else f"{round(bytes/1073741824,4):,}GB"))
 sizer2          =lambda bytes          : f"{str(round(bytes,4)).zfill(9)} Bytes" if bytes<1024 else (f"{str(round(bytes/1024,4)).zfill(9)}KB" if bytes<1048576 else (f"{str(round(bytes/1048576,4)).zfill(9)}MB" if bytes<1073741824 else f"{round(bytes/1073741824,4):,}GB"))
 format_abr      =lambda stream         : f"{stream.__getattribute__('abr')}\t" if stream.__getattribute__("abr") else 'No audio'
+format_fps      =lambda stream         : stream.__getattribute__('fps') if stream.__getattribute__("fps") else 'No video'
 format_length   =lambda secs           : f"{secs//86400} days plus {str(secs%21600//3600).zfill(2)}:{str(secs%3600//60).zfill(2)}:{str(secs%60).zfill(2)}" if secs >= 86400 else (f"{str(secs//3600).zfill(2)}:{str(secs%3600//60).zfill(2)}:{str(secs%60).zfill(2)}" if secs >= 3600 else f"{str(secs//60).zfill(2)}:{str(secs%60).zfill(2)}")
-format_video    =lambda stream         : f"{format_abr(stream)}\t{stream.resolution}\t{stream.__getattribute__('fps')+f'\t' if stream.__getattribute__('fps') else 'No video'}\t{sizer2(stream.filesize)}\t{stream.url}"
-specialbool     =lambda input          : input.lower() in ["1", "ok", "yes", "ye", "yeah", "enable", "on", "enabled", "tick", "true"]
+format_video    =lambda stream         : f"{format_abr(stream)}\t{stream.resolution}\t{format_fps(stream)}\t{sizer2(stream.filesize)}\t{stream.url}"
+specialbool     =lambda input          : input.lower() in ["1", "ok", "yes", "ye", "yeah", "enable", "on", "enabled", "tic", "true"]
 has_perms       =lambda chn, memb, perm: (chn.permissions_for(memb).value  & 1 << perm) or (chn.permissions_for(memb).value  & 1 << 8) or memb.id in db["botadmins"]
 naiveness       =lambda dt             : "Naive" if (dt.tzinfo is None or dt.tzinfo.utcoffset(dt) is None) else "Not Naive"
 
