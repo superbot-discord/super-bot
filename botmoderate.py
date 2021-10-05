@@ -100,13 +100,24 @@ async def makeinvite(ctx, timetocount=0, uses : int = 0):
     await ctx.reply("You don't have the required permission: Generate Invites.")
 
 @commands.command(aliases=['makerole'])
-async def makeroles(ctx, times:int=1):
+async def makeroles(ctx, times:int=1, *, name="Sample role $number"):
   if has_perms(ctx.channel, ctx.author, 28):
-    for count in range(0,times):
-      await ctx.guild.create_role(name=f"Sample role {str(count+1)}")
-    await ctx.reply("Successfully created roles.")
+    current_server = ctx.guild
+    for count in range(1,times+1):
+      await current_server.create_role(name=name.replace("$number", str(count)))
+    await ctx.reply("Successfully created role(s).")
   else:
     await ctx.reply("You don't have the required permission: Manage Roles.")
+
+@commands.command(aliases=['makethread'])
+async def makethreads(ctx, times:int=1, *, name="Sample thread $number"):
+  if has_perms(ctx.channel, ctx.author, 32):
+    current_channel = ctx.channel
+    for count in range(1,times+1):
+      await current_channel.create_thread(name=name.replace("$number", str(count)), type=discord.ChannelType.public_thread, auto_archive_duration=1)
+    await ctx.reply("Successfully created thread(s).")
+  else:
+    await ctx.reply("You don't have the required permission: Manage Threads.")
 
 @commands.command()
 async def react(ctx, emoji : discord.Emoji, message : discord.Message = None):
@@ -413,6 +424,7 @@ def setup(bot):
   bot.add_command(kick)
   bot.add_command(makeinvite)
   bot.add_command(makeroles)
+  bot.add_command(makethreads)
   bot.add_command(react)
   bot.add_command(search)
   bot.add_command(setperm)
