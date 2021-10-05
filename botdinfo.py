@@ -399,13 +399,13 @@ async def message(ctx, message: discord.Message=None):
           msg_menus += 1
   embed=discord.Embed(title="Message Information", description=desc[:2047], url=message.jump_url)
   embed.add_field(name="In channel", value=message.channel.mention, inline=True)
-  if message.webhook_id != None:
-    embed.add_field(name="Webhook message", value="This message is sent by a webhook.", inline=True)
   if message.pinned:
     embed.add_field(name="Pinned", value="This message is pinned.", inline=True)
   if message.mention_everyone:
     embed.add_field(name="@everyone", value="This message mentioned everyone.", inline=True)
   embed.add_field(name="ID", value=str(message.id), inline=True)
+  if message.webhook_id != None:
+    embed.add_field(name="Webhook message", value="This message is sent by a webhook.", inline=True)
   if message.type == discord.MessageType.recipient_add:
     embed.add_field(name="System message", value="This is a system message indicating that a recipient has been added to the group.", inline=False)
   elif message.type == discord.MessageType.recipient_remove:

@@ -161,18 +161,17 @@ async def length(ctx, *, text):
 async def pick(ctx,lower:int,upper:int,times:int):
   ti=f"{times} random number(s) between {lower} and {upper}"
   desc=f"Your random number(s) is/are:\n"
-  randoms = []
+  if lower > upper:
+    lower, upper = upper, lower
+  upper_length = len(str(upper))
   if times <= (upper-lower+1):
-    for count in range(0,times):
-      rand=ra.randint(lower,upper)
-      while rand in randoms:
-        rand=ra.randint(lower,upper)
-      desc += f"||`{str(rand).zfill(len(str(upper)))}`||  "
-      randoms.append(rand)
+    rand = range(lower, upper+1)
+    ra.shuffle(rand)
+    for count,count2 in zip(range(times), rand):
+      desc += f"||`{count2.zfill(upper_length)}`||  "
   else:
     for count in range(0,times):
-      rand=ra.randint(lower,upper)
-      desc += f"||`{str(rand).zfill(len(str(upper)))}`||  "
+      desc += f"||`{str(ra.randint(lower,upper)).zfill(upper_length)}`||  "
   embed=discord.Embed(title=ti, description=desc)
   await ctx.reply(embed=embed)
 
