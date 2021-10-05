@@ -1,2 +1,2 @@
 worker: python bot.py
-web   : php -S 127.0.0.1:8000
+web   : php -S https://superdbot.herokuapp.com/
