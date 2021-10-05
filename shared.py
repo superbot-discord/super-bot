@@ -48,7 +48,7 @@ def format_fps(stream):
   try:
     return stream.fps
   except:
-    return 'No video'
+    return 'No vid.'
 
 def voice_region_format(region):
   if not region: return "Auto"
