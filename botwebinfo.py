@@ -328,7 +328,7 @@ async def youtube(ctx, *, link):
       video2 = filtered2[len(filtered2)-1]
       filtered3 = allaudios.order_by("abr")
       video3 = filtered3[len(filtered3)-1]
-      video4 = filtered2b[int(len(filtered2)/2)]
+      video4 = filtered2b[int(len(filtered2b)/2)]
       video4b = filtered2[int(len(filtered2)/2)]
       video5 = filtered3[len(filtered3)-1]
       filtered6 = allvideos.order_by("filesize")
