@@ -3,7 +3,6 @@ import re
 
 import discord
 import pytube
-from pytube.query import StreamQuery
 import wikipedia
 from bs4 import BeautifulSoup
 from discord.ext import commands
@@ -356,25 +355,24 @@ async def youtube(ctx, *, link):
         if count.filesize < 8000000:
           videox3 = count
           break
-      
-      videox1_text = f"{formabr(videox1)}\t{videox1.resolution}\t{sizer2(videox1.filesize)}\t{videox1.url}" if videox1 else "There is no progressive video less than 8MB."
-      videox2_text = f"{formabr(videox2)}\t{videox2.resolution}\t{sizer2(videox2.filesize)}\t{videox2.url}" if videox2 else "There is no audio less than 8MB."
-      videox3_text = f"{formabr(videox3)}\t{videox3.resolution}\t{sizer2(videox3.filesize)}\t{videox3.url}" if videox3 else "There is no video less than 8MB."
+      videox1_text = format_video(videox1) if videox1 else "There is no progressive video less than 8MB."
+      videox2_text = format_video(videox2) if videox2 else "There is no audio less than 8MB."
+      videox3_text = format_video(videox3) if videox3 else "There is no video less than 8MB."
 
       extra_downloads=f'''Note: the embed title's URL links to 'Vi+Au - Best quality'.\n
-Type and quality\t\tBitrate\t\tRes.\tSize\t\tLink\n
-Vi+Au - Best quality\t\t{formabr(video1)}\t{video1.resolution}\t{sizer2(video1.filesize)}\t{video1.url}
-Video - Best quality\t\t{formabr(video2)}\t{video2.resolution}\t{sizer2(video2.filesize)}\t{video2.url}
-Audio - Best quality\t\t{formabr(video3)}\t{video3.resolution}\t{sizer2(video3.filesize)}\t{video3.url}
-Vi+Au - Medium quality\t\t{formabr(video4)}\t{video4.resolution}\t{sizer2(video4.filesize)}\t{video4.url}
-Video - Medium quality\t\t{formabr(video4b)}\t{video4b.resolution}\t{sizer2(video4b.filesize)}\t{video4b.url}
-Audio - Medium quality\t\t{formabr(video5)}\t{video5.resolution}\t{sizer2(video5.filesize)}\t{video5.url}
+Type and quality\t\tBitrate\t\tRes.\tFPS\tSize\t\tLink\n
+Vi+Au - Best quality\t\t{format_video(video1)}
+Video - Best quality\t\t{format_video(video2)}
+Audio - Best quality\t\t{format_video(video3)}
+Vi+Au - Medium quality\t\t{format_video(video4)}
+Video - Medium quality\t\t{format_video(video4b)}
+Audio - Medium quality\t\t{format_video(video5)}
 Vi+Au - Less than 8MB\t\t{videox1_text}
 Video - Less than 8MB\t\t{videox3_text}
 Audio - Less than 8MB\t\t{videox2_text}
-Vi+Au - Minimum size\t\t{formabr(video6)}\t{video6.resolution}\t{sizer2(video6.filesize)}\t{video6.url}
-Video - Minimum size\t\t{formabr(video7)}\t{video7.resolution}\t{sizer2(video7.filesize)}\t{video7.url}
-Audio - Minimum size\t\t{formabr(video8)}\t{video8.resolution}\t{sizer2(video8.filesize)}\t{video8.url}'''
+Vi+Au - Minimum size\t\t{format_video(video6)}
+Video - Minimum size\t\t{format_video(video7)}
+Audio - Minimum size\t\t{format_video(video8)}'''
       f = open('extra_downloads.txt', "w")
       f.write(extra_downloads)
       f.close()
