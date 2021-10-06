@@ -155,9 +155,8 @@ async def length(ctx, *, text):
   length_analysis = {count1: count2 for count1, count2 in sorted(length_analysis.items(), key=lambda item: item[1], reverse=True)}
   for (count1, count2),count3 in zip(length_analysis.items(), range(10)):
     desc += f"`{count1}` ({count2})\n"
-  length_analysis.reverse()
   desc += f"\n**Least common characters:**\n"
-  for (count1, count2),count3 in zip(length_analysis.items(), range(5)):
+  for count1, count2,count3 in zip(reversed(length_analysis.keys()), reversed(length_analysis.values()), range(5)):
     desc += f"`{count1}` ({count2})\n"
   await length_msg.edit(desc)
 
