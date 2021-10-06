@@ -146,11 +146,17 @@ async def insert(ctx,emoji, *, text):
 
 @commands.command()
 async def length(ctx, *, text):
-  desc = f"The piece of text contains {len(text)} characters."
   full_analysis = f"Freq.\tCharacter"
-  length_msg = await ctx.reply(desc)
-  desc += f"\n**Most common characters:**\n"
   length_analysis = {}
+  for count1, count2 in length_analysis.items():
+    full_analysis += f"{count2}\t{count1}\n"
+  f = open('analysis.txt', 'a')
+  f.write(full_analysis)
+  f.close()
+  desc = f"The piece of text contains {len(text)} characters."
+  length_msg = await ctx.reply(desc, file=discord.File('analysis.txt'))
+  os.remove('analysis.txt')
+  desc += f"\n**Most common characters:**\n"
   for count in text:
     length_analysis[count] = length_analysis.get(count, 0) + 1
   length_analysis = {count1: count2 for count1, count2 in sorted(length_analysis.items(), key=lambda item: item[1], reverse=True)}
@@ -159,13 +165,7 @@ async def length(ctx, *, text):
   desc += f"\n**Least common characters:**\n"
   for count1, count2,count3 in zip(reversed(length_analysis.keys()), reversed(length_analysis.values()), range(5)):
     desc += f"`{count1}` ({count2})\n"
-  for count1, count2 in length_analysis.items():
-    full_analysis += f"{count2}\t{count1}\n"
-  f = open('analysis.txt', 'a')
-  f.write(full_analysis)
-  f.close()
-  await length_msg.edit(desc, file=discord.File('analysis.txt'))
-  os.remove('analysis.txt')
+  await length_msg.edit(desc)
 
 @commands.command()
 async def pick(ctx, lower:int, upper:int, times:int):
