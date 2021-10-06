@@ -204,6 +204,7 @@ async def search(ctx, *, flags : SearchFlags):
   f.write(desc)
   f.close()
   await ctx.reply(file=discord.File('search.txt'))
+  os.remove('search.txt')
 
 @commands.command(aliases=['setperms', 'setpermission', 'setpermissions', 'rolepermission', 'rolespermission', 'rolepermissions', 'rolespermissions'])
 async def setperm(ctx, permission_input:typing.Union[int, str], *roles:discord.Role):

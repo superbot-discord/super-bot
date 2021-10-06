@@ -164,7 +164,8 @@ async def length(ctx, *, text):
   f = open('analysis.txt', 'a')
   f.write(full_analysis)
   f.close()
-  await length_msg.edit(desc)
+  await length_msg.edit(desc, file=discord.File('analysis.txt'))
+  os.remove('analysis.txt')
 
 @commands.command()
 async def pick(ctx, lower:int, upper:int, times:int):

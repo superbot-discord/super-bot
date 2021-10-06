@@ -258,6 +258,7 @@ async def emojis(ctx, *, text=None):
   f.write(desc)
   f.close()
   await ctx.reply(file=discord.File('output.txt'))
+  os.remove('output.txt')
 
 @commands.command()
 async def invitelink(ctx,inviteinput: discord.Invite):
@@ -876,6 +877,7 @@ async def stickers(ctx, *, text=None):
   f.write(desc)
   f.close()
   await ctx.reply(file=discord.File('output.txt'))
+  os.remove('output.txt')
 
 @commands.command()
 async def template(ctx, *, tempinput):

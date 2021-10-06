@@ -193,7 +193,7 @@ async def on_message(message):
 @bot_.event
 async def on_interaction(interaction):
   interaction_select_option = interaction.data.get("values", None)
-  interaction_original_message = await interaction.original_message()
+  interaction_original_message = interaction.message
   if interaction.type == discord.InteractionType.component:
     interaction_custom_id = interaction.data["custom_id"]
     if interaction_custom_id in ["primary", "secondary", "green", "red"]:
@@ -249,7 +249,7 @@ async def on_interaction(interaction):
       foot = eval(f"sniperdate{sniperdict[interaction_original_message]}[keyname]")
       embed = discord.Embed(title=ti, description=desc)
       embed.set_footer(text=foot)
-      await interaction.edit_original_message(embed=embed)
+      await interaction_original_message.edit(embed=embed)
 
 @bot_.command(aliases=['sniper'])
 async def snipe(ctx, *, text = None):
