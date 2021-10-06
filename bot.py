@@ -544,13 +544,13 @@ async def on_ready():
   #  if count.member_count < 10:
   #    for count2 in count.members:
   #      print(f'\t',count2.name)
-  agree_emoji = bot_.get_emoji(885515344863703121)
-  message_1 = await bot_.get_channel(894820155761246231).fetch_message(894820888321622058)
-  message_2 = await bot_.get_channel(894820155761246231).fetch_message(894821177137197067)
-  message_3 = await bot_.get_channel(894820155761246231).fetch_message(894820846206590986)
-  await message_1.add_reaction(agree_emoji)
-  await message_2.add_reaction(agree_emoji)
-  await message_3.add_reaction(agree_emoji)
+  # agree_emoji = bot_.get_emoji(885515344863703121)
+  # message_1 = await bot_.get_channel(894820155761246231).fetch_message(894820888321622058)
+  # message_2 = await bot_.get_channel(894820155761246231).fetch_message(894821177137197067)
+  # message_3 = await bot_.get_channel(894820155761246231).fetch_message(894820846206590986)
+  # await message_1.add_reaction(agree_emoji)
+  # await message_2.add_reaction(agree_emoji)
+  # await message_3.add_reaction(agree_emoji)
 
 print("Bot is getting started…")
 try:
