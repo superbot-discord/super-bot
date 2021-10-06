@@ -35,7 +35,8 @@ sniperdate5={}
 sniperdict={}
 sniping={}
 poll_options={}
-snipereactions=polls=allid=[]
+polls=[]
+allid=[]
 
 
 @bot_.event
@@ -135,56 +136,7 @@ async def on_message_delete(message):
 @bot_.event
 async def on_reaction_add(reaction, user):
   msg = reaction.message
-  if msg in snipereactions and user.id != 796686363604680755:
-    keyname = str(msg.guild.id)+str(msg.channel.id)
-    if reaction.emoji == '⏪':
-      sniperdict[msg] = 1
-    elif reaction.emoji == '⬅️' and sniperdict[msg] > 1:
-      sniperdict[msg] = sniperdict[msg] - 1
-    elif reaction.emoji == '📌' and msg.pinned == False and msg.channel.permissions_for(msg.guild.get_member(796686363604680755)).manage_messages:
-      await msg.pin()
-      pinmsg = await msg.channel.fetch_message(msg.channel.last_message_id)
-      await pinmsg.delete()
-    elif reaction.emoji == '📌' and msg.pinned == False and msg.channel.permissions_for(msg.guild.get_member(796686363604680755)).manage_messages:
-      await msg.unpin()
-    elif reaction.emoji == '📌':
-      await msg.channel.send("Unable to Pin/Unpin messages without `Manage Server` permission.")
-      return
-    elif reaction.emoji == '➡️' and sniperdict[msg] <5 and eval('sniper'+str(sniperdict[msg]+1)+'.get(keyname, 1)') != 1:
-      sniperdict[msg] = sniperdict[msg] + 1
-    elif reaction.emoji == '⏩' and sniper5.get(keyname, 1) != 1:
-      sniperdict[msg] = 5
-    elif reaction.emoji == '⏩' and sniper4.get(keyname, 1) != 1:
-      sniperdict[msg] = 4
-    elif reaction.emoji == '⏩' and sniper3.get(keyname, 1) != 1:
-      sniperdict[msg] = 3
-    elif reaction.emoji == '⏩' and sniper2.get(keyname, 1) != 1:
-      sniperdict[msg] = 2
-    elif reaction.emoji == '⏩' and sniper1.get(keyname, 1) != 1:
-      sniperdict[msg] = 1
-    elif reaction.emoji == '⬅️' or reaction.emoji == '➡️':
-      await reaction.remove(user)
-      return
-    else:
-      return
-    await reaction.remove(user)
-    if sniper2.get(keyname, 1) == 1:
-      maxc = 1
-    elif sniper3.get(keyname, 1) == 1:
-      maxc = 2
-    elif sniper4.get(keyname, 1) == 1:
-      maxc = 3
-    elif sniper5.get(keyname, 1) == 1:
-      maxc = 4
-    else:
-      maxc = 5
-    ti = "Snipped message ("+str(sniperdict[msg])+r"/"+str(maxc)+")"
-    desc = eval('sniper'+str(sniperdict[msg])+'[keyname]')
-    foot = eval('sniperdate'+str(sniperdict[msg])+'[keyname]')
-    embed = discord.Embed(title=ti, description=desc)
-    embed.set_footer(text=foot)
-    await msg.edit(embed=embed)
-  elif msg.id in polls and user.id != 796686363604680755:
+  if msg.id in polls and user.id != 796686363604680755:
     cache_embed = msg.embeds[0]
     desc = ""
     msg_dict = poll_options[msg.id]
@@ -241,6 +193,7 @@ async def on_message(message):
 @bot_.event
 async def on_interaction(interaction):
   interaction_select_option = interaction.data.get("values", None)
+  interaction_original_message = await interaction.original_message()
   if interaction.type == discord.InteractionType.component:
     interaction_custom_id = interaction.data["custom_id"]
     if interaction_custom_id in ["primary", "secondary", "green", "red"]:
@@ -251,6 +204,52 @@ async def on_interaction(interaction):
         await interaction.edit_original_message(embed=eval(interaction_first_option))
       else:
         await interaction.followup.send(f"You selected {', '.join(interaction_select_option)} in the {interaction_custom_id} menu.", ephemeral=True)
+    elif interaction_custom_id in ["Snipe1", "Snipe2", "Snipe3", "Snipe4", "Snipe5"]:
+      keyname = f"{interaction_original_message.guild.id}{interaction_original_message.channel.id}"
+      if interaction_custom_id == "Snipe1":
+        sniperdict[interaction_original_message] = 1
+      elif interaction_custom_id == "Snipe2" and sniperdict[interaction_original_message] > 1:
+        sniperdict[interaction_original_message] = sniperdict[interaction_original_message] - 1
+      elif interaction_custom_id == "Snipe3" and interaction_original_message.pinned == False:
+        if interaction_original_message.channel.permissions_for(interaction_original_message.guild.get_member(796686363604680755)).manage_messages:
+          if not interaction_original_message.pinned:
+            await interaction_original_message.pin()
+            pinmsg = await interaction_original_message.channel.fetch_message(interaction_original_message.channel.last_message_id)
+            await pinmsg.delete()
+          else:
+            await interaction_original_message.unpin()
+        else:
+          await interaction_original_message.channel.send("Unable to Pin/Unpin messages without `Manage Server` permission.")
+          return
+      elif interaction_custom_id == "Snipe4":
+        if sniperdict[interaction_original_message] < 5 and eval(f"sniper{sniperdict[interaction_original_message]+1}.get(keyname, 1)") != 1:
+          sniperdict[interaction_original_message] += 1
+        elif sniper5.get(keyname, 1) != 1:
+          sniperdict[interaction_original_message] = 5
+        elif sniper4.get(keyname, 1) != 1:
+          sniperdict[interaction_original_message] = 4
+        elif sniper3.get(keyname, 1) != 1:
+          sniperdict[interaction_original_message] = 3
+        elif sniper2.get(keyname, 1) != 1:
+          sniperdict[interaction_original_message] = 2
+        elif sniper1.get(keyname, 1) != 1:
+          sniperdict[interaction_original_message] = 1
+      if sniper2.get(keyname, 1) == 1:
+        maxc = 1
+      elif sniper3.get(keyname, 1) == 1:
+        maxc = 2
+      elif sniper4.get(keyname, 1) == 1:
+        maxc = 3
+      elif sniper5.get(keyname, 1) == 1:
+        maxc = 4
+      else:
+        maxc = 5
+      ti = f"Snipped message ("+str(sniperdict[interaction_original_message])+r"/"+str(maxc)+")"
+      desc = eval(f"sniper{sniperdict[interaction_original_message]}[keyname]")
+      foot = eval(f"sniperdate{sniperdict[interaction_original_message]}[keyname]")
+      embed = discord.Embed(title=ti, description=desc)
+      embed.set_footer(text=foot)
+      await interaction.edit_original_message(embed=embed)
 
 @bot_.command(aliases=['sniper'])
 async def snipe(ctx, *, text = None):
@@ -278,14 +277,11 @@ async def snipe(ctx, *, text = None):
         foot = sniperdate1[keyname]
       embed = discord.Embed(title=ti, description=desc)
       embed.set_footer(text=foot)
-      cmsg = await ctx.reply(embed=embed)
+      snipe_view = ui.View(timeout=120)
+      for count in snipe_buttons:
+        snipe_view.add_item(count)
+      cmsg = await ctx.reply(embed=embed, view=snipe_view)
       sniperdict[cmsg] = 1
-      await cmsg.add_reaction('⏪')
-      await cmsg.add_reaction('⬅️')
-      await cmsg.add_reaction('📌')
-      await cmsg.add_reaction('➡️')
-      await cmsg.add_reaction('⏩')
-      snipereactions.append(cmsg)
     else:
       await ctx.reply("Snipping is disabled. Please ask someone with manage messages permission to re-enable it.")
   elif has_perms(ctx.channel, ctx.author, 13):

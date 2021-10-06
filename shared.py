@@ -102,6 +102,14 @@ def sample_buttons(ctx):
   ui.Button(style=discord.ButtonStyle.url,       row=1, disabled=True, label="URL (grey)", url=ctx.message.jump_url),
 ]
 
+snipe_buttons = [
+  ui.Button(style=discord.ButtonStyle.primary, row=0, custom_id="Snipe1", emoji="⏪", label="First page"),
+  ui.Button(style=discord.ButtonStyle.primary, row=0, custom_id="Snipe2", emoji="⬅️", label="Previous"),
+  ui.Button(style=discord.ButtonStyle.primary, row=0, custom_id="Snipe3", emoji="📌", label="Pin"),
+  ui.Button(style=discord.ButtonStyle.primary, row=0, custom_id="Snipe4", emoji="➡️", label="Next"),
+  ui.Button(style=discord.ButtonStyle.primary, row=0, custom_id="Snipe5", emoji="⏩'", label="Last page")
+]
+
 support_embed = discord.Embed(title="Support", description=f"""
 If you need support, please kindly join the support server or directly contact JohannLau#6541.
 """.replace(f"\n", " "))
