@@ -148,6 +148,9 @@ async def insert(ctx,emoji, *, text):
 async def length(ctx, *, text):
   full_analysis = f"Freq.\tCharacter"
   length_analysis = {}
+  for count in text:
+    length_analysis[count] = length_analysis.get(count, 0) + 1
+  length_analysis = {count1: count2 for count1, count2 in sorted(length_analysis.items(), key=lambda item: item[1], reverse=True)}
   for count1, count2 in length_analysis.items():
     full_analysis += f"{count2}\t{count1}\n"
   f = open('analysis.txt', 'a')
@@ -157,9 +160,6 @@ async def length(ctx, *, text):
   length_msg = await ctx.reply(desc, file=discord.File('analysis.txt'))
   os.remove('analysis.txt')
   desc += f"\n**Most common characters:**\n"
-  for count in text:
-    length_analysis[count] = length_analysis.get(count, 0) + 1
-  length_analysis = {count1: count2 for count1, count2 in sorted(length_analysis.items(), key=lambda item: item[1], reverse=True)}
   for (count1, count2),count3 in zip(length_analysis.items(), range(5)):
     desc += f"`{count1}` ({count2})\n"
   desc += f"\n**Least common characters:**\n"
