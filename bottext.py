@@ -146,7 +146,7 @@ async def insert(ctx,emoji, *, text):
 
 @commands.command()
 async def length(ctx, *, text):
-  full_analysis = f"Freq.\tCharacter"
+  full_analysis = f"Freq.\tCharacter\n"
   length_analysis = {}
   for count in text:
     length_analysis[count] = length_analysis.get(count, 0) + 1
