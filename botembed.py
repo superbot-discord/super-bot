@@ -53,7 +53,7 @@ async def pretend(ctx, member : discord.Member, *, message):
     identify = wh.id
   async with aiohttp.ClientSession() as session:
     webhook = Webhook.partial(identify, token, session=session)
-    await webhook.send(message, username=member.name, avatar_url=member.avatar.url)
+    await webhook.send(message, username=member.name, avatar_url=member.display_avatar.url)
 
 @commands.command(pass_context=True)
 async def pretendembed(ctx, member : discord.Member, *, text):
@@ -75,7 +75,7 @@ async def pretendembed(ctx, member : discord.Member, *, text):
   async with aiohttp.ClientSession() as session:
     webhook = Webhook.partial(identify, token, session=session)
   embed = botembed(text)
-  await webhook.send(embed=embed, username=member.name, avatar_url=member.avatar.url)
+  await webhook.send(embed=embed, username=member.name, avatar_url=member.display_avatar.url)
 
 
 @commands.command(aliases=["fastembed", "qe"])

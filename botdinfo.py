@@ -4,20 +4,46 @@ cmaphsv = plt.cm.hsv
 
 @commands.command()
 async def avatar(ctx,user: discord.Member=None):
-  base_url = user.avatar.url
   if not user:
     user=ctx.author
+  base_url1 = user.default_avatar
+  base_url2 = user.avatar
+  base_url3 = user.guild_avatar
   desc = f"Avatar of {user.mention}\n"
-  embed=discord.Embed(title="Avatar", description=desc)
-  for count1 in ['png', 'jpg', 'webp']:
-    desc = ""
-    base_url = user.avatar.url.replace('.png', f'.{count1}')
-    for count in range(5, 13):
-      size = str(2**count)
-      temp = base_url.replace("?size=1024", f"?size={size}")
-      desc += f"[{size}]({temp}) "
-    embed.add_field(name=f"{count1.upper()}s", value=desc)
-  embed.set_image(url=user.avatar.url)
+  embed=discord.Embed(title="Avatars", description=desc)
+  if base_url1:
+    base_url1 = base_url1.url
+    for count1 in ['png', 'jpg', 'webp']:
+      desc = ""
+      base_url1 = user.avatar.url.replace('.png', f'.{count1}')
+      for count in range(5, 13):
+        size = str(2**count)
+        temp = base_url1.replace("?size=1024", f"?size={size}")
+        desc += f"[{size}]({temp}) "
+      embed.add_field(name=f"Default {count1.upper()}s", value=desc)
+    embed.set_image(url=user.avatar.url)
+  if base_url2:
+    base_url2 = base_url2.url
+    for count1 in ['png', 'jpg', 'webp']:
+      desc = ""
+      base_url2 = user.avatar.url.replace('.png', f'.{count1}')
+      for count in range(5, 13):
+        size = str(2**count)
+        temp = base_url2.replace("?size=1024", f"?size={size}")
+        desc += f"[{size}]({temp}) "
+      embed.add_field(name=f"Custom {count1.upper()}s", value=desc)
+    embed.set_image(url=user.avatar.url)
+  if base_url3:
+    base_url3 = base_url3.url
+    for count1 in ['png', 'jpg', 'webp']:
+      desc = ""
+      base_url3 = user.avatar.url.replace('.png', f'.{count1}')
+      for count in range(5, 13):
+        size = str(2**count)
+        temp = base_url3.replace("?size=1024", f"?size={size}")
+        desc += f"[{size}]({temp}) "
+      embed.add_field(name=f"Server {count1.upper()}s", value=desc)
+    embed.set_image(url=user.avatar.url)
   await ctx.reply(embed=embed)
 
 @commands.command()
@@ -317,7 +343,7 @@ async def leftuser(ctx, *, userinput):
   else:
     desc = f"{lfuser.mention} (human)"
   embed=discord.Embed(title=ti,color=lfuser.color, description=desc)
-  embed.set_thumbnail(url=lfuser.avatar.url)
+  embed.set_thumbnail(url=lfuser.display_avatar.url)
   f0v=f"{lfuser.name}#{lfuser.discriminator}"
   f1v=f"<t:{round((lfuser.created_at-dt1).total_seconds())}:F>"
   f1ts = str(datetime.now(timezone.utc) - lfuser.created_at)

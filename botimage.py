@@ -314,7 +314,7 @@ def sharpness(percent):
 async def mandelbrot(ctx, size:int = 1024):
   img = Image.effect_mandelbrot((size, size), (-1.5, -2.5, 3.5, 2.5), 95)
   img.save('mandelbrot.png')
-  await ctx.reply(file = discord.File('Mandelbrot.png'))
+  await ctx.reply(file = discord.File('mandelbrot.png'))
   os.remove('mandelbrot.png')
 
 @commands.command()
