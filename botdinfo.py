@@ -13,15 +13,12 @@ async def avatar(ctx,user: discord.Member=None):
   embed=discord.Embed(title="Avatars", description=desc)
   if base_url1:
     base_url1 = base_url1.url
-    for count1 in ['png', 'jpg', 'webp']:
-      desc = ""
-      base_url1 = user.avatar.url.replace('.png', f'.{count1}')
-      for count in range(5, 13):
-        size = str(2**count)
-        temp = base_url1.replace("?size=1024", f"?size={size}")
-        desc += f"[{size}]({temp}) "
-      embed.add_field(name=f"Default {count1.upper()}s", value=desc)
-    embed.set_image(url=user.avatar.url)
+    desc = ""
+    for count in range(5, 13):
+      size = str(2**count)
+      temp = base_url1.replace("?size=1024", f"?size={size}")
+      desc += f"[{size}]({temp}) "
+    embed.add_field(name=f"Default avatar", value=desc, inline=False)
   if base_url2:
     base_url2 = base_url2.url
     for count1 in ['png', 'jpg', 'webp']:
@@ -32,7 +29,6 @@ async def avatar(ctx,user: discord.Member=None):
         temp = base_url2.replace("?size=1024", f"?size={size}")
         desc += f"[{size}]({temp}) "
       embed.add_field(name=f"Custom {count1.upper()}s", value=desc)
-    embed.set_image(url=user.avatar.url)
   if base_url3:
     base_url3 = base_url3.url
     for count1 in ['png', 'jpg', 'webp']:
@@ -43,7 +39,7 @@ async def avatar(ctx,user: discord.Member=None):
         temp = base_url3.replace("?size=1024", f"?size={size}")
         desc += f"[{size}]({temp}) "
       embed.add_field(name=f"Server {count1.upper()}s", value=desc)
-    embed.set_image(url=user.avatar.url)
+  embed.set_image(url=user.display_avatar.url)
   await ctx.reply(embed=embed)
 
 @commands.command()
