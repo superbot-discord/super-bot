@@ -13,12 +13,7 @@ async def avatar(ctx,user: discord.Member=None):
   embed=discord.Embed(title="Avatars", description=desc)
   if base_url1:
     base_url1 = base_url1.url
-    desc = ""
-    for count in range(5, 13):
-      size = str(2**count)
-      temp = base_url1.replace("?size=1024", f"?size={size}")
-      desc += f"[{size}]({temp}) "
-    embed.add_field(name=f"Default avatar", value=desc, inline=False)
+    embed.add_field(name=f"Default avatar", value=base_url1, inline=False)
   if base_url2:
     base_url2 = base_url2.url
     for count1 in ['png', 'jpg', 'webp']:
