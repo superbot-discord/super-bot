@@ -258,7 +258,7 @@ async def snipe(ctx, *, text = None):
   if text == None:
     if sniping.get(keyname, 1) == 1 or sniping[keyname] == True:
       if sniper1.get(keyname, 1) == 1:
-        embed = discord.Embed(title="Rrror", description="Nothing to snipe from this channel.")
+        embed = discord.Embed(title="Error", description="Nothing to snipe from this channel.")
         await ctx.reply(embed=embed)
         return
       else:
