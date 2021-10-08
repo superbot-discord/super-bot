@@ -181,7 +181,8 @@ async def on_message(message):
     if message.guild.id == 852899227004305458 and message.author.id != 796686363604680755 and message.channel.id in [856053769149874196, 864757953121878026, 864754633910255646]:
       await message.add_reaction("<:UpArrowSquare:864762633194569728>")
       await message.add_reaction("<:DownArrowSquare:864762633625534485>")
-    elif message.channel.id in [805459414001778739, 805462208414089217, 880076327783370812]:
+      #                         SuperBot #news      #new-features       #github             LSC Bots CraftBot   SuperBot            DolphinBot          WalkerBot           Waffles
+    elif message.channel.id in [805459414001778739, 805462208414089217, 880076327783370812, 888254659502936074, 888254911740018708, 888256046496382988, 888256348268138556, 890227476452753448]:
       await message.publish()
     if message.author.id not in banned_ids and message.content.startswith("==")==False:
       await bot_.process_commands(message)
