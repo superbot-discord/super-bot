@@ -280,7 +280,10 @@ async def snipe(ctx, *, text = None):
       snipe_view = ui.View(timeout=120)
       for count in snipe_buttons:
         snipe_view.add_item(count)
-      cmsg = await ctx.reply(embed=embed, view=snipe_view)
+      if chance(1000):
+        cmsg = await ctx.reply("Did someone just ghostping you?", embed=embed, view=snipe_view)
+      else:
+        cmsg = await ctx.reply(embed=embed, view=snipe_view)
       sniperdict[cmsg] = 1
     else:
       await ctx.reply("Snipping is disabled. Please ask someone with manage messages permission to re-enable it.")

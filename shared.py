@@ -44,6 +44,7 @@ format_video    =lambda stream         : f"{format_abr(stream)}\t{stream.resolut
 specialbool     =lambda input          : input.lower() in ["1", "ok", "yes", "ye", "yeah", "enable", "on", "enabled", "tic", "true"]
 has_perms       =lambda chn, memb, perm: (chn.permissions_for(memb).value  & 1 << perm) or (chn.permissions_for(memb).value  & 1 << 8) or memb.id in db["botadmins"]
 naiveness       =lambda dt             : "Naive" if (dt.tzinfo is None or dt.tzinfo.utcoffset(dt) is None) else "Not Naive"
+chance          =lambda ratio          : ra.randint(1, ratio) == ratio
 def format_fps(stream):
   try:
     return stream.fps
