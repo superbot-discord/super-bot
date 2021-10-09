@@ -2,13 +2,13 @@ import os
 import re
 from datetime import datetime, timedelta
 
+import discord as discord
 import pytz
 from bs4 import BeautifulSoup
-from PIL import Image
-
-import discord as discord
-import requests as requests
 from discord.ext import commands
+
+import requests as requests
+from shared import *
 
 set(pytz.all_timezones_set)
 hexstring_pattern = re.compile(r'#?([0-9A-F]{2})([0-9A-F]{2})([0-9A-F]{2})', re.IGNORECASE)

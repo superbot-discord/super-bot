@@ -7,15 +7,15 @@ import discord
 import matplotlib.pyplot as plt
 import pytesseract
 import qr_img
-import requests
 from captcha.image import ImageCaptcha
 from colorgram import extract
 from colorthief import ColorThief
 from discord.ext import commands
 from pdf2image import convert_from_path
-from PIL import Image, ImageDraw, ImageEnhance, ImageFilter, ImageOps
 
 import ascii2 as asc
+import requests
+from shared import *
 
 cimage = ImageCaptcha()
 @commands.command()
