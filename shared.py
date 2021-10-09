@@ -34,8 +34,9 @@ f = open('database.json', 'r')
 db = json.loads(f.read())
 f.close()
 
-font_led = ImageFont.truetype("fonts/led.ttf", 50)
-font_lcd = ImageFont.truetype("fonts/lcd.ttf", 50)
+font_led      = ImageFont.truetype("fonts/led.ttf", 50)
+font_led_bold = ImageFont.truetype("fonts/led_bold.ttf", 50)
+font_lcd      = ImageFont.truetype("fonts/lcd.ttf", 50)
 
 func            =lambda pct, allvals   : "{:d} ({:.1f}%)".format(int(pct/100*np.sum(allvals)), round(pct, 1))
 botadmin        =lambda context        : context.author.id in db["botadmins"]
