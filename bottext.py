@@ -15,7 +15,7 @@ from shared import *
 
 @commands.command(aliases=["lower", "upper", "capital", "capitalise", "capitalize", "lowercase", "lower_case", "uppercase", "upper_case"])
 async def case(ctx, *, text):
-  f = open("output.txt")
+  f = open("output.txt", "w")
   f.write(f"UPPERCASE\n{text.upper()}\n\nLOWERCASE\n{text.lower()}\n\nTITLE CASE\n{text.title()}")
   f.close()
   await ctx.send(file=discord.File('output.txt'))
