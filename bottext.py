@@ -13,6 +13,13 @@ from unicode_charnames import search_charnames
 
 from shared import *
 
+@commands.command(aliases=["lower", "upper", "capital", "capitalise", "capitalize", "lowercase", "lower_case", "uppercase", "upper_case"])
+async def case(ctx, *, text):
+  f = open("output.txt")
+  f.write(f"UPPERCASE\n{text.upper()}\n\nLOWERCASE\n{text.lower()}\n\nTITLE CASE\n{text.title()}")
+  f.close()
+  await ctx.send(file=discord.File('output.txt'))
+  os.remove('output.txt')
 
 @commands.command()
 async def choice(ctx,*options):
@@ -256,6 +263,7 @@ async def unix(ctx, *, text = "now"):
   await ctx.reply(f"`<t:{seconds}>` | <t:{seconds}>\n`<t:{seconds}:F>` | <t:{seconds}:F>\n`<t:{seconds}:f>` | <t:{seconds}:f>\n`<t:{seconds}:D>` | <t:{seconds}:D>\n`<t:{seconds}:d>` | <t:{seconds}:d>\n`<t:{seconds}:T>` | <t:{seconds}:T>\n`<t:{seconds}:t>` | <t:{seconds}:t>\n`<t:{seconds}:R>` | <t:{seconds}:R>")
 
 def setup(bot):
+  bot.add_command(case)
   bot.add_command(choice)
   bot.add_command(decode)
   bot.add_command(emoji)

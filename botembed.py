@@ -44,13 +44,13 @@ async def pretend(ctx, member : discord.Member, *, message):
   ourweb = False
   for count in whl:
     if count.name == "Pretender":
+      wh = count
       ourweb = True
-      token = count.token
-      identify = count.id
-  if len(whl) == 0 or ourweb == False:
+      break
+  if not ourweb:
     wh = await ctx.channel.create_webhook(name = "Pretender")
-    token = wh.token
-    identify = wh.id
+  token = wh.token
+  identify = wh.id
   async with aiohttp.ClientSession() as session:
     webhook = Webhook.partial(identify, token, session=session)
     await webhook.send(message, username=member.name, avatar_url=member.display_avatar.url)
