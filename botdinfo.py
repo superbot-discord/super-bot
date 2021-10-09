@@ -583,14 +583,14 @@ async def role(ctx,role: discord.Role=None):
       f0v = f0v + count.mention + " "
     f0v = f0v[:-1]
   mention=role.mentionable
-  f1v=("Mentionable" if mention else "Not mentionable")
-  f1v=f1v+f"\nMention: `<&{str(role.id)}>`"
+  f1v=("Mentionable by everyone" if mention else "Not mentionable by everyone")
   f2v="Yes" if role.hoist else "No"
   embed.add_field(name="Mentions", value=f1v, inline=True)
   embed.add_field(name="Displayed separately?", value=f2v, inline=True)
   embed.add_field(name="Role ID", value=role.id, inline=True)
-  embed.add_field(name="Position in hierarchy", value=role.position, inline=True)
+  embed.add_field(name="Position from top", value=role.position, inline=True)
   embed.add_field(name="Color", value=role.color, inline=True)
+  embed.add_field(name="Permission integer", value=str(role.permissions.value), inline=True)
   if role.is_integration():
     embed.add_field(name="Integration", value="This role is managed by an integration.", inline=False)
   if role.is_bot_managed():
