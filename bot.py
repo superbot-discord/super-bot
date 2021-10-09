@@ -62,16 +62,16 @@ async def on_command_error(ctx, error):
     print(error.with_traceback(error.__traceback__))
     await ctx.reply(f"An error occured:\n```{error.with_traceback(error.__traceback__)}```\nIf you think that this is an issue with the bot, please kindly inform JohannLau#6541 about this issue.")
 
-@bot_.event
-async def on_thread_update(before, after):
-  if after.id == 887562599191941121 and after.archived:
-    await after.edit(archived=False)
-    await after.send("I hate Discord's short auto-archive period when I don't buy Nitro, so I auto-unarchived it!")
+# @bot_.event
+# async def on_thread_update(before, after):
+#   if after.id == 887562599191941121 and after.archived:
+#     await after.edit(archived=False)
+#     await after.send("I hate Discord's short auto-archive period when I don't buy Nitro, so I auto-unarchived it!")
 
-@bot_.event
-async def on_thread_join(thread):
-  if thread.guild.id == 805441351033552916 and not thread.me:
-    await thread.join()
+# @bot_.event
+# async def on_thread_join(thread):
+#   if thread.guild.id == 805441351033552916 and not thread.me:
+#     await thread.join()
 
 @bot_.event
 async def on_voice_state_update(member, before, after):
@@ -101,37 +101,17 @@ async def on_message_delete(message):
     sniper1[keyname] = val
     sniperdate1[keyname] = adt
   elif sniper2.get(keyname, 1) == 1:
-    sniper2[keyname] = sniper1[keyname]
-    sniper1[keyname] = val
-    sniperdate2[keyname] = sniperdate1[keyname]
-    sniperdate1[keyname] = adt
+    sniper2[keyname], sniper1[keyname] = sniper1[keyname], val
+    sniperdate2[keyname], sniperdate1[keyname] = sniperdate1[keyname], adt
   elif sniper3.get(keyname, 1) == 1:
-    sniper3[keyname] = sniper2[keyname]
-    sniper2[keyname] = sniper1[keyname]
-    sniper1[keyname] = val
-    sniperdate3[keyname] = sniperdate2[keyname]
-    sniperdate2[keyname] = sniperdate1[keyname]
-    sniperdate1[keyname] = adt
+    sniper3[keyname], sniper2[keyname], sniper1[keyname] = sniper2[keyname], sniper1[keyname], val
+    sniperdate3[keyname], sniperdate2[keyname], sniperdate1[keyname] = sniperdate2[keyname], sniperdate1[keyname], adt
   elif sniper4.get(keyname, 1) == 1:
-    sniper4[keyname] = sniper3[keyname]
-    sniper3[keyname] = sniper2[keyname]
-    sniper2[keyname] = sniper1[keyname]
-    sniper1[keyname] = val
-    sniperdate4[keyname] = sniperdate3[keyname]
-    sniperdate3[keyname] = sniperdate2[keyname]
-    sniperdate2[keyname] = sniperdate1[keyname]
-    sniperdate1[keyname] = adt
+    sniper4[keyname], sniper3[keyname], sniper2[keyname], sniper1[keyname] = sniper3[keyname], sniper2[keyname], sniper1[keyname], val
+    sniperdate4[keyname], sniperdate3[keyname], sniperdate2[keyname], sniperdate1[keyname] = sniperdate3[keyname], sniperdate2[keyname], sniperdate1[keyname], adt
   else:
-    sniper5[keyname] = sniper4[keyname]
-    sniper4[keyname] = sniper3[keyname]
-    sniper3[keyname] = sniper2[keyname]
-    sniper2[keyname] = sniper1[keyname]
-    sniper1[keyname] = val
-    sniperdate5[keyname] = sniperdate4[keyname]
-    sniperdate4[keyname] = sniperdate3[keyname]
-    sniperdate3[keyname] = sniperdate2[keyname]
-    sniperdate2[keyname] = sniperdate1[keyname]
-    sniperdate1[keyname] = adt
+    sniper5[keyname], sniper4[keyname], sniper3[keyname], sniper2[keyname], sniper1[keyname] = sniper4[keyname], sniper3[keyname], sniper2[keyname], sniper1[keyname], val
+    sniperdate5[keyname], sniperdate4[keyname], sniperdate3[keyname], sniperdate2[keyname], sniperdate1[keyname] = sniperdate4[keyname], sniperdate3[keyname], sniperdate2[keyname], sniperdate1[keyname], adt
 
 @bot_.event
 async def on_reaction_add(reaction, user):

@@ -27,7 +27,7 @@ class SearchFlags(commands.FlagConverter):
   files            : specialbool                           = None
 
 @commands.command()
-async def ban(ctx, user: discord.User, delete : int =0, *, reason="No reason provided"):
+async def ban(ctx, user: discord.User, delete : int = 0, *, reason = "No reason provided"):
   if ctx.channel.permissions_for(ctx.author).ban_members or bot_admins.count(ctx.author.id) != 0:
     try:
       await ctx.guild.ban(user, delete_message_days=delete, reason=reason)
@@ -39,7 +39,7 @@ async def ban(ctx, user: discord.User, delete : int =0, *, reason="No reason pro
     try:
       await user.send(embed=embed1)
     except:
-      1
+      pass
     await ctx.reply(embed=embed2)
   else:
     await ctx.reply("You don't have the required permission: Ban members.")
@@ -226,13 +226,13 @@ async def setperm(ctx, permission_input:typing.Union[int, str], *roles:discord.R
 
 @commands.command()
 async def slowmode(ctx, sec = None, *channels:typing.Union[discord.TextChannel,str]):
+  if sec.isdigit() == False:
+      sec = 0
   if sec != None:
     sec = int(timedelta(**{
       UNITS.get(m.group('unit').lower(), 'seconds'): int(m.group('val'))
       for m in re.finditer(r'(?P<val>\d+)(?P<unit>[smhdw]?)', sec, flags=re.I)
     }).total_seconds())
-    if sec.isdigit() == False:
-      sec = 0
     if int(sec) < 0 or int(sec) > 21600 or int(sec)%1 != 0:
       await ctx.reply("Invalid input! Please enter a duration below or equal to 21600 seconds (6 hours).")
       return
