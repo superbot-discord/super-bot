@@ -228,12 +228,12 @@ async def setperm(ctx, permission_input:typing.Union[int, str], *roles:discord.R
 async def slowmode(ctx, sec = None, *channels:typing.Union[discord.TextChannel,str]):
   if sec.isdigit() == False:
       sec = 0
-  if sec != None:
+  if sec:
     sec = int(timedelta(**{
       UNITS.get(m.group('unit').lower(), 'seconds'): int(m.group('val'))
       for m in re.finditer(r'(?P<val>\d+)(?P<unit>[smhdw]?)', sec, flags=re.I)
     }).total_seconds())
-    if int(sec) < 0 or int(sec) > 21600 or int(sec)%1 != 0:
+    if sec < 0 or sec > 21600 or sec%1 != 0:
       await ctx.reply("Invalid input! Please enter a duration below or equal to 21600 seconds (6 hours).")
       return
     if len(channels) == 0:
