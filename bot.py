@@ -92,7 +92,7 @@ async def on_voice_state_update(member, before, after):
 
 @bot_.event
 async def on_message_delete(message):
-  keyname = str(message.guild.id)+str(message.channel.id)
+  keyname = f"{message.guild.id}{message.channel.id}"
   val = message.content
   if val.replace(" ","") == "":
     return
