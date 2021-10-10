@@ -244,7 +244,7 @@ async def unicode(ctx, *, query):
     embed.add_field(name = count[1].title(), value = "U+" + count[0] + eval("u\" \\u"+count[0]+"\""))
   await ctx.reply(embed=embed)
 
-@commands.command()
+@commands.command(aliases=["timestamp", "posix"])
 async def unix(ctx, *, text = "now"):
   now = datetime.now()
   dateParts = {

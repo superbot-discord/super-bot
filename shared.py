@@ -44,7 +44,7 @@ font_lcd_calc = ImageFont.truetype("fonts/lcd_calc.ttf", 50)
 led_font_dict = {
   font_led      : {"spacing" : 20, "padding" : 3,  "height_plus" : 15 },
   font_led_bold : {"spacing" : 20, "padding" : 3,  "height_plus" : 15 },
-  font_led_serif: {"spacing" : 20, "padding" : 9,  "height_plus" : 22 },
+  font_led_serif: {"spacing" : 25, "padding" : 9,  "height_plus" : 22 },
   font_led_mono : {"spacing" : 10, "padding" : -12,"height_plus" : -12},
   font_lcd      : {"spacing" : 20, "padding" : 3,  "height_plus" : 15 },
   font_lcd_calc : {"spacing" : 20, "padding" : 3,  "height_plus" : 15 }
