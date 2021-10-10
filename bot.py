@@ -202,7 +202,7 @@ async def on_interaction(interaction):
           else:
             await interaction_original_message.unpin()
         else:
-          await interaction_original_message.channel.send("Unable to Pin/Unpin messages without `Manage Server` permission.")
+          await interaction.followup.send("Unable to Pin/Unpin messages without `Manage Server` permission.", ephemeral=True)
           return
       elif interaction_custom_id == "Snipe4":
         if sniperdict[interaction_original_message] < 5 and eval(f"sniper{sniperdict[interaction_original_message]+1}.get(keyname, 1)") != 1:
