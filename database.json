@@ -1,17 +1,17 @@
 {
   "font_dicts" : {
-    "title"      :{"color":"#AAA", "fontsize":15  , "fontweight":"bold"},
-    "semi_title" :{"color":"#AAA", "fontsize":10  , "fontweight":"demi"},
-    "label"      :{"color":"#AAA", "fontsize":8   , "fontweight":"book"},
-    "tiny"       :{"color":"#AAA", "fontsize":5   , "fontweight":"light"},
-    "mini"       :{"color":"#AAA", "fontsize":4   , "fontweight":"light"},
-    "light_label":{"color":"#FFF", "fontsize":8   , "fontweight":"book"},
-    "light_tiny" :{"color":"#FFF", "fontsize":5   , "fontweight":"light"},
-    "light_mini" :{"color":"#FFF", "fontsize":4   , "fontweight":"light"},
-    "legend"     :{"color":"#111", "fontsize":8   , "fontweight":"semibold"}
+    "title"      :{"color":"#AAA", "fontsize":15, "fontweight":"bold"},
+    "semi_title" :{"color":"#AAA", "fontsize":10, "fontweight":"demi"},
+    "label"      :{"color":"#AAA", "fontsize":8 , "fontweight":"book"},
+    "tiny"       :{"color":"#AAA", "fontsize":5 , "fontweight":"light"},
+    "mini"       :{"color":"#AAA", "fontsize":4 , "fontweight":"light"},
+    "light_label":{"color":"#FFF", "fontsize":8 , "fontweight":"book"},
+    "light_tiny" :{"color":"#FFF", "fontsize":5 , "fontweight":"light"},
+    "light_mini" :{"color":"#FFF", "fontsize":4 , "fontweight":"light"},
+    "legend"     :{"color":"#111", "fontsize":8 , "fontweight":"semibold"}
   },
   "led_colors" : {
-    "cyan" : {"fg":"#222240FF", "bg":"#98BB69FF"}, "icyan" : {"fg":"#98BB69FF", "bg":"#222240FF"},
+    "cyan" : {"fg":"#222240FF", "bg":"#98BB69FF"}, "icyan" : {"fg":"#989B69FF", "bg":"#222260FF"},
     "red"  : {"fg":"#D83030FF", "bg":"#300000FF"}, "ired"  : {"fg":"#300000FF", "bg":"#D83030FF"},
     "green": {"fg":"#30D830FF", "bg":"#003000FF"}, "igreen": {"fg":"#003000FF", "bg":"#30D830FF"},
     "blue" : {"fg":"#3030D8FF", "bg":"#000030FF"}, "iblue" : {"fg":"#000030FF", "bg":"#3030D8FF"},
