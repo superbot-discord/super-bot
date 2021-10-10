@@ -1,6 +1,6 @@
 from shared import *
 
-led_colors = typing.Optional[typing.Literal["cyan", "icyan", "red", "ired", "green", "igreen", "blue", "iblue", "purple", "ipurple", "yellow", "iyellow"]]
+led_colors = typing.Optional[typing.Literal["cyan", "icyan", "red", "ired", "green", "igreen", "blue", "iblue", "purple", "ipurple", "yellow", "iyellow", "teal", "iteal"]]
 led_alignment = typing.Optional[typing.Literal['left', 'center', 'right']]
 
 @commands.command()
