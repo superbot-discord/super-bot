@@ -17,7 +17,9 @@
     "blue" : {"fg":"#3030D8FF", "bg":"#000030FF"}, "iblue" : {"fg":"#000030FF", "bg":"#3030D8FF"},
     "purple":{"fg":"#D830D8FF", "bg":"#300030FF"}, "ipurple":{"fg":"#300030FF", "bg":"#D830D8FF"},
     "yellow":{"fg":"#D8D830FF", "bg":"#303000FF"}, "iyellow":{"fg":"#303000FF", "bg":"#D8D830FF"},
-    "teal" : {"fg":"#30D8D8FF", "bg":"#303030FF"}, "iteal" : {"fg":"#303030FF", "bg":"#30D8D8FF"}
+    "teal" : {"fg":"#30D8D8FF", "bg":"#003030FF"}, "iteal" : {"fg":"#003030FF", "bg":"#30D8D8FF"},
+    "white": {"fg":"#000000FF", "bg":"#FFFFFFFF"}, "black" : {"fg":"#FFFFFFFF", "bg":"#000000FF"},
+    "twhite":{"fg":"#000000FF", "bg":"#00000000"}, "tblack": {"fg":"#FFFFFFFF", "bg":"#00000000"}
   },
   "status_buttons" : [
     {"label":"New website", "url":"https://superbot-discord.github.io/"},
