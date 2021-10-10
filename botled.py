@@ -1,5 +1,5 @@
 from shared import *
-
+#"icyan" : {"fg":"#87B33FFF", "bg":"#131402FF"}
 led_colors = typing.Optional[typing.Literal["cyan", "icyan", "red", "ired", "green", "igreen", "blue", "iblue", "purple", "ipurple", "yellow", "iyellow",
                                             "teal", "iteal", "black", "white", "tblack", "twhite", "dark", "light", "tdark", "tlight"]]
 led_alignment = typing.Optional[typing.Literal['left', 'center', 'right']]
