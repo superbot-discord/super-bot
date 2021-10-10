@@ -11,10 +11,12 @@
     "legend"     :{"color":"#111", "fontsize":8   , "fontweight":"semibold"}
   },
   "led_colors" : {
-    "cyan" : {"fg":"#222222FF", "bg":"#98BB69FF"}, "icyan" : {"fg":"#98BB69FF", "bg":"#222222FF"},
+    "cyan" : {"fg":"#222240FF", "bg":"#98BB69FF"}, "icyan" : {"fg":"#98BB69FF", "bg":"#222240FF"},
     "red"  : {"fg":"#D83030FF", "bg":"#300000FF"}, "ired"  : {"fg":"#300000FF", "bg":"#D83030FF"},
     "green": {"fg":"#30D830FF", "bg":"#003000FF"}, "igreen": {"fg":"#003000FF", "bg":"#30D830FF"},
-    "blue" : {"fg":"#3030D8FF", "bg":"#000030FF"}, "iblue" : {"fg":"#000030FF", "bg":"#3030D8FF"}
+    "blue" : {"fg":"#3030D8FF", "bg":"#000030FF"}, "iblue" : {"fg":"#000030FF", "bg":"#3030D8FF"},
+    "purple":{"fg":"#D830D8FF", "bg":"#300030FF"}, "ipurple":{"fg":"#300030FF", "bg":"#D830D8FF"},
+    "yellow":{"fg":"#D8D830FF", "bg":"#303000FF"}, "iyellow":{"fg":"#303000FF", "bg":"#D8D830FF"}
   },
   "status_buttons" : [
     {"label":"New website", "url":"https://superbot-discord.github.io/"},
