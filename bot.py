@@ -356,6 +356,15 @@ async def botadmin(ctx, user : discord.User):
   await ctx.reply("Added user as bot admin.")
 
 @bot_.command()
+@commands.is_owner()
+async def nick(ctx, *, new_nick):
+  try:
+    await ctx.guild.me.edit(nick=(None if new_nick == "clear" else new_nick))
+    await ctx.reply("Changed nickname.")
+  except:
+    await ctx.reply("Unable to change nickname.")
+
+@bot_.command()
 async def botpurge(ctx, *, num):
   try:
     await ctx.message.delete()
