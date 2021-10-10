@@ -11,7 +11,7 @@
     "legend"     :{"color":"#111", "fontsize":8 , "fontweight":"semibold"}
   },
   "led_colors" : {
-    "cyan" : {"fg":"#2F5200FF", "bg":"#98BB69FF"}, "icyan" : {"fg":"#B8DB89FF", "bg":"#0F3200FF"},
+    "cyan" : {"fg":"#2F5200FF", "bg":"#98BB69FF"}, "icyan" : {"fg":"#B8B8B8FF", "bg":"#0F3200FF"},
     "red"  : {"fg":"#D83030FF", "bg":"#300000FF"}, "ired"  : {"fg":"#300000FF", "bg":"#D83030FF"},
     "green": {"fg":"#30D830FF", "bg":"#003000FF"}, "igreen": {"fg":"#003000FF", "bg":"#30D830FF"},
     "blue" : {"fg":"#3030D8FF", "bg":"#000030FF"}, "iblue" : {"fg":"#000030FF", "bg":"#3030D8FF"},
