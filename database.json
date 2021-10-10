@@ -15,7 +15,7 @@
     "red"  : {"fg":"#D83030FF", "bg":"#300000FF"}, "ired"  : {"fg":"#300000FF", "bg":"#D83030FF"},
     "green": {"fg":"#30D830FF", "bg":"#003000FF"}, "igreen": {"fg":"#003000FF", "bg":"#30D830FF"},
     "blue" : {"fg":"#3030D8FF", "bg":"#000030FF"}, "iblue" : {"fg":"#000030FF", "bg":"#3030D8FF"},
-    "purple":{"fg":"#D830D8FF", "bg":"#300030FF"}, "ipurple":{"fg":"#300030FF", "bg":"#D830D8FF"},
+    "purple":{"fg":"#C7F2EEFF", "bg":"#300030FF"}, "ipurple":{"fg":"#300030FF", "bg":"#C7F2EEFF"},
     "yellow":{"fg":"#D8D830FF", "bg":"#303000FF"}, "iyellow":{"fg":"#303000FF", "bg":"#D8D830FF"},
     "teal" : {"fg":"#30D8D8FF", "bg":"#003030FF"}, "iteal" : {"fg":"#003030FF", "bg":"#30D8D8FF"},
     "black": {"fg":"#FFFFFFFF", "bg":"#000000FF"}, "white" : {"fg":"#000000FF", "bg":"#FFFFFFFF"},
