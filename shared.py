@@ -36,7 +36,17 @@ f.close()
 
 font_led      = ImageFont.truetype("fonts/led.ttf", 50)
 font_led_bold = ImageFont.truetype("fonts/led_bold.ttf", 50)
+font_led_serif= ImageFont.truetype("fonts/led_serif.ttf", 50)
+font_led_mono = ImageFont.truetype("fonts/led_mono.ttf", 50)
 font_lcd      = ImageFont.truetype("fonts/lcd.ttf", 50)
+
+led_font_dict = {
+  font_led      : {"spacing" : 20, "padding" : 3,  "height_plus" : 15 },
+  font_led_bold : {"spacing" : 20, "padding" : 3,  "height_plus" : 15 },
+  font_led_serif: {"spacing" : 20, "padding" : 9,  "height_plus" : 22 },
+  font_led_mono : {"spacing" : 10, "padding" : -12,"height_plus" : -12},
+  font_lcd      : {"spacing" : 20, "padding" : 3,  "height_plus" : 15 }
+}
 
 func            =lambda pct, allvals   : "{:d} ({:.1f}%)".format(int(pct/100*np.sum(allvals)), round(pct, 1))
 botadmin        =lambda context        : context.author.id in db["botadmins"]
