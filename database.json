@@ -10,6 +10,11 @@
     "light_mini" :{"color":"#FFF", "fontsize":4   , "fontweight":"light"},
     "legend"     :{"color":"#111", "fontsize":8   , "fontweight":"semibold"}
   },
+  "led_colors" : {
+    "red"  : {"fg":"#D83030FF", "bg":"#300000FF"},
+    "green": {"fg":"#30D830FF", "bg":"#003000FF"},
+    "blue" : {"fg":"#3030D8FF", "bg":"#000030FF"}
+  },
   "status_buttons" : [
     {"label":"New website", "url":"https://superbot-discord.github.io/"},
     {"label":"Old website", "url":"https://github.com/johann-lau/bot"}

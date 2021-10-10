@@ -1,3 +1,4 @@
+from matplotlib.colors import to_hex
 from shared import *
 
 banned_ids =  [755416776581578813]
