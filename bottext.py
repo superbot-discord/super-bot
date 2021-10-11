@@ -19,7 +19,7 @@ async def case(ctx, *, text):
   f.write(f"UPPERCASE\n{text.upper()}\n\nLOWERCASE\n{text.lower()}\n\nTITLE CASE\n{text.title()}")
   f.close()
   await ctx.send(file=discord.File('output.txt'))
-  os.remove('output.txt')
+  try_delete('output.txt')
 
 @commands.command()
 async def choice(ctx,*options):
@@ -165,7 +165,7 @@ async def length(ctx, *, text):
   f.close()
   desc = f"The piece of text contains {len(text)} characters."
   length_msg = await ctx.reply(desc, file=discord.File('analysis.txt'))
-  os.remove('analysis.txt')
+  try_delete('analysis.txt')
   desc += f"\n**Most common characters:**\n"
   for (count1, count2),count3 in zip(length_analysis.items(), range(5)):
     desc += f"`{count1}` ({count2})\n"
@@ -237,15 +237,34 @@ async def spoil(ctx, *, text):
   await ctx.reply(text.replace("||", ""))
 
 @commands.command()
-async def unicode(ctx, *, query):
-  allchars = search_charnames(query)
-  embed = discord.Embed(title = f"Search results for: {query}")
+async def unicode(ctx, *query):
+  query = [query] if len(query) == 1 else list(query)
+  embed = discord.Embed(title = f"Search results for: {' '.join(query)}")
+  all_results = []
+  for count in query:
+    current_results = []
+    for count in search_charnames(count):
+      current_results.append(count)
+    all_results.append(current_results)
+  print(all_results)
+  intersected_results = []
+  x=sum(all_results, [])
+  for count in x:
+    if count not in intersected_results:
+      intersected_results.append(count)
   should_add_character = len(query) == 1
-  for count, count2 in zip(allchars, range(24 if should_add_character else 25)):
+  for count, count2 in zip(intersected_results, range(24 if should_add_character else 25)):
     embed.add_field(name = count[1].title(), value = f"U+{count[0]} `"+eval(f'u\'\\u{count[0]}\'')+"`")
+  desc = f"Code\tChar.\tName"
+  for count in intersected_results:
+    desc += f"U+{count[0]}\t" + eval(f'u\'\\u{count[0]}\'') + f"\t{count[1].title()}"
   if should_add_character:
     embed.add_field(name = f"INPUT - {charname(query).title()}", value = f"U+{codepoint(charname(query))} `"+eval(f'u\'\\u{codepoint(charname(query))}\'')+"`")
-  await ctx.reply(embed=embed)
+    desc += f"U+{codepoint(charname(query))}\t" + eval(f'u\'\\u{codepoint(charname(query))}\'') + f"\t{charname(query).title()}"
+  f = open("unicode.txt", 'w')
+  f.write(desc)
+  f.close()
+  await ctx.reply(embed=embed, file=discord.File("unicode.txt"))
 
 @commands.command(aliases=["timestamp", "posix"])
 async def unix(ctx, *, text = "now"):

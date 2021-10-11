@@ -218,7 +218,7 @@ async def unscramble(ctx, text, length="0"):
   file.write(text)
   file.close()
   await ctx.reply(embed=output, file=discord.File("output.txt"))
-  os.remove('output.txt')
+  try_delete('output.txt')
 
 @commands.command()
 async def wiki(ctx, *, query):
@@ -306,7 +306,7 @@ async def youtube(ctx, *, link):
       file.write(text)
       file.close()
       await ctx.reply(file=discord.File("output.txt"))
-      os.remove("output.txt")
+      try_delete('output.txt')
     except:
       try:
         youtube = pytube.YouTube(link, allow_oauth_cache=False)
@@ -374,7 +374,7 @@ Audio - Minimum size\t\t{format_video(video8)}'''
       f.write(extra_downloads)
       f.close()
       ytmsg = await ctx.reply(embed=embed, file=discord.File('extra_downloads.txt'))
-      os.remove('extra_downloads.txt')
+      try_delete('extra_downloads.txt')
       embed = discord.Embed(title="Download (Click here)", url=video1.url, description=desc)
       embed.add_field(name="Title", value=youtube.title, inline=False)
       if len(youtube.description[:1023].replace(" ", "")) == 0:

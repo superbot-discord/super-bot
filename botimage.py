@@ -25,7 +25,7 @@ async def captcha(ctx, *, text=None):
   data = cimage.generate(text)
   cimage.write(text, 'captcha.png')
   await ctx.reply(f"Captcha for {text}", file = discord.File('captcha.png'))
-  os.remove('captcha.png')
+  try_delete('captcha.png')
 
 @commands.command()
 async def image(ctx, *, mode):
@@ -59,17 +59,14 @@ async def image(ctx, *, mode):
       await ctx.reply(file=discord.File('output_lightness.png'))
       await ctx.reply(file=discord.File('output_hue.png'))
       await ctx.reply(file=discord.File('analysis.txt'))
-    os.remove('analysis.txt')
-    os.remove('output_hue.png')
-    os.remove('output_lightness.png')
+    try_delete('analysis.txt', 'output_hue.png', 'output_lightness.png')
   elif mode.startswith("blur"):
     try:
       blur(int(mode.split(" ")[1]))
     except:
       blur(2)
     await ctx.reply(files=[discord.File('output1.png'), discord.File('output2.png')])
-    os.remove('output1.png')
-    os.remove('output2.png')
+    try_delete('output1.png', 'output2.png')
   elif mode.startswith("resize "):
     resize(int(mode.split(" ")[1]), int(mode.split(" ")[2]))
     try:
@@ -81,12 +78,7 @@ async def image(ctx, *, mode):
       await ctx.reply(file=discord.File('output4.png'))
       await ctx.reply(file=discord.File('output5.png'))
       await ctx.reply(file=discord.File('output6.png'))
-      os.remove('output1.png')
-      os.remove('output2.png')
-      os.remove('output3.png')
-      os.remove('output4.png')
-      os.remove('output5.png')
-      os.remove('output6.png')
+      try_delete('output1.png', 'output2.png', 'output3.png', 'output4.png', 'output5.png', 'output6.png')
   elif mode.startswith("edge"):
     edge()
     try:
@@ -94,13 +86,11 @@ async def image(ctx, *, mode):
     except:
       await ctx.reply(file=discord.File('output1.png'))
       await ctx.reply(file=discord.File('output2.png'))
-      os.remove('output1.png')
-      os.remove('output2.png')
+      try_delete('output1.png', 'output2.png')
   elif mode.startswith("rotate "):
     rotate(float(mode.split(" ")[1]))
     await ctx.reply(files=[discord.File('output1.png'), discord.File('output2.png')])
-    os.remove('output1.png')
-    os.remove('output2.png')
+    try_delete('output1.png', 'output2.png')
   else:
     if mode.startswith("invert"):
       invert()
@@ -142,8 +132,8 @@ async def image(ctx, *, mode):
         except:
           recolor((0,0,0), (255,0,0))
     await ctx.reply(file=discord.File('output.png'))
-    os.remove('output.png')
-  os.remove('input.png')
+    try_delete('output.png')
+  try_delete('input.png')
 
 def addhue(degs):
   im = Image.open('input.png')
@@ -315,7 +305,7 @@ async def mandelbrot(ctx, size:int = 1024):
   img = Image.effect_mandelbrot((size, size), (-1.5, -2.5, 3.5, 2.5), 95)
   img.save('mandelbrot.png')
   await ctx.reply(file = discord.File('mandelbrot.png'))
-  os.remove('mandelbrot.png')
+  try_delete('mandelbrot.png')
 
 @commands.command()
 async def ocr(ctx, lang="eng", *, text = None):
@@ -333,7 +323,7 @@ async def qr(ctx, *, text=None):
   for count in ctx.message.attachments:
     await count.save('qrcode.png')
     await ctx.reply(qr_img.qr_decode('qrcode.png'))
-    os.remove('qrcode.png')
+    try_delete('qrcode.png')
 
 @commands.command()
 async def render(ctx, width:float=1):
@@ -346,7 +336,7 @@ async def render(ctx, width:float=1):
       file.write(output)
       file.close()
       await ctx.reply(file = discord.File('output.txt'))
-      os.remove('output.txt')
+      try_delete('output.txt')
       break
     except:
       pass
@@ -382,7 +372,7 @@ async def transparent(ctx, alpha = 128):
   img.paste(img2, img)
   img.save('Transparent.png')
   await ctx.reply(file = discord.File('Transparent.png'))
-  os.remove('Transparent.png')
+  try_delete('Transparent.png')
 
 def setup(bot):
   bot.add_command(image)

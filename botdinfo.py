@@ -275,7 +275,7 @@ async def emojis(ctx, *, text=None):
   f.write(desc)
   f.close()
   await ctx.reply(file=discord.File('output.txt'))
-  os.remove('output.txt')
+  try_delete('output.txt')
 
 @commands.command()
 async def invitelink(ctx,inviteinput: discord.Invite):
@@ -882,8 +882,7 @@ async def statuses(ctx, *, text = None):
   plt.savefig("statuses.svg", transparent=True)
   await ctx.reply(files = [discord.File('statuses.png'), discord.File('statuses.svg')])
   plt.clf()
-  os.remove('statuses.png')
-  os.remove('statuses.svg')
+  try_delete('statuses.png', 'statuses.svg')
 
 @commands.command()
 async def stickers(ctx, *, text=None):
@@ -894,7 +893,7 @@ async def stickers(ctx, *, text=None):
   f.write(desc)
   f.close()
   await ctx.reply(file=discord.File('output.txt'))
-  os.remove('output.txt')
+  try_delete('output.txt')
 
 @commands.command()
 async def template(ctx, *, tempinput):

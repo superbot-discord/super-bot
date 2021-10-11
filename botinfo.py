@@ -47,7 +47,7 @@ async def color(ctx, *, name):
   img = Image.new('RGB', (64, 64), (r, g, b))
   img.save('color.png')
   await ctx.reply(embed=embed, file=discord.File('color.png'))
-  os.remove('color.png')
+  try_delete('color.png')
 
 @commands.command()
 async def regex(ctx, regularexp, *, text):

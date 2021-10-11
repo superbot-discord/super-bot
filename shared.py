@@ -90,6 +90,13 @@ def format_fps(stream):
   except:
     return 'No vid.'
 
+def try_delete(*filenames):
+  for count in filenames:
+    try:
+      os.remove(count)
+    except:
+      pass
+
 def voice_region_format(region):
   if not region: return "Auto"
   if region == VoiceRegion.amsterdam  : return "Amsterdam"

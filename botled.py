@@ -21,7 +21,7 @@ async def lcd(ctx, mode: typing.Optional[typing.Literal['regular', 'calc', 'dens
   draw.multiline_text((0, current_properties["padding"]), text, font=current_font, fill=db["led_colors"][color]["fg"], spacing=current_properties["spacing"], align=alignment)
   image.save('output.png')
   await ctx.send(file=discord.File('output.png'))
-  os.remove('output.png')
+  try_delete('output.png')
 #to_hex
 
 @commands.command()
@@ -43,7 +43,7 @@ async def led(ctx, mode: typing.Optional[typing.Literal['regular', 'bold', 'caps
   draw.multiline_text((0, current_properties["padding"]), text, font=current_font, fill=db["led_colors"][color]["fg"], spacing=current_properties["spacing"], align=alignment)
   image.save('output.png')
   await ctx.send(file=discord.File('output.png'))
-  os.remove('output.png')
+  try_delete('output.png')
 
 @commands.command()
 async def led2(ctx, mode: typing.Optional[typing.Literal['regular', 'bold', 'caps', 'fat', 'modern', 'serif']] = 'regular', color: led_colors = 'red', alignment: led_alignment = 'left', *, text):
@@ -66,7 +66,7 @@ async def led2(ctx, mode: typing.Optional[typing.Literal['regular', 'bold', 'cap
   draw.multiline_text((0, current_properties["padding"]), text, font=current_font, fill=db["led_colors"][color]["fg"], spacing=current_properties["spacing"], align=alignment)
   image.save('output.png')
   await ctx.send(file=discord.File('output.png'))
-  os.remove('output.png')
+  try_delete('output.png')
 
 def setup(bot):
   bot.add_command(lcd)

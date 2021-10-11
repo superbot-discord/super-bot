@@ -48,7 +48,7 @@ async def ascii(ctx, *, text):
     await ctx.reply(file=discord.File('ascii.txt'))
   else:
     await ctx.reply(f"```{output}```", file=discord.File('ascii.txt'))
-  os.remove('ascii.txt')
+  try_delete('ascii.txt')
 
 
 @commands.command()
@@ -77,8 +77,8 @@ async def barh(ctx, numbers, label, *, title="No_title_required"):
     plt.savefig("horizontalbarchart.svg", transparent=True)
     plt.clf()
     await ctx.reply(files=[discord.File("horizontalbarchart.png"), discord.File("horizontalbarchart.svg")])
-    os.remove('horizontalbarchart.png')
-    os.remove('horizontalbarchart.svg')
+    try_delete('horizontalbarchart.png')
+    try_delete('horizontalbarchart.svg')
   except:
     await ctx.reply("Invalid input. Please try again.")
 
@@ -107,8 +107,8 @@ async def barv(ctx, numbers, label, *, title="No_title_required"):
     plt.savefig("verticalbarchart.svg", transparent=True)
     plt.clf()
     await ctx.reply(files=[discord.File("verticalbarchart.png"), discord.File("verticalbarchart.svg")])
-    os.remove('verticalbarchart.png')
-    os.remove('verticalbarchart.svg')
+    try_delete('verticalbarchart.png')
+    try_delete('verticalbarchart.svg')
   except:
     await ctx.reply("Invalid input. Please try again.")
 
@@ -129,8 +129,8 @@ async def bline(ctx, numbers, *, title="No_title_required"):
     plt.savefig("brokenline.svg", transparent=True)
     plt.clf()
     await ctx.reply(files=[discord.File("brokenline.png"), discord.File("brokenline.svg")])
-    os.remove('brokenline.png')
-    os.remove('brokenline.svg')
+    try_delete('brokenline.png')
+    try_delete('brokenline.svg')
   except:
     await ctx.reply("Invalid input. Please try again.")
 
@@ -153,8 +153,8 @@ async def bline2(ctx, numbers, xnumbers, *, title="No_title_required"):
     plt.savefig("brokenline.svg", transparent=True)
     plt.clf()
     await ctx.reply(files=[discord.File("brokenline.png"), discord.File("brokenline.svg")])
-    os.remove('brokenline.png')
-    os.remove('brokenline.svg')
+    try_delete('brokenline.png')
+    try_delete('brokenline.svg')
   except:
     await ctx.reply("Invalid input. Please try again.")
 
@@ -184,7 +184,7 @@ async def draw(ctx, *, text):
     await ctx.reply(file=discord.File('drawing.txt'))
   else:
     await ctx.reply(f"```{output}```", file=discord.File('drawing.txt'))
-  os.remove('drawing.txt')
+  try_delete('drawing.txt')
 
 @commands.command(aliases=["mathplot", "mathgraph"])
 async def graph(ctx, func, range_low:float=-10.0, range_high:float=10.0, equalize:specialbool=False,*, title="No_title_required"):
@@ -202,8 +202,8 @@ async def graph(ctx, func, range_low:float=-10.0, range_high:float=10.0, equaliz
     plt.savefig("graph.svg", transparent=True)
     plt.clf()
     await ctx.reply(files=[discord.File("graph.png"), discord.File("graph.svg")])
-    os.remove('graph.png')
-    os.remove('graph.svg')
+    try_delete('graph.png')
+    try_delete('graph.svg')
   except:
     await ctx.reply("Invalid input. Please try again.")
 
@@ -223,8 +223,8 @@ async def hist(ctx, numbers, *, title="No_title_required"):
     plt.savefig("histogram.svg", transparent=True)
     plt.clf()
     await ctx.reply(files=[discord.File("histogram.png"), discord.File("histogram.svg")])
-    os.remove('histogram.png')
-    os.remove('histogram.svg')
+    try_delete('histogram.png')
+    try_delete('histogram.svg')
   except:
     await ctx.reply("Invalid input. Please try again.")
 
@@ -249,8 +249,8 @@ async def multibline(ctx, numbers, labels, *, title="No_title_required"):
     plt.savefig("brokenline.svg", transparent=True)
     plt.clf()
     await ctx.reply(files=[discord.File("brokenline.png"), discord.File("brokenline.svg")])
-    os.remove('brokenline.png')
-    os.remove('brokenline.svg')
+    try_delete('brokenline.png')
+    try_delete('brokenline.svg')
   except:
     await ctx.reply("Invalid input. Please try again.")
 
@@ -271,8 +271,8 @@ async def multigraph(ctx, func, range_low:float=-10.0, range_high:float=10.0, *,
     plt.savefig("graph.svg", transparent=True)
     plt.clf()
     await ctx.reply(files=[discord.File("graph.png"), discord.File("graph.svg")])
-    os.remove('graph.png')
-    os.remove('graph.svg')
+    try_delete('graph.png')
+    try_delete('graph.svg')
   except:
     await ctx.reply("Invalid input. Please try again.")
 
@@ -306,8 +306,8 @@ async def pie(ctx, numbers, label="", *, title="No_title_required"):
     plt.savefig("piechart.svg", transparent=True)
     plt.clf()
     await ctx.reply(files=[discord.File("piechart.png"), discord.File("piechart.svg")])
-    os.remove('piechart.png')
-    os.remove('piechart.svg')
+    try_delete('piechart.png')
+    try_delete('piechart.svg')
   except:
     await ctx.reply("Invalid input. Please try again.")
 
@@ -365,7 +365,7 @@ async def qrmake(ctx, *, text):
         img = qr.make_image(fill_color="black", back_color="white")
   img.save('QRCode.png')
   await ctx.reply(file=discord.File("QRCode.png"))
-  os.remove("QRCode.png")
+  try_delete('QRCode.png')
 
 @commands.command(aliases=["simpcolour", "simplecolor", "simplecolour"])
 async def simpcolor(ctx, *, name):
@@ -390,8 +390,8 @@ async def simpcolor(ctx, *, name):
     plt.savefig("color.png", transparent=True)
     plt.savefig("color.svg", transparent=True)
   await ctx.reply(files=[discord.File("color.png"), discord.File("color.svg")])
-  os.remove('color.png')
-  os.remove('color.svg')
+  try_delete('color.png')
+  try_delete('color.svg')
 
 @commands.command(alias=["snowgraph", "snowflake"])
 async def snow(ctx, recursion = 7):  
@@ -414,10 +414,10 @@ async def snow(ctx, recursion = 7):
       if float(recursion) < 8:
         plt.savefig("snow.svg", transparent=True)
         await ctx.reply(file=discord.File("snow.svg"))
-        os.remove('snow.svg')
+        try_delete('snow.svg')
       await ctx.reply(file=discord.File("snow.png"))
       plt.clf()
-      os.remove('snow.png')
+      try_delete('snow.png')
   except:
     await ctx.reply("Invalid input. Please try again.")
 
@@ -479,7 +479,7 @@ async def table(ctx, *, text):
   file.write(output)
   file.close()
   await ctx.reply(f"```{output}```", file=discord.File('table.txt'))
-  os.remove('table.txt')
+  try_delete('table.txt')
 
 def setup(bot):
   bot.add_command(ascii)

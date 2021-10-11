@@ -119,7 +119,7 @@ async def html(ctx, *, htmlcode = None):
   driver.set_window_size(S('Width'),S('Height'))
   driver.save_screenshot('html_screenshot.png')
   await ctx.reply(file=discord.File('html_screenshot.png'))
-  os.remove('html_screenshot.png')
+  try_delete('html_screenshot.png')
   driver.quit()
 
 @commands.command()
@@ -160,7 +160,7 @@ async def markdown(ctx, *, mdcode = None):
   driver.set_window_size(S('Width'),S('Height'))
   driver.save_screenshot('md_screenshot.png')
   await ctx.reply(file=discord.File('md_screenshot.png'))
-  os.remove('md_screenshot.png')
+  try_delete('md_screenshot.png')
   driver.quit()
 
 @commands.command()
@@ -228,13 +228,13 @@ async def screenshot(ctx, url = None, form = "all"):
       driver.set_window_size(1440,900)
       driver.get_screenshot_as_file('web_screenshot1.png')
       await ctx.reply(file=discord.File('web_screenshot1.png'))
-      os.remove('web_screenshot1.png')
+      try_delete('web_screenshot1.png')
     if form == "everything" or form == "full" or form == "entire" or form == "whole" or form == "all":
       S = lambda X: driver.execute_script('return document.body.parentNode.scroll'+X)
       driver.set_window_size(S('Width'),S('Height'))
       driver.get_screenshot_as_file('web_screenshot2.png')
       await ctx.reply(file=discord.File('web_screenshot2.png'))
-      os.remove('web_screenshot2.png')
+      try_delete('web_screenshot2.png')
     driver.quit()
 
 def setup(bot):
