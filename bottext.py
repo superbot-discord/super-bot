@@ -242,9 +242,9 @@ async def unicode(ctx, *, query):
   embed = discord.Embed(title = f"Search results for: {query}")
   should_add_character = len(query) == 1
   for count, count2 in zip(allchars, range(24 if should_add_character else 25)):
-    embed.add_field(name = count[1].title(), value = f"U+{count[0]} `"+eval(f'u\' \\u{count[0]}\'')+"`")
+    embed.add_field(name = count[1].title(), value = f"U+{count[0]} `"+eval(f'u\'\\u{count[0]}\'')+"`")
   if should_add_character:
-    embed.add_field(name = charname(query), value = f"U+{codepoint(query)} `"+eval(f'u\' \\u{codepoint(query)}\'')+"`")
+    embed.add_field(name = f"INPUT - {charname(query).title()}", value = f"U+{codepoint(charname(query))} `"+eval(f'u\'\\u{codepoint(charname(query))}\'')+"`")
   await ctx.reply(embed=embed)
 
 @commands.command(aliases=["timestamp", "posix"])
