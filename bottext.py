@@ -9,7 +9,7 @@ import discord as discord
 import emojis as em
 import pytz
 from discord.ext import commands
-from unicode_charnames import search_charnames
+from unicode_charnames import search_charnames, charname, codepoint
 
 from shared import *
 
@@ -239,9 +239,12 @@ async def spoil(ctx, *, text):
 @commands.command()
 async def unicode(ctx, *, query):
   allchars = search_charnames(query)
-  embed = discord.Embed(title = "Search results for: "+query)
-  for count, count2 in zip(allchars, range(25)):
-    embed.add_field(name = count[1].title(), value = "U+" + count[0] + eval("u\" \\u"+count[0]+"\""))
+  embed = discord.Embed(title = f"Search results for: {query}")
+  should_add_character = len(query) == 1
+  for count, count2 in zip(allchars, range(24 if should_add_character else 25)):
+    embed.add_field(name = count[1].title(), value = f"U+{count[0]} `{eval(f'u\' \\u{count[0]}\'')}`")
+  if should_add_character:
+    embed.add_field(name = charname(query), value = f"U+{codepoint(query)} `{eval(f'u\' \\u{codepoint(query)}\'')}`")
   await ctx.reply(embed=embed)
 
 @commands.command(aliases=["timestamp", "posix"])
