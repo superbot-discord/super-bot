@@ -5,11 +5,13 @@ led_colors = typing.Optional[typing.Literal["cyan", "icyan", "red", "ired", "gre
 led_alignment = typing.Optional[typing.Literal['left', 'center', 'right']]
 
 @commands.command()
-async def lcd(ctx, mode: typing.Optional[typing.Literal['calc', 'seven', 'regular']] = 'regular', color: led_colors = 'red', alignment: led_alignment = 'left', *, text):
+async def lcd(ctx, mode: typing.Optional[typing.Literal['regular', 'calc', 'dense', 'mono']] = 'regular', color: led_colors = 'red', alignment: led_alignment = 'left', *, text):
   if mode == 'calc':
     current_font = font_lcd_calc
-  elif mode == 'seven':
-    current_font = font_lcd
+  elif mode == 'dense':
+    current_font = font_lcd_dense
+  elif mode == 'mono':
+    current_font = font_lcd_mono
   else:
     current_font = font_lcd
   current_properties = led_font_dict[current_font]
@@ -23,7 +25,7 @@ async def lcd(ctx, mode: typing.Optional[typing.Literal['calc', 'seven', 'regula
 #to_hex
 
 @commands.command()
-async def led(ctx, mode: typing.Optional[typing.Literal['regular','bold', 'caps', 'mono', 'serif']] = 'regular', color: led_colors = 'red', alignment: led_alignment = 'left', *, text):
+async def led(ctx, mode: typing.Optional[typing.Literal['regular', 'bold', 'caps', 'mono', 'serif']] = 'regular', color: led_colors = 'red', alignment: led_alignment = 'left', *, text):
   if mode == 'bold':
     current_font = font_led_bold
   elif mode == 'caps':
