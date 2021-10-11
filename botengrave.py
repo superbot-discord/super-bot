@@ -1,3 +1,4 @@
+from difflib import SequenceMatcher
 from discord.ext import commands
 import discord as discord
 
@@ -40,37 +41,30 @@ async def engrave(ctx, product = "list", *, text = "Your text goes here."):
     embed = discord.Embed(title="Engrave on iPad Pro (Space Gray)")
     split = text.splitlines()
     if len(split) == 1:
-      embed.set_image(url="https://www.apple.com/shop/preview/engrave/PHP43LL/A?th="+text+"&tl=&s=2")
+      embed.set_image(url="https://www.apple.com/shop/preview/engrave/PHNF3LL/A?th="+text+"&tl=&s=2")
     else:
-      embed.set_image(url="https://www.apple.com/shop/preview/engrave/PHP43LL/A?th="+split[0]+"&tl="+split[1]+"&s=2")
+      embed.set_image(url="https://www.apple.com/shop/preview/engrave/PHNF3LL/A?th="+split[0]+"&tl="+split[1]+"&s=2")
   elif product == "ipadprosilver":
     embed = discord.Embed(title="Engrave on iPad Pro (Silver)")
     split = text.splitlines()
     if len(split) == 1:
-      embed.set_image(url="https://www.apple.com/shop/preview/engrave/PHP53LL/A?th="+text+"&tl=&s=2")
+      embed.set_image(url="https://www.apple.com/shop/preview/engrave/PHNG3LL/A?th="+text+"&tl=&s=2")
     else:
-      embed.set_image(url="https://www.apple.com/shop/preview/engrave/PHP53LL/A?th="+split[0]+"&tl="+split[1]+"&s=2")
+      embed.set_image(url="https://www.apple.com/shop/preview/engrave/PHNG3LL/A?th="+split[0]+"&tl="+split[1]+"&s=2")
   elif product == "ipadgray" or product == "ipadgrey" or product == "padgray" or product == "padgrey" or product == "ipadspacegray" or product == "ipadspacegrey" or product == "padspacegray" or product == "padspacegrey" or product == "ipad" or product == "pad":
     embed = discord.Embed(title="Engrave on iPad (Space Gray)")
     split = text.splitlines()
     if len(split) == 1:
-      embed.set_image(url="https://www.apple.com/shop/preview/engrave/PYN72LL/A?th="+text+"&tl=&s=2")
+      embed.set_image(url="https://www.apple.com/shop/preview/engrave/PK2K3LL/A?th="+text+"&tl=&s=2")
     else:
-      embed.set_image(url="https://www.apple.com/shop/preview/engrave/PYN72LL/A?th="+split[0]+"&tl="+split[1]+"&s=2")
+      embed.set_image(url="https://www.apple.com/shop/preview/engrave/PK2K3LL/A?th="+split[0]+"&tl="+split[1]+"&s=2")
   elif product == "ipadsilver" or product == "padsilver":
     embed = discord.Embed(title="Engrave on iPad (Silver)")
     split = text.splitlines()
     if len(split) == 1:
-      embed.set_image(url="https://www.apple.com/shop/preview/engrave/PYN82LL/A?th="+text+"&tl=&s=2")
+      embed.set_image(url="https://www.apple.com/shop/preview/engrave/PK2L3LL/A?th="+text+"&tl=&s=2")
     else:
-      embed.set_image(url="https://www.apple.com/shop/preview/engrave/PYN82LL/A?th="+split[0]+"&tl="+split[1]+"&s=2")
-  elif product == "ipadgold" or product == "ipadgolden" or product == "padgold" or product == "ipadgolden":
-    embed = discord.Embed(title="Engrave on iPad (Gold)")
-    split = text.splitlines()
-    if len(split) == 1:
-      embed.set_image(url="https://www.apple.com/shop/preview/engrave/PYN92LL/A?th="+text+"&tl=&s=2")
-    else:
-      embed.set_image(url="https://www.apple.com/shop/preview/engrave/PYN92LL/A?th="+split[0]+"&tl="+split[1]+"&s=2")
+      embed.set_image(url="https://www.apple.com/shop/preview/engrave/PK2L3LL/A?th="+split[0]+"&tl="+split[1]+"&s=2")
   elif product == "ipadairgray" or product == "ipadairgrey" or product == "padairgray" or product == "padairgrey" or product == "ipadairspacegray" or product == "ipadairspacegrey" or product == "padairspacegray" or product == "padairspacegrey" or product == "ipadair" or product == "padair":
     embed = discord.Embed(title="Engrave on iPad Air (Space Gray)")
     split = text.splitlines()
@@ -106,63 +100,70 @@ async def engrave(ctx, product = "list", *, text = "Your text goes here."):
       embed.set_image(url="https://www.apple.com/shop/preview/engrave/PYFQ2LL/A?th="+text+"&tl=&s=2")
     else:
       embed.set_image(url="https://www.apple.com/shop/preview/engrave/PYFQ2LL/A?th="+split[0]+"&tl="+split[1]+"&s=2")
-  elif product == "ipadminigray" or product == "ipadminigrey" or product == "padminigray" or product == "padminigrey" or product == "ipadminispacegray" or product == "ipadminispacegrey" or product == "padminispacegray" or product == "padminispacegrey" or product == "ipadmini" or product == "padmini":
+  elif SequenceMatcher(None, product, 'ipadmini').ratio()>0.77 or SequenceMatcher(None, product, 'ipadminispace').ratio()>0.77 or SequenceMatcher(None, product, 'ipadminigray').ratio()>0.77:
     embed = discord.Embed(title="Engrave on iPad Mini (Space Gray)")
     split = text.splitlines()
     if len(split) == 1:
-      embed.set_image(url="https://www.apple.com/shop/preview/engrave/PUQW2LL/A?th="+text+"&tl=&s=2")
+      embed.set_image(url="https://www.apple.com/shop/preview/engrave/PK7T3LL/A?th="+text+"&tl=&s=2")
     else:
-      embed.set_image(url="https://www.apple.com/shop/preview/engrave/PUQW2LL/A?th="+split[0]+"&tl="+split[1]+"&s=2")
-  elif product == "ipadminisilver" or product == "padminisilver":
-    embed = discord.Embed(title="Engrave on iPad Mini (Silver)")
+      embed.set_image(url="https://www.apple.com/shop/preview/engrave/PK7T3LL/A?th="+split[0]+"&tl="+split[1]+"&s=2")
+  elif SequenceMatcher(None, product, 'ipadministar').ratio()>0.77 or SequenceMatcher(None, product, 'ipadminiyellow').ratio()>0.77:
+    embed = discord.Embed(title="Engrave on iPad Mini (Starlight/Yellow)")
     split = text.splitlines()
     if len(split) == 1:
-      embed.set_image(url="https://www.apple.com/shop/preview/engrave/PUQX2LL/A?th="+text+"&tl=&s=2")
+      embed.set_image(url="https://www.apple.com/shop/preview/engrave/PK7V3LL/A?th="+text+"&tl=&s=2")
     else:
-      embed.set_image(url="https://www.apple.com/shop/preview/engrave/PUQX2LL/A?th="+split[0]+"&tl="+split[1]+"&s=2")
-  elif product == "ipadminigold" or product == "ipadminigolden" or product == "padminigold" or product == "padminigolden":
-    embed = discord.Embed(title="Engrave on iPad Mini (Gold)")
+      embed.set_image(url="https://www.apple.com/shop/preview/engrave/PK7V3LL/A?th="+split[0]+"&tl="+split[1]+"&s=2")
+  elif SequenceMatcher(None, product, 'ipadminipurple').ratio()>0.77:
+    embed = discord.Embed(title="Engrave on iPad Mini (Purple)")
     split = text.splitlines()
     if len(split) == 1:
-      embed.set_image(url="https://www.apple.com/shop/preview/engrave/PUQY2LL/A?th="+text+"&tl=&s=2")
+      embed.set_image(url="https://www.apple.com/shop/preview/engrave/PK7X3LL/A?th="+text+"&tl=&s=2")
     else:
-      embed.set_image(url="https://www.apple.com/shop/preview/engrave/PUQY2LL/A?th="+split[0]+"&tl="+split[1]+"&s=2")
-  elif product == "ipodgray" or product == "ipodgrey" or product == "podgray" or product == "podgrey" or product == "ipodspacegray" or product == "ipodspacegrey" or product == "podspacegray" or product == "podspacegrey" or product == "ipodtouchgray" or product == "ipodtouchgrey" or product == "podtouchgray" or product == "podtouchgrey" or product == "ipodtouchspacegray" or product == "ipodtouchspacegrey" or product == "podtouchspacegray" or product == "podtouchspacegrey" or product == "ipod" or product == "pod" or product == "ipodtouch" or product == "podtouch" :
+      embed.set_image(url="https://www.apple.com/shop/preview/engrave/PK7X3LL/A?th="+split[0]+"&tl="+split[1]+"&s=2")
+  elif SequenceMatcher(None, product, 'ipadminipink').ratio()>0.77:
+    embed = discord.Embed(title="Engrave on iPad Mini (Pink)")
+    split = text.splitlines()
+    if len(split) == 1:
+      embed.set_image(url="https://www.apple.com/shop/preview/engrave/PLWR3LL/A?th="+text+"&tl=&s=2")
+    else:
+      embed.set_image(url="https://www.apple.com/shop/preview/engrave/PLWR3LL/A?th="+split[0]+"&tl="+split[1]+"&s=2")
+  elif SequenceMatcher(None, product, 'ipod').ratio()>0.75 or SequenceMatcher(None, product, 'ipodtouch').ratio()>0.75 or SequenceMatcher(None, product, 'ipodspace').ratio()>0.75 or SequenceMatcher(None, product, 'ipodgray').ratio()>0.75:
     embed = discord.Embed(title="Engrave on iPod Touch (Space Gray)")
     split = text.splitlines()
     if len(split) == 1:
       embed.set_image(url="https://www.apple.com/shop/preview/v2/engrave/PVHW2LL/A?th="+split[0]+"&tl=&s=2")
     else:
       embed.set_image(url="https://www.apple.com/shop/preview/v2/engrave/PVHW2LL/A?th="+split[0]+"&tl="+split[1]+"&s=2")
-  elif product == "ipodsilver" or product == "podsilver" or product == "ipodtouchsilver" or product == "podtouchsilver":
+  elif SequenceMatcher(None, product, 'ipodsilver').ratio()>0.77 or SequenceMatcher(None, product, 'ipodtouchsilver').ratio()>0.77:
     embed = discord.Embed(title="Engrave on iPod Touch (Silver)")
     split = text.splitlines()
     if len(split) == 1:
       embed.set_image(url="https://www.apple.com/shop/preview/v2/engrave/PVHV2LL/A?th="+split[0]+"&tl=&s=2")
     else:
       embed.set_image(url="https://www.apple.com/shop/preview/v2/engrave/PVHV2LL/A?th="+split[0]+"&tl="+split[1]+"&s=2")
-  elif product == "ipodgold" or product == "ipodgolden" or product == "podgold" or product == "podgolden" or product == "ipodtouchgold" or product == "ipodtouchgolden" or product == "podtouchgold" or product == "podtouchgolden":
+  elif SequenceMatcher(None, product, 'ipodgold').ratio()>0.77 or SequenceMatcher(None, product, 'ipodtouchgold').ratio()>0.77:
     embed = discord.Embed(title="Engrave on iPod Touch (Gold)")
     split = text.splitlines()
     if len(split) == 1:
       embed.set_image(url="https://www.apple.com/shop/preview/v2/engrave/PVHT2LL/A?th="+split[0]+"&tl=&s=2")
     else:
       embed.set_image(url="https://www.apple.com/shop/preview/v2/engrave/PVHT2LL/A?th="+split[0]+"&tl="+split[1]+"&s=2")
-  elif product == "ipodblue" or product == "podblue" or product == "ipodtouchblue" or product == "podtouchblue":
+  elif SequenceMatcher(None, product, 'ipodblue').ratio()>0.77 or SequenceMatcher(None, product, 'ipodtouchblue').ratio()>0.77:
     embed = discord.Embed(title="Engrave on iPod Touch (Blue)")
     split = text.splitlines()
     if len(split) == 1:
       embed.set_image(url="https://www.apple.com/shop/preview/v2/engrave/PVHU2LL/A?th="+split[0]+"&tl=&s=2")
     else:
       embed.set_image(url="https://www.apple.com/shop/preview/v2/engrave/PVHU2LL/A?th="+split[0]+"&tl="+split[1]+"&s=2")
-  elif product == "ipodpink" or product == "podpink" or product == "ipodtouchpink" or product == "podtouchpink":
+  elif SequenceMatcher(None, product, 'ipodpink').ratio()>0.77 or SequenceMatcher(None, product, 'ipodtouchpink').ratio()>0.77:
     embed = discord.Embed(title="Engrave on iPod Touch (Pink)")
     split = text.splitlines()
     if len(split) == 1:
       embed.set_image(url="https://www.apple.com/shop/preview/v2/engrave/PVHY2LL/A?th="+split[0]+"&tl=&s=2")
     else:
       embed.set_image(url="https://www.apple.com/shop/preview/v2/engrave/PVHY2LL/A?th="+split[0]+"&tl="+split[1]+"&s=2")
-  elif product == "ipodred" or product == "podred" or product == "ipodtouchred" or product == "podtouchred":
+  elif SequenceMatcher(None, product, 'ipodred').ratio()>0.77 or SequenceMatcher(None, product, 'ipodtouchred').ratio()>0.77:
     embed = discord.Embed(title="Engrave on iPod Touch (Red)")
     split = text.splitlines()
     if len(split) == 1:
@@ -176,9 +177,9 @@ async def engrave(ctx, product = "list", *, text = "Your text goes here."):
     embed = discord.Embed(title="List of products")
     embed.add_field(name="AirPods/Accesories", value="`airpods` `airpodson` `airpodspro` `pencil` `airtag`", inline=False)
     embed.add_field(name="AirPods Max", value="`airpodsmax` `airpodsmaxgray` `airpodsmaxsilver` `airpodsmaxpink` `airpodsmaxgreen` `airpodsmaxblue`", inline=False)
-    embed.add_field(name="iPad/iPad Mini", value="`ipadmini` `ipadminigray` `ipadminisilver` `ipadminigold`", inline=False)
-    embed.add_field(name="iPad Pro", value="`ipadpro` `ipadprogray` `ipadprosilver`", inline=False)
-    embed.add_field(name="iPad Air", value="`ipadair` `ipadairgray` `ipadairsilver` `ipadairrose` `ipadairgreen` `ipadairblue`", inline=False)
+    embed.add_field(name="iPad/iPad Mini", value="`ipad` `ipadsilver` `ipadmini` `ipadminiyellow` `ipadminipurple` `ipadminipink`", inline=False)
+    embed.add_field(name="iPad Pro", value="`ipadpro` `ipadprosilver`", inline=False)
+    embed.add_field(name="iPad Air", value="`ipadair` `ipadairsilver` `ipadairrose` `ipadairgreen` `ipadairblue`", inline=False)
     embed.add_field(name="iPod Touch", value="`ipod` `ipodgray` `ipodsilver` `ipodgold` `ipodred` `ipodpink` `ipodblue`", inline=False)
     
   else:
