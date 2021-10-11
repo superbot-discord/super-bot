@@ -12,7 +12,7 @@ async def engrave(ctx, product = "list", *, text = "Your text goes here."):
   text = text.replace("?","%3F").replace("@","%40").replace("^","%5E").replace("`","%60")
   if product == "airtag" or product == "airtags":
     embed = discord.Embed(title="Engrave on AirTags")
-    embed.set_image(url="https://www.apple.com/hk/shop/preview/engrave/PX532AM/A?th=" + text + "&s=2&f=mixed")
+    embed.set_image(url="https://www.apple.com/shop/preview/engrave/PX532AM/A?th=" + text + "&s=2&f=mixed")
   elif product == "airpodspro" or product == "airpodpro":
     embed = discord.Embed(title="Engrave on AirPods Pro")
     embed.set_image(url="https://www.apple.com/shop/preview/engrave/PWP22AM/A?th="+text+"&s=2&tl=&f=mixed")

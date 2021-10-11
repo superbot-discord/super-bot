@@ -4,6 +4,7 @@ import os
 import random as ra
 import re
 import sys
+import traceback
 import typing
 from datetime import datetime, timedelta, timezone
 from difflib import SequenceMatcher
@@ -22,7 +23,8 @@ from discord import Embed, Permissions, ui
 from discord.enums import VoiceRegion
 from discord.ext import commands
 from markdown2 import Markdown
-from PIL import Image, ImageDraw, ImageEnhance, ImageFilter, ImageFont, ImageOps
+from PIL import (Image, ImageDraw, ImageEnhance, ImageFilter, ImageFont,
+                 ImageOps)
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
