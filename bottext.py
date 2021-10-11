@@ -251,15 +251,25 @@ async def unicode(ctx, *query):
   for count in x:
     if count not in intersected_results:
       intersected_results.append(count)
-  should_add_character = len(query[0]) == 1
-  for count, count2 in zip(intersected_results, range(24 if should_add_character else 25)):
+  characters_added = int(len(query[0]) == 1)
+  try:
+    hex_character = chr(int(query, 16))
+    characters_added += 1
+    add_hex_character = True
+  except:
+    pass
+    add_hex_character = False
+  for count, count2 in zip(intersected_results, range(25-characters_added)):
     embed.add_field(name = count[1].title(), value = f"U+{count[0]} `"+eval(f'u\'\\u{count[0]}\'')+"`")
   desc = f"Code\tChar.\tName\n\n"
   for count in intersected_results:
     desc += f"U+{count[0]}\t" + eval(f'u\'\\u{count[0]}\'') + f"\t{count[1].title()}\n"
-  if should_add_character:
+  if int(len(query[0]) == 1):
     embed.add_field(name = f"INPUT - {charname(query[0]).title()}", value = f"U+{codepoint(charname(query[0]))} `"+eval(f'u\'\\u{codepoint(charname(query[0]))}\'')+"`")
     desc += f"U+{codepoint(charname(query[0]))}\t" + eval(f'u\'\\u{codepoint(charname(query[0]))}\'') + f"\t{charname(query[0]).title()}"
+  if add_hex_character:
+    embed.add_field(name = f"HEX - {charname(hex_character).title()}", value = f"U+{codepoint(charname(hex_character))} `"+eval(f'u\'\\u{codepoint(charname(hex_character))}\'')+"`")
+    desc += f"U+{codepoint(charname(hex_character))}\t" + eval(f'u\'\\u{codepoint(charname(hex_character))}\'') + f"\t{charname(hex_character).title()}"
   f = open("unicode.txt", 'w')
   f.write(desc)
   f.close()
