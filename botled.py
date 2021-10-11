@@ -49,7 +49,7 @@ async def led2(ctx, mode: typing.Optional[typing.Literal['regular', 'bold', 'cap
     current_font = font_led2_bold
   elif mode == 'caps':
     current_font = font_led2_caps
-  elif mode == 'fay':
+  elif mode == 'fat':
     current_font = font_led2_fat
   elif mode == 'mono':
     current_font = font_led2_modern

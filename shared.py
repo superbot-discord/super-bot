@@ -36,7 +36,7 @@ f.close()
 
 font_led      = ImageFont.truetype("fonts/led.ttf", 50)
 font_led_bold = ImageFont.truetype("fonts/led_bold.ttf", 50)
-font_led_caps = ImageFont.truetype("fonts/led_bold.ttf", 50)
+font_led_caps = ImageFont.truetype("fonts/led_caps.ttf", 50)
 font_led_mono = ImageFont.truetype("fonts/led_mono.ttf", 50)
 font_led_serif= ImageFont.truetype("fonts/led_serif.ttf", 50)
 
