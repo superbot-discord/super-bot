@@ -2,9 +2,6 @@ import random
 from difflib import SequenceMatcher
 import typing
 
-from discord.ext import commands
-from discord.voice_client import VoiceClient
-
 from shared import *
 
 
@@ -78,6 +75,7 @@ async def select(ctx, *, text=None):
   for count in sample_menus():
     sample_select_view.add_item(count)
   await ctx.reply("All menus will not timeout.", view = sample_select_view)
+
 def setup(bot):
   bot.add_command(button)
   bot.add_command(join)

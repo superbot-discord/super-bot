@@ -1,3 +1,4 @@
+from matplotlib.colors import to_hex
 from shared import *
 
 banned_ids =  [755416776581578813]
@@ -14,6 +15,7 @@ bot_.load_extension("botembed")
 bot_.load_extension("botengrave")
 bot_.load_extension("botimage")
 bot_.load_extension("botinfo")
+bot_.load_extension("botled")
 bot_.load_extension("botmoderate")
 bot_.load_extension("botpartners")
 bot_.load_extension("botplot")
@@ -22,8 +24,21 @@ bot_.load_extension("bottext")
 bot_.load_extension("botwebinfo")
 bot_.load_extension("botwebscrape")
 
-sniper1=sniper2=sniper3=sniper4=sniper5=sniperdate1=sniperdate2=sniperdate3=sniperdate4=sniperdate5=sniperdict=sniping=poll_options={}
-snipereactions=polls=allid=[]
+sniper1={}
+sniper2={}
+sniper3={}
+sniper4={}
+sniper5={}
+sniperdate1={}
+sniperdate2={}
+sniperdate3={}
+sniperdate4={}
+sniperdate5={}
+sniperdict={}
+sniping={}
+poll_options={}
+polls=[]
+allid=[]
 
 
 @bot_.event
@@ -49,16 +64,16 @@ async def on_command_error(ctx, error):
     print(error.with_traceback(error.__traceback__))
     await ctx.reply(f"An error occured:\n```{error.with_traceback(error.__traceback__)}```\nIf you think that this is an issue with the bot, please kindly inform JohannLau#6541 about this issue.")
 
-@bot_.event
-async def on_thread_update(before, after):
-  if after.id == 887562599191941121 and after.archived:
-    await after.edit(archived=False)
-    await after.send("I hate Discord's short auto-archive period when I don't buy Nitro, so I auto-unarchived it!")
+# @bot_.event
+# async def on_thread_update(before, after):
+#   if after.id == 887562599191941121 and after.archived:
+#     await after.edit(archived=False)
+#     await after.send("I hate Discord's short auto-archive period when I don't buy Nitro, so I auto-unarchived it!")
 
-@bot_.event
-async def on_thread_join(thread):
-  if thread.guild.id == 805441351033552916 and not thread.me:
-    await thread.join()
+# @bot_.event
+# async def on_thread_join(thread):
+#   if thread.guild.id == 805441351033552916 and not thread.me:
+#     await thread.join()
 
 @bot_.event
 async def on_voice_state_update(member, before, after):
@@ -79,7 +94,7 @@ async def on_voice_state_update(member, before, after):
 
 @bot_.event
 async def on_message_delete(message):
-  keyname = str(message.guild.id)+str(message.channel.id)
+  keyname = f"{message.guild.id}{message.channel.id}"
   val = message.content
   if val.replace(" ","") == "":
     return
@@ -88,91 +103,22 @@ async def on_message_delete(message):
     sniper1[keyname] = val
     sniperdate1[keyname] = adt
   elif sniper2.get(keyname, 1) == 1:
-    sniper2[keyname] = sniper1[keyname]
-    sniper1[keyname] = val
-    sniperdate2[keyname] = sniperdate1[keyname]
-    sniperdate1[keyname] = adt
+    sniper2[keyname], sniper1[keyname] = sniper1[keyname], val
+    sniperdate2[keyname], sniperdate1[keyname] = sniperdate1[keyname], adt
   elif sniper3.get(keyname, 1) == 1:
-    sniper3[keyname] = sniper2[keyname]
-    sniper2[keyname] = sniper1[keyname]
-    sniper1[keyname] = val
-    sniperdate3[keyname] = sniperdate2[keyname]
-    sniperdate2[keyname] = sniperdate1[keyname]
-    sniperdate1[keyname] = adt
+    sniper3[keyname], sniper2[keyname], sniper1[keyname] = sniper2[keyname], sniper1[keyname], val
+    sniperdate3[keyname], sniperdate2[keyname], sniperdate1[keyname] = sniperdate2[keyname], sniperdate1[keyname], adt
   elif sniper4.get(keyname, 1) == 1:
-    sniper4[keyname] = sniper3[keyname]
-    sniper3[keyname] = sniper2[keyname]
-    sniper2[keyname] = sniper1[keyname]
-    sniper1[keyname] = val
-    sniperdate4[keyname] = sniperdate3[keyname]
-    sniperdate3[keyname] = sniperdate2[keyname]
-    sniperdate2[keyname] = sniperdate1[keyname]
-    sniperdate1[keyname] = adt
+    sniper4[keyname], sniper3[keyname], sniper2[keyname], sniper1[keyname] = sniper3[keyname], sniper2[keyname], sniper1[keyname], val
+    sniperdate4[keyname], sniperdate3[keyname], sniperdate2[keyname], sniperdate1[keyname] = sniperdate3[keyname], sniperdate2[keyname], sniperdate1[keyname], adt
   else:
-    sniper5[keyname] = sniper4[keyname]
-    sniper4[keyname] = sniper3[keyname]
-    sniper3[keyname] = sniper2[keyname]
-    sniper2[keyname] = sniper1[keyname]
-    sniper1[keyname] = val
-    sniperdate5[keyname] = sniperdate4[keyname]
-    sniperdate4[keyname] = sniperdate3[keyname]
-    sniperdate3[keyname] = sniperdate2[keyname]
-    sniperdate2[keyname] = sniperdate1[keyname]
-    sniperdate1[keyname] = adt
+    sniper5[keyname], sniper4[keyname], sniper3[keyname], sniper2[keyname], sniper1[keyname] = sniper4[keyname], sniper3[keyname], sniper2[keyname], sniper1[keyname], val
+    sniperdate5[keyname], sniperdate4[keyname], sniperdate3[keyname], sniperdate2[keyname], sniperdate1[keyname] = sniperdate4[keyname], sniperdate3[keyname], sniperdate2[keyname], sniperdate1[keyname], adt
 
 @bot_.event
 async def on_reaction_add(reaction, user):
   msg = reaction.message
-  if msg in snipereactions and user.id != 796686363604680755:
-    keyname = str(msg.guild.id)+str(msg.channel.id)
-    if reaction.emoji == '⏪':
-      sniperdict[msg] = 1
-    elif reaction.emoji == '⬅️' and sniperdict[msg] > 1:
-      sniperdict[msg] = sniperdict[msg] - 1
-    elif reaction.emoji == '📌' and msg.pinned == False and msg.channel.permissions_for(msg.guild.get_member(796686363604680755)).manage_messages:
-      await msg.pin()
-      pinmsg = await msg.channel.fetch_message(msg.channel.last_message_id)
-      await pinmsg.delete()
-    elif reaction.emoji == '📌' and msg.pinned == False and msg.channel.permissions_for(msg.guild.get_member(796686363604680755)).manage_messages:
-      await msg.unpin()
-    elif reaction.emoji == '📌':
-      await msg.channel.send("Unable to Pin/Unpin messages without `Manage Server` permission.")
-      return
-    elif reaction.emoji == '➡️' and sniperdict[msg] <5 and eval('sniper'+str(sniperdict[msg]+1)+'.get(keyname, 1)') != 1:
-      sniperdict[msg] = sniperdict[msg] + 1
-    elif reaction.emoji == '⏩' and sniper5.get(keyname, 1) != 1:
-      sniperdict[msg] = 5
-    elif reaction.emoji == '⏩' and sniper4.get(keyname, 1) != 1:
-      sniperdict[msg] = 4
-    elif reaction.emoji == '⏩' and sniper3.get(keyname, 1) != 1:
-      sniperdict[msg] = 3
-    elif reaction.emoji == '⏩' and sniper2.get(keyname, 1) != 1:
-      sniperdict[msg] = 2
-    elif reaction.emoji == '⏩' and sniper1.get(keyname, 1) != 1:
-      sniperdict[msg] = 1
-    elif reaction.emoji == '⬅️' or reaction.emoji == '➡️':
-      await reaction.remove(user)
-      return
-    else:
-      return
-    await reaction.remove(user)
-    if sniper2.get(keyname, 1) == 1:
-      maxc = 1
-    elif sniper3.get(keyname, 1) == 1:
-      maxc = 2
-    elif sniper4.get(keyname, 1) == 1:
-      maxc = 3
-    elif sniper5.get(keyname, 1) == 1:
-      maxc = 4
-    else:
-      maxc = 5
-    ti = "Snipped message ("+str(sniperdict[msg])+r"/"+str(maxc)+")"
-    desc = eval('sniper'+str(sniperdict[msg])+'[keyname]')
-    foot = eval('sniperdate'+str(sniperdict[msg])+'[keyname]')
-    embed = discord.Embed(title=ti, description=desc)
-    embed.set_footer(text=foot)
-    await msg.edit(embed=embed)
-  elif msg.id in polls and user.id != 796686363604680755:
+  if msg.id in polls and user.id != 796686363604680755:
     cache_embed = msg.embeds[0]
     desc = ""
     msg_dict = poll_options[msg.id]
@@ -217,7 +163,8 @@ async def on_message(message):
     if message.guild.id == 852899227004305458 and message.author.id != 796686363604680755 and message.channel.id in [856053769149874196, 864757953121878026, 864754633910255646]:
       await message.add_reaction("<:UpArrowSquare:864762633194569728>")
       await message.add_reaction("<:DownArrowSquare:864762633625534485>")
-    elif message.channel.id in [805459414001778739, 805462208414089217, 880076327783370812]:
+      #                         SuperBot #news      #new-features       #github             LSC Bots CraftBot   SuperBot            DolphinBot          WalkerBot           Waffles
+    elif message.channel.id in [805459414001778739, 805462208414089217, 880076327783370812, 888254659502936074, 888254911740018708, 888256046496382988, 888256348268138556, 890227476452753448]:
       await message.publish()
     if message.author.id not in banned_ids and message.content.startswith("==")==False:
       await bot_.process_commands(message)
@@ -229,6 +176,7 @@ async def on_message(message):
 @bot_.event
 async def on_interaction(interaction):
   interaction_select_option = interaction.data.get("values", None)
+  interaction_original_message = interaction.message
   if interaction.type == discord.InteractionType.component:
     interaction_custom_id = interaction.data["custom_id"]
     if interaction_custom_id in ["primary", "secondary", "green", "red"]:
@@ -239,6 +187,52 @@ async def on_interaction(interaction):
         await interaction.edit_original_message(embed=eval(interaction_first_option))
       else:
         await interaction.followup.send(f"You selected {', '.join(interaction_select_option)} in the {interaction_custom_id} menu.", ephemeral=True)
+    elif interaction_custom_id in ["Snipe1", "Snipe2", "Snipe3", "Snipe4", "Snipe5"]:
+      keyname = f"{interaction_original_message.guild.id}{interaction_original_message.channel.id}"
+      if interaction_custom_id == "Snipe1":
+        sniperdict[interaction_original_message] = 1
+      elif interaction_custom_id == "Snipe2" and sniperdict[interaction_original_message] > 1:
+        sniperdict[interaction_original_message] = sniperdict[interaction_original_message] - 1
+      elif interaction_custom_id == "Snipe3" and interaction_original_message.pinned == False:
+        if interaction_original_message.channel.permissions_for(interaction_original_message.guild.get_member(796686363604680755)).manage_messages:
+          if not interaction_original_message.pinned:
+            await interaction_original_message.pin()
+            pinmsg = await interaction_original_message.channel.fetch_message(interaction_original_message.channel.last_message_id)
+            await pinmsg.delete()
+          else:
+            await interaction_original_message.unpin()
+        else:
+          await interaction.followup.send("Unable to Pin/Unpin messages without `Manage Server` permission.", ephemeral=True)
+          return
+      elif interaction_custom_id == "Snipe4":
+        if sniperdict[interaction_original_message] < 5 and eval(f"sniper{sniperdict[interaction_original_message]+1}.get(keyname, 1)") != 1:
+          sniperdict[interaction_original_message] += 1
+        elif sniper5.get(keyname, 1) != 1:
+          sniperdict[interaction_original_message] = 5
+        elif sniper4.get(keyname, 1) != 1:
+          sniperdict[interaction_original_message] = 4
+        elif sniper3.get(keyname, 1) != 1:
+          sniperdict[interaction_original_message] = 3
+        elif sniper2.get(keyname, 1) != 1:
+          sniperdict[interaction_original_message] = 2
+        elif sniper1.get(keyname, 1) != 1:
+          sniperdict[interaction_original_message] = 1
+      if sniper2.get(keyname, 1) == 1:
+        maxc = 1
+      elif sniper3.get(keyname, 1) == 1:
+        maxc = 2
+      elif sniper4.get(keyname, 1) == 1:
+        maxc = 3
+      elif sniper5.get(keyname, 1) == 1:
+        maxc = 4
+      else:
+        maxc = 5
+      ti = f"Snipped message ("+str(sniperdict[interaction_original_message])+r"/"+str(maxc)+")"
+      desc = eval(f"sniper{sniperdict[interaction_original_message]}[keyname]")
+      foot = eval(f"sniperdate{sniperdict[interaction_original_message]}[keyname]")
+      embed = discord.Embed(title=ti, description=desc)
+      embed.set_footer(text=foot)
+      await interaction_original_message.edit(embed=embed)
 
 @bot_.command(aliases=['sniper'])
 async def snipe(ctx, *, text = None):
@@ -247,9 +241,7 @@ async def snipe(ctx, *, text = None):
   if text == None:
     if sniping.get(keyname, 1) == 1 or sniping[keyname] == True:
       if sniper1.get(keyname, 1) == 1:
-        ti = "Error"
-        desc = "Nothing to snipe from this channel."
-        embed = discord.Embed(title=ti, description=desc)
+        embed = discord.Embed(title="Error", description="Nothing to snipe from this channel.")
         await ctx.reply(embed=embed)
         return
       else:
@@ -263,19 +255,19 @@ async def snipe(ctx, *, text = None):
           maxc = 4
         else:
           maxc = 5
-        ti = "Snipped message (1/"+str(maxc)+")"
+        ti = f"Snipped message (1/{maxc})"
         desc = sniper1[keyname]
         foot = sniperdate1[keyname]
       embed = discord.Embed(title=ti, description=desc)
       embed.set_footer(text=foot)
-      cmsg = await ctx.reply(embed=embed)
+      snipe_view = ui.View(timeout=120)
+      for count in snipe_buttons:
+        snipe_view.add_item(count)
+      if chance(1000):
+        cmsg = await ctx.reply("Did someone just ghostping you?", embed=embed, view=snipe_view)
+      else:
+        cmsg = await ctx.reply(embed=embed, view=snipe_view)
       sniperdict[cmsg] = 1
-      await cmsg.add_reaction('⏪')
-      await cmsg.add_reaction('⬅️')
-      await cmsg.add_reaction('📌')
-      await cmsg.add_reaction('➡️')
-      await cmsg.add_reaction('⏩')
-      snipereactions.append(cmsg)
     else:
       await ctx.reply("Snipping is disabled. Please ask someone with manage messages permission to re-enable it.")
   elif has_perms(ctx.channel, ctx.author, 13):
@@ -362,6 +354,15 @@ async def botunban(ctx, user : discord.User):
 async def botadmin(ctx, user : discord.User):
   bot_admins.append(user.id)
   await ctx.reply("Added user as bot admin.")
+
+@bot_.command()
+@commands.is_owner()
+async def nick(ctx, *, new_nick):
+  try:
+    await ctx.guild.me.edit(nick=(None if new_nick == "clear" else new_nick))
+    await ctx.reply("Changed nickname.")
+  except:
+    await ctx.reply("Unable to change nickname.")
 
 @bot_.command()
 async def botpurge(ctx, *, num):
@@ -538,6 +539,13 @@ async def on_ready():
   #  if count.member_count < 10:
   #    for count2 in count.members:
   #      print(f'\t',count2.name)
+  # agree_emoji = bot_.get_emoji(885515344863703121)
+  # message_1 = await bot_.get_channel(894820155761246231).fetch_message(894820888321622058)
+  # message_2 = await bot_.get_channel(894820155761246231).fetch_message(894821177137197067)
+  # message_3 = await bot_.get_channel(894820155761246231).fetch_message(894820846206590986)
+  # await message_1.add_reaction(agree_emoji)
+  # await message_2.add_reaction(agree_emoji)
+  # await message_3.add_reaction(agree_emoji)
 
 print("Bot is getting started…")
 try:

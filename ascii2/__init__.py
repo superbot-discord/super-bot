@@ -31,8 +31,8 @@ def loadFromUrl(URL, columns=60, color=True):
 	px = im.load()
 	size = im.size
 	output = ""
-	for y in range(0, size[1]):
-		for x in range(0, size[0]):
+	for y in range(size[1]):
+		for x in range(size[0]):
 			_px = px[x,y]
 			_a = asciify.getRawChar(_px[0], _px[1], _px[2], 1)
 			if color == True:

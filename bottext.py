@@ -13,6 +13,13 @@ from unicode_charnames import search_charnames
 
 from shared import *
 
+@commands.command(aliases=["lower", "upper", "capital", "capitalise", "capitalize", "lowercase", "lower_case", "uppercase", "upper_case"])
+async def case(ctx, *, text):
+  f = open("output.txt", "w")
+  f.write(f"UPPERCASE\n{text.upper()}\n\nLOWERCASE\n{text.lower()}\n\nTITLE CASE\n{text.title()}")
+  f.close()
+  await ctx.send(file=discord.File('output.txt'))
+  os.remove('output.txt')
 
 @commands.command()
 async def choice(ctx,*options):
@@ -140,39 +147,48 @@ async def encode(ctx, code, *, text):
     await ctx.reply("Encoding not found!")
   
 @commands.command()
-async def insert(ctx,emoji,*,text):
+async def insert(ctx,emoji, *, text):
   text=text.replace(" "," "+emoji+" ")
   await ctx.reply(text)
 
 @commands.command()
 async def length(ctx, *, text):
-  desc = f"The piece of text contains {len(text)} characters."
-  length_msg = await ctx.reply(desc)
-  desc += f"\n**Most common characters:**\n"
+  full_analysis = f"Freq.\tCharacter\n"
   length_analysis = {}
   for count in text:
     length_analysis[count] = length_analysis.get(count, 0) + 1
   length_analysis = {count1: count2 for count1, count2 in sorted(length_analysis.items(), key=lambda item: item[1], reverse=True)}
-  for (count1, count2),count3 in zip(length_analysis.items(), range(10)):
+  for count1, count2 in length_analysis.items():
+    full_analysis += f"{count2}\t{count1}\n"
+  f = open('analysis.txt', 'a')
+  f.write(full_analysis)
+  f.close()
+  desc = f"The piece of text contains {len(text)} characters."
+  length_msg = await ctx.reply(desc, file=discord.File('analysis.txt'))
+  os.remove('analysis.txt')
+  desc += f"\n**Most common characters:**\n"
+  for (count1, count2),count3 in zip(length_analysis.items(), range(5)):
+    desc += f"`{count1}` ({count2})\n"
+  desc += f"\n**Least common characters:**\n"
+  for count1, count2,count3 in zip(reversed(length_analysis.keys()), reversed(length_analysis.values()), range(5)):
     desc += f"`{count1}` ({count2})\n"
   await length_msg.edit(desc)
 
 @commands.command()
-async def pick(ctx,lower:int,upper:int,times:int):
+async def pick(ctx, lower:int, upper:int, times:int):
   ti=f"{times} random number(s) between {lower} and {upper}"
   desc=f"Your random number(s) is/are:\n"
-  randoms = []
+  if lower > upper:
+    lower, upper = upper, lower
+  upper_length = len(str(upper))
   if times <= (upper-lower+1):
-    for count in range(0,times):
-      rand=ra.randint(lower,upper)
-      while rand in randoms:
-        rand=ra.randint(lower,upper)
-      desc += f"||`{str(rand).zfill(len(str(upper)))}`||  "
-      randoms.append(rand)
+    rand = list(range(lower, upper+1))
+    ra.shuffle(rand)
+    for count,count2 in zip(range(times), rand):
+      desc += f"||`{str(count2).zfill(upper_length)}`||  "
   else:
-    for count in range(0,times):
-      rand=ra.randint(lower,upper)
-      desc += f"||`{str(rand).zfill(len(str(upper)))}`||  "
+    for count in range(times):
+      desc += f"||`{str(ra.randint(lower,upper)).zfill(upper_length)}`||  "
   embed=discord.Embed(title=ti, description=desc)
   await ctx.reply(embed=embed)
 
@@ -189,7 +205,7 @@ async def random(ctx,lower:int,upper:int):
 async def raffle(ctx,lower:int,upper:int,times:int):
   ti=f"{times} random number(s) between {lower} and {upper}"
   desc=f"Your random number(s) is/are:\n"
-  for count in range(0,times):
+  for count in range(times):
     rand=ra.randint(lower,upper)
     desc += f"||`{str(rand).zfill(len(str(upper)))}`||  "
   embed=discord.Embed(title=ti, description=desc)
@@ -224,11 +240,11 @@ async def spoil(ctx, *, text):
 async def unicode(ctx, *, query):
   allchars = search_charnames(query)
   embed = discord.Embed(title = "Search results for: "+query)
-  for count, count2 in zip(allchars, range(0,25)):
+  for count, count2 in zip(allchars, range(25)):
     embed.add_field(name = count[1].title(), value = "U+" + count[0] + eval("u\" \\u"+count[0]+"\""))
   await ctx.reply(embed=embed)
 
-@commands.command()
+@commands.command(aliases=["timestamp", "posix"])
 async def unix(ctx, *, text = "now"):
   now = datetime.now()
   dateParts = {
@@ -247,6 +263,7 @@ async def unix(ctx, *, text = "now"):
   await ctx.reply(f"`<t:{seconds}>` | <t:{seconds}>\n`<t:{seconds}:F>` | <t:{seconds}:F>\n`<t:{seconds}:f>` | <t:{seconds}:f>\n`<t:{seconds}:D>` | <t:{seconds}:D>\n`<t:{seconds}:d>` | <t:{seconds}:d>\n`<t:{seconds}:T>` | <t:{seconds}:T>\n`<t:{seconds}:t>` | <t:{seconds}:t>\n`<t:{seconds}:R>` | <t:{seconds}:R>")
 
 def setup(bot):
+  bot.add_command(case)
   bot.add_command(choice)
   bot.add_command(decode)
   bot.add_command(emoji)

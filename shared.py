@@ -3,6 +3,7 @@ import json
 import os
 import random as ra
 import re
+import sys
 import typing
 from datetime import datetime, timedelta, timezone
 from difflib import SequenceMatcher
@@ -21,6 +22,7 @@ from discord import Embed, Permissions, ui
 from discord.enums import VoiceRegion
 from discord.ext import commands
 from markdown2 import Markdown
+from PIL import Image, ImageDraw, ImageEnhance, ImageFilter, ImageFont, ImageOps
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
@@ -32,15 +34,61 @@ f = open('database.json', 'r')
 db = json.loads(f.read())
 f.close()
 
+font_led      = ImageFont.truetype("fonts/led.ttf", 50)
+font_led_bold = ImageFont.truetype("fonts/led_bold.ttf", 50)
+font_led_caps = ImageFont.truetype("fonts/led_caps.ttf", 50)
+font_led_mono = ImageFont.truetype("fonts/led_mono.ttf", 50)
+font_led_serif= ImageFont.truetype("fonts/led_serif.ttf", 50)
+
+font_led2      = ImageFont.truetype("fonts/led2.ttf", 50)
+font_led2_bold = ImageFont.truetype("fonts/led2_bold.ttf", 50)
+font_led2_caps = ImageFont.truetype("fonts/led2_caps.ttf", 50)
+font_led2_fat  = ImageFont.truetype("fonts/led2_fat.ttf", 50)
+font_led2_modern=ImageFont.truetype("fonts/led2_modern.ttf", 50)
+font_led2_serif= ImageFont.truetype("fonts/led2_serif.ttf", 50)
+
+font_lcd      = ImageFont.truetype("fonts/lcd.ttf", 50)
+font_lcd_calc = ImageFont.truetype("fonts/lcd_calc.ttf", 50)
+font_lcd_dense= ImageFont.truetype("fonts/lcd_dense.otf", 50)
+font_lcd_mono = ImageFont.truetype("fonts/lcd_mono.otf", 50)
+
+led_font_dict = {
+  font_led      : {"spacing" : 20, "padding" : 3,  "height_plus" : 15 },
+  font_led_bold : {"spacing" : 20, "padding" : 3,  "height_plus" : 15 },
+  font_led_caps : {"spacing" : 10, "padding" : -10,"height_plus" : -10},
+  font_led_mono : {"spacing" : 10, "padding" : -12,"height_plus" : -13},
+  font_led_serif: {"spacing" : 25, "padding" : 9,  "height_plus" : 22 },
+
+  font_led2       : {"spacing" : 10, "padding" : -5 ,"height_plus" : 5  },
+  font_led2_bold  : {"spacing" : 50, "padding" : 20 ,"height_plus" : 40 },
+  font_led2_caps  : {"spacing" : 10, "padding" : -15,"height_plus" : -15},
+  font_led2_fat   : {"spacing" : 10, "padding" : -15,"height_plus" : -15},
+  font_led2_modern: {"spacing" : 20, "padding" : 0  ,"height_plus" : 10 },
+  font_led2_serif : {"spacing" : 25, "padding" : 5  ,"height_plus" : 15 },
+
+  font_lcd      : {"spacing" : 20, "padding" : 3,  "height_plus" : 15 },
+  font_lcd_calc : {"spacing" : 20, "padding" : 3,  "height_plus" : 15 },
+  font_lcd_dense: {"spacing" : 20, "padding" : 3,  "height_plus" : 15 },
+  font_lcd_mono : {"spacing" : 20, "padding" : 3,  "height_plus" : 15 }
+}
+
 func            =lambda pct, allvals   : "{:d} ({:.1f}%)".format(int(pct/100*np.sum(allvals)), round(pct, 1))
 botadmin        =lambda context        : context.author.id in db["botadmins"]
 number_to_emoji =lambda a              : a.replace("1",":one: ").replace("2",":two: ").replace("3",":three: ").replace("4",":four: ").replace("5",":five: ").replace("6",":six: ").replace("7",":seven: ").replace("8",":eight: ").replace("9",":nine: ").replace("0",":zero: ")
 sizer           =lambda bytes          : f"{round(bytes,4):,} Bytes" if bytes<1024 else (f"{round(bytes/1024,4):,}KB" if bytes<1048576 else (f"{round(bytes/1048576,4):,}MB" if bytes<1073741824 else f"{round(bytes/1073741824,4):,}GB"))
-format_length   =lambda secs           : f"{str(secs//86400)} days plus {str(secs%21600//3600).zfill(2)}:{str(secs%3600//60).zfill(2)}:{str(secs%60).zfill(2)}" if secs >= 86400 else (f"{str(secs//3600).zfill(2)}:{str(secs%3600//60).zfill(2)}:{str(secs%60).zfill(2)}" if secs >= 3600 else f"{str(secs//60).zfill(2)}:{str(secs%60).zfill(2)}")
-formabr         =lambda vid            : vid.__getattribute__("abr")+f"\t" if vid.__getattribute__("abr") else 'No audio'
-specialbool     =lambda input          : input.lower() in ["1", "ok", "yes", "ye", "yeah", "enable", "on", "enabled", "tick", "true"]
+sizer2          =lambda bytes          : f"{str(round(bytes,4)).zfill(9)} Bytes" if bytes<1024 else (f"{str(round(bytes/1024,4)).zfill(9)}KB" if bytes<1048576 else (f"{str(round(bytes/1048576,4)).zfill(9)}MB" if bytes<1073741824 else f"{round(bytes/1073741824,4):,}GB"))
+format_abr      =lambda stream         : f"{stream.__getattribute__('abr')}\t" if stream.__getattribute__("abr") else 'No audio'
+format_length   =lambda secs           : f"{secs//86400} days plus {str(secs%21600//3600).zfill(2)}:{str(secs%3600//60).zfill(2)}:{str(secs%60).zfill(2)}" if secs >= 86400 else (f"{str(secs//3600).zfill(2)}:{str(secs%3600//60).zfill(2)}:{str(secs%60).zfill(2)}" if secs >= 3600 else f"{str(secs//60).zfill(2)}:{str(secs%60).zfill(2)}")
+format_video    =lambda stream         : f"{format_abr(stream)}\t{stream.resolution}\t{format_fps(stream)}\t{sizer2(stream.filesize)}\t{stream.url}"
+specialbool     =lambda input          : input.lower() in ["1", "ok", "yes", "ye", "yeah", "enable", "on", "enabled", "tic", "true"]
 has_perms       =lambda chn, memb, perm: (chn.permissions_for(memb).value  & 1 << perm) or (chn.permissions_for(memb).value  & 1 << 8) or memb.id in db["botadmins"]
 naiveness       =lambda dt             : "Naive" if (dt.tzinfo is None or dt.tzinfo.utcoffset(dt) is None) else "Not Naive"
+chance          =lambda ratio          : ra.randint(1, ratio) == ratio
+def format_fps(stream):
+  try:
+    return stream.fps
+  except:
+    return 'No vid.'
 
 def voice_region_format(region):
   if not region: return "Auto"
@@ -94,12 +142,21 @@ def sample_buttons(ctx):
   ui.Button(style=discord.ButtonStyle.url,       row=1, disabled=True, label="URL (grey)", url=ctx.message.jump_url),
 ]
 
+snipe_buttons = [
+  ui.Button(style=discord.ButtonStyle.primary, row=0, custom_id="Snipe1", emoji="⏪"),#, label="First page"),
+  ui.Button(style=discord.ButtonStyle.primary, row=0, custom_id="Snipe2", emoji="⬅️"),#, label="Previous"),
+  ui.Button(style=discord.ButtonStyle.primary, row=0, custom_id="Snipe3", emoji="📌"),#, label="Pin"),
+  ui.Button(style=discord.ButtonStyle.primary, row=0, custom_id="Snipe4", emoji="➡️"),#, label="Next"),
+  ui.Button(style=discord.ButtonStyle.primary, row=0, custom_id="Snipe5", emoji="⏩"),#, label="Last page")
+]
+
 support_embed = discord.Embed(title="Support", description=f"""
 If you need support, please kindly join the support server or directly contact JohannLau#6541.
 """.replace(f"\n", " "))
 support_buttons = [
   ui.Button(style=discord.ButtonStyle.url, row=0, label="Support server", url="https://discord.gg/sesedKMWHH"),
-  ui.Button(style=discord.ButtonStyle.url, row=0, label="Bot creator", url="https://discord.com/channels/@me/752345200029859871"),
+  ui.Button(style=discord.ButtonStyle.url, row=0, label="Website", url="https://superbot-discord.github.io/"),
+  ui.Button(style=discord.ButtonStyle.url, row=0, label="Bot creator", url="https://discord.com/channels/@me/843455131798601738"),
 ]
 #clicker_button = ui.Button(style=discord.ButtonStyle.primary, row=0, custom_id="clicker", label="Click me!")
 
@@ -237,6 +294,8 @@ voice_channel_real = {
   25: "Use Voice Activity",
   8 : "Priority Speaker"
 }
+
+youtube_headers={'cookie':'SID=CghejA2ZNiG3ffH-ea-xuLc9tIaHBbwGapD38onoVwAzAbkHnjoZtpUhHdUAmcNRJOHTDw.; __Secure-1PSID=CghejA2ZNiG3ffH-ea-xuLc9tIaHBbwGapD38onoVwAzAbkHEoE3S8JEj0cM-biiWZLVyA.; __Secure-3PSID=CghejA2ZNiG3ffH-ea-xuLc9tIaHBbwGapD38onoVwAzAbkH4sXzfbXVlttnq4TjWVCEfg.; HSID=A-m2IhioZ3oeerjgh; SSID=AbaPAqttHYjZqyPhz; APISID=tPPnfzostQvEsOd-/ALcV81KVGrbqB4Igh; SAPISID=ClVhEot1sUk0cUo-/AEEQ1aXT00mYUmE7f; __Secure-1PAPISID=ClVhEot1sUk0cUo-/AEEQ1aXT00mYUmE7f; __Secure-3PAPISID=ClVhEot1sUk0cUo-/AEEQ1aXT00mYUmE7f; YSC=33OC1x1sBQc;…:QUQ3MjNmenRqWWtfNkdJSGRkbkhLQkJVVHN0a1lkVE41ajhsTzRTTk9RLURmN2FCN1hkZ1JOTGMzYXAxdi1HS3p1NUxFMFRFeXcyVE84Rlg5LWZVRTNNOThHM0RLTDZBQzZucDQ4a0R0VURzYUtOZEdtOGJDSUoxRktjckg0QTAxd3JwTGNybzJQYTBUN1c5bUo5NVAxVXNtV2JRNjlmdjZJajg3ZC1MQy1rMGZrcWtkQTFXTmlUcUdYekpEbHRwYmU1YkpILXl6Tmx5RDI5RnJueDN4czRkdXliUzNFd2FUZw==; SIDCC=AJi4QfF-hT3IbtAsSfRNu4EviRtD9WBBt48166pXbGGDIX2wN5n4luQgHUDSmwX-WSozfHfc; __Secure-3PSIDCC=AJi4QfFRxCGcdkA1zU8EIyJ7kPmscvGPk9vdyN5QWKweSv4jI-xcXxr8GtSt2loCC7scCGMS; PREF=f4=4000000&tz=Asia.Hong_Kong'}
 
 def server_itop(integer):
   cache3 = ""

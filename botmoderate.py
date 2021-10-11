@@ -27,7 +27,7 @@ class SearchFlags(commands.FlagConverter):
   files            : specialbool                           = None
 
 @commands.command()
-async def ban(ctx, user: discord.User, delete : int =0, *, reason="No reason provided"):
+async def ban(ctx, user: discord.User, delete : int = 0, *, reason = "No reason provided"):
   if ctx.channel.permissions_for(ctx.author).ban_members or bot_admins.count(ctx.author.id) != 0:
     try:
       await ctx.guild.ban(user, delete_message_days=delete, reason=reason)
@@ -39,7 +39,7 @@ async def ban(ctx, user: discord.User, delete : int =0, *, reason="No reason pro
     try:
       await user.send(embed=embed1)
     except:
-      1
+      pass
     await ctx.reply(embed=embed2)
   else:
     await ctx.reply("You don't have the required permission: Ban members.")
@@ -100,13 +100,24 @@ async def makeinvite(ctx, timetocount=0, uses : int = 0):
     await ctx.reply("You don't have the required permission: Generate Invites.")
 
 @commands.command(aliases=['makerole'])
-async def makeroles(ctx, times:int=1):
+async def makeroles(ctx, times:int=1, *, name="Sample role $number"):
   if has_perms(ctx.channel, ctx.author, 28):
-    for count in range(0,times):
-      await ctx.guild.create_role(name=f"Sample role {str(count+1)}")
-    await ctx.reply("Successfully created roles.")
+    current_server = ctx.guild
+    for count in range(1,times+1):
+      await current_server.create_role(name=name.replace("$number", str(count)))
+    await ctx.reply("Successfully created role(s).")
   else:
     await ctx.reply("You don't have the required permission: Manage Roles.")
+
+@commands.command(aliases=['makethread'])
+async def makethreads(ctx, times:int=1, *, name="Sample thread $number"):
+  if has_perms(ctx.channel, ctx.author, 32):
+    current_channel = ctx.channel
+    for count in range(1,times+1):
+      await current_channel.create_thread(name=name.replace("$number", str(count)), type=discord.ChannelType.public_thread, auto_archive_duration=1)
+    await ctx.reply("Successfully created thread(s).")
+  else:
+    await ctx.reply("You don't have the required permission: Manage Threads.")
 
 @commands.command()
 async def react(ctx, emoji : discord.Emoji, message : discord.Message = None):
@@ -140,9 +151,9 @@ async def search(ctx, *, flags : SearchFlags):
   else:
     channels = flags.channels
   if type(channels) != tuple:
-    channels = [channels[0]]
+    channels = [channels]
   if type(query) != tuple:
-    query = [query[0]]
+    query = [query]
   for channel_count in channels:
     async for message_count in channel_count.history(limit=flags.maximum):
       contents     = message_count.content
@@ -154,7 +165,7 @@ async def search(ctx, *, flags : SearchFlags):
         break
       else:
         embed    = {}
-      if (files and message_count.pinned) or (files == False and not message_count.pinned):
+      if (files and len(message_count.attachments)) or (files == False and not len(message_count.attachments)):
         match = False
         continue
       for query_count in query:
@@ -193,6 +204,7 @@ async def search(ctx, *, flags : SearchFlags):
   f.write(desc)
   f.close()
   await ctx.reply(file=discord.File('search.txt'))
+  os.remove('search.txt')
 
 @commands.command(aliases=['setperms', 'setpermission', 'setpermissions', 'rolepermission', 'rolespermission', 'rolepermissions', 'rolespermissions'])
 async def setperm(ctx, permission_input:typing.Union[int, str], *roles:discord.Role):
@@ -214,14 +226,14 @@ async def setperm(ctx, permission_input:typing.Union[int, str], *roles:discord.R
 
 @commands.command()
 async def slowmode(ctx, sec = None, *channels:typing.Union[discord.TextChannel,str]):
-  if sec != None:
+  if sec.isdigit() == False:
+      sec = 0
+  if sec:
     sec = int(timedelta(**{
       UNITS.get(m.group('unit').lower(), 'seconds'): int(m.group('val'))
       for m in re.finditer(r'(?P<val>\d+)(?P<unit>[smhdw]?)', sec, flags=re.I)
     }).total_seconds())
-    if sec.isdigit() == False:
-      sec = 0
-    if int(sec) < 0 or int(sec) > 21600 or int(sec)%1 != 0:
+    if sec < 0 or sec > 21600 or sec%1 != 0:
       await ctx.reply("Invalid input! Please enter a duration below or equal to 21600 seconds (6 hours).")
       return
     if len(channels) == 0:
@@ -413,6 +425,7 @@ def setup(bot):
   bot.add_command(kick)
   bot.add_command(makeinvite)
   bot.add_command(makeroles)
+  bot.add_command(makethreads)
   bot.add_command(react)
   bot.add_command(search)
   bot.add_command(setperm)

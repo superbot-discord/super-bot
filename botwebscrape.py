@@ -35,7 +35,7 @@ async def covid(ctx, *, country="world"):
         found = 1
         break
     except:
-      1
+      pass
   if found == 1:
     if country == "world":
       embed = discord.Embed(title="Coronavirus statistics worldwide")

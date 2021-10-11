@@ -4,20 +4,37 @@ cmaphsv = plt.cm.hsv
 
 @commands.command()
 async def avatar(ctx,user: discord.Member=None):
-  base_url = user.avatar.url
   if not user:
     user=ctx.author
+  base_url1 = user.default_avatar
+  base_url2 = user.avatar
+  base_url3 = user.guild_avatar
   desc = f"Avatar of {user.mention}\n"
-  embed=discord.Embed(title="Avatar", description=desc)
-  for count1 in ['png', 'jpg', 'webp']:
-    desc = ""
-    base_url = user.avatar.url.replace('.png', f'.{count1}')
-    for count in range(5, 13):
-      size = str(2**count)
-      temp = base_url.replace("?size=1024", f"?size={size}")
-      desc += f"[{size}]({temp}) "
-    embed.add_field(name=f"{count1.upper()}s", value=desc)
-  embed.set_image(url=user.avatar.url)
+  embed=discord.Embed(title="Avatars", description=desc)
+  if base_url1:
+    base_url1 = base_url1.url
+    embed.add_field(name=f"Default avatar", value=base_url1, inline=False)
+  if base_url2:
+    base_url2 = base_url2.url
+    for count1 in ['png', 'jpg', 'webp']:
+      desc = ""
+      base_url2 = user.avatar.url.replace('.png', f'.{count1}')
+      for count in range(5, 13):
+        size = str(2**count)
+        temp = base_url2.replace("?size=1024", f"?size={size}")
+        desc += f"[{size}]({temp}) "
+      embed.add_field(name=f"Custom {count1.upper()}s", value=desc)
+  if base_url3:
+    base_url3 = base_url3.url
+    for count1 in ['png', 'jpg', 'webp']:
+      desc = ""
+      base_url3 = user.avatar.url.replace('.png', f'.{count1}')
+      for count in range(5, 13):
+        size = str(2**count)
+        temp = base_url3.replace("?size=1024", f"?size={size}")
+        desc += f"[{size}]({temp}) "
+      embed.add_field(name=f"Server {count1.upper()}s", value=desc)
+  embed.set_image(url=user.display_avatar.url)
   await ctx.reply(embed=embed)
 
 @commands.command()
@@ -258,6 +275,7 @@ async def emojis(ctx, *, text=None):
   f.write(desc)
   f.close()
   await ctx.reply(file=discord.File('output.txt'))
+  os.remove('output.txt')
 
 @commands.command()
 async def invitelink(ctx,inviteinput: discord.Invite):
@@ -316,7 +334,7 @@ async def leftuser(ctx, *, userinput):
   else:
     desc = f"{lfuser.mention} (human)"
   embed=discord.Embed(title=ti,color=lfuser.color, description=desc)
-  embed.set_thumbnail(url=lfuser.avatar.url)
+  embed.set_thumbnail(url=lfuser.display_avatar.url)
   f0v=f"{lfuser.name}#{lfuser.discriminator}"
   f1v=f"<t:{round((lfuser.created_at-dt1).total_seconds())}:F>"
   f1ts = str(datetime.now(timezone.utc) - lfuser.created_at)
@@ -339,7 +357,6 @@ async def message(ctx, message: discord.Message=None):
     else:
       await ctx.reply("Please reply to a message or add a message ID/Link.")
       return
-  ti="Message Information"
   desc=f"Sent by {message.author.mention} at <t:{round((message.created_at-dt1).total_seconds())}:F>"
   if message.edited_at != None:
     desc += f"Edited at <t:{round((message.edited_at-dt1).total_seconds())}:F>"
@@ -398,15 +415,15 @@ async def message(ctx, message: discord.Message=None):
           msg_dmenus += 1
         else:
           msg_menus += 1
-  embed=discord.Embed(title=ti, description=desc[:2047], url=message.jump_url)
-  embed.add_field(name="From channel", value=message.channel.mention, inline=True)
-  if message.webhook_id != None:
-    embed.add_field(name="Webhook message", value="This message is sent by a webhook.", inline=True)
+  embed=discord.Embed(title="Message Information", description=desc[:2047], url=message.jump_url)
+  embed.add_field(name="In channel", value=message.channel.mention, inline=True)
   if message.pinned:
     embed.add_field(name="Pinned", value="This message is pinned.", inline=True)
   if message.mention_everyone:
     embed.add_field(name="@everyone", value="This message mentioned everyone.", inline=True)
   embed.add_field(name="ID", value=str(message.id), inline=True)
+  if message.webhook_id != None:
+    embed.add_field(name="Webhook message", value="This message is sent by a webhook.", inline=True)
   if message.type == discord.MessageType.recipient_add:
     embed.add_field(name="System message", value="This is a system message indicating that a recipient has been added to the group.", inline=False)
   elif message.type == discord.MessageType.recipient_remove:
@@ -418,7 +435,7 @@ async def message(ctx, message: discord.Message=None):
   elif message.type == discord.MessageType.channel_icon_change:
     embed.add_field(name="System message", value="This is a system message indicating that someone changed the group's icon.", inline=False)
   elif message.type == discord.MessageType.pins_add:
-    embed.add_field(name="System message", value="This is a system message indicating that someone pinned a message.", inline=False)
+    embed.add_field(name="System message", value=f"This is a system message indicating that someone pinned [a message]({message.reference.jump_url}).", inline=False)
   elif message.type == discord.MessageType.new_member:
     embed.add_field(name="System message", value="This is a system message indicating that someone joined the server.", inline=False)
   elif message.type == discord.MessageType.premium_guild_subscription:
@@ -431,22 +448,36 @@ async def message(ctx, message: discord.Message=None):
     embed.add_field(name="System message", value="This is a system message indicating that someone nitro-boosted the server. It is now level 3.", inline=False)
   elif message.type == discord.MessageType.channel_follow_add:
     embed.add_field(name="System message", value="This is a system message indicating that someone followed another server's announcement.", inline=False)
+  if message.flags.urgent:
+    embed.add_field(name="Special message", value="This message is sent by Discord's Trust and Safety Team and is urgent.", inline=False)
+  if message.flags.ephemeral:
+    embed.add_field(name="Ephemeral message", value="This is an ephemeral message (can only be seen by you).", inline=False)
+  if message.flags.is_crossposted:
+    embed.add_field(name="Followed message", value="This is a message followed from an announcement channel in another server.", inline=False)
+  if message.flags.crossposted:
+    embed.add_field(name="Published message", value="This is a published message in an announcement channel.", inline=False)
+  if message.flags.source_message_deleted:
+    embed.add_field(name="Source deleted", value="This message's original source has been deleted.", inline=False)
+  if message.flags.has_thread:
+    embed.add_field(name="Thread", value="This message is associated with a thread.", inline=False)
+  if message.flags.suppress_embeds:
+    embed.add_field(name="Suppresed embeds", value="This message's embed(s) are suppressed.", inline=False)
   if message.application != None:
     embed.add_field(name=message.application["name"], value=f"This message is created by {message.application['name']}.\n{message.application['description']}", inline=False)
   if len(f0vraw) != 0:
-    embed.add_field(name="Reactions ("+str(len(f0vraw))+")", value=f0v, inline=False)
+    embed.add_field(name=f"Reactions ({len(f0vraw)})", value=f0v, inline=False)
   if len(f1vraw) != 0:
-    embed.add_field(name="Attachments ("+str(len(f1vraw))+")", value=f1v, inline=False)
+    embed.add_field(name=f"Attachments ({len(f1vraw)})", value=f1v, inline=False)
   if len(message.embeds) != 0:
     embed.add_field(name="Embeds", value=f"{len(message.embeds)} embed(s) are added to the message.", inline=False)
   if len(f5vraw) != 0:
     embed.add_field(name="Components", value=f"Working buttons & menus: {msg_buttons}, {msg_menus}\nDisabled buttons & menus: {msg_dbuttons}, {msg_dmenus}", inline=False)
   if len(f2vraw) != 0:
-    embed.add_field(name="Channel mentions ("+str(len(f2vraw))+")", value=f2v, inline=False)
+    embed.add_field(name=f"Channel mentions ({len(f2vraw)})", value=f2v, inline=False)
   if len(f3vraw) != 0:
-    embed.add_field(name="Role mentions ("+str(len(f3vraw))+")", value=f3v, inline=False)
+    embed.add_field(name=f"Role mentions ({len(f3vraw)})", value=f3v, inline=False)
   if len(f4vraw) != 0:
-    embed.add_field(name="User mentions ("+str(len(f4vraw))+")", value=f4v, inline=False)
+    embed.add_field(name=f"User mentions ({len(f4vraw)})", value=f4v, inline=False)
   await ctx.reply(embed=embed)
 
 @commands.command(aliases = ['perm', 'perms', 'permission'])
@@ -552,14 +583,14 @@ async def role(ctx,role: discord.Role=None):
       f0v = f0v + count.mention + " "
     f0v = f0v[:-1]
   mention=role.mentionable
-  f1v=("Mentionable" if mention else "Not mentionable")
-  f1v=f1v+f"\nMention: `<&{str(role.id)}>`"
+  f1v=("Mentionable by everyone" if mention else "Not mentionable by everyone")
   f2v="Yes" if role.hoist else "No"
   embed.add_field(name="Mentions", value=f1v, inline=True)
   embed.add_field(name="Displayed separately?", value=f2v, inline=True)
   embed.add_field(name="Role ID", value=role.id, inline=True)
-  embed.add_field(name="Position in hierarchy", value=role.position, inline=True)
+  embed.add_field(name="Position from top", value=role.position, inline=True)
   embed.add_field(name="Color", value=role.color, inline=True)
+  embed.add_field(name="Permission integer", value=str(role.permissions.value), inline=True)
   if role.is_integration():
     embed.add_field(name="Integration", value="This role is managed by an integration.", inline=False)
   if role.is_bot_managed():
@@ -863,6 +894,7 @@ async def stickers(ctx, *, text=None):
   f.write(desc)
   f.close()
   await ctx.reply(file=discord.File('output.txt'))
+  os.remove('output.txt')
 
 @commands.command()
 async def template(ctx, *, tempinput):
@@ -907,7 +939,7 @@ async def user(ctx, user: discord.Member = None, channel: discord.TextChannel = 
   else:
     days = int(re.sub(r'([\d]+) days, [\s\S]*', r'\1', f1ts))
     f1va = re.sub(r'([\d]+) days, (\d{1,2}):(\d{2}):(\d{2})', r'\1 days \2 hrs \3 mins \4 secs', f1ts)[:-7] + f"\n≈ "+str((int(f1ts.split(" days, ")[0]))//365) + " years " + str(int(f1ts.split(" days, ")[0]) % 365) + " days"
-  f2v=f"<t:{(user.joined_at-dt1).total_seconds()}:F>"
+  f2v=f"<t:{round((user.joined_at-dt1).total_seconds())}:F>"
   f2ts = str(datetime.now(timezone.utc) - user.joined_at)
   if f2ts.count(" days, ") == 0:
     f2va = re.sub(r'(\d{1,2}):(\d{2}):(\d{2})', r'\1 hours \2 minutes \3 seconds', f2ts) + f"\n≈ "+f2ts.split(":")[0]+" hours"

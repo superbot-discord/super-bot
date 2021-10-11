@@ -7,15 +7,15 @@ import discord
 import matplotlib.pyplot as plt
 import pytesseract
 import qr_img
-import requests
 from captcha.image import ImageCaptcha
 from colorgram import extract
 from colorthief import ColorThief
 from discord.ext import commands
 from pdf2image import convert_from_path
-from PIL import Image, ImageDraw, ImageEnhance, ImageFilter, ImageOps
 
 import ascii2 as asc
+import requests
+from shared import *
 
 cimage = ImageCaptcha()
 @commands.command()
@@ -60,6 +60,8 @@ async def image(ctx, *, mode):
       await ctx.reply(file=discord.File('output_hue.png'))
       await ctx.reply(file=discord.File('analysis.txt'))
     os.remove('analysis.txt')
+    os.remove('output_hue.png')
+    os.remove('output_lightness.png')
   elif mode.startswith("blur"):
     try:
       blur(int(mode.split(" ")[1]))
@@ -311,9 +313,9 @@ def sharpness(percent):
 @commands.command()
 async def mandelbrot(ctx, size:int = 1024):
   img = Image.effect_mandelbrot((size, size), (-1.5, -2.5, 3.5, 2.5), 95)
-  img.save('Mandelbrot.png')
-  await ctx.reply(file = discord.File('Mandelbrot.png'))
-  os.remove('Mandelbrot.png')
+  img.save('mandelbrot.png')
+  await ctx.reply(file = discord.File('mandelbrot.png'))
+  os.remove('mandelbrot.png')
 
 @commands.command()
 async def ocr(ctx, lang="eng", *, text = None):

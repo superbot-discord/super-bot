@@ -32,9 +32,6 @@ wikipedia.set_lang("en")
 yt_pattern = re.compile(r'search\s[0-5]\s.*')
 
 botadmin = lambda context : context.author.id == 687474789342117900
-sizer = lambda bytes: f"{round(bytes/1024,4):,}KB" if bytes<1048576 else (f"{round(bytes/1048576,4):,}MB" if bytes<1073741824 else f"{round(bytes/1073741824,4):,}GB")
-format_length=lambda secs: f"{str(secs//86400)} days plus {str(secs%21600//3600).zfill(2)}:{str(secs%3600//60).zfill(2)}:{str(secs%60).zfill(2)}" if secs >= 86400 else (f"{str(secs//3600).zfill(2)}:{str(secs%3600//60).zfill(2)}:{str(secs%60).zfill(2)}" if secs >= 3600 else f"{str(secs//60).zfill(2)}:{str(secs%60).zfill(2)}")
-formabr = lambda vid: vid.__getattribute__("abr")+f"\t" if vid.__getattribute__("abr") else 'No audio'
 
 @commands.command()
 async def definition(ctx, *, word):
@@ -108,7 +105,7 @@ async def minecraft(ctx, *, item="tnt"):
         if count.findAll('td')[0].text.replace("<p>", "").replace("</p>", "").replace(" ", "").replace("\n", "") != "":
           embed.add_field(name=count.findAll('th')[0].text.replace("<p>", "").replace("</p>", ""), value=count.findAll('td')[0].text.replace("<p>", "").replace("</p>", ""))
     except:
-      1
+      pass
     """for count in soup.findAll("h3"):
       if ["ID", "Metadata", "Share", "Views", "More", "Search", "Minecraft Wiki", "Games", "Useful pages", "Minecraft links", "Gamepedia", "Tools", "In other languages", "Namespaces", "Variants"].count(count.text.replace("[edit]", "")) == 0:
         desc = str(count.next_element.next_element.next_element.next_element.next_element.next_element.next_element.next_element.next_element.next_element.next_element).replace("<p>", "").replace("</p>", "")
@@ -121,7 +118,7 @@ async def minecraft(ctx, *, item="tnt"):
           if len(desc.replace(" ", "").replace(f"\n", "").replace("[edit]", "")) != 0:
             embed.add_field(name=count.text.replace("[edit]", ""), value=desc, inline=False)
         except:
-          1
+          pass
     """
     image = soup.findAll("img")[2]['data-src']
     embed.set_image(url = image)
@@ -261,7 +258,7 @@ async def youtube(ctx, *, link):
     else:
       searches = 1
     try:
-      for count in range(0, searches+1):
+      for count in range(searches+1):
         searching.get_next_results()
     except:
       pass
@@ -279,7 +276,7 @@ async def youtube(ctx, *, link):
     chnl = pytube.Channel(link)
     videos = chnl.videos
     desc = f"**Videos ({len(chnl.videos):,})**:\n"
-    for count,count2 in zip(videos, range(0,12)):
+    for count,count2 in zip(videos, range(12)):
       desc+=f"[{count.title}]({count.watch_url})\n{count.views:,} Views | {round(count.rating*20, 3)}% Liked | {format_length(count.length)}\n\n"
     embed = discord.Embed(title=chnl.channel_name, description=desc, url=chnl.videos_url)
     embed.set_footer(text="Use =youtube [Link] to download videos. | Analysing additional info…")
@@ -312,7 +309,7 @@ async def youtube(ctx, *, link):
       os.remove("output.txt")
     except:
       try:
-        youtube = pytube.YouTube(link)
+        youtube = pytube.YouTube(link, allow_oauth_cache=False)
       except:
         youtube = pytube.Search(link).results[0]
       yt_streams = youtube.streams
@@ -324,25 +321,55 @@ async def youtube(ctx, *, link):
       allvideos = yt_streams.filter(type="video")
       allaudios = yt_streams.filter(only_audio=True)
       filtered2 = allvideos.order_by("resolution")
+      filtered2b = filtered2.filter(progressive=True)
       video2 = filtered2[len(filtered2)-1]
       filtered3 = allaudios.order_by("abr")
       video3 = filtered3[len(filtered3)-1]
-      video4 = filtered2[int(len(filtered2)/2)]
+      video4 = filtered2b[int(len(filtered2b)/2)]
+      video4b = filtered2[int(len(filtered2)/2)]
       video5 = filtered3[len(filtered3)-1]
       filtered6 = allvideos.order_by("filesize")
-      video6 = filtered6[0]
+      video7 = filtered6[0]
       filtered7 = allaudios.order_by("filesize")
-      video7 = filtered7[0]
-      filtered8 = yt_streams.filter(type="video", progressive=True).order_by("filesize")
-      video8 = filtered8[0]
-      extra_downloads=f'''Type and quality\t\tBitrate\t\tRes.\tSize\t\tLink\n
-Frames only - Best quality\t{formabr(video2)}\t{video2.resolution}\t{sizer(video2.filesize)}\t{video2.url}
-Audio - Best quality\t\t{formabr(video3)}\t{video3.resolution}\t{sizer(video3.filesize)}\t{video3.url}
-Video - Medium quality\t\t{formabr(video4)}\t{video4.resolution}\t{sizer(video4.filesize)}\t{video4.url}
-Audio - Medium quality\t\t{formabr(video2)}\t{video5.resolution}\t{sizer(video5.filesize)}\t{video5.url}
-Video - Minimum size\t\t{formabr(video6)}\t{video6.resolution}\t{sizer(video6.filesize)}\t{video6.url}
-Audio - Minimum size\t\t{formabr(video7)}\t{video7.resolution}\t{sizer(video7.filesize)}\t{video7.url}
-Video+audio - Minimum size\t{formabr(video8)}\t{video8.resolution}\t{sizer(video8.filesize)}\t{video8.url}'''
+      video8 = filtered7[0]
+      filtered8 = filtered2b.order_by("filesize")
+      video6 = filtered8[0]
+
+      videox1 = None
+      for count in filtered8.__reversed__():
+        if count.filesize < 8000000:
+          videox1 = count
+          break
+      
+      videox2 = None
+      for count in filtered7.__reversed__():
+        if count.filesize < 8000000:
+          videox2 = count
+          break
+      
+      videox3 = None
+      for count in filtered6.__reversed__():
+        if count.filesize < 8000000:
+          videox3 = count
+          break
+      videox1_text = format_video(videox1) if videox1 else "There is no progressive video less than 8MB."
+      videox2_text = format_video(videox2) if videox2 else "There is no audio less than 8MB."
+      videox3_text = format_video(videox3) if videox3 else "There is no video less than 8MB."
+
+      extra_downloads=f'''Note: the embed title's URL links to 'Vi+Au - Best quality'.\n
+Type and quality\t\tBitrate\t\tRes.\tFPS\tSize\t\tLink\n
+Vi+Au - Best quality\t\t{format_video(video1)}
+Video - Best quality\t\t{format_video(video2)}
+Audio - Best quality\t\t{format_video(video3)}
+Vi+Au - Medium quality\t\t{format_video(video4)}
+Video - Medium quality\t\t{format_video(video4b)}
+Audio - Medium quality\t\t{format_video(video5)}
+Vi+Au - Less than 8MB\t\t{videox1_text}
+Video - Less than 8MB\t\t{videox3_text}
+Audio - Less than 8MB\t\t{videox2_text}
+Vi+Au - Minimum size\t\t{format_video(video6)}
+Video - Minimum size\t\t{format_video(video7)}
+Audio - Minimum size\t\t{format_video(video8)}'''
       f = open('extra_downloads.txt', "w")
       f.write(extra_downloads)
       f.close()
@@ -368,6 +395,25 @@ Video+audio - Minimum size\t{formabr(video8)}\t{video8.resolution}\t{sizer(video
         embed.add_field(name="Restricted", value="This video is age-restricted.", inline=True)
       embed.set_thumbnail(url=youtube.thumbnail_url)
       await ytmsg.edit(embed=embed)
+
+      # youtube_view = ui.View(timeout=0)
+      # youtube_view.add_item(ui.Button(style=discord.ButtonStyle.success, row=0, label="Best quality", disabled=True))
+      # youtube_view.add_item(ui.Button(style=discord.ButtonStyle.url, row=0, label="Video+Audio", url=video1.url))
+      # youtube_view.add_item(ui.Button(style=discord.ButtonStyle.url, row=0, label="Video only", url=video2.url))
+      # youtube_view.add_item(ui.Button(style=discord.ButtonStyle.url, row=0, label="Audio only", url=video3.url))
+      # youtube_view.add_item(ui.Button(style=discord.ButtonStyle.primary, row=1, label="Medium quality", disabled=True))
+      # youtube_view.add_item(ui.Button(style=discord.ButtonStyle.url, row=1, label="Video+Audio", url=video4.url))
+      # youtube_view.add_item(ui.Button(style=discord.ButtonStyle.url, row=1, label="Video only", url=video4b.url))
+      # youtube_view.add_item(ui.Button(style=discord.ButtonStyle.url, row=1, label="Audio only", url=video5.url))
+      # youtube_view.add_item(ui.Button(style=discord.ButtonStyle.secondary, row=2, label="Less than 8MB", disabled=True))
+      # youtube_view.add_item(ui.Button(style=discord.ButtonStyle.url, row=2, label="Video+Audio", url=videox1.url) if videox1 else ui.Button(style=discord.ButtonStyle.url, row=2, label="Video+Audio", url="https://example.com", disabled=True))
+      # youtube_view.add_item(ui.Button(style=discord.ButtonStyle.url, row=2, label="Video only", url=videox3.url)  if videox1 else ui.Button(style=discord.ButtonStyle.url, row=2, label="Video only", url="https://example.com", disabled=True))
+      # youtube_view.add_item(ui.Button(style=discord.ButtonStyle.url, row=2, label="Audio only", url=videox2.url)  if videox1 else ui.Button(style=discord.ButtonStyle.url, row=2, label="Audio only", url="https://example.com", disabled=True))
+      # youtube_view.add_item(ui.Button(style=discord.ButtonStyle.danger, row=3, label="Medium quality", disabled=True))
+      # youtube_view.add_item(ui.Button(style=discord.ButtonStyle.url, row=3, label="Video+Audio", url=video6.url))
+      # youtube_view.add_item(ui.Button(style=discord.ButtonStyle.url, row=3, label="Video only", url=video7.url))
+      # youtube_view.add_item(ui.Button(style=discord.ButtonStyle.url, row=3, label="Audio only", url=video8.url))
+      # await ctx.reply(view=youtube_view)
 
 def setup(bot):
   bot.add_command(definition)

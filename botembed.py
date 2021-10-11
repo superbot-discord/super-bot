@@ -44,16 +44,16 @@ async def pretend(ctx, member : discord.Member, *, message):
   ourweb = False
   for count in whl:
     if count.name == "Pretender":
+      wh = count
       ourweb = True
-      token = count.token
-      identify = count.id
-  if len(whl) == 0 or ourweb == False:
+      break
+  if not ourweb:
     wh = await ctx.channel.create_webhook(name = "Pretender")
-    token = wh.token
-    identify = wh.id
+  token = wh.token
+  identify = wh.id
   async with aiohttp.ClientSession() as session:
     webhook = Webhook.partial(identify, token, session=session)
-    await webhook.send(message, username=member.name, avatar_url=member.avatar.url)
+    await webhook.send(message, username=member.name, avatar_url=member.display_avatar.url)
 
 @commands.command(pass_context=True)
 async def pretendembed(ctx, member : discord.Member, *, text):
@@ -75,7 +75,7 @@ async def pretendembed(ctx, member : discord.Member, *, text):
   async with aiohttp.ClientSession() as session:
     webhook = Webhook.partial(identify, token, session=session)
   embed = botembed(text)
-  await webhook.send(embed=embed, username=member.name, avatar_url=member.avatar.url)
+  await webhook.send(embed=embed, username=member.name, avatar_url=member.display_avatar.url)
 
 
 @commands.command(aliases=["fastembed", "qe"])
@@ -120,7 +120,7 @@ async def simpleembed(ctx, *, text):
     embed.set_image    (url =textlist[3])
   except:
     pass
-  for count in range(0, (len(textlist)-3)//3):
+  for count in range((len(textlist)-3)//3):
     inline = textlist[3*count+4].lower()
     inline = inline.startswith("y") or inline.startswith("1") or inline.startswith("e") or inline.startswith("on")
     embed.add_field(name=textlist[3*count+5], value=textlist[3*count+6].replace("{{{newline}}}", f"\n"), inline=inline)
@@ -226,7 +226,7 @@ def botembed(text):
     embed.set_footer   (text=textlist[5], icon_url=textlist[10])
   except:
     pass
-  for count in range(0, (len(textlist)-11)//3):
+  for count in range((len(textlist)-11)//3):
     inline = textlist[3*count+11].lower()
     inline = inline.startswith("y") or inline.startswith("1") or inline.startswith("e") or inline.startswith("on")
     embed.add_field(name=textlist[3*count+12], value=textlist[3*count+13].replace("{{{newline}}}", f"\n"), inline=inline)
