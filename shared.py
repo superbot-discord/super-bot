@@ -36,16 +36,34 @@ f.close()
 
 font_led      = ImageFont.truetype("fonts/led.ttf", 50)
 font_led_bold = ImageFont.truetype("fonts/led_bold.ttf", 50)
-font_led_serif= ImageFont.truetype("fonts/led_serif.ttf", 50)
+font_led_caps = ImageFont.truetype("fonts/led_bold.ttf", 50)
 font_led_mono = ImageFont.truetype("fonts/led_mono.ttf", 50)
+font_led_serif= ImageFont.truetype("fonts/led_serif.ttf", 50)
+
+font_led2      = ImageFont.truetype("fonts/led2.ttf", 50)
+font_led2_bold = ImageFont.truetype("fonts/led2_bold.ttf", 50)
+font_led2_caps = ImageFont.truetype("fonts/led2_caps.ttf", 50)
+font_led2_fat  = ImageFont.truetype("fonts/led2_fat.ttf", 50)
+font_led2_modern=ImageFont.truetype("fonts/led2_modern.ttf", 50)
+font_led2_serif= ImageFont.truetype("fonts/led2_serif.ttf", 50)
+
 font_lcd      = ImageFont.truetype("fonts/lcd.ttf", 50)
 font_lcd_calc = ImageFont.truetype("fonts/lcd_calc.ttf", 50)
 
 led_font_dict = {
   font_led      : {"spacing" : 20, "padding" : 3,  "height_plus" : 15 },
   font_led_bold : {"spacing" : 20, "padding" : 3,  "height_plus" : 15 },
-  font_led_serif: {"spacing" : 25, "padding" : 9,  "height_plus" : 22 },
+  font_led_caps : {"spacing" : 10, "padding" : -10,"height_plus" : -10},
   font_led_mono : {"spacing" : 10, "padding" : -12,"height_plus" : -13},
+  font_led_serif: {"spacing" : 25, "padding" : 9,  "height_plus" : 22 },
+
+  font_led2       : {"spacing" : 10, "padding" : -5 ,"height_plus" : 5  },
+  font_led2_bold  : {"spacing" : 50, "padding" : 20 ,"height_plus" : 40 },
+  font_led2_caps  : {"spacing" : 10, "padding" : -15,"height_plus" : -15},
+  font_led2_fat   : {"spacing" : 10, "padding" : -15,"height_plus" : -15},
+  font_led2_modern: {"spacing" : 20, "padding" : 0  ,"height_plus" : 10 },
+  font_led2_serif : {"spacing" : 25, "padding" : 5  ,"height_plus" : 15 },
+
   font_lcd      : {"spacing" : 20, "padding" : 3,  "height_plus" : 15 },
   font_lcd_calc : {"spacing" : 20, "padding" : 3,  "height_plus" : 15 }
 }
