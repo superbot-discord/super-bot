@@ -10,8 +10,11 @@ import emojis as em
 import pytz
 from discord.ext import commands
 from unicode_charnames import search_charnames, charname, codepoint
-
+from spellwise import Typox
 from shared import *
+
+spell_checker = Typox()
+spell_checker.add_from_path("fonts/dictionary.txt")
 
 @commands.command(aliases=["lower", "upper", "capital", "capitalise", "capitalize", "lowercase", "lower_case", "uppercase", "upper_case"])
 async def case(ctx, *, text):
@@ -228,7 +231,20 @@ async def reverse(ctx, *, text):
   await ctx.reply(text[::-1])
 
 @commands.command()
-async def spoiler(ctx,*,text):
+async def spellcheck(ctx, text, distance : typing.Optional[int] = 3, *, disposed = None):
+  results = spell_checker.get_suggestions(text, max_distance = distance)
+  desc = f"QWERTY-spellchecking results for {text}"
+  distances = {count["distance"] for count in results}
+  for count in distances:
+    desc += f"\n\nDISTANCE: {count}\n{', '.join([count3 for count3 in [count4['word'] for count4 in results]])}"
+  f = open("output.txt", "w")
+  f.write(desc)
+  f.close()
+  await ctx.send(file = discord.File("output.txt"))
+  try_delete("output.txt")
+
+@commands.command()
+async def spoiler(ctx, *, text):
   text="||||".join(text)
   await ctx.reply(f"||{text}||")
 
@@ -310,6 +326,7 @@ def setup(bot):
   bot.add_command(rawspoiler)
   bot.add_command(rawrawspoiler)
   bot.add_command(reverse)
+  bot.add_command(spellcheck)
   bot.add_command(spoiler)
   bot.add_command(spoil)
   bot.add_command(unicode)

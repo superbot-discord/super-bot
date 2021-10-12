@@ -327,7 +327,7 @@ async def clearsnipe(ctx, *, chnl : discord.TextChannel = None):
 
 @bot_.command()
 @commands.is_owner()
-async def purgeserver(ctx, text, condition="1==1", *, nothing = None):
+async def purgeserver(ctx, text, condition="1==1", *, disposed = None):
   text = text.lower()
   if text.startswith("role"):
     allroles = ctx.guild.roles()
@@ -387,7 +387,7 @@ async def botpurge(ctx, *, num):
     await ctx.reply("You don't have the required permission: Manage messages.")
 
 @bot_.command(aliases=["online"])
-async def ping(ctx, *, text = None):
+async def ping(ctx, *, disposed = None):
   now1 = datetime.now(timezone.utc)
   message = await ctx.send("Pong!")
   mcs = str(int((datetime.now(timezone.utc) - now1).microseconds)+int(((datetime.now(timezone.utc) - now1).total_seconds())%60))
@@ -406,7 +406,7 @@ async def terminate(ctx, *, idc):
     await ctx.reply("Please provide an 5-alphabet ID code. Example: `ABCDE`")
 
 @bot_.command()
-async def rtimer(ctx, timetocount,*,Text=None):
+async def rtimer(ctx, timetocount, *, Text = None):
     sec = int(timedelta(**{
       UNITS.get(m.group('unit').lower(), 'seconds'): int(m.group('val'))
       for m in re.finditer(r'(?P<val>\d+)(?P<unit>[smhdw]?)', timetocount, flags=re.I)
@@ -466,7 +466,7 @@ async def rtimer(ctx, timetocount,*,Text=None):
       await message.reply(f"Countdown complete!\n"+Text)
 
 @bot_.command()
-async def ttimer(ctx, timetocount,*,Text=None):
+async def ttimer(ctx, timetocount, *, Text = None):
     sec = int(timedelta(**{
       UNITS.get(m.group('unit').lower(), 'seconds'): int(m.group('val'))
       for m in re.finditer(r'(?P<val>\d+)(?P<unit>[smhdw]?)', timetocount, flags=re.I)

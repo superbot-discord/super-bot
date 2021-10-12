@@ -267,7 +267,7 @@ async def emojiinfo(ctx,emojiarg : typing.Union[discord.Emoji, str]):
   await ctx.reply(embed=embed)
 
 @commands.command()
-async def emojis(ctx, *, text=None):
+async def emojis(ctx, *, disposed = None):
   desc = ""
   for count in ctx.guild.emojis:
     desc += f":{count.name}: `<:{count.name}:{count.id}>`{' (Animated)' if count.animated else ''}\n"
@@ -823,7 +823,7 @@ async def status(ctx, member : discord.Member = None):
   await ctx.reply(embed=embed)
 
 @commands.command(aliases=["sts"])
-async def statuses(ctx, *, text = None):
+async def statuses(ctx, *, disposed = None):
   bot_onlines = bot_dnds = bot_idles = bot_offlines = 0
   usr_onlines = usr_dnds = usr_idles = usr_offlines = 0
   for count in ctx.guild.members:
@@ -885,7 +885,7 @@ async def statuses(ctx, *, text = None):
   try_delete('statuses.png', 'statuses.svg')
 
 @commands.command()
-async def stickers(ctx, *, text=None):
+async def stickers(ctx, *, disposed = None):
   desc = ""
   for count in ctx.guild.stickers:
     desc += f"{count.emoji} {count.name} (ID: {count.id})\n  {count.description}\n"

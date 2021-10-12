@@ -6,27 +6,27 @@ from shared import *
 
 
 @commands.command(aliases=['buttons'])
-async def button(ctx, *, text=None):
+async def button(ctx, *, disposed = None):
   sample_buttons_view = ui.View(timeout=None)
   for count in sample_buttons(ctx):
     sample_buttons_view.add_item(count)
   await ctx.reply("All buttons will not timeout.", view = sample_buttons_view)
 
 @commands.command()
-async def join(ctx, vc:discord.VoiceChannel = None, *, text=None):
+async def join(ctx, vc:discord.VoiceChannel = None, *, disposed = None):
   if not vc:
     vc = ctx.author.voice.channel
   vclients[ctx.guild] = await vc.connect()
   await ctx.reply("Joined the channel.")
 
 @commands.command()
-async def leave(ctx, *, text=None):
+async def leave(ctx, *, disposed = None):
   await ctx.guild.voice_client.disconnect()
   del vclients[ctx.guild]
   await ctx.reply("Left the channel.")
 
 @commands.command()
-async def loop(ctx, *, text=None):
+async def loop(ctx, *, disposed = None):
   if vclients.get(ctx.guild, None).loop:
     vclients.get(ctx.guild, None).loop = False
     await ctx.reply('Disabled loop.')
@@ -36,7 +36,7 @@ async def loop(ctx, *, text=None):
 
 @commands.command()
 @commands.cooldown(2, 10, commands.BucketType.user)
-async def patience(ctx, *, text=None):
+async def patience(ctx, *, disposed = None):
   await ctx.reply("Success!")
 
 @patience.error
@@ -44,7 +44,7 @@ async def patience_error(ctx, error):
   await ctx.reply("This command is on cooldown! You can only use it twice per 10 seconds.")
 
 @commands.command(aliases=['continue', 'resume', 'paused'])
-async def pause(ctx, *, text=None):
+async def pause(ctx, *, disposed = None):
   if vclients.get(ctx.guild, None).is_playing():
     vclients.get(ctx.guild, None).pause()
     await ctx.reply("Paused the song.")
@@ -70,7 +70,7 @@ async def play(ctx, volume: typing.Optional[int]=100, *, song="rickroll"):
   await ctx.reply("Playing the song.")
 
 @commands.command(aliases=['selectmenu', 'menu', 'option', 'options'])
-async def select(ctx, *, text=None):
+async def select(ctx, *, disposed = None):
   sample_select_view = ui.View(timeout=None)
   for count in sample_menus():
     sample_select_view.add_item(count)

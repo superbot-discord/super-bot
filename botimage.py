@@ -19,7 +19,7 @@ from shared import *
 
 cimage = ImageCaptcha()
 @commands.command()
-async def captcha(ctx, *, text=None):
+async def captcha(ctx, *, text = None):
   if text == None:
     text = ra.choice("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789") + ra.choice("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789") + ra.choice("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789") + ra.choice("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789")
   data = cimage.generate(text)
@@ -308,7 +308,7 @@ async def mandelbrot(ctx, size:int = 1024):
   try_delete('mandelbrot.png')
 
 @commands.command()
-async def ocr(ctx, lang="eng", *, text = None):
+async def ocr(ctx, lang="eng", *, disposed = None):
   images = ctx.message.attachments
   for count in images:
     await count.save('input.png')
@@ -319,7 +319,7 @@ async def ocr(ctx, lang="eng", *, text = None):
     await ctx.reply(desc)
 
 @commands.command()
-async def qr(ctx, *, text=None):
+async def qr(ctx, *, disposed = None):
   for count in ctx.message.attachments:
     await count.save('qrcode.png')
     await ctx.reply(qr_img.qr_decode('qrcode.png'))
@@ -351,12 +351,12 @@ async def text(ctx, *, text = None):
       images = convert_from_path(cname)
       for count in images:
         desc=pytesseract.image_to_string(count)
-      os.remove(cname)
+      try_delete(cname)
     elif cname.endswith(".txt"):
       file = open('data.txt', 'r')
       desc = file.read().replace('\n', '')
       file.close()
-      os.remove(cname)
+      try_delete(cname)
     else:
       desc = "Unsupported format. Please use .pdf or .txt."
     if desc=="":
