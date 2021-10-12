@@ -253,7 +253,7 @@ async def unicode(ctx, *query):
       intersected_results.append(count)
   characters_added = int(len(query[0]) == 1)
   try:
-    hex_character = chr(int(query, 16))
+    hex_character = chr(int(query[0], 16))
     characters_added += 1
     add_hex_character = True
   except:
