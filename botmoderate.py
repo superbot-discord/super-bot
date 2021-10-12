@@ -7,7 +7,6 @@ from difflib import SequenceMatcher
 import discord
 from discord.ext import commands
 
-from bot import bot_admins
 from shared import *
 
 UNITS = {'s':'seconds', 'm':'minutes', 'h':'hours', 'd':'days', 'w':'weeks'}
@@ -28,7 +27,7 @@ class SearchFlags(commands.FlagConverter):
 
 @commands.command()
 async def ban(ctx, user: discord.User, delete : int = 0, *, reason = "No reason provided"):
-  if ctx.channel.permissions_for(ctx.author).ban_members or bot_admins.count(ctx.author.id) != 0:
+  if ctx.channel.permissions_for(ctx.author).ban_members or botadmin(ctx):
     try:
       await ctx.guild.ban(user, delete_message_days=delete, reason=reason)
     except:
@@ -246,7 +245,7 @@ async def slowmode(ctx, sec = None, *channels:typing.Union[discord.TextChannel,s
     for count in allchannel:
       if type(count) == str:
         continue
-      if count.permissions_for(ctx.author).manage_channels or bot_admins.count(ctx.author.id)!=0:
+      if count.permissions_for(ctx.author).manage_channels or botadmin(ctx):
         orsec = str(count.slowmode_delay)
         await count.edit(slowmode_delay = sec)
         channellist.append(count.mention)
@@ -265,7 +264,7 @@ async def tts(ctx, *, desc):
 
 @commands.command()
 async def unban(ctx, user: discord.User, *, reason="No reason provided"):
-  if ctx.channel.permissions_for(ctx.author).ban_members or bot_admins.count(ctx.author.id) != 0:
+  if ctx.channel.permissions_for(ctx.author).ban_members or botadmin(ctx):
     try:
       await ctx.guild.unban(user, reason=reason)
     except:
@@ -283,7 +282,7 @@ async def unban(ctx, user: discord.User, *, reason="No reason provided"):
 
 @commands.command()
 async def purge(ctx, num):
-  if ctx.channel.permissions_for(ctx.author).manage_messages or bot_admins.count(ctx.author.id)!=0:
+  if ctx.channel.permissions_for(ctx.author).manage_messages or botadmin(ctx):
     num=int(num)
     deleted = await ctx.channel.purge(limit=num+1)
     msg = await ctx.reply("Purging completed.")
@@ -314,7 +313,7 @@ async def purgeregex(ctx, num, *, regex):
     await ctx.message.delete()
   except:
     pass
-  if ctx.channel.permissions_for(ctx.author).manage_messages or bot_admins.count(ctx.author.id)!=0:
+  if ctx.channel.permissions_for(ctx.author).manage_messages or botadmin(ctx):
     purge_pattern = eval("re.compile(r'"+regex+"')")
     num = int(num)
     purged = 0
@@ -339,7 +338,7 @@ async def purgerole(ctx, num, roleinput : discord.Role):
     await ctx.message.delete()
   except:
     pass
-  if ctx.channel.permissions_for(ctx.author).manage_messages or bot_admins.count(ctx.author.id)!=0:
+  if ctx.channel.permissions_for(ctx.author).manage_messages or botadmin(ctx):
     num = int(num)
     purged = 0
     async for count in ctx.channel.history(limit=1000):
@@ -358,7 +357,7 @@ async def purgeuser(ctx, num, userinput : discord.User):
     await ctx.message.delete()
   except:
     pass
-  if ctx.channel.permissions_for(ctx.author).manage_messages or bot_admins.count(ctx.author.id)!=0:
+  if ctx.channel.permissions_for(ctx.author).manage_messages or botadmin(ctx):
     num = int(num)
     purged = 0
     async for count in ctx.channel.history(limit=1000):
@@ -377,7 +376,7 @@ async def purgepy(ctx, num, pyscript):
     await ctx.message.delete()
   except:
     pass
-  if ctx.channel.permissions_for(ctx.author).manage_messages or bot_admins.count(ctx.author.id)!=0:
+  if ctx.channel.permissions_for(ctx.author).manage_messages or botadmin(ctx):
     num = int(num)
     purged = 0
     async for msg in ctx.channel.history(limit=1000):
@@ -400,7 +399,7 @@ async def purgepygex(ctx, num, regex, *, pyscript):
     await ctx.message.delete()
   except:
     pass
-  if ctx.channel.permissions_for(ctx.author).manage_messages or bot_admins.count(ctx.author.id)!=0:
+  if ctx.channel.permissions_for(ctx.author).manage_messages or botadmin(ctx):
     purge_pattern = eval("re.compile(r'"+regex+"'")
     num = int(num)
     purged = 0
