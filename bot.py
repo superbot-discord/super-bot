@@ -336,14 +336,14 @@ async def purgeserver(ctx, text, condition="1==1", *, disposed = None):
     await ctx.reply("Role purging completed.")
 
 @bot_.command()
-@botadmin
+@commands.check(botadmin)
 async def botban(ctx, user : discord.User, *, text="No reason was provided"):
   banned_ids.append(user.id)
   banned_text.append(text)
   await ctx.reply("Banned user from using the bot.")
 
 @bot_.command()
-@botadmin
+@commands.check(botadmin)
 async def botunban(ctx, user : discord.User):
   if banned_ids.count(user.id) == 1:
     banned_text.remove(banned_text[banned_ids.index(user.id)])
