@@ -3,6 +3,7 @@ from shared import *
 led_colors = typing.Optional[typing.Literal["cyan", "icyan", "crystal", "icrystal", "red", "ired", "green", "igreen", "blue", "iblue", "purple", "ipurple", "yellow", "iyellow",
                                             "teal", "iteal", "black", "white", "tblack", "twhite", "dark", "light", "tdark", "tlight", "wdark", "wlight", "twdark", "twlight"]]
 led_alignment = typing.Optional[typing.Literal['left', 'center', 'right']]
+led_sizer = lambda s, c, t: (s[0]-c["unneeded_width"], s[1]+(c["height_plus"] if t[len(t)-1] in "gjpqy" else c["required_height_plus"]))
 
 @commands.command()
 async def lcd(ctx, mode: typing.Optional[typing.Literal['regular', 'calc', 'dense', 'mono']] = 'regular', color: led_colors = 'red', alignment: led_alignment = 'left', *, text):
@@ -38,7 +39,7 @@ async def led(ctx, mode: typing.Optional[typing.Literal['regular', 'bold', 'caps
     current_font = font_led
   current_properties = led_font_dict[current_font]
   sizes = current_font.getsize_multiline(text, spacing=current_properties["spacing"])
-  image = Image.new("RGBA", (sizes[0], sizes[1]+(current_properties["height_plus"] if text[len(text)-1] in "gjpqy" else current_properties["required_height_plus"])), color=db["led_colors"][color]["bg"])
+  image = Image.new("RGBA", led_sizer(sizes, current_properties, text), color=db["led_colors"][color]["bg"])
   draw = ImageDraw.Draw(image)
   draw.multiline_text((0, current_properties["padding"]), text, font=current_font, fill=db["led_colors"][color]["fg"], spacing=current_properties["spacing"], align=alignment)
   image.save('output.png')
@@ -61,7 +62,7 @@ async def led2(ctx, mode: typing.Optional[typing.Literal['regular', 'bold', 'cap
     current_font = font_led2
   current_properties = led_font_dict[current_font]
   sizes = current_font.getsize_multiline(text, spacing=current_properties["spacing"])
-  image = Image.new("RGBA", (sizes[0], sizes[1]+(current_properties["height_plus"] if text[len(text)-1] in "gjpqy" else current_properties["required_height_plus"])), color=db["led_colors"][color]["bg"])
+  image = Image.new("RGBA", led_sizer(sizes, current_properties, text), color=db["led_colors"][color]["bg"])
   draw = ImageDraw.Draw(image)
   draw.multiline_text((0, current_properties["padding"]), text, font=current_font, fill=db["led_colors"][color]["fg"], spacing=current_properties["spacing"], align=alignment)
   image.save('output.png')
