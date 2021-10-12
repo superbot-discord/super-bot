@@ -259,6 +259,8 @@ async def unicode(ctx, *query):
   except:
     pass
     add_hex_character = False
+  if not hex_character:
+    add_hex_character = False
   for count, count2 in zip(intersected_results, range(25-characters_added)):
     embed.add_field(name = count[1].title(), value = f"U+{count[0]} `"+eval(f'u\'\\u{count[0]}\'')+"`")
   desc = f"Code\tChar.\tName\n\n"
