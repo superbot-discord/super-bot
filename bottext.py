@@ -257,9 +257,6 @@ async def unicode(ctx, *query):
     characters_added += 1
     add_hex_character = True
   except:
-    pass
-    add_hex_character = False
-  if not hex_character:
     add_hex_character = False
   for count, count2 in zip(intersected_results, range(25-characters_added)):
     embed.add_field(name = count[1].title(), value = f"U+{count[0]} `"+eval(f'u\'\\u{count[0]}\'')+"`")
@@ -270,8 +267,11 @@ async def unicode(ctx, *query):
     embed.add_field(name = f"INPUT - {charname(query[0]).title()}", value = f"U+{codepoint(charname(query[0]))} `"+eval(f'u\'\\u{codepoint(charname(query[0]))}\'')+"`")
     desc += f"U+{codepoint(charname(query[0]))}\t" + eval(f'u\'\\u{codepoint(charname(query[0]))}\'') + f"\t{charname(query[0]).title()}"
   if add_hex_character:
-    embed.add_field(name = f"HEX - {charname(hex_character).title()}", value = f"U+{codepoint(charname(hex_character))} `"+eval(f'u\'\\u{codepoint(charname(hex_character))}\'')+"`")
-    desc += f"U+{codepoint(charname(hex_character))}\t" + eval(f'u\'\\u{codepoint(charname(hex_character))}\'') + f"\t{charname(hex_character).title()}"
+    try:
+      embed.add_field(name = f"HEX - {charname(hex_character).title()}", value = f"U+{codepoint(charname(hex_character))} `"+eval(f'u\'\\u{codepoint(charname(hex_character))}\'')+"`")
+      desc += f"U+{codepoint(charname(hex_character))}\t" + eval(f'u\'\\u{codepoint(charname(hex_character))}\'') + f"\t{charname(hex_character).title()}"
+    except:
+      pass
   f = open("unicode.txt", 'w')
   f.write(desc)
   f.close()
