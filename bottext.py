@@ -165,6 +165,7 @@ async def length(ctx, *, text):
     full_analysis += f"{count2}\t{count1}\n"
   f = open('analysis.txt', 'a')
   f.write(full_analysis)
+  f.flush()
   f.close()
   desc = f"The piece of text contains {len(text)} characters."
   length_msg = await ctx.reply(desc, file=discord.File('analysis.txt'))
@@ -239,6 +240,7 @@ async def spellcheck(ctx, text, distance : typing.Optional[int] = 3, *, disposed
     desc += f"\n\nDISTANCE: {count+1}\n{', '.join([count3 for count3 in [count4['word'] for count4 in results if count4['distance'] == count]])}"
   f = open("output.txt", "w")
   f.write(desc)
+  f.flush()
   f.close()
   await ctx.send(file = discord.File("output.txt"))
   try_delete("output.txt")
@@ -290,6 +292,7 @@ async def unicode(ctx, *query):
       pass
   f = open("unicode.txt", 'w')
   f.write(desc)
+  f.flush()
   f.close()
   await ctx.reply(embed=embed, file=discord.File("unicode.txt"))
   try_delete("unicode.txt")

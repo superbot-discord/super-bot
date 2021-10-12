@@ -40,8 +40,8 @@ async def image(ctx, *, mode):
       downloaded_obj = requests.get(image_user.display_avatar.url.replace("?size=1024", "?size=4096"))
     except:
       downloaded_obj = requests.get(user_input)
-    with open("input.png", "wb") as file:
-      file.write(downloaded_obj.content)
+    with open("input.png", "wb") as f:
+      f.write(downloaded_obj.content)
   if mode.startswith("analyse") or mode.startswith("analyze"):
     try:
       scale = int(mode.split(" ")[1])
@@ -208,6 +208,7 @@ def analyse(scale, colors):
 
   f = open("analysis.txt", "a")
   f.write(desc)
+  f.flush()
   f.close()
   return hexcode
 
@@ -332,9 +333,10 @@ async def render(ctx, width:float=1):
   for count in range(100,0, -5):
     try:
       output = asc.loadFromUrl(att.url, columns=int(att_width*count/100*width), color=False)
-      file = open('output.txt', 'w')
-      file.write(output)
-      file.close()
+      f = open('output.txt', 'w')
+      f.write(output)
+      f.flush()
+      f.close()
       await ctx.reply(file = discord.File('output.txt'))
       try_delete('output.txt')
       break
@@ -353,9 +355,9 @@ async def text(ctx, *, text = None):
         desc=pytesseract.image_to_string(count)
       try_delete(cname)
     elif cname.endswith(".txt"):
-      file = open('data.txt', 'r')
-      desc = file.read().replace('\n', '')
-      file.close()
+      f = open('data.txt', 'r')
+      desc = f.read().replace('\n', '')
+      f.close()
       try_delete(cname)
     else:
       desc = "Unsupported format. Please use .pdf or .txt."

@@ -214,9 +214,10 @@ async def unscramble(ctx, text, length="0"):
         formatted = count2.rstrip(" ").replace(f"\n","")
         text += f"{formatted}\n"
       
-  file = open("output.txt", "w")
-  file.write(text)
-  file.close()
+  f = open("output.txt", "w")
+  f.write(text)
+  f.flush()
+  f.close()
   await ctx.reply(embed=output, file=discord.File("output.txt"))
   try_delete('output.txt')
 
@@ -302,9 +303,10 @@ async def youtube(ctx, *, link):
       text = ""
       for count in playlist.videos:
         text=text+str(count)+"  "+count.streams.filter(mime_type="video/mp4").filter(progressive="True").filter(type="video").order_by("resolution").first().url+f"\n"
-      file = open("output.txt", "w")
-      file.write(text)
-      file.close()
+      f = open("output.txt", "w")
+      f.write(text)
+      f.flush()
+      f.close()
       await ctx.reply(file=discord.File("output.txt"))
       try_delete('output.txt')
     except:
@@ -372,6 +374,7 @@ Video - Minimum size\t\t{format_video(video7)}
 Audio - Minimum size\t\t{format_video(video8)}'''
       f = open('extra_downloads.txt', "w")
       f.write(extra_downloads)
+      f.flush()
       f.close()
       ytmsg = await ctx.reply(embed=embed, file=discord.File('extra_downloads.txt'))
       try_delete('extra_downloads.txt')

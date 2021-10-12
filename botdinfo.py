@@ -273,6 +273,7 @@ async def emojis(ctx, *, disposed = None):
     desc += f":{count.name}: `<:{count.name}:{count.id}>`{' (Animated)' if count.animated else ''}\n"
   f = open('output.txt', 'w')
   f.write(desc)
+  f.flush()
   f.close()
   await ctx.reply(file=discord.File('output.txt'))
   try_delete('output.txt')
@@ -891,6 +892,7 @@ async def stickers(ctx, *, disposed = None):
     desc += f"{count.emoji} {count.name} (ID: {count.id})\n  {count.description}\n"
   f = open('output.txt', 'w')
   f.write(desc)
+  f.flush()
   f.close()
   await ctx.reply(file=discord.File('output.txt'))
   try_delete('output.txt')

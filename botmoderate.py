@@ -201,6 +201,7 @@ async def search(ctx, *, flags : SearchFlags):
         desc += f"{len(contents)}\t{message_count.jump_url}\t{message_count.channel.name}\n"
   f = open('search.txt', 'w')
   f.write(desc)
+  f.flush()
   f.close()
   await ctx.reply(file=discord.File('search.txt'))
   try_delete('search.txt')
