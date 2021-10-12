@@ -236,7 +236,7 @@ async def spellcheck(ctx, text, distance : typing.Optional[int] = 3, *, disposed
   desc = f"QWERTY-spellchecking results for {text}"
   distances = {count["distance"] for count in results}
   for count in distances:
-    desc += f"\n\nDISTANCE: {count}\n{', '.join([count3 for count3 in [count4['word'] for count4 in results]])}"
+    desc += f"\n\nDISTANCE: {count+1}\n{', '.join([count3 for count3 in [count4['word'] for count4 in results if count4['distance'] == count]])}"
   f = open("output.txt", "w")
   f.write(desc)
   f.close()

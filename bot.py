@@ -3,7 +3,6 @@ from shared import *
 
 banned_ids =  []
 banned_text = []
-bot_admins = [687474789342117900, 752335217339007067]
 bot_ = commands.Bot(command_prefix=commands.when_mentioned_or("="), intents=discord.Intents.all(), allowed_mentions=discord.AllowedMentions(everyone=False, users=True, roles=False, replied_user=False),
   case_insensitive=True, strip_after_prefix=True)
 bot_.remove_command('help')
@@ -315,7 +314,7 @@ async def poll(ctx, *, text):
 async def clearsnipe(ctx, *, chnl : discord.TextChannel = None):
   if chnl == None:
     chnl = ctx.channel
-  if chnl.permissions_for(ctx.author).manage_channels or bot_admins.count(ctx.author.id)!=0:
+  if chnl.permissions_for(ctx.author).manage_channels or botadmin(ctx):
     sniper1.pop(str(ctx.guild.id)+str(chnl.id))
     sniper2.pop(str(ctx.guild.id)+str(chnl.id))
     sniper3.pop(str(ctx.guild.id)+str(chnl.id))
@@ -337,25 +336,25 @@ async def purgeserver(ctx, text, condition="1==1", *, disposed = None):
     await ctx.reply("Role purging completed.")
 
 @bot_.command()
-@commands.is_owner()
+@botadmin()
 async def botban(ctx, user : discord.User, *, text="No reason was provided"):
   banned_ids.append(user.id)
   banned_text.append(text)
   await ctx.reply("Banned user from using the bot.")
 
 @bot_.command()
-@commands.is_owner()
+@botadmin()
 async def botunban(ctx, user : discord.User):
   if banned_ids.count(user.id) == 1:
     banned_text.remove(banned_text[banned_ids.index(user.id)])
     banned_ids.remove(user.id)
     await ctx.reply("Unbanned user from using the bot.")
 
-@bot_.command()
-@commands.is_owner()
-async def botadmin(ctx, user : discord.User):
-  bot_admins.append(user.id)
-  await ctx.reply("Added user as bot admin.")
+# @bot_.command()
+# @commands.is_owner()
+# async def botadmin(ctx, user : discord.User):
+#   bot_admins.append(user.id)
+#   await ctx.reply("Added user as bot admin.")
 
 @bot_.command()
 @commands.is_owner()
@@ -372,7 +371,7 @@ async def botpurge(ctx, *, num):
     await ctx.message.delete()
   except:
     pass
-  if ctx.channel.permissions_for(ctx.author).manage_messages or bot_admins.count(ctx.author.id)!=0:
+  if ctx.channel.permissions_for(ctx.author).manage_messages or botadmin(ctx):
     num = int(num)
     purged = 0
     async for count in ctx.channel.history(limit=1000):
