@@ -1,6 +1,6 @@
 from shared import *
 #"icyan" : {"fg":"#87B33FFF", "bg":"#131402FF"}
-led_colors = typing.Optional[typing.Literal["cyan", "icyan", "crystal", "icrystal" "red", "ired", "green", "igreen", "blue", "iblue", "purple", "ipurple", "yellow", "iyellow",
+led_colors = typing.Optional[typing.Literal["cyan", "icyan", "crystal", "icrystal", "red", "ired", "green", "igreen", "blue", "iblue", "purple", "ipurple", "yellow", "iyellow",
                                             "teal", "iteal", "black", "white", "tblack", "twhite", "dark", "light", "tdark", "tlight"]]
 led_alignment = typing.Optional[typing.Literal['left', 'center', 'right']]
 
@@ -16,7 +16,7 @@ async def lcd(ctx, mode: typing.Optional[typing.Literal['regular', 'calc', 'dens
     current_font = font_lcd
   current_properties = led_font_dict[current_font]
   sizes = current_font.getsize_multiline(text, spacing=current_properties["spacing"])
-  image = Image.new("RGBA", (sizes[0], sizes[1]+current_properties["height_plus"]), color=db["led_colors"][color]["bg"])
+  image = Image.new("RGBA", (sizes[0]-10, sizes[1]+(current_properties["height_plus"] if text[len(text)-1] in "gjpqy" else 0)), color=db["led_colors"][color]["bg"])
   draw = ImageDraw.Draw(image)
   draw.multiline_text((0, current_properties["padding"]), text, font=current_font, fill=db["led_colors"][color]["fg"], spacing=current_properties["spacing"], align=alignment)
   image.save('output.png')
@@ -38,7 +38,7 @@ async def led(ctx, mode: typing.Optional[typing.Literal['regular', 'bold', 'caps
     current_font = font_led
   current_properties = led_font_dict[current_font]
   sizes = current_font.getsize_multiline(text, spacing=current_properties["spacing"])
-  image = Image.new("RGBA", (sizes[0], sizes[1]+current_properties["height_plus"]), color=db["led_colors"][color]["bg"])
+  image = Image.new("RGBA", (sizes[0], sizes[1]+(current_properties["height_plus"] if text[len(text)-1] in "gjpqy" else 0)), color=db["led_colors"][color]["bg"])
   draw = ImageDraw.Draw(image)
   draw.multiline_text((0, current_properties["padding"]), text, font=current_font, fill=db["led_colors"][color]["fg"], spacing=current_properties["spacing"], align=alignment)
   image.save('output.png')
@@ -61,7 +61,7 @@ async def led2(ctx, mode: typing.Optional[typing.Literal['regular', 'bold', 'cap
     current_font = font_led2
   current_properties = led_font_dict[current_font]
   sizes = current_font.getsize_multiline(text, spacing=current_properties["spacing"])
-  image = Image.new("RGBA", (sizes[0], sizes[1]+current_properties["height_plus"]), color=db["led_colors"][color]["bg"])
+  image = Image.new("RGBA", (sizes[0], sizes[1]+(current_properties["height_plus"] if text[len(text)-1] in "gjpqy" else 0)), color=db["led_colors"][color]["bg"])
   draw = ImageDraw.Draw(image)
   draw.multiline_text((0, current_properties["padding"]), text, font=current_font, fill=db["led_colors"][color]["fg"], spacing=current_properties["spacing"], align=alignment)
   image.save('output.png')

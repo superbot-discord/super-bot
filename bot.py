@@ -1,9 +1,9 @@
 from matplotlib.colors import to_hex
 from shared import *
 
-banned_ids =  [755416776581578813]
-banned_text = ["Searching for inappropriate content"]
-bot_admins = [687474789342117900]
+banned_ids =  []
+banned_text = []
+bot_admins = [687474789342117900, 752335217339007067]
 bot_ = commands.Bot(command_prefix=commands.when_mentioned_or("="), intents=discord.Intents.all(), allowed_mentions=discord.AllowedMentions(everyone=False, users=True, roles=False, replied_user=False),
   case_insensitive=True, strip_after_prefix=True)
 bot_.remove_command('help')
