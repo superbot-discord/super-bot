@@ -39,7 +39,7 @@ async def led(ctx, mode: typing.Optional[typing.Literal['regular', 'bold', 'caps
     current_font = font_led
   current_properties = led_font_dict[current_font]
   sizes = current_font.getsize_multiline(text, spacing=current_properties["spacing"])
-  minus_padding = 0 if any(check in text.splitlines()[0] for check in "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`bdfhijklt{|}~ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞß÷█▉▊▋▌▍▎▏") else current_properties["unneeded_padding"]
+  minus_padding = current_properties["unneeded_padding"] if all(check in "acegmnopqrsuvwxyz.," for check in text.splitlines()[0]) else 0
   image = Image.new("RGBA", led_sizer(sizes, current_properties, minus_padding, text.splitlines()[len(text.splitlines())-1]), color=db["led_colors"][color]["bg"])
   draw = ImageDraw.Draw(image)
   draw.multiline_text(led_positioner(current_properties, minus_padding), text, font=current_font, fill=db["led_colors"][color]["fg"], spacing=current_properties["spacing"], align=alignment)
@@ -63,7 +63,7 @@ async def led2(ctx, mode: typing.Optional[typing.Literal['regular', 'bold', 'cap
     current_font = font_led2
   current_properties = led_font_dict[current_font]
   sizes = current_font.getsize_multiline(text, spacing=current_properties["spacing"])
-  minus_padding = 0 if any(check in text.splitlines()[0] for check in "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`bdfhijklt{|}~ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞß÷█▉▊▋▌▍▎▏") else current_properties["unneeded_padding"]
+  minus_padding = current_properties["unneeded_padding"] if all(check in "acegmnopqrsuvwxyz.," for check in text.splitlines()[0]) else 0
   image = Image.new("RGBA", led_sizer(sizes, current_properties, minus_padding, text.splitlines()[len(text.splitlines())-1]), color=db["led_colors"][color]["bg"])
   draw = ImageDraw.Draw(image)
   draw.multiline_text(led_positioner(current_properties, minus_padding), text, font=current_font, fill=db["led_colors"][color]["fg"], spacing=current_properties["spacing"], align=alignment)
