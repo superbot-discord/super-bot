@@ -127,8 +127,16 @@ async def encode(ctx, code, *, text):
     coder = hashlib.sha224()
     coder.update(bytes(text, encoding='utf-8'))
     await ctx.reply(coder.hexdigest())
-  elif SequenceMatcher(None, code, 'sha128').ratio()>0.6:
+  elif SequenceMatcher(None, code, 'sha1').ratio()>0.6:
     coder = hashlib.sha1()
+    coder.update(bytes(text, encoding='utf-8'))
+    await ctx.reply(coder.hexdigest())
+  elif SequenceMatcher(None, code, 'blake2b').ratio()>0.9:
+    coder = hashlib.blake2b()
+    coder.update(bytes(text, encoding='utf-8'))
+    await ctx.reply(coder.hexdigest())
+  elif SequenceMatcher(None, code, 'blakes2s').ratio()>0.9:
+    coder = hashlib.blake2s()
     coder.update(bytes(text, encoding='utf-8'))
     await ctx.reply(coder.hexdigest())
   elif SequenceMatcher(None, code, 'base64').ratio()>0.6:
