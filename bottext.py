@@ -21,7 +21,7 @@ async def case(ctx, *, text):
   f = open("output.txt", "w")
   f.write(f"UPPERCASE\n{text.upper()}\n\nLOWERCASE\n{text.lower()}\n\nTITLE CASE\n{text.title()}")
   f.close()
-  await ctx.send(file=discord.File('output.txt'))
+  await ctx.reply(file=discord.File('output.txt'))
   try_delete('output.txt')
 
 @commands.command()
@@ -242,7 +242,7 @@ async def spellcheck(ctx, text, distance : typing.Optional[int] = 3, *, disposed
   f.write(desc)
   f.flush()
   f.close()
-  await ctx.send(file = discord.File("output.txt"))
+  await ctx.reply(file = discord.File("output.txt"))
   try_delete("output.txt")
 
 @commands.command()

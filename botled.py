@@ -3,7 +3,8 @@ from shared import *
 led_colors = typing.Optional[typing.Literal["cyan", "icyan", "crystal", "icrystal", "red", "ired", "green", "igreen", "blue", "iblue", "purple", "ipurple", "yellow", "iyellow",
                                             "teal", "iteal", "black", "white", "tblack", "twhite", "dark", "light", "tdark", "tlight", "wdark", "wlight", "twdark", "twlight"]]
 led_alignment = typing.Optional[typing.Literal['left', 'center', 'right']]
-led_sizer = lambda s, c, t: (s[0]-c["unneeded_width"], s[1]+(c["height_plus"] if t.splitlines()[len(t.splitlines)-1] in "gjpqy" else c["required_height_plus"]))
+led_sizer      = lambda s, c, m, l: (s[0]-c["unneeded_width"], s[1]-m+(c["height_plus"] if any(check in l for check in "gjpqy") else c["required_height_plus"]))
+led_positioner = lambda    c, m   : (0, c["padding"] - m)
 
 @commands.command()
 async def lcd(ctx, mode: typing.Optional[typing.Literal['regular', 'calc', 'dense', 'mono']] = 'regular', color: led_colors = 'red', alignment: led_alignment = 'left', *, text):
@@ -21,7 +22,7 @@ async def lcd(ctx, mode: typing.Optional[typing.Literal['regular', 'calc', 'dens
   draw = ImageDraw.Draw(image)
   draw.multiline_text((0, current_properties["padding"]), text, font=current_font, fill=db["led_colors"][color]["fg"], spacing=current_properties["spacing"], align=alignment)
   image.save('output.png')
-  await ctx.send(file=discord.File('output.png'))
+  await ctx.reply(file=discord.File('output.png'))
   try_delete('output.png')
 #to_hex
 
@@ -39,11 +40,12 @@ async def led(ctx, mode: typing.Optional[typing.Literal['regular', 'bold', 'caps
     current_font = font_led
   current_properties = led_font_dict[current_font]
   sizes = current_font.getsize_multiline(text, spacing=current_properties["spacing"])
-  image = Image.new("RGBA", led_sizer(sizes, current_properties, text), color=db["led_colors"][color]["bg"])
+  minus_padding = 0 if any(check in text.splitlines()[0] for check in "ABCDEFGHIJKLMNOPQRSTUVWXYZbdfhijklt") else current_properties["unneeded_padding"]
+  image = Image.new("RGBA", led_sizer(sizes, current_properties, minus_padding, text.splitlines()[len(text.splitlines())-1]), color=db["led_colors"][color]["bg"])
   draw = ImageDraw.Draw(image)
-  draw.multiline_text((0, current_properties["padding"]), text, font=current_font, fill=db["led_colors"][color]["fg"], spacing=current_properties["spacing"], align=alignment)
+  draw.multiline_text(led_positioner(current_properties, minus_padding), text, font=current_font, fill=db["led_colors"][color]["fg"], spacing=current_properties["spacing"], align=alignment)
   image.save('output.png')
-  await ctx.send(file=discord.File('output.png'))
+  await ctx.reply(file=discord.File('output.png'))
   try_delete('output.png')
 
 @commands.command()
@@ -62,11 +64,12 @@ async def led2(ctx, mode: typing.Optional[typing.Literal['regular', 'bold', 'cap
     current_font = font_led2
   current_properties = led_font_dict[current_font]
   sizes = current_font.getsize_multiline(text, spacing=current_properties["spacing"])
-  image = Image.new("RGBA", led_sizer(sizes, current_properties, text), color=db["led_colors"][color]["bg"])
+  minus_padding = 0 if any(check in text.splitlines()[0] for check in "ABCDEFGHIJKLMNOPQRSTUVWXYZbdfhijklt") else current_properties["unneeded_padding"]
+  image = Image.new("RGBA", led_sizer(sizes, current_properties, minus_padding, text.splitlines()[len(text.splitlines())-1]), color=db["led_colors"][color]["bg"])
   draw = ImageDraw.Draw(image)
-  draw.multiline_text((0, current_properties["padding"]), text, font=current_font, fill=db["led_colors"][color]["fg"], spacing=current_properties["spacing"], align=alignment)
+  draw.multiline_text(led_positioner(current_properties, minus_padding), text, font=current_font, fill=db["led_colors"][color]["fg"], spacing=current_properties["spacing"], align=alignment)
   image.save('output.png')
-  await ctx.send(file=discord.File('output.png'))
+  await ctx.reply(file=discord.File('output.png'))
   try_delete('output.png')
 
 def setup(bot):
