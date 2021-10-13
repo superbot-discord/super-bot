@@ -3,7 +3,7 @@ from shared import *
 led_colors = typing.Optional[typing.Literal["cyan", "icyan", "crystal", "icrystal", "red", "ired", "green", "igreen", "blue", "iblue", "purple", "ipurple", "yellow", "iyellow",
                                             "teal", "iteal", "black", "white", "tblack", "twhite", "dark", "light", "tdark", "tlight", "wdark", "wlight", "twdark", "twlight"]]
 led_alignment = typing.Optional[typing.Literal['left', 'center', 'right']]
-led_sizer = lambda s, c, t: (s[0]-c["unneeded_width"], s[1]+(c["height_plus"] if t[len(t)-1] in "gjpqy" else c["required_height_plus"]))
+led_sizer = lambda s, c, t: (s[0]-c["unneeded_width"], s[1]+(c["height_plus"] if t.splitlines()[len(t.splitlines)-1] in "gjpqy" else c["required_height_plus"]))
 
 @commands.command()
 async def lcd(ctx, mode: typing.Optional[typing.Literal['regular', 'calc', 'dense', 'mono']] = 'regular', color: led_colors = 'red', alignment: led_alignment = 'left', *, text):
