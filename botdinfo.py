@@ -928,7 +928,7 @@ async def user(ctx, user: discord.Member = None, channel: discord.TextChannel = 
     desc=f"{user.mention} (bot)"
   else:
     desc=f"{user.mention} (human)"
-  embed=discord.Embed(title="User Information",color=user.color, description=desc)
+  embed=discord.Embed(title="User Information", color=ctx.bot.fetch_user(user.id).accent_color, description=desc)
   if user.name==user.display_name:
     f0v=f"{user.name}#{user.discriminator}"
   else:
@@ -1006,6 +1006,7 @@ async def user(ctx, user: discord.Member = None, channel: discord.TextChannel = 
   f5v = f5v + (f"**Hypesquad:** The user is in the Hypesquad Brilliance House.\n"          if user.public_flags.hypesquad_brilliance else "")
   f5v = f5v + (f"**Hypesquad:** The user is in the Hypesquad Balance House.\n"             if user.public_flags.hypesquad_balance else "")
   f5v = "No badges" if len(f5v) == 0 else None
+
   embed.add_field(name="Time since user registered", value=f1va, inline=True)
   embed.add_field(name="Time since user joined", value=f2va, inline=True)
   embed.add_field(name="Name", value=f0v, inline=False)
