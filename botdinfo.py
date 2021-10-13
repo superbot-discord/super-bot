@@ -928,7 +928,7 @@ async def user(ctx, user: discord.Member = None, channel: discord.TextChannel = 
     desc=f"{user.mention} (bot)"
   else:
     desc=f"{user.mention} (human)"
-  embed=discord.Embed(title="User Information", color=ctx.bot.fetch_user(user.id).accent_color, description=desc)
+  embed=discord.Embed(title="User Information", color=await ctx.bot.fetch_user(user.id).accent_color, description=desc)
   if user.name==user.display_name:
     f0v=f"{user.name}#{user.discriminator}"
   else:
