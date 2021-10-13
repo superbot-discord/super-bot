@@ -55,7 +55,7 @@ font_lcd_dense= ImageFont.truetype("fonts/lcd_dense.otf", 50)
 font_lcd_mono = ImageFont.truetype("fonts/lcd_mono.otf", 50)
 
 led_font_dict = {
-  font_led      :  {"spacing" : 20, "padding" : 3  , "height_plus" : 15 , "required_height_plus" : 3  , "unneeded_width" : 8 , "unneeded_padding" : 14},
+  font_led      :  {"spacing" : 20, "padding" : 3  , "height_plus" : 15 , "required_height_plus" : 3  , "unneeded_width" : 8 , "unneeded_padding" : 12},
   font_led_bold :  {"spacing" : 20, "padding" : 3  , "height_plus" : 15 , "required_height_plus" : 3  , "unneeded_width" : 6 , "unneeded_padding" : 12},
   font_led_caps :  {"spacing" : 10, "padding" : -10, "height_plus" : -10, "required_height_plus" : -10, "unneeded_width" : 7 , "unneeded_padding" : 0},
   font_led_mono :  {"spacing" : 10, "padding" : -12, "height_plus" : -13, "required_height_plus" : -13, "unneeded_width" : 7 , "unneeded_padding" : 14},
