@@ -40,7 +40,7 @@ async def led(ctx, mode: typing.Optional[typing.Literal['regular', 'bold', 'caps
     current_font = font_led
   current_properties = led_font_dict[current_font]
   sizes = current_font.getsize_multiline(text, spacing=current_properties["spacing"])
-  minus_padding = 0 if any(check in text.splitlines()[0] for check in "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`bdfhijklt{|}~ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞß÷") else current_properties["unneeded_padding"]
+  minus_padding = 0 if any(check in text.splitlines()[0] for check in "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`bdfhijklt{|}~ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞß÷█▉▊▋▌▍▎▏") else current_properties["unneeded_padding"]
   image = Image.new("RGBA", led_sizer(sizes, current_properties, minus_padding, text.splitlines()[len(text.splitlines())-1]), color=db["led_colors"][color]["bg"])
   draw = ImageDraw.Draw(image)
   draw.multiline_text(led_positioner(current_properties, minus_padding), text, font=current_font, fill=db["led_colors"][color]["fg"], spacing=current_properties["spacing"], align=alignment)
@@ -64,13 +64,24 @@ async def led2(ctx, mode: typing.Optional[typing.Literal['regular', 'bold', 'cap
     current_font = font_led2
   current_properties = led_font_dict[current_font]
   sizes = current_font.getsize_multiline(text, spacing=current_properties["spacing"])
-  minus_padding = 0 if any(check in text.splitlines()[0] for check in "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`bdfhijklt{|}~ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞß÷") else current_properties["unneeded_padding"]
+  minus_padding = 0 if any(check in text.splitlines()[0] for check in "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`bdfhijklt{|}~ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞß÷█▉▊▋▌▍▎▏") else current_properties["unneeded_padding"]
   image = Image.new("RGBA", led_sizer(sizes, current_properties, minus_padding, text.splitlines()[len(text.splitlines())-1]), color=db["led_colors"][color]["bg"])
   draw = ImageDraw.Draw(image)
   draw.multiline_text(led_positioner(current_properties, minus_padding), text, font=current_font, fill=db["led_colors"][color]["fg"], spacing=current_properties["spacing"], align=alignment)
   image.save('output.png')
   await ctx.reply(file=discord.File('output.png'))
   try_delete('output.png')
+
+# @commands.command()
+# async def ledbar(ctx, total : float, step : float, color: led_colors = 'red'):
+#   image = Image.new("RGBA", (1200, 100), color=db["led_colors"][color]["bg"])
+#   draw = ImageDraw.Draw(image)
+#   x_count = 0
+#   while step > 0:
+#     draw.rectangle(fill=db["led_colors"][color]["fg"])
+#   image.save('output.png')
+#   await ctx.reply(file=discord.File('output.png'))
+#   try_delete('output.png')
 
 def setup(bot):
   bot.add_command(lcd)
