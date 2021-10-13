@@ -5,6 +5,7 @@ from datetime import timedelta
 from difflib import SequenceMatcher
 
 import discord
+from discord import user
 from discord.ext import commands
 
 from shared import *
@@ -119,7 +120,7 @@ async def makethreads(ctx, times:int=1, *, name="Sample thread $number"):
     await ctx.reply("You don't have the required permission: Manage Threads.")
 
 @commands.command()
-async def react(ctx, emoji : discord.Emoji, message : discord.Message = None):
+async def react(ctx, emoji : discord.Emoji, message  = None):
   if message==None:
     potential_reference = ctx.message.reference
     if potential_reference:
@@ -282,20 +283,37 @@ async def unban(ctx, user: discord.User, *, reason="No reason provided"):
     await ctx.reply("You don't have the required permission: Ban members.")
 
 @commands.command()
-async def purge(ctx, num):
+async def purge(ctx, num : int):
+  try_delete_message(ctx.message)
   if ctx.channel.permissions_for(ctx.author).manage_messages or botadmin(ctx):
-    num=int(num)
     deleted = await ctx.channel.purge(limit=num+1)
     msg = await ctx.reply("Purging completed.")
-    desc = ""
-    authors = [count.author.name + count.author.discriminator for count in deleted]
-    authors = list(dict.fromkeys(authors))
-    counter = 0
-    for count in deleted:
-      contents = count.content
-      if 'fuck' in contents or 'shit' in contents or 'asshole' in contents or 'dick' in contents:
-        counter = counter + 1
-    await msg.edit(f"Purging completed.\nDeleted {counter} messages with bad words", delete_after = 5)
+    authors = {f"{count.author.name}#{count.author.discriminator}{' **bot**' if count.author.bot else ''}" for count in deleted}
+    await msg.edit(f"Purged {len(deleted)} messages from:\n{'\n'.join(authors)}", delete_after = 5)
+  else:
+    await ctx.reply("You don't have the required permission: Manage messages.")
+
+@commands.command()
+async def purgepy(ctx, num : int, pyscript):
+  try_delete_message(ctx.message)
+  if ctx.channel.permissions_for(ctx.author).manage_messages or botadmin(ctx):
+    num=int(num)
+    deleted = await ctx.channel.purge(limit=num+1, check = lambda msg: eval(pyscript))
+    msg = await ctx.reply("Purging completed.")
+    authors = {f"{count.author.name}#{count.author.discriminator}{' **bot**' if count.author.bot else ''}" for count in deleted}
+    await msg.edit(f"Purged {len(deleted)} messages from:\n{'\n'.join(authors)}", delete_after = 5)
+  else:
+    await ctx.reply("You don't have the required permission: Manage messages.")
+
+@commands.command()
+async def purgepygex(ctx, num : int, regex, *, pyscript):
+  try_delete_message(ctx.message)
+  if ctx.channel.permissions_for(ctx.author).manage_messages or botadmin(ctx):
+    purge_pattern = re.compile(regex)
+    deleted = await ctx.channel.purge(limit=num+1, check = lambda msg: eval(pyscript) and purge_pattern.fullmatch(msg.content))
+    msg = await ctx.reply("Purging completed.")
+    authors = {f"{count.author.name}#{count.author.discriminator}{' **bot**' if count.author.bot else ''}" for count in deleted}
+    await msg.edit(f"Purged {len(deleted)} messages from:\n{'\n'.join(authors)}", delete_after = 5)
   else:
     await ctx.reply("You don't have the required permission: Manage messages.")
 
@@ -309,113 +327,36 @@ async def purgereactions(ctx, messages, emoji: discord.Emoji = None):
       await message.clear_reaction(emoji)
 
 @commands.command()
-async def purgeregex(ctx, num, *, regex):
-  try:
-    await ctx.message.delete()
-  except:
-    pass
+async def purgeregex(ctx, num : int, *, regex):
+  try_delete_message(ctx.message)
   if ctx.channel.permissions_for(ctx.author).manage_messages or botadmin(ctx):
-    purge_pattern = eval("re.compile(r'"+regex+"')")
-    num = int(num)
-    purged = 0
-    async for count in ctx.channel.history(limit=1000):
-      match = match = purge_pattern.fullmatch(count.content)
-      try:
-        if match:
-          await count.delete()
-          purged = purged + 1
-          if purged >= num:
-            break
-      except:
-        await ctx.reply("The bot doesn't have the required permission (Manage messages) or the regex was malformed.")
-        break
-    await ctx.reply("Regex purging completed.", delete_after = 5)
+    purge_pattern = re.compile(regex)
+    deleted = await ctx.channel.purge(limit=num+1, check = lambda msg: purge_pattern.fullmatch(msg.content))
+    msg = await ctx.reply("Purging completed.")
+    authors = {f"{count.author.name}#{count.author.discriminator}{' **bot**' if count.author.bot else ''}" for count in deleted}
+    await msg.edit(f"Purged {len(deleted)} messages from:\n{'\n'.join(authors)}", delete_after = 5)
   else:
     await ctx.reply("You don't have the required permission: Manage messages.")
 
 @commands.command()
 async def purgerole(ctx, num, roleinput : discord.Role):
-  try:
-    await ctx.message.delete()
-  except:
-    pass
+  try_delete_message(ctx.message)
   if ctx.channel.permissions_for(ctx.author).manage_messages or botadmin(ctx):
-    num = int(num)
-    purged = 0
-    async for count in ctx.channel.history(limit=1000):
-      if roleinput in count.author.roles:
-        await count.delete()
-        purged = purged + 1
-        if purged >= num:
-          break
-    await ctx.reply("User purging completed.", delete_after = 5)
+    deleted = await ctx.channel.purge(limit=num+1, check = lambda msg: roleinput in msg.author.roles)
+    msg = await ctx.reply("Purging completed.")
+    authors = {f"{count.author.name}#{count.author.discriminator}{' **bot**' if count.author.bot else ''}" for count in deleted}
+    await msg.edit(f"Purged {len(deleted)} messages from:\n{'\n'.join(authors)}", delete_after = 5)
   else:
     await ctx.reply("You don't have the required permission: Manage messages.")
 
 @commands.command()
-async def purgeuser(ctx, num, userinput : discord.User):
-  try:
-    await ctx.message.delete()
-  except:
-    pass
+async def purgeuser(ctx, num, *userinput : discord.User):
+  try_delete_message(ctx.message)
   if ctx.channel.permissions_for(ctx.author).manage_messages or botadmin(ctx):
-    num = int(num)
-    purged = 0
-    async for count in ctx.channel.history(limit=1000):
-      if count.author == userinput:
-        await count.delete()
-        purged = purged + 1
-        if purged >= num:
-          break
-    await ctx.reply("User purging completed.", delete_after = 5)
-  else:
-    await ctx.reply("You don't have the required permission: Manage messages.")
-
-@commands.command()
-async def purgepy(ctx, num, pyscript):
-  try:
-    await ctx.message.delete()
-  except:
-    pass
-  if ctx.channel.permissions_for(ctx.author).manage_messages or botadmin(ctx):
-    num = int(num)
-    purged = 0
-    async for msg in ctx.channel.history(limit=1000):
-      try:
-        if eval(pyscript) == True:
-          await msg.delete()
-          purged = purged + 1
-          if purged >= num:
-            break
-      except:
-        await ctx.reply("The bot doesn't have the required permission (Manage messages) or the script was malformed.")
-        break
-    await ctx.reply("Python purging completed.", delete_after = 5)
-  else:
-    await ctx.reply("You don't have the required permission: Manage messages.")
-
-@commands.command()
-async def purgepygex(ctx, num, regex, *, pyscript):
-  try:
-    await ctx.message.delete()
-  except:
-    pass
-  if ctx.channel.permissions_for(ctx.author).manage_messages or botadmin(ctx):
-    purge_pattern = eval("re.compile(r'"+regex+"'")
-    num = int(num)
-    purged = 0
-    async for count in ctx.channel.history(limit=1000):
-      match = match = purge_pattern.fullmatch(count.content)
-      try:
-        if match and eval(pyscript) == True:
-          await count.delete()
-          purged = purged + 1
-          if purged >= num:
-            break
-      except:
-        await ctx.reply("The bot doesn't have the required permission (Manage messages) or the regex/script was malformed.")
-        break
-    await ctx.reply("Python Regex purging completed.", delete_after = 5)
+    deleted = await ctx.channel.purge(limit=num+1, check = lambda msg: msg.author in userinput)
+    msg = await ctx.reply("Purging completed.")
+    authors = {f"{count.author.name}#{count.author.discriminator}{' **bot**' if count.author.bot else ''}" for count in deleted}
+    await msg.edit(f"Purged {len(deleted)} messages from:\n{'\n'.join(authors)}", delete_after = 5)
   else:
     await ctx.reply("You don't have the required permission: Manage messages.")
 

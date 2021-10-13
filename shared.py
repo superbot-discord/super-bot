@@ -99,6 +99,12 @@ def try_delete(*filenames):
     except:
       pass
 
+def try_delete_message(msg):
+  try:
+    msg.delete()
+  except:
+    pass
+
 def voice_region_format(region):
   if not region: return "Auto"
   if region == VoiceRegion.amsterdam  : return "Amsterdam"
