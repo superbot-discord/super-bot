@@ -58,12 +58,11 @@ async def on_command_error(ctx, error):
     await ctx.reply(f'Your might have made a typo and your command has been interpreted as `{command}`.', delete_after=4)
     await bot_.process_commands(message)
   elif isinstance(error, commands.MissingRequiredArgument):
-    await ctx.reply(f'You missed one or more arguments! {len(ctx.command.clean_params.keys())} argument(s) are required.\nNote: Multiline arguments are treated as one argument.')
+    await ctx.reply(f'You missed one or more arguments! {len(ctx.command.clean_params.keys())} argument(s) are required.\nNote: Multiline arguments are treated as one argument. Optional arguments are counted as well.')
+  elif isinstance(error, commands.UserInputError):
+    await ctx.reply(f'One or more of your arguments is/are not in the correct format! Please read the documentation.')
   else:
-    #print(error.with_traceback(error.__traceback__))
-    lines = traceback.format_exception(type(error), error, error.__traceback__)
-    traceback_text = ''.join(lines)
-    await ctx.reply(f"An error occured:\n```{traceback_text}```\nIf you think that this is an issue with the bot, please kindly inform JohannLau#6541 about this issue.")
+    await ctx.reply(f"An error occured:\n```{''.join(traceback.format_exception(type(error), error, error.__traceback__))}```\nIf you think that this is an issue with the bot, please kindly inform JohannLau#6541 about this issue.")
 
 # @bot_.event
 # async def on_thread_update(before, after):
