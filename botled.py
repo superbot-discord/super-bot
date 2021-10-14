@@ -5,6 +5,7 @@ led_colors = typing.Optional[typing.Literal["cyan", "icyan", "crystal", "icrysta
 led_alignment = typing.Optional[typing.Literal['left', 'center', 'right']]
 led_sizer      = lambda s, c, m, l: (s[0]-c["unneeded_width"], s[1]-m+(c["height_plus"] if any(check in l for check in "gjpqy") else c["required_height_plus"]))
 led_positioner = lambda    c, m   : (0, c["padding"] - m)
+all_halfheight = lambda       t   : all(check in "acegmnopqrsuvwxyz., " for check in t.splitlines()[0])
 
 @commands.command()
 async def lcd(ctx, mode: typing.Optional[typing.Literal['regular', 'calc', 'dense', 'mono']] = 'regular', color: led_colors = 'red', alignment: led_alignment = 'left', *, text):
@@ -39,7 +40,7 @@ async def led(ctx, mode: typing.Optional[typing.Literal['regular', 'bold', 'caps
     current_font = font_led
   current_properties = led_font_dict[current_font]
   sizes = current_font.getsize_multiline(text, spacing=current_properties["spacing"])
-  minus_padding = current_properties["unneeded_padding"] if all(check in "acegmnopqrsuvwxyz.," for check in text.splitlines()[0]) else 0
+  minus_padding = current_properties["unneeded_padding"] if all_halfheight(text) else 0
   image = Image.new("RGBA", led_sizer(sizes, current_properties, minus_padding, text.splitlines()[len(text.splitlines())-1]), color=db["led_colors"][color]["bg"])
   draw = ImageDraw.Draw(image)
   draw.multiline_text(led_positioner(current_properties, minus_padding), text, font=current_font, fill=db["led_colors"][color]["fg"], spacing=current_properties["spacing"], align=alignment)
@@ -63,7 +64,7 @@ async def led2(ctx, mode: typing.Optional[typing.Literal['regular', 'bold', 'cap
     current_font = font_led2
   current_properties = led_font_dict[current_font]
   sizes = current_font.getsize_multiline(text, spacing=current_properties["spacing"])
-  minus_padding = current_properties["unneeded_padding"] if all(check in "acegmnopqrsuvwxyz.," for check in text.splitlines()[0]) else 0
+  minus_padding = current_properties["unneeded_padding"] if all_halfheight(text) else 0
   image = Image.new("RGBA", led_sizer(sizes, current_properties, minus_padding, text.splitlines()[len(text.splitlines())-1]), color=db["led_colors"][color]["bg"])
   draw = ImageDraw.Draw(image)
   draw.multiline_text(led_positioner(current_properties, minus_padding), text, font=current_font, fill=db["led_colors"][color]["fg"], spacing=current_properties["spacing"], align=alignment)
