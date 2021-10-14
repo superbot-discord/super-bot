@@ -317,13 +317,13 @@ async def pie(ctx, numbers, label="", *, title="No_title_required"):
 async def qrmake(ctx, *, text):
   textlist = text.split("\n")
   data = textlist[0].replace("{{{newline}}}", f"\n")
-  textlist2 = textlist[1].split(" ")
-  fgc = textlist2[0]     if len(textlist2) > 0 else "#000000"
-  bgc = textlist2[1]     if len(textlist2) > 1 else "#FFFFFF"
-  tsize = textlist2[2]   if len(textlist2) > 2 else "10"
-  bsize = textlist2[3]   if len(textlist2) > 3 else "4"
-  iecorr = textlist2[4]  if len(textlist2) > 4 else "4"
-  version = textlist2[5] if len(textlist2) > 5 else "1"
+  textlist2 = textlist[1].split(" ") if len(textlist) > 1 else []
+  fgc       = textlist2[0] if len(textlist2) > 0 else "#000000"
+  bgc       = textlist2[1] if len(textlist2) > 1 else "#FFFFFF"
+  tsize     = textlist2[2] if len(textlist2) > 2 else "10"
+  bsize     = textlist2[3] if len(textlist2) > 3 else "4"
+  iecorr    = textlist2[4] if len(textlist2) > 4 else "4"
+  version   = textlist2[5] if len(textlist2) > 5 else "1"
   if iecorr == "4":
     ecorr = qrcode.constants.ERROR_CORRECT_H
   elif iecorr == "3":
