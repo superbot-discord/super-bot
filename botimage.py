@@ -317,7 +317,7 @@ async def ocr(ctx, lang="eng", *, disposed = None):
       desc="There was no text."
     await ctx.reply(desc)
 
-@commands.command()
+@commands.command(aliases=['scan'])
 async def qr(ctx, *, disposed = None):
   for count in ctx.message.attachments:
     await count.save("input.png")
@@ -333,8 +333,10 @@ async def qr(ctx, *, disposed = None):
       points.append((poly[0].x, poly[0].y))
       draw.line(points, fill="#FF0000A0", width=8)
       image.save('qrcode.png')
-      await ctx.send(count2.data.decode("utf-8"), file=discord.File('qrcode.png'))
-      try_delete('input.png', 'qrcode.png')
+      await ctx.reply(count2.data.decode("utf-8"), file=discord.File('qrcode.png'))
+    if not pyzbar.decode(image):
+      await ctx.reply("No codes found!")
+    try_delete('input.png', 'qrcode.png')
 
 @commands.command()
 async def render(ctx, width:float=1):
