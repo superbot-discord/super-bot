@@ -1,17 +1,15 @@
 import colorsys
-import os
 import random as ra
-import sys
 
 import discord
 import matplotlib.pyplot as plt
 import pytesseract
-import qr_img
 from captcha.image import ImageCaptcha
 from colorgram import extract
 from colorthief import ColorThief
 from discord.ext import commands
 from pdf2image import convert_from_path
+from pyzbar import pyzbar
 
 import ascii2 as asc
 import requests
@@ -336,7 +334,7 @@ async def qr(ctx, *, disposed = None):
     draw.line(points, fill="#FF0000A0", width=8)
     image.save('qrcode.png')
     await ctx.send(qr_code.data.decode("utf-8"), file=discord.File('qrcode.png'))
-    try_delete('qrcode.png')
+    try_delete('input.png', 'qrcode.png')
 
 @commands.command()
 async def render(ctx, width:float=1):

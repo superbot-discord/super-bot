@@ -25,7 +25,6 @@ from discord.ext import commands
 from markdown2 import Markdown
 from PIL import (Image, ImageDraw, ImageEnhance, ImageFilter, ImageFont,
                  ImageOps)
-from pyzbar import pyzbar
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
