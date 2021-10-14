@@ -322,8 +322,20 @@ async def ocr(ctx, lang="eng", *, disposed = None):
 @commands.command()
 async def qr(ctx, *, disposed = None):
   for count in ctx.message.attachments:
-    await count.save('qrcode.png')
-    await ctx.reply(qr_img.qr_decode('qrcode.png'))
+    await count.save("input.png")
+    image = Image.open("input.png").convert("RGBA")
+    qr_code = pyzbar.decode(image)[0]
+    poly = qr_code.polygon
+    rectangle = qr_code.rect
+    draw = ImageDraw.Draw(image)
+    draw.rectangle([rectangle.left, rectangle.top, rectangle.left+rectangle.width, rectangle.top+rectangle.height], outline="#00FF00A0", width=8)
+    points = [(i.x, i.y) for i in poly]
+    for point in points:
+      draw.ellipse((point[0] - 12, point[1] - 12, point[0]  + 12, point[1] + 12), fill="#FF5050A0")
+    points.append((poly[0].x, poly[0].y))
+    draw.line(points, fill="#FF0000A0", width=8)
+    image.save('qrcode.png')
+    await ctx.send(qr_code.data.decode("utf-8"), file=discord.File('qrcode.png'))
     try_delete('qrcode.png')
 
 @commands.command()
