@@ -316,55 +316,28 @@ async def pie(ctx, numbers, label="", *, title="No_title_required"):
 @commands.command()
 async def qrmake(ctx, *, text):
   textlist = text.split("\n")
-  try:
-    data = textlist[0].replace("{{{newline}}}", f"\n")
-    textlist2 = textlist[1].split(" ")
-    fgc = textlist2[0]
-    bgc = textlist2[1]
-    tsize = textlist2[2]
-    bsize = textlist2[3]
-    iecorr = textlist2[4]
-    if iecorr == "4":
-      ecorr = qrcode.constants.ERROR_CORRECT_H
-    elif iecorr == "3":
-      ecorr = qrcode.constants.ERROR_CORRECT_Q
-    elif iecorr == "2":
-      ecorr = qrcode.constants.ERROR_CORRECT_M
-    else:
-      ecorr = qrcode.constants.ERROR_CORRECT_L
-    version = textlist2[5]
-  except:
-    pass
-  try:
-    qr = qrcode.QRCode(version=version, error_correction=ecorr, box_size=tsize, border=bsize)
-  except:
-    try:
-      qr = qrcode.QRCode(version=1, error_correction=ecorr, box_size=tsize, border=bsize)
-    except:
-      try:
-        qr = qrcode.QRCode(version=1, error_correction=qrcode.constants.ERROR_CORRECT_L, box_size=tsize, border=bsize)
-      except:
-        try:
-          qr = qrcode.QRCode(version=1, error_correction=qrcode.constants.ERROR_CORRECT_L, box_size=tsize, border=4)
-        except:
-          try:
-            qr = qrcode.QRCode(version=1, error_correction=qrcode.constants.ERROR_CORRECT_L, box_size=10, border=4)
-          except:
-            await ctx.reply("Invalid input. Please try again.")
+  data = textlist[0].replace("{{{newline}}}", f"\n")
+  textlist2 = textlist[1].split(" ")
+  fgc = textlist2[0]     if len(textlist2) > 0 else "#000000"
+  bgc = textlist2[1]     if len(textlist2) > 1 else "#FFFFFF"
+  tsize = textlist2[2]   if len(textlist2) > 2 else "10"
+  bsize = textlist2[3]   if len(textlist2) > 3 else "4"
+  iecorr = textlist2[4]  if len(textlist2) > 4 else "4"
+  version = textlist2[5] if len(textlist2) > 5 else "1"
+  if iecorr == "4":
+    ecorr = qrcode.constants.ERROR_CORRECT_H
+  elif iecorr == "3":
+    ecorr = qrcode.cNonstants.ERROR_CORRECT_Q
+  elif iecorr == "2":
+    ecorr = qrcode.constants.ERROR_CORRECT_M
+  else:
+    ecorr = qrcode.constants.ERROR_CORRECT_L
+  qr = qrcode.QRCode(version=version, error_correction=ecorr, box_size=tsize, border=bsize)
   try:
     qr.add_data(data)
   except:
     await ctx.reply("Invalid input. Please try again.")
-  try:
-    img = qr.make_image(fill_color=fgc, back_color=bgc)
-  except:
-    try:
-      img = qr.make_image(fill_color=fgc, back_color="black")
-    except:
-      try:
-        img = qr.make_image(fill_color="white", back_color=bgc)
-      except:
-        img = qr.make_image(fill_color="black", back_color="white")
+  img = qr.make_image(fill_color=fgc, back_color=bgc)
   img.save('QRCode.png')
   await ctx.reply(file=discord.File("QRCode.png"))
   try_delete('QRCode.png')
