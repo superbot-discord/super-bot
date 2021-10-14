@@ -1,6 +1,6 @@
 from shared import *
 #"icyan" : {"fg":"#87B33FFF", "bg":"#131402FF"}
-led_colors = typing.Optional[typing.Literal["cyan", "icyan", "crystal", "icrystal", "red", "ired", "green", "igreen", "blue", "iblue", "purple", "ipurple", "yellow", "iyellow",
+led_colors = typing.Optional[typing.Literal["cyan", "icyan", "crystal", "icrystal", "amber", "iamber", "red", "ired", "green", "igreen", "blue", "iblue", "purple", "ipurple", "yellow", "iyellow",
                                             "teal", "iteal", "black", "white", "tblack", "twhite", "dark", "light", "tdark", "tlight", "wdark", "wlight", "twdark", "twlight"]]
 led_alignment = typing.Optional[typing.Literal['left', 'center', 'right']]
 led_sizer      = lambda s, c, m, l: (s[0]-c["unneeded_width"], s[1]-m+(c["height_plus"] if any(check in l for check in "gjpqy") else c["required_height_plus"]))
