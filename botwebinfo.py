@@ -144,7 +144,7 @@ async def translate(ctx, lang = "list", fromlang = "auto", *, text = "Sample tex
   else:
     if lang in list(langdict.values()):
       lang = list(langdict.keys())[list(langdict.values()).index(lang)]
-    translation = translatorvar.translate(text, src=fromlang, dest=lang)
+    translation = translatorvar.translate(text, src=srclangdict[fromlang], dest=lang)
     try:
       await ctx.reply(f"**Translation from {srclangdict[fromlang]} to {langdict[lang]}:**\n{translation.text.replace('u003c', '<').replace('u003e', '>').replace('u0026', '&')}")
     except:
