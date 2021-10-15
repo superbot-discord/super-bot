@@ -1,14 +1,8 @@
 import base64
 import hashlib
-import random as ra
-import re
-from datetime import datetime
-from difflib import SequenceMatcher
 
-import discord as discord
 import emojis as em
 import pytz
-from discord.ext import commands
 from unicode_charnames import search_charnames, charname, codepoint
 from spellwise import Typox
 from shared import *

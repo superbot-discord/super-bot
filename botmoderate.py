@@ -1,13 +1,3 @@
-import asyncio
-import re
-import typing
-from datetime import timedelta
-from difflib import SequenceMatcher
-
-import discord
-from discord import user
-from discord.ext import commands
-
 from shared import *
 
 UNITS = {'s':'seconds', 'm':'minutes', 'h':'hours', 'd':'days', 'w':'weeks'}

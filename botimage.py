@@ -1,7 +1,5 @@
 import colorsys
-import random as ra
 
-import discord
 import matplotlib.pyplot as plt
 import pytesseract
 from captcha.image import ImageCaptcha
@@ -12,7 +10,6 @@ from pdf2image import convert_from_path
 from pyzbar import pyzbar
 
 import ascii2 as asc
-import requests
 from shared import *
 
 cimage = ImageCaptcha()

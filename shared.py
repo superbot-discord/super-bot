@@ -467,20 +467,19 @@ Need help? check the [documentation](https://superbot-discord.github.io/document
 help_info = discord.Embed(title="SuperBot Information Commands", description=f"""
 **color [Color]** Views information about a color. Supports Decimal, `R G B` and `#Hex`.
 **simplecolor [Color]** Draws a color of gradient. Supports [these colors](https://raw.githubusercontent.com/johann-lau/Bot/main/Colours001.jpeg).
-**translate**
-**definition**
-**unix**
-**time**
-**rtimer**
-**ttimer**
-**terminate**
-**unscramble**
-**unicode**
-**random**
-**choice**
-**raffle**
-**pick**
-
+**translate [Language] [Text]** Translates the text into the [Language].
+**definition [Word]** Looks up the word in a ditionary.
+**unix [Time]** Converts the time into Discord timestamps.
+**time {{Timezone}} Shows the time. Defaults to UTC+0.**
+**rtimer [Duration] Starts a regional-indicator-based timer.**
+**ttimer [Duration]** Starts a plain-text timer. Suitable for iOS devices.
+**terminate [Timer ID]** Stops a timer.
+**unscramble [Scrambled letters]** Unscrambles letters. Useful during a Scrabble game.
+**unicode [Name/Hex/Char]** Searches for Unicode characters.
+**random [L] [H]** Draws a random integer between [L] and [H].
+**choice [Choices]** Draws an option out of choices. Example: `=choice Apple Banana Cherry`
+**raffle [L] [H] [T]** Draws [T] random integer(s) betwene [L] and [H] in spoilers.
+**pick [L] [H] [T]** Same as `=raffle`, but integers do not repeat.
 Need help? check the [documentation](https://superbot-discord.github.io/documentation)!
 """)
 

@@ -1,6 +1,4 @@
-from difflib import SequenceMatcher
-from discord.ext import commands
-import discord as discord
+from shared import *
 
 @commands.command()
 async def engrave(ctx, product = "list", *, text = "Your text goes here."):

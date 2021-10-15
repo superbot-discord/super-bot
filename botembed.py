@@ -1,8 +1,6 @@
 import aiohttp
-import discord as discord
 from discord import Webhook
-from discord.ext import commands
-
+from shared import *
 
 @commands.command()
 async def editembed(ctx, message : discord.Message = None, *,text):

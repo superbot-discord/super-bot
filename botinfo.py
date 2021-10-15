@@ -1,13 +1,4 @@
-import os
-import re
-from datetime import datetime, timedelta
-
-import discord as discord
 import pytz
-from bs4 import BeautifulSoup
-from discord.ext import commands
-
-import requests as requests
 from shared import *
 
 set(pytz.all_timezones_set)

@@ -1,15 +1,9 @@
-import os
-import re
-
 import matplotlib.pyplot as plt
 import qrcode
 from art import *
 from ascii_canvas import canvas, item
 from table2ascii import PresetStyle, table2ascii
 
-import discord as discord
-import numpy as np
-from discord.ext import commands
 from shared import *
 cmaphsv = plt.cm.hsv
 def func(pct, allvals):

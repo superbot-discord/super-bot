@@ -1,5 +1,3 @@
-import discord as discord
-from discord.ext import commands
 from shared import *
 
 @commands.command()
