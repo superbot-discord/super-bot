@@ -35,18 +35,30 @@ def koch_snowflake(order):
 async def ascii(ctx, *, text):
   output = f'''{text2art(text,"cybermedium")}
 {text2art(text,"cyberlarge")}
-{text2art(text,"arrows")}
 {text2art(text,"big")}
+{text2art(text,"arrows")}
 {text2art(text,"keyboard")}
 {text2art(text,"smkeyboard")}
 {text2art(text,"asc")}
 {text2art(text,"ascii")}
 {text2art(text,"banner")}
 {text2art(text,"banner3")}
-{text2art(text,"banner3d")}
+{text2art(text,"banner3-d")}
 {text2art(text,"banner4")}
 {text2art(text,"block")}
 {text2art(text,"appha")}
+{text2art(text,"xcour")}
+{text2art(text,"xcourb")}
+{text2art(text,"xcouri")}
+{text2art(text,"xcourbi")}
+{text2art(text,"xhelv")}
+{text2art(text,"xhelvb")}
+{text2art(text,"xhelvi")}
+{text2art(text,"xhelvbi")}
+{text2art(text,"xsans")}
+{text2art(text,"xsansb")}
+{text2art(text,"xsansi")}
+{text2art(text,"xsansbi")}
 {text2art(text,"isometric1")}
 {text2art(text,"isometric2")}
 {text2art(text,"isometric3")}
