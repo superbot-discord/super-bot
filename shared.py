@@ -347,25 +347,26 @@ help_all = discord.Embed(title="SuperBot#4073 (ID:796686363604680755)", descript
 **Basic Commands**
 `help` `inter_help` `support` `invite` `prefix` `ping` `botpurge`\n
 **Discord Information Commands**
-`server` `invitelink` `role` `channel` `user` `avatar` `status` `leftuser` `message` `raw` `reactions` `emojiinfo` `template`\n
+`server` `invitelink` `role` `channel` `user` `avatar` `status` `leftuser` `message` `raw` `rawraw` `reactions` `emojiinfo` `template`\n
 **Discord Commands**
 `react` `snipe` `clearsnipe` `pretend` `pretendembed` `embed` `editembed` `simpleembed` `quickembed` `ett` `tts`\n
 **Moderation Commands**
 `kick` `ban` `unban` `slowmode` `purge` `purgeuser` `purgeregex` `purgepy` `purgepygex` `purgereactions` `makeinvite`\n
 **Text Manipulation Commands**
-`poll` `insert` `spoiler` `rawspoiler` `rawrawspoiler` `reverse` `emoji` `base` `encode` `decode`\n
+`poll` `insert` `spoiler` `rawspoiler` `rawrawspoiler` `reverse` `emoji` `base` `encode` `decode` `length` spellcheck` `case`\n
 **Information Commands**
 `color` `simplecolor` `translate` `definition` `unix` `time` `rtimer` `ttimer` `terminate` `unscramble` `unicode` `random` `choice` `raffle` `pick`\n
 **Web Commands**
-`redirect` `screenshot` `youtube` `wiki` `minecraft` `engrave` `covid` `population` `map` `bunny` `cat` `dog` `duck` `fox` `koala` `lizard` `panda` `shiba` `error` `errorcat` `errordog`\n
+`redirect` `screenshot` `youtube` `wiki` `minecraft` `engrave` `covid` `population` `map`
+`bunny` `cat` `dog` `duck` `fox` `koala` `lizard` `panda` `shiba` `error` `errorcat` `errordog`\n
 **Plot/Drawing Commands**
-`ascii` `table` `render` `captcha` `pie` `barh` `barv` `hist` `sankey` `snow` `mandelbrot`\n
+`ascii` `table` `render` `captcha` `graph` `bline` `bline2` `pie` `barh` `barv` `hist` `sankey` `snow` `mandelbrot`\n
 **Developer Tools and Miscellaneous Commands**
 `html` `md` `regex` `regsub` `button` `menu`\n
 **Image Commands**
 `analyse` `histogram` `resize` `rotate` `brightness` `contrast` `sharpen` `edge` `contour` `blur` `invert` `hue` `recolor`
 To use the 13 commands above, type `=image ` first, then upload an image. Example: `=image analyse`. Supply a user name to work on his avatar, e.g. `=image SuperBot#4073 analyse`
-`ocr` `qr` `qrmake` `transparent` `text`\n
+`lcd` `led` `led2` `ocr` `qr` `qrmake` `transparent` `text`\n
 `hello` leads you to death\nNeed help? check the [documentation](https://superbot-discord.github.io/documentation)!""")
 
 def help_menu_options(ctx):
@@ -407,6 +408,7 @@ help_dinfo = discord.Embed(title="SuperBot Discord Information Commands", descri
 **leftuser** Views limited information about a user not in the current server.
 **message** Views information about a message.
 **raw** Views the content of a message.
+**rawraw** Views the escaped raw content of a message.
 **reactions** Views information about the reactions of a message.
 **emojiinfo** Views information about an emoji.
 **template** Views information about a server template.\n
@@ -442,6 +444,24 @@ help_mod = discord.Embed(title="SuperBot Moderation Commands", description=f"""
 **purgereactions [No.]** Purges all reactions from [No.] of the most recent messages.¹
 **makeinvite [Valid duration (secs)] {{Max. uses}}** Creates an invite link with a maximum number of uses (default: infinity). Bot and you need `Create invites`.\n
 1: Bot and you need `Manage messages`.
+Need help? check the [documentation](https://superbot-discord.github.io/documentation)!
+""")
+
+help_text = discord.Embed(title="SuperBot Moderation Commands", description=f"""
+**poll [Title] [Options]** Starts a poll. Example: `=poll Do you like pizza? Yes🍕 No😟`
+**insert [Emoji] [Text]** Inserts an emoji. Example: `=insert 👏 This is a sentence.`
+**spoiler [Text]** Turns each character of the text into a spoiler.
+**rawspoiler [Text]** Copy-paste version of `=spoiler`.
+**rawrawspoiler [Text]** Copy-paste version of `=rawspoiler`.
+**reverse [Text]** Reverses a piece of text.
+**emoji [Text]** Turns text into emojis. Supports alphabets and common symbols.
+**base [x] [y] [Number]** Converts numbers from base-[x] to base-[y].
+**encode [Algorithm] [Text]** Encodes the text in base-x, ascii caesar cipher and hashes.
+**decode [Algorithm] [Text]** Encodes the text in base-x and ascii caesar cipher.
+**length [Text]** Calculates the length of the text and analyses the most frequent characters.
+**spellcheck [Word]** Spellchecks a word based on the QWERTY keyboard layout. 
+**case [Text]** Converts the case (capitalization) of the text.
+
 Need help? check the [documentation](https://superbot-discord.github.io/documentation)!
 """)
 
