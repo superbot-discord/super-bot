@@ -23,8 +23,7 @@ from discord import Embed, Permissions, ui
 from discord.enums import VoiceRegion
 from discord.ext import commands
 from markdown2 import Markdown
-from PIL import (Image, ImageDraw, ImageEnhance, ImageFilter, ImageFont,
-                 ImageOps)
+from PIL import Image, ImageDraw, ImageEnhance, ImageFilter, ImageFont, ImageOps
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
@@ -53,6 +52,8 @@ font_lcd      = ImageFont.truetype("fonts/lcd.ttf", 50)
 font_lcd_calc = ImageFont.truetype("fonts/lcd_calc.ttf", 50)
 font_lcd_dense= ImageFont.truetype("fonts/lcd_dense.otf", 50)
 font_lcd_mono = ImageFont.truetype("fonts/lcd_mono.otf", 50)
+
+whitney       = ImageFont.truetype("fonts/whitney.otf", 34)
 
 led_font_dict = {
   font_led      :  {"spacing" : 20, "padding" : 3  , "height_plus" : 15 , "required_height_plus" : 3  , "unneeded_width" : 8 , "unneeded_padding" : 12},

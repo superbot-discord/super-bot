@@ -7,6 +7,30 @@ led_sizer      = lambda s, c, m, l: (s[0]-c["unneeded_width"], s[1]-m+(c["height
 led_positioner = lambda    c, m   : (0, c["padding"] - m)
 all_halfheight = lambda       t   : all(check in "acegmnopqrsuvwxyz., " for check in t.splitlines()[0])
 
+def autowrap(needed_width, font, text):
+  output = ""
+  cache_text = ""
+  for count in text.split(' '):
+    width = font.getsize_multiline(cache_text+count)[0]
+    if width < needed_width or cache_text == "":
+      cache_text += f"{count} "
+    else:
+      output += f"{cache_text}\n"
+      cache_text = ""
+  output += f"{cache_text}"
+  return output
+
+@commands.command()
+async def fakemsg(ctx, size: typing.Optional[typing.Literal['mobile', 'tablet', 'laptop']] = 'mobile', theme: typing.Optional[typing.Literal['white', 'dark', 'black']] = 'dark', *, text_input):
+  true_size = db["fakemsg_size"][size]
+  text = autowrap(true_size, whitney, text_input)
+  image = Image.new("RGBA", (true_size, whitney.getsize_multiline(text)[1]+8), color=db["led_colors"][theme]["bg"])
+  draw = ImageDraw.Draw(image)
+  draw.multiline_text((0, 0), text, font=whitney, fill=db["led_colors"][theme]["fg"], spacing=0, align="left")
+  image.save('output.png')
+  await ctx.reply(file=discord.File('output.png'))
+  try_delete('output.png')
+
 @commands.command()
 async def lcd(ctx, mode: typing.Optional[typing.Literal['regular', 'calc', 'dense', 'mono']] = 'regular', color: led_colors = 'red', alignment: led_alignment = 'left', *, text):
   if mode == 'calc':
@@ -84,6 +108,7 @@ async def led2(ctx, mode: typing.Optional[typing.Literal['regular', 'bold', 'cap
 #   try_delete('output.png')
 
 def setup(bot):
+  bot.add_command(fakemsg)
   bot.add_command(lcd)
   bot.add_command(led)
   bot.add_command(led2)

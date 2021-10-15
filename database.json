@@ -1,4 +1,9 @@
 {
+  "fakemsg_size":{
+    "mobile" : 900,
+    "tablet" : 1800,
+    "laptop" : 2400
+  },
   "font_dicts" : {
     "title"      :{"color":"#AAA", "fontsize":15, "fontweight":"bold"},
     "semi_title" :{"color":"#AAA", "fontsize":10, "fontweight":"demi"},
