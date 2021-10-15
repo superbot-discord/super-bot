@@ -33,13 +33,20 @@ def koch_snowflake(order):
 
 @commands.command()
 async def ascii(ctx, *, text):
-  output = f'''{text2art(text,"block")}
-{text2art(text,"cybermedium")}
+  output = f'''{text2art(text,"cybermedium")}
 {text2art(text,"cyberlarge")}
+{text2art(text,"arrows")}
+{text2art(text,"big")}
 {text2art(text,"keyboard")}
 {text2art(text,"smkeyboard")}
-{text2art(text,"big")}
-{text2art(text,"future_1")}
+{text2art(text,"asc")}
+{text2art(text,"ascii")}
+{text2art(text,"banner")}
+{text2art(text,"banner3")}
+{text2art(text,"banner3d")}
+{text2art(text,"banner4")}
+{text2art(text,"block")}
+{text2art(text,"appha")}
 {text2art(text,"isometric1")}
 {text2art(text,"isometric2")}
 {text2art(text,"isometric3")}
