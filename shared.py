@@ -354,7 +354,7 @@ help_all = discord.Embed(title="SuperBot#4073 (ID:796686363604680755)", descript
 **Moderation Commands**
 `kick` `ban` `unban` `slowmode` `purge` `purgeuser` `purgeregex` `purgepy` `purgepygex` `purgereactions` `makeinvite`\n
 **Text Manipulation Commands**
-`poll` `insert` `spoiler` `rawspoiler` `rawrawspoiler` `reverse` `emoji` `base` `encode` `decode` `length` spellcheck` `case`\n
+`poll` `insert` `spoiler` `rawspoiler` `rawrawspoiler` `reverse` `emoji` `base` `encode` `decode` `length` `spellcheck` `case`\n
 **Information Commands**
 `color` `simplecolor` `translate` `definition` `unix` `time` `rtimer` `ttimer` `terminate` `unscramble` `unicode` `random` `choice` `raffle` `pick`\n
 **Web Commands**
