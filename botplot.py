@@ -218,6 +218,9 @@ async def fonts(ctx, *, text):
 {text2art(text,"drako")}
 
 {text2art(text,"monospace")}
+{text2art(text,"strange")}
+{text2art(text,"fancy57")}
+
 {text2art(text,"fancy60")}
 {text2art(text,"fancy62")}
 {text2art(text,"fancy64")}
@@ -225,6 +228,10 @@ async def fonts(ctx, *, text):
 {text2art(text,"fancy56")}
 {text2art(text,"fancy61")}
 {text2art(text,"fancy63")}
+
+{text2art(text,"fancy65")}
+{text2art(text,"fancy58")}
+{text2art(text,"fancy66")}
 
 {text2art(text,"instagram")}
 '''
