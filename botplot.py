@@ -207,6 +207,34 @@ async def draw(ctx, *, text):
     await ctx.reply(f"```{output}```", file=discord.File('drawing.txt'))
   try_delete('drawing.txt')
 
+@commands.command()
+async def fonts(ctx, *, text):
+  output = f'''{text2art(text,"antrophobia")}
+{text2art(text,"awesome")}
+{text2art(text,"carrier1")}
+{text2art(text,"carrier2")}
+{text2art(text,"cranky")}
+{text2art(text,"cute1")}
+{text2art(text,"drako")}
+
+{text2art(text,"monospace")}
+{text2art(text,"fancy60")}
+{text2art(text,"fancy62")}
+{text2art(text,"fancy64")}
+
+{text2art(text,"fancy56")}
+{text2art(text,"fancy61")}
+{text2art(text,"fancy63")}
+
+{text2art(text,"instagram")}
+'''
+  f = open("fonts.txt", "w")
+  f.write(output)
+  f.flush()
+  f.close()
+  await ctx.reply(file=discord.File('fonts.txt'))
+  try_delete('fonts.txt')
+
 @commands.command(aliases=["mathplot", "mathgraph"])
 async def graph(ctx, func, range_low:float=-10.0, range_high:float=10.0, equalize:specialbool=False,*, title="No_title_required"):
   try:
@@ -482,6 +510,7 @@ def setup(bot):
   bot.add_command(barv)
   bot.add_command(bline)
   bot.add_command(bline2)
+  bot.add_command(fonts)
   bot.add_command(graph)
   bot.add_command(hist)
   bot.add_command(multibline)
