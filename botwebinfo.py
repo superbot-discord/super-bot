@@ -1,19 +1,11 @@
-import os
-import re
-
-import discord
 import pytube
 import wikipedia
-from bs4 import BeautifulSoup
-from discord.ext import commands
 from PyDictionary import PyDictionary
 from pygoogletranslation import Translator
 
-import requests
 from shared import *
-from shared import db
 
-dictionary=PyDictionary()
+dictionary    = PyDictionary()
 translatorvar = Translator()
 unsortedlangdict = translatorvar.glanguage().get("tl")
 unsortedsrclangdict = translatorvar.glanguage().get("sl")

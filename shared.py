@@ -371,18 +371,18 @@ To use the 13 commands above, type `=image ` first, then upload an image. Exampl
 
 def help_menu_options(ctx):
   return [
-    discord.SelectOption(label="All", description="Rough list of all commands",                                           value="help_all", emoji=ctx.bot.get_emoji(891363286589780058)),
-    discord.SelectOption(label="Basic", description="Fundamental commands, e.g. help, ping",                              value="help_basic", emoji=ctx.bot.get_emoji(891363286661087272)),
-    discord.SelectOption(label="Discord info", description="Discord information viewer, e.g. server. user",               value="help_dinfo", emoji=ctx.bot.get_emoji(891363286656905246)),
-    discord.SelectOption(label="Discord", description="Commands that interact with Discord, e.g. snipe",                  value="help_discord", emoji=ctx.bot.get_emoji(891363286761734264)),
-    discord.SelectOption(label="Moderation", description="Commands to simplify server moderation, e.g. purge, makeinvite",value="help_mod", emoji=ctx.bot.get_emoji(891363286786928650)),
-    discord.SelectOption(label="Text", description="Have fun with your text, e.g. reverse, encode",                       value="help_text", emoji=ctx.bot.get_emoji(891363286614949898)),
-    discord.SelectOption(label="Information", description="Informative commands, e.g. color, unix",                       value="help_info", emoji=ctx.bot.get_emoji(891363286694625342)),
-    discord.SelectOption(label="Web", description="Commands that interact with the Internet, e.g. youtube, wiki",         value="help_web", emoji=ctx.bot.get_emoji(891363286761734265)),
-    discord.SelectOption(label="Plot", description="Commands to draw graphs, e.g. pie, bar",                              value="help_plot", emoji=ctx.bot.get_emoji(891363286631743618)),
-    discord.SelectOption(label="Developer", description="Developer-oriented commands, e.g. html, regex",                  value="help_dev", emoji=ctx.bot.get_emoji(891363286665265183)),
-    discord.SelectOption(label="Image", description="Image-editing or analysing commands, e.g. analyse, ocr",             value="help_img", emoji=ctx.bot.get_emoji(891363286694625341)),
-    discord.SelectOption(label="General Documentation", description="Quick links and documentation website",              value="help_general", emoji=ctx.bot.get_emoji(891363286078066749)),
+    discord.SelectOption(label="All", description="Rough list of all commands",                                           value="help_all",    emoji=ctx.bot.get_emoji(891363286589780058)),
+    discord.SelectOption(label="Basic", description="Fundamental commands, e.g. help, ping",                              value="help_basic",  emoji=ctx.bot.get_emoji(891363286661087272)),
+    discord.SelectOption(label="Discord info", description="Discord information viewer, e.g. server. user",               value="help_dinfo",  emoji=ctx.bot.get_emoji(891363286656905246)),
+    discord.SelectOption(label="Discord", description="Commands that interact with Discord, e.g. snipe",                  value="help_discord",emoji=ctx.bot.get_emoji(891363286761734264)),
+    discord.SelectOption(label="Moderation", description="Commands to simplify server moderation, e.g. purge, makeinvite",value="help_mod",    emoji=ctx.bot.get_emoji(891363286786928650)),
+    discord.SelectOption(label="Text", description="Have fun with your text, e.g. reverse, encode",                       value="help_text",   emoji=ctx.bot.get_emoji(891363286614949898)),
+    discord.SelectOption(label="Information", description="Informative commands, e.g. color, unix",                       value="help_info",   emoji=ctx.bot.get_emoji(891363286694625342)),
+    discord.SelectOption(label="Web", description="Commands that interact with the Internet, e.g. youtube, wiki",         value="help_web",    emoji=ctx.bot.get_emoji(891363286761734265)),
+    discord.SelectOption(label="Plot", description="Commands to plot graphs, e.g. pie, bar",                              value="help_plot",   emoji=ctx.bot.get_emoji(891363286631743618)),
+    discord.SelectOption(label="Developer", description="Developer-oriented commands, e.g. html, regex",                  value="help_dev",    emoji=ctx.bot.get_emoji(891363286665265183)),
+    discord.SelectOption(label="Image", description="Image-editing or analysing commands, e.g. analyse, ocr",             value="help_img",    emoji=ctx.bot.get_emoji(891363286694625341)),
+    discord.SelectOption(label="General Documentation", description="Quick links and documentation website",              value="help_general",emoji=ctx.bot.get_emoji(891363286078066749)),
   ]
 
 help_basic = discord.Embed(title="SuperBot Basic Commands", description=f"""
@@ -447,7 +447,7 @@ help_mod = discord.Embed(title="SuperBot Moderation Commands", description=f"""
 Need help? check the [documentation](https://superbot-discord.github.io/documentation)!
 """)
 
-help_text = discord.Embed(title="SuperBot Moderation Commands", description=f"""
+help_text = discord.Embed(title="SuperBot Text Commands", description=f"""
 **poll [Title] [Options]** Starts a poll. Example: `=poll Do you like pizza? Yes🍕 No😟`
 **insert [Emoji] [Text]** Inserts an emoji. Example: `=insert 👏 This is a sentence.`
 **spoiler [Text]** Turns each character of the text into a spoiler.
@@ -461,6 +461,25 @@ help_text = discord.Embed(title="SuperBot Moderation Commands", description=f"""
 **length [Text]** Calculates the length of the text and analyses the most frequent characters.
 **spellcheck [Word]** Spellchecks a word based on the QWERTY keyboard layout. 
 **case [Text]** Converts the case (capitalization) of the text.
+Need help? check the [documentation](https://superbot-discord.github.io/documentation)!
+""")
+
+help_info = discord.Embed(title="SuperBot Information Commands", description=f"""
+**color [Color]** Views information about a color. Supports Decimal, `R G B` and `#Hex`.
+**simplecolor [Color]** Draws a color of gradient. Supports [these colors](https://raw.githubusercontent.com/johann-lau/Bot/main/Colours001.jpeg).
+**translate**
+**definition**
+**unix**
+**time**
+**rtimer**
+**ttimer**
+**terminate**
+**unscramble**
+**unicode**
+**random**
+**choice**
+**raffle**
+**pick**
 
 Need help? check the [documentation](https://superbot-discord.github.io/documentation)!
 """)
