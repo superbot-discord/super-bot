@@ -1,6 +1,4 @@
 import random
-from difflib import SequenceMatcher
-import typing
 
 from shared import *
 

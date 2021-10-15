@@ -1,4 +1,3 @@
-from matplotlib.colors import to_hex
 from shared import *
 
 banned_ids =  []
@@ -344,7 +343,7 @@ async def botban(ctx, user : discord.User, *, text="No reason was provided"):
 @bot_.command()
 @commands.check(botadmin)
 async def botunban(ctx, user : discord.User):
-  if banned_ids.count(user.id) == 1:
+  if user.id in banned_ids:
     banned_text.remove(banned_text[banned_ids.index(user.id)])
     banned_ids.remove(user.id)
     await ctx.reply("Unbanned user from using the bot.")
@@ -394,7 +393,7 @@ async def ping(ctx, *, disposed = None):
 @bot_.command()
 async def terminate(ctx, *, idc):
   if id_pattern.fullmatch(idc) and len(idc)==5:
-    if allid.count(idc.upper()+str(ctx.guild.id))==1:
+    if f"{idc.upper()}{ctx.guild.id}" in allid:
       exec("terminate"+idc.lower()+str(ctx.guild.id)+"=1",globals())
       allid.remove(idc.upper()+str(ctx.guild.id))
       await ctx.reply("Timer terminated!")

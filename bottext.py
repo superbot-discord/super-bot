@@ -258,7 +258,6 @@ async def spoil(ctx, *, text):
 
 @commands.command()
 async def unicode(ctx, *query):
-  #query = [query] if len(query) == 1 else list(query)
   embed = discord.Embed(title = f"Search results for: {' '.join(query)}")
   all_results = []
   for count in query:
@@ -269,7 +268,7 @@ async def unicode(ctx, *query):
   intersected_results = []
   x=sum(all_results, [])
   for count in x:
-    if count not in intersected_results:
+    if count not in intersected_results and all([count in y for y in all_results]):
       intersected_results.append(count)
   characters_added = int(len(query[0]) == 1)
   try:

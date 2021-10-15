@@ -130,49 +130,49 @@ def botett(msg):
   edict = count.to_dict()
   ekeys = list(edict)
   desc = "=embed "
-  if ekeys.count('title') == 1:
+  if 'title' in ekeys:
     desc = desc + edict['title']
   desc = desc + f"\n"
-  if ekeys.count('description') == 1:
+  if 'description' in ekeys:
     desc = desc + edict['description'].replace(f"\n", "{{{newline}}}")
   desc = desc + f"\n"
-  if ekeys.count('color') == 1:
+  if 'color' in ekeys:
     desc = desc + str(edict['color'])
   desc = desc + f"\n"
-  if ekeys.count('url') == 1:
+  if 'url' in ekeys:
     desc = desc + edict['url']
   desc = desc + f"\n"
-  if ekeys.count('author') == 1:
+  if 'author' in ekeys:
     eauthor = edict['author']
     authorkeys = list(eauthor)
-    if authorkeys.count('name') == 1:
+    if 'name' in authorkeys:
       desc = desc + eauthor['name']
   desc = desc + f"\n"
-  if ekeys.count('footer') == 1:
+  if 'footer' in ekeys:
     efooter = edict['footer']
     footerkeys = list(efooter)
-    if footerkeys.count('text') == 1:
+    if 'text' in footerkeys:
       desc = desc + efooter['text']
   desc = desc + f"\n"
-  if ekeys.count('author') == 1:
-    if authorkeys.count('url') == 1:
+  if 'author' in ekeys:
+    if 'url' in authorkeys:
       desc = desc + eauthor['url']
   desc = desc + f"\n"
-  if ekeys.count('image') == 1:
+  if 'image' in ekeys:
     desc = desc + (edict['image'])['url']
   desc = desc + f"\n"
-  if ekeys.count('thumbnail') == 1:
+  if 'thumbnail' in ekeys:
     desc = desc + (edict['thumbnail'])['url']
   desc = desc + f"\n"
-  if ekeys.count('author') == 1:
-    if authorkeys.count('icon_url') == 1:
+  if 'author' in ekeys:
+    if 'icon_url' in authorkeys:
       desc = desc + eauthor['icon_url']
   desc = desc + f"\n"
-  if ekeys.count('footer') == 1:
-    if footerkeys.count('icon_url') == 1:
+  if 'footer' in ekeys:
+    if 'icon_url' in footerkeys:
       desc = desc + efooter['icon_url']
   desc = desc + f"\n"
-  if ekeys.count('fields') == 1:
+  if 'fields' in ekeys:
     for count in edict['fields']:
       desc = desc + str(count['inline']) + f"\n" + count['name'] + f"\n" + count['value'].replace(f"\n", "{{{newline}}}") + f"\n"
   return desc

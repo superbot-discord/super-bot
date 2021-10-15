@@ -42,7 +42,7 @@ async def getrole(ctx, roles : commands.Greedy[discord.Role], member: discord.Me
     member_roles=member.roles
     addrole_count = removerole_count = 0
     for count in roles:
-      if member_roles.count(count)==1:
+      if count in member_roles:
         await member.remove_roles(count)
         removerole_count -= 1
       else:

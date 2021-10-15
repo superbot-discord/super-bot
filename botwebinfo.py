@@ -91,7 +91,7 @@ async def minecraft(ctx, *, item="tnt"):
     desc = re.sub(r'<i>([\s\S]*?)<\/i>', r'*\1*', desc)
     desc = desc.replace("<p>", "").replace("</p>", "")
     desc = re.sub(r'<([a-z]+?)( ([a-z]+?)=".*?")*?>(.*?)<\/\1>', '', desc)
-    embed = discord.Embed(title = "Minecraft: "+item, description=desc, url='https://minecraft.fandom.com/wiki/'+item)
+    embed = discord.Embed(title = "Minecraft: "+item, description=desc, url=f"https://minecraft.fandom.com/wiki/{item}")
     try:
       for count in table.findAll('tr'):
         if count.findAll('td')[0].text.replace("<p>", "").replace("</p>", "").replace(" ", "").replace("\n", "") != "":
@@ -99,7 +99,7 @@ async def minecraft(ctx, *, item="tnt"):
     except:
       pass
     """for count in soup.findAll("h3"):
-      if ["ID", "Metadata", "Share", "Views", "More", "Search", "Minecraft Wiki", "Games", "Useful pages", "Minecraft links", "Gamepedia", "Tools", "In other languages", "Namespaces", "Variants"].count(count.text.replace("[edit]", "")) == 0:
+      if count.text.replace("[edit]", "") not in ["ID", "Metadata", "Share", "Views", "More", "Search", "Minecraft Wiki", "Games", "Useful pages", "Minecraft links", "Gamepedia", "Tools", "In other languages", "Namespaces", "Variants"]:
         desc = str(count.next_element.next_element.next_element.next_element.next_element.next_element.next_element.next_element.next_element.next_element.next_element).replace("<p>", "").replace("</p>", "")
         desc = re.sub(r'<a (class=".+?" )?href="\/([\w/]+?)"( title="([\s\S]+?))?">([\s\S]+?)<\/a>', r'[\5](https://minecraft.fandom.com/\4)', desc)
         desc = re.sub(r'<b>([\s\S]*?)<\/b>', r'**\1**', desc)
@@ -137,26 +137,18 @@ async def redirect(ctx, *, url):
     await ctx.reply("Invalid URL. Please try again.")
 
 @commands.command()
-async def translate(ctx, langinput = "list", *, text = "Sample text"):
-  if langinput == "list" or langinput == "all":
-    await ctx.reply(embed=discord.Embed(description = f"**List of Language Input (Abbreviations)**\n`{'  '.join(list(langdict.keys()))}`\n\n**List of Language Input (Full Names)**\n`{'` `'.join(list(langdict.values()))}`"))
-    await ctx.reply(embed=discord.Embed(description = f"**List of Language Output (Abbreviations)**\n`{'  '.join(list(srclangdict.keys()))}`\n\n**List of Language Output (Full Names)**\n`{'` `'.join(list(srclangdict.values()))}`"))
+async def translate(ctx, lang = "list", fromlang = "auto", *, text = "Sample text"):
+  if lang == "list" or lang == "all":
+    await ctx.reply(embed=discord.Embed(description = f"**List of Language Input (Abbreviations)**\n```{'  '.join(list(srclangdict.keys()))}```\n\n**List of Language Input (Full Names)**\n{', '.join(list(srclangdict.values()))}"))
+    await ctx.reply(embed=discord.Embed(description = f"**List of Language Output (Abbreviations)**\n```{' '.join(list(langdict.keys()))}```\n\n**List of Language Output (Full Names)**\n{', '.join(list(langdict.values()))}"))
   else:
-    if langinput.count(",")==1:
-      lang = langinput.split(",")[0]
-      fromlang = langinput.split(",")[1]
-      if list(srclangdict.values()).count(fromlang) == 1:
-        fromlang = list(srclangdict.keys())[list(srclangdict.values()).index(fromlang)]
-    else:
-      fromlang = "auto"
-      lang = langinput
-    if list(langdict.values()).count(lang) == 1:
+    if lang in list(langdict.values()):
       lang = list(langdict.keys())[list(langdict.values()).index(lang)]
     translation = translatorvar.translate(text, src=fromlang, dest=lang)
     try:
-      await ctx.reply("**Translation from "+srclangdict[fromlang]+" to "+langdict[lang]+f":**\n"+translation.text.replace("u003c", "<").replace("u003e", ">").replace("u0026", "&"))
+      await ctx.reply(f"**Translation from {srclangdict[fromlang]} to {langdict[lang]}:**\n{translation.text.replace('u003c', '<').replace('u003e', '>').replace('u0026', '&')}")
     except:
-      return "Language not found! Please use `=translate list` to get a list of languages."
+      await ctx.reply("Language not found! Please use `=translate list` to get a list of languages.")
 
 @commands.command()
 async def unscramble(ctx, text, length="0"):
