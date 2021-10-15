@@ -78,14 +78,14 @@ async def kick(ctx, user: discord.Member, *, reason="No reason provided"):
     await ctx.reply("You don't have the required permission: Kick members.")
 
 @commands.command()
-async def makeinvite(ctx, timetocount = "0", uses : int = "0"):
+async def makeinvite(ctx, timetocount = "0", uses : int = 0):
   if has_perms(ctx.channel, ctx.author, 0):
     seconds = int(timedelta(**{
       UNITS.get(m.group('unit').lower(), 'seconds'): int(m.group('val'))
       for m in re.finditer(r'(?P<val>\d+)(?P<unit>[smhdw]?)', timetocount, flags=re.I)
     }).total_seconds())
     theinvite = await ctx.channel.create_invite(max_age = seconds, max_uses = uses)
-    await ctx.reply(f"An invite was generated with {seconds} seconds of valid duration: {theinvite.url}")
+    await ctx.reply(f"An invite was generated with {seconds} seconds of valid duration and {uses} maximum users: {theinvite.url}\nNote: a zero indicates infinity.")
   else:
     await ctx.reply("You don't have the required permission: Generate Invites.")
 

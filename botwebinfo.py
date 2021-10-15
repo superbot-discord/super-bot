@@ -142,9 +142,17 @@ async def translate(ctx, lang = "list", fromlang = "auto", *, text = "Sample tex
     await ctx.reply(embed=discord.Embed(description = f"**List of Language Input (Abbreviations)**\n```{'  '.join(list(srclangdict.keys()))}```\n\n**List of Language Input (Full Names)**\n{', '.join(list(srclangdict.values()))}"))
     await ctx.reply(embed=discord.Embed(description = f"**List of Language Output (Abbreviations)**\n```{' '.join(list(langdict.keys()))}```\n\n**List of Language Output (Full Names)**\n{', '.join(list(langdict.values()))}"))
   else:
-    if lang in list(langdict.values()):
+    if "," in lang:
+      lang_split = lang.split(",")
+      lang = lang_split[0]
+      fromlang = lang_split[1]
+      if list(srclangdict.values()).count(fromlang) == 1:
+        fromlang = list(srclangdict.keys())[list(srclangdict.values()).index(fromlang)]
+    else:
+      fromlang = "auto"
+    if list(langdict.values()).count(lang) == 1:
       lang = list(langdict.keys())[list(langdict.values()).index(lang)]
-    translation = translatorvar.translate(text, src=srclangdict[fromlang], dest=lang)
+      translation = translatorvar.translate(text, src=fromlang, dest=lang)
     try:
       await ctx.reply(f"**Translation from {srclangdict[fromlang]} to {langdict[lang]}:**\n{translation.text.replace('u003c', '<').replace('u003e', '>').replace('u0026', '&')}")
     except:
