@@ -216,10 +216,18 @@ async def fonts(ctx, *, text):
 {text2art(text,"cranky")}
 {text2art(text,"cute1")}
 {text2art(text,"drako")}
+{text2art(text,"strange")}
 
 {text2art(text,"monospace")}
-{text2art(text,"strange")}
 {text2art(text,"fancy57")}
+
+{text2art(text,"thin2")}
+{text2art(text,"thin3")}
+{text2art(text,"tiny")}
+{text2art(text,"tiny2")}
+{text2art(text,"wiggly")}
+{text2art(text,"smallcaps2")}
+{text2art(text,"smallcaps3")}
 
 {text2art(text,"fancy60")}
 {text2art(text,"fancy62")}
@@ -230,10 +238,19 @@ async def fonts(ctx, *, text):
 {text2art(text,"fancy63")}
 
 {text2art(text,"fancy65")}
-{text2art(text,"fancy58")}
 {text2art(text,"fancy66")}
+{text2art(text,"fancy58")}
 
-{text2art(text,"instagram")}
+{text2art(text,"handwriting1")}
+{text2art(text,"handwriting2")}
+{text2art(text,"handwriting3")}
+
+{text2art(text,"black_bubble")}
+{text2art(text,"black_square")}
+{text2art(text,"white_bubble")}
+{text2art(text,"white_square")}
+{text2art(text,"contouring3")}
+{text2art(text,"contouring4")}
 '''
   f = open("fonts.txt", "w")
   f.write(output)
