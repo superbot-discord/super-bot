@@ -78,7 +78,7 @@ async def kick(ctx, user: discord.Member, *, reason="No reason provided"):
     await ctx.reply("You don't have the required permission: Kick members.")
 
 @commands.command()
-async def makeinvite(ctx, timetocount=0, uses : int = 0):
+async def makeinvite(ctx, timetocount = "0", uses : int = "0"):
   if has_perms(ctx.channel, ctx.author, 0):
     seconds = int(timedelta(**{
       UNITS.get(m.group('unit').lower(), 'seconds'): int(m.group('val'))
