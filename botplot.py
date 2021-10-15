@@ -31,20 +31,26 @@ def koch_snowflake(order):
   x, y = points.real, points.imag
   return x, y
 
-
 @commands.command()
 async def ascii(ctx, *, text):
-  output = text2art(text,"cybermedium") + f"\n" + text2art(text,"big")+f"\n" + text2art(text,"future_1")
+  output = f'''{text2art(text,"block")}
+{text2art(text,"cybermedium")}
+{text2art(text,"cyberlarge")}
+{text2art(text,"keyboard")}
+{text2art(text,"smkeyboard")}
+{text2art(text,"big")}
+{text2art(text,"future_1")}
+{text2art(text,"isometric1")}
+{text2art(text,"isometric2")}
+{text2art(text,"isometric3")}
+{text2art(text,"isometric4")}
+'''
   f = open("ascii.txt", "w")
   f.write(output)
   f.flush()
   f.close()
-  if len(output) > 1994 or len(text) > 11:
-    await ctx.reply(file=discord.File('ascii.txt'))
-  else:
-    await ctx.reply(f"```{output}```", file=discord.File('ascii.txt'))
+  await ctx.reply(file=discord.File('ascii.txt'))
   try_delete('ascii.txt')
-
 
 @commands.command()
 async def barh(ctx, numbers, label, *, title="No_title_required"):
