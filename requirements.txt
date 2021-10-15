@@ -33,7 +33,7 @@ art==5.3
 # Web info
 wikipedia-sections==2.0.0
 beautifulsoup4==4.10.0
-selenium==4.0.0rc3
+selenium==4.0.0
 pytube==11.0.1
 
 # Image
@@ -45,5 +45,5 @@ captcha==0.3
 
 unicode-charnames==14.0.0
 emojis==0.6.0
-emoji==1.6.0
+emoji==1.6.1
 pytz==2021.3
