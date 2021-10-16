@@ -1,6 +1,7 @@
 from shared import *
 
-banned_ids =  []
+#              LED Spammer
+banned_ids =  [753526161732141067]
 banned_text = []
 bot_ = commands.Bot(command_prefix=commands.when_mentioned_or("="), intents=discord.Intents.all(), allowed_mentions=discord.AllowedMentions(everyone=False, users=True, roles=False, replied_user=False),
   case_insensitive=True, strip_after_prefix=True)
