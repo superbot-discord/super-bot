@@ -20,6 +20,23 @@ def autowrap(needed_width, font, text):
   output += f"{cache_text}"
   return output
 
+def led_server_info(server):
+  desc = server.name
+  for count in server.channels:
+    if count.type == discord.ChannelType.category:
+      desc += f"\n{count.name}"
+    elif count.type == discord.ChannelType.text:
+      desc += f"\n  #{count.name}"
+    elif count.type == discord.ChannelType.voice:
+      desc += f"\n  !{count.name}"
+    elif count.type == discord.ChannelType.stage_voice:
+      desc += f"\n  %{count.name}"
+    elif count.type == discord.ChannelType.store:
+      desc += f"\n  ${count.name}"
+    elif count.type in [discord.ChannelType.news_thread, discord.ChannelType.private_thread, discord.ChannelType.public_thread]:
+      desc += f"\n    >{count.name}"
+  return desc
+
 @commands.command()
 async def fakemsg(ctx, size: typing.Optional[typing.Literal['mobile', 'tablet', 'laptop']] = 'mobile', theme: typing.Optional[typing.Literal['white', 'dark', 'black']] = 'dark', *, text_input):
   true_size = db["fakemsg_size"][size]
@@ -96,6 +113,29 @@ async def led2(ctx, mode: typing.Optional[typing.Literal['regular', 'bold', 'cap
   await ctx.reply(file=discord.File('output.png'))
   try_delete('output.png')
 
+@commands.command()
+async def led_server(ctx, mode: typing.Optional[typing.Literal['regular', 'bold', 'caps', 'mono', 'serif']] = 'regular', color: led_colors = 'red', alignment: led_alignment = 'left'):
+  if mode == 'bold':
+    current_font = font_led_bold
+  elif mode == 'caps':
+    current_font = font_led_caps
+  elif mode == 'mono':
+    current_font = font_led_mono
+  elif mode == 'serif':
+    current_font = font_led_serif
+  else:
+    current_font = font_led
+  current_properties = led_font_dict[current_font]
+  text = led_server_info(ctx.guild)
+  sizes = current_font.getsize_multiline(text, spacing=current_properties["spacing"])
+  minus_padding = current_properties["unneeded_padding"] if all_halfheight(text) else 0
+  image = Image.new("RGBA", led_sizer(sizes, current_properties, minus_padding, text.splitlines()[len(text.splitlines())-1]), color=db["led_colors"][color]["bg"])
+  draw = ImageDraw.Draw(image)
+  draw.multiline_text(led_positioner(current_properties, minus_padding), text, font=current_font, fill=db["led_colors"][color]["fg"], spacing=current_properties["spacing"], align=alignment)
+  image.save('output.png')
+  await ctx.reply(file=discord.File('output.png'))
+  try_delete('output.png')
+
 # @commands.command()
 # async def ledbar(ctx, total : float, step : float, color: led_colors = 'red'):
 #   image = Image.new("RGBA", (1200, 100), color=db["led_colors"][color]["bg"])
@@ -112,3 +152,4 @@ def setup(bot):
   bot.add_command(lcd)
   bot.add_command(led)
   bot.add_command(led2)
+  bot.add_command(led_server)
