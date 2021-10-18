@@ -6,6 +6,7 @@ led_alignment = typing.Optional[typing.Literal['left', 'center', 'right']]
 led_sizer      = lambda s, c, m, l: (s[0]-c["unneeded_width"], s[1]-m+(c["height_plus"] if any(check in l for check in "gjpqy,;") else c["required_height_plus"]))
 led_positioner = lambda    c, m   : (0, c["padding"] - m)
 all_halfheight = lambda       t   : all(check in "acegmnopqrsuvwxyz., " for check in t.splitlines()[0])
+channel_sort   = lambda c: 1 if c.type in [discord.ChannelType.voice, discord.ChannelType.stage_voice] else 0
 
 def autowrap(needed_width, font, text):
   output = ""
@@ -24,23 +25,23 @@ def led_server_info(server : discord.Guild):
   desc = server.name
   def desc_add(ch):
     if ch.type == discord.ChannelType.category:
-      return f"\n{ch.name}"
+      return f"\n {ch.name}"
     elif ch.type == discord.ChannelType.text:
-      return f"\n  #{ch.name}"
+      return f"\n   #{ch.name}"
     elif ch.type == discord.ChannelType.voice:
-      return f"\n  !{ch.name}"
+      return f"\n   !{ch.name}"
     elif ch.type == discord.ChannelType.stage_voice:
-      return f"\n  %{ch.name}"
+      return f"\n   %{ch.name}"
     elif ch.type == discord.ChannelType.store:
-      return f"\n  ${ch.name}"
+      return f"\n   ${ch.name}"
     elif ch.type == discord.ChannelType.news:
-      return f"\n  >{ch.name}"
+      return f"\n   >{ch.name}"
     elif ch.type in [discord.ChannelType.news_thread, discord.ChannelType.private_thread, discord.ChannelType.public_thread]:
-      return f"\n    -{ch.name}"
+      return f"\n     -{ch.name}"
     else:
       return ""
   led_server_channels = list(filter(lambda i: i.type != discord.ChannelType.category, server.channels))
-  led_server_channels.sort(key=lambda i: i.type, reverse=True)
+  led_server_channels.sort(key=channel_sort)
   for count in led_server_channels:
     if not count.category:
       desc += desc_add(count)
