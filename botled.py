@@ -33,8 +33,10 @@ def led_server_info(server : discord.Guild):
       return f"\n  %{ch.name}"
     elif ch.type == discord.ChannelType.store:
       return f"\n  ${ch.name}"
+    elif ch.type == discord.ChannelType.news:
+      return f"\n  >{ch.name}"
     elif ch.type in [discord.ChannelType.news_thread, discord.ChannelType.private_thread, discord.ChannelType.public_thread]:
-      return f"\n    >{ch.name}"
+      return f"\n    -{ch.name}"
     else:
       return ""
   led_server_channels = list(filter(lambda i: i.type != discord.ChannelType.category, server.channels))
