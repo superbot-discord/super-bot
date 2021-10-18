@@ -20,21 +20,38 @@ def autowrap(needed_width, font, text):
   output += f"{cache_text}"
   return output
 
-def led_server_info(server):
+def led_server_info(server : discord.Guild):
   desc = server.name
-  for count in server.channels:
-    if count.type == discord.ChannelType.category:
-      desc += f"\n{count.name}"
-    elif count.type == discord.ChannelType.text:
-      desc += f"\n  #{count.name}"
-    elif count.type == discord.ChannelType.voice:
-      desc += f"\n  !{count.name}"
-    elif count.type == discord.ChannelType.stage_voice:
-      desc += f"\n  %{count.name}"
-    elif count.type == discord.ChannelType.store:
-      desc += f"\n  ${count.name}"
-    elif count.type in [discord.ChannelType.news_thread, discord.ChannelType.private_thread, discord.ChannelType.public_thread]:
-      desc += f"\n    >{count.name}"
+  def desc_add(ch):
+    if ch.type == discord.ChannelType.category:
+      return f"\n{ch.name}"
+    elif ch.type == discord.ChannelType.text:
+      return f"\n  #{ch.name}"
+    elif ch.type == discord.ChannelType.voice:
+      return f"\n  !{ch.name}"
+    elif ch.type == discord.ChannelType.stage_voice:
+      return f"\n  %{ch.name}"
+    elif ch.type == discord.ChannelType.store:
+      return f"\n  ${ch.name}"
+    elif ch.type in [discord.ChannelType.news_thread, discord.ChannelType.private_thread, discord.ChannelType.public_thread]:
+      return f"\n    >{ch.name}"
+    else:
+      return ""
+  led_server_channels = list(filter(lambda i: i.type != discord.ChannelType.category, server.channels))
+  led_server_channels.sort(key=lambda i: i.type, reverse=True)
+  for count in led_server_channels:
+    if not count.category:
+      desc += desc_add(count)
+  led_server_categories = server.categories
+  print(led_server_categories)
+  led_server_categories.sort(key=lambda i: i.position)
+  print(led_server_categories)
+  for count in led_server_categories:
+    desc += desc_add(count)
+    led_in_category_channels = count.channels
+    led_in_category_channels.sort(key=lambda i: i.position)
+    for count2 in led_in_category_channels:
+      desc += desc_add(count2)
   return desc
 
 @commands.command()
