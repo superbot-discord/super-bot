@@ -395,7 +395,7 @@ async def ping(ctx, *, disposed = None):
 async def terminate(ctx, *, idc):
   if id_pattern.fullmatch(idc) and len(idc)==5:
     if f"{idc.upper()}{ctx.guild.id}" in allid:
-      exec("terminate"+idc.lower()+str(ctx.guild.id)+"=1",globals())
+      exec(f"terminate{idc.lower()}{ctx.guild.id}=1",globals())
       allid.remove(idc.upper()+str(ctx.guild.id))
       await ctx.reply("Timer terminated!")
     else:
@@ -412,7 +412,7 @@ async def rtimer(ctx, timetocount, *, Text = None):
     end = datetime.now(timezone.utc) + timedelta(seconds = sec)
     seconds = int((end - datetime.now(timezone.utc)).total_seconds())
     idcode = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"[ra.randint(0, 25)]+"ABCDEFGHIJKLMNOPQRSTUVWXYZ"[ra.randint(0, 25)]+"ABCDEFGHIJKLMNOPQRSTUVWXYZ"[ra.randint(0, 25)]+"ABCDEFGHIJKLMNOPQRSTUVWXYZ"[ra.randint(0, 25)]+"ABCDEFGHIJKLMNOPQRSTUVWXYZ"[ra.randint(0, 25)]
-    exec("terminate"+idcode.lower()+str(ctx.guild.id)+"=0",globals())
+    exec(f"terminate{idcode.lower()}{ctx.guild.id}=0",globals())
     newidcode=idcode.lower()
     allid.append(idcode+str(ctx.guild.id))
     desc = "Initializing countdown…"
@@ -472,7 +472,7 @@ async def ttimer(ctx, timetocount, *, Text = None):
     end = datetime.now(timezone.utc) + timedelta(seconds = sec)
     seconds = int((end - datetime.now(timezone.utc)).total_seconds())
     newidcode = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"[ra.randint(0, 25)]+"ABCDEFGHIJKLMNOPQRSTUVWXYZ"[ra.randint(0, 25)]+"ABCDEFGHIJKLMNOPQRSTUVWXYZ"[ra.randint(0, 25)]+"ABCDEFGHIJKLMNOPQRSTUVWXYZ"[ra.randint(0, 25)]+"ABCDEFGHIJKLMNOPQRSTUVWXYZ"[ra.randint(0, 25)]
-    exec("terminate"+newidcode.lower()+str(ctx.guild.id)+"=0",globals())
+    exec(f"terminate{newidcode.lower()}{ctx.guild.id}=0",globals())
     allid.append(newidcode+str(ctx.guild.id))
     desc = "Initializing countdown…"
     message = await ctx.reply(desc)

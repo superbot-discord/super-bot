@@ -288,7 +288,6 @@ async def invitelink(ctx,inviteinput: discord.Invite):
   ti=f"Invite Information: {invite.code}"
   desc=f"Created at {round((invite.created_at-dt1).total_seconds())} by {invite.inviter}"
   embed=discord.Embed(title=ti, description=desc)
-  f00v=invite.guild
   if invite.max_uses == 0:
     f0v=str(invite.uses)
   else:
@@ -311,7 +310,36 @@ async def invitelink(ctx,inviteinput: discord.Invite):
     f7v = "Never"
   else:
     f7v=f"<t:{(invite.created_at+timedelta(seconds=age)-dt1).total_seconds()}:F>"
-  embed.add_field(name="Server", value=f00v, inline=True)
+  invite_guild = invite.guild
+  if invite_guild:
+    embed.title = f"Invite Information: {invite.code} ({invite_guild.name})"
+    if invite_guild.banner:
+      base_url1 = invite_guild.banner.url
+      embed.set_image(url=base_url1)
+      for count1 in ['png', 'jpg', 'webp']:
+        desc = ""
+        base_url1 = invite_guild.banner.url.replace('.png', f'.{count1}')
+        for count in range(4, 13):
+          size = str(2**count)
+          temp = base_url1.replace("?size=1024", f"?size={size}")
+          desc += f"[{size}]({temp}) "
+        embed.add_field(name=f"Server {count1.upper()} banners", value=desc)
+    if invite_guild.banner:
+      base_url1 = invite_guild.banner.url
+      embed.set_image(url=base_url1)
+      for count1 in ['png', 'jpg', 'webp']:
+        desc = ""
+        base_url1 = invite_guild.banner.url.replace('.png', f'.{count1}')
+        for count in range(5, 13):
+          size = str(2**count)
+          temp = base_url1.replace("?size=1024", f"?size={size}")
+          desc += f"[{size}]({temp}) "
+        embed.add_field(name=f"Server {count1.upper()} icons", value=desc)
+    embed.add_field(name="Server Verification Level", value=str(invite_guild.verification_level))
+    if invite_guild.description:
+      embed.add_field(name="Server Description", value=invite_guild.description, inline=False)
+  else:
+    embed.add_field(name="Server", value=f"Invite link", inline=True)
   embed.add_field(name="Uses", value=f0v, inline=True)
   embed.add_field(name="Temporary?", value=f1v, inline=True)
   embed.add_field(name="URL", value=f3v, inline=True)
@@ -324,7 +352,6 @@ async def invitelink(ctx,inviteinput: discord.Invite):
 
 @commands.command(aliases=["lu"])
 async def leftuser(ctx, *, userinput):
-  global bot
   lfuser = await ctx.bot.fetch_user(int(userinput))
   ti="Left User Information"
   if lfuser == None:
@@ -654,11 +681,11 @@ async def server(ctx, text = "regular"):
         f0v = ""
         for count2 in guild.text_channels:
           if len(f0v+count2.name+", ") > 1024:
-            f0v = f0v + "… "
+            f0v += "… "
             break
-          f0v = f0v + count2.name + ", "
+          f0v += count2.name + ", "
         break
-      f0v=f0v+str(count.mention)+", "
+      f0v += f"{count.mention}, "
     f1v=""
     f0v=f0v[:-1]
     if len(guild.voice_channels)==0:
@@ -704,8 +731,8 @@ async def server(ctx, text = "regular"):
         break
       f1va = f1va + count.mention+" "
     f1va = f1va[:-1]
-    f2v = str(guild.bitrate_limit//1000)+" kbps"
-    f3v = str(guild.filesize_limit//1048576)+" MB"
+    f2v = f"{guild.bitrate_limit//1000} kbps"
+    f3v = f"{guild.filesize_limit//1048576} MB"
     f4v = str(guild.emoji_limit)
     f5v = guild.mfa_level
     if f5v==1:
@@ -719,7 +746,7 @@ async def server(ctx, text = "regular"):
     elif str(ecf)=="no_role":
       f7v="Members without roles"
     elif str(ecf)=="all_members":
-      f7v="All Members"""
+      f7v="All Members"
     f8v=""
     for count in guild.members:
       f8v=f8v+count.mention+" "
@@ -735,12 +762,12 @@ async def server(ctx, text = "regular"):
     f13v = guild.description
     if f13v == None:
       f13v = "No description"
-    embed.add_field(name="Text Channels ("+str(len(guild.text_channels))+")", value=f0v, inline=False)
-    embed.add_field(name="Categories ("+str(len(guild.categories))+")", value=f1vb, inline=False)
-    embed.add_field(name="Voice Channels ("+str(len(guild.voice_channels))+")", value=f1v, inline=True)
-    embed.add_field(name="Stage Channels ("+str(len(guild.stage_channels))+")", value=f1vc, inline=True)
-    embed.add_field(name="Roles ("+str(len(guild.roles))+")", value=f1va, inline=False)
-    embed.add_field(name="Members ("+str(guild.member_count)+")", value=f8v, inline=False)
+    embed.add_field(name=f"Text Channels ({len(guild.text_channels)})", value=f0v, inline=False)
+    embed.add_field(name=f"Categories ({len(guild.categories)})", value=f1vb, inline=False)
+    embed.add_field(name=f"Voice Channels ({len(guild.voice_channels)})", value=f1v, inline=True)
+    embed.add_field(name=f"Stage Channels ({len(guild.stage_channels)})", value=f1vc, inline=True)
+    embed.add_field(name=f"Roles ({len(guild.roles)})", value=f1va, inline=False)
+    embed.add_field(name=f"Members ({guild.member_count})", value=f8v, inline=False)
     embed.add_field(name="Max bitrate", value=f2v, inline=True)
     embed.add_field(name="Max filesize", value=f3v, inline=True)
     embed.add_field(name="Max emojis", value=f4v, inline=True)
@@ -748,7 +775,7 @@ async def server(ctx, text = "regular"):
     embed.add_field(name="Verification Level", value=f6v, inline=True)
     embed.add_field(name="Explict Content Filter", value=f7v, inline=True)
     if guild.afk_channel!=None:
-      f9v=str(guild.afk_timeout//60)+" minute(s)"
+      f9v=f"{guild.afk_timeout//60} minute(s)"
       embed.add_field(name="AFK Timeout", value=f9v, inline=True)
       embed.add_field(name="AFK Channel", value=guild.afk_channel.mention, inline=True)
     embed.add_field(name="Server boosts", value=str(guild.premium_subscription_count), inline=True)
