@@ -27,7 +27,7 @@ def led_server_info(server : discord.Guild):
     if ch.type == discord.ChannelType.category:
       return f"\n {ch.name}"
     elif ch.type == discord.ChannelType.text:
-      return f"\n   #{ch.name}"
+      return (f"\n   #{ch.name}" + f'\n     -{x.name}' for x in ch.threads)
     elif ch.type == discord.ChannelType.voice:
       return f"\n   !{ch.name}"
     elif ch.type == discord.ChannelType.stage_voice:
@@ -36,8 +36,8 @@ def led_server_info(server : discord.Guild):
       return f"\n   ${ch.name}"
     elif ch.type == discord.ChannelType.news:
       return f"\n   >{ch.name}"
-    elif ch.type in [discord.ChannelType.news_thread, discord.ChannelType.private_thread, discord.ChannelType.public_thread]:
-      return f"\n     -{ch.name}"
+    #elif ch.type in [discord.ChannelType.news_thread, discord.ChannelType.private_thread, discord.ChannelType.public_thread]:
+    #  return f"\n     -{ch.name}"
     else:
       return ""
   led_server_channels = list(filter(lambda i: i.type != discord.ChannelType.category, server.channels))
