@@ -279,37 +279,46 @@ async def emojis(ctx, *, disposed = None):
   try_delete('output.txt')
 
 @commands.command()
-async def invitelink(ctx,inviteinput: discord.Invite):
-  allinvites=await inviteinput.channel.invites()
-  for count in allinvites:
-    if count==inviteinput:
-      invite=count
-      break
+async def invitelink(ctx, *, invite_input: discord.Invite):
+  invite_has_info = False
+  try:
+    allinvites=await invite_input.guild.invites()
+    for count in allinvites:
+      if count == invite_input:
+        invite = count
+        break
+    assert invite
+    invite_has_info = True
+  except:
+    invite = invite_input
   ti=f"Invite Information: {invite.code}"
-  desc=f"Created at {round((invite.created_at-dt1).total_seconds())} by {invite.inviter}"
+  f2v = f"{invite.channel.mention} ({invite.channel.type})"
+  f3v = invite.url
+  f4v = invite.id
+  if invite_has_info:
+    desc=f"Created at {round((invite.created_at-dt1).total_seconds())} by {invite.inviter}"
+    f1v = invite.temporary
+    age = invite.max_age
+    if age==0:
+      f5v="Never Expires"
+    elif age>86400:
+      f5v=f"{age/86400} day(s)"
+    elif age>3600:
+      f5v=f"{age/3600} hour(s)"
+    else:
+      f5v=f"{age/60} minute(s)"
+    if f5v == "Never Expires":
+      f7v = "Never"
+    else:
+      f7v=f"<t:{(invite.created_at+timedelta(seconds=age)-dt1).total_seconds()}:F>"
+    if invite.max_uses == 0:
+      f0v=str(invite.uses)
+    else:
+      f0v = f"{invite.uses}/{invite.max_uses}"
+  else:
+    desc= f"Created by {invite.inviter}\nNote: Some information cannot be retrieved as the invite does not come from the current server!"
   embed=discord.Embed(title=ti, description=desc)
-  if invite.max_uses == 0:
-    f0v=str(invite.uses)
-  else:
-    f0v=str(invite.uses)+"/"+str(invite.max_uses)
-  f1v=invite.temporary
-  f2v=invite.channel.mention+" ("+str(invite.channel.type)+")"
-  f3v=invite.url
-  f4v=invite.id
-  age=invite.max_age
-  if age==0:
-    f5v="Never Expires"
-  elif age>86400:
-    f5v=f"{age/86400} day"
-  elif age>3600:
-    f5v=f"{age/3600} hr"
-  else:
-    f5v=f"{age/60} min"
   f6v=str(invite.revoked)
-  if f5v == "Never Expires":
-    f7v = "Never"
-  else:
-    f7v=f"<t:{(invite.created_at+timedelta(seconds=age)-dt1).total_seconds()}:F>"
   invite_guild = invite.guild
   if invite_guild:
     embed.title = f"Invite Information: {invite.code} ({invite_guild.name})"
@@ -340,13 +349,15 @@ async def invitelink(ctx,inviteinput: discord.Invite):
       embed.add_field(name="Server Description", value=invite_guild.description, inline=False)
   else:
     embed.add_field(name="Server", value=f"Invite link", inline=True)
-  embed.add_field(name="Uses", value=f0v, inline=True)
-  embed.add_field(name="Temporary?", value=f1v, inline=True)
+  if invite_has_info:
+    embed.add_field(name="Uses", value=f0v, inline=True)
+    embed.add_field(name="Temporary?", value=f1v, inline=True)
   embed.add_field(name="URL", value=f3v, inline=True)
   embed.add_field(name="Channel", value=f2v, inline=True)
-  embed.add_field(name="ID", value=f4v, inline=True)
-  embed.add_field(name="Expires", value=f7v, inline=True)
-  embed.add_field(name="Valid Duration", value=f5v, inline=True)
+  #embed.add_field(name="ID", value=f4v, inline=True)
+  if invite_has_info:
+    embed.add_field(name="Expires", value=f7v, inline=True)
+    embed.add_field(name="Valid Duration", value=f5v, inline=True)
   embed.add_field(name="Expired?", value=f6v, inline=True)
   await ctx.reply(embed=embed)
 
