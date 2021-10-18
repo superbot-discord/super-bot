@@ -41,18 +41,19 @@ def led_server_info(server : discord.Guild):
     else:
       return ""
   led_server_channels = list(filter(lambda i: i.type != discord.ChannelType.category, server.channels))
+  print(led_server_channels)
   led_server_channels.sort(key=channel_sort)
+  print(led_server_channels)
   for count in led_server_channels:
     if not count.category:
       desc += desc_add(count)
   led_server_categories = server.categories
-  print(led_server_categories)
   led_server_categories.sort(key=lambda i: i.position)
-  print(led_server_categories)
   for count in led_server_categories:
     desc += desc_add(count)
     led_in_category_channels = count.channels
-    led_in_category_channels.sort(key=lambda i: i.position)
+    #led_in_category_channels.sort(key=lambda i: i.position)
+    led_in_category_channels.sort(key=channel_sort)
     for count2 in led_in_category_channels:
       desc += desc_add(count2)
   return desc
