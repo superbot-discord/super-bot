@@ -332,7 +332,7 @@ async def invitelink(ctx, *, invite_input: discord.Invite):
           size = str(2**count)
           temp = base_url1.replace("?size=1024", f"?size={size}")
           desc += f"[{size}]({temp}) "
-        embed.add_field(name=f"Server {count1.upper()} banners", value=desc)
+        embed.add_field(name=f"{'Ser.' if count1 == 'webp' else 'Server'} {count1.upper()} banners", value=desc)
     if invite_guild.banner:
       base_url1 = invite_guild.banner.url
       embed.set_image(url=base_url1)
