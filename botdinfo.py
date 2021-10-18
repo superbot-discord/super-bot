@@ -652,6 +652,15 @@ async def server(ctx, text = "regular"):
       desc += f"[{size}]({temp}) "
   except:
     pass
+  try:
+    base_url = guild.splash.url
+    desc += f"\nServer Invite Splash: "
+    for count in range(4, 13):
+      size = str(2**count)
+      temp = base_url.replace("?size=1024", f"?size={size}")
+      desc += f"[{size}]({temp}) "
+  except:
+    pass
   embed=discord.Embed(title=ti, description=desc)
   try:
     embed.set_author(name="Server Information",icon_url=guild.icon.url)
