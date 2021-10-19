@@ -988,19 +988,28 @@ async def user(ctx, user: discord.Member = None, channel: discord.TextChannel = 
     f0v=f"{user.name}#{user.discriminator}"
   else:
     f0v=f"{user.name}#{user.discriminator} (__Nickname:__  `{user.display_name}`)"
-  f1v=f"<t:{round((user.created_at-dt1).total_seconds())}:F>"
+  f1v=f"<t:{round((user.created_at-dt1).total_seconds())}:F>\nFrom now:\n"
   f1ts = str(datetime.now(timezone.utc) - user.created_at)
   if " days, " not in f1ts:
-    f1va = re.sub(r'(\d{1,2}):(\d{2}):(\d{2})', r'\1 hours \2 minutes \3 seconds', f1ts) + f"\n≈ "+f1ts.split(":")[0]+" hours"
+    f1v + re.sub(r'(\d{1,2}):(\d{2}):(\d{2})', r'\1 hours \2 minutes \3 seconds', f1ts) + f"\n≈ {f1ts.split(':')[0]} hours"
   else:
     days = int(re.sub(r'([\d]+) days, [\s\S]*', r'\1', f1ts))
-    f1va = re.sub(r'([\d]+) days, (\d{1,2}):(\d{2}):(\d{2})', r'\1 days \2 hrs \3 mins \4 secs', f1ts)[:-7] + f"\n≈ "+str((int(f1ts.split(" days, ")[0]))//365) + " years " + str(int(f1ts.split(" days, ")[0]) % 365) + " days"
-  f2v=f"<t:{round((user.joined_at-dt1).total_seconds())}:F>"
+    f1v += re.sub(r'([\d]+) days, (\d{1,2}):(\d{2}):(\d{2})', r'\1 days \2 hrs \3 mins \4 secs', f1ts)[:-7] + f"\n≈ {(int(f1ts.split(' days, ')[0]))//365} years {int(f1ts.split(' days, ')[0]) % 365} days"
+  f2v=f"<t:{round((user.joined_at-dt1).total_seconds())}:F>\nFrom now:\n"
   f2ts = str(datetime.now(timezone.utc) - user.joined_at)
   if " days, " not in f2ts:
-    f2va = re.sub(r'(\d{1,2}):(\d{2}):(\d{2})', r'\1 hours \2 minutes \3 seconds', f2ts) + f"\n≈ "+f2ts.split(":")[0]+" hours"
+    f2v += re.sub(r'(\d{1,2}):(\d{2}):(\d{2})', r'\1 hours \2 minutes \3 seconds', f2ts) + f"\n≈ {f2ts.split(':')[0]} hours"
   else:
-    f2va = re.sub(r'([\d]+) days, (\d{1,2}):(\d{2}):(\d{2})', r'\1 days \2 hrs \3 mins \4 secs', f2ts)[:-7] + f"\n≈ "+str((int(f2ts.split(" days, ")[0]))//365) + " years " + str(int(f2ts.split(" days, ")[0]) % 365) + " days"
+    f2v += re.sub(r'([\d]+) days, (\d{1,2}):(\d{2}):(\d{2})', r'\1 days \2 hrs \3 mins \4 secs', f2ts)[:-7] + f"\n≈ {(int(f2ts.split(' days, ')[0]))//365} years {int(f2ts.split(' days, ')[0]) % 365} days"
+  if user.premium_since:
+    f6v=f"<t:{round((user.premium_since-dt1).total_seconds())}:F>\nFrom now:\n"
+    f6ts = str(datetime.now(timezone.utc) - user.joined_at)
+    if " days, " not in f6ts:
+      f6v += re.sub(r'(\d{1,2}):(\d{2}):(\d{2})', r'\1 hours \2 minutes \3 seconds', f6ts) + f"\n≈ {f6ts.split(':')[0]} hours"
+    else:
+      f6v += re.sub(r'([\d]+) days, (\d{1,2}):(\d{2}):(\d{2})', r'\1 days \2 hrs \3 mins \4 secs', f6ts)[:-7] + f"\n≈ {(int(f6ts.split(' days, ')[0]))//365} years {int(f6ts.split(' days, ')[0]) % 365} days"
+  else:
+    f6v = "No server boosting"
   allroles=user.roles
   f3v_raw1 = channel.permissions_for(user).value
   f3v_raw2 = user.guild_permissions.value
@@ -1047,23 +1056,22 @@ async def user(ctx, user: discord.Member = None, channel: discord.TextChannel = 
   else:
     f4v="No roles"
   f5v = ""
-  f5v = f5v + (f"**Staff:** The user is a Discord Employee.\n"                             if user.public_flags.staff else "")
-  f5v = f5v + (f"**Partner:** The user is a Discord Partner.\n"                            if user.public_flags.partner else "")
-  f5v = f5v + (f"**Hypesquad:** The user is a HypeSquad Events member.\n"                  if user.public_flags.hypesquad else "")
-  f5v = f5v + (f"**Early Support:** The user is an Early Supporter.\n"                     if user.public_flags.early_supporter else "")
-  f5v = f5v + (f"**Team User:** The user is a Team User.\n"                                if user.public_flags.team_user else "")
-  f5v = f5v + (f"**Bug Hunter:** The user is a Bug Hunter.\n"                              if user.public_flags.bug_hunter else "")
-  f5v = f5v + (f"**Bug Hunter 2:** The user is a Bug Hunter (Level 2).\n"                  if user.public_flags.bug_hunter_level_2 else "")
-  f5v = f5v + (f"**System:** The user is a system user (represents Discord officially).\n" if user.public_flags.system else "")
-  f5v = f5v + (f"**Developer:** The user is a Verified Bot Developer.\n"                   if user.public_flags.verified_bot_developer else "")
-  f5v = f5v + (f"**✔︎Bot:** The user is a Verified Bot.\n"                                  if user.public_flags.verified_bot else "")
-  f5v = f5v + (f"**Hypesquad:** The user is in the Hypesquad Bravery House.\n"             if user.public_flags.hypesquad_bravery else "")
-  f5v = f5v + (f"**Hypesquad:** The user is in the Hypesquad Brilliance House.\n"          if user.public_flags.hypesquad_brilliance else "")
-  f5v = f5v + (f"**Hypesquad:** The user is in the Hypesquad Balance House.\n"             if user.public_flags.hypesquad_balance else "")
-  f5v = "No badges" if len(f5v) == 0 else None
+  user_public_flags = user.public_flags
+  f5v = f5v + (f"**Staff:** The user is a Discord Employee.\n"                             if user_public_flags.staff else "")
+  f5v = f5v + (f"**Partner:** The user is a Discord Partner.\n"                            if user_public_flags.partner else "")
+  f5v = f5v + (f"**Hypesquad:** The user is a HypeSquad Events member.\n"                  if user_public_flags.hypesquad else "")
+  f5v = f5v + (f"**Early Support:** The user is an Early Supporter.\n"                     if user_public_flags.early_supporter else "")
+  f5v = f5v + (f"**Team User:** The user is a Team User.\n"                                if user_public_flags.team_user else "")
+  f5v = f5v + (f"**Bug Hunter:** The user is a Bug Hunter.\n"                              if user_public_flags.bug_hunter else "")
+  f5v = f5v + (f"**Bug Hunter 2:** The user is a Bug Hunter (Level 2).\n"                  if user_public_flags.bug_hunter_level_2 else "")
+  f5v = f5v + (f"**System:** The user is a system user (represents Discord officially).\n" if user_public_flags.system else "")
+  f5v = f5v + (f"**Developer:** The user is a Verified Bot Developer.\n"                   if user_public_flags.verified_bot_developer else "")
+  f5v = f5v + (f"**✔︎Bot:** The user is a Verified Bot.\n"                                  if user_public_flags.verified_bot else "")
+  f5v = f5v + (f"**Hypesquad:** The user is in the Hypesquad Bravery House.\n"             if user_public_flags.hypesquad_bravery else "")
+  f5v = f5v + (f"**Hypesquad:** The user is in the Hypesquad Brilliance House.\n"          if user_public_flags.hypesquad_brilliance else "")
+  f5v = f5v + (f"**Hypesquad:** The user is in the Hypesquad Balance House.\n"             if user_public_flags.hypesquad_balance else "")
+  f5v = "No badges" if len(f5v) == "" else f5v
 
-  embed.add_field(name="Time since user registered", value=f1va, inline=True)
-  embed.add_field(name="Time since user joined", value=f2va, inline=True)
   embed.add_field(name="Name", value=f0v, inline=False)
   embed.add_field(name="Registered", value=f1v, inline=True)
   embed.add_field(name="Joined", value=f2v, inline=True)
@@ -1077,7 +1085,8 @@ async def user(ctx, user: discord.Member = None, channel: discord.TextChannel = 
   except:
     pass
   embed.add_field(name="Permission integer", value=str(f3v_raw2), inline=True)
-  embed.add_field(name="Badges", value=f5v, inline=False)
+  embed.add_field(name="Boosting since", value=f6v, inline=False)
+  embed.add_field(name=f"Badges (Integer: {user_public_flags.value})", value=f5v, inline=False)
   await ctx.reply(embed=embed)
 
 def setup(bot):
