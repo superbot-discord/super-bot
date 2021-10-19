@@ -2,7 +2,6 @@ import random
 
 from shared import *
 
-
 @commands.command(aliases=['buttons'])
 async def button(ctx, *, disposed = None):
   sample_buttons_view = ui.View(timeout=None)

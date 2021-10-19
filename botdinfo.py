@@ -566,6 +566,16 @@ async def permissions(ctx, integer="help"):
       embed = perms_guide
   await ctx.reply(embed=embed)
 
+@commands.command(aliases= ['permgen', 'permsgen', 'permgenerate', 'permsgenerate', 'permission_gen', 'permissions_gen' 'permission_generate'])
+async def permission_generate(ctx, *, disposed = None):
+  permission_view = ui.View(timeout=None)
+  for count in permission_menus:
+    permission_view.add_item(count)
+  #for count in permission_buttons:
+  #  permission_view.add_item(count)
+  msg = await ctx.reply(view = permission_view)
+  permission_messages[msg] = {"permission_server_selection":0, "permission_text_selection":0, "permission_voice_selection":0}
+
 @commands.command()
 async def raw(ctx, msg : discord.Message = None):
   if msg==None:
@@ -1112,6 +1122,7 @@ def setup(bot):
   bot.add_command(leftuser)
   bot.add_command(message)
   bot.add_command(permissions)
+  bot.add_command(permission_generate)
   bot.add_command(raw)
   bot.add_command(rawraw)
   bot.add_command(reactions)

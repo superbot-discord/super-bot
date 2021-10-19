@@ -40,7 +40,7 @@ polls=[]
 allid=[]
 
 
-"""@bot_.event
+@bot_.event
 async def on_command_error(ctx, error):
   if isinstance(error, commands.CommandNotFound):
     message = ctx.message
@@ -63,7 +63,7 @@ async def on_command_error(ctx, error):
     await ctx.reply(f'One or more of your arguments is/are not in the correct format! Please read the documentation.')
   else:
     await ctx.reply(f"An error occured:\n```{''.join(traceback.format_exception(type(error), error, error.__traceback__))}```\nIf you think that this is an issue with the bot, please kindly inform JohannLau#6541 about this issue.")
-"""
+
 # @bot_.event
 # async def on_thread_update(before, after):
 #   if after.id == 887562599191941121 and after.archived:
@@ -227,12 +227,15 @@ async def on_interaction(interaction):
         maxc = 4
       else:
         maxc = 5
-      ti = f"Snipped message ("+str(sniperdict[interaction_original_message])+r"/"+str(maxc)+")"
+      ti = f"Snipped message ({sniperdict[interaction_original_message]}/{maxc})"
       desc = eval(f"sniper{sniperdict[interaction_original_message]}[keyname]")
       foot = eval(f"sniperdate{sniperdict[interaction_original_message]}[keyname]")
       embed = discord.Embed(title=ti, description=desc)
       embed.set_footer(text=foot)
       await interaction_original_message.edit(embed=embed)
+    elif interaction_custom_id in ["permission_server_selection", "permission_text_selection", "permission_voice_selection"]:
+      permission_messages[interaction_original_message][interaction_custom_id] = sum(interaction.data["values"])
+      await interaction.edit_original_message(sum(permission_messages[interaction_original_message].values()))
 
 @bot_.command(aliases=['sniper'])
 async def snipe(ctx, *, text = None):

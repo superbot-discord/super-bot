@@ -87,6 +87,8 @@ specialbool     =lambda input          : input.lower() in ["1", "ok", "yes", "ye
 has_perms       =lambda chn, memb, perm: (chn.permissions_for(memb).value  & 1 << perm) or (chn.permissions_for(memb).value  & 1 << 8) or memb.id in db["botadmins"]
 naiveness       =lambda dt             : "Naive" if (dt.tzinfo is None or dt.tzinfo.utcoffset(dt) is None) else "Not Naive"
 chance          =lambda ratio          : ra.randint(1, ratio) == ratio
+permission_messages={}
+
 def format_fps(stream):
   try:
     return stream.fps
@@ -349,6 +351,29 @@ badges_real = {
   7 : "HypeSquad Brilliance House",
   8 : "HypeSquad Balance House"
 }
+
+server_permission_options = []
+for count, count2 in server_real.items():
+  server_permission_options.append(discord.SelectOption(label=count2, description=f"Index: {count}", value=count))
+
+text_permission_options = []
+for count, count2 in text_channel_real.items():
+  text_permission_options.append(discord.SelectOption(label=count2, description=f"Index: {count}", value=count))
+
+voice_permission_options = []
+for count, count2 in voice_channel_real.items():
+  voice_permission_options.append(discord.SelectOption(label=count2, description=f"Index: {count}", value=count))
+
+permission_menus = [
+  ui.Select(placeholder="Select options", min=1, max=25, custom_id="permission_server_selection", row=0, options=server_permission_options),
+  ui.Select(placeholder="Select options", min=1, max=25, custom_id="permission_text_selection",   row=0, options=text_permission_options),
+  ui.Select(placeholder="Select options", min=1, max=25, custom_id="permission_voice_selection",  row=0, options=voice_permission_options)
+]
+
+# permission_buttons = [
+#   ui.Button(style=discord.ButtonStyle.primary, row=3, label="Generate!", custom_id = "permission_generate"),
+#   ui.Button(style=discord.ButtonStyle.danger,  row=3, label="Clear all", custom_id = "permission_clear")
+# ]
 
 youtube_headers={'cookie':'SID=CghejA2ZNiG3ffH-ea-xuLc9tIaHBbwGapD38onoVwAzAbkHnjoZtpUhHdUAmcNRJOHTDw.; __Secure-1PSID=CghejA2ZNiG3ffH-ea-xuLc9tIaHBbwGapD38onoVwAzAbkHEoE3S8JEj0cM-biiWZLVyA.; __Secure-3PSID=CghejA2ZNiG3ffH-ea-xuLc9tIaHBbwGapD38onoVwAzAbkH4sXzfbXVlttnq4TjWVCEfg.; HSID=A-m2IhioZ3oeerjgh; SSID=AbaPAqttHYjZqyPhz; APISID=tPPnfzostQvEsOd-/ALcV81KVGrbqB4Igh; SAPISID=ClVhEot1sUk0cUo-/AEEQ1aXT00mYUmE7f; __Secure-1PAPISID=ClVhEot1sUk0cUo-/AEEQ1aXT00mYUmE7f; __Secure-3PAPISID=ClVhEot1sUk0cUo-/AEEQ1aXT00mYUmE7f; YSC=33OC1x1sBQc;…:QUQ3MjNmenRqWWtfNkdJSGRkbkhLQkJVVHN0a1lkVE41ajhsTzRTTk9RLURmN2FCN1hkZ1JOTGMzYXAxdi1HS3p1NUxFMFRFeXcyVE84Rlg5LWZVRTNNOThHM0RLTDZBQzZucDQ4a0R0VURzYUtOZEdtOGJDSUoxRktjckg0QTAxd3JwTGNybzJQYTBUN1c5bUo5NVAxVXNtV2JRNjlmdjZJajg3ZC1MQy1rMGZrcWtkQTFXTmlUcUdYekpEbHRwYmU1YkpILXl6Tmx5RDI5RnJueDN4czRkdXliUzNFd2FUZw==; SIDCC=AJi4QfF-hT3IbtAsSfRNu4EviRtD9WBBt48166pXbGGDIX2wN5n4luQgHUDSmwX-WSozfHfc; __Secure-3PSIDCC=AJi4QfFRxCGcdkA1zU8EIyJ7kPmscvGPk9vdyN5QWKweSv4jI-xcXxr8GtSt2loCC7scCGMS; PREF=f4=4000000&tz=Asia.Hong_Kong'}
 
