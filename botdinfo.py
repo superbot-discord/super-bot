@@ -271,9 +271,10 @@ async def emojis(ctx, *, disposed = None):
   desc = ""
   sent_desc = ""
   for count in ctx.guild.emojis:
-    temp_desc = f"<:{count.name}:{count.id}>{' (Animated)' if count.animated else ''}"
+    #temp_desc = f"<:{count.name}:{count.id}>{' (Animated)' if count.animated else ''}"
+    temp_desc = f"{count}{' (Animated)' if count.animated else ''}"
     desc += f":{(count.name+':'):<35} {temp_desc:<60}{count.url}\n"
-    sent_desc += f":{count.name}: "
+    sent_desc += f"{count} "
   f = open('output.txt', 'w')
   f.write(desc)
   f.flush()
