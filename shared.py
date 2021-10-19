@@ -365,9 +365,9 @@ for count, count2 in voice_channel_real.items():
   voice_permission_options.append(discord.SelectOption(label=count2, description=f"Index: {count}", value=count))
 
 permission_menus = [
-  ui.Select(placeholder="Select options", min=1, max=25, custom_id="permission_server_selection", row=0, options=server_permission_options),
-  ui.Select(placeholder="Select options", min=1, max=25, custom_id="permission_text_selection",   row=0, options=text_permission_options),
-  ui.Select(placeholder="Select options", min=1, max=25, custom_id="permission_voice_selection",  row=0, options=voice_permission_options)
+  ui.Select(placeholder="Select options", min_values=1, max_values=25, custom_id="permission_server_selection", row=0, options=server_permission_options),
+  ui.Select(placeholder="Select options", min_values=1, max_values=25, custom_id="permission_text_selection",   row=0, options=text_permission_options),
+  ui.Select(placeholder="Select options", min_values=1, max_values=25, custom_id="permission_voice_selection",  row=0, options=voice_permission_options)
 ]
 
 # permission_buttons = [
