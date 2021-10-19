@@ -90,7 +90,7 @@ async def makeinvite(ctx, timetocount = "0", uses : int = 0):
     await ctx.reply("You don't have the required permission: Generate Invites.")
 
 @commands.command(aliases=['makerole'])
-async def makeroles(ctx, times:int=1, *, name="Sample role $number"):
+async def makeroles(ctx, times : int = 1, *, name = "Sample role $number"):
   if has_perms(ctx.channel, ctx.author, 28):
     current_server = ctx.guild
     for count in range(1,times+1):
@@ -100,21 +100,21 @@ async def makeroles(ctx, times:int=1, *, name="Sample role $number"):
     await ctx.reply("You don't have the required permission: Manage Roles.")
 
 @commands.command(aliases=['makethread'])
-async def makethreads(ctx, times:int=1, *, name="Sample thread $number"):
+async def makethreads(ctx, times : int = 1, archive:typing.Literal['1', '2', '3', '4'] = '2', *, name="Sample thread $number"):
   if has_perms(ctx.channel, ctx.author, 32):
     current_channel = ctx.channel
-    for count in range(1,times+1):
-      await current_channel.create_thread(name=name.replace("$number", str(count)), type=discord.ChannelType.public_thread, auto_archive_duration=1)
+    for count in range(1, times+1):
+      await current_channel.create_thread(name=name.replace("$number", str(count)), type=discord.ChannelType.public_thread, auto_archive_duration=db["thread_archive"].get(archive, 2))
     await ctx.reply("Successfully created thread(s).")
   else:
     await ctx.reply("You don't have the required permission: Manage Threads.")
 
 @commands.command()
-async def react(ctx, emoji : discord.Emoji, message  = None):
-  if message==None:
+async def react(ctx, emoji : discord.Emoji, message = None):
+  if message == None:
     potential_reference = ctx.message.reference
     if potential_reference:
-      message=await ctx.bot.get_channel(potential_reference.channel_id).fetch_message(potential_reference.message_id)
+      message = await ctx.bot.get_channel(potential_reference.channel_id).fetch_message(potential_reference.message_id)
     else:
       await ctx.reply("Please reply to a message or add a message ID/Link.")
       return

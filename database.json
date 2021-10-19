@@ -32,6 +32,12 @@
     "wdark": {"fg":"#E9EDEFFF", "bg":"#000000FF"}, "wlight": {"fg":"#0F181DFF", "bg":"#BDE3E6FF"},
     "twdark":{"fg":"#E9EDEFFF", "bg":"#00000000"}, "twlight":{"fg":"#0F181DFF", "bg":"#BDE3E600"}
   },
+  "thread_archive" : {
+    "1": 60,
+    "2": 1440,
+    "3": 4320,
+    "4": 10080
+  },
   "status_buttons" : [
     {"label":"New website", "url":"https://superbot-discord.github.io/"},
     {"label":"Old website", "url":"https://github.com/johann-lau/bot"}

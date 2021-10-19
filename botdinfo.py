@@ -269,13 +269,19 @@ async def emojiinfo(ctx,emojiarg : typing.Union[discord.Emoji, str]):
 @commands.command()
 async def emojis(ctx, *, disposed = None):
   desc = ""
+  sent_desc = ""
   for count in ctx.guild.emojis:
-    desc += f":{count.name}: `<:{count.name}:{count.id}>`{' (Animated)' if count.animated else ''}\n"
+    temp_desc = f"<:{count.name}:{count.id}>{' (Animated)' if count.animated else ''}"
+    desc += f":{(count.name+':'):<35} {temp_desc:<60}{count.url}\n"
+    sent_desc += f":{count.name}: "
   f = open('output.txt', 'w')
   f.write(desc)
   f.flush()
   f.close()
-  await ctx.reply(file=discord.File('output.txt'))
+  try:
+    await ctx.reply(sent_desc, file=discord.File('output.txt'))
+  except:
+    await ctx.reply(file=discord.File('output.txt'))
   try_delete('output.txt')
 
 @commands.command()
