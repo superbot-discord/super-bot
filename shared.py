@@ -257,13 +257,36 @@ Index Permission
 8     Priority Speaker
 ```"""
 
+badges_text = """```
+Index Badge
+0     Staff (Discord Employee)",
+1     Partnered Server Owner",
+2     HypeSquad Events member",
+9     Early Supporter",
+10    Team User",
+3     Bug Hunter (Level 1)",
+14    Bug Hunter (Level 2)",
+12    System User",
+17    Early Verified Bot Developer",
+16    Verified Bot",
+6     HypeSquad Bravery House",
+7     HypeSquad Brilliance House",
+8     HypeSquad Balance House"
+```"""
+
 perms_guide = Embed(title="Permission integers", description="""
 Permission integers allow you to store permissions quickly. To represent some permissions, calculate the sum of 2 to the power of the permission index.
-For example, to specify kick members, manage channels and stream, calculate `2^1+2^4+2^9`, which is 530.
-Alternatively, if you know binary, put a `1` in the permission indices' places, which is `100001001`. Then run `=base 2 10 [Your binary]` to get the decimal equivalent.""")
+For example, to specify kick members, manage channels and stream, calculate `2^1+2^4+2^9`, which is 2+16+512, or 530.
+Alternatively, if you know binary, put a `1` in the permission indices' places, which is `1000010010` in this case. Then run `=base 2 10 [Your binary]` to get the decimal equivalent.""")
 perms_guide.add_field(name="Server permissions", value=server_permtext, inline=False)
 perms_guide.add_field(name="Text channel permissions", value=tc_permtext, inline=False)
 perms_guide.add_field(name="Voice channel permissions", value=vc_permtext, inline=False)
+
+badges_guide = Embed(title="Badge integers", description="""
+Badge integers allow you to store badges quickly. To represent some badges, calculate the sum of 2 to the power of the badge index.
+For example, to specify Discord employee, HypeSquad Events Member and System User, calculate `2^0+2^2+2^12`, which is 1+4+4096, or 4101.
+Alternatively, if you know binary, put a `1` in the badge indices' places, which is `1000000000101` in this case. Then run `=base 2 10 [Your binary]` to get the decimal equivalent.""")
+badges_guide.add_field(name="Badges", value=badges_text, inline=False)
 
 server_real = {
   3 : "Administrator",
@@ -311,7 +334,33 @@ voice_channel_real = {
   8 : "Priority Speaker"
 }
 
+badges_real = {
+  0 : "Staff (Discord Employee)",
+  1 : "Partnered Server Owner",
+  2 : "HypeSquad Events member",
+  9 : "Early Supporter",
+  10: "Team User",
+  3 : "Bug Hunter (Level 1)",
+  14: "Bug Hunter (Level 2)",
+  12: "System User",
+  17: "Early Verified Bot Developer",
+  16: "Verified Bot",
+  6 : "HypeSquad Bravery House",
+  7 : "HypeSquad Brilliance House",
+  8 : "HypeSquad Balance House"
+}
+
 youtube_headers={'cookie':'SID=CghejA2ZNiG3ffH-ea-xuLc9tIaHBbwGapD38onoVwAzAbkHnjoZtpUhHdUAmcNRJOHTDw.; __Secure-1PSID=CghejA2ZNiG3ffH-ea-xuLc9tIaHBbwGapD38onoVwAzAbkHEoE3S8JEj0cM-biiWZLVyA.; __Secure-3PSID=CghejA2ZNiG3ffH-ea-xuLc9tIaHBbwGapD38onoVwAzAbkH4sXzfbXVlttnq4TjWVCEfg.; HSID=A-m2IhioZ3oeerjgh; SSID=AbaPAqttHYjZqyPhz; APISID=tPPnfzostQvEsOd-/ALcV81KVGrbqB4Igh; SAPISID=ClVhEot1sUk0cUo-/AEEQ1aXT00mYUmE7f; __Secure-1PAPISID=ClVhEot1sUk0cUo-/AEEQ1aXT00mYUmE7f; __Secure-3PAPISID=ClVhEot1sUk0cUo-/AEEQ1aXT00mYUmE7f; YSC=33OC1x1sBQc;…:QUQ3MjNmenRqWWtfNkdJSGRkbkhLQkJVVHN0a1lkVE41ajhsTzRTTk9RLURmN2FCN1hkZ1JOTGMzYXAxdi1HS3p1NUxFMFRFeXcyVE84Rlg5LWZVRTNNOThHM0RLTDZBQzZucDQ4a0R0VURzYUtOZEdtOGJDSUoxRktjckg0QTAxd3JwTGNybzJQYTBUN1c5bUo5NVAxVXNtV2JRNjlmdjZJajg3ZC1MQy1rMGZrcWtkQTFXTmlUcUdYekpEbHRwYmU1YkpILXl6Tmx5RDI5RnJueDN4czRkdXliUzNFd2FUZw==; SIDCC=AJi4QfF-hT3IbtAsSfRNu4EviRtD9WBBt48166pXbGGDIX2wN5n4luQgHUDSmwX-WSozfHfc; __Secure-3PSIDCC=AJi4QfFRxCGcdkA1zU8EIyJ7kPmscvGPk9vdyN5QWKweSv4jI-xcXxr8GtSt2loCC7scCGMS; PREF=f4=4000000&tz=Asia.Hong_Kong'}
+
+def badges_itop(integer):
+  cache3 = ""
+  for count, count2 in badges_real.items():
+    if integer & 1 << count:
+      cache3 += count2 + ", "
+  if len(cache3) > 2:
+    return cache3[:-2]
+  else:
+    return "No badges"
 
 def server_itop(integer):
   cache3 = ""
