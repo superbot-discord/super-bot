@@ -40,7 +40,7 @@ pytube==11.0.1
 colorgram.py==1.2.0
 colorthief==0.2.1
 folium==0.12.1
-Pillow==8.3.2
+Pillow==8.4.0
 captcha==0.3
 
 unicode-charnames==14.0.0
