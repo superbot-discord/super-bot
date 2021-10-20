@@ -39,14 +39,17 @@ async def avatar(ctx,user: discord.Member=None):
 
 @commands.command(aliases = ['badge', 'flag', 'flags'])
 async def badges(ctx, integer="help"):
-  try:
-    try:
-      int(integer)
-    except:
-      integer = ctx.author.public_flags.value
-    embed = discord.Embed(title = f"Permission integer {integer}", description=badges_itop(int(integer)))
-  except:
+  if integer == "help":
     embed = badges_guide
+  else:
+    try:
+      try:
+        int(integer)
+      except:
+        integer = ctx.author.public_flags.value
+      embed = discord.Embed(title = f"Badges integer {integer}", description=badges_itop(int(integer)))
+    except:
+      embed = badges_guide
   await ctx.reply(embed=embed)
 
 @commands.command()
@@ -540,30 +543,33 @@ async def message(ctx, message: discord.Message=None):
 
 @commands.command(aliases = ['perm', 'perms', 'permission'])
 async def permissions(ctx, integer="help"):
-  try:
+  if integer == "help":
+    embed = badges_guide
+  else:
     try:
-      int(integer)
+      try:
+        int(integer)
+      except:
+        try:
+          integer = commands.RoleConverter().convert(ctx, integer).permissions.value
+        except:
+          integer = ctx.channel.permissions_for(commands.MemberConverter().convert(ctx, integer)).value
+      embed = discord.Embed(title = f"Permission integer {integer}")
+      embed.add_field(name = "Server permissions", value=server_itop(int(integer)), inline=False)
+      embed.add_field(name = "Text permissions", value=tc_itop(int(integer)), inline=False)
+      embed.add_field(name = "Voice permissions", value=vc_itop(int(integer)), inline=False)
     except:
       try:
-        integer = commands.RoleConverter().convert(ctx, integer).permissions.value
+        for count,count2 in custom_permissions.items():
+          if SequenceMatcher(None, integer, count).ratio() >= 0.75:
+            embed = discord.Embed(title = f"Custom permission {integer}")
+            embed.add_field(name = "Server permissions", value=server_itop(count2.value), inline=False)
+            embed.add_field(name = "Text permissions", value=tc_itop(count2.value), inline=False)
+            embed.add_field(name = "Voice permissions", value=vc_itop(count2.value), inline=False)
+            break
+        embed
       except:
-        integer = ctx.channel.permissions_for(commands.MemberConverter().convert(ctx, integer)).value
-    embed = discord.Embed(title = f"Permission integer {integer}")
-    embed.add_field(name = "Server permissions", value=server_itop(int(integer)), inline=False)
-    embed.add_field(name = "Text permissions", value=tc_itop(int(integer)), inline=False)
-    embed.add_field(name = "Voice permissions", value=vc_itop(int(integer)), inline=False)
-  except:
-    try:
-      for count,count2 in custom_permissions.items():
-        if SequenceMatcher(None, integer, count).ratio() >= 0.75:
-          embed = discord.Embed(title = f"Custom permission {integer}")
-          embed.add_field(name = "Server permissions", value=server_itop(count2.value), inline=False)
-          embed.add_field(name = "Text permissions", value=tc_itop(count2.value), inline=False)
-          embed.add_field(name = "Voice permissions", value=vc_itop(count2.value), inline=False)
-          break
-      embed
-    except:
-      embed = perms_guide
+        embed = perms_guide
   await ctx.reply(embed=embed)
 
 @commands.command(aliases= ['permgen', 'permsgen', 'permgenerate', 'permsgenerate', 'permission_gen', 'permissions_gen' 'permission_generate'])
