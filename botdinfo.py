@@ -573,8 +573,9 @@ async def permission_generate(ctx, *, disposed = None):
     permission_view.add_item(count)
   #for count in permission_buttons:
   #  permission_view.add_item(count)
-  msg = await ctx.reply(view = permission_view)
-  permission_messages[msg] = {"permission_server_selection":0, "permission_text_selection":0, "permission_voice_selection":0}
+  #print(len(permission_view))
+  msg = await ctx.reply("Select the permissions! You can select multiple options.", view = permission_view)
+  permission_messages[msg] = {"permission_server_selection": [], "permission_text_selection": [], "permission_voice_selection": []}
 
 @commands.command()
 async def raw(ctx, msg : discord.Message = None):

@@ -354,20 +354,20 @@ badges_real = {
 
 server_permission_options = []
 for count, count2 in server_real.items():
-  server_permission_options.append(discord.SelectOption(label=count2, description=f"Index: {count}", value=count))
+  server_permission_options.append(discord.SelectOption(label=count2, value=count))
 
 text_permission_options = []
 for count, count2 in text_channel_real.items():
-  text_permission_options.append(discord.SelectOption(label=count2, description=f"Index: {count}", value=count))
+  text_permission_options.append(discord.SelectOption(label=count2, value=count))
 
 voice_permission_options = []
 for count, count2 in voice_channel_real.items():
-  voice_permission_options.append(discord.SelectOption(label=count2, description=f"Index: {count}", value=count))
+  voice_permission_options.append(discord.SelectOption(label=count2, value=count))
 
 permission_menus = [
-  ui.Select(placeholder="Select options", min_values=1, max_values=25, custom_id="permission_server_selection", row=0, options=server_permission_options),
-  ui.Select(placeholder="Select options", min_values=1, max_values=25, custom_id="permission_text_selection",   row=1, options=text_permission_options),
-  ui.Select(placeholder="Select options", min_values=1, max_values=25, custom_id="permission_voice_selection",  row=2, options=voice_permission_options)
+  ui.Select(placeholder="Server",       min_values=1, max_values=14,custom_id="permission_server_selection",row=0, options=server_permission_options),
+  ui.Select(placeholder="Text channel", min_values=1, max_values=15,custom_id="permission_text_selection",  row=1, options=text_permission_options),
+  ui.Select(placeholder="Voice channel",min_values=1, max_values=8, custom_id="permission_voice_selection", row=2, options=voice_permission_options)
 ]
 
 # permission_buttons = [

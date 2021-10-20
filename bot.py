@@ -40,7 +40,7 @@ polls=[]
 allid=[]
 
 
-@bot_.event
+"""@bot_.event
 async def on_command_error(ctx, error):
   if isinstance(error, commands.CommandNotFound):
     message = ctx.message
@@ -63,7 +63,7 @@ async def on_command_error(ctx, error):
     await ctx.reply(f'One or more of your arguments is/are not in the correct format! Please read the documentation.')
   else:
     await ctx.reply(f"An error occured:\n```{''.join(traceback.format_exception(type(error), error, error.__traceback__))}```\nIf you think that this is an issue with the bot, please kindly inform JohannLau#6541 about this issue.")
-
+"""
 # @bot_.event
 # async def on_thread_update(before, after):
 #   if after.id == 887562599191941121 and after.archived:
@@ -182,11 +182,19 @@ async def on_interaction(interaction):
     if interaction_custom_id in ["primary", "secondary", "green", "red"]:
       await interaction.followup.send(f"You pressed on the {interaction_custom_id} button.", ephemeral=True)
     elif interaction_select_option:
-      interaction_first_option = interaction_select_option[0]
-      if interaction_first_option.startswith("help_"):
-        await interaction.edit_original_message(embed=eval(interaction_first_option))
-      else:
-        await interaction.followup.send(f"You selected {', '.join(interaction_select_option)} in the {interaction_custom_id} menu.", ephemeral=True)
+      if interaction_custom_id in ["single-selection", "multi-selection"]:
+        interaction_first_option = interaction_select_option[0]
+        if interaction_first_option.startswith("help_"):
+          await interaction.edit_original_message(embed=eval(interaction_first_option))
+        else:
+          await interaction.followup.send(f"You selected {', '.join(interaction_select_option)} in the {interaction_custom_id} menu.", ephemeral=True)
+      elif interaction_custom_id in ["permission_server_selection", "permission_text_selection", "permission_voice_selection"]:
+        permission_messages[interaction_original_message][interaction_custom_id] = interaction.data["values"]
+        permission_integer = 0
+        for count in permission_messages[interaction_original_message].values():
+          for count2 in count:
+            permission_integer += 2**int(count2)
+        await interaction.edit_original_message(content = f"Decimal permission integer: {permission_integer}")
     elif interaction_custom_id in ["Snipe1", "Snipe2", "Snipe3", "Snipe4", "Snipe5"]:
       keyname = f"{interaction_original_message.guild.id}{interaction_original_message.channel.id}"
       if interaction_custom_id == "Snipe1":
@@ -233,9 +241,6 @@ async def on_interaction(interaction):
       embed = discord.Embed(title=ti, description=desc)
       embed.set_footer(text=foot)
       await interaction_original_message.edit(embed=embed)
-    elif interaction_custom_id in ["permission_server_selection", "permission_text_selection", "permission_voice_selection"]:
-      permission_messages[interaction_original_message][interaction_custom_id] = sum(interaction.data["values"])
-      await interaction.edit_original_message(sum(permission_messages[interaction_original_message].values()))
 
 @bot_.command(aliases=['sniper'])
 async def snipe(ctx, *, text = None):
