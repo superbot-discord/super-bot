@@ -352,15 +352,15 @@ badges_real = {
   8 : "HypeSquad Balance House"
 }
 
-server_permission_options = []
+server_permission_options = [discord.SelectOption(label="None", description="Select this if you do not want permissions from this category.")]
 for count, count2 in server_real.items():
   server_permission_options.append(discord.SelectOption(label=count2, value=count))
 
-text_permission_options = []
+text_permission_options = [discord.SelectOption(label="None", description="Select this if you do not want permissions from this category.")]
 for count, count2 in text_channel_real.items():
   text_permission_options.append(discord.SelectOption(label=count2, value=count))
 
-voice_permission_options = []
+voice_permission_options = [discord.SelectOption(label="None", description="Select this if you do not want permissions from this category.")]
 for count, count2 in voice_channel_real.items():
   voice_permission_options.append(discord.SelectOption(label=count2, value=count))
 
