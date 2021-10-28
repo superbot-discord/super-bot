@@ -193,8 +193,8 @@ async def on_interaction(interaction):
         permission_integer = 0
         for count in permission_messages[interaction_original_message].values():
           for count2 in count:
-            permission_integer += 2**int(count2)
-        await interaction.followup.send(f"Decimal permission integer: {permission_integer}")
+            permission_integer += (2**int(count2) if count2 != 'None' else 0)
+        await interaction.followup.send(f"Decimal permission integer: {permission_integer}", ephemeral=True)
     elif interaction_custom_id in ["Snipe1", "Snipe2", "Snipe3", "Snipe4", "Snipe5"]:
       keyname = f"{interaction_original_message.guild.id}{interaction_original_message.channel.id}"
       if interaction_custom_id == "Snipe1":

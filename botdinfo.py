@@ -152,7 +152,7 @@ async def bottchannel(channel):
   if f5v:
     embed.add_field(name="Invites", value=f5v, inline=True)
   embed.add_field(name="ID", value=channel.id, inline=True)
-  embed.add_field(name="First message", value=f"[here]({f9v.jump_url})", inline=True)
+  embed.add_field(name="First message", value="[here](https://youtube.com/watch?v=Tt7bzxurJ1I)" if datetime.now().minute == 14 else f"[here]({f9v.jump_url})", inline=True)
   if channel.is_nsfw()==True:
     embed.add_field(name="NSFW", value="This is an NSFW channel.", inline=True)
   if channel.is_news()==True:
