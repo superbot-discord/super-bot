@@ -211,7 +211,7 @@ async def led3(ctx, mode: typing.Optional[typing.Literal['1', '1i', '2', '2i', '
   try_delete('output.png')
 
 @commands.command()
-async def led3_server(ctx, mode: typing.Optional[typing.Literal['1', '1i', '2', '2i', '3', '3i']] = 'regular', color: led_colors = 'red', alignment: led_alignment = 'left'):
+async def led3_server(ctx, mode: typing.Optional[typing.Literal['1', '1i', '2', '2i', '3', '3i']] = '1', color: led_colors = 'red', alignment: led_alignment = 'left'):
   if mode == '1':
     current_font = font_led3_1
   elif mode == '1i':
@@ -236,7 +236,7 @@ async def led3_server(ctx, mode: typing.Optional[typing.Literal['1', '1i', '2', 
   try_delete('output.png')
 
 @commands.command()
-async def led_bar(ctx, total : float, step : float, color: led_colors = 'red'):
+async def led_bar(ctx, total : int, step : int, color: led_colors = 'red'):
   image = Image.new("RGBA", (total, 100), color=db["led_colors"][color]["bg"])
   draw = ImageDraw.Draw(image)
   draw.rectangle([0, 0, step+1, 101], fill=db["led_colors"][color]["fg"])
