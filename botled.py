@@ -224,13 +224,13 @@ async def led3_server(ctx, mode: typing.Optional[typing.Literal['1', '1i', '2', 
     current_font = font_led3_3i
   else:
     current_font = font_led3_2
-  current_properties = led_font_dict[current_font]
   text = led_server_info(ctx.guild)
+  current_properties = led_font_dict[current_font]
   sizes = current_font.getsize_multiline(text, spacing=current_properties["spacing"])
-  minus_padding = 0
+  minus_padding = 3
   image = Image.new("RGBA", led34_sizer(sizes, current_properties, minus_padding, text.splitlines()[len(text.splitlines())-1]), color=db["led_colors"][color]["bg"])
   draw = ImageDraw.Draw(image)
-  draw.multiline_text(led_positioner(current_properties, minus_padding), text, font=current_font, fill=db["led_colors"][color]["fg"], spacing=current_properties["spacing"], align=alignment)
+  draw.multiline_text(led34_positioner(current_properties, minus_padding), text, font=current_font, fill=db["led_colors"][color]["fg"], spacing=current_properties["spacing"], align=alignment)
   image.save('output.png')
   await ctx.reply(file=discord.File('output.png'))
   try_delete('output.png')
