@@ -48,6 +48,13 @@ font_led2_fat  = ImageFont.truetype("fonts/led2_fat.ttf", 50)
 font_led2_modern=ImageFont.truetype("fonts/led2_modern.ttf", 50)
 font_led2_serif= ImageFont.truetype("fonts/led2_serif.ttf", 50)
 
+font_led3_1   = ImageFont.truetype("fonts/led3_1.ttf", 50)
+font_led3_1i  = ImageFont.truetype("fonts/led3_1i.ttf", 50)
+font_led3_2   = ImageFont.truetype("fonts/led3_2.ttf", 50)
+font_led3_2i  = ImageFont.truetype("fonts/led3_2i.ttf", 50)
+font_led3_3   = ImageFont.truetype("fonts/led3_3.ttf", 50)
+font_led3_3i  = ImageFont.truetype("fonts/led3_3i.ttf", 50)
+
 font_lcd      = ImageFont.truetype("fonts/lcd.ttf", 50)
 font_lcd_calc = ImageFont.truetype("fonts/lcd_calc.ttf", 50)
 font_lcd_dense= ImageFont.truetype("fonts/lcd_dense.otf", 50)
@@ -72,7 +79,14 @@ led_font_dict = {
   font_lcd       : {"spacing" : 20, "padding" : 3,  "height_plus" : 15},
   font_lcd_calc  : {"spacing" : 20, "padding" : 3,  "height_plus" : 15},
   font_lcd_dense : {"spacing" : 20, "padding" : 3,  "height_plus" : 15},
-  font_lcd_mono  : {"spacing" : 20, "padding" : 3,  "height_plus" : 15}
+  font_lcd_mono  : {"spacing" : 20, "padding" : 3,  "height_plus" : 15},
+
+  font_led3_1    : {"spacing" : 20, "padding" : 3 , "height_plus" : 3 , "unneeded_width" : 11 },
+  font_led3_1i   : {"spacing" : 20, "padding" : 3 , "height_plus" : 3 , "unneeded_width" : 11 },
+  font_led3_2    : {"spacing" : 20, "padding" : 3 , "height_plus" : 3 , "unneeded_width" : 10 },
+  font_led3_2i   : {"spacing" : 20, "padding" : 3 , "height_plus" : 3 , "unneeded_width" : 10 },
+  font_led3_3    : {"spacing" : 20, "padding" : 3 , "height_plus" : 3 , "unneeded_width" : 9  },
+  font_led3_3i   : {"spacing" : 20, "padding" : 3 , "height_plus" : 3 , "unneeded_width" : 9  }
 }
 
 func            =lambda pct, allvals   : "{:d} ({:.1f}%)".format(int(pct/100*np.sum(allvals)), round(pct, 1))

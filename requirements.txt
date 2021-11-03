@@ -43,7 +43,7 @@ folium==0.12.1
 Pillow==8.4.0
 captcha==0.3
 
+# Miscellaneous
 unicode-charnames==14.0.0
 emojis==0.6.0
-emoji==1.6.1
 pytz==2021.3
