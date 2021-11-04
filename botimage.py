@@ -392,6 +392,7 @@ async def transparent(ctx, alpha = 128):
 
 def setup(bot):
   bot.add_command(image)
+  bot.add_command(captcha)
   bot.add_command(mandelbrot)
   bot.add_command(ocr)
   bot.add_command(qr)
