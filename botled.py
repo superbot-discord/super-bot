@@ -285,13 +285,26 @@ async def led4_server(ctx, mode: led_34_modes = '1', color: led_colors = 'red', 
   await ctx.reply(file=discord.File('output.png'))
   try_delete('output.png')
 
+# @commands.command()
+# async def led_bar(ctx, total : int, step : int, color: led_colors = 'red', width : int = None):
+#   width = width if width else total/3.3028
+#   image = Image.new("RGBA", (total*20, width), color=db["led_colors"][color]["bg"])
+#   draw = ImageDraw.Draw(image)
+#   for count in range(step):
+#     for count2 in range(5):
+#       draw.rectangle([round(count*width/5), round(count2*width/5+1), round(count*width/5+width/5.5), round(count2*width/5+width/5.5)], fill=db["led_colors"][color]["fg"])
+#   image.save('output.png')
+#   await ctx.reply(file=discord.File('output.png'))
+#   try_delete('output.png')
+
 @commands.command()
 async def led_bar(ctx, total : int, step : int, color: led_colors = 'red', width : int = None):
-  image = Image.new("RGBA", (total*20, width if width else total/3.3028), color=db["led_colors"][color]["bg"])
+  width = width if width else round(total/66.0555)
+  image = Image.new("RGBA", (total*20, width*20), color=db["led_colors"][color]["bg"])
   draw = ImageDraw.Draw(image)
   for count in range(step):
-    for count2 in range(5):
-      draw.rectangle([count*20, count2*20+1, count*20+16, count2*20+17], fill=db["led_colors"][color]["fg"])
+    for count2 in range(width):
+      draw.rectangle([count*20, count2*20+1, count*20+18, count2*20+19], fill=db["led_colors"][color]["fg"])
   image.save('output.png')
   await ctx.reply(file=discord.File('output.png'))
   try_delete('output.png')
