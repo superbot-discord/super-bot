@@ -133,13 +133,13 @@ async def encode(ctx, code, *, text):
     coder = hashlib.blake2s()
     coder.update(bytes(text, encoding='utf-8'))
     await ctx.reply(coder.hexdigest())
-  elif SequenceMatcher(None, code, 'base64').ratio()>0.6:
+  elif SequenceMatcher(None, code, 'base64').ratio()>0.8:
     coder = base64.b64encode(bytes(text, encoding='utf-8'))
     await ctx.reply(coder.decode("utf-8"))
-  elif SequenceMatcher(None, code, 'base32').ratio()>0.6:
+  elif SequenceMatcher(None, code, 'base32').ratio()>0.8:
     coder = base64.b32encode(bytes(text, encoding='utf-8'))
     await ctx.reply(coder.decode("utf-8"))
-  elif SequenceMatcher(None, code, 'base16').ratio()>0.6:
+  elif SequenceMatcher(None, code, 'base16').ratio()>0.8:
     coder = base64.b16encode(bytes(text, encoding='utf-8'))
     await ctx.reply(coder.decode("utf-8"))
   elif SequenceMatcher(None, code, 'caesar').ratio()>0.6 or code.startswith("caesar"):

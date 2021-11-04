@@ -55,10 +55,31 @@ font_led3_2i  = ImageFont.truetype("fonts/led3_2i.ttf", 50)
 font_led3_3   = ImageFont.truetype("fonts/led3_3.ttf", 50)
 font_led3_3i  = ImageFont.truetype("fonts/led3_3i.ttf", 50)
 
+font_led4_1   = ImageFont.truetype("fonts/led4_1.ttf", 50)
+font_led4_1i  = ImageFont.truetype("fonts/led4_1i.ttf", 50)
+font_led4_2   = ImageFont.truetype("fonts/led4_2.ttf", 50)
+font_led4_2i  = ImageFont.truetype("fonts/led4_2i.ttf", 50)
+font_led4_3   = ImageFont.truetype("fonts/led4_3.ttf", 50)
+font_led4_3i  = ImageFont.truetype("fonts/led4_3i.ttf", 50)
+
 font_lcd      = ImageFont.truetype("fonts/lcd.ttf", 50)
 font_lcd_calc = ImageFont.truetype("fonts/lcd_calc.ttf", 50)
 font_lcd_dense= ImageFont.truetype("fonts/lcd_dense.otf", 50)
 font_lcd_mono = ImageFont.truetype("fonts/lcd_mono.otf", 50)
+
+font_lcd2_1   = ImageFont.truetype("fonts/lcd2_1.ttf", 50)
+font_lcd2_1i  = ImageFont.truetype("fonts/lcd2_1i.ttf", 50)
+font_lcd2_2   = ImageFont.truetype("fonts/lcd2_2.ttf", 50)
+font_lcd2_2i  = ImageFont.truetype("fonts/lcd2_2i.ttf", 50)
+font_lcd2_3   = ImageFont.truetype("fonts/lcd2_3.ttf", 50)
+font_lcd2_3i  = ImageFont.truetype("fonts/lcd2_3i.ttf", 50)
+
+font_lcd3_1   = ImageFont.truetype("fonts/lcd3_1.ttf", 50)
+font_lcd3_1i  = ImageFont.truetype("fonts/lcd3_1i.ttf", 50)
+font_lcd3_2   = ImageFont.truetype("fonts/lcd3_2.ttf", 50)
+font_lcd3_2i  = ImageFont.truetype("fonts/lcd3_2i.ttf", 50)
+font_lcd3_3   = ImageFont.truetype("fonts/lcd3_3.ttf", 50)
+font_lcd3_3i  = ImageFont.truetype("fonts/lcd3_3i.ttf", 50)
 
 whitney       = ImageFont.truetype("fonts/whitney.otf", 34)
 
@@ -76,17 +97,38 @@ led_font_dict = {
   font_led2_modern:{"spacing" : 20, "padding" : 0  , "height_plus" : 10 , "required_height_plus" : -10, "unneeded_width" : 5 , "unneeded_padding" : 4},
   font_led2_serif :{"spacing" : 25, "padding" : 5  , "height_plus" : 15 , "required_height_plus" : 5  , "unneeded_width" : 5 , "unneeded_padding" : 10},
 
-  font_lcd       : {"spacing" : 20, "padding" : 3,  "height_plus" : 15},
-  font_lcd_calc  : {"spacing" : 20, "padding" : 3,  "height_plus" : 15},
-  font_lcd_dense : {"spacing" : 20, "padding" : 3,  "height_plus" : 15},
-  font_lcd_mono  : {"spacing" : 20, "padding" : 3,  "height_plus" : 15},
-
   font_led3_1    : {"spacing" : 20, "padding" : 3 , "height_plus" : 3 , "unneeded_width" : 11 },
   font_led3_1i   : {"spacing" : 20, "padding" : 3 , "height_plus" : 3 , "unneeded_width" : 11 },
   font_led3_2    : {"spacing" : 20, "padding" : 3 , "height_plus" : 3 , "unneeded_width" : 10 },
   font_led3_2i   : {"spacing" : 20, "padding" : 3 , "height_plus" : 3 , "unneeded_width" : 10 },
   font_led3_3    : {"spacing" : 20, "padding" : 3 , "height_plus" : 3 , "unneeded_width" : 9  },
-  font_led3_3i   : {"spacing" : 20, "padding" : 3 , "height_plus" : 3 , "unneeded_width" : 9  }
+  font_led3_3i   : {"spacing" : 20, "padding" : 3 , "height_plus" : 3 , "unneeded_width" : 9  },
+
+  font_led4_1    : {"spacing" : 20, "padding" : 3 , "height_plus" : 3 , "unneeded_width" : 11 },
+  font_led4_1i   : {"spacing" : 20, "padding" : 3 , "height_plus" : 3 , "unneeded_width" : 11 },
+  font_led4_2    : {"spacing" : 20, "padding" : 3 , "height_plus" : 3 , "unneeded_width" : 10 },
+  font_led4_2i   : {"spacing" : 20, "padding" : 3 , "height_plus" : 3 , "unneeded_width" : 10 },
+  font_led4_3    : {"spacing" : 20, "padding" : 3 , "height_plus" : 3 , "unneeded_width" : 9  },
+  font_led4_3i   : {"spacing" : 20, "padding" : 3 , "height_plus" : 3 , "unneeded_width" : 9  },
+
+  font_lcd       : {"spacing" : 20, "padding" : 3,  "height_plus" : 15},
+  font_lcd_calc  : {"spacing" : 20, "padding" : 3,  "height_plus" : 15},
+  font_lcd_dense : {"spacing" : 20, "padding" : 3,  "height_plus" : 15},
+  font_lcd_mono  : {"spacing" : 20, "padding" : 3,  "height_plus" : 15},
+
+  font_lcd2_1    : {"spacing" : 20, "padding" : 3 , "height_plus" : 3 , "unneeded_width" : 11 },
+  font_lcd2_1i   : {"spacing" : 20, "padding" : 3 , "height_plus" : 3 , "unneeded_width" : 11 },
+  font_lcd2_2    : {"spacing" : 20, "padding" : 3 , "height_plus" : 3 , "unneeded_width" : 10 },
+  font_lcd2_2i   : {"spacing" : 20, "padding" : 3 , "height_plus" : 3 , "unneeded_width" : 10 },
+  font_lcd2_3    : {"spacing" : 20, "padding" : 3 , "height_plus" : 3 , "unneeded_width" : 9  },
+  font_lcd2_3i   : {"spacing" : 20, "padding" : 3 , "height_plus" : 3 , "unneeded_width" : 9  },
+
+  font_lcd3_1    : {"spacing" : 20, "padding" : 3 , "height_plus" : 3 , "unneeded_width" : 11 },
+  font_lcd3_1i   : {"spacing" : 20, "padding" : 3 , "height_plus" : 3 , "unneeded_width" : 11 },
+  font_lcd3_2    : {"spacing" : 20, "padding" : 3 , "height_plus" : 3 , "unneeded_width" : 10 },
+  font_lcd3_2i   : {"spacing" : 20, "padding" : 3 , "height_plus" : 3 , "unneeded_width" : 10 },
+  font_lcd3_3    : {"spacing" : 20, "padding" : 3 , "height_plus" : 3 , "unneeded_width" : 9  },
+  font_lcd3_3i   : {"spacing" : 20, "padding" : 3 , "height_plus" : 3 , "unneeded_width" : 9  }
 }
 
 func            =lambda pct, allvals   : "{:d} ({:.1f}%)".format(int(pct/100*np.sum(allvals)), round(pct, 1))

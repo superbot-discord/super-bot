@@ -3,6 +3,7 @@ from shared import *
 led_colors = typing.Optional[typing.Literal["cyan", "icyan", "crystal", "icrystal", "amber", "iamber", "red", "ired", "green", "igreen", "blue", "iblue", "purple", "ipurple", "yellow", "iyellow",
                                             "teal", "iteal", "black", "white", "tblack", "twhite", "dark", "light", "tdark", "tlight", "wdark", "wlight", "twdark", "twlight"]]
 led_alignment = typing.Optional[typing.Literal['left', 'center', 'right']]
+led_34_modes = typing.Optional[typing.Literal['1', '1i', '2', '2i', '3', '3i']]
 # S: Getsize sizes   C: Current properties   M: Minus padding   L: Logest text line
 led_sizer      = lambda s, c, m, l: (s[0]-c["unneeded_width"], s[1]-m+(c["height_plus"] if any(check in l for check in "gjpqy,;") else c["required_height_plus"]))
 led34_sizer    = lambda s, c, m, l: (s[0]-c["unneeded_width"], s[1]-m+c["height_plus"])
@@ -187,7 +188,7 @@ async def led2_server(ctx, mode: typing.Optional[typing.Literal['regular', 'bold
   try_delete('output.png')
 
 @commands.command()
-async def led3(ctx, mode: typing.Optional[typing.Literal['1', '1i', '2', '2i', '3', '3i']] = '2', color: led_colors = 'red', alignment: led_alignment = 'left', *, text):
+async def led3(ctx, mode: led_34_modes = '2', color: led_colors = 'red', alignment: led_alignment = 'left', *, text):
   if mode == '1':
     current_font = font_led3_1
   elif mode == '1i':
@@ -211,7 +212,7 @@ async def led3(ctx, mode: typing.Optional[typing.Literal['1', '1i', '2', '2i', '
   try_delete('output.png')
 
 @commands.command()
-async def led3_server(ctx, mode: typing.Optional[typing.Literal['1', '1i', '2', '2i', '3', '3i']] = '1', color: led_colors = 'red', alignment: led_alignment = 'left'):
+async def led3_server(ctx, mode: led_34_modes = '1', color: led_colors = 'red', alignment: led_alignment = 'left'):
   if mode == '1':
     current_font = font_led3_1
   elif mode == '1i':
@@ -236,10 +237,61 @@ async def led3_server(ctx, mode: typing.Optional[typing.Literal['1', '1i', '2', 
   try_delete('output.png')
 
 @commands.command()
-async def led_bar(ctx, total : int, step : int, color: led_colors = 'red'):
-  image = Image.new("RGBA", (total, 100), color=db["led_colors"][color]["bg"])
+async def led4(ctx, mode: led_34_modes = '2', color: led_colors = 'red', alignment: led_alignment = 'left', *, text):
+  if mode == '1':
+    current_font = font_led4_1
+  elif mode == '1i':
+    current_font = font_led4_1i
+  elif mode == '2i':
+    current_font = font_led4_2i
+  elif mode == '3':
+    current_font = font_led4_3
+  elif mode == '3i':
+    current_font = font_led4_3i
+  else:
+    current_font = font_led4_2
+  current_properties = led_font_dict[current_font]
+  sizes = current_font.getsize_multiline(text, spacing=current_properties["spacing"])
+  minus_padding = 3
+  image = Image.new("RGBA", led34_sizer(sizes, current_properties, minus_padding, text.splitlines()[len(text.splitlines())-1]), color=db["led_colors"][color]["bg"])
   draw = ImageDraw.Draw(image)
-  draw.rectangle([0, 0, step+1, 101], fill=db["led_colors"][color]["fg"])
+  draw.multiline_text(led34_positioner(current_properties, minus_padding), text, font=current_font, fill=db["led_colors"][color]["fg"], spacing=current_properties["spacing"], align=alignment)
+  image.save('output.png')
+  await ctx.reply(file=discord.File('output.png'))
+  try_delete('output.png')
+
+@commands.command()
+async def led4_server(ctx, mode: led_34_modes = '1', color: led_colors = 'red', alignment: led_alignment = 'left'):
+  if mode == '1':
+    current_font = font_led4_1
+  elif mode == '1i':
+    current_font = font_led4_1i
+  elif mode == '2i':
+    current_font = font_led4_2i
+  elif mode == '3':
+    current_font = font_led4_3
+  elif mode == '3i':
+    current_font = font_led4_3i
+  else:
+    current_font = font_led4_2
+  text = led_server_info(ctx.guild)
+  current_properties = led_font_dict[current_font]
+  sizes = current_font.getsize_multiline(text, spacing=current_properties["spacing"])
+  minus_padding = 3
+  image = Image.new("RGBA", led34_sizer(sizes, current_properties, minus_padding, text.splitlines()[len(text.splitlines())-1]), color=db["led_colors"][color]["bg"])
+  draw = ImageDraw.Draw(image)
+  draw.multiline_text(led34_positioner(current_properties, minus_padding), text, font=current_font, fill=db["led_colors"][color]["fg"], spacing=current_properties["spacing"], align=alignment)
+  image.save('output.png')
+  await ctx.reply(file=discord.File('output.png'))
+  try_delete('output.png')
+
+@commands.command()
+async def led_bar(ctx, total : int, step : int, color: led_colors = 'red'):
+  image = Image.new("RGBA", (total*20, 100), color=db["led_colors"][color]["bg"])
+  draw = ImageDraw.Draw(image)
+  for count in range(step):
+    for count2 in range(5):
+      draw.rectangle([count*20, count2*20+1, count*20+16, count2*20+17], fill=db["led_colors"][color]["fg"])
   image.save('output.png')
   await ctx.reply(file=discord.File('output.png'))
   try_delete('output.png')
@@ -253,4 +305,6 @@ def setup(bot):
   bot.add_command(led2_server)
   bot.add_command(led3)
   bot.add_command(led3_server)
+  bot.add_command(led4)
+  bot.add_command(led4_server)
   bot.add_command(led_bar)
