@@ -298,8 +298,8 @@ async def led4_server(ctx, mode: led_34_modes = '1', color: led_colors = 'red', 
 #   try_delete('output.png')
 
 @commands.command()
-async def led_bar(ctx, total : int, step : int, color: led_colors = 'red', width : int = None):
-  width = width if width else round(total/66.0555)
+async def led_bar(ctx, total : int, step : int, color: led_colors = 'red', width : int = 5):
+  #width = width if width else round(total/66.0555)
   image = Image.new("RGBA", (total*20, width*20), color=db["led_colors"][color]["bg"])
   draw = ImageDraw.Draw(image)
   for count in range(step):
