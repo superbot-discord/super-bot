@@ -304,7 +304,7 @@ async def led_bar(ctx, total : int, step : int, color: led_colors = 'red', width
   draw = ImageDraw.Draw(image)
   for count in range(step):
     for count2 in range(width):
-      draw.rectangle([count*20, count2*20+1, count*20+18, count2*20+19], fill=db["led_colors"][color]["fg"])
+      draw.rectangle([count*20, count2*20+1, count*20+17, count2*20+18], fill=db["led_colors"][color]["fg"])
   image.save('output.png')
   await ctx.reply(file=discord.File('output.png'))
   try_delete('output.png')
