@@ -968,6 +968,30 @@ async def statuses(ctx, *, disposed = None):
   plt.clf()
   try_delete('statuses.png', 'statuses.svg')
 
+@commands.command(aliases=["stick", "st"])
+async def sticker(ctx, message: discord.Message=None):
+  if message==None:
+    potential_reference = ctx.message.reference
+    if potential_reference:
+      message=await ctx.bot.get_channel(potential_reference.channel_id).fetch_message(potential_reference.message_id)
+    else:
+      await ctx.reply("Please reply to a message or add a message ID/Link.")
+      return
+  _sticker = message.stickers
+  if not _sticker:
+    await ctx.send("The message does not contain any stickers.")
+    return
+  _sticker = await _sticker[0].fetch()
+  sticker_pack = await _sticker.pack()
+  desc=f"**{_sticker.name}**\nSent by {message.author.mention} at <t:{round((message.created_at-dt1).total_seconds())}:F>\nDescription: {_sticker.description}"
+  embed=discord.Embed(title="Sticker Information", description=desc, url=message.jump_url)
+  embed.add_field(name="Tags", value=", ".join(_sticker.tags), inline=False)
+  embed.add_field(name="ID", value=_sticker.id, inline=True)
+  embed.add_field(name="Type", value=("PNG" if _sticker.type==discord.StickerFormatType.png else ("APNG" if _sticker.type==discord.StickerFormatType.apng else "Lottie")), inline=True)
+  embed.add_field(name=f"Pack ({_sticker.sort_value}/{len(sticker_pack.stickers)})", value=f"**ID:** {sticker_pack.id}\n**Cover: **{sticker_pack.cover_sticker.name}\n**{sticker_pack.name}**\nDescription: {sticker_pack.description}", inline=False)
+  #embed.set(_sticker.url)
+  await ctx.reply(embed=embed)
+
 @commands.command()
 async def stickers(ctx, *, disposed = None):
   desc = ""
@@ -1135,6 +1159,7 @@ def setup(bot):
   bot.add_command(reactions)
   bot.add_command(role)
   bot.add_command(server)
+  bot.add_command(sticker)
   bot.add_command(stickers)
   bot.add_command(status)
   bot.add_command(statuses)
