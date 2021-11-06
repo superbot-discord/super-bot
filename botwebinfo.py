@@ -75,6 +75,15 @@ async def errordog(ctx, code="404", *, disposed = None):
     await ctx.reply("Invalid code!")
 
 @commands.command()
+async def gender(ctx, *, name):
+  r=requests.get(f"https://api.genderize.io/?name={name}")
+  gender_json = r.json()
+  if gender_json["gender"]:
+    await ctx.send(f"{name} is {round(gender_json['probability']*100, 2)}% a {gender_json['gender']}.")
+  else:
+    await ctx.send("No gender was found for the name.")
+
+@commands.command()
 async def minecraft(ctx, *, item="tnt"):
   await ctx.channel.trigger_typing()
   r=requests.get('https://minecraft.fandom.com/wiki/'+item)
@@ -415,6 +424,7 @@ def setup(bot):
   bot.add_command(error)
   bot.add_command(errorcat)
   bot.add_command(errordog)
+  bot.add_command(gender)
   bot.add_command(minecraft)
   bot.add_command(redirect)
   bot.add_command(translate)

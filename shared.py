@@ -479,7 +479,7 @@ help_all = discord.Embed(title="SuperBot#4073 (ID:796686363604680755)", descript
 `help` `inter_help` `support` `invite` `prefix` `ping` `botpurge`\n
 **Discord Information Commands**
 `server` `invitelink` `role` `channel` `user` `avatar` `status` `leftuser` `message` `raw` `rawraw` `reactions` `emojiinfo` `sticker` `template`
-`stickers` `emojis` `permissions` `badges` `led_server` `led2_server` `led3_server` `led4_server`\n
+`permissions` `badges` `stickers` `emojis` `led_server` `led2_server` `led3_server` `led4_server`\n
 **Discord Commands**
 `react` `snipe` `clearsnipe` `pretend` `pretendembed` `embed` `editembed` `simpleembed` `quickembed` `ett` `tts`\n
 **Moderation Commands**

@@ -27,8 +27,8 @@
     "teal" : {"fg":"#30D8D8FF", "bg":"#003030FF"}, "iteal" : {"fg":"#003030FF", "bg":"#30D8D8FF"},
     "black": {"fg":"#FFFFFFFF", "bg":"#000000FF"}, "white" : {"fg":"#000000FF", "bg":"#FFFFFFFF"},
     "tblack":{"fg":"#FFFFFFFF", "bg":"#00000000"}, "twhite": {"fg":"#000000FF", "bg":"#FFFFFF00"},
-    "dark" : {"fg":"#FFFFFFFF", "bg":"#37393FFF"}, "light" : {"fg":"#2E3337FF", "bg":"#FFFFFFFF"},
-    "tdark": {"fg":"#FFFFFFFF", "bg":"#37393F00"}, "tlight": {"fg":"#2E3337FF", "bg":"#FFFFFF00"},
+    "dark" : {"fg":"#FFFFFFFF", "bg":"#37393EFF"}, "light" : {"fg":"#2E3337FF", "bg":"#FFFFFFFF"},
+    "tdark": {"fg":"#FFFFFFFF", "bg":"#37393E00"}, "tlight": {"fg":"#2E3337FF", "bg":"#FFFFFF00"},
     "wdark": {"fg":"#E9EDEFFF", "bg":"#000000FF"}, "wlight": {"fg":"#0F181DFF", "bg":"#BDE3E6FF"},
     "twdark":{"fg":"#E9EDEFFF", "bg":"#00000000"}, "twlight":{"fg":"#0F181DFF", "bg":"#BDE3E600"}
   },
