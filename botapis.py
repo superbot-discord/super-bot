@@ -1,6 +1,7 @@
 from discord.ext import commands
 import requests
 import html
+import random
 
 @commands.command(aliases=["rabbit", "rabbits", "bunnies"])
 async def bunny(ctx, number=1):
@@ -64,6 +65,10 @@ async def lizard(ctx, number=1):
     await ctx.reply(botlizard(number))
   else:
     await ctx.reply("There are too many pictures to show! I can only display up to 9 pictures.")
+
+@commands.command(aliases=["apod"])
+async def nasa(ctx):
+  await ctx.reply(botnasa())
 
 @commands.command()
 async def panda(ctx, number=1):
@@ -164,6 +169,11 @@ def botlizard(number):
     desc += f"{r.json()['url']}\n"
   return desc
 
+def botnasa():
+  r = requests.get('https://apodapi.herokuapp.com/api').json()
+  desc = f"**{r['title']}** by {r['copyright']}\n{r['hdurl']}\n\n{r['description']}"
+  return desc[:1023]
+
 def botpanda(number):
   desc = ""
   for count in range(1, number+1):
@@ -197,7 +207,7 @@ def bottrivia(number):
     desc += f"**{count['category']} - {count['difficulty']}**  - {html.unescape(count['question'])}\n"
     if count["type"] == "multiple":
       list_temp = [html.unescape(x) for x in count["incorrect_answers"]] + [html.unescape(count["correct_answer"])]
-      list_temp.shuffle()
+      random.shuffle(list_temp)
       desc += [f'  • {x}\n' for x in list_temp] + f"Answer: ||{html.unescape(count['correct_answer'])}||\n"
     else:
       desc += f"True or False?\nAnswer: ||{html.unescape(count['correct_answer'])}||\n"
