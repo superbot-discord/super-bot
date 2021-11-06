@@ -181,6 +181,10 @@ def botpanda(number):
     desc += f"{r.json()['link']}\n"
   return desc
 
+def botparagraph(number):
+  r = requests.get(f'http://metaphorpsum.com/paragraphs/1/{number}').content
+  return r
+
 def botquote(number):
   desc = ""
   for count in range(1, number+1):
@@ -208,7 +212,9 @@ def bottrivia(number):
     if count["type"] == "multiple":
       list_temp = [html.unescape(x) for x in count["incorrect_answers"]] + [html.unescape(count["correct_answer"])]
       random.shuffle(list_temp)
-      desc += [f'  • {x}\n' for x in list_temp] + f"Answer: ||{html.unescape(count['correct_answer'])}||\n"
+      for x in list_temp:
+        desc += f'  • {x}\n'
+      desc += f"Answer: ||{html.unescape(count['correct_answer'])}||\n"
     else:
       desc += f"True or False?\nAnswer: ||{html.unescape(count['correct_answer'])}||\n"
   return desc
