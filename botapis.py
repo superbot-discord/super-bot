@@ -73,6 +73,13 @@ async def panda(ctx, number=1):
     await ctx.reply("There are too many pictures to show! I can only display up to 9 pictures.")
 
 @commands.command()
+async def quote(ctx, number=1):
+  if number<6:
+    await ctx.reply(botquote(number))
+  else:
+    await ctx.reply("There are too many quotes to show! I can only display up to 5 quotes.")
+
+@commands.command()
 async def shiba(ctx, number=1):
   if number<10:
     await ctx.reply(botshiba(number))
@@ -101,7 +108,7 @@ def botbunny(number):
 def botcat(number):
   desc = ""
   for count in range(1, number+1):
-    r=requests.get(f"https://api.thecatapi.com/v1/images/search")
+    r=requests.get("https://api.thecatapi.com/v1/images/search")
     desc += f"{r.json()[0]['url']}\n"
   return desc
 
@@ -115,7 +122,7 @@ def botdish(number):
 def botdog(number):
   desc = ""
   for count in range(1, number+1):
-    r=requests.get(f"https://dog.ceo/api/breeds/image/random")
+    r=requests.get("https://dog.ceo/api/breeds/image/random")
     desc += f"{r.json()['message']}\n"
   return desc
 
@@ -146,7 +153,7 @@ def botjoke(number):
 def botkoala(number):
   desc = ""
   for count in range(1, number+1):
-    r=requests.get(f"https://some-random-api.ml/img/koala")
+    r=requests.get("https://some-random-api.ml/img/koala")
     desc += f"{r.json()['link']}\n"
   return desc
 
@@ -160,20 +167,27 @@ def botlizard(number):
 def botpanda(number):
   desc = ""
   for count in range(1, number+1):
-    r=requests.get(f"https://some-random-api.ml/img/panda")
+    r=requests.get("https://some-random-api.ml/img/panda")
     desc += f"{r.json()['link']}\n"
   return desc
 
-def botstates(country):
-  r=requests.get(f"https://rawcdn.githack.com/kamikazechaser/administrative-divisions-db/master/api/{country}.json")
-  desc = ",".join(r.json())
+def botquote(number):
+  desc = ""
+  for count in range(1, number+1):
+    r=requests.get("http://api.forismatic.com/api/1.0/?method=getQuote&lang=en&format=json").json()
+    desc += f"> {r['quoteText']}\n—By {r['quoteAuthor']}\n\n"
   return desc
 
 def botshiba(number):
   desc = ""
   for count in range(1, number+1):
-    r=requests.get(f"http://shibe.online/api/shibes")
+    r=requests.get("http://shibe.online/api/shibes")
     desc += f"{r.json()[0]}\n"
+  return desc
+
+def botstates(country):
+  r=requests.get(f"https://rawcdn.githack.com/kamikazechaser/administrative-divisions-db/master/api/{country}.json")
+  desc = ", ".join(r.json())
   return desc
 
 def bottrivia(number):
@@ -182,7 +196,7 @@ def bottrivia(number):
   for count in r:
     desc += f"**{count['category']} - {count['difficulty']}**  - {html.unescape(count['question'])}\n"
     if count["type"] == "multiple":
-      list_temp = [html.unescape(x) for x in count["incorrect_answers"]] + html.unescape(count["correct_answer"])
+      list_temp = [html.unescape(x) for x in count["incorrect_answers"]] + [html.unescape(count["correct_answer"])]
       list_temp.shuffle()
       desc += [f'  • {x}\n' for x in list_temp] + f"Answer: ||{html.unescape(count['correct_answer'])}||\n"
     else:
@@ -201,6 +215,7 @@ def setup(bot):
   bot.add_command(koala)
   bot.add_command(lizard)
   bot.add_command(panda)
+  bot.add_command(quote)
   bot.add_command(shiba)
   bot.add_command(states)
   bot.add_command(trivia)
