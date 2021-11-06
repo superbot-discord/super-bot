@@ -317,19 +317,19 @@ Index Permission
 
 badges_text = """```
 Index Badge
-0     Staff (Discord Employee)",
-1     Partnered Server Owner",
-2     HypeSquad Events member",
-9     Early Supporter",
-10    Team User",
-3     Bug Hunter (Level 1)",
-14    Bug Hunter (Level 2)",
-12    System User",
-17    Early Verified Bot Developer",
-16    Verified Bot",
-6     HypeSquad Bravery House",
-7     HypeSquad Brilliance House",
-8     HypeSquad Balance House"
+0     Staff (Discord Employee)
+1     Partnered Server Owner
+2     HypeSquad Events member
+9     Early Supporter
+10    Team User
+3     Bug Hunter (Level 1)
+14    Bug Hunter (Level 2)
+12    System User
+17    Early Verified Bot Developer
+16    Verified Bot
+6     HypeSquad Bravery House
+7     HypeSquad Brilliance House
+8     HypeSquad Balance House
 ```"""
 
 perms_guide = Embed(title="Permission integers", description="""
@@ -478,7 +478,8 @@ help_all = discord.Embed(title="SuperBot#4073 (ID:796686363604680755)", descript
 **Basic Commands**
 `help` `inter_help` `support` `invite` `prefix` `ping` `botpurge`\n
 **Discord Information Commands**
-`server` `invitelink` `role` `channel` `user` `avatar` `status` `leftuser` `message` `raw` `rawraw` `reactions` `emojiinfo` `template`\n
+`server` `invitelink` `role` `channel` `user` `avatar` `status` `leftuser` `message` `raw` `rawraw` `reactions` `emojiinfo` `sticker` `template`
+`stickers` `emojis` `permissions` `badges` `led_server` `led2_server` `led3_server` `led4_server`\n
 **Discord Commands**
 `react` `snipe` `clearsnipe` `pretend` `pretendembed` `embed` `editembed` `simpleembed` `quickembed` `ett` `tts`\n
 **Moderation Commands**
@@ -497,7 +498,7 @@ help_all = discord.Embed(title="SuperBot#4073 (ID:796686363604680755)", descript
 **Image Commands**
 `analyse` `histogram` `resize` `rotate` `brightness` `contrast` `sharpen` `edge` `contour` `blur` `invert` `hue` `recolor`
 To use the 13 commands above, type `=image ` first, then upload an image. Example: `=image analyse`. Supply a user name to work on his avatar, e.g. `=image SuperBot#4073 analyse`
-`lcd` `led` `led2` `ocr` `qr` `qrmake` `transparent` `text`\n
+`lcd` `led` `led2` `led3` `led4` `led_bar` `ocr` `qr` `qrmake` `transparent` `text`\n
 `hello` leads you to death\nNeed help? check the [documentation](https://superbot-discord.github.io/documentation)!""")
 
 def help_menu_options(ctx):
