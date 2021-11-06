@@ -79,13 +79,16 @@ async def shiba(ctx, number=1):
   else:
     await ctx.reply("There are too many pictures to show! I can only display up to 9 pictures.")
 
+@commands.command()
+async def states(ctx, country="UK"):
+  await ctx.reply(botstates(country))
+
 @commands.command(aliases=["quiz", "questions"])
 async def trivia(ctx, number=1):
   if number<4:
     await ctx.reply(bottrivia(number))
   else:
     await ctx.reply("There are too many questions to show! I can only display up to 3 questions.")
-
 
 
 def botbunny(number):
@@ -161,6 +164,11 @@ def botpanda(number):
     desc += f"{r.json()['link']}\n"
   return desc
 
+def botstates(country):
+  r=requests.get(f"https://rawcdn.githack.com/kamikazechaser/administrative-divisions-db/master/api/{country}.json")
+  desc = ",".join(r.json())
+  return desc
+
 def botshiba(number):
   desc = ""
   for count in range(1, number+1):
@@ -174,9 +182,9 @@ def bottrivia(number):
   for count in r:
     desc += f"**{count['category']} - {count['difficulty']}**  - {html.unescape(count['question'])}\n"
     if count["type"] == "multiple":
-      list_temp = (html.unescape(x) for x in count["incorrect_answers"]) + html.unescape(count["correct_answer"])
+      list_temp = [html.unescape(x) for x in count["incorrect_answers"]] + html.unescape(count["correct_answer"])
       list_temp.shuffle()
-      desc += (f'  • {x}\n' for x in list_temp) + f"Answer: ||{html.unescape(count['correct_answer'])}||\n"
+      desc += [f'  • {x}\n' for x in list_temp] + f"Answer: ||{html.unescape(count['correct_answer'])}||\n"
     else:
       desc += f"True or False?\nAnswer: ||{html.unescape(count['correct_answer'])}||\n"
   return desc
@@ -194,4 +202,5 @@ def setup(bot):
   bot.add_command(lizard)
   bot.add_command(panda)
   bot.add_command(shiba)
+  bot.add_command(states)
   bot.add_command(trivia)
