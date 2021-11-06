@@ -1,82 +1,90 @@
 from discord.ext import commands
-import requests as requests
+import requests
+import html
 
 @commands.command(aliases=["rabbit", "rabbits", "bunnies"])
 async def bunny(ctx, number=1):
-  if number<9:
+  if number<10:
     await ctx.reply(botbunny(number))
   else:
     await ctx.reply("There are too many pictures to show! I can only display up to 9 pictures.")
 
 @commands.command()
 async def cat(ctx, number=1):
-  if number<9:
+  if number<10:
     await ctx.reply(botcat(number))
   else:
     await ctx.reply("There are too many pictures to show! I can only display up to 9 pictures.")
 
 @commands.command(aliases=["food"])
 async def dish(ctx, number=1):
-  if number<9:
+  if number<10:
     await ctx.reply(botdish(number))
   else:
     await ctx.reply("There are too many pictures to show! I can only display up to 9 pictures.")
 
 @commands.command()
 async def dog(ctx, number=1):
-  if number<9:
+  if number<10:
     await ctx.reply(botdog(number))
   else:
     await ctx.reply("There are too many pictures to show! I can only display up to 9 pictures.")
 
 @commands.command()
 async def duck(ctx, number=1):
-  if number<9:
+  if number<10:
     await ctx.reply(botduck(number))
   else:
     await ctx.reply("There are too many pictures to show! I can only display up to 9 pictures.")
 
 @commands.command()
 async def fox(ctx, number=1):
-  if number<9:
+  if number<10:
     await ctx.reply(botfox(number))
   else:
     await ctx.reply("There are too many pictures to show! I can only display up to 9 pictures.")
 
 @commands.command()
 async def joke(ctx, number=1):
-  if number<9:
+  if number<10:
     await ctx.reply(botjoke(number))
   else:
     await ctx.reply("There are too many pictures to show! I can only display up to 9 pictures.")
 
 @commands.command()
 async def koala(ctx, number=1):
-  if number<9:
+  if number<10:
     await ctx.reply(botkoala(number))
   else:
     await ctx.reply("There are too many pictures to show! I can only display up to 9 pictures.")
 
 @commands.command()
 async def lizard(ctx, number=1):
-  if number<9:
+  if number<10:
     await ctx.reply(botlizard(number))
   else:
     await ctx.reply("There are too many pictures to show! I can only display up to 9 pictures.")
 
 @commands.command()
 async def panda(ctx, number=1):
-  if number<9:
+  if number<10:
     await ctx.reply(botpanda(number))
   else:
     await ctx.reply("There are too many pictures to show! I can only display up to 9 pictures.")
 
 @commands.command()
 async def shiba(ctx, number=1):
-  if number<9:
+  if number<10:
     await ctx.reply(botshiba(number))
   else:
     await ctx.reply("There are too many pictures to show! I can only display up to 9 pictures.")
+
+@commands.command(aliases=["quiz", "questions"])
+async def trivia(ctx, number=1):
+  if number<4:
+    await ctx.reply(bottrivia(number))
+  else:
+    await ctx.reply("There are too many questions to show! I can only display up to 3 questions.")
 
 
 
@@ -160,6 +168,19 @@ def botshiba(number):
     desc += f"{r.json()[0]}\n"
   return desc
 
+def bottrivia(number):
+  desc = ""
+  r=requests.get(f"https://opentdb.com/api.php?amount={number}&encoding=base64").json()["results"]
+  for count in r:
+    desc += f"**{count['category']} - {count['difficulty']}**  - {html.unescape(count['question'])}\n"
+    if count["type"] == "multiple":
+      list_temp = (html.unescape(x) for x in count["incorrect_answers"]) + html.unescape(count["correct_answer"])
+      list_temp.shuffle()
+      desc += (f'  • {x}\n' for x in list_temp) + f"Answer: ||{html.unescape(count['correct_answer'])}||\n"
+    else:
+      desc += f"True or False?\nAnswer: ||{html.unescape(count['correct_answer'])}||\n"
+  return desc
+
 
 def setup(bot):
   bot.add_command(bunny)
@@ -173,3 +194,4 @@ def setup(bot):
   bot.add_command(lizard)
   bot.add_command(panda)
   bot.add_command(shiba)
+  bot.add_command(trivia)
