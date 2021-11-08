@@ -537,7 +537,7 @@ async def message(ctx, message: discord.Message=None):
   await ctx.reply(embed=embed)
 
 @commands.command()
-async def overwrites(ctx, channel_ = None):
+async def overwrites(ctx, channel_:typing.Union[discord.TextChannel, discord.VoiceChannel, discord.StageChannel] = None):
   if not channel_:
     channel_ = ctx.channel
   desc = ""
