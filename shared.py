@@ -143,7 +143,7 @@ specialbool     =lambda input          : input.lower() in ["1", "ok", "yes", "ye
 has_perms       =lambda chn, memb, perm: (chn.permissions_for(memb).value  & 1 << perm) or (chn.permissions_for(memb).value  & 1 << 8) or memb.id in db["botadmins"]
 naiveness       =lambda dt             : "Naive" if (dt.tzinfo is None or dt.tzinfo.utcoffset(dt) is None) else "Not Naive"
 chance          =lambda ratio          : ra.randint(1, ratio) == ratio
-unix_timestamp  =lambda dt             : f"<t:{round((dt-dt1).total_seconds())}:F>"
+unix_timestamp  =lambda dt, flag="F"   : f"<t:{round((dt-dt1).total_seconds())}:{flag}>"
 permission_messages={}
 
 def format_fps(stream):
