@@ -537,13 +537,13 @@ async def message(ctx, message: discord.Message=None):
   await ctx.reply(embed=embed)
 
 @commands.command()
-async def overwrites(ctx, channel = None):
-  if not channel:
-    channel = ctx.channel
+async def overwrites(ctx, channel_ = None):
+  if not channel_:
+    channel_ = ctx.channel
   desc = ""
-  for count, count2 in channel.overwrites.items():
+  for count, count2 in channel_.overwrites.items():
     desc += f"**{count.mention}**\nAllowed: {count2.pair()[0].value} Denied: {count2.pair()[1].value}\n"
-  embed = discord.Embed(title=f"Overwrites for {channel.mention}", description=desc[:4096])
+  embed = discord.Embed(title=f"Overwrites for {channel_.mention}", description=desc[:4096])
   await ctx.reply(embed=embed)
 
 @commands.command(aliases = ['perm', 'perms', 'permission'])
@@ -1162,7 +1162,7 @@ async def widget(ctx, *, disposed = None):
   f1v = ", ".join([f"{x.name}#{x.discriminator}" for x in widget_.members])
   embed.add_field(name="Channels", value=f0v, inline=False)
   embed.add_field(name="Members listed", value=f1v[:1024], inline=False)
-  embed.url = widget.json_url
+  embed.url = widget_.json_url
   await ctx.reply(embed=embed)
 
 def setup(bot):
