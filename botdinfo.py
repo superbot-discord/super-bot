@@ -173,10 +173,7 @@ async def botvchannel(channel):
   except:
     f2v = "Cannot get invites without Manage Invites permission."
   f5vlist=channel.members
-  f5v=""
-  for count in f5vlist:
-    f5v=f5v+count.mention+"  "
-  f5v=f5v[:-2]
+  f5v=" ".join([x.mention for x in f5vlist])
   f3v=str(channel.bitrate//1000)+" kbps"
   if str(channel.user_limit)=="0":
     f4v="Infinite"
@@ -204,34 +201,32 @@ async def botstagec(channel):
     desc=f"{channel.name}\nCreated at {unix_timestamp(channel.created_at)}"
   embed=discord.Embed(title=ti, description=desc)
   f2vlist=await channel.invites()
-  f2v=""
-  for count in f2vlist:
-    f2v=f2v+count.url+"  "
-  f2v=f2v[:-2]
-  f5vlist=channel.members
-  f5v=""
-  for count in f5vlist:
-    f5v=f5v+count.mention+"  "
-  f5v=f5v[:-2]
-  f6vlist=channel.requesting_to_speak
-  f6v=""
-  for count in f6vlist:
-    f6v=f6v+count.mention+"  "
-  f6v=f6v[:-2]
-  f3v=str(channel.bitrate//1024)+" kbps"
+  f2v="  ".join([x.url for x in f2vlist])
+  f3v=f"{channel.bitrate//1024} kbps"
   if channel.user_limit:
-    f4v=str(channel.user_limit)+" members"
+    f4v=f"{channel.user_limit} members"
   else:
     f4v="Infinite"
+  f5valist=channel.listeners
+  f5va=" ".join([x.mention for x in f5valist])
+  f5vblist=channel.speakers
+  f5vb=" ".join([x.mention for x in f5vblist])
+  f6vlist=channel.requesting_to_speak
+  f6v=" ".join([x.mention for x in f6vlist])
+  f7vx=channel.instance
   embed.add_field(name="Category", value=str(channel.category), inline=True)
   if len(f2vlist)!=0:
     embed.add_field(name="Invites", value=f2v, inline=False)
   embed.add_field(name="Bitrate", value=f3v, inline=True)
   embed.add_field(name="Max. Members", value=f4v, inline=True)
-  if len(f5vlist)!=0:
-    embed.add_field(name="Current Members", value=f5v, inline=True)
+  if len(f5valist)!=0:
+    embed.add_field(name="Members listening", value=f5va, inline=True)
+  if len(f5vblist)!=0:
+    embed.add_field(name="Members speaking", value=f5vb, inline=True)
   if len(f6vlist)!=0:
     embed.add_field(name="Members requesting to speak", value=f6v, inline=True)
+  if f7vx:
+    f7v = f"Topic: {f7vx.topic}\nDiscovery: {'disabled' if f7vx.discoverable_disabled else 'enabled'}\nPrivacy level: {'server members only' if f7vx.privacy_level == discord.StagePrivacyLevel.closed else 'everyone on Discord'}"
 
 async def botthread(channel):
   ti=f"Thread Information: {channel.name}"
@@ -240,7 +235,7 @@ async def botthread(channel):
   f1v = channel.slowmode_delay
   f8v = ""
   for count in channel.members:
-    if len(f8v+ f"<@{count.id}> ") >= 500:
+    if len(f"{f8v}<@{count.id}> ") >= 500:
       f8v += "…"
     f8v+= f"<@{count.id}> "
   async for count in channel.history(limit=1, oldest_first=True):
@@ -539,6 +534,16 @@ async def message(ctx, message: discord.Message=None):
     embed.add_field(name=f"Role mentions ({len(f3vraw)})", value=f3v, inline=False)
   if len(f4vraw) != 0:
     embed.add_field(name=f"User mentions ({len(f4vraw)})", value=f4v, inline=False)
+  await ctx.reply(embed=embed)
+
+@commands.command()
+async def overwrites(ctx, channel = None):
+  if not channel:
+    channel = ctx.channel
+  desc = ""
+  for count, count2 in channel.overwrites.items():
+    desc += f"**{count.mention}**\nAllowed: {count2.pair()[0].value} Denied: {count2.pair()[1].value}\n"
+  embed = discord.Embed(title=f"Overwrites for {channel.mention}", description=desc[:4096])
   await ctx.reply(embed=embed)
 
 @commands.command(aliases = ['perm', 'perms', 'permission'])
@@ -1170,6 +1175,7 @@ def setup(bot):
   bot.add_command(invitelink)
   bot.add_command(leftuser)
   bot.add_command(message)
+  bot.add_command(overwrites)
   bot.add_command(permissions)
   bot.add_command(permission_generate)
   bot.add_command(raw)
