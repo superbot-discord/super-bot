@@ -92,6 +92,34 @@ async def banner(ctx, user: typing.Union[discord.User, discord.Member]=None):
   await ctx.reply(embed=embed)
 
 @commands.command()
+async def category(ctx, category_: discord.CategoryChannel = None):
+  if not category_:
+    if ctx.channel.category:
+      category_ = ctx.channel.category
+    else:
+      await ctx.send("Please specify a category.")
+      return
+  ti=f"Category Information: {category_.name}"
+  desc=f"Created at {unix_timestamp(category_.created_at)}"
+  embed = discord.Embed(title=ti, description=desc)
+  f0valist=category_.text_channels
+  f0v=" ".join([x.mention for x in f0valist])
+  f1valist=category_.voice_channels
+  f1v=" ".join([x.name for x in f1valist])
+  f2valist=category_.stage_channels
+  f2v=" ".join([x.name for x in f2valist])
+  f3v=category_.id
+  f4v=category_.position
+  embed.add_field(name="ID", value=f3v, inline=True)
+  embed.add_field(name="Position", value=f4v, inline=True)
+  if len(f0valist)!=0:
+    embed.add_field(name=f"Text Channels ({len(f0valist)})", value=f0v, inline=True)
+  if len(f1valist)!=0:
+    embed.add_field(name=f"Voice Channels ({len(f1valist)})", value=f1v, inline=True)
+  if len(f2valist)!=0:
+    embed.add_field(name=f"Stage Channels ({len(f2valist)})", value=f2v, inline=True)
+
+@commands.command()
 async def channel(ctx, channel:typing.Union[discord.TextChannel, discord.VoiceChannel, discord.StageChannel]=None):
   if not channel:
     channel = ctx.channel
@@ -116,7 +144,7 @@ async def channel(ctx, channel:typing.Union[discord.TextChannel, discord.VoiceCh
     await ctx.reply(embed=embed)
 
 async def bottchannel(channel):
-  ti="Channel Information: "+channel.name
+  ti=f"Channel Information: {channel.name}"
   desc=f"{channel.mention} Created at {unix_timestamp(channel.created_at)}"
   embed=discord.Embed(title=ti, description=desc)
   f1v = channel.slowmode_delay
@@ -537,13 +565,13 @@ async def message(ctx, message: discord.Message=None):
   await ctx.reply(embed=embed)
 
 @commands.command()
-async def overwrites(ctx, channel_:typing.Union[discord.TextChannel, discord.VoiceChannel, discord.StageChannel] = None):
+async def overwrites(ctx, channel_:typing.Union[discord.TextChannel, discord.VoiceChannel, discord.StageChannel, discord.CategoryChannel] = None):
   if not channel_:
     channel_ = ctx.channel
-  desc = ""
-  for count, count2 in channel_.overwrites.items():
+  desc = f"{channel_.mention}\n"
+  for count, count2 in channel_.overwrites.items().__reversed__():
     desc += f"**{count.mention}**\nAllowed: {count2.pair()[0].value} Denied: {count2.pair()[1].value}\n"
-  embed = discord.Embed(title=f"Overwrites for {channel_.mention}", description=desc[:4096])
+  embed = discord.Embed(title=f"Overwrites information", description=desc[:4096])
   await ctx.reply(embed=embed)
 
 @commands.command(aliases = ['perm', 'perms', 'permission'])
@@ -1169,6 +1197,7 @@ def setup(bot):
   bot.add_command(avatar)
   bot.add_command(badges)
   bot.add_command(banner)
+  bot.add_command(category)
   bot.add_command(channel)
   bot.add_command(emojiinfo)
   bot.add_command(emojis)
