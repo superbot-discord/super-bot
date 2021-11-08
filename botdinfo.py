@@ -117,7 +117,7 @@ async def channel(ctx, channel:typing.Union[discord.TextChannel, discord.VoiceCh
 
 async def bottchannel(channel):
   ti="Channel Information: "+channel.name
-  desc=f"{channel.mention} Created at <t:{round((channel.created_at-dt1).total_seconds())}:F>"
+  desc=f"{channel.mention} Created at {unix_timestamp(channel.created_at)}"
   embed=discord.Embed(title=ti, description=desc)
   f1v = channel.slowmode_delay
   f2v = [count.name for count in channel.threads]
@@ -161,7 +161,7 @@ async def bottchannel(channel):
 
 async def botvchannel(channel):
   ti=f"Voice Channel Information: {channel.name}"
-  desc=f"{channel.mention} created at <t:{round((channel.created_at-dt1).total_seconds())}:F>"
+  desc=f"{channel.mention} created at {unix_timestamp(channel.created_at)}"
   embed=discord.Embed(title=ti, description=desc)
   f1v = channel.video_quality_mode
   try:
@@ -199,9 +199,9 @@ async def botvchannel(channel):
 async def botstagec(channel):
   ti=f"Stage Channel Information: {channel.name}"
   if channel.topic:
-    desc=f"{channel.mention}  {channel.topic}\nCreated at <t:{round((channel.created_at-dt1).total_seconds())}:F>"
+    desc=f"{channel.mention}  {channel.topic}\nCreated at {unix_timestamp(channel.created_at)}"
   else:
-    desc=f"{channel.name}\nCreated at <t:{round((channel.created_at-dt1).total_seconds())}:F>"
+    desc=f"{channel.name}\nCreated at {unix_timestamp(channel.created_at)}"
   embed=discord.Embed(title=ti, description=desc)
   f2vlist=await channel.invites()
   f2v=""
@@ -235,7 +235,7 @@ async def botstagec(channel):
 
 async def botthread(channel):
   ti=f"Thread Information: {channel.name}"
-  desc=f"{channel.mention} Created by {channel.owner.mention}\nArchives at <t:{round((channel.archive_timestamp-dt1).total_seconds())}:F>"
+  desc=f"{channel.mention} Created by {channel.owner.mention}\nArchives at {unix_timestamp(channel.archive_timestamp)}"
   embed=discord.Embed(title=ti, description=desc)
   f1v = channel.slowmode_delay
   f8v = ""
@@ -260,20 +260,20 @@ async def botthread(channel):
   return embed
 
 @commands.command()
-async def emojiinfo(ctx,emojiarg : typing.Union[discord.Emoji, str]):
+async def emojiinfo(ctx,emoji_ : typing.Union[discord.Emoji, str]):
   try:
     try:
-      creator = await ctx.guild.fetch_emoji(emojiarg.id)
-      desc = f"{str(emojiarg)} {emojiarg.name}\nCreated by {str(creator.user.mention)} at <t:{round((emojiarg.created_at-dt1).total_seconds())}:F>"
+      creator = await ctx.guild.fetch_emoji(emoji_.id)
+      desc = f"{str(emoji_)} {emoji_.name}\nCreated by {str(creator.user.mention)} at {unix_timestamp(emoji_.created_at)}"
     except:
-      desc = f"emojiarg\n`Created by` field can only be retrieved with the manage-emojis permission.\nCreated at {round((emojiarg.created_at-dt1).total_seconds())}"
-    embed = discord.Embed(title=f"Emoji Info: {emojiarg.name}", description=desc)
-    embed.add_field(name="ID", value=emojiarg.id, inline=True)
-    embed.set_image(url = emojiarg.url)
+      desc = f"{emoji_}\n`Created by` field can only be retrieved with the manage-emojis permission.\nCreated at {unix_timestamp(emoji_.created_at)}"
+    embed = discord.Embed(title=f"Emoji Info: {emoji_.name}", description=desc)
+    embed.add_field(name="ID", value=emoji_.id, inline=True)
+    embed.set_image(url = emoji_.url)
   except:
-    cemoji = ems.db.get_emoji_by_alias(emojiarg)
+    cemoji = ems.db.get_emoji_by_alias(emoji_)
     if cemoji == None:
-      cemoji = ems.db.get_emoji_by_code(emojiarg)
+      cemoji = ems.db.get_emoji_by_code(emoji_)
     embed = discord.Embed(title="Emoji Info", description = (f"{cemoji[1]} :{':, :'.join(cemoji[0])}:"))
     embed.add_field(name="Category", value=cemoji[3], inline=True)
     embed.add_field(name="Unicode Version", value=cemoji[4], inline=True)
@@ -318,7 +318,7 @@ async def invitelink(ctx, *, invite_input: discord.Invite):
   f3v = invite.url
   f4v = invite.id
   if invite_has_info:
-    desc=f"Created at {round((invite.created_at-dt1).total_seconds())} by {invite.inviter}"
+    desc=f"Created at {unix_timestamp(invite.created_at)} by {invite.inviter}"
     f1v = invite.temporary
     age = invite.max_age
     if age==0:
@@ -332,7 +332,7 @@ async def invitelink(ctx, *, invite_input: discord.Invite):
     if f5v == "Never Expires":
       f7v = "Never"
     else:
-      f7v=f"<t:{(invite.created_at+timedelta(seconds=age)-dt1).total_seconds()}:F>"
+      f7v=f"{unix_timestamp(invite.created_at+timedelta(seconds=age))}"
     if invite.max_uses == 0:
       f0v=str(invite.uses)
     else:
@@ -397,7 +397,7 @@ async def leftuser(ctx, *, userinput):
   embed=discord.Embed(title=ti,color=lfuser.color, description=desc)
   embed.set_thumbnail(url=lfuser.display_avatar.url)
   f0v=f"{lfuser.name}#{lfuser.discriminator}"
-  f1v=f"<t:{round((lfuser.created_at-dt1).total_seconds())}:F>"
+  f1v={unix_timestamp(lfuser.created_at)}
   f1ts = str(datetime.now(timezone.utc) - lfuser.created_at)
   if " days, " not in f1ts:
     f1va = re.sub(r'(\d{1,2}):(\d{2}):(\d{2})', r'\1 hours \2 minutes \3 seconds', f1ts) + f"\n≈ "+f1ts.split(":")[0]+" hours"
@@ -418,9 +418,9 @@ async def message(ctx, message: discord.Message=None):
     else:
       await ctx.reply("Please reply to a message or add a message ID/Link.")
       return
-  desc=f"Sent by {message.author.mention} at <t:{round((message.created_at-dt1).total_seconds())}:F>"
+  desc=f"Sent by {message.author.mention} at {unix_timestamp(message.created_at)}"
   if message.edited_at != None:
-    desc += f"Edited at <t:{round((message.edited_at-dt1).total_seconds())}:F>"
+    desc += f"Edited at {unix_timestamp(message.edited_at)}"
   contents = message.content
   if contents:
     desc += f"\n**Message content: **\n{contents}"
@@ -647,7 +647,7 @@ async def role(ctx,role: discord.Role=None):
   if role==None:
     role=ctx.author.top_role
   ti=f"Role Information: {role.name}"
-  desc=f"{role.mention} created at <t:{round((role.created_at-dt1).total_seconds())}:F>"
+  desc=f"{role.mention} created at {unix_timestamp(role.created_at)}"
   embed=discord.Embed(title=ti,color=role.color, description=desc)
   memberlist=role.members
   if len(memberlist) == 0:
@@ -680,7 +680,7 @@ async def role(ctx,role: discord.Role=None):
 async def server(ctx, text = "regular"):
   guild=ctx.guild
   ti=guild.name
-  desc=f"Created at <t:{round((guild.created_at-dt1).total_seconds())}:F> by {guild.owner.mention}\nRegion: {guild.region}"
+  desc=f"Created at {unix_timestamp(guild.created_at)} by {guild.owner.mention}\nRegion: {guild.region}"
   try:
     base_url = guild.icon.url
     desc += f"\nServer Icon: "
@@ -894,10 +894,10 @@ async def status(ctx, member : discord.Member = None):
             field=":"+count.emoji.name+":"
       embed.add_field(name="Status", value=field, inline=False)
     if str(count.type)=="ActivityType.playing":
-      field=count.name+f"\nStarted: <t:{round((count.start-dt1).total_seconds())}:F>"
+      field=count.name+f"\nStarted: {unix_timestamp(count.start)}"
       embed.add_field(name="Game", value=field, inline=False)
     if str(count.type)=="ActivityType.streaming":
-      field=f"[{count.platform}: {count.name}]({count.url})\nStarted: <t:{round((count.start-dt1).total_seconds())}:F>"
+      field=f"[{count.platform}: {count.name}]({count.url})\nStarted: {unix_timestamp(count.start)}"
       embed.add_field(name="Game", value=field, inline=False)
       embed.set_thumbnail(url=count.large_image_url)
     if str(count.type)=="ActivityType.listening":
@@ -983,7 +983,7 @@ async def sticker(ctx, message: discord.Message=None):
     return
   _sticker = await _sticker[0].fetch()
   sticker_pack = await _sticker.pack()
-  desc=f"**{_sticker.name}**\nSent by {message.author.mention} at <t:{round((message.created_at-dt1).total_seconds())}:F>\nDescription: {_sticker.description}"
+  desc=f"**{_sticker.name}**\nSent by {message.author.mention} at {unix_timestamp(message.created_at)}\nDescription: {_sticker.description}"
   embed=discord.Embed(title="Sticker Information", description=desc, url=message.jump_url)
   embed.add_field(name="Tags", value=", ".join(_sticker.tags), inline=False)
   embed.add_field(name="ID", value=_sticker.id, inline=True)
@@ -1012,11 +1012,11 @@ async def template(ctx, *, tempinput):
     await ctx.reply("Invalid input. Please try again.")
     return
   ti=f"Template Information: {temp.name} ({temp.code})"
-  desc=f"Created at <t:{round((temp.created_at-dt1).total_seconds())}:F> by {temp.creator.mention}"
+  desc=f"Created at {unix_timestamp(temp.created_at)} by {temp.creator.mention}"
   embed=discord.Embed(title=ti, description=desc)
   f0v=temp.description
   f1v=temp.uses
-  f2v=f"<t:{(temp.updated_at-dt1).total_seconds()}:F>"
+  f2v={unix_timestamp(temp.updated_at)}
   f3v=temp.source_guild
   embed.add_field(name="Description", value=f0v, inline=False)
   embed.add_field(name="Uses", value=f1v, inline=True)
@@ -1041,21 +1041,21 @@ async def user(ctx, user: discord.Member = None, channel: discord.TextChannel = 
     f0v=f"{user.name}#{user.discriminator}"
   else:
     f0v=f"{user.name}#{user.discriminator} (__Nickname:__  `{user.display_name}`)"
-  f1v=f"<t:{round((user.created_at-dt1).total_seconds())}:F>\nFrom now:\n"
+  f1v=f"{unix_timestamp(user.created_at)}\nFrom now:\n"
   f1ts = str(datetime.now(timezone.utc) - user.created_at)
   if " days, " not in f1ts:
     f1v + re.sub(r'(\d{1,2}):(\d{2}):(\d{2})', r'\1 hours \2 minutes \3 seconds', f1ts) + f"\n≈ {f1ts.split(':')[0]} hours"
   else:
     days = int(re.sub(r'([\d]+) days, [\s\S]*', r'\1', f1ts))
     f1v += re.sub(r'([\d]+) days, (\d{1,2}):(\d{2}):(\d{2})', r'\1 days \2 hrs \3 mins \4 secs', f1ts)[:-7] + f"\n≈ {(int(f1ts.split(' days, ')[0]))//365} years {int(f1ts.split(' days, ')[0]) % 365} days"
-  f2v=f"<t:{round((user.joined_at-dt1).total_seconds())}:F>\nFrom now:\n"
+  f2v=f"{unix_timestamp(user.joined_at)}\nFrom now:\n"
   f2ts = str(datetime.now(timezone.utc) - user.joined_at)
   if " days, " not in f2ts:
     f2v += re.sub(r'(\d{1,2}):(\d{2}):(\d{2})', r'\1 hours \2 minutes \3 seconds', f2ts) + f"\n≈ {f2ts.split(':')[0]} hours"
   else:
     f2v += re.sub(r'([\d]+) days, (\d{1,2}):(\d{2}):(\d{2})', r'\1 days \2 hrs \3 mins \4 secs', f2ts)[:-7] + f"\n≈ {(int(f2ts.split(' days, ')[0]))//365} years {int(f2ts.split(' days, ')[0]) % 365} days"
   if user.premium_since:
-    f6v=f"<t:{round((user.premium_since-dt1).total_seconds())}:F>\nFrom now:\n"
+    f6v=f"{unix_timestamp(user.premium_since)}\nFrom now:\n"
     f6ts = str(datetime.now(timezone.utc) - user.joined_at)
     if " days, " not in f6ts:
       f6v += re.sub(r'(\d{1,2}):(\d{2}):(\d{2})', r'\1 hours \2 minutes \3 seconds', f6ts) + f"\n≈ {f6ts.split(':')[0]} hours"
@@ -1080,18 +1080,18 @@ async def user(ctx, user: discord.Member = None, channel: discord.TextChannel = 
   try:
     if f3vcraw.type.playing:
       try:
-        f3vc = f"Playing {f3vcraw.name} since <t:{round((f3vcraw.start-dt1).total_seconds())}\n{f3vcraw.details}"
+        f3vc = f"Playing {f3vcraw.name} since {unix_timestamp(f3vcraw.start)}\n{f3vcraw.details}"
       except:
         f3vc = f"Playing {f3vcraw.name}"
     elif f3vcraw.type.streaming:
       f3vc = f"Streaming [{f3vcraw.name}({f3vcraw.game})]({f3vcraw.url}) via {f3vcraw.platform}\n{f3vcraw.details}"
     elif f3vcraw.type.listening:
-      f3vc = f"Listening to {f3vcraw.artist}: {f3vcraw.album}: {f3vcraw.title}\nStarted: <t:{round((f3vcraw.created_at-dt1).total_seconds())}:F>\n{f3vcraw.details}"
+      f3vc = f"Listening to {f3vcraw.artist}: {f3vcraw.album}: {f3vcraw.title}\nStarted: {unix_timestamp(f3vcraw.created_at)}\n{f3vcraw.details}"
     elif f3vcraw.type.watching:
       try:
-        f3vc = f"Watching [{f3vcraw.name}]({f3vcraw.url}) since <t:{(f3vcraw.start-dt1).total_seconds()}:F>\n{f3vcraw.details}"
+        f3vc = f"Watching [{f3vcraw.name}]({f3vcraw.url}) since {unix_timestamp(f3vcraw.start)}\n{f3vcraw.details}"
       except:
-        f3vc = f"Watching {f3vcraw.name} since <t:{(f3vcraw.start-dt1).total_seconds()}:F>"
+        f3vc = f"Watching {f3vcraw.name} since {unix_timestamp(f3vcraw.start)}"
     elif f3vcraw.type.custom:
       try:
         f3vc = f":{f3vcraw.emoji.name}: {f3vcraw.details}"
@@ -1142,6 +1142,24 @@ async def user(ctx, user: discord.Member = None, channel: discord.TextChannel = 
   embed.add_field(name=f"Badges (Integer: {user_public_flags.value})", value=f5v, inline=False)
   await ctx.reply(embed=embed)
 
+@commands.command()
+async def widget(ctx, *, disposed = None):
+  try:
+    widget_ = await ctx.guild.widget()
+  except:
+    await ctx.send("This server does not have a widget.")
+    return
+  invite_has_info = False
+  ti=f"Widget Information: {widget_.name}"
+  desc= f"{widget_.invite_url}\nCreated at {unix_timestamp(widget_.created_at)}"
+  embed=discord.Embed(title=ti, description=desc)
+  f0v = ", ".join([x.name for x in widget_.channels])
+  f1v = ", ".join([f"{x.name}#{x.discriminator}" for x in widget_.members])
+  embed.add_field(name="Channels", value=f0v, inline=False)
+  embed.add_field(name="Members listed", value=f1v[:1024], inline=False)
+  embed.url = widget.json_url
+  await ctx.reply(embed=embed)
+
 def setup(bot):
   bot.add_command(avatar)
   bot.add_command(badges)
@@ -1165,3 +1183,4 @@ def setup(bot):
   bot.add_command(statuses)
   bot.add_command(template)
   bot.add_command(user)
+  bot.add_command(widget)

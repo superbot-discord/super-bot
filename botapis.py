@@ -93,7 +93,7 @@ async def shiba(ctx, number=1):
 
 @commands.command()
 async def states(ctx, country="UK"):
-  await ctx.reply(botstates(country))
+  await ctx.reply(botstates(country.upper()))
 
 @commands.command(aliases=["quiz", "questions"])
 async def trivia(ctx, number=1):
@@ -206,7 +206,10 @@ def botstates(country):
 
 def bottrivia(number):
   desc = ""
-  r=requests.get(f"https://opentdb.com/api.php?amount={number}&encoding=base64").json()["results"]
+  try:
+    r=requests.get(f"https://opentdb.com/api.php?amount={number}&encoding=base64").json()["results"]
+  except:
+    return "The country code could not be found!"
   for count in r:
     desc += f"**{count['category']} - {count['difficulty']}**  - {html.unescape(count['question'])}\n"
     if count["type"] == "multiple":
@@ -223,13 +226,14 @@ def bottrivia(number):
 def setup(bot):
   bot.add_command(bunny)
   bot.add_command(cat)
-  bot.add_command(dog)
   bot.add_command(dish)
+  bot.add_command(dog)
   bot.add_command(duck)
   bot.add_command(fox)
   bot.add_command(joke)
   bot.add_command(koala)
   bot.add_command(lizard)
+  bot.add_command(nasa)
   bot.add_command(panda)
   bot.add_command(quote)
   bot.add_command(shiba)
