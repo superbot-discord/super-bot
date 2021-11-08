@@ -79,9 +79,9 @@ async def gender(ctx, *, name):
   r=requests.get(f"https://api.genderize.io/?name={name}")
   gender_json = r.json()
   if gender_json["gender"]:
-    await ctx.send(f"{name} is {round(gender_json['probability']*100, 2)}% a {gender_json['gender']}.")
+    await ctx.reply(f"{name} is {round(gender_json['probability']*100, 2)}% a {gender_json['gender']}.")
   else:
-    await ctx.send("No gender was found for the name.")
+    await ctx.reply("No gender was found for the name.")
 
 @commands.command()
 async def minecraft(ctx, *, item="tnt"):

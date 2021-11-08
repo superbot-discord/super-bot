@@ -2,6 +2,35 @@ from shared import *
 
 cmaphsv = plt.cm.hsv
 
+@commands.command(aliases=["att", "atch"])
+async def attachment(ctx, message: discord.Message=None, index: int = 1):
+  if message==None:
+    potential_reference = ctx.message.reference
+    if potential_reference:
+      message=await ctx.bot.get_channel(potential_reference.channel_id).fetch_message(potential_reference.message_id)
+    else:
+      await ctx.reply("Please reply to a message or add a message ID/Link.")
+      return
+  if len(message.attachments) < index:
+      await ctx.reply("The message does not include (that many) attachments.")
+      return
+  attachment_ = message.attachments[index-1]
+  ti=f"Attachment Information: {attachment_.filename}"
+  if attachment_.width:
+    desc=f"{attachment_.width} (W) × {attachment_.height} (H)"
+  else:
+    desc=""
+  embed = discord.Embed(title=ti, description=desc, url=attachment_.url)
+  f0v = attachment_.id
+  f1v = sizer(attachment_.size)
+  f2v = attachment_.content_type
+  f3v = f"[here]({attachment_.proxy_url})"
+  embed.add_field(name="ID", value=f0v, inline=True)
+  embed.add_field(name="Size", value=f1v, inline=True)
+  embed.add_field(name="MIME Type", value=f2v, inline=True)
+  embed.add_field(name="Alternative URL (Does not always work!)", value=f3v, inline=False)
+  await ctx.reply(embed=embed)
+
 @commands.command()
 async def avatar(ctx,user: discord.Member=None):
   if not user:
@@ -97,7 +126,7 @@ async def category(ctx, category_: discord.CategoryChannel = None):
     if ctx.channel.category:
       category_ = ctx.channel.category
     else:
-      await ctx.send("Please specify a category.")
+      await ctx.reply("Please specify a category.")
       return
   ti=f"Category Information: {category_.name}"
   desc=f"Created at {unix_timestamp(category_.created_at)}"
@@ -118,6 +147,7 @@ async def category(ctx, category_: discord.CategoryChannel = None):
     embed.add_field(name=f"Voice Channels ({len(f1valist)})", value=f1v, inline=True)
   if len(f2valist)!=0:
     embed.add_field(name=f"Stage Channels ({len(f2valist)})", value=f2v, inline=True)
+  await ctx.reply(embed=embed)
 
 @commands.command()
 async def channel(ctx, channel:typing.Union[discord.TextChannel, discord.VoiceChannel, discord.StageChannel]=None):
@@ -1012,7 +1042,7 @@ async def sticker(ctx, message: discord.Message=None):
       return
   _sticker = message.stickers
   if not _sticker:
-    await ctx.send("The message does not contain any stickers.")
+    await ctx.reply("The message does not contain any stickers.")
     return
   _sticker = await _sticker[0].fetch()
   sticker_pack = await _sticker.pack()
@@ -1180,7 +1210,7 @@ async def widget(ctx, *, disposed = None):
   try:
     widget_ = await ctx.guild.widget()
   except:
-    await ctx.send("This server does not have a widget.")
+    await ctx.reply("This server does not have a widget.")
     return
   invite_has_info = False
   ti=f"Widget Information: {widget_.name}"
