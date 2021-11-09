@@ -75,6 +75,20 @@ async def errordog(ctx, code="404", *, disposed = None):
     await ctx.reply("Invalid code!")
 
 @commands.command()
+async def forecast(ctx, *, location):
+  r2=requests.get(f"http://api.openweathermap.org/geo/1.0/direct?q={location}&limit=1&appid=a920f6ea8a76b95a520a52e904965b14").json()[0]
+  r1=requests.get(f"https://api.openweathermap.org/data/2.5/onecall?lat={r2['lat']}&lon={r2['lon']}&appid=a920f6ea8a76b95a520a52e904965b14&units=metric").json()
+  f1=open('forecasts.html')
+  f2c=eval("f'''"+f1.read()+"'''")
+  f1.close()
+  f2=open(f'forecasts_{ctx.message.id}.html', 'w')
+  f2.write(f2c)
+  f2.close()
+  await ctx.reply("To view the results, download both files and open the `forecasts_XXXXXXXXXXXXXXXXXX.html` one. If prompted, select your browser, such as Firefox.",
+  files = [discord.File(f'forecasts_{ctx.message.id}.html'), discord.File('forecasts_css.css')])
+  try_delete(f'forecasts_{ctx.message.id}.html')
+
+@commands.command()
 async def gender(ctx, *, name):
   r=requests.get(f"https://api.genderize.io/?name={name}")
   gender_json = r.json()
@@ -455,6 +469,7 @@ def setup(bot):
   bot.add_command(error)
   bot.add_command(errorcat)
   bot.add_command(errordog)
+  bot.add_command(forecast)
   bot.add_command(gender)
   bot.add_command(minecraft)
   bot.add_command(redirect)

@@ -165,7 +165,7 @@ async def length(ctx, *, text):
   length_analysis = {count1: count2 for count1, count2 in sorted(length_analysis.items(), key=lambda item: item[1], reverse=True)}
   for count1, count2 in length_analysis.items():
     full_analysis += f"{count2}\t{count1}\n"
-  f = open('analysis.txt', 'a')
+  f = open('analysis.txt', 'w')
   f.write(full_analysis)
   f.flush()
   f.close()
