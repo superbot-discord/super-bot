@@ -225,22 +225,26 @@ async def unscramble(ctx, text, length="0"):
 @commands.command()
 async def weather(ctx, *, location):
   r1=requests.get(f"http://api.openweathermap.org/data/2.5/weather?q={location}&appid=a920f6ea8a76b95a520a52e904965b14&units=metric").json()
-  if r1["cod"] == 404:
+  if r1["cod"] == "404":
     await ctx.reply("Invalid location! Please try again.")
     return
   r2=requests.get(f"http://api.openweathermap.org/data/2.5/weather?q={location}&appid=a920f6ea8a76b95a520a52e904965b14&units=imperial").json()
   ti=f"Weather for {r1['name']} ({r1['sys']['country']})"
   desc=f"{r1['weather'][0]['main']}: {r1['weather'][0]['description']}\n{abs(r1['coord']['lat'])}°{'N' if r1['coord']['lat']>0 else 'S'}\n{abs(r1['coord']['lon'])}°{'E' if r1['coord']['lon']>0 else 'W'}"
   embed=discord.Embed(title=f"{ti}", description=desc)
-  embed.add_field(name="Temperature", value=f"""{r1['main']['temp_min']}°C ~ {r1['main']['temp_max']}°C\nCurrent: {r1['main']['temp']}°C\nFeels like: {r1['main']['feels_like']}°C
-{r1['main']['temp_min']}°F ~ {r1['main']['temp_max']}°F\nCurrent: {r1['main']['temp']}°F\nFeels like: {r1['main']['feels_like']}°F""", inline=False)
-  embed.add_field(name="Wind", value=f"{r1['wind']['speed']} m/s towards {r1['wind']['deg']}°\nGust: {r1['wind']['gust']} m/s\n{r1['wind']['speed']} mph towards {r1['wind']['deg']}°\nGust: {r1['wind']['gust']} mph", inline=False)
+  embed.add_field(name="Temp. range", value=f"{r1['main']['temp_min']}°C ~ {r1['main']['temp_max']}°C\n{r2['main']['temp_min']}°F ~ {r2['main']['temp_max']}°F", inline=True)
+  embed.add_field(name="Temp. feels like", value=f"{r1['main']['feels_like']}°C / {r2['main']['feels_like']}°F", inline=True)
+  embed.add_field(name="Temperature", value=f"{r1['main']['temp']}°C / {r2['main']['temp']}°F", inline=True)
+  embed.add_field(name="Wind speed", value=f"{r1['wind']['speed']} m/s / {r2['wind']['speed']} mph", inline=True)
+  embed.add_field(name="Wind direction", value=f"{r1['wind']['deg']}°", inline=True)
+  embed.add_field(name="Wind gust", value=f"{r1['wind']['gust']} m/s / {r2['wind']['gust']} mph", inline=True)
   embed.add_field(name="Humidity", value=f"{r1['main']['humidity']}%", inline=True)
-  embed.add_field(name="Sunrise", value=f"<t:{r1['sys']['sunrise']}> (<t:{r1['sys']['sunrise']}:R>)", inline=True)
-  embed.add_field(name="Sunset", value=f"<t:{r1['sys']['sunset']}> (<t:{r1['sys']['sunrise']}:R>)", inline=True)
+  embed.add_field(name="Sunrise", value=f"<t:{r1['sys']['sunrise']}>\n<t:{r1['sys']['sunrise']}:R>", inline=True)
+  embed.add_field(name="Sunset", value=f"<t:{r1['sys']['sunset']}>\n<t:{r1['sys']['sunrise']}:R>", inline=True)
   embed.add_field(name="Rain in past hour", value=f"{r1['rain']['1h']} mm", inline=True)
   embed.add_field(name="Cloud Coverage", value=f"{r1['clouds']['all']}%", inline=True)
   embed.add_field(name="Pressure", value=f"{r1['main']['pressure']} hPa", inline=True)
+  embed.set_thumbnail(url=f"http://openweathermap.org/img/wn/{r1['weather'][0]['icon']}@2x.png")
   await ctx.reply(embed=embed)
 
 @commands.command()
