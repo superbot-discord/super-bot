@@ -229,6 +229,7 @@ async def weather(ctx, *, location):
     await ctx.reply("Invalid location! Please try again.")
     return
   r2=requests.get(f"http://api.openweathermap.org/data/2.5/weather?q={location}&appid=a920f6ea8a76b95a520a52e904965b14&units=imperial").json()
+  r3=requests.get(f"http://api.openweathermap.org/data/2.5/air_pollution?lat={r1['coord']['lat']}&lon=r1['coord']['lon']&appid=a920f6ea8a76b95a520a52e904965b14").json()['list'][0]
   ti=f"Weather for {r1['name']} ({r1['sys']['country']})"
   desc=f"{r1['weather'][0]['main']}: {r1['weather'][0]['description']}\n{abs(r1['coord']['lat'])}°{'N' if r1['coord']['lat']>0 else 'S'}\n{abs(r1['coord']['lon'])}°{'E' if r1['coord']['lon']>0 else 'W'}"
   embed=discord.Embed(title=f"{ti}", description=desc)
@@ -237,13 +238,17 @@ async def weather(ctx, *, location):
   embed.add_field(name="Temperature", value=f"{r1['main']['temp']}°C / {r2['main']['temp']}°F", inline=True)
   embed.add_field(name="Wind speed", value=f"{r1['wind']['speed']} m/s / {r2['wind']['speed']} mph", inline=True)
   embed.add_field(name="Wind direction", value=f"{r1['wind']['deg']}°", inline=True)
-  embed.add_field(name="Wind gust", value=f"{r1['wind']['gust']} m/s / {r2['wind']['gust']} mph", inline=True)
+  if r1['wind'].get('gust', None):
+    embed.add_field(name="Wind gust", value=f"{r1['wind']['gust']} m/s / {r2['wind']['gust']} mph", inline=True)
   embed.add_field(name="Humidity", value=f"{r1['main']['humidity']}%", inline=True)
   embed.add_field(name="Sunrise", value=f"<t:{r1['sys']['sunrise']}>\n<t:{r1['sys']['sunrise']}:R>", inline=True)
   embed.add_field(name="Sunset", value=f"<t:{r1['sys']['sunset']}>\n<t:{r1['sys']['sunrise']}:R>", inline=True)
   embed.add_field(name="Rain in past hour", value=f"{r1['rain']['1h']} mm", inline=True)
   embed.add_field(name="Cloud Coverage", value=f"{r1['clouds']['all']}%", inline=True)
   embed.add_field(name="Pressure", value=f"{r1['main']['pressure']} hPa", inline=True)
+  embed.add_field(name="Air Quality", value=f"""{r3['main']['aqi']} ({db['air_quality'][str(r3['main']['aqi'])]})\n{r3['components']['co']} μg/m3 CO (Carbon Monoxide)\n{r3['components']['no']} μg/m3 NO (Nitrogen Monoxide)
+{r3['components']['no2']} μg/m3 NO₂ (Nitrogen Dioxide)\n{r3['components']['o3']} μg/m3 O₃ (Ozone)\n{r3['components']['so2']} μg/m3 SO₂ (Sulphur Dioxide)\n{r3['components']['pm2_5']} μg/m3 PM₂.₅ (Fine Particles patter)
+{r3['components']['pm10']} μg/m3 PM₁₀ (Coarse Particulate Matter)\n{r3['components']['nh3']} μg/m3 NH₃ (Ammonia)""", inline=False)
   embed.set_thumbnail(url=f"http://openweathermap.org/img/wn/{r1['weather'][0]['icon']}@2x.png")
   await ctx.reply(embed=embed)
 
