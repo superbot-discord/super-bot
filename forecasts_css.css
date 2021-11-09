@@ -1,75 +1,90 @@
 html {
-      scroll-behavior: smooth;
-      font-family: Roboto, 'Segoe UI', Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    }
+  scroll-behavior: smooth;
+  font-family: Roboto, 'Segoe UI', Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
 
-    a:link {
-      color: #0000d0;
-    }
+a:link {
+  color: #0000d0;
+}
 
-    a:visited {
-      color: #6000d0;
-    }
+a:visited {
+  color: #6000d0;
+}
 
-    a:hover {
-      color: #4090ff;
-    }
+a:hover {
+  color: #4090ff;
+}
 
-    a:active {
-      color: #1060cf;
-    }
+a:active {
+  color: #1060cf;
+}
 
-    h1,
-    h2,
-    h3 {
-      font-family: Verdana, Geneva, Tahoma, sans-serif;
-    }
+h1, h2, h3 {
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
 
-    h1 {
-      font-size: 32px;
-    }
+h1 {
+  font-size: 32px;
+}
 
-    h2,
-    th {
-      font-size: 28px;
-    }
+h2, th {
+  font-size: 28px;
+}
 
-    h3 {
-      font-size: 25px;
-    }
+h3 {
+  font-size: 25px;
+}
 
-    p,
-    a,
-    button,
-    td {
-      font-size: 20px;
-    }
+p, a, button, td {
+  font-size: 20px;
+}
 
-    table,
-    th,
-    td {
-      text-align: center;
-      border-collapse: collapse;
-      table-layout: fixed;
-      border-style: solid;
-      border-width: 0.1vw;
-      border-color: #000;
-    }
+table {
+  text-align: center;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
 
-    #top_button {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      border: 0.3vw solid #2070df;
-      background-color: #0000d0;
-      color: white;
-      cursor: pointer;
-      padding: 0.9vw;
-      border-radius: 1vw;
-      font-size: 1.4vw;
-      transition-duration: 0.3s;
-    }
+th {
+  border-style: solid;
+  border-width: 0.1vw;
+  border-color: #000;
+  background-color: #eee;
+}
 
-    #top_button:hover {
-      background-color: #2070df;
-    }
+td {
+  border-style: solid;
+  border-width: 0.1vw;
+  border-color: #000;
+}
+
+#top_button {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+}
+
+.sticky {
+  position: sticky;
+  top: 0px;
+  background: white;
+}
+
+div.overflow {
+  overflow-x: scroll;
+}
+
+button {
+  border: 0.3vw solid #2070df;
+  background-color: #0000d0;
+  color: white;
+  cursor: pointer;
+  padding: 0.9vw;
+  border-radius: 1vw;
+  font-size: 1.4vw;
+  transition-duration: 0.3s;
+}
+
+button:hover {
+  background-color: #2070df;
+}

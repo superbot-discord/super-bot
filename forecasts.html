@@ -3,12 +3,22 @@
 
 <head>
   <link rel="stylesheet" id="mystyle" href="forecasts_css.css">
-
 </head>
 
 <body>
   <button id="top_button" onclick="window.scroll(0, 0);">Back to top</button>
-  <h1>Weather Forecast for {r2['name']}</h1>
+  <script>
+    var _ = document.getElementById("top_button");
+    function hide_show() {{
+      if (_.style.display == "none") {{
+        _.style.display = "block"
+      }} else {{
+        _.style.display = "none"
+      }}
+    }}
+  </script>
+  <button id="hs_button" onclick='hide_show()'>Hide/show back-to-top button</button>
+  <h1>Weather Forecast for {r2['name']} (Generated on {datetime.now().strftime("%d %B %Y (%A)")} at {datetime.now().strftime("%H:%M:%S")} UTC)</h1>
   <div style="width: 180px; height: 75px; background-color: #eee; padding: 10px; float: left;">
     <a href="#F1">Minutely forecasts</a><br>
     <a href="#F2">Hourly forecasts</a><br>
@@ -22,6 +32,7 @@
   </div>
 
   <h2 id="F1">Minutely Forecasts</h2>
+
   <table style="width: 100%;">
     <colgroup>
       <col span="1" style="width: 9%;">
@@ -41,7 +52,7 @@
       <th colspan="11">Precipitaion in the coming 59 minutes (00 is the current minute, 01 is the next, and so on.)</th>
     </tr>
 
-    <tr>
+    <tr class="sticky">
       <td></td>
       <td>_0</td>
       <td>_1</td>
@@ -57,86 +68,86 @@
 
     <tr>
       <td>0_</td>
-      <td>{r1['minutely'][0] ['precipitation']}%</td>
-      <td>{r1['minutely'][1] ['precipitation']}%</td>
-      <td>{r1['minutely'][2] ['precipitation']}%</td>
-      <td>{r1['minutely'][3] ['precipitation']}%</td>
-      <td>{r1['minutely'][4] ['precipitation']}%</td>
-      <td>{r1['minutely'][5] ['precipitation']}%</td>
-      <td>{r1['minutely'][6] ['precipitation']}%</td>
-      <td>{r1['minutely'][7] ['precipitation']}%</td>
-      <td>{r1['minutely'][8] ['precipitation']}%</td>
-      <td>{r1['minutely'][9] ['precipitation']}%</td>
+      <td>{r1['minutely'][0] ['precipitation']} mm</td>
+      <td>{r1['minutely'][1] ['precipitation']} mm</td>
+      <td>{r1['minutely'][2] ['precipitation']} mm</td>
+      <td>{r1['minutely'][3] ['precipitation']} mm</td>
+      <td>{r1['minutely'][4] ['precipitation']} mm</td>
+      <td>{r1['minutely'][5] ['precipitation']} mm</td>
+      <td>{r1['minutely'][6] ['precipitation']} mm</td>
+      <td>{r1['minutely'][7] ['precipitation']} mm</td>
+      <td>{r1['minutely'][8] ['precipitation']} mm</td>
+      <td>{r1['minutely'][9] ['precipitation']} mm</td>
     </tr>
 
     <tr>
       <td>1_</td>
-      <td>{r1['minutely'][10]['precipitation']}%</td>
-      <td>{r1['minutely'][11]['precipitation']}%</td>
-      <td>{r1['minutely'][12]['precipitation']}%</td>
-      <td>{r1['minutely'][13]['precipitation']}%</td>
-      <td>{r1['minutely'][14]['precipitation']}%</td>
-      <td>{r1['minutely'][15]['precipitation']}%</td>
-      <td>{r1['minutely'][16]['precipitation']}%</td>
-      <td>{r1['minutely'][17]['precipitation']}%</td>
-      <td>{r1['minutely'][18]['precipitation']}%</td>
-      <td>{r1['minutely'][19]['precipitation']}%</td>
+      <td>{r1['minutely'][10]['precipitation']} mm</td>
+      <td>{r1['minutely'][11]['precipitation']} mm</td>
+      <td>{r1['minutely'][12]['precipitation']} mm</td>
+      <td>{r1['minutely'][13]['precipitation']} mm</td>
+      <td>{r1['minutely'][14]['precipitation']} mm</td>
+      <td>{r1['minutely'][15]['precipitation']} mm</td>
+      <td>{r1['minutely'][16]['precipitation']} mm</td>
+      <td>{r1['minutely'][17]['precipitation']} mm</td>
+      <td>{r1['minutely'][18]['precipitation']} mm</td>
+      <td>{r1['minutely'][19]['precipitation']} mm</td>
     </tr>
 
     <tr>
       <td>2_</td>
-      <td>{r1['minutely'][20]['precipitation']}%</td>
-      <td>{r1['minutely'][21]['precipitation']}%</td>
-      <td>{r1['minutely'][22]['precipitation']}%</td>
-      <td>{r1['minutely'][23]['precipitation']}%</td>
-      <td>{r1['minutely'][24]['precipitation']}%</td>
-      <td>{r1['minutely'][25]['precipitation']}%</td>
-      <td>{r1['minutely'][26]['precipitation']}%</td>
-      <td>{r1['minutely'][27]['precipitation']}%</td>
-      <td>{r1['minutely'][28]['precipitation']}%</td>
-      <td>{r1['minutely'][29]['precipitation']}%</td>
+      <td>{r1['minutely'][20]['precipitation']} mm</td>
+      <td>{r1['minutely'][21]['precipitation']} mm</td>
+      <td>{r1['minutely'][22]['precipitation']} mm</td>
+      <td>{r1['minutely'][23]['precipitation']} mm</td>
+      <td>{r1['minutely'][24]['precipitation']} mm</td>
+      <td>{r1['minutely'][25]['precipitation']} mm</td>
+      <td>{r1['minutely'][26]['precipitation']} mm</td>
+      <td>{r1['minutely'][27]['precipitation']} mm</td>
+      <td>{r1['minutely'][28]['precipitation']} mm</td>
+      <td>{r1['minutely'][29]['precipitation']} mm</td>
     </tr>
 
     <tr>
       <td>3_</td>
-      <td>{r1['minutely'][30]['precipitation']}%</td>
-      <td>{r1['minutely'][31]['precipitation']}%</td>
-      <td>{r1['minutely'][32]['precipitation']}%</td>
-      <td>{r1['minutely'][33]['precipitation']}%</td>
-      <td>{r1['minutely'][34]['precipitation']}%</td>
-      <td>{r1['minutely'][35]['precipitation']}%</td>
-      <td>{r1['minutely'][36]['precipitation']}%</td>
-      <td>{r1['minutely'][37]['precipitation']}%</td>
-      <td>{r1['minutely'][38]['precipitation']}%</td>
-      <td>{r1['minutely'][39]['precipitation']}%</td>
+      <td>{r1['minutely'][30]['precipitation']} mm</td>
+      <td>{r1['minutely'][31]['precipitation']} mm</td>
+      <td>{r1['minutely'][32]['precipitation']} mm</td>
+      <td>{r1['minutely'][33]['precipitation']} mm</td>
+      <td>{r1['minutely'][34]['precipitation']} mm</td>
+      <td>{r1['minutely'][35]['precipitation']} mm</td>
+      <td>{r1['minutely'][36]['precipitation']} mm</td>
+      <td>{r1['minutely'][37]['precipitation']} mm</td>
+      <td>{r1['minutely'][38]['precipitation']} mm</td>
+      <td>{r1['minutely'][39]['precipitation']} mm</td>
     </tr>
 
     <tr>
       <td>4_</td>
-      <td>{r1['minutely'][40]['precipitation']}%</td>
-      <td>{r1['minutely'][41]['precipitation']}%</td>
-      <td>{r1['minutely'][42]['precipitation']}%</td>
-      <td>{r1['minutely'][43]['precipitation']}%</td>
-      <td>{r1['minutely'][44]['precipitation']}%</td>
-      <td>{r1['minutely'][45]['precipitation']}%</td>
-      <td>{r1['minutely'][46]['precipitation']}%</td>
-      <td>{r1['minutely'][47]['precipitation']}%</td>
-      <td>{r1['minutely'][48]['precipitation']}%</td>
-      <td>{r1['minutely'][49]['precipitation']}%</td>
+      <td>{r1['minutely'][40]['precipitation']} mm</td>
+      <td>{r1['minutely'][41]['precipitation']} mm</td>
+      <td>{r1['minutely'][42]['precipitation']} mm</td>
+      <td>{r1['minutely'][43]['precipitation']} mm</td>
+      <td>{r1['minutely'][44]['precipitation']} mm</td>
+      <td>{r1['minutely'][45]['precipitation']} mm</td>
+      <td>{r1['minutely'][46]['precipitation']} mm</td>
+      <td>{r1['minutely'][47]['precipitation']} mm</td>
+      <td>{r1['minutely'][48]['precipitation']} mm</td>
+      <td>{r1['minutely'][49]['precipitation']} mm</td>
     </tr>
 
     <tr>
       <td>5_</td>
-      <td>{r1['minutely'][50]['precipitation']}%</td>
-      <td>{r1['minutely'][51]['precipitation']}%</td>
-      <td>{r1['minutely'][52]['precipitation']}%</td>
-      <td>{r1['minutely'][53]['precipitation']}%</td>
-      <td>{r1['minutely'][54]['precipitation']}%</td>
-      <td>{r1['minutely'][55]['precipitation']}%</td>
-      <td>{r1['minutely'][56]['precipitation']}%</td>
-      <td>{r1['minutely'][57]['precipitation']}%</td>
-      <td>{r1['minutely'][58]['precipitation']}%</td>
-      <td>{r1['minutely'][59]['precipitation']}%</td>
+      <td>{r1['minutely'][50]['precipitation']} mm</td>
+      <td>{r1['minutely'][51]['precipitation']} mm</td>
+      <td>{r1['minutely'][52]['precipitation']} mm</td>
+      <td>{r1['minutely'][53]['precipitation']} mm</td>
+      <td>{r1['minutely'][54]['precipitation']} mm</td>
+      <td>{r1['minutely'][55]['precipitation']} mm</td>
+      <td>{r1['minutely'][56]['precipitation']} mm</td>
+      <td>{r1['minutely'][57]['precipitation']} mm</td>
+      <td>{r1['minutely'][58]['precipitation']} mm</td>
+      <td>{r1['minutely'][59]['precipitation']} mm</td>
     </tr>
   </table>
 
@@ -161,7 +172,7 @@
       <th colspan="11">Weather in the coming 47 hours (00 is the current hour, 01 is the next, and so on.)</th>
     </tr>
 
-    <tr>
+    <tr class="sticky">
       <td></td>
       <td>Temperature</td>
       <td>T. (Feels like)</td>
@@ -846,8 +857,294 @@
       <td>{r1['hourly'][47]['uvi']}</td>
       <td>{r1['hourly'][47]['clouds']}%</td>
     </tr>
-    </table>
+  </table>
 
+  <h2 id="F3">Daily Forecasts</h2>
+
+  <div class="overflow">
+    <table style="width: 207%;">
+      <colgroup>
+        <col span="1" style="width: 9%;">
+        <col span="1" style="width: 9%;">
+        <col span="1" style="width: 9%;">
+        <col span="1" style="width: 9%;">
+        <col span="1" style="width: 9%;">
+        <col span="1" style="width: 9%;">
+        <col span="1" style="width: 9%;">
+        <col span="1" style="width: 9%;">
+        <col span="1" style="width: 9%;">
+        <col span="1" style="width: 9%;">
+        <col span="1" style="width: 9%;">
+        <col span="1" style="width: 9%;">
+        <col span="1" style="width: 9%;">
+        <col span="1" style="width: 9%;">
+        <col span="1" style="width: 9%;">
+        <col span="1" style="width: 9%;">
+        <col span="1" style="width: 9%;">
+        <col span="1" style="width: 9%;">
+        <col span="1" style="width: 9%;">
+        <col span="1" style="width: 9%;">
+        <col span="1" style="width: 9%;">
+        <col span="1" style="width: 9%;">
+        <col span="1" style="width: 9%;">
+        <col span="1" style="width: 9%;">
+      </colgroup>
+
+      <tr>
+        <th colspan="24">Weather in the coming 7 days (0 is today, 1 is tomorrow, and so on.)</th>
+      </tr>
+
+      <tr class="sticky">
+        <td rowspan="2"></td>
+        <td colspan="6">Temperature</td>
+        <td colspan="4">T. (Feels like)</td>
+        <td colspan="2">Sun</td>
+        <td colspan="3">Moon</td>
+        <td rowspan="2">Humidity</td>
+        <td rowspan="2">Wind Speed</td>
+        <td rowspan="2">Wind Dir.</td>
+        <td rowspan="2">Wind Gust</td>
+        <td rowspan="2">Dew Point</td>
+        <td rowspan="2">Pressure</td>
+        <td rowspan="2">UV Index</td>
+        <td rowspan="2">Clouds</td>
+      </tr>
+
+      <tr class="sticky">
+        <td>Minimum</td>
+        <td>Maximum</td>
+        <td>Morning</td>
+        <td>Day</td>
+        <td>Evening</td>
+        <td>Night</td>
+        <td>Morning</td>
+        <td>Day</td>
+        <td>Evening</td>
+        <td>Night</td>
+        <td>Rise</td>
+        <td>Set</td>
+        <td>Rise</td>
+        <td>Set</td>
+        <td>Phase</td>
+      </tr>
+
+      <tr>
+        <td>0</td>
+        <td>{r1['daily'][0]['temp']['min']}°C</td>
+        <td>{r1['daily'][0]['temp']['max']}°C</td>
+        <td>{r1['daily'][0]['temp']['morn']}°C</td>
+        <td>{r1['daily'][0]['temp']['day']}°C</td>
+        <td>{r1['daily'][0]['temp']['eve']}°C</td>
+        <td>{r1['daily'][0]['temp']['night']}°C</td>
+        <td>{r1['daily'][0]['feels_like']['morn']}°C</td>
+        <td>{r1['daily'][0]['feels_like']['day']}°C</td>
+        <td>{r1['daily'][0]['feels_like']['eve']}°C</td>
+        <td>{r1['daily'][0]['feels_like']['night']}°C</td>
+        <td>{datetime.utcfromtimestamp(r1['daily'][0]['sunrise']+r1['timezone_offset']).strftime('%H:%M:%S')}</td>
+        <td>{datetime.utcfromtimestamp(r1['daily'][0]['sunset']+r1['timezone_offset']).strftime('%H:%M:%S')}</td>
+        <td>{datetime.utcfromtimestamp(r1['daily'][0]['moonrise']+r1['timezone_offset']).strftime('%H:%M:%S')}</td>
+        <td>{datetime.utcfromtimestamp(r1['daily'][0]['moonset']+r1['timezone_offset']).strftime('%H:%M:%S')}</td>
+        <td>{100*r1['daily'][0]['moon_phase']}%</td>
+        <td>{r1['daily'][0]['humidity']}%</td>
+        <td>{r1['daily'][0]['wind_speed']} m/s</td>
+        <td>{r1['daily'][0]['wind_deg']}°</td>
+        <td>{r1['daily'][0]['wind_gust']} m/s</td>
+        <td>{r1['daily'][0]['dew_point']}°C</td>
+        <td>{r1['daily'][0]['pressure']} kPa</td>
+        <td>{r1['daily'][0]['uvi']}</td>
+        <td>{r1['daily'][0]['clouds']}%</td>
+      </tr>
+
+      <tr>
+        <td>1</td>
+        <td>{r1['daily'][1]['temp']['min']}°C</td>
+        <td>{r1['daily'][1]['temp']['max']}°C</td>
+        <td>{r1['daily'][1]['temp']['morn']}°C</td>
+        <td>{r1['daily'][1]['temp']['day']}°C</td>
+        <td>{r1['daily'][1]['temp']['eve']}°C</td>
+        <td>{r1['daily'][1]['temp']['night']}°C</td>
+        <td>{r1['daily'][1]['feels_like']['morn']}°C</td>
+        <td>{r1['daily'][1]['feels_like']['day']}°C</td>
+        <td>{r1['daily'][1]['feels_like']['eve']}°C</td>
+        <td>{r1['daily'][1]['feels_like']['night']}°C</td>
+        <td>{datetime.utcfromtimestamp(r1['daily'][1]['sunrise']+r1['timezone_offset']).strftime('%H:%M:%S')}</td>
+        <td>{datetime.utcfromtimestamp(r1['daily'][1]['sunset']+r1['timezone_offset']).strftime('%H:%M:%S')}</td>
+        <td>{datetime.utcfromtimestamp(r1['daily'][1]['moonrise']+r1['timezone_offset']).strftime('%H:%M:%S')}</td>
+        <td>{datetime.utcfromtimestamp(r1['daily'][1]['moonset']+r1['timezone_offset']).strftime('%H:%M:%S')}</td>
+        <td>{100*r1['daily'][1]['moon_phase']}%</td>
+        <td>{r1['daily'][1]['humidity']}%</td>
+        <td>{r1['daily'][1]['wind_speed']} m/s</td>
+        <td>{r1['daily'][1]['wind_deg']}°</td>
+        <td>{r1['daily'][1]['wind_gust']} m/s</td>
+        <td>{r1['daily'][1]['dew_point']}°C</td>
+        <td>{r1['daily'][1]['pressure']} kPa</td>
+        <td>{r1['daily'][1]['uvi']}</td>
+        <td>{r1['daily'][1]['clouds']}%</td>
+      </tr>
+
+      <tr>
+        <td>2</td>
+        <td>{r1['daily'][2]['temp']['min']}°C</td>
+        <td>{r1['daily'][2]['temp']['max']}°C</td>
+        <td>{r1['daily'][2]['temp']['morn']}°C</td>
+        <td>{r1['daily'][2]['temp']['day']}°C</td>
+        <td>{r1['daily'][2]['temp']['eve']}°C</td>
+        <td>{r1['daily'][2]['temp']['night']}°C</td>
+        <td>{r1['daily'][2]['feels_like']['morn']}°C</td>
+        <td>{r1['daily'][2]['feels_like']['day']}°C</td>
+        <td>{r1['daily'][2]['feels_like']['eve']}°C</td>
+        <td>{r1['daily'][2]['feels_like']['night']}°C</td>
+        <td>{datetime.utcfromtimestamp(r1['daily'][2]['sunrise']+r1['timezone_offset']).strftime('%H:%M:%S')}</td>
+        <td>{datetime.utcfromtimestamp(r1['daily'][2]['sunset']+r1['timezone_offset']).strftime('%H:%M:%S')}</td>
+        <td>{datetime.utcfromtimestamp(r1['daily'][2]['moonrise']+r1['timezone_offset']).strftime('%H:%M:%S')}</td>
+        <td>{datetime.utcfromtimestamp(r1['daily'][2]['moonset']+r1['timezone_offset']).strftime('%H:%M:%S')}</td>
+        <td>{100*r1['daily'][2]['moon_phase']}%</td>
+        <td>{r1['daily'][2]['humidity']}%</td>
+        <td>{r1['daily'][2]['wind_speed']} m/s</td>
+        <td>{r1['daily'][2]['wind_deg']}°</td>
+        <td>{r1['daily'][2]['wind_gust']} m/s</td>
+        <td>{r1['daily'][2]['dew_point']}°C</td>
+        <td>{r1['daily'][2]['pressure']} kPa</td>
+        <td>{r1['daily'][2]['uvi']}</td>
+        <td>{r1['daily'][2]['clouds']}%</td>
+      </tr>
+
+      <tr>
+        <td>3</td>
+        <td>{r1['daily'][3]['temp']['min']}°C</td>
+        <td>{r1['daily'][3]['temp']['max']}°C</td>
+        <td>{r1['daily'][3]['temp']['morn']}°C</td>
+        <td>{r1['daily'][3]['temp']['day']}°C</td>
+        <td>{r1['daily'][3]['temp']['eve']}°C</td>
+        <td>{r1['daily'][3]['temp']['night']}°C</td>
+        <td>{r1['daily'][3]['feels_like']['morn']}°C</td>
+        <td>{r1['daily'][3]['feels_like']['day']}°C</td>
+        <td>{r1['daily'][3]['feels_like']['eve']}°C</td>
+        <td>{r1['daily'][3]['feels_like']['night']}°C</td>
+        <td>{datetime.utcfromtimestamp(r1['daily'][3]['sunrise']+r1['timezone_offset']).strftime('%H:%M:%S')}</td>
+        <td>{datetime.utcfromtimestamp(r1['daily'][3]['sunset']+r1['timezone_offset']).strftime('%H:%M:%S')}</td>
+        <td>{datetime.utcfromtimestamp(r1['daily'][3]['moonrise']+r1['timezone_offset']).strftime('%H:%M:%S')}</td>
+        <td>{datetime.utcfromtimestamp(r1['daily'][3]['moonset']+r1['timezone_offset']).strftime('%H:%M:%S')}</td>
+        <td>{100*r1['daily'][3]['moon_phase']}%</td>
+        <td>{r1['daily'][3]['humidity']}%</td>
+        <td>{r1['daily'][3]['wind_speed']} m/s</td>
+        <td>{r1['daily'][3]['wind_deg']}°</td>
+        <td>{r1['daily'][3]['wind_gust']} m/s</td>
+        <td>{r1['daily'][3]['dew_point']}°C</td>
+        <td>{r1['daily'][3]['pressure']} kPa</td>
+        <td>{r1['daily'][3]['uvi']}</td>
+        <td>{r1['daily'][3]['clouds']}%</td>
+      </tr>
+
+      <tr>
+        <td>4</td>
+        <td>{r1['daily'][4]['temp']['min']}°C</td>
+        <td>{r1['daily'][4]['temp']['max']}°C</td>
+        <td>{r1['daily'][4]['temp']['morn']}°C</td>
+        <td>{r1['daily'][4]['temp']['day']}°C</td>
+        <td>{r1['daily'][4]['temp']['eve']}°C</td>
+        <td>{r1['daily'][4]['temp']['night']}°C</td>
+        <td>{r1['daily'][4]['feels_like']['morn']}°C</td>
+        <td>{r1['daily'][4]['feels_like']['day']}°C</td>
+        <td>{r1['daily'][4]['feels_like']['eve']}°C</td>
+        <td>{r1['daily'][4]['feels_like']['night']}°C</td>
+        <td>{datetime.utcfromtimestamp(r1['daily'][4]['sunrise']+r1['timezone_offset']).strftime('%H:%M:%S')}</td>
+        <td>{datetime.utcfromtimestamp(r1['daily'][4]['sunset']+r1['timezone_offset']).strftime('%H:%M:%S')}</td>
+        <td>{datetime.utcfromtimestamp(r1['daily'][4]['moonrise']+r1['timezone_offset']).strftime('%H:%M:%S')}</td>
+        <td>{datetime.utcfromtimestamp(r1['daily'][4]['moonset']+r1['timezone_offset']).strftime('%H:%M:%S')}</td>
+        <td>{100*r1['daily'][4]['moon_phase']}%</td>
+        <td>{r1['daily'][4]['humidity']}%</td>
+        <td>{r1['daily'][4]['wind_speed']} m/s</td>
+        <td>{r1['daily'][4]['wind_deg']}°</td>
+        <td>{r1['daily'][4]['wind_gust']} m/s</td>
+        <td>{r1['daily'][4]['dew_point']}°C</td>
+        <td>{r1['daily'][4]['pressure']} kPa</td>
+        <td>{r1['daily'][4]['uvi']}</td>
+        <td>{r1['daily'][4]['clouds']}%</td>
+      </tr>
+
+      <tr>
+        <td>5</td>
+        <td>{r1['daily'][5]['temp']['min']}°C</td>
+        <td>{r1['daily'][5]['temp']['max']}°C</td>
+        <td>{r1['daily'][5]['temp']['morn']}°C</td>
+        <td>{r1['daily'][5]['temp']['day']}°C</td>
+        <td>{r1['daily'][5]['temp']['eve']}°C</td>
+        <td>{r1['daily'][5]['temp']['night']}°C</td>
+        <td>{r1['daily'][5]['feels_like']['morn']}°C</td>
+        <td>{r1['daily'][5]['feels_like']['day']}°C</td>
+        <td>{r1['daily'][5]['feels_like']['eve']}°C</td>
+        <td>{r1['daily'][5]['feels_like']['night']}°C</td>
+        <td>{datetime.utcfromtimestamp(r1['daily'][5]['sunrise']+r1['timezone_offset']).strftime('%H:%M:%S')}</td>
+        <td>{datetime.utcfromtimestamp(r1['daily'][5]['sunset']+r1['timezone_offset']).strftime('%H:%M:%S')}</td>
+        <td>{datetime.utcfromtimestamp(r1['daily'][5]['moonrise']+r1['timezone_offset']).strftime('%H:%M:%S')}</td>
+        <td>{datetime.utcfromtimestamp(r1['daily'][5]['moonset']+r1['timezone_offset']).strftime('%H:%M:%S')}</td>
+        <td>{100*r1['daily'][5]['moon_phase']}%</td>
+        <td>{r1['daily'][5]['humidity']}%</td>
+        <td>{r1['daily'][5]['wind_speed']} m/s</td>
+        <td>{r1['daily'][5]['wind_deg']}°</td>
+        <td>{r1['daily'][5]['wind_gust']} m/s</td>
+        <td>{r1['daily'][5]['dew_point']}°C</td>
+        <td>{r1['daily'][5]['pressure']} kPa</td>
+        <td>{r1['daily'][5]['uvi']}</td>
+        <td>{r1['daily'][5]['clouds']}%</td>
+      </tr>
+
+      <tr>
+        <td>6</td>
+        <td>{r1['daily'][6]['temp']['min']}°C</td>
+        <td>{r1['daily'][6]['temp']['max']}°C</td>
+        <td>{r1['daily'][6]['temp']['morn']}°C</td>
+        <td>{r1['daily'][6]['temp']['day']}°C</td>
+        <td>{r1['daily'][6]['temp']['eve']}°C</td>
+        <td>{r1['daily'][6]['temp']['night']}°C</td>
+        <td>{r1['daily'][6]['feels_like']['morn']}°C</td>
+        <td>{r1['daily'][6]['feels_like']['day']}°C</td>
+        <td>{r1['daily'][6]['feels_like']['eve']}°C</td>
+        <td>{r1['daily'][6]['feels_like']['night']}°C</td>
+        <td>{datetime.utcfromtimestamp(r1['daily'][6]['sunrise']+r1['timezone_offset']).strftime('%H:%M:%S')}</td>
+        <td>{datetime.utcfromtimestamp(r1['daily'][6]['sunset']+r1['timezone_offset']).strftime('%H:%M:%S')}</td>
+        <td>{datetime.utcfromtimestamp(r1['daily'][6]['moonrise']+r1['timezone_offset']).strftime('%H:%M:%S')}</td>
+        <td>{datetime.utcfromtimestamp(r1['daily'][6]['moonset']+r1['timezone_offset']).strftime('%H:%M:%S')}</td>
+        <td>{100*r1['daily'][6]['moon_phase']}%</td>
+        <td>{r1['daily'][6]['humidity']}%</td>
+        <td>{r1['daily'][6]['wind_speed']} m/s</td>
+        <td>{r1['daily'][6]['wind_deg']}°</td>
+        <td>{r1['daily'][6]['wind_gust']} m/s</td>
+        <td>{r1['daily'][6]['dew_point']}°C</td>
+        <td>{r1['daily'][6]['pressure']} kPa</td>
+        <td>{r1['daily'][6]['uvi']}</td>
+        <td>{r1['daily'][6]['clouds']}%</td>
+      </tr>
+
+      <tr>
+        <td>7</td>
+        <td>{r1['daily'][7]['temp']['min']}°C</td>
+        <td>{r1['daily'][7]['temp']['max']}°C</td>
+        <td>{r1['daily'][7]['temp']['morn']}°C</td>
+        <td>{r1['daily'][7]['temp']['day']}°C</td>
+        <td>{r1['daily'][7]['temp']['eve']}°C</td>
+        <td>{r1['daily'][7]['temp']['night']}°C</td>
+        <td>{r1['daily'][7]['feels_like']['morn']}°C</td>
+        <td>{r1['daily'][7]['feels_like']['day']}°C</td>
+        <td>{r1['daily'][7]['feels_like']['eve']}°C</td>
+        <td>{r1['daily'][7]['feels_like']['night']}°C</td>
+        <td>{datetime.utcfromtimestamp(r1['daily'][7]['sunrise']+r1['timezone_offset']).strftime('%H:%M:%S')}</td>
+        <td>{datetime.utcfromtimestamp(r1['daily'][7]['sunset']+r1['timezone_offset']).strftime('%H:%M:%S')}</td>
+        <td>{datetime.utcfromtimestamp(r1['daily'][7]['moonrise']+r1['timezone_offset']).strftime('%H:%M:%S')}</td>
+        <td>{datetime.utcfromtimestamp(r1['daily'][7]['moonset']+r1['timezone_offset']).strftime('%H:%M:%S')}</td>
+        <td>{100*r1['daily'][7]['moon_phase']}%</td>
+        <td>{r1['daily'][7]['humidity']}%</td>
+        <td>{r1['daily'][7]['wind_speed']} m/s</td>
+        <td>{r1['daily'][7]['wind_deg']}°</td>
+        <td>{r1['daily'][7]['wind_gust']} m/s</td>
+        <td>{r1['daily'][7]['dew_point']}°C</td>
+        <td>{r1['daily'][7]['pressure']} kPa</td>
+        <td>{r1['daily'][7]['uvi']}</td>
+        <td>{r1['daily'][7]['clouds']}%</td>
+      </tr>
+    </table>
+  </div>
 </body>
 
 </html>
