@@ -229,7 +229,7 @@ async def weather(ctx, *, location):
     await ctx.reply("Invalid location! Please try again.")
     return
   r2=requests.get(f"http://api.openweathermap.org/data/2.5/weather?q={location}&appid=a920f6ea8a76b95a520a52e904965b14&units=imperial").json()
-  r3=requests.get(f"http://api.openweathermap.org/data/2.5/air_pollution?lat={r1['coord']['lat']}&lon=r1['coord']['lon']&appid=a920f6ea8a76b95a520a52e904965b14").json()['list'][0]
+  r3=requests.get(f"http://api.openweathermap.org/data/2.5/air_pollution?lat={r1['coord']['lat']}&lon={r1['coord']['lon']} &appid=a920f6ea8a76b95a520a52e904965b14").json()['list'][0]
   ti=f"Weather for {r1['name']} ({r1['sys']['country']})"
   desc=f"{r1['weather'][0]['main']}: {r1['weather'][0]['description']}\n{abs(r1['coord']['lat'])}°{'N' if r1['coord']['lat']>0 else 'S'}\n{abs(r1['coord']['lon'])}°{'E' if r1['coord']['lon']>0 else 'W'}"
   embed=discord.Embed(title=f"{ti}", description=desc)
