@@ -255,8 +255,8 @@ async def weather(ctx, *, location):
   if r1['wind'].get('gust', None):
     embed.add_field(name="Wind gust", value=f"{r1['wind']['gust']} m/s / {r2['wind']['gust']} mph", inline=True)
   embed.add_field(name="Humidity", value=f"{r1['main']['humidity']}%", inline=True)
-  embed.add_field(name="Sunrise", value=f"<t:{r1['sys']['sunrise']}>\n<t:{r1['sys']['sunrise']}:R>", inline=True)
-  embed.add_field(name="Sunset", value=f"<t:{r1['sys']['sunset']}>\n<t:{r1['sys']['sunrise']}:R>", inline=True)
+  embed.add_field(name="Sunrise", value=f"<t:{r1['sys']['sunrise']}:T> <t:{r1['sys']['sunrise']}:R>", inline=True)
+  embed.add_field(name="Sunset", value=f"<t:{r1['sys']['sunset']}:T> <t:{r1['sys']['sunset']}:R>", inline=True)
   if r1['wind'].get('rain', None):
     embed.add_field(name="Rain in past hour", value=f"{r1['rain']['1h']} mm", inline=True)
   embed.add_field(name="Cloud Coverage", value=f"{r1['clouds']['all']}%", inline=True)
