@@ -146,6 +146,9 @@ chance          =lambda ratio          : ra.randint(1, ratio) == ratio
 unix_timestamp  =lambda dt, flag="F"   : f"<t:{round((dt-dt1).total_seconds())}:{flag}>"
 permission_messages={}
 
+forecast_formatter = """
+"""
+
 def format_fps(stream):
   try:
     return stream.fps

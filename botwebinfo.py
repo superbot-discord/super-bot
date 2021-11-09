@@ -243,7 +243,8 @@ async def weather(ctx, *, location):
   embed.add_field(name="Humidity", value=f"{r1['main']['humidity']}%", inline=True)
   embed.add_field(name="Sunrise", value=f"<t:{r1['sys']['sunrise']}>\n<t:{r1['sys']['sunrise']}:R>", inline=True)
   embed.add_field(name="Sunset", value=f"<t:{r1['sys']['sunset']}>\n<t:{r1['sys']['sunrise']}:R>", inline=True)
-  embed.add_field(name="Rain in past hour", value=f"{r1['rain']['1h']} mm", inline=True)
+  if r1['wind'].get('rain', None):
+    embed.add_field(name="Rain in past hour", value=f"{r1['rain']['1h']} mm", inline=True)
   embed.add_field(name="Cloud Coverage", value=f"{r1['clouds']['all']}%", inline=True)
   embed.add_field(name="Pressure", value=f"{r1['main']['pressure']} hPa", inline=True)
   embed.add_field(name="Air Quality", value=f"""{r3['main']['aqi']} ({db['air_quality'][str(r3['main']['aqi'])]})\n{r3['components']['co']} μg/m3 CO (Carbon Monoxide)\n{r3['components']['no']} μg/m3 NO (Nitrogen Monoxide)
