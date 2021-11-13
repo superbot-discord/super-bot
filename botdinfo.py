@@ -607,7 +607,7 @@ async def overwrites(ctx, channel_:typing.Union[discord.TextChannel, discord.Voi
 @commands.command(aliases = ['perm', 'perms', 'permission'])
 async def permissions(ctx, integer="help"):
   if integer == "help":
-    embed = badges_guide
+    embed = perms_guide
   else:
     try:
       try:
