@@ -143,7 +143,7 @@ specialbool     =lambda input          : input.lower() in ["1", "ok", "yes", "ye
 has_perms       =lambda chn, memb, perm: (chn.permissions_for(memb).value  & 1 << perm) or (chn.permissions_for(memb).value  & 1 << 8) or memb.id in db["botadmins"]
 naiveness       =lambda dt             : "Naive" if (dt.tzinfo is None or dt.tzinfo.utcoffset(dt) is None) else "Not Naive"
 chance          =lambda ratio          : ra.randint(1, ratio) == ratio
-unix_timestamp  =lambda dt, flag="F"   : f"<t:{round((dt-dt1).total_seconds())}:{flag}>"
+unix_timestamp  =lambda dt, flag="F"   : f"<t:{datetime.timestamp(dt)}:{flag}>"
 permission_messages={}
 
 forecast_formatter = """
@@ -203,7 +203,6 @@ view_overwrite = discord.PermissionOverwrite()
 view_overwrite.view_channel = True
 clickers = {}
 vclients={}
-dt1 = datetime(1970,1,1,0,0,0,0,pytz.timezone('GMT'))
 timestamp_pattern = re.compile(r'<t:-?[\d]{1,13}(:[FfDdTtR])?>')
 
 def sample_buttons(ctx):

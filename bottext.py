@@ -302,10 +302,9 @@ async def unicode(ctx, *query):
 async def unix(ctx, *, text = "now"):
   now = datetime.now()
   dateParts = {
-    m[-1]: int(m[:-1])
-    for m in re.findall(r'([\d]{1,4}[yMdhms]{1})', text)
+    m[-1]: int(m[:-1]) for m in re.findall(r'([\d]{1,4}[yMdhms])', text)
   }
-  if text.startswith("now") or SequenceMatcher(None, text, "now").ratio()>0.65:
+  if text.startswith("now") or SequenceMatcher(None, text, "now").ratio()>0.66:
     dt2=now
   else:
     dt2 = datetime(
@@ -313,8 +312,8 @@ async def unix(ctx, *, text = "now"):
       dateParts.get('d', now.day),    dateParts.get('h', now.hour),
       dateParts.get('m', now.minute), dateParts.get('s', now.second))
   dt2 = pytz.timezone('UTC').localize(dt2)
-  seconds = round((dt2-dt1).total_seconds())
-  await ctx.reply(f"`<t:{seconds}>` | <t:{seconds}>\n`<t:{seconds}:F>` | <t:{seconds}:F>\n`<t:{seconds}:f>` | <t:{seconds}:f>\n`<t:{seconds}:D>` | <t:{seconds}:D>\n`<t:{seconds}:d>` | <t:{seconds}:d>\n`<t:{seconds}:T>` | <t:{seconds}:T>\n`<t:{seconds}:t>` | <t:{seconds}:t>\n`<t:{seconds}:R>` | <t:{seconds}:R>")
+  s = datetime.timestamp(dt2)
+  await ctx.reply(f"`<t:{s}>`     | <t:{s}>\n`<t:{s}:F>` | <t:{s}:F>\n`<t:{s}:f>` | <t:{s}:f>\n`<t:{s}:D>` | <t:{s}:D>\n`<t:{s}:d>` | <t:{s}:d>\n`<t:{s}:T>` | <t:{s}:T>\n`<t:{s}:t>` | <t:{s}:t>\n`<t:{s}:R>` | <t:{s}:R>")
 
 def setup(bot):
   bot.add_command(case)
