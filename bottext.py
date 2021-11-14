@@ -253,7 +253,7 @@ async def spoiler(ctx, *, text):
   await ctx.reply(f"||{text}||")
 
 @commands.command(aliases=['antispoiler', 'antispoilers', 'aspoiler', 'aspoilers', 'spoils'])
-async def spoil(ctx, msg : discord.Message = None, *, text):
+async def spoil(ctx, msg : discord.Message = None, *, text="Reply to a message, add a message ID/link or add some text to remove the spoilers!"):
   potential_reference = ctx.message.reference
   if potential_reference and not msg:
     msg = await ctx.bot.get_channel(potential_reference.channel_id).fetch_message(potential_reference.message_id)
@@ -312,9 +312,7 @@ async def unix(ctx, *, text = "now"):
   if text.startswith("now") or SequenceMatcher(None, text, "now").ratio()>0.66:
     dt2=now
   else:
-    dt2 = datetime(
-      dateParts.get('y', now.year),   dateParts.get('M', now.month), dateParts.get('d', now.day), dateParts.get('h', now.hour),
-      dateParts.get('m', now.minute), dateParts.get('s', now.second), timezone.utc)
+    dt2 = datetime(dateParts.get('y', now.year), dateParts.get('M', now.month), dateParts.get('d', now.day), dateParts.get('h', now.hour), dateParts.get('m', now.minute), dateParts.get('s', now.second), tzinfo=timezone.utc)
   s = round(datetime.timestamp(dt2))
   await ctx.reply(f"`<t:{s}>`      | <t:{s}>\n`<t:{s}:F>` | <t:{s}:F>\n`<t:{s}:f>` | <t:{s}:f>\n`<t:{s}:D>` | <t:{s}:D>\n`<t:{s}:d>` | <t:{s}:d>\n`<t:{s}:T>` | <t:{s}:T>\n`<t:{s}:t>` | <t:{s}:t>\n`<t:{s}:R>` | <t:{s}:R>")
 
