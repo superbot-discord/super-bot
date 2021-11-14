@@ -253,7 +253,12 @@ async def spoiler(ctx, *, text):
   await ctx.reply(f"||{text}||")
 
 @commands.command(aliases=['antispoiler', 'antispoilers', 'aspoiler', 'aspoilers', 'spoils'])
-async def spoil(ctx, *, text):
+async def spoil(ctx, msg : discord.Message = None, *, text):
+  potential_reference = ctx.message.reference
+  if potential_reference and not msg:
+    msg = await ctx.bot.get_channel(potential_reference.channel_id).fetch_message(potential_reference.message_id)
+  if msg:
+    text = msg.content
   await ctx.reply(text.replace("||", ""))
 
 @commands.command()
@@ -300,7 +305,7 @@ async def unicode(ctx, *query):
 
 @commands.command(aliases=["timestamp", "posix"])
 async def unix(ctx, *, text = "now"):
-  now = datetime.now()
+  now = datetime.now(tz=timezone.utc)
   dateParts = {
     m[-1]: int(m[:-1]) for m in re.findall(r'([\d]{1,4}[yMdhms])', text)
   }
@@ -308,10 +313,8 @@ async def unix(ctx, *, text = "now"):
     dt2=now
   else:
     dt2 = datetime(
-      dateParts.get('y', now.year),   dateParts.get('M', now.month),
-      dateParts.get('d', now.day),    dateParts.get('h', now.hour),
-      dateParts.get('m', now.minute), dateParts.get('s', now.second))
-  dt2 = pytz.timezone('UTC').localize(dt2)
+      dateParts.get('y', now.year),   dateParts.get('M', now.month), dateParts.get('d', now.day), dateParts.get('h', now.hour),
+      dateParts.get('m', now.minute), dateParts.get('s', now.second), timezone.utc)
   s = round(datetime.timestamp(dt2))
   await ctx.reply(f"`<t:{s}>`      | <t:{s}>\n`<t:{s}:F>` | <t:{s}:F>\n`<t:{s}:f>` | <t:{s}:f>\n`<t:{s}:D>` | <t:{s}:D>\n`<t:{s}:d>` | <t:{s}:d>\n`<t:{s}:T>` | <t:{s}:T>\n`<t:{s}:t>` | <t:{s}:t>\n`<t:{s}:R>` | <t:{s}:R>")
 
