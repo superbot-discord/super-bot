@@ -435,7 +435,7 @@ Audio - Minimum size\t\t{format_video(video8)}'''
       else:
         embed.add_field(name="Tags", value=(", ".join(youtube.keywords))[:1023], inline=False)
       embed.add_field(name="Views", value=f'{youtube.views:,}', inline=True)
-      embed.add_field(name="Date uploaded", value=f"<t:{round((pytz.timezone('UTC').localize(youtube.publish_date)-dt1).total_seconds())}:D>", inline=True)
+      embed.add_field(name="Date uploaded", value=unix_timestamp(youtube.publish_date, "D"), inline=True)
       embed.add_field(name="Length", value=format_length(youtube.length), inline=True)
       chnl = pytube.Channel(youtube.channel_url)
       embed.add_field(name="Rating", value=f"{str(round(youtube.rating*20, 3))}%", inline=True)

@@ -39,9 +39,8 @@ sniping={}
 poll_options={}
 polls=[]
 allid=[]
-now_ = datetime.now()
 
-@tasks.loop(hours=24, time=datetime(now_.year, now_.month, now_.day, 0 if now_.hour==23 else now_.hour+1, 0, 0))
+@tasks.loop(hours=24)
 async def sba_marks():
   sba_channel = bot_.get_channel(909445785509326859)
   await sba_channel.send(f"5m <@757416033811169351> <@752335217339007067>\nFun fact: this is the {sba_marks.current_loop}{st_nd_th_format(sba_marks.current_loop)} time of SBA marks claiming since the last deploy!")
@@ -540,10 +539,14 @@ async def on_ready():
     #buttons=db["status_buttons"],
     timestamps = db["status_timestamps"])
   await bot_.change_presence(status=discord.Status.idle, activity=activity)
+  # datetime(now_.year, now_.month, now_.day, (0 if now_.hour==23 else now_.hour+1), 0, 0)
+  sba_marks.start()
   #for count in bot_.get_guild(805441351033552916).threads:
   #  if not count.me:
   #   await count.join()
   print(f"Bot is ready!\n")
+  now_ = datetime.now()
+  await asyncio.sleep(timedelta(minutes=60-now_.minute, seconds=60-now_.second).total_seconds())
   #scratch = bot_.get_guild(867962875422081024)
   #johann = scratch.get_member(687474789342117900)
   #await johann.add_roles(scratch.get_role(871716868862406756))

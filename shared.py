@@ -482,7 +482,7 @@ help_all = discord.Embed(title="SuperBot#4073 (ID:796686363604680755)", descript
 **Basic Commands**
 `help` `inter_help` `support` `invite` `prefix` `ping` `botpurge`\n
 **Discord Information Commands**
-`server` `invitelink` `role` `channel` `user` `avatar` `banner` `status` `leftuser` `message` `raw` `rawraw` `reactions` `emojiinfo` `sticker` `template`
+`server` `statuses` `invitelink` `role` `channel` `user` `avatar` `banner` `status` `leftuser` `message` `raw` `rawraw` `reactions` `emojiinfo` `sticker` `template`
 `permissions` `badges` `stickers` `emojis` `led_server` `led2_server` `led3_server` `led4_server`\n
 **Discord Commands**
 `react` `snipe` `clearsnipe` `pretend` `pretendembed` `embed` `editembed` `simpleembed` `quickembed` `ett` `tts`\n
@@ -493,7 +493,7 @@ help_all = discord.Embed(title="SuperBot#4073 (ID:796686363604680755)", descript
 **Information Commands**
 `color` `simplecolor` `translate` `definition` `unix` `time` `rtimer` `ttimer` `terminate` `unscramble` `unicode` `random` `choice` `raffle` `pick`\n
 **Web Commands**
-`redirect` `screenshot` `youtube` `wiki` `minecraft` `engrave` `covid` `population` `map`
+`redirect` `screenshot` `youtube` `wiki` `minecraft` `engrave` `covid` `population` `states` `map` `weather` `forecast`
 `bunny` `cat` `dog` `duck` `fox` `koala` `lizard` `panda` `shiba` `error` `errorcat` `errordog`\n
 **Plot/Drawing Commands**
 `ascii` `table` `render` `captcha` `graph` `bline` `bline2` `pie` `barh` `barv` `hist` `sankey` `snow` `mandelbrot`\n
