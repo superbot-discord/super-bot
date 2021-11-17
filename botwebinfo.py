@@ -1,8 +1,10 @@
+from os import name
+from discord.ext.commands.core import command
 import pytube
 import wikipedia
 from PyDictionary import PyDictionary
 from pygoogletranslation import Translator
-
+import html
 from shared import *
 
 dictionary    = PyDictionary()
@@ -96,6 +98,42 @@ async def gender(ctx, *, name):
     await ctx.reply(f"{name} is {round(gender_json['probability']*100, 2)}% a {gender_json['gender']}.")
   else:
     await ctx.reply("No gender was found for the name.")
+
+@commands.command()
+async def hk_forecast(ctx, *, disposed=None):
+  r1=requests.get(f"https://data.weather.gov.hk/weatherAPI/opendata/weather.php?dataType=fnd&lang=en").json()
+  r2=requests.get(f"https://data.weather.gov.hk/weatherAPI/opendata/weather.php?dataType=fnd&lang=tc").json()
+  embed = discord.Embed(title="HKO Forecast", description=f"{r1['generalSituation']}\n{r2['generalSituation']}")
+  for d, d2 in zip(r1['weatherForecast'], r2['weatherForecast']):
+    embed.add_field(name=f"{d['week']}", value=f"""{d['forecastWeather']} {d2['forecastWeather']}\nTemperature: {d['forecastMintemp']}°C ~ {d['forecastMaxtemp']}°C
+    Humidity: {d['forecastMinrh']}% ~ {d['forecastMaxrh']}%\n{d['PSR']} probability of significant rain\nWind: {d['forecastWind']} {d2['forecastWind']}""", inline=False)
+  f0v = f"Sea temperature at {r1['seaTemp']['place']}: {r1['seaTemp']['value']}°C\n"
+  for r in r1['soilTemp']:
+    f0v += f"Soil temperature at {r['place']} ({r['depth']['value']}m deep): {r['value']}"
+  embed.add_field(name="Extra Information", value=f0v)
+  await ctx.reply(embed=embed)
+
+@commands.command()
+async def hk_weather(ctx, *, disposed=None):
+  r1=requests.get(f"https://data.weather.gov.hk/weatherAPI/opendata/weather.php?dataType=rhrread&lang=en").json()
+  r2=requests.get(f"https://data.weather.gov.hk/weatherAPI/opendata/weather.php?dataType=rhrread&lang=tc").json()
+  desc = ""
+  for count in ['warningMessage', 'mintempFrom00To09', 'rainfallFrom00To12']:
+    if r1[count]:
+      desc += f"{r1[count]} {r2[count]}\n"
+  embed = discord.Embed(title="HKO Weather Information", description=desc)
+  rain_dict = {html.unescape(f"{x1['place']} {x2['place']}"): y for x1, x2, y in zip(r1['rainfall']['data']   , r2['rainfall']['data']   , range(0, 18))}
+  temp_dict = {html.unescape(f"{x1['place']} {x2['place']}"): y for x1, x2, y in zip(r1['temperature']['data'], r2['temperature']['data'], range(0, 27))}
+  places_list = list(set(rain_dict)+set(temp_dict))
+  places_list.sort(reverse=True)
+  for count in places_list:
+    fv =  f"Rainfall: {r1['rainfall']['data']   [rain_dict[count]]['max']} mm"     if count in list(rain_dict) else ""
+    fv += f"Temperature: {r1['temperature']['data'][temp_dict[count]]['value']}°C" if count in list(temp_dict) else ""
+    embed.add_field(name=count, value=fv, inline=True)
+  embed.add_field(name="Extra Information", value=f"""UV Index: {r1['uvindex']['data'][0]['value']} ({r1['uvindex']['data'][0]['desc']}) at {r1['uvindex']['data'][0]['place']}
+  Humidity: {r1['humidity']['data'][0]['value']}% at {r1['humidity']['data'][0]['place']}""")
+  embed.set_thumbnail(url=f"https://www.hko.gov.hk/images/HKOWxIconOutline/pic{r1['icon'][0]}.png")
+  await ctx.reply(embed=embed)
 
 @commands.command()
 async def minecraft(ctx, *, item="tnt"):
@@ -471,6 +509,8 @@ def setup(bot):
   bot.add_command(errordog)
   bot.add_command(forecast)
   bot.add_command(gender)
+  bot.add_command(hk_forecast)
+  bot.add_command(hk_weather)
   bot.add_command(minecraft)
   bot.add_command(redirect)
   bot.add_command(translate)
