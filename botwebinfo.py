@@ -126,7 +126,7 @@ async def hk_weather(ctx, *, disposed=None):
   embed = discord.Embed(title="HKO Weather Information", description=desc)
   rain_dict = {html.unescape(f"{x1['place']} {x2['place']}"): y for x1, x2, y in zip(r1['rainfall']['data']   , r2['rainfall']['data']   , range(0, 18))}
   temp_dict = {html.unescape(f"{x1['place']} {x2['place']}"): y for x1, x2, y in zip(r1['temperature']['data'], r2['temperature']['data'], range(0, 27))}
-  places_list = list(set(rain_dict + temp_dict))
+  places_list = list(set(list(rain_dict) + list(temp_dict)))
   places_list.sort(reverse=True)
   for count in places_list:
     fv =  f"Rainfall: {r1['rainfall']['data']   [rain_dict[count]]['max']} mm"     if count in list(rain_dict) else ""
