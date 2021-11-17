@@ -40,10 +40,10 @@ poll_options={}
 polls=[]
 allid=[]
 
-@tasks.loop(hours=24)
-async def sba_marks():
-  sba_channel = bot_.get_channel(909445785509326859)
-  await sba_channel.send(f"5m <@757416033811169351> <@752335217339007067>\nFun fact: this is the {sba_marks.current_loop}{st_nd_th_format(sba_marks.current_loop)} time of SBA marks claiming since the last deploy!")
+# @tasks.loop(hours=24)
+# async def sba_marks():
+#  sba_channel = bot_.get_channel(909445785509326859)
+#  await sba_channel.send(f"5m <@757416033811169351> <@752335217339007067>\nFun fact: this is the {sba_marks.current_loop}{st_nd_th_format(sba_marks.current_loop)} time of SBA marks claiming since the last deploy!")
 
 @bot_.event
 async def on_command_error(ctx, error):
