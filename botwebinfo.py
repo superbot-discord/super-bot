@@ -127,14 +127,14 @@ async def hk_weather(ctx, *, disposed=None):
   rain_dict = {html.unescape(f"{x1['place']} {x2['place']}"): y for x1, x2, y in zip(r1['rainfall']['data']   , r2['rainfall']['data']   , range(0, 18))}
   temp_dict = {html.unescape(f"{x1['place']} {x2['place']}"): y for x1, x2, y in zip(r1['temperature']['data'], r2['temperature']['data'], range(0, 27))}
   places_list = list(set(list(rain_dict) + list(temp_dict)))
-  places_list.sort(reverse=True)
+  places_list.sort()
   for count in places_list:
-    fv =  f"Rainfall: {r1['rainfall']['data']   [rain_dict[count]]['max']} mm"     if count in list(rain_dict) else ""
+    fv =  f"Rainfall: {r1['rainfall']['data']   [rain_dict[count]]['max']} mm\n"   if count in list(rain_dict) else ""
     fv += f"Temperature: {r1['temperature']['data'][temp_dict[count]]['value']}°C" if count in list(temp_dict) else ""
     embed.add_field(name=count, value=fv, inline=True)
   embed.add_field(name="Extra Information", value=f"""UV Index: {r1['uvindex']['data'][0]['value']} ({r1['uvindex']['data'][0]['desc']}) at {r1['uvindex']['data'][0]['place']}
   Humidity: {r1['humidity']['data'][0]['value']}% at {r1['humidity']['data'][0]['place']}""")
-  embed.set_thumbnail(url=f"https://www.hko.gov.hk/images/HKOWxIconOutline/pic{r1['icon'][0]}.png")
+  embed.set_image(url=f"https://www.hko.gov.hk/images/HKOWxIconOutline/pic{r1['icon'][0]}.png")
   await ctx.reply(embed=embed)
 
 @commands.command()
