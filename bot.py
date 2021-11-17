@@ -540,7 +540,7 @@ async def on_ready():
     timestamps = db["status_timestamps"])
   await bot_.change_presence(status=discord.Status.idle, activity=activity)
   # datetime(now_.year, now_.month, now_.day, (0 if now_.hour==23 else now_.hour+1), 0, 0)
-  sba_marks.start()
+  #sba_marks.start()
   #for count in bot_.get_guild(805441351033552916).threads:
   #  if not count.me:
   #   await count.join()
