@@ -105,8 +105,8 @@ async def hk_forecast(ctx, *, disposed=None):
   r2=requests.get(f"https://data.weather.gov.hk/weatherAPI/opendata/weather.php?dataType=fnd&lang=tc").json()
   embed = discord.Embed(title="HKO Forecast", description=f"{r1['generalSituation']}\n{r2['generalSituation']}")
   for d, d2 in zip(r1['weatherForecast'], r2['weatherForecast']):
-    embed.add_field(name=f"{d['week']}", value=f"""{d['forecastWeather']} {d2['forecastWeather']}\nTemperature: {d['forecastMintemp']}°C ~ {d['forecastMaxtemp']}°C
-    Humidity: {d['forecastMinrh']}% ~ {d['forecastMaxrh']}%\n{d['PSR']} probability of significant rain\nWind: {d['forecastWind']} {d2['forecastWind']}""", inline=False)
+    embed.add_field(name=f"{d['week']}", value=f"""{d['forecastWeather']} {d2['forecastWeather']}\nTemperature: {d['forecastMintemp']['value']}°C ~ {d['forecastMaxtemp']['value']}°C
+    Humidity: {d['forecastMinrh']['value']}% ~ {d['forecastMaxrh']['value']}%\n{d['PSR']} probability of significant rain\nWind: {d['forecastWind']} {d2['forecastWind']}""", inline=False)
   f0v = f"Sea temperature at {r1['seaTemp']['place']}: {r1['seaTemp']['value']}°C\n"
   for r in r1['soilTemp']:
     f0v += f"Soil temperature at {r['place']} ({r['depth']['value']}m deep): {r['value']}"
@@ -124,7 +124,7 @@ async def hk_weather(ctx, *, disposed=None):
   embed = discord.Embed(title="HKO Weather Information", description=desc)
   rain_dict = {html.unescape(f"{x1['place']} {x2['place']}"): y for x1, x2, y in zip(r1['rainfall']['data']   , r2['rainfall']['data']   , range(0, 18))}
   temp_dict = {html.unescape(f"{x1['place']} {x2['place']}"): y for x1, x2, y in zip(r1['temperature']['data'], r2['temperature']['data'], range(0, 27))}
-  places_list = list(set(rain_dict)+set(temp_dict))
+  places_list = list(set(rain_dict + temp_dict))
   places_list.sort(reverse=True)
   for count in places_list:
     fv =  f"Rainfall: {r1['rainfall']['data']   [rain_dict[count]]['max']} mm"     if count in list(rain_dict) else ""

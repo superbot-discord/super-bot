@@ -545,8 +545,8 @@ async def on_ready():
   #  if not count.me:
   #   await count.join()
   print(f"Bot is ready!\n")
-  now_ = datetime.now()
-  await asyncio.sleep(timedelta(minutes=60-now_.minute, seconds=60-now_.second).total_seconds())
+  #now_ = datetime.now()
+  #await asyncio.sleep(timedelta(minutes=60-now_.minute, seconds=60-now_.second).total_seconds())
   #scratch = bot_.get_guild(867962875422081024)
   #johann = scratch.get_member(687474789342117900)
   #await johann.add_roles(scratch.get_role(871716868862406756))
