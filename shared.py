@@ -15,6 +15,7 @@ import emojis as ems
 import folium
 import matplotlib.gridspec as gridspec
 import matplotlib.pyplot as plt
+import matplotlib as mpl
 import numpy as np
 import pytz
 import selenium

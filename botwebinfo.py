@@ -101,6 +101,7 @@ async def gender(ctx, *, name):
 
 @commands.command()
 async def hk_forecast(ctx, *, disposed=None):
+  await ctx.channel.trigger_typing()
   r1=requests.get("https://data.weather.gov.hk/weatherAPI/opendata/weather.php?dataType=fnd&lang=en").json()
   r2=requests.get("https://data.weather.gov.hk/weatherAPI/opendata/weather.php?dataType=fnd&lang=tc").json()
   embed = discord.Embed(title="HKO Forecast", description=f"{r1['generalSituation']}\n{r2['generalSituation']}")
@@ -112,9 +113,40 @@ async def hk_forecast(ctx, *, disposed=None):
     f0v += f"Soil temperature at {r['place']} ({r['depth']['value']}m deep): {r['value']}°C\n"
   embed.add_field(name="Extra Information", value=f0v)
   await ctx.reply(embed=embed)
+  await ctx.channel.trigger_typing()
+  plt.rcdefaults()
+  fig, ax = plt.subplots()
+  labels = [x['week'][0:3] for x in r1['weatherForecast']]
+  labels[7], labels[8] = f"{labels[7]} 2", f"{labels[8]} 2"
+  numlist_lt = [x['forecastMintemp']['value'] for x in r1['weatherForecast']]
+  numlist_ht = [x['forecastMaxtemp']['value'] for x in r1['weatherForecast']]
+  ax.plot(labels, numlist_lt, label="Minimum temp.", color="#008FFF")
+  ax.plot(labels, numlist_ht, label="Maximum temp.", color="#FF8F00")
+  ax2 = ax.twinx()
+  ax2.set_ylim(0, 100)
+  numlist_lh = [x['forecastMinrh']['value'] for x in r1['weatherForecast']]
+  numlist_hh = [x['forecastMaxrh']['value'] for x in r1['weatherForecast']]
+  ax2.plot(labels, numlist_lh, label="Minimum hum.", color="#003CFF")
+  ax2.plot(labels, numlist_hh, label="Maximum hum.", color="#FF3C00")
+  for count in ['top', 'bottom', 'left', 'right']:
+    #ax.spines[count].set_color("w")
+    ax2.spines[count].set_color("w")
+  ax.tick_params(axis='both', colors='w')
+  ax.legend()
+  ax.set_ylabel("Temperature (°C)")
+  ax2.tick_params(axis='both', colors='w')
+  ax2.legend()
+  ax2.set_ylabel("Relative Humidity (%)")
+  plt.title("Weather information", fontdict=db["font_dicts"]["title"])
+  plt.savefig("brokenline.png", transparent=True)
+  plt.savefig("brokenline.svg", transparent=True)
+  plt.clf()
+  await ctx.reply(files=[discord.File("brokenline.png"), discord.File("brokenline.svg")])
+  try_delete('brokenline.png', 'brokenline.svg')
 
 @commands.command()
 async def hk_weather(ctx, *, disposed=None):
+  await ctx.channel.trigger_typing()
   r1=requests.get("https://data.weather.gov.hk/weatherAPI/opendata/weather.php?dataType=rhrread&lang=en").json()
   r2=requests.get("https://data.weather.gov.hk/weatherAPI/opendata/weather.php?dataType=rhrread&lang=tc").json()
   r3=requests.get("https://data.weather.gov.hk/weatherAPI/opendata/weather.php?dataType=flw&lang=en").json()
