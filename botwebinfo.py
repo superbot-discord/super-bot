@@ -126,17 +126,17 @@ async def hk_forecast(ctx, *, disposed=None):
   ax2.set_ylim(0, 100)
   numlist_lh = [x['forecastMinrh']['value'] for x in r1['weatherForecast']]
   numlist_hh = [x['forecastMaxrh']['value'] for x in r1['weatherForecast']]
-  ax2.plot(labels, numlist_lh, label="Minimum hum.", color="#003CFF")
-  ax2.plot(labels, numlist_hh, label="Maximum hum.", color="#FF3C00")
+  ax2.plot(labels, numlist_lh, label="Minimum hum.", color="#003CFF", marker="x")
+  ax2.plot(labels, numlist_hh, label="Maximum hum.", color="#FF3C00", marker=".")
   for count in ['top', 'bottom', 'left', 'right']:
     #ax.spines[count].set_color("w")
     ax2.spines[count].set_color("w")
   ax.tick_params(axis='both', colors='w')
   ax.legend()
-  ax.set_ylabel("Temperature (°C)")
+  ax.set_ylabel("Temperature (°C)", fontdict=db["font_dicts"]["small_label"])
   ax2.tick_params(axis='both', colors='w')
   ax2.legend()
-  ax2.set_ylabel("Relative Humidity (%)")
+  ax2.set_ylabel("Relative Humidity (%)", fontdict=db["font_dicts"]["small_label"])
   plt.title("Weather information", fontdict=db["font_dicts"]["title"])
   plt.savefig("brokenline.png", transparent=True)
   plt.savefig("brokenline.svg", transparent=True)
