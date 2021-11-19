@@ -1,10 +1,9 @@
-from os import name
-from discord.ext.commands.core import command
 import pytube
 import wikipedia
 from PyDictionary import PyDictionary
 from pygoogletranslation import Translator
 import html
+import csv
 from shared import *
 
 dictionary    = PyDictionary()
@@ -142,6 +141,18 @@ async def hk_forecast(ctx, *, disposed=None):
   plt.clf()
   await ctx.reply(files=[discord.File("brokenline.png"), discord.File("brokenline.svg")])
   try_delete('brokenline.png', 'brokenline.svg')
+
+@commands.command()
+async def hk_tide(ctx, *, disposed=None):
+  await ctx.channel.trigger_typing()
+  r=requests.get("https://data.weather.gov.hk/weatherAPI/hko_data/tide/ALL_en.csv").content
+  tide=r.content.decode("utf-8")
+  reader = csv.DictReader(tide.splitlines())
+  tides = [x for x in reader]
+  embed = discord.Embed(title="HKO Tide Information", description=f"Information updated at {tides[0]['Time']} HKT (Update frequency: 5 minutes)")
+  for t in tides:
+    embed.add_field(name=t['Tide Station'], value=f"{t['Height(m)']} m", inline=True)
+  await ctx.reply(embed=embed)
 
 @commands.command()
 async def hk_weather(ctx, *, disposed=None):
@@ -543,6 +554,7 @@ def setup(bot):
   bot.add_command(forecast)
   bot.add_command(gender)
   bot.add_command(hk_forecast)
+  bot.add_command(hk_tide)
   bot.add_command(hk_weather)
   bot.add_command(minecraft)
   bot.add_command(redirect)

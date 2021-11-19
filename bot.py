@@ -45,7 +45,7 @@ allid=[]
 #  sba_channel = bot_.get_channel(909445785509326859)
 #  await sba_channel.send(f"5m <@757416033811169351> <@752335217339007067>\nFun fact: this is the {sba_marks.current_loop}{st_nd_th_format(sba_marks.current_loop)} time of SBA marks claiming since the last deploy!")
 
-"""@bot_.event
+@bot_.event
 async def on_command_error(ctx, error):
   if isinstance(error, commands.CommandNotFound):
     message = ctx.message
@@ -71,7 +71,7 @@ async def on_command_error(ctx, error):
       await ctx.reply(f"An error occured:\n```{''.join(traceback.format_exception(type(error), error, error.__traceback__))}```\nIf you think that this is an issue with the bot, please kindly inform JohannLau#6541 about this issue.")
     except:
       await ctx.reply(f"Sorry! An error occured. Please kindly inform JohannLau#6541 about this issue.")
-"""
+
 # @bot_.event
 # async def on_thread_update(before, after):
 #   if after.id == 887562599191941121 and after.archived:
