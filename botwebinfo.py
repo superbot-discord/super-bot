@@ -120,13 +120,13 @@ async def hk_forecast(ctx, *, disposed=None):
   labels[7], labels[8] = f"{labels[7]} 2", f"{labels[8]} 2"
   numlist_lt = [x['forecastMintemp']['value'] for x in r1['weatherForecast']]
   numlist_ht = [x['forecastMaxtemp']['value'] for x in r1['weatherForecast']]
-  ax.plot(labels, numlist_lt, label="Minimum temp.", color="#008FFF")
-  ax.plot(labels, numlist_ht, label="Maximum temp.", color="#FF8F00")
+  ax.plot(labels, numlist_lt, label="Minimum temp.", color="#008FFF", marker="x")
+  ax.plot(labels, numlist_ht, label="Maximum temp.", color="#FF8F00", marker="x")
   ax2 = ax.twinx()
   ax2.set_ylim(0, 100)
   numlist_lh = [x['forecastMinrh']['value'] for x in r1['weatherForecast']]
   numlist_hh = [x['forecastMaxrh']['value'] for x in r1['weatherForecast']]
-  ax2.plot(labels, numlist_lh, label="Minimum hum.", color="#003CFF", marker="x")
+  ax2.plot(labels, numlist_lh, label="Minimum hum.", color="#003CFF", marker=".")
   ax2.plot(labels, numlist_hh, label="Maximum hum.", color="#FF3C00", marker=".")
   for count in ['top', 'bottom', 'left', 'right']:
     #ax.spines[count].set_color("w")
