@@ -115,29 +115,28 @@ async def hk_forecast(ctx, *, disposed=None):
   await ctx.reply(embed=embed)
   await ctx.channel.trigger_typing()
   plt.rcdefaults()
-  fig, ax = plt.subplots()
+  fig, (ax, ax2) = plt.subplots(2, 1)
   labels = [x['week'][0:3] for x in r1['weatherForecast']]
   labels[7], labels[8] = f"{labels[7]} 2", f"{labels[8]} 2"
   numlist_lt = [x['forecastMintemp']['value'] for x in r1['weatherForecast']]
   numlist_ht = [x['forecastMaxtemp']['value'] for x in r1['weatherForecast']]
   ax.plot(labels, numlist_lt, label="Minimum temp.", color="#008FFF", marker="x")
   ax.plot(labels, numlist_ht, label="Maximum temp.", color="#FF8F00", marker="x")
-  ax2 = ax.twinx()
   ax2.set_ylim(0, 100)
   numlist_lh = [x['forecastMinrh']['value'] for x in r1['weatherForecast']]
   numlist_hh = [x['forecastMaxrh']['value'] for x in r1['weatherForecast']]
   ax2.plot(labels, numlist_lh, label="Minimum hum.", color="#003CFF", marker=".")
   ax2.plot(labels, numlist_hh, label="Maximum hum.", color="#FF3C00", marker=".")
   for count in ['top', 'bottom', 'left', 'right']:
-    #ax.spines[count].set_color("w")
+    ax.spines[count].set_color("w")
     ax2.spines[count].set_color("w")
   ax.tick_params(axis='both', colors='w')
-  ax.legend()
-  ax.set_ylabel("Temperature (°C)", fontdict=db["font_dicts"]["small_label"])
+  #ax.legend()
+  #ax.title("Temperature (°C)", fontdict=db["font_dicts"]["small_label"])
   ax2.tick_params(axis='both', colors='w')
-  ax2.legend()
-  ax2.set_ylabel("Relative Humidity (%)", fontdict=db["font_dicts"]["small_label"])
-  plt.title("Weather information", fontdict=db["font_dicts"]["title"])
+  #ax2.legend()
+  plt.legend()
+  #ax2.title("Relative Humidity (%)", fontdict=db["font_dicts"]["small_label"])
   plt.savefig("brokenline.png", transparent=True)
   plt.savefig("brokenline.svg", transparent=True)
   plt.clf()

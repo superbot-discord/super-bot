@@ -132,6 +132,8 @@ led_font_dict = {
   font_lcd3_3i   : {"spacing" : 20, "padding" : 3 , "height_plus" : 3 , "unneeded_width" : 9  }
 }
 
+plt.style.use('mpl.mplstyle')
+
 func            =lambda pct, allvals   : "{:d} ({:.1f}%)".format(int(pct/100*np.sum(allvals)), round(pct, 1))
 botadmin        =lambda context        : context.author.id in db["botadmins"]
 number_to_emoji =lambda a              : a.replace("1",":one: ").replace("2",":two: ").replace("3",":three: ").replace("4",":four: ").replace("5",":five: ").replace("6",":six: ").replace("7",":seven: ").replace("8",":eight: ").replace("9",":nine: ").replace("0",":zero: ")
