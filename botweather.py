@@ -71,7 +71,7 @@ async def hk_weather(ctx, *, disposed=None):
   reader = csv.DictReader(uvi_raw.splitlines())
   uvi = [x for x in reader]
   for u in uvi:
-    desc += f"UV Index at \n{re.sub(uvi_pattern, uvi_pattern_, u['Date'])}: {u['past 15-minute mean UV Index']} (Update frequency: 15 minutes)"
+    desc += f"UV Index at \n{re.sub(uvi_pattern, uvi_pattern_, u['Date time'])}: {u['past 15-minute mean UV Index']} (Update frequency: 15 minutes)"
   for count in ['warningMessage', 'mintempFrom00To09', 'rainfallFrom00To12']:
     if r1[count]:
       desc += f"{r1[count]} {r2[count]}\n"
