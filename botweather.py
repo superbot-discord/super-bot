@@ -2,8 +2,27 @@ from shared import *
 import html
 import csv
 
-uvi_pattern = re.compile(r'\d{8}(\d{2})(\d{2})')
-uvi_pattern_= r'\1:\2'
+hko_dt_pattern = re.compile(r'\d{8}(\d{2})(\d{2})')
+hko_dt_pattern_= r'\1:\2'
+
+aqi_range1 = lambda min, max: min if min == max else f"{min}~{max}"
+aqi_range2 = lambda min, max: min if min == max else f"{min} ~ {max}"
+
+@commands.command()
+async def hk_aqi(ctx, *, disposed=None):
+  await ctx.channel.trigger_typing()
+  r1=requests.get("https://ogciopsi.blob.core.windows.net/dataset/aqhi/aqhi.json").json()
+  r2=requests.get("https://ogciopsi.blob.core.windows.net/dataset/aqhi/aqhi-forecast.json").json()
+  r3=requests.get("https://dashboard.data.gov.hk/api/aqhi-individual?format=json").json()
+  embed = discord.Embed(title="HK OGCIO AQI Info", description=f"""**Current (All HK)**\nGeneral: {aqi_range1(r1[0]['aqhi_min'], r1[0]['aqhi_max'])} ({aqi_range2(r1[0]['health_risk_min'], r1[0]['health_risk_max'])})
+  Roadside: {aqi_range1(r1[1]['aqhi_min'], r1[1]['aqhi_max'])} ({aqi_range2(r1[1]['health_risk_min'], r1[1]['health_risk_max'])}\n**Tomorrow AM**
+  General: {aqi_range1(r2[0]['aqhi_min'], r2[0]['aqhi_max'])} ({aqi_range2(r2[0]['health_risk_min'], r2[0]['health_risk_max'])})
+  Roadside: {aqi_range1(r2[1]['aqhi_min'], r2[1]['aqhi_max'])} ({aqi_range2(r2[1]['health_risk_min'], r2[1]['health_risk_max'])}\n**Tomorrow PM**
+  General: {aqi_range1(r2[2]['aqhi_min'], r2[2]['aqhi_max'])} ({aqi_range2(r2[2]['health_risk_min'], r2[2]['health_risk_max'])})
+  Roadside: {aqi_range1(r2[3]['aqhi_min'], r2[3]['aqhi_max'])} ({aqi_range2(r2[3]['health_risk_min'], r2[3]['health_risk_max'])}""")
+  for a in r3:
+    embed.add_field(name=a['station'], value=f"{a['aqhi']} ({a['health_risk']})")
+  await ctx.reply(embed=embed)
 
 @commands.command()
 async def hk_forecast(ctx, *, disposed=None):
@@ -56,7 +75,7 @@ async def hk_moon(ctx, *, disposed=None):
   moons = [x for x in reader][current_day-1:current_day+24]
   embed = discord.Embed(title="HKO Moon Information")
   embed.set_footer(text="""The owner has checked with the data source and it was not apparent why some data was empty (Maybe it was astronomically correct?)
-  The save also happened to data in the data supplied for 2018~2023. Please do not contact the developers for information on that.""".replace(f"\n", ""))
+  The same also happened to data in the data supplied for 2018~2023. Please do not contact the developers for information on that.""".replace(f"\n", ""))
   for m in moons:
     embed.add_field(name=m['YYYY-MM-DD'], value=f"Rise-Set: {m['RISE']} ~ {m['SET']}\nTransitional Period: {m['TRAN.']}")
   await ctx.reply(embed=embed)
@@ -141,6 +160,18 @@ async def hk_tide(ctx, *, disposed=None):
   await ctx.reply(embed=embed)
 
 @commands.command()
+async def hk_visibility(ctx, *, disposed=None):
+  await ctx.channel.trigger_typing()
+  r=requests.get("https://data.weather.gov.hk/weatherAPI/opendata/opendata.php?dataType=LTMV&lang=en&rformat=csv")
+  visibility=r.content.decode("utf-8")[1:-1]
+  reader = csv.DictReader(visibility.splitlines())
+  visibilities = [x for x in reader]
+  embed = discord.Embed(title="HKO Visibility Information", description=f"Information updated at {re.sub(hko_dt_pattern, hko_dt_pattern_, visibilities[0]['Date time'])} HKT (Update frequency: 10 minutes)")
+  for v in visibilities:
+    embed.add_field(name=v['Automatic Weather Station'], value=v['10 minute mean visibility'].replace("km", " km"), inline=True)
+  await ctx.reply(embed=embed)
+
+@commands.command()
 async def hk_weather(ctx, *, disposed=None):
   await ctx.channel.trigger_typing()
   r1=requests.get("https://data.weather.gov.hk/weatherAPI/opendata/weather.php?dataType=rhrread&lang=en").json()
@@ -153,7 +184,7 @@ async def hk_weather(ctx, *, disposed=None):
   reader = csv.DictReader(uvi_raw.splitlines())
   uvi = [x for x in reader]
   for u in uvi:
-    desc += f"UV Index at \n{re.sub(uvi_pattern, uvi_pattern_, u['Date time'])}: {u['past 15-minute mean UV Index']} (Update frequency: 15 minutes)"
+    desc += f"\nUV Index at \n{re.sub(hko_dt_pattern, hko_dt_pattern_, u['Date time'])}: {u['past 15-minute mean UV Index']} (Update frequency: 15 minutes)"
   for count in ['warningMessage', 'mintempFrom00To09', 'rainfallFrom00To12']:
     if r1[count]:
       desc += f"{r1[count]} {r2[count]}\n"
@@ -166,8 +197,10 @@ async def hk_weather(ctx, *, disposed=None):
     fv =  f"Rainfall: {r1['rainfall']['data']   [rain_dict[count]]['max']} mm\n"   if count in list(rain_dict) else ""
     fv += f"Temperature: {r1['temperature']['data'][temp_dict[count]]['value']}°C" if count in list(temp_dict) else ""
     embed.add_field(name=count, value=fv, inline=True)
-  embed.add_field(name="Extra Information", value=f"""UV Index: {r1['uvindex']['data'][0]['value']} ({r1['uvindex']['data'][0]['desc']}) at {r1['uvindex']['data'][0]['place']}
-  Humidity: {r1['humidity']['data'][0]['value']}% at {r1['humidity']['data'][0]['place']}""")
+  f0v = "Humidity: {r1['humidity']['data'][0]['value']}% at {r1['humidity']['data'][0]['place']}"
+  if r1['uvindex:']:
+    f0v += f"UV Index: {r1['uvindex']['data'][0]['value']} ({r1['uvindex']['data'][0]['desc']}) at {r1['uvindex']['data'][0]['place']}"
+  embed.add_field(name="Extra Information", value=f0v)
   embed.set_image(url=f"https://www.hko.gov.hk/images/HKOWxIconOutline/pic{r1['icon'][0]}.png")
   await ctx.reply(embed=embed)
 
@@ -176,8 +209,10 @@ async def uk_extremes(ctx, *, disposed=None):
   r=requests.get("http://datapoint.metoffice.gov.uk/public/data/txt/wxobs/ukextremes/json/latest?key=69eba5b0-9c89-4198-b973-b4576f60f0f5").json()
 
 def setup(bot):
+  bot.add_command(hk_aqi)
   bot.add_command(hk_forecast)
   bot.add_command(hk_moon)
   bot.add_command(hk_sun)
   bot.add_command(hk_tide)
+  bot.add_command(hk_visibility)
   bot.add_command(hk_weather)
