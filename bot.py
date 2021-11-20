@@ -1,4 +1,4 @@
-from discord.ext import tasks
+#from discord.ext import tasks
 from shared import *
 
 #              LED Spammer
@@ -9,6 +9,7 @@ bot_ = commands.Bot(command_prefix=commands.when_mentioned_or("="), intents=disc
 bot_.remove_command('help')
 bot_.load_extension("botapis")
 bot_.load_extension("botbasic")
+bot_.load_extension("botcalc")
 bot_.load_extension("botdevelopment")
 bot_.load_extension("botdinfo")
 bot_.load_extension("botembed")
@@ -19,8 +20,8 @@ bot_.load_extension("botled")
 bot_.load_extension("botmoderate")
 bot_.load_extension("botpartners")
 bot_.load_extension("botplot")
-bot_.load_extension("botcalc")
 bot_.load_extension("bottext")
+bot_.load_extension("botweather")
 bot_.load_extension("botwebinfo")
 bot_.load_extension("botwebscrape")
 

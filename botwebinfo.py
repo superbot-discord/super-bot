@@ -2,8 +2,6 @@ import pytube
 import wikipedia
 from PyDictionary import PyDictionary
 from pygoogletranslation import Translator
-import html
-import csv
 from shared import *
 
 dictionary    = PyDictionary()
@@ -23,8 +21,6 @@ for count in srclangkeys:
 wikipedia.set_lang("en")
 
 yt_pattern = re.compile(r'search\s[0-5]\s.*')
-
-botadmin = lambda context : context.author.id == 687474789342117900
 
 @commands.command()
 async def definition(ctx, *, word):
@@ -97,87 +93,6 @@ async def gender(ctx, *, name):
     await ctx.reply(f"{name} is {round(gender_json['probability']*100, 2)}% a {gender_json['gender']}.")
   else:
     await ctx.reply("No gender was found for the name.")
-
-@commands.command()
-async def hk_forecast(ctx, *, disposed=None):
-  await ctx.channel.trigger_typing()
-  r1=requests.get("https://data.weather.gov.hk/weatherAPI/opendata/weather.php?dataType=fnd&lang=en").json()
-  r2=requests.get("https://data.weather.gov.hk/weatherAPI/opendata/weather.php?dataType=fnd&lang=tc").json()
-  embed = discord.Embed(title="HKO Forecast", description=f"{r1['generalSituation']}\n{r2['generalSituation']}")
-  for d, d2 in zip(r1['weatherForecast'], r2['weatherForecast']):
-    embed.add_field(name=f"{d['week']}", value=f"""{d['forecastWeather']} {d2['forecastWeather']}\nTemperature: {d['forecastMintemp']['value']}°C ~ {d['forecastMaxtemp']['value']}°C
-    Humidity: {d['forecastMinrh']['value']}% ~ {d['forecastMaxrh']['value']}%\n{d['PSR']} probability of significant rain\nWind: {d['forecastWind']} {d2['forecastWind']}""", inline=False)
-  f0v = f"Sea temperature at {r1['seaTemp']['place']}: {r1['seaTemp']['value']}°C\n"
-  for r in r1['soilTemp']:
-    f0v += f"Soil temperature at {r['place']} ({r['depth']['value']}m deep): {r['value']}°C\n"
-  embed.add_field(name="Extra Information", value=f0v)
-  await ctx.reply(embed=embed)
-  await ctx.channel.trigger_typing()
-  plt.rcdefaults()
-  fig, (ax, ax2) = plt.subplots(2, 1)
-  labels = [x['week'][0:3] for x in r1['weatherForecast']]
-  labels[7], labels[8] = f"{labels[7]} 2", f"{labels[8]} 2"
-  numlist_lt = [x['forecastMintemp']['value'] for x in r1['weatherForecast']]
-  numlist_ht = [x['forecastMaxtemp']['value'] for x in r1['weatherForecast']]
-  ax.plot(labels, numlist_lt, label="Minimum temp.", color="#008FFF", marker="x")
-  ax.plot(labels, numlist_ht, label="Maximum temp.", color="#FF8F00", marker="x")
-  ax2.set_ylim(0, 100)
-  numlist_lh = [x['forecastMinrh']['value'] for x in r1['weatherForecast']]
-  numlist_hh = [x['forecastMaxrh']['value'] for x in r1['weatherForecast']]
-  ax2.plot(labels, numlist_lh, label="Minimum hum.", color="#003CFF", marker=".")
-  ax2.plot(labels, numlist_hh, label="Maximum hum.", color="#FF3C00", marker=".")
-  for count in ['top', 'bottom', 'left', 'right']:
-    ax.spines[count].set_color("w")
-    ax2.spines[count].set_color("w")
-  ax.tick_params(axis='both', colors='w')
-  #ax.legend()
-  #ax.title("Temperature (°C)", fontdict=db["font_dicts"]["small_label"])
-  ax2.tick_params(axis='both', colors='w')
-  #ax2.legend()
-  plt.legend()
-  #ax2.title("Relative Humidity (%)", fontdict=db["font_dicts"]["small_label"])
-  plt.savefig("brokenline.png", transparent=True)
-  plt.savefig("brokenline.svg", transparent=True)
-  plt.clf()
-  await ctx.reply(files=[discord.File("brokenline.png"), discord.File("brokenline.svg")])
-  try_delete('brokenline.png', 'brokenline.svg')
-
-@commands.command()
-async def hk_tide(ctx, *, disposed=None):
-  await ctx.channel.trigger_typing()
-  r=requests.get("https://data.weather.gov.hk/weatherAPI/hko_data/tide/ALL_en.csv").content
-  tide=r.content.decode("utf-8")
-  reader = csv.DictReader(tide.splitlines())
-  tides = [x for x in reader]
-  embed = discord.Embed(title="HKO Tide Information", description=f"Information updated at {tides[0]['Time']} HKT (Update frequency: 5 minutes)")
-  for t in tides:
-    embed.add_field(name=t['Tide Station'], value=f"{t['Height(m)']} m", inline=True)
-  await ctx.reply(embed=embed)
-
-@commands.command()
-async def hk_weather(ctx, *, disposed=None):
-  await ctx.channel.trigger_typing()
-  r1=requests.get("https://data.weather.gov.hk/weatherAPI/opendata/weather.php?dataType=rhrread&lang=en").json()
-  r2=requests.get("https://data.weather.gov.hk/weatherAPI/opendata/weather.php?dataType=rhrread&lang=tc").json()
-  r3=requests.get("https://data.weather.gov.hk/weatherAPI/opendata/weather.php?dataType=flw&lang=en").json()
-  r4=requests.get("https://data.weather.gov.hk/weatherAPI/opendata/weather.php?dataType=flw&lang=tc").json()
-  desc = f"{r3['generalSituation']} {r4['generalSituation']}\n{r3['forecastPeriod']}: {r3['forecastDesc']}\n{r4['forecastPeriod']}: {r4['forecastDesc']}\n{r3['outlook']} {r4['outlook']}"
-  for count in ['warningMessage', 'mintempFrom00To09', 'rainfallFrom00To12']:
-    if r1[count]:
-      desc += f"{r1[count]} {r2[count]}\n"
-  embed = discord.Embed(title="HKO Weather Information", description=desc)
-  rain_dict = {html.unescape(f"{x1['place']} {x2['place']}"): y for x1, x2, y in zip(r1['rainfall']['data']   , r2['rainfall']['data']   , range(0, 18))}
-  temp_dict = {html.unescape(f"{x1['place']} {x2['place']}"): y for x1, x2, y in zip(r1['temperature']['data'], r2['temperature']['data'], range(0, 27))}
-  places_list = list(set(list(rain_dict) + list(temp_dict)))
-  places_list.sort()
-  for count in places_list:
-    fv =  f"Rainfall: {r1['rainfall']['data']   [rain_dict[count]]['max']} mm\n"   if count in list(rain_dict) else ""
-    fv += f"Temperature: {r1['temperature']['data'][temp_dict[count]]['value']}°C" if count in list(temp_dict) else ""
-    embed.add_field(name=count, value=fv, inline=True)
-  embed.add_field(name="Extra Information", value=f"""UV Index: {r1['uvindex']['data'][0]['value']} ({r1['uvindex']['data'][0]['desc']}) at {r1['uvindex']['data'][0]['place']}
-  Humidity: {r1['humidity']['data'][0]['value']}% at {r1['humidity']['data'][0]['place']}""")
-  embed.set_image(url=f"https://www.hko.gov.hk/images/HKOWxIconOutline/pic{r1['icon'][0]}.png")
-  await ctx.reply(embed=embed)
 
 @commands.command()
 async def minecraft(ctx, *, item="tnt"):
@@ -553,9 +468,6 @@ def setup(bot):
   bot.add_command(errordog)
   bot.add_command(forecast)
   bot.add_command(gender)
-  bot.add_command(hk_forecast)
-  bot.add_command(hk_tide)
-  bot.add_command(hk_weather)
   bot.add_command(minecraft)
   bot.add_command(redirect)
   bot.add_command(translate)
