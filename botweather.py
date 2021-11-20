@@ -2,6 +2,9 @@ from shared import *
 import html
 import csv
 
+uvi_pattern = re.compile(r'\d{8}(\d{2})(\d{2})')
+uvi_pattern_= r'\1:\2'
+
 @commands.command()
 async def hk_forecast(ctx, *, disposed=None):
   await ctx.channel.trigger_typing()
@@ -68,7 +71,7 @@ async def hk_weather(ctx, *, disposed=None):
   reader = csv.DictReader(uvi_raw.splitlines())
   uvi = [x for x in reader]
   for u in uvi:
-    desc += f"UV Index at \n{re.sub(r'\d{8}(\d{2})(\d{2})', r'\1:\2', u['Date'])}: {u['past 15-minute mean UV Index']} (Update frequency: 15 minutes)"
+    desc += f"UV Index at \n{re.sub(uvi_pattern, uvi_pattern_, u['Date'])}: {u['past 15-minute mean UV Index']} (Update frequency: 15 minutes)"
   for count in ['warningMessage', 'mintempFrom00To09', 'rainfallFrom00To12']:
     if r1[count]:
       desc += f"{r1[count]} {r2[count]}\n"
