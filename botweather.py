@@ -47,6 +47,88 @@ async def hk_forecast(ctx, *, disposed=None):
   try_delete('forecast.png', 'forecast.svg')
 
 @commands.command()
+async def hk_moon(ctx, *, disposed=None):
+  await ctx.channel.trigger_typing()
+  r=requests.get(f"https://data.weather.gov.hk/weatherAPI/opendata/opendata.php?dataType=MRS&year=2021&rformat=csv")
+  sun =r.content.decode("utf-8")[1:-1]
+  reader = csv.DictReader(sun.splitlines())
+  current_day = int(datetime.now(tz=timezone(timedelta(hours=8))).strftime("%j"))
+  moons = [x for x in reader][current_day-1:current_day+24]
+  embed = discord.Embed(title="HKO Moon Information")
+  embed.set_footer(text="""The owner has checked with the data source and it was not apparent why some data was empty (Maybe it was astronomically correct?)
+  The save also happened to data in the data supplied for 2018~2023. Please do not contact the developers for information on that.""".replace(f"\n", ""))
+  for m in moons:
+    embed.add_field(name=m['YYYY-MM-DD'], value=f"Rise-Set: {m['RISE']} ~ {m['SET']}\nTransitional Period: {m['TRAN.']}")
+  await ctx.reply(embed=embed)
+  plt.rcdefaults()
+  fig, (ax1, ax2, ax3) = plt.subplots(3, 1, sharex=True)
+  dates = [datetime.strptime(x['YYYY-MM-DD'], "%Y-%m-%d") for x in moons]
+  ax1_data = [datetime.strptime(x['RISE'],  "%H:%M") for x in moons]
+  ax2_data = [datetime.strptime(x['TRAN.'], "%H:%M") for x in moons]
+  ax3_data = [datetime.strptime(x['SET'],   "%H:%M") for x in moons]
+  ax1.plot(dates, ax1_data, color="#FF7F00", marker="x")
+  ax2.plot(dates, ax2_data, color="#FF2020", marker="x")
+  ax3.plot(dates, ax3_data, color="#007FFF", marker="x")
+  for ax in [ax1, ax2, ax3]:
+    ax.xaxis.set_major_locator(mpl.dates.DayLocator(interval=2))
+    ax.xaxis.set_minor_locator(mpl.dates.DayLocator())
+    ax.xaxis.set_major_formatter(mpl.dates.DateFormatter("%m-%d"))
+    ax.tick_params(axis='both', colors='w')
+    for count in ['top', 'bottom', 'left', 'right']:
+      ax.spines[count].set_color("w")
+  ax1.yaxis.set_major_locator(mpl.dates.MinuteLocator(interval=2))
+  ax1.yaxis.set_major_formatter(mpl.dates.DateFormatter("%H:%M"))
+  ax2.yaxis.set_major_locator(mpl.dates.MinuteLocator(interval=2))
+  ax2.yaxis.set_major_formatter(mpl.dates.DateFormatter("%H:%M"))
+  ax3.yaxis.set_major_locator(mpl.dates.MinuteLocator(interval=1))
+  ax3.yaxis.set_major_formatter(mpl.dates.DateFormatter("%H:%M"))
+  plt.setp(ax3.get_xticklabels(), rotation=20, ha="right")
+  plt.savefig("sun.png", transparent=True)
+  plt.savefig("sun.svg", transparent=True)
+  plt.clf()
+  await ctx.reply(files=[discord.File("sun.png"), discord.File("sun.svg")])
+
+@commands.command()
+async def hk_sun(ctx, *, disposed=None):
+  await ctx.channel.trigger_typing()
+  r=requests.get(f"https://data.weather.gov.hk/weatherAPI/opendata/opendata.php?dataType=SRS&year=2021&rformat=csv")
+  sun =r.content.decode("utf-8")[1:-1]
+  reader = csv.DictReader(sun.splitlines())
+  current_day = int(datetime.now(tz=timezone(timedelta(hours=8))).strftime("%j"))
+  suns = [x for x in reader][current_day-1:current_day+24]
+  embed = discord.Embed(title="HKO Sun Information")
+  for s in suns:
+    embed.add_field(name=s['YYYY-MM-DD'], value=f"Rise-Set: {s['RISE']} ~ {s['SET']}\nTransitional Period: {s['TRAN.']}")
+  await ctx.reply(embed=embed)
+  plt.rcdefaults()
+  fig, (ax1, ax2, ax3) = plt.subplots(3, 1, sharex=True)
+  dates = [datetime.strptime(x['YYYY-MM-DD'], "%Y-%m-%d") for x in suns]
+  ax1_data = [datetime.strptime(x['RISE'],  "%H:%M") for x in suns]
+  ax2_data = [datetime.strptime(x['TRAN.'], "%H:%M") for x in suns]
+  ax3_data = [datetime.strptime(x['SET'],   "%H:%M") for x in suns]
+  ax1.plot(dates, ax1_data, color="#FF7F00", marker="x")
+  ax2.plot(dates, ax2_data, color="#FF2020", marker="x")
+  ax3.plot(dates, ax3_data, color="#007FFF", marker="x")
+  for ax in [ax1, ax2, ax3]:
+    ax.xaxis.set_major_locator(mpl.dates.DayLocator(interval=2))
+    ax.xaxis.set_minor_locator(mpl.dates.DayLocator())
+    ax.xaxis.set_major_formatter(mpl.dates.DateFormatter("%m-%d"))
+    ax.tick_params(axis='both', colors='w')
+    for count in ['top', 'bottom', 'left', 'right']:
+      ax.spines[count].set_color("w")
+  ax1.yaxis.set_major_locator(mpl.dates.MinuteLocator(interval=2))
+  ax1.yaxis.set_major_formatter(mpl.dates.DateFormatter("%H:%M"))
+  ax2.yaxis.set_major_locator(mpl.dates.MinuteLocator(interval=2))
+  ax2.yaxis.set_major_formatter(mpl.dates.DateFormatter("%H:%M"))
+  ax3.yaxis.set_major_locator(mpl.dates.MinuteLocator(interval=1))
+  ax3.yaxis.set_major_formatter(mpl.dates.DateFormatter("%H:%M"))
+  plt.setp(ax3.get_xticklabels(), rotation=20, ha="right")
+  plt.savefig("sun.png", transparent=True)
+  plt.savefig("sun.svg", transparent=True)
+  plt.clf()
+  await ctx.reply(files=[discord.File("sun.png"), discord.File("sun.svg")])
+
+@commands.command()
 async def hk_tide(ctx, *, disposed=None):
   await ctx.channel.trigger_typing()
   r=requests.get("https://data.weather.gov.hk/weatherAPI/hko_data/tide/ALL_en.csv")
@@ -95,5 +177,7 @@ async def uk_extremes(ctx, *, disposed=None):
 
 def setup(bot):
   bot.add_command(hk_forecast)
+  bot.add_command(hk_moon)
+  bot.add_command(hk_sun)
   bot.add_command(hk_tide)
   bot.add_command(hk_weather)
