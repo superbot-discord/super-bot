@@ -62,7 +62,13 @@ async def hk_weather(ctx, *, disposed=None):
   r2=requests.get("https://data.weather.gov.hk/weatherAPI/opendata/weather.php?dataType=rhrread&lang=tc").json()
   r3=requests.get("https://data.weather.gov.hk/weatherAPI/opendata/weather.php?dataType=flw&lang=en").json()
   r4=requests.get("https://data.weather.gov.hk/weatherAPI/opendata/weather.php?dataType=flw&lang=tc").json()
+  r5=requests.get("https://data.weather.gov.hk/weatherAPI/hko_data/regional-weather/latest_15min_uvindex.csv")
   desc = f"{r3['generalSituation']} {r4['generalSituation']}\n{r3['forecastPeriod']}: {r3['forecastDesc']}\n{r4['forecastPeriod']}: {r4['forecastDesc']}\n{r3['outlook']} {r4['outlook']}"
+  uvi_raw=r5.content.decode("utf-8")[:-1]
+  reader = csv.DictReader(uvi_raw.splitlines())
+  uvi = [x for x in reader]
+  for u in uvi:
+    desc += f"UV Index at \n{re.sub(r'\d{8}(\d{2})(\d{2})', r'\1:\2', u['Date'])}: {u['past 15-minute mean UV Index']} (Update frequency: 15 minutes)"
   for count in ['warningMessage', 'mintempFrom00To09', 'rainfallFrom00To12']:
     if r1[count]:
       desc += f"{r1[count]} {r2[count]}\n"
