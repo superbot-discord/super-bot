@@ -34,7 +34,7 @@
     "twdark":{"fg":"#E9EDEFFF", "bg":"#00000000"}, "twlight":{"fg":"#0F181DFF", "bg":"#BDE3E600"}
   },
   "air_quality" : {"1":"Good", "2":"Fair", "3":"Moderate", "4":"Poor", "5":"Very poor"},
-  "compass_points" : {"North":"↑", "Northeast":"↗︎", "East":"→", "Southeast":"↘︎", "South":"↓", "Southwest":"↙︎", "West":"←", "Northwest":"↖︎", "Variable":""},
+  "compass_points" : {"North":"↑", "Northeast":"↗︎", "East":"→", "Southeast":"↘︎", "South":"↓", "Southwest":"↙︎", "West":"←", "Northwest":"↖︎", "Variable":"", "N/A":""},
   "thread_archive" : {
     "1": 60,
     "2": 1440,

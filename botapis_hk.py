@@ -81,7 +81,7 @@ async def hk_lightning(ctx, *, disposed=None):
   lightnings_ = [x for x in reader_]
   embed = discord.Embed(title="HKO Lightning Information", description=f"Information within {re.sub(hko_dt_pattern2, hko_dt_pattern2_, lightnings[0]['DateTime'])} HKT (Update frequency: 1 hour)")
   for l, l2 in zip(lightnings, lightnings_):
-    embed.add_field(name=f"{l['Region']}: {l['Type']}\n{l2['Region']}: {l2['Type']}", value=f"Lightnings: {l['lightning count']}", inline=True)
+    embed.add_field(name=f"{l['Region']}: {l['Type']}\n{l2['區域']}: {l2['類別']}", value=f"Lightnings: {l['lightning count']}", inline=True)
   await ctx.reply(embed=embed)
 
 @commands.command()
@@ -94,37 +94,10 @@ async def hk_moon(ctx, *, disposed=None):
   moons = [x for x in reader][current_day-1:current_day+24]
   embed = discord.Embed(title="HKO Moon Information")
   embed.set_footer(text="""The owner has checked with the data source and it was not apparent why some data was empty (Maybe it was astronomically correct?)
-  The same also happened to data in the data supplied for 2018~2023. Please do not contact the developers for information on that.""".replace(f"\n", ""))
+  The same also happened in the data supplied for 2018~2023. Please do not contact the developers for information on that.""".replace(f"\n", ""))
   for m in moons:
     embed.add_field(name=m['YYYY-MM-DD'], value=f"Rise-Set: {m['RISE']} ~ {m['SET']}\nTransitional Period: {m['TRAN.']}")
   await ctx.reply(embed=embed)
-  plt.rcdefaults()
-  fig, (ax1, ax2, ax3) = plt.subplots(3, 1, sharex=True)
-  dates = [datetime.strptime(x['YYYY-MM-DD'], "%Y-%m-%d") for x in moons]
-  ax1_data = [datetime.strptime(x['RISE'],  "%H:%M") for x in moons]
-  ax2_data = [datetime.strptime(x['TRAN.'], "%H:%M") for x in moons]
-  ax3_data = [datetime.strptime(x['SET'],   "%H:%M") for x in moons]
-  ax1.plot(dates, ax1_data, color="#FF7F00", marker="x")
-  ax2.plot(dates, ax2_data, color="#FF2020", marker="x")
-  ax3.plot(dates, ax3_data, color="#007FFF", marker="x")
-  for ax in [ax1, ax2, ax3]:
-    ax.xaxis.set_major_locator(mpl.dates.DayLocator(interval=2))
-    ax.xaxis.set_minor_locator(mpl.dates.DayLocator())
-    ax.xaxis.set_major_formatter(mpl.dates.DateFormatter("%m-%d"))
-    ax.tick_params(axis='both', colors='w')
-    for count in ['top', 'bottom', 'left', 'right']:
-      ax.spines[count].set_color("w")
-  ax1.yaxis.set_major_locator(mpl.dates.MinuteLocator(interval=2))
-  ax1.yaxis.set_major_formatter(mpl.dates.DateFormatter("%H:%M"))
-  ax2.yaxis.set_major_locator(mpl.dates.MinuteLocator(interval=2))
-  ax2.yaxis.set_major_formatter(mpl.dates.DateFormatter("%H:%M"))
-  ax3.yaxis.set_major_locator(mpl.dates.MinuteLocator(interval=1))
-  ax3.yaxis.set_major_formatter(mpl.dates.DateFormatter("%H:%M"))
-  plt.setp(ax3.get_xticklabels(), rotation=20, ha="right")
-  plt.savefig("sun.png", transparent=True)
-  plt.savefig("sun.svg", transparent=True)
-  plt.clf()
-  await ctx.reply(files=[discord.File("sun.png"), discord.File("sun.svg")])
 
 @commands.command()
 async def hk_sea_pressure(ctx, *, disposed=None):
@@ -134,7 +107,7 @@ async def hk_sea_pressure(ctx, *, disposed=None):
   pressure=r.content.decode("utf-8")[:-1]
   reader = csv.DictReader(pressure.splitlines())
   pressures = [x for x in reader]
-  pressure_=r.content.decode("utf-8")[:-1]
+  pressure_=r1.content.decode("utf-8")[:-1]
   reader_ = csv.DictReader(pressure_.splitlines())
   pressures_ = [x for x in reader_]
   embed = discord.Embed(title="HKO Sea Pressure Information", description=f"Information updated at {re.sub(hko_dt_pattern, hko_dt_pattern_, pressures[0]['Date time'])} HKT (Update frequency: 10 minutes)")
