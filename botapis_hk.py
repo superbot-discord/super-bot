@@ -8,6 +8,7 @@ hko_dt_pattern2 =re.compile(r'\d{8}(\d{2})(\d{2})-\d{8}(\d{2})(\d{2})')
 hko_dt_pattern2_=r'\1:\2~\3:\4'
 
 fake_headers = {'User-Agent' : "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:95.0) Gecko/20100101 Firefox/95.0"}
+mtr_time   = lambda rt: re.sub(r'\d{4}-\d{2}-\d{2} (\d{2}:\d{2}:\d{2})', r'\1', rt)
 aqi_range1 = lambda min, max: min if min == max else f"{min}~{max}"
 aqi_range2 = lambda min, max: min if min == max else f"{min} ~ {max}"
 
@@ -81,7 +82,7 @@ async def hk_lightning(ctx, *, disposed=None):
   lightnings_ = [x for x in reader_]
   embed = discord.Embed(title="HKO Lightning Information", description=f"Information within {re.sub(hko_dt_pattern2, hko_dt_pattern2_, lightnings[0]['DateTime'])} HKT (Update frequency: 1 hour)")
   for l, l2 in zip(lightnings, lightnings_):
-    embed.add_field(name=f"{l['Region']}: {l['Type']}\n{l2['區域']}: {l2['類別']}", value=f"Lightnings: {l['lightning count']}", inline=True)
+    embed.add_field(name=f"{l['Region'].replace('Hong Kong Island', 'HKI')}: {l['Type']}\n{l2['區域']}: {l2['類別']}", value=f"Lightnings: {l['lightning count']}", inline=True)
   await ctx.reply(embed=embed)
 
 @commands.command()
@@ -97,6 +98,20 @@ async def hk_moon(ctx, *, disposed=None):
   The same also happened in the data supplied for 2018~2023. Please do not contact the developers for information on that.""".replace(f"\n", ""))
   for m in moons:
     embed.add_field(name=m['YYYY-MM-DD'], value=f"Rise-Set: {m['RISE']} ~ {m['SET']}\nTransitional Period: {m['TRAN.']}")
+  await ctx.reply(embed=embed)
+
+@commands.command()
+async def hk_mtr(ctx, station, line):
+  if station not in db["mtr"]["stations"]:
+    await ctx.reply(f"Please supply a 3-digit station code! Available codes are `{'` `'.join(db['mtr']['stations'])}`")
+    return
+  if station not in db["mtr"]["lines"]:
+    await ctx.reply(f"Please supply a 3-digit line code! Available codes are `{'` `'.join(db['mtr']['lines'])}`")
+    return
+  r=list(requests.get(f"https://rt.data.gov.hk/v1/transport/mtr/getSchedule.php?line={line}&sta={station}").json()['data'].values())[0]
+  embed=discord.Embed(title="MTR Trains")
+  embed.add_field(name="Up", value=f"\n".join([f"To {x['dest']} from platform {x['plat']} in {x['ttnt']} minutes ({mtr_time(x['time'])})" for x in r['UP']]))
+  embed.add_field(name="Down", value=f"\n".join([f"To {x['dest']} from platform {x['plat']} in {x['ttnt']} minutes ({mtr_time(x['time'])})" for x in r['DOWN']]))
   await ctx.reply(embed=embed)
 
 @commands.command()
@@ -225,7 +240,7 @@ async def hk_wind(ctx, *, disposed=None):
   embed = discord.Embed(title="HKO Wind Information", description=f"Information updated at {re.sub(hko_dt_pattern, hko_dt_pattern_, winds[0]['Date time'])} HKT (Update frequency: 10 minutes)")
   for w in winds:
     embed.add_field(name=f"{w['Automatic Weather Station']} {db['compass_points'][w['10-Minute Mean Wind Direction(Compass points)']]}",
-    value=f"""{w['10-Minute Mean Wind Direction(Compass points)']}{(' at'+w['10-Minute Mean Speed(km/hour)']+' km/h') if w['10-Minute Mean Speed(km/hour)']!="N/A" else ''}
+    value=f"""{w['10-Minute Mean Wind Direction(Compass points)']}{(' at '+w['10-Minute Mean Speed(km/hour)']+' km/h') if w['10-Minute Mean Speed(km/hour)']!="N/A" else ''}
     {('Maximum Gust: '+w['10-Minute Maximum Gust(km/hour)']+' km/h') if w['10-Minute Maximum Gust(km/hour)']!='N/A' else ''}""", inline=True)
   embed.set_footer(text="Speed and Gust Information might be empty for some weather stations. Directions and Speed are mean values in the past 10 minutes.")
   await ctx.reply(embed=embed)
@@ -235,6 +250,7 @@ def setup(bot):
   bot.add_command(hk_forecast)
   bot.add_command(hk_lightning)
   bot.add_command(hk_moon)
+  bot.add_command(hk_mtr)
   bot.add_command(hk_sea_pressure)
   bot.add_command(hk_sun)
   bot.add_command(hk_tide)
