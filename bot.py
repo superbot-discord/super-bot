@@ -71,7 +71,8 @@ async def on_command_error(ctx, error):
     try:
       await ctx.reply(f"An error occured:\n```{''.join(traceback.format_exception(type(error), error, error.__traceback__))}```\nIf you think that this is an issue with the bot, please kindly inform JohannLau#6541 about this issue.")
     except:
-      await ctx.reply(f"Sorry! An error occured. Please kindly inform JohannLau#6541 about this issue.")
+      print(traceback.format_exception(type(error), error, error.__traceback__))
+      await ctx.reply(f"Sorry! An error occured. The error was too long but it had been shown to JohannLau#6541. If the error persists, Please kindly inform him about this issue.")
 
 # @bot_.event
 # async def on_thread_update(before, after):

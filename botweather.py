@@ -5,6 +5,7 @@ import csv
 hko_dt_pattern = re.compile(r'\d{8}(\d{2})(\d{2})')
 hko_dt_pattern_= r'\1:\2'
 
+fake_headers = {'User-Agent' : "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:95.0) Gecko/20100101 Firefox/95.0"}
 aqi_range1 = lambda min, max: min if min == max else f"{min}~{max}"
 aqi_range2 = lambda min, max: min if min == max else f"{min} ~ {max}"
 
@@ -13,13 +14,13 @@ async def hk_aqi(ctx, *, disposed=None):
   await ctx.channel.trigger_typing()
   r1=requests.get("https://ogciopsi.blob.core.windows.net/dataset/aqhi/aqhi.json").json()
   r2=requests.get("https://ogciopsi.blob.core.windows.net/dataset/aqhi/aqhi-forecast.json").json()
-  r3=requests.get("https://dashboard.data.gov.hk/api/aqhi-individual?format=json").json()
+  r3=requests.get("https://dashboard.data.gov.hk/api/aqhi-individual?format=json", headers=fake_headers).json()
   embed = discord.Embed(title="HK OGCIO AQI Info", description=f"""**Current (All HK)**\nGeneral: {aqi_range1(r1[0]['aqhi_min'], r1[0]['aqhi_max'])} ({aqi_range2(r1[0]['health_risk_min'], r1[0]['health_risk_max'])})
-  Roadside: {aqi_range1(r1[1]['aqhi_min'], r1[1]['aqhi_max'])} ({aqi_range2(r1[1]['health_risk_min'], r1[1]['health_risk_max'])}\n**Tomorrow AM**
-  General: {aqi_range1(r2[0]['aqhi_min'], r2[0]['aqhi_max'])} ({aqi_range2(r2[0]['health_risk_min'], r2[0]['health_risk_max'])})
-  Roadside: {aqi_range1(r2[1]['aqhi_min'], r2[1]['aqhi_max'])} ({aqi_range2(r2[1]['health_risk_min'], r2[1]['health_risk_max'])}\n**Tomorrow PM**
-  General: {aqi_range1(r2[2]['aqhi_min'], r2[2]['aqhi_max'])} ({aqi_range2(r2[2]['health_risk_min'], r2[2]['health_risk_max'])})
-  Roadside: {aqi_range1(r2[3]['aqhi_min'], r2[3]['aqhi_max'])} ({aqi_range2(r2[3]['health_risk_min'], r2[3]['health_risk_max'])}""")
+  Roadside: {aqi_range1(r1[1]['aqhi_min'], r1[1]['aqhi_max'])} ({aqi_range2(r1[1]['health_risk_min'], r1[1]['health_risk_max'])})\n**Tomorrow (All HK) AM**
+  General: {aqi_range2(r2[0]['health_risk_min'], r2[0]['health_risk_max'])}
+  Roadside: {aqi_range2(r2[1]['health_risk_min'], r2[1]['health_risk_max'])}\n**Tomorrow (All HK) PM**
+  General: {aqi_range2(r2[2]['health_risk_min'], r2[2]['health_risk_max'])}
+  Roadside: {aqi_range2(r2[3]['health_risk_min'], r2[3]['health_risk_max'])}""")
   for a in r3:
     embed.add_field(name=a['station'], value=f"{a['aqhi']} ({a['health_risk']})")
   await ctx.reply(embed=embed)
