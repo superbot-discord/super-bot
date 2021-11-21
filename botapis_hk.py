@@ -35,7 +35,7 @@ async def hk_ferry_1(ctx, *, disposed=None):
   r2=requests.get("https://www.hongkongwatertaxi.com.hk/eta/?route=CLHH").json()['data'][0]
   embed = discord.Embed(title="Fortune Ferry Information")
   for r in [r1, r2]:
-    embed.add_field(name=f"{r['route_en']} {r['route_tc']}".replace("-", "→"), value=f"Next departure at {r['depart_time']}{(' (Vessel Code: '+r['vessel_code']+')') if r['vessel_code'] else ''}")
+    embed.add_field(name=f"{r['route_en']} {r['route_tc']}".replace("-", "→"), value=f"Next departure at {r['depart_time']}{(' (Vessel Code: '+r['vessel_code']+')') if r.get('vessel_code', None) else ''}")
   await ctx.reply(embed=embed)
 
 @commands.command()
@@ -105,7 +105,7 @@ async def hk_lr(ctx, station : int):
   for p in r:
     desc = ""
     for t in p['route_list']:
-      desc += f"{'🚃'*t['train_length']} {t['route_no']} to {t['dest_en']} ({t['dest_ch']}) {db['mtr']['lr_status'][t['arrival_departure']]}{' in '+t['time_en'] if t['time_en'].isdigit() else '('+t['time_en']+')'}"
+      desc += f"{'🚃'*t['train_length']} {t['route_no']} to {t['dest_en']} ({t['dest_ch']}) {db['mtr']['lr_status'][t['arrival_departure']]} {'in '+t['time_en'] if t['time_en'][0].isdigit() else '('+t['time_en']+')'}\n"
     embed.add_field(name=f"Platform {p['platform_id']}", value=desc)
   await ctx.reply(embed=embed)
 
