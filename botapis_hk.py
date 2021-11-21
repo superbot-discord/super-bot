@@ -29,6 +29,16 @@ async def hk_aqi(ctx, *, disposed=None):
   await ctx.reply(embed=embed)
 
 @commands.command()
+async def hk_ferry_1(ctx, *, disposed=None):
+  await ctx.channel.trigger_typing()
+  r1=requests.get("https://www.hongkongwatertaxi.com.hk/eta/?route=HHCL").json()['data'][0]
+  r2=requests.get("https://www.hongkongwatertaxi.com.hk/eta/?route=CLHH").json()['data'][0]
+  embed = discord.Embed(title="Fortune Ferry Information")
+  for r in [r1, r2]:
+    embed.add_field(name=f"{r['route_en']} {r['route_tc']}".replace("-", "→"), value=f"Next departure at {r['depart_time']} (Vessel Code: {r['vessel_code']})")
+  await ctx.reply(embed=embed)
+
+@commands.command()
 async def hk_forecast(ctx, *, disposed=None):
   await ctx.channel.trigger_typing()
   r1=requests.get("https://data.weather.gov.hk/weatherAPI/opendata/weather.php?dataType=fnd&lang=en").json()
@@ -83,6 +93,20 @@ async def hk_lightning(ctx, *, disposed=None):
   embed = discord.Embed(title="HKO Lightning Information", description=f"Information within {re.sub(hko_dt_pattern2, hko_dt_pattern2_, lightnings[0]['DateTime'])} HKT (Update frequency: 1 hour)")
   for l, l2 in zip(lightnings, lightnings_):
     embed.add_field(name=f"{l['Region'].replace('Hong Kong Island', 'HKI')}: {l['Type']}\n{l2['區域']}: {l2['類別']}", value=f"Lightnings: {l['lightning count']}", inline=True)
+  await ctx.reply(embed=embed)
+
+@commands.command()
+async def hk_lr(ctx, station : int):
+  if station not in db["mtr"]["lr_stations"]:
+    await ctx.reply(f"Please supply a 1~3-digit station code! Available codes are `{'` `'.join(db['mtr']['stations'])}`")
+    return
+  r=requests.get(f"https://rt.data.gov.hk/v1/transport/mtr/lrt/getSchedule?station_id={station}").json()['platform_list']
+  embed=discord.Embed(title="Light Rail ETA")
+  for p in r:
+    desc = ""
+    for t in p['route_list']:
+      desc += f"{'🚃'*t['train_length']} {t['route_no']} to {t['dest_en']} ({t['dest_ch']}) {db['mtr']['lr_status'][t['arrival_departure']]}{' in '+t['time_en'] if t['time_en'].isdigit() else '('+t['time_en']+')'}"
+    embed.add_field(name=f"Platform {p['platform_id']}")
   await ctx.reply(embed=embed)
 
 @commands.command()

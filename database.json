@@ -38,7 +38,10 @@
   "mtr" : {
     "stations" : ["AWE", "AIR", "TUC", "SUN", "TSY", "LAK", "NAC", "OLY", "KOW", "HOK", "TUM", "SIH", "TIS", "LOP", "YUL", "KSR", "TWW", "NOP", "QUB", "YAT", "TIK", "TKO", "LHP", "HAH", "POA",
                   "MEF", "AUS", "ETS", "HUH", "HOM", "TKW", "SUW", "KAI", "DIH", "HIK", "TAW", "CKT", "STW", "CIO", "SHM", "TSH", "HEO", "MOS", "WKS"],
-    "lines"    : ["AEL", "TCL", "TML", "TKL"]
+    "lines"    : ["AEL", "TCL", "TML", "TKL"],
+    "lr_stations" : [1,10,15,20,30,40,50,60,70,75,80,90,100,110,120,130,140,150,160,170,180,190,200,212,220,230,240,250,260,265,270,275,280,295,300,
+                    310,320,330,340,350,360,370,380,390,400,425,430,435,445,448,450,455,460,468,480,490,500,510,520,530,540,550,560,570,580,590,600,920],
+    "lr_status" : {"A":"arriving", "D":"departing"}
   },
   "thread_archive" : {
     "1": 60,
