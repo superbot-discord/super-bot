@@ -110,8 +110,10 @@ async def hk_mtr(ctx, station, line):
     return
   r=list(requests.get(f"https://rt.data.gov.hk/v1/transport/mtr/getSchedule.php?line={line}&sta={station}").json()['data'].values())[0]
   embed=discord.Embed(title="MTR Trains")
-  embed.add_field(name="Up", value=f"\n".join([f"To {x['dest']} from platform {x['plat']} in {x['ttnt']} minutes ({mtr_time(x['time'])})" for x in r['UP']]))
-  embed.add_field(name="Down", value=f"\n".join([f"To {x['dest']} from platform {x['plat']} in {x['ttnt']} minutes ({mtr_time(x['time'])})" for x in r['DOWN']]))
+  if r.get('UP', None):
+    embed.add_field(name="Up", value=f"\n".join([f"To {x['dest']} from platform {x['plat']} in {x['ttnt']} minutes ({mtr_time(x['time'])})" for x in r['UP']]))
+  if r.get('DOWN', None):
+    embed.add_field(name="Down", value=f"\n".join([f"To {x['dest']} from platform {x['plat']} in {x['ttnt']} minutes ({mtr_time(x['time'])})" for x in r['DOWN']]))
   await ctx.reply(embed=embed)
 
 @commands.command()
