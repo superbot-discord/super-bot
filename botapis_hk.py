@@ -4,6 +4,8 @@ import csv
 
 hko_dt_pattern = re.compile(r'\d{8}(\d{2})(\d{2})')
 hko_dt_pattern_= r'\1:\2'
+hko_dt_pattern2 =re.compile(r'\d{8}(\d{2})(\d{2})-\d{8}(\d{2})(\d{2})')
+hko_dt_pattern2_=r'\1:\2~\3:\4'
 
 fake_headers = {'User-Agent' : "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:95.0) Gecko/20100101 Firefox/95.0"}
 aqi_range1 = lambda min, max: min if min == max else f"{min}~{max}"
@@ -67,6 +69,22 @@ async def hk_forecast(ctx, *, disposed=None):
   try_delete('forecast.png', 'forecast.svg')
 
 @commands.command()
+async def hk_lightning(ctx, *, disposed=None):
+  await ctx.channel.trigger_typing()
+  r1=requests.get("https://data.weather.gov.hk/weatherAPI/opendata/opendata.php?dataType=LHL&lang=en&rformat=csv")
+  r2=requests.get("https://data.weather.gov.hk/weatherAPI/opendata/opendata.php?dataType=LHL&lang=tc&rformat=csv")
+  lightning=r1.content.decode("utf-8")[1:-1]
+  reader = csv.DictReader(lightning.splitlines())
+  lightnings = [x for x in reader]
+  lightning_=r2.content.decode("utf-8")[1:-1]
+  reader_ = csv.DictReader(lightning_.splitlines())
+  lightnings_ = [x for x in reader_]
+  embed = discord.Embed(title="HKO Lightning Information", description=f"Information within {re.sub(hko_dt_pattern2, hko_dt_pattern2_, lightnings[0]['Date time'])} HKT (Update frequency: 1 hour)")
+  for l, l2 in zip(lightnings, lightnings_):
+    embed.add_field(name=f"{l['Region']}: {l['Type']}\n{l2['Region']}: {l2['Type']}", value=f"Lightnings: {l['lightning count']}", inline=True)
+  await ctx.reply(embed=embed)
+
+@commands.command()
 async def hk_moon(ctx, *, disposed=None):
   await ctx.channel.trigger_typing()
   r=requests.get(f"https://data.weather.gov.hk/weatherAPI/opendata/opendata.php?dataType=MRS&year=2021&rformat=csv")
@@ -107,6 +125,22 @@ async def hk_moon(ctx, *, disposed=None):
   plt.savefig("sun.svg", transparent=True)
   plt.clf()
   await ctx.reply(files=[discord.File("sun.png"), discord.File("sun.svg")])
+
+@commands.command()
+async def hk_sea_pressure(ctx, *, disposed=None):
+  await ctx.channel.trigger_typing()
+  r=requests.get("https://data.weather.gov.hk/weatherAPI/hko_data/regional-weather/latest_1min_pressure.csv")
+  r1=requests.get("https://data.weather.gov.hk/weatherAPI/hko_data/regional-weather/latest_1min_pressure_uc.csv")
+  pressure=r.content.decode("utf-8")[1:]
+  reader = csv.DictReader(pressure.splitlines())
+  pressures = [x for x in reader]
+  pressure_=r.content.decode("utf-8")[1:]
+  reader_ = csv.DictReader(pressure_.splitlines())
+  pressures_ = [x for x in reader_]
+  embed = discord.Embed(title="HKO Sea Pressure Information", description=f"Information updated at {re.sub(hko_dt_pattern, hko_dt_pattern_, pressures[0]['Date time'])} HKT (Update frequency: 10 minutes)")
+  for p, p_ in zip(pressures, pressures_):
+    embed.add_field(name=f"{p['Automatic Weather Station']} {p_['自動氣象站'].replace(' ', '')}", value=f"{p['Mean Sea Level Pressure(hPa)']} hPa", inline=True)
+  await ctx.reply(embed=embed)
 
 @commands.command()
 async def hk_sun(ctx, *, disposed=None):
@@ -199,21 +233,35 @@ async def hk_weather(ctx, *, disposed=None):
     fv += f"Temperature: {r1['temperature']['data'][temp_dict[count]]['value']}°C" if count in list(temp_dict) else ""
     embed.add_field(name=count, value=fv, inline=True)
   f0v = "Humidity: {r1['humidity']['data'][0]['value']}% at {r1['humidity']['data'][0]['place']}"
-  if r1['uvindex:']:
+  if r1.get('uvindex:', None):
     f0v += f"UV Index: {r1['uvindex']['data'][0]['value']} ({r1['uvindex']['data'][0]['desc']}) at {r1['uvindex']['data'][0]['place']}"
   embed.add_field(name="Extra Information", value=f0v)
   embed.set_image(url=f"https://www.hko.gov.hk/images/HKOWxIconOutline/pic{r1['icon'][0]}.png")
   await ctx.reply(embed=embed)
 
 @commands.command()
-async def uk_extremes(ctx, *, disposed=None):
-  r=requests.get("http://datapoint.metoffice.gov.uk/public/data/txt/wxobs/ukextremes/json/latest?key=69eba5b0-9c89-4198-b973-b4576f60f0f5").json()
+async def hk_wind(ctx, *, disposed=None):
+  await ctx.channel.trigger_typing()
+  r=requests.get("https://data.weather.gov.hk/weatherAPI/hko_data/regional-weather/latest_10min_wind.csv")
+  wind=r.content.decode("utf-8")[:-1]
+  reader = csv.DictReader(wind.splitlines())
+  winds = [x for x in reader]
+  embed = discord.Embed(title="HKO Wind Information", description=f"Information updated at {re.sub(hko_dt_pattern, hko_dt_pattern_, winds[0]['Date time'])} HKT (Update frequency: 10 minutes)")
+  for w in winds:
+    embed.add_field(name=f"{w['Automatic Weather Station']} {db['compass_points'][w['10-Minute Mean Wind Direction(Compass points)']]}",
+    value=f"""{w['10-Minute Mean Wind Direction(Compass points)']}{(' at'+w['10-Minute Mean Speed(km/hour)']+' km/h') if w['10-Minute Mean Speed(km/hour)']!="N/A" else ''}
+    {('Maximum Gust: '+w['10-Minute Maximum Gust(km/hour)']+' km/h') if w['10-Minute Maximum Gust(km/hour)']!='N/A' else ''}""", inline=True)
+  embed.set_footer(text="Speed and Gust Information might be empty for some weather stations. Directions and Speed are mean values in the past 10 minutes.")
+  await ctx.reply(embed=embed)
 
 def setup(bot):
   bot.add_command(hk_aqi)
   bot.add_command(hk_forecast)
+  bot.add_command(hk_lightning)
   bot.add_command(hk_moon)
+  bot.add_command(hk_sea_pressure)
   bot.add_command(hk_sun)
   bot.add_command(hk_tide)
   bot.add_command(hk_visibility)
   bot.add_command(hk_weather)
+  bot.add_command(hk_wind)
