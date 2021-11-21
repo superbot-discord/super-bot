@@ -273,8 +273,10 @@ async def hk_wind(ctx, *, disposed=None):
 
 def setup(bot):
   bot.add_command(hk_aqi)
+  bot.add_command(hk_ferry_1)
   bot.add_command(hk_forecast)
   bot.add_command(hk_lightning)
+  bot.add_command(hk_lr)
   bot.add_command(hk_moon)
   bot.add_command(hk_mtr)
   bot.add_command(hk_sea_pressure)
