@@ -105,7 +105,7 @@ async def hk_mtr(ctx, station, line):
   if station not in db["mtr"]["stations"]:
     await ctx.reply(f"Please supply a 3-digit station code! Available codes are `{'` `'.join(db['mtr']['stations'])}`")
     return
-  if station not in db["mtr"]["lines"]:
+  if line not in db["mtr"]["lines"]:
     await ctx.reply(f"Please supply a 3-digit line code! Available codes are `{'` `'.join(db['mtr']['lines'])}`")
     return
   r=list(requests.get(f"https://rt.data.gov.hk/v1/transport/mtr/getSchedule.php?line={line}&sta={station}").json()['data'].values())[0]
