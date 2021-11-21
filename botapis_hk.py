@@ -79,7 +79,7 @@ async def hk_lightning(ctx, *, disposed=None):
   lightning_=r2.content.decode("utf-8")[1:-1]
   reader_ = csv.DictReader(lightning_.splitlines())
   lightnings_ = [x for x in reader_]
-  embed = discord.Embed(title="HKO Lightning Information", description=f"Information within {re.sub(hko_dt_pattern2, hko_dt_pattern2_, lightnings[0]['Date time'])} HKT (Update frequency: 1 hour)")
+  embed = discord.Embed(title="HKO Lightning Information", description=f"Information within {re.sub(hko_dt_pattern2, hko_dt_pattern2_, lightnings[0]['DateTime'])} HKT (Update frequency: 1 hour)")
   for l, l2 in zip(lightnings, lightnings_):
     embed.add_field(name=f"{l['Region']}: {l['Type']}\n{l2['Region']}: {l2['Type']}", value=f"Lightnings: {l['lightning count']}", inline=True)
   await ctx.reply(embed=embed)
@@ -131,10 +131,10 @@ async def hk_sea_pressure(ctx, *, disposed=None):
   await ctx.channel.trigger_typing()
   r=requests.get("https://data.weather.gov.hk/weatherAPI/hko_data/regional-weather/latest_1min_pressure.csv")
   r1=requests.get("https://data.weather.gov.hk/weatherAPI/hko_data/regional-weather/latest_1min_pressure_uc.csv")
-  pressure=r.content.decode("utf-8")[1:]
+  pressure=r.content.decode("utf-8")[:-1]
   reader = csv.DictReader(pressure.splitlines())
   pressures = [x for x in reader]
-  pressure_=r.content.decode("utf-8")[1:]
+  pressure_=r.content.decode("utf-8")[:-1]
   reader_ = csv.DictReader(pressure_.splitlines())
   pressures_ = [x for x in reader_]
   embed = discord.Embed(title="HKO Sea Pressure Information", description=f"Information updated at {re.sub(hko_dt_pattern, hko_dt_pattern_, pressures[0]['Date time'])} HKT (Update frequency: 10 minutes)")
@@ -219,10 +219,13 @@ async def hk_weather(ctx, *, disposed=None):
   reader = csv.DictReader(uvi_raw.splitlines())
   uvi = [x for x in reader]
   for u in uvi:
-    desc += f"\nUV Index at \n{re.sub(hko_dt_pattern, hko_dt_pattern_, u['Date time'])}: {u['past 15-minute mean UV Index']} (Update frequency: 15 minutes)"
-  for count in ['warningMessage', 'mintempFrom00To09', 'rainfallFrom00To12']:
+    desc += f"\nUV Index at {re.sub(hko_dt_pattern, hko_dt_pattern_, u['Date time'])}: {u['past 15-minute mean UV Index']} (Update frequency: 15 minutes)"
+  for count in ['mintempFrom00To09', 'rainfallFrom00To12']:
     if r1[count]:
-      desc += f"{r1[count]} {r2[count]}\n"
+      desc += f"\n{r1[count]} {r2[count]}"
+  if r1['warningMessage']:
+    for w, w_ in zip(r1['warningMessage'], r2['warningMessage']):
+      desc += f"\n{w} {w_}"
   embed = discord.Embed(title="HKO Weather Information", description=desc)
   rain_dict = {html.unescape(f"{x1['place']} {x2['place']}"): y for x1, x2, y in zip(r1['rainfall']['data']   , r2['rainfall']['data']   , range(0, 18))}
   temp_dict = {html.unescape(f"{x1['place']} {x2['place']}"): y for x1, x2, y in zip(r1['temperature']['data'], r2['temperature']['data'], range(0, 27))}
