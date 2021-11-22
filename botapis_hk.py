@@ -106,7 +106,7 @@ async def hk_lr(ctx, station : int):
     desc = ""
     if p.get('route_list', None):
       for t in p['route_list']:
-        desc += f"{'🚃 '*t['train_length']}**{t['route_no']}** to {t['dest_en']} ({t['dest_ch']}) {db['mtr']['lr_status'][t['arrival_departure']]} {'in '+t['time_en'] if t['time_en'][0].isdigit() else '('+t['time_en']+')'}\n"
+        desc += f"{'🚃 '*t['train_length']}{'<:Transparent:912206780015190038> '*(2-t['train_length'])}**{t['route_no']}** to {t['dest_en']} ({t['dest_ch']}) {db['mtr']['lr_status'][t['arrival_departure']]} {'in '+t['time_en'] if t['time_en'][0].isdigit() else '('+t['time_en']+')'}\n"
       embed.add_field(name=f"Platform {p['platform_id']}", value=desc, inline=False)
   if len(embed.fields):
     await ctx.reply(embed=embed)
@@ -150,7 +150,7 @@ async def hk_nwfb(ctx, line):
   if not r1:
     await ctx.reply("Invalid route.")
     return
-  r2=requests.get(f"https://rt.data.gov.hk/v1/transport/citybus-nwfb/route-stop/ctb/{line}/inbound").json()['data']
+  r2=requests.get(f"https://rt.data.gov.hk/v1/transport/citybus-nwfb/route-stop/nwfb/{line}/inbound").json()['data']
   desc = ""
   for s in r2:
     rt1=requests.get(f"https://rt.data.gov.hk/v1/transport/citybus-nwfb/stop/{s['stop']}").json()['data']
@@ -160,6 +160,18 @@ async def hk_nwfb(ctx, line):
     rt2_eta=datetime.fromisoformat(rt2[0]['eta'])
     desc += f"{s['seq']}: {rt1['name_en']} {rt1['name_tc']} (Bus at {rt2_eta.strftime('%H:%M:%S')})"
   embed=discord.Embed(title=f"{r1['route']} {r1['orig_en']} {r1['orig_tc']} → {r1['dest_en']} {r1['dest_tc']}", description=desc)
+  await ctx.reply(embed=embed)
+  r1=requests.get(f"https://rt.data.gov.hk/v1/transport/citybus-nwfb/route/nwfb/{line}/").json()['data']
+  r2=requests.get(f"https://rt.data.gov.hk/v1/transport/citybus-nwfb/route-stop/nwfb/{line}/outbound").json()['data']
+  desc = ""
+  for s in r2:
+    rt1=requests.get(f"https://rt.data.gov.hk/v1/transport/citybus-nwfb/stop/{s['stop']}").json()['data']
+    rt2=requests.get(f"https://rt.data.gov.hk/v1/transport/citybus-nwfb/eta/nwfb/{s['stop']}/{line}").json()['data']
+    rt2=rt2.filter(lambda x: x['eta'])
+    rt2.sort(key=lambda x: x['eta_seq'])
+    rt2_eta=datetime.fromisoformat(rt2[0]['eta'])
+    desc += f"{s['seq']}: {rt1['name_en']} {rt1['name_tc']} (Bus at {rt2_eta.strftime('%H:%M:%S')})"
+  embed=discord.Embed(title=f"{r1['route']} {r1['dest_en']} {r1['dest_tc']} → {r1['orig_en']} {r1['orig_tc']}", description=desc)
   await ctx.reply(embed=embed)
 
 
