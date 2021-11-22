@@ -12,6 +12,9 @@ mtr_time   = lambda rt: re.sub(r'\d{4}-\d{2}-\d{2} (\d{2}:\d{2}:\d{2})', r'\1', 
 aqi_range1 = lambda min, max: min if min == max else f"{min}~{max}"
 aqi_range2 = lambda min, max: min if min == max else f"{min} ~ {max}"
 
+kmb_stops = requests.get("https://data.etabus.gov.hk/v1/transport/kmb/stop").json()['data']
+kmb_routes= requests.get("https://data.etabus.gov.hk/v1/transport/kmb/route/").json()['data']
+
 @commands.command()
 async def hk_aqi(ctx, *, disposed=None):
   await ctx.channel.trigger_typing()
@@ -35,7 +38,7 @@ async def hk_ferry_1(ctx, *, disposed=None):
   r2=requests.get("https://www.hongkongwatertaxi.com.hk/eta/?route=CLHH").json()['data'][0]
   embed = discord.Embed(title="Fortune Ferry Information")
   for r in [r1, r2]:
-    embed.add_field(name=f"{r['route_en']} {r['route_tc']}".replace("-", "→"), value=f"Next departure at {r['depart_time']}{(' (Vessel Code: '+r['vessel_code']+')') if r.get('vessel_code', None) else ''}")
+    embed.add_field(name=r['route_en'].replace("-", "→").replace("Hung Hom", "Hung Hom 紅磡").replace("Central", "Central 中環"), value=f"Next departure at {r['depart_time']}{(' (Vessel Code: '+r['vessel_code']+')') if r.get('vessel_code', None) else ''}")
   await ctx.reply(embed=embed)
 
 @commands.command()
@@ -80,6 +83,28 @@ async def hk_forecast(ctx, *, disposed=None):
   try_delete('forecast.png', 'forecast.svg')
 
 @commands.command()
+async def hk_kmb(ctx, line):
+  line = line.upper()
+  r1=list(filter(lambda x: x['route'] == line,kmb_routes))
+  if not r1:
+    await ctx.reply("Invalid route.")
+    return
+  for r1_ in r1:
+    await ctx.channel.trigger_typing()
+    route_url = f"{r1_['route']}/{db['kmb_bound'][r1_['bound']]}/{r1_['service_type']}"
+    r2=requests.get(f"https://data.etabus.gov.hk/v1/transport/kmb/route-stop/{route_url}").json()['data']
+    desc = ""
+    for s in r2:
+      rt1=requests.get(f"https://data.etabus.gov.hk/v1/transport/kmb/stop/{s['stop']}").json()['data']
+      rt2=requests.get(f"https://data.etabus.gov.hk/v1/transport/kmb/eta/{s['stop']}/1/1").json()['data'][:2]
+      desc += f"\n{s['seq']}: {rt1['name_en'].title()} {rt1['name_tc']}"
+      if rt2:
+        rt2_etas=[datetime.fromisoformat(x['eta']).strftime('%H:%M:%S') for x in rt2]
+        desc += f" (Bus(es) at {', '.join(rt2_etas)})"
+    embed=discord.Embed(title=f"{r1_['route']} {r1_['dest_en']} {r1_['dest_tc']} → {r1_['orig_en']} {r1_['orig_tc']}", description=desc)
+    await ctx.reply(embed=embed)
+
+@commands.command()
 async def hk_lightning(ctx, *, disposed=None):
   await ctx.channel.trigger_typing()
   r1=requests.get("https://data.weather.gov.hk/weatherAPI/opendata/opendata.php?dataType=LHL&lang=en&rformat=csv")
@@ -106,7 +131,7 @@ async def hk_lr(ctx, station : int):
     desc = ""
     if p.get('route_list', None):
       for t in p['route_list']:
-        desc += f"{'🚃 '*t['train_length']}{'<:Transparent:912206780015190038> '*(2-t['train_length'])}**{t['route_no']}** to {t['dest_en']} ({t['dest_ch']}) {db['mtr']['lr_status'][t['arrival_departure']]} {'in '+t['time_en'] if t['time_en'][0].isdigit() else '('+t['time_en']+')'}\n"
+        desc += f"""<:Train1:912268792808243200> {'<:Transparent:912206780015190038>'if t['train_length']==1 else'<:Train2:912268792908890132>'} **{t['route_no']}** to {t['dest_en']} ({t['dest_ch']}) {db['mtr']['lr_status'][t['arrival_departure']]} {f"in {t['time_en']}" if t['time_en'][0].isdigit() else f"({t['time_en']})"}\n"""
       embed.add_field(name=f"Platform {p['platform_id']}", value=desc, inline=False)
   if len(embed.fields):
     await ctx.reply(embed=embed)
@@ -146,6 +171,7 @@ async def hk_mtr(ctx, station, line):
 
 @commands.command()
 async def hk_nwfb(ctx, line):
+  await ctx.channel.trigger_typing()
   r1=requests.get(f"https://rt.data.gov.hk/v1/transport/citybus-nwfb/route/nwfb/{line}/").json()['data']
   if not r1:
     await ctx.reply("Invalid route.")
@@ -155,25 +181,29 @@ async def hk_nwfb(ctx, line):
   for s in r2:
     rt1=requests.get(f"https://rt.data.gov.hk/v1/transport/citybus-nwfb/stop/{s['stop']}").json()['data']
     rt2=requests.get(f"https://rt.data.gov.hk/v1/transport/citybus-nwfb/eta/nwfb/{s['stop']}/{line}").json()['data']
-    rt2=rt2.filter(lambda x: x['eta'])
+    rt2=list(filter(lambda x: x['eta'], rt2))
     rt2.sort(key=lambda x: x['eta_seq'])
-    rt2_eta=datetime.fromisoformat(rt2[0]['eta'])
-    desc += f"{s['seq']}: {rt1['name_en']} {rt1['name_tc']} (Bus at {rt2_eta.strftime('%H:%M:%S')})"
-  embed=discord.Embed(title=f"{r1['route']} {r1['orig_en']} {r1['orig_tc']} → {r1['dest_en']} {r1['dest_tc']}", description=desc)
+    desc += f"\n{s['seq']}: {rt1['name_en']} {rt1['name_tc']}"
+    if rt2:
+      rt2_eta=datetime.fromisoformat(rt2[0]['eta'])
+      desc += f" (Bus at {rt2_eta.strftime('%H:%M:%S')})"
+  embed=discord.Embed(title=f"{r1['route']} {r1['dest_en']} {r1['dest_tc']} → {r1['orig_en']} {r1['orig_tc']}", description=desc)
   await ctx.reply(embed=embed)
+  await ctx.channel.trigger_typing()
   r1=requests.get(f"https://rt.data.gov.hk/v1/transport/citybus-nwfb/route/nwfb/{line}/").json()['data']
   r2=requests.get(f"https://rt.data.gov.hk/v1/transport/citybus-nwfb/route-stop/nwfb/{line}/outbound").json()['data']
   desc = ""
   for s in r2:
     rt1=requests.get(f"https://rt.data.gov.hk/v1/transport/citybus-nwfb/stop/{s['stop']}").json()['data']
     rt2=requests.get(f"https://rt.data.gov.hk/v1/transport/citybus-nwfb/eta/nwfb/{s['stop']}/{line}").json()['data']
-    rt2=rt2.filter(lambda x: x['eta'])
+    rt2=list(filter(lambda x: x['eta'], rt2))
     rt2.sort(key=lambda x: x['eta_seq'])
-    rt2_eta=datetime.fromisoformat(rt2[0]['eta'])
-    desc += f"{s['seq']}: {rt1['name_en']} {rt1['name_tc']} (Bus at {rt2_eta.strftime('%H:%M:%S')})"
-  embed=discord.Embed(title=f"{r1['route']} {r1['dest_en']} {r1['dest_tc']} → {r1['orig_en']} {r1['orig_tc']}", description=desc)
+    desc += f"\n{s['seq']}: {rt1['name_en']} {rt1['name_tc']}"
+    if rt2:
+      rt2_eta=datetime.fromisoformat(rt2[0]['eta'])
+      desc += f" (Bus at {rt2_eta.strftime('%H:%M:%S')})"
+  embed=discord.Embed(title=f"{r1['route']} {r1['orig_en']} {r1['orig_tc']} → {r1['dest_en']} {r1['dest_tc']}", description=desc)
   await ctx.reply(embed=embed)
-
 
 @commands.command()
 async def hk_sea_pressure(ctx, *, disposed=None):
@@ -310,6 +340,7 @@ def setup(bot):
   bot.add_command(hk_aqi)
   bot.add_command(hk_ferry_1)
   bot.add_command(hk_forecast)
+  bot.add_command(hk_kmb)
   bot.add_command(hk_lightning)
   bot.add_command(hk_lr)
   bot.add_command(hk_moon)

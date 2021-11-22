@@ -244,3 +244,4 @@ def setup(bot):
   bot.add_command(markdown)
   bot.add_command(population)
   bot.add_command(screenshot)
+  print('Finished loading modules')
