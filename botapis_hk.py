@@ -104,10 +104,14 @@ async def hk_lr(ctx, station : int):
   embed=discord.Embed(title="Light Rail ETA")
   for p in r:
     desc = ""
-    for t in p['route_list']:
-      desc += f"{'🚃'*t['train_length']} {t['route_no']} to {t['dest_en']} ({t['dest_ch']}) {db['mtr']['lr_status'][t['arrival_departure']]} {'in '+t['time_en'] if t['time_en'][0].isdigit() else '('+t['time_en']+')'}\n"
-    embed.add_field(name=f"Platform {p['platform_id']}", value=desc)
-  await ctx.reply(embed=embed)
+    if p.get('route_list', None):
+      for t in p['route_list']:
+        desc += f"{'🚃 '*t['train_length']}**{t['route_no']}** to {t['dest_en']} ({t['dest_ch']}) {db['mtr']['lr_status'][t['arrival_departure']]} {'in '+t['time_en'] if t['time_en'][0].isdigit() else '('+t['time_en']+')'}\n"
+      embed.add_field(name=f"Platform {p['platform_id']}", value=desc, inline=False)
+  if len(embed.fields):
+    await ctx.reply(embed=embed)
+  else:
+    await ctx.reply("No information could be fetched.")
 
 @commands.command()
 async def hk_moon(ctx, *, disposed=None):
@@ -139,6 +143,25 @@ async def hk_mtr(ctx, station, line):
   if r.get('DOWN', None):
     embed.add_field(name="Down", value=f"\n".join([f"To {x['dest']} from platform {x['plat']} in {x['ttnt']} minutes ({mtr_time(x['time'])})" for x in r['DOWN']]))
   await ctx.reply(embed=embed)
+
+@commands.command()
+async def hk_nwfb(ctx, line):
+  r1=requests.get(f"https://rt.data.gov.hk/v1/transport/citybus-nwfb/route/nwfb/{line}/").json()['data']
+  if not r1:
+    await ctx.reply("Invalid route.")
+    return
+  r2=requests.get(f"https://rt.data.gov.hk/v1/transport/citybus-nwfb/route-stop/ctb/{line}/inbound").json()['data']
+  desc = ""
+  for s in r2:
+    rt1=requests.get(f"https://rt.data.gov.hk/v1/transport/citybus-nwfb/stop/{s['stop']}").json()['data']
+    rt2=requests.get(f"https://rt.data.gov.hk/v1/transport/citybus-nwfb/eta/nwfb/{s['stop']}/{line}").json()['data']
+    rt2=rt2.filter(lambda x: x['eta'])
+    rt2.sort(key=lambda x: x['eta_seq'])
+    rt2_eta=datetime.fromisoformat(rt2[0]['eta'])
+    desc += f"{s['seq']}: {rt1['name_en']} {rt1['name_tc']} (Bus at {rt2_eta.strftime('%H:%M:%S')})"
+  embed=discord.Embed(title=f"{r1['route']} {r1['orig_en']} {r1['orig_tc']} → {r1['dest_en']} {r1['dest_tc']}", description=desc)
+  await ctx.reply(embed=embed)
+
 
 @commands.command()
 async def hk_sea_pressure(ctx, *, disposed=None):
@@ -279,6 +302,7 @@ def setup(bot):
   bot.add_command(hk_lr)
   bot.add_command(hk_moon)
   bot.add_command(hk_mtr)
+  bot.add_command(hk_nwfb)
   bot.add_command(hk_sea_pressure)
   bot.add_command(hk_sun)
   bot.add_command(hk_tide)
