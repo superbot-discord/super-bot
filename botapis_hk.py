@@ -90,19 +90,22 @@ async def hk_kmb(ctx, line):
     await ctx.reply("Invalid route.")
     return
   for r1_ in r1:
-    await ctx.channel.trigger_typing()
-    route_url = f"{r1_['route']}/{db['kmb_bound'][r1_['bound']]}/{r1_['service_type']}"
-    r2=requests.get(f"https://data.etabus.gov.hk/v1/transport/kmb/route-stop/{route_url}").json()['data']
-    desc = ""
-    for s in r2:
-      rt1=requests.get(f"https://data.etabus.gov.hk/v1/transport/kmb/stop/{s['stop']}").json()['data']
-      rt2=requests.get(f"https://data.etabus.gov.hk/v1/transport/kmb/eta/{s['stop']}/1/1").json()['data'][:2]
-      desc += f"\n{s['seq']}: {rt1['name_en'].title()} {rt1['name_tc']}"
-      if rt2:
-        rt2_etas=[datetime.fromisoformat(x['eta']).strftime('%H:%M:%S') for x in rt2]
-        desc += f" (Bus(es) at {', '.join(rt2_etas)})"
-    embed=discord.Embed(title=f"{r1_['route']} {r1_['dest_en']} {r1_['dest_tc']} → {r1_['orig_en']} {r1_['orig_tc']}", description=desc)
-    await ctx.reply(embed=embed)
+    async with ctx.channel.typing:
+      for x in [r1_['dest_en'], r1_['orig_en']]:
+        x=x.title()
+      route_url = f"{r1_['route']}/{db['kmb_bound'][r1_['bound']]}/{r1_['service_type']}"
+      r2=requests.get(f"https://data.etabus.gov.hk/v1/transport/kmb/route-stop/{route_url}").json()['data']
+      desc = ""
+      for s in r2:
+        #rt1=requests.get(f"https://data.etabus.gov.hk/v1/transport/kmb/stop/{s['stop']}").json()['data']
+        rt1=list(filter(lambda x: x['stop'] == s['stop'], kmb_stops))[0]
+        rt2=requests.get(f"https://data.etabus.gov.hk/v1/transport/kmb/eta/{s['stop']}/{r1_['route']}/{r1_['service_type']}").json()['data'][:2]
+        desc += f"\n{s['seq']}: {rt1['name_en'].title()} {rt1['name_tc']}"
+        if rt2:
+          rt2_etas=[datetime.fromisoformat(x['eta']).strftime('%H:%M:%S') for x in rt2]
+          desc += f" (Bus(es) at {', '.join(rt2_etas)})"
+      embed=discord.Embed(title=r1_['route']+(f" {r1_['orig_en']} {r1_['orig_tc']} → {r1_['dest_en']} {r1_['dest_tc']}" if r1_['bound']=='O' else f" {r1_['dest_en']} {r1_['dest_tc']} → {r1_['orig_en']} {r1_['orig_tc']}"), description=desc)
+      await ctx.reply(embed=embed)
 
 @commands.command()
 async def hk_lightning(ctx, *, disposed=None):
@@ -171,7 +174,6 @@ async def hk_mtr(ctx, station, line):
 
 @commands.command()
 async def hk_nwfb(ctx, line):
-  await ctx.channel.trigger_typing()
   r1=requests.get(f"https://rt.data.gov.hk/v1/transport/citybus-nwfb/route/nwfb/{line}/").json()['data']
   if not r1:
     await ctx.reply("Invalid route.")
@@ -179,6 +181,7 @@ async def hk_nwfb(ctx, line):
   r2=requests.get(f"https://rt.data.gov.hk/v1/transport/citybus-nwfb/route-stop/nwfb/{line}/inbound").json()['data']
   desc = ""
   for s in r2:
+    await ctx.channel.trigger_typing()
     rt1=requests.get(f"https://rt.data.gov.hk/v1/transport/citybus-nwfb/stop/{s['stop']}").json()['data']
     rt2=requests.get(f"https://rt.data.gov.hk/v1/transport/citybus-nwfb/eta/nwfb/{s['stop']}/{line}").json()['data']
     rt2=list(filter(lambda x: x['eta'], rt2))
