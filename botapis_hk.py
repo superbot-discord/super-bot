@@ -6,14 +6,21 @@ hko_dt_pattern = re.compile(r'\d{8}(\d{2})(\d{2})')
 hko_dt_pattern_= r'\1:\2'
 hko_dt_pattern2 =re.compile(r'\d{8}(\d{2})(\d{2})-\d{8}(\d{2})(\d{2})')
 hko_dt_pattern2_=r'\1:\2~\3:\4'
+gmb_weekdays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
 
 fake_headers = {'User-Agent' : "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:95.0) Gecko/20100101 Firefox/95.0"}
 mtr_time   = lambda rt: re.sub(r'\d{4}-\d{2}-\d{2} (\d{2}:\d{2}:\d{2})', r'\1', rt)
 aqi_range1 = lambda min, max: min if min == max else f"{min}~{max}"
 aqi_range2 = lambda min, max: min if min == max else f"{min} ~ {max}"
+gmb_weekday= lambda x:"Everyday " if x==[True]*7 else ("Mon ~ Sat" if x==[True]*6+[False] else ("Mon ~ Fri" if x==[True]*5+[False]*2 else (
+  "Sat ~ Sun" if x==[False]*5+[True]*2 else ", ".join([gmb_weekdays[y] for y in x if y]))))
+gmb_ph = {True:"including", False:"excluding"}
 
 kmb_stops = requests.get("https://data.etabus.gov.hk/v1/transport/kmb/stop").json()['data']
 kmb_routes= requests.get("https://data.etabus.gov.hk/v1/transport/kmb/route/").json()['data']
+gmb_routes_HKI = requests.get("https://data.etagmb.gov.hk/route/HKI/").json()['data']['routes']
+gmb_routes_KLN = requests.get("https://data.etagmb.gov.hk/route/KLN/").json()['data']['routes']
+gmb_routes_NT  = requests.get("https://data.etagmb.gov.hk/route/NT/").json()['data']['routes']
 
 @commands.command()
 async def hk_aqi(ctx, *, disposed=None):
@@ -83,6 +90,30 @@ async def hk_forecast(ctx, *, disposed=None):
   try_delete('forecast.png', 'forecast.svg')
 
 @commands.command()
+async def hk_gmb(ctx, region, line):
+  region = region.upper()
+  line = line.upper()
+  if region not in ['HKI', 'KLN', 'NT']:
+    await ctx.reply("Invalid region. Please use `HKI`, `KLN` or `NT` (case-insensitive).")
+    return
+  r1=list(filter(lambda x: x == line, eval(f'gmb_routes_{region}')))[0]
+  if not len(r1):
+    await ctx.reply("Invalid route.")
+    return
+  r2 = requests.get(f"https://data.etagmb.gov.hk/route/{region}/{line}").json()['data'][0]
+  for r2_ in r2['directions']:
+    async with ctx.channel.typing():
+      r3=requests.get(f"https://data.etagmb.gov.hk/route-stop/{r2['route_id']}/{r2_['route_seq']}").json()['data']['route_stops']
+      desc = "```"+f"\n".join([f"{x['frequency']} mins/car: {gmb_weekday(x['weekdays'])} {x['start_time']} ~ {x['end_time']} ({gmb_ph[x['public_holiday']]} PHs)" for x in r2_['headways']])+"```"
+      for r3_ in r3:
+        r4=requests.get(f"https://data.etagmb.gov.hk/eta/route-stop/{r2['route_id']}/{r2_['route_seq']}/{r3_['stop_seq']}").json()['data']['eta']
+        desc += f"\n**{r3_['name_tc']} {r3_['name_en']}**"
+        if r4:
+          desc += f"\nCar(s) at {', '.join([datetime.fromisoformat(x['timestamp']).strftime('%H:%M:%S') for x in r4])}"
+      embed=discord.Embed(title=f"{r2_['orig_en']} {r2_['orig_tc']} → {r2_['dest_en']} {r2_['dest_tc']}", description=desc)
+      await ctx.reply(embed=embed)
+
+@commands.command()
 async def hk_kmb(ctx, line):
   line = line.upper()
   r1=list(filter(lambda x: x['route'] == line,kmb_routes))
@@ -90,20 +121,19 @@ async def hk_kmb(ctx, line):
     await ctx.reply("Invalid route.")
     return
   for r1_ in r1:
-    async with ctx.channel.typing:
+    async with ctx.channel.typing():
       for x in [r1_['dest_en'], r1_['orig_en']]:
         x=x.title()
       route_url = f"{r1_['route']}/{db['kmb_bound'][r1_['bound']]}/{r1_['service_type']}"
       r2=requests.get(f"https://data.etabus.gov.hk/v1/transport/kmb/route-stop/{route_url}").json()['data']
       desc = ""
       for s in r2:
-        #rt1=requests.get(f"https://data.etabus.gov.hk/v1/transport/kmb/stop/{s['stop']}").json()['data']
         rt1=list(filter(lambda x: x['stop'] == s['stop'], kmb_stops))[0]
         rt2=requests.get(f"https://data.etabus.gov.hk/v1/transport/kmb/eta/{s['stop']}/{r1_['route']}/{r1_['service_type']}").json()['data'][:2]
-        desc += f"\n{s['seq']}: {rt1['name_en'].title()} {rt1['name_tc']}"
+        desc += f"\n**{s['seq']}: {rt1['name_en'].title()} {rt1['name_tc']}**"
         if rt2:
           rt2_etas=[datetime.fromisoformat(x['eta']).strftime('%H:%M:%S') for x in rt2]
-          desc += f" (Bus(es) at {', '.join(rt2_etas)})"
+          desc += f"\nBus(es) at {', '.join(rt2_etas)}"
       embed=discord.Embed(title=r1_['route']+(f" {r1_['orig_en']} {r1_['orig_tc']} → {r1_['dest_en']} {r1_['dest_tc']}" if r1_['bound']=='O' else f" {r1_['dest_en']} {r1_['dest_tc']} → {r1_['orig_en']} {r1_['orig_tc']}"), description=desc)
       await ctx.reply(embed=embed)
 
@@ -343,6 +373,7 @@ def setup(bot):
   bot.add_command(hk_aqi)
   bot.add_command(hk_ferry_1)
   bot.add_command(hk_forecast)
+  bot.add_command(hk_gmb)
   bot.add_command(hk_kmb)
   bot.add_command(hk_lightning)
   bot.add_command(hk_lr)
