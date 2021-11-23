@@ -131,10 +131,10 @@ async def hk_kmb(ctx, line):
         rt1=list(filter(lambda x: x['stop'] == s['stop'], kmb_stops))[0]
         rt2=requests.get(f"https://data.etabus.gov.hk/v1/transport/kmb/eta/{s['stop']}/{r1_['route']}/{r1_['service_type']}").json()['data'][:2]
         desc += f"\n**{s['seq']}: {rt1['name_en'].title()} {rt1['name_tc']}**"
-        if rt2:
+        if len(rt2):
           rt2_etas=[datetime.fromisoformat(x['eta']).strftime('%H:%M:%S') for x in rt2]
           desc += f"\nBus(es) at {', '.join(rt2_etas)}"
-      embed=discord.Embed(title=r1_['route']+(f" {r1_['orig_en']} {r1_['orig_tc']} → {r1_['dest_en']} {r1_['dest_tc']}" if r1_['bound']=='O' else f" {r1_['dest_en']} {r1_['dest_tc']} → {r1_['orig_en']} {r1_['orig_tc']}"), description=desc)
+      embed=discord.Embed(title=r1_['route']+(f" {r1_['orig_en']} {r1_['orig_tc']} → {r1_['dest_en']} {r1_['dest_tc']}" if r1_['bound']=='outbound' else f" {r1_['dest_en']} {r1_['dest_tc']} → {r1_['orig_en']} {r1_['orig_tc']}"), description=desc)
       await ctx.reply(embed=embed)
 
 @commands.command()
