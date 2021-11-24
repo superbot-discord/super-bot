@@ -45,7 +45,7 @@ async def hk_ferry_1(ctx, *, disposed=None):
   r2=requests.get("https://www.hongkongwatertaxi.com.hk/eta/?route=CLHH").json()['data'][0]
   embed = discord.Embed(title="Fortune Ferry Information")
   for r in [r1, r2]:
-    embed.add_field(name=r['route_en'].replace("-", "→").replace("Hung Hom", "Hung Hom 紅磡").replace("Central", "Central 中環"), value=f"Next departure at {r['depart_time']}{(' (Vessel Code: '+r['vessel_code']+')') if r.get('vessel_code', None) else ''}")
+    embed.add_field(name=r['route_en'].replace("-", "→").replace("Hung Hom", "Hung Hom 紅磡").replace("Central", "Central 中環"), value=f"Next departure at {r['depart_time']}{(' (Vessel Code: '+r['vesselcode']+')') if r.get('vesselcode', None) else ''}")
   await ctx.reply(embed=embed)
 
 @commands.command()
