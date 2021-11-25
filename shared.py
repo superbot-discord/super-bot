@@ -83,6 +83,7 @@ font_lcd3_3   = ImageFont.truetype("fonts/lcd3_3.ttf", 50)
 font_lcd3_3i  = ImageFont.truetype("fonts/lcd3_3i.ttf", 50)
 
 whitney       = ImageFont.truetype("fonts/whitney.otf", 34)
+sf_pro_r      = ImageFont.truetype("fonts/awf.ttf", 23)
 
 led_font_dict = {
   font_led      :  {"spacing" : 20, "padding" : 3  , "height_plus" : 15 , "required_height_plus" : 3  , "unneeded_width" : 8 , "unneeded_padding" : 12},
