@@ -13,7 +13,7 @@ import ascii2 as asc
 from shared import *
 
 cimage = ImageCaptcha()
-aw = [[(215, 145), "#3F91F0FF"], [(281, 164), "#69D880FF"], [(327, 214), "#DE9F41FF"], [(344, 278), "#9886E1FF"], [(328, 341), "#C8EC66FF"], [(284, 390), "#D56569FF"], [(216, 408), "#56AFE1FF"], [(150, 390), "#F2E872FF"], [(106, 340), "#E295C2FF"]]
+aw = [[(230, 153), "#3F91F0FF"], [(296, 170), "#69D880FF"], [(342, 220), "#DE9F41FF"], [(362, 283), "#9886E1FF"], [(342, 345), "#C8EC66FF"], [(296, 394), "#D56569FF"], [(231, 412), "#56AFE1FF"], [(165, 395), "#F2E872FF"], [(118, 347), "#E295C2FF"]]
 
 @commands.command()
 async def apple_watch(ctx, *, text):
@@ -21,10 +21,10 @@ async def apple_watch(ctx, *, text):
   img = Image.open("fonts/aw.png")
   draw = ImageDraw.Draw(img)
   for x, y in zip(aw, texts):
-    draw.text(x[0], y, font=sf_pro_r, fill=x[1])
+    draw.text(x[0], y, font=sf_pro_r, fill=x[1], anchor="mt")
   aw_fn = f"AppleWatch_{ctx.message.id}.png"
   img.save(aw_fn)
-  await ctx.reply(file = discord.File(aw_fn))
+  await ctx.reply("1", file = discord.File(aw_fn))
   try_delete(aw_fn)
 
 @commands.command()
