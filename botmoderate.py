@@ -38,16 +38,16 @@ async def ban(ctx, user: discord.User, delete : int = 0, *, reason = "No reason 
 async def getrole(ctx, roles : commands.Greedy[discord.Role], member: discord.Member = None):
   if member == None:
     member = ctx.author
-  if has_perms(ctx.channel, ctx.author, 28) or False not in [count in db["getrole_bypass_ids"] for count in roles]:
+  if has_perms(ctx.channel, ctx.author, 28) or False not in [x in db["getrole_bypass_ids"] for x in roles]:
     member_roles=member.roles
     addrole_count = removerole_count = 0
-    for count in roles:
-      if count in member_roles:
-        await member.remove_roles(count)
+    for x in roles:
+      if x in member_roles:
+        await member.remove_roles(x)
         removerole_count -= 1
       else:
         addrole_count    += 1
-        await member.add_roles(count)
+        await member.add_roles(x)
     if addrole_count and removerole_count:
       await ctx.reply(f"Added {str(addrole_count)} and removed {str(removerole_count)} roles to {str(member)}.")
     elif addrole_count:
@@ -93,8 +93,8 @@ async def makeinvite(ctx, timetocount = "0", uses : int = 0):
 async def makeroles(ctx, times : int = 1, *, name = "Sample role $number"):
   if has_perms(ctx.channel, ctx.author, 28):
     current_server = ctx.guild
-    for count in range(1,times+1):
-      await current_server.create_role(name=name.replace("$number", str(count)))
+    for x in range(1,times+1):
+      await current_server.create_role(name=name.replace("$number", str(x)))
     await ctx.reply("Successfully created role(s).")
   else:
     await ctx.reply("You don't have the required permission: Manage Roles.")
@@ -103,8 +103,8 @@ async def makeroles(ctx, times : int = 1, *, name = "Sample role $number"):
 async def makethreads(ctx, times : int = 1, archive:typing.Literal['1', '2', '3', '4'] = '2', *, name="Sample thread $number"):
   if has_perms(ctx.channel, ctx.author, 32):
     current_channel = ctx.channel
-    for count in range(1, times+1):
-      await current_channel.create_thread(name=name.replace("$number", str(count)), type=discord.ChannelType.public_thread, auto_archive_duration=db["thread_archive"].get(archive, 2))
+    for x in range(1, times+1):
+      await current_channel.create_thread(name=name.replace("$number", str(x)), type=discord.ChannelType.public_thread, auto_archive_duration=db["thread_archive"].get(archive, 2))
     await ctx.reply("Successfully created thread(s).")
   else:
     await ctx.reply("You don't have the required permission: Manage Threads.")
@@ -205,12 +205,12 @@ async def setperm(ctx, permission_input:typing.Union[int, str], *roles:discord.R
     else:
       permission_input = permission_input.lower()
       permission = re.sub(r'[^A-z]|\^', '', permission_input)
-      for count, count2 in custom_permissions.items():
-        if SequenceMatcher(None, permission, count).ratio() >= 0.75:
-          permission = count2
+      for x, y in custom_permissions.items():
+        if SequenceMatcher(None, permission, x).ratio() >= 0.75:
+          permission = y
           break
-    for count in roles:
-      await count.edit(permissions=permission)
+    for x in roles:
+      await x.edit(permissions=permission)
     await ctx.reply("Successfully set permissions.")
   else:
     await ctx.reply("You don't have the required permission: Manage Roles.")
@@ -234,13 +234,13 @@ async def slowmode(ctx, sec = None, *channels:typing.Union[discord.TextChannel,s
     else:
       allchannel = channels
     channellist = []
-    for count in allchannel:
-      if type(count) == str:
+    for x in allchannel:
+      if type(x) == str:
         continue
-      if count.permissions_for(ctx.author).manage_channels or botadmin(ctx):
-        orsec = str(count.slowmode_delay)
-        await count.edit(slowmode_delay = sec)
-        channellist.append(count.mention)
+      if x.permissions_for(ctx.author).manage_channels or botadmin(ctx):
+        orsec = str(x.slowmode_delay)
+        await x.edit(slowmode_delay = sec)
+        channellist.append(x.mention)
     if len(channellist)==0:
       await ctx.reply("You don't have the required permission: Manage channels.")
     elif len(channellist)==1:
@@ -278,7 +278,7 @@ async def purge(ctx, num : int):
   if ctx.channel.permissions_for(ctx.author).manage_messages or botadmin(ctx):
     deleted = await ctx.channel.purge(limit=num+1)
     msg = await ctx.reply("Purging completed.")
-    authors = f'\n'.join({f"{count.author.name}#{count.author.discriminator}{' **bot**' if count.author.bot else ''}" for count in deleted})
+    authors = f'\n'.join({f"{count.author.name}#{x.author.discriminator}{' **bot**' if x.author.bot else ''}" for x in deleted})
     await msg.edit(f"Purged {len(deleted)} messages from:\n{authors}", delete_after = 5)
   else:
     await ctx.reply("You don't have the required permission: Manage messages.")
@@ -290,7 +290,7 @@ async def purgepy(ctx, num : int, pyscript):
     num=int(num)
     deleted = await ctx.channel.purge(limit=num+1, check = lambda msg: eval(pyscript))
     msg = await ctx.reply("Purging completed.")
-    authors = f'\n'.join({f"{count.author.name}#{count.author.discriminator}{' **bot**' if count.author.bot else ''}" for count in deleted})
+    authors = f'\n'.join({f"{x.author.name}#{x.author.discriminator}{' **bot**' if x.author.bot else ''}" for x in deleted})
     await msg.edit(f"Purged {len(deleted)} messages from:\n{authors}", delete_after = 5)
   else:
     await ctx.reply("You don't have the required permission: Manage messages.")
@@ -302,7 +302,7 @@ async def purgepygex(ctx, num : int, regex, *, pyscript):
     purge_pattern = re.compile(regex)
     deleted = await ctx.channel.purge(limit=num+1, check = lambda msg: eval(pyscript) and purge_pattern.fullmatch(msg.content))
     msg = await ctx.reply("Purging completed.")
-    authors = f'\n'.join({f"{count.author.name}#{count.author.discriminator}{' **bot**' if count.author.bot else ''}" for count in deleted})
+    authors = f'\n'.join({f"{x.author.name}#{x.author.discriminator}{' **bot**' if x.author.bot else ''}" for x in deleted})
     await msg.edit(f"Purged {len(deleted)} messages from:\n{authors}", delete_after = 5)
   else:
     await ctx.reply("You don't have the required permission: Manage messages.")
@@ -323,7 +323,7 @@ async def purgeregex(ctx, num : int, *, regex):
     purge_pattern = re.compile(regex)
     deleted = await ctx.channel.purge(limit=num+1, check = lambda msg: purge_pattern.fullmatch(msg.content))
     msg = await ctx.reply("Purging completed.")
-    authors = f'\n'.join({f"{count.author.name}#{count.author.discriminator}{' **bot**' if count.author.bot else ''}" for count in deleted})
+    authors = f'\n'.join({f"{x.author.name}#{x.author.discriminator}{' **bot**' if x.author.bot else ''}" for x in deleted})
     await msg.edit(f"Purged {len(deleted)} messages from:\n{authors}", delete_after = 5)
   else:
     await ctx.reply("You don't have the required permission: Manage messages.")
@@ -334,7 +334,7 @@ async def purgerole(ctx, num, roleinput : discord.Role):
   if ctx.channel.permissions_for(ctx.author).manage_messages or botadmin(ctx):
     deleted = await ctx.channel.purge(limit=num+1, check = lambda msg: roleinput in msg.author.roles)
     msg = await ctx.reply("Purging completed.")
-    authors = f'\n'.join({f"{count.author.name}#{count.author.discriminator}{' **bot**' if count.author.bot else ''}" for count in deleted})
+    authors = f'\n'.join({f"{x.author.name}#{x.author.discriminator}{' **bot**' if x.author.bot else ''}" for x in deleted})
     await msg.edit(f"Purged {len(deleted)} messages from:\n{authors}", delete_after = 5)
   else:
     await ctx.reply("You don't have the required permission: Manage messages.")
@@ -345,7 +345,7 @@ async def purgeuser(ctx, num, *userinput : discord.User):
   if ctx.channel.permissions_for(ctx.author).manage_messages or botadmin(ctx):
     deleted = await ctx.channel.purge(limit=num+1, check = lambda msg: msg.author in userinput)
     msg = await ctx.reply("Purging completed.")
-    authors = f'\n'.join({f"{count.author.name}#{count.author.discriminator}{' **bot**' if count.author.bot else ''}" for count in deleted})
+    authors = f'\n'.join({f"{x.author.name}#{x.author.discriminator}{' **bot**' if x.author.bot else ''}" for x in deleted})
     await msg.edit(f"Purged {len(deleted)} messages from:\n{authors}", delete_after = 5)
   else:
     await ctx.reply("You don't have the required permission: Manage messages.")

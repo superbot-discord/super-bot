@@ -40,8 +40,8 @@ async def decode(ctx, code, *, text):
   elif SequenceMatcher(None, code, 'caesar').ratio()>0.6 or code.startswith("caesar"):
     encrypted = ""
     distance = int(code.replace("caesar", "", 1))
-    for count in text:
-      encrypted += chr(ord(count) - distance % 128)
+    for x in text:
+      encrypted += chr(ord(x) - distance % 128)
     await ctx.reply(encrypted)
   else:
     await ctx.reply("Encoding not found!")
@@ -145,8 +145,8 @@ async def encode(ctx, code, *, text):
   elif SequenceMatcher(None, code, 'caesar').ratio()>0.6 or code.startswith("caesar"):
     encrypted = ""
     distance = int(code.replace("caesar", "", 1))
-    for count in text:
-      encrypted += chr(ord(count) + distance % 128)
+    for x in text:
+      encrypted += chr(ord(x) + distance % 128)
     await ctx.reply(encrypted)
   else:
     await ctx.reply("Encoding not found!")
@@ -160,11 +160,11 @@ async def insert(ctx,emoji, *, text):
 async def length(ctx, *, text):
   full_analysis = f"Freq.\tCharacter\n"
   length_analysis = {}
-  for count in text:
-    length_analysis[count] = length_analysis.get(count, 0) + 1
-  length_analysis = {count1: count2 for count1, count2 in sorted(length_analysis.items(), key=lambda item: item[1], reverse=True)}
-  for count1, count2 in length_analysis.items():
-    full_analysis += f"{count2}\t{count1}\n"
+  for x in text:
+    length_analysis[x] = length_analysis.get(x, 0) + 1
+  length_analysis = {x: y for x, y in sorted(length_analysis.items(), key=lambda item: item[1], reverse=True)}
+  for x, y in length_analysis.items():
+    full_analysis += f"{y}\t{x}\n"
   f = open('analysis.txt', 'w')
   f.write(full_analysis)
   f.flush()
@@ -173,11 +173,11 @@ async def length(ctx, *, text):
   length_msg = await ctx.reply(desc, file=discord.File('analysis.txt'))
   try_delete('analysis.txt')
   desc += f"\n**Most common characters:**\n"
-  for (count1, count2),count3 in zip(length_analysis.items(), range(5)):
-    desc += f"`{count1}` ({count2})\n"
+  for (x, y),z in zip(length_analysis.items(), range(5)):
+    desc += f"`{x}` ({y})\n"
   desc += f"\n**Least common characters:**\n"
-  for count1, count2,count3 in zip(reversed(length_analysis.keys()), reversed(length_analysis.values()), range(5)):
-    desc += f"`{count1}` ({count2})\n"
+  for x, y,z in zip(reversed(length_analysis.keys()), reversed(length_analysis.values()), range(5)):
+    desc += f"`{x}` ({y})\n"
   await length_msg.edit(desc)
 
 @commands.command()
@@ -190,10 +190,10 @@ async def pick(ctx, lower:int, upper:int, times:int):
   if times <= (upper-lower+1):
     rand = list(range(lower, upper+1))
     ra.shuffle(rand)
-    for count,count2 in zip(range(times), rand):
-      desc += f"||`{str(count2).zfill(upper_length)}`||  "
+    for x,y in zip(range(times), rand):
+      desc += f"||`{str(y).zfill(upper_length)}`||  "
   else:
-    for count in range(times):
+    for x in range(times):
       desc += f"||`{str(ra.randint(lower,upper)).zfill(upper_length)}`||  "
   embed=discord.Embed(title=ti, description=desc)
   await ctx.reply(embed=embed)
@@ -211,7 +211,7 @@ async def random(ctx,lower:int,upper:int):
 async def raffle(ctx,lower:int,upper:int,times:int):
   ti=f"{times} random number(s) between {lower} and {upper}"
   desc=f"Your random number(s) is/are:\n"
-  for count in range(times):
+  for x in range(times):
     rand=ra.randint(lower,upper)
     desc += f"||`{str(rand).zfill(len(str(upper)))}`||  "
   embed=discord.Embed(title=ti, description=desc)
@@ -237,9 +237,9 @@ async def reverse(ctx, *, text):
 async def spellcheck(ctx, text, distance : typing.Optional[int] = 3, *, disposed = None):
   results = spell_checker.get_suggestions(text, max_distance = distance)
   desc = f"QWERTY-spellchecking results for {text}"
-  distances = {count["distance"] for count in results}
-  for count in distances:
-    desc += f"\n\nDISTANCE: {count+1}\n{', '.join([count3 for count3 in [count4['word'] for count4 in results if count4['distance'] == count]])}"
+  distances = {x["distance"] for x in results}
+  for x in distances:
+    desc += f"\n\nDISTANCE: {x+1}\n{', '.join([y for y in [z['word'] for z in results if z['distance'] == x]])}"
   f = open("output.txt", "w")
   f.write(desc)
   f.flush()
@@ -265,16 +265,16 @@ async def spoil(ctx, msg : discord.Message = None, *, text="Reply to a message, 
 async def unicode(ctx, *query):
   embed = discord.Embed(title = f"Search results for: {' '.join(query)}")
   all_results = []
-  for count in query:
+  for x in query:
     current_results = []
-    for count in search_charnames(count):
-      current_results.append(count)
+    for y in search_charnames(x):
+      current_results.append(y)
     all_results.append(current_results)
   intersected_results = []
   x=sum(all_results, [])
-  for count in x:
-    if count not in intersected_results and all([count in y for y in all_results]):
-      intersected_results.append(count)
+  for y in x:
+    if y not in intersected_results and all([y in y for y in all_results]):
+      intersected_results.append(y)
   characters_added = int(len(query[0]) == 1)
   try:
     hex_character = chr(int(query[0], 16))
@@ -282,11 +282,11 @@ async def unicode(ctx, *query):
     add_hex_character = True
   except:
     add_hex_character = False
-  for count, count2 in zip(intersected_results, range(25-characters_added)):
-    embed.add_field(name = count[1].title(), value = f"U+{count[0]} `"+eval(f'u\'\\u{count[0]}\'')+"`")
+  for x, y in zip(intersected_results, range(25-characters_added)):
+    embed.add_field(name = x[1].title(), value = f"U+{x[0]} `"+eval(f'u\'\\u{x[0]}\'')+"`")
   desc = f"Code\tChar.\tName\n\n"
-  for count in intersected_results:
-    desc += f"U+{count[0]}\t" + eval(f'u\'\\u{count[0]}\'') + f"\t{count[1].title()}\n"
+  for x in intersected_results:
+    desc += f"U+{x[0]}\t" + eval(f'u\'\\u{x[0]}\'') + f"\t{x[1].title()}\n"
   if int(len(query[0]) == 1):
     embed.add_field(name = f"INPUT - {charname(query[0]).title()}", value = f"U+{codepoint(charname(query[0]))} `"+eval(f'u\'\\u{codepoint(charname(query[0]))}\'')+"`")
     desc += f"U+{codepoint(charname(query[0]))}\t" + eval(f'u\'\\u{codepoint(charname(query[0]))}\'') + f"\t{charname(query[0]).title()}"

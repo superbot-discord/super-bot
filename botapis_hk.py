@@ -76,9 +76,9 @@ async def hk_forecast(ctx, *, disposed=None):
   numlist_hh = [x['forecastMaxrh']['value'] for x in r1['weatherForecast']]
   ax2.plot(labels, numlist_lh, label="Minimum", color="#003CFF", marker=".")
   ax2.plot(labels, numlist_hh, label="Maximum", color="#FF3C00", marker=".")
-  for count in ['top', 'bottom', 'left', 'right']:
-    ax.spines[count].set_color("w")
-    ax2.spines[count].set_color("w")
+  for x in ['top', 'bottom', 'left', 'right']:
+    ax.spines[x].set_color("w")
+    ax2.spines[x].set_color("w")
   ax.tick_params(axis='both', colors='w')
   ax.legend(title="Temp. (°C)")
   ax2.tick_params(axis='both', colors='w')
@@ -280,8 +280,8 @@ async def hk_sun(ctx, *, disposed=None):
     ax.xaxis.set_minor_locator(mpl.dates.DayLocator())
     ax.xaxis.set_major_formatter(mpl.dates.DateFormatter("%m-%d"))
     ax.tick_params(axis='both', colors='w')
-    for count in ['top', 'bottom', 'left', 'right']:
-      ax.spines[count].set_color("w")
+    for x in ['top', 'bottom', 'left', 'right']:
+      ax.spines[x].set_color("w")
   ax1.yaxis.set_major_locator(mpl.dates.MinuteLocator(interval=2))
   ax1.yaxis.set_major_formatter(mpl.dates.DateFormatter("%H:%M"))
   ax2.yaxis.set_major_locator(mpl.dates.MinuteLocator(interval=2))
@@ -332,9 +332,9 @@ async def hk_weather(ctx, *, disposed=None):
   uvi = [x for x in reader]
   for u in uvi:
     desc += f"\nUV Index at {re.sub(hko_dt_pattern, hko_dt_pattern_, u['Date time'])}: {u['past 15-minute mean UV Index']} (Update frequency: 15 minutes)"
-  for count in ['mintempFrom00To09', 'rainfallFrom00To12']:
-    if r1[count]:
-      desc += f"\n{r1[count]} {r2[count]}"
+  for x in ['mintempFrom00To09', 'rainfallFrom00To12']:
+    if r1[x]:
+      desc += f"\n{r1[x]} {r2[x]}"
   if r1['warningMessage']:
     for w, w_ in zip(r1['warningMessage'], r2['warningMessage']):
       desc += f"\n{w} {w_}"
@@ -343,10 +343,10 @@ async def hk_weather(ctx, *, disposed=None):
   temp_dict = {html.unescape(f"{x1['place']} {x2['place']}"): y for x1, x2, y in zip(r1['temperature']['data'], r2['temperature']['data'], range(0, 27))}
   places_list = list(set(list(rain_dict) + list(temp_dict)))
   places_list.sort()
-  for count in places_list:
-    fv =  f"Rainfall: {r1['rainfall']['data']   [rain_dict[count]]['max']} mm\n"   if count in list(rain_dict) else ""
-    fv += f"Temperature: {r1['temperature']['data'][temp_dict[count]]['value']}°C" if count in list(temp_dict) else ""
-    embed.add_field(name=count, value=fv, inline=True)
+  for x in places_list:
+    fv =  f"Rainfall: {r1['rainfall']['data']   [rain_dict[x]]['max']} mm\n"   if x in list(rain_dict) else ""
+    fv += f"Temperature: {r1['temperature']['data'][temp_dict[x]]['value']}°C" if x in list(temp_dict) else ""
+    embed.add_field(name=x, value=fv, inline=True)
   f0v = "Humidity: {r1['humidity']['data'][0]['value']}% at {r1['humidity']['data'][0]['place']}"
   if r1.get('uvindex:', None):
     f0v += f"UV Index: {r1['uvindex']['data'][0]['value']} ({r1['uvindex']['data'][0]['desc']}) at {r1['uvindex']['data'][0]['place']}"

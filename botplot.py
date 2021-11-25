@@ -88,8 +88,8 @@ async def barh(ctx, numbers, label, *, title="No_title_required"):
     ax.set_yticks(y_pos)
     ax.set_yticklabels(labels)
     ax.invert_yaxis()
-    for count in ['top', 'bottom', 'left', 'right']:
-      ax.spines[count].set_color("w")
+    for x in ['top', 'bottom', 'left', 'right']:
+      ax.spines[x].set_color("w")
     ax.tick_params(axis='both', colors='w')
     if title != "No_title_required":
       plt.title(title, fontdict=db["font_dicts"]["title"])
@@ -118,8 +118,8 @@ async def barv(ctx, numbers, label, *, title="No_title_required"):
     ax.bar(np.arange(len(labels)), numlist, align='center')
     ax.set_xticks(x_pos)
     ax.set_xticklabels(labels)
-    for count in ['top', 'bottom', 'left', 'right']:
-      ax.spines[count].set_color("w")
+    for x in ['top', 'bottom', 'left', 'right']:
+      ax.spines[x].set_color("w")
     ax.tick_params(axis='both', colors='w')
     if title != "No_title_required":
       plt.title(title, fontdict=db["font_dicts"]["title"])
@@ -140,8 +140,8 @@ async def bline(ctx, numbers, *, title="No_title_required"):
     plt.rcdefaults()
     fig, ax = plt.subplots()
     ax.plot(numlist)
-    for count in ['top', 'bottom', 'left', 'right']:
-      ax.spines[count].set_color("w")
+    for x in ['top', 'bottom', 'left', 'right']:
+      ax.spines[x].set_color("w")
     ax.tick_params(axis='both', colors='w')
     if title != "No_title_required":
       plt.title(title, fontdict=db["font_dicts"]["title"])
@@ -164,8 +164,8 @@ async def bline2(ctx, numbers, xnumbers, *, title="No_title_required"):
     plt.rcdefaults()
     fig, ax = plt.subplots()
     ax.plot(xnumlist, numlist)
-    for count in ['top', 'bottom', 'left', 'right']:
-      ax.spines[count].set_color("w")
+    for x in ['top', 'bottom', 'left', 'right']:
+      ax.spines[x].set_color("w")
     ax.tick_params(axis='both', colors='w')
     if title != "No_title_required":
       plt.title(title, fontdict=db["font_dicts"]["title"])
@@ -182,19 +182,19 @@ async def bline2(ctx, numbers, xnumbers, *, title="No_title_required"):
 async def draw(ctx, *, text):
   canvas_ = canvas.Canvas()
   splitted = text.split(f"\n")
-  for count in splitted:
-    if count.startswith("R|"):
-      count = count.replace("R|", "", 1)
-      pos_x = re.sub(r'(-?[\d]+?)\|(-?[\d]+?)\|(-?[\s\S]+)', r'\1', count)
-      pos_y = re.sub(r'(-?[\d]+?)\|(-?[\d]+?)\|(-?[\s\S]+)', r'\2', count)
-      rtext = re.sub(r'(-?[\d]+?)\|(-?[\d]+?)\|(-?[\s\S]+)', r'\3', count)
+  for x in splitted:
+    if x.startswith("R|"):
+      x = x.replace("R|", "", 1)
+      pos_x = re.sub(r'(-?[\d]+?)\|(-?[\d]+?)\|(-?[\s\S]+)', r'\1', x)
+      pos_y = re.sub(r'(-?[\d]+?)\|(-?[\d]+?)\|(-?[\s\S]+)', r'\2', x)
+      rtext = re.sub(r'(-?[\d]+?)\|(-?[\d]+?)\|(-?[\s\S]+)', r'\3', x)
       canvas_.add_item(item.Item(f"+{'-'*len(rtext)}+\n|{rtext}|\n+{'-'*len(rtext)}+", position=[int(pos_x), int(pos_y)]))
-    elif count.startswith("L|"):
-      count = count.replace("L|", "", 1)
-      x1 = re.sub(r'(-?[\d]+?)\|(-?[\d]+?)\|(-?[\d]+?)\|(-?[\d]+?)', r'\1', count)
-      y1 = re.sub(r'(-?[\d]+?)\|(-?[\d]+?)\|(-?[\d]+?)\|(-?[\d]+?)', r'\2', count)
-      x2 = re.sub(r'(-?[\d]+?)\|(-?[\d]+?)\|(-?[\d]+?)\|(-?[\d]+?)', r'\3', count)
-      y2 = re.sub(r'(-?[\d]+?)\|(-?[\d]+?)\|(-?[\d]+?)\|(-?[\d]+?)', r'\4', count)
+    elif x.startswith("L|"):
+      x = x.replace("L|", "", 1)
+      x1 = re.sub(r'(-?[\d]+?)\|(-?[\d]+?)\|(-?[\d]+?)\|(-?[\d]+?)', r'\1', x)
+      y1 = re.sub(r'(-?[\d]+?)\|(-?[\d]+?)\|(-?[\d]+?)\|(-?[\d]+?)', r'\2', x)
+      x2 = re.sub(r'(-?[\d]+?)\|(-?[\d]+?)\|(-?[\d]+?)\|(-?[\d]+?)', r'\3', x)
+      y2 = re.sub(r'(-?[\d]+?)\|(-?[\d]+?)\|(-?[\d]+?)\|(-?[\d]+?)', r'\4', x)
       canvas_.add_item(item.Line(start=[int(x1), int(y1)], end=[int(x2), int(y2)]))
   output = canvas_.render()
   f = open("drawing.txt", "w")
@@ -266,8 +266,8 @@ async def graph(ctx, func, range_low:float=-10.0, range_high:float=10.0, equaliz
     y_axis = eval(func)
     fig, ax = plt.subplots()
     plt.plot(x_, y_axis)
-    for count in ['top', 'bottom', 'left', 'right']:
-      ax.spines[count].set_color("w")
+    for x in ['top', 'bottom', 'left', 'right']:
+      ax.spines[x].set_color("w")
     ax.tick_params(axis='both', colors='w')
     if title != "No_title_required":
       plt.title(title, fontdict=db["font_dicts"]["title"])
@@ -287,8 +287,8 @@ async def hist(ctx, numbers, *, title="No_title_required"):
     numlist = list(map(float, numlist))
     fig, ax = plt.subplots()
     plt.hist(numlist)
-    for count in ['top', 'bottom', 'left', 'right']:
-      ax.spines[count].set_color("w")
+    for x in ['top', 'bottom', 'left', 'right']:
+      ax.spines[x].set_color("w")
     ax.tick_params(axis='both', colors='w')
     if title != "No_title_required":
       plt.title(title, fontdict=db["font_dicts"]["title"])
@@ -308,12 +308,12 @@ async def multibline(ctx, numbers, labels, *, title="No_title_required"):
     plt.rcdefaults()
     fig, ax = plt.subplots()
     labels = labels.split(",")
-    for count1 in range(len(lines)):
-      numlist = lines[count1].split(",")
+    for x in range(len(lines)):
+      numlist = lines[x].split(",")
       numlist = list(map(float, numlist))
-      ax.plot(numlist, label=labels[count1])
-    for count in ['top', 'bottom', 'left', 'right']:
-      ax.spines[count].set_color("w")
+      ax.plot(numlist, label=labels[x])
+    for x in ['top', 'bottom', 'left', 'right']:
+      ax.spines[x].set_color("w")
     ax.tick_params(axis='both', colors='w')
     ax.legend()
     if title != "No_title_required":
@@ -332,11 +332,11 @@ async def multigraph(ctx, func, range_low:float=-10.0, range_high:float=10.0, *,
   try:
     x_ = np.linspace(range_low, range_high, 200)
     fig, ax = plt.subplots()
-    for count in func.split(";"):
-      y_axis = eval(count)
+    for x in func.split(";"):
+      y_axis = eval(x)
       plt.plot(x_, y_axis)
-    for count in ['top', 'bottom', 'left', 'right']:
-      ax.spines[count].set_color("w")
+    for x in ['top', 'bottom', 'left', 'right']:
+      ax.spines[x].set_color("w")
     ax.tick_params(axis='both', colors='w')
     if title != "No_title_required":
       plt.title(title, fontdict=db["font_dicts"]["title"])
@@ -356,8 +356,8 @@ async def pie(ctx, numbers, label="", *, title="No_title_required"):
     numlist = list(map(float, numlist))
     mycolors = []
     y = np.array(numlist)
-    for count in range(len(numlist)):
-      mycolors.append(cmaphsv(count/len(numlist)))
+    for x in range(len(numlist)):
+      mycolors.append(cmaphsv(x/len(numlist)))
     if label:
       labels = label.split(",")
       if len(labels) > len(numlist):
@@ -505,8 +505,8 @@ async def table(ctx, *, text):
     pass
   rawbodies = everythingelse#.split(f"\n")
   bodies = []
-  for count in rawbodies:
-    bodies.append(count.split(","))
+  for x in rawbodies:
+    bodies.append(x.split(","))
   try:
     output = table2ascii(header=headers, footer=footers, body=bodies, style=style, first_col_heading=first_col_heading,  last_col_heading=last_col_heading)
   except:

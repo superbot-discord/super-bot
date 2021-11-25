@@ -40,9 +40,9 @@ async def pretend(ctx, member : discord.Member, *, message):
     pass
   whl = await ctx.channel.webhooks()
   ourweb = False
-  for count in whl:
-    if count.name == "Pretender":
-      wh = count
+  for x in whl:
+    if x.name == "Pretender":
+      wh = x
       ourweb = True
       break
   if not ourweb:
@@ -61,11 +61,11 @@ async def pretendembed(ctx, member : discord.Member, *, text):
     pass
   whl = await ctx.channel.webhooks()
   ourweb = False
-  for count in whl:
-    if count.name == "Pretender":
+  for x in whl:
+    if x.name == "Pretender":
       ourweb = True
-      token = count.token
-      identify = count.id
+      token = x.token
+      identify = x.id
   if len(whl) == 0 or ourweb == False:
     wh = await ctx.channel.create_webhook(name = "Pretender")
     token = wh.token
@@ -118,16 +118,16 @@ async def simpleembed(ctx, *, text):
     embed.set_image    (url =textlist[3])
   except:
     pass
-  for count in range((len(textlist)-3)//3):
-    inline = textlist[3*count+4].lower()
+  for x in range((len(textlist)-3)//3):
+    inline = textlist[3*x+4].lower()
     inline = inline.startswith("y") or inline.startswith("1") or inline.startswith("e") or inline.startswith("on")
-    embed.add_field(name=textlist[3*count+5], value=textlist[3*count+6].replace("{{{newline}}}", f"\n"), inline=inline)
+    embed.add_field(name=textlist[3*x+5], value=textlist[3*x+6].replace("{{{newline}}}", f"\n"), inline=inline)
   await ctx.reply(embed=embed)
 
 def botett(msg):
-  #for count in msg.embeds:
-  count = msg.embeds[0]
-  edict = count.to_dict()
+  #for x in msg.embeds:
+  x = msg.embeds[0]
+  edict = x.to_dict()
   ekeys = list(edict)
   desc = "=embed "
   if 'title' in ekeys:
@@ -173,8 +173,8 @@ def botett(msg):
       desc = desc + efooter['icon_url']
   desc = desc + f"\n"
   if 'fields' in ekeys:
-    for count in edict['fields']:
-      desc = desc + str(count['inline']) + f"\n" + count['name'] + f"\n" + count['value'].replace(f"\n", "{{{newline}}}") + f"\n"
+    for x in edict['fields']:
+      desc = f"{desc}{x['inline']}\n{x['name']}\n{x['value'].replace(f'\n', '{{{newline}}}')}\n"
   return desc
 
 def botembed(text):
@@ -224,10 +224,10 @@ def botembed(text):
     embed.set_footer   (text=textlist[5], icon_url=textlist[10])
   except:
     pass
-  for count in range((len(textlist)-11)//3):
+  for x in range((len(textlist)-11)//3):
     inline = textlist[3*count+11].lower()
     inline = inline.startswith("y") or inline.startswith("1") or inline.startswith("e") or inline.startswith("on")
-    embed.add_field(name=textlist[3*count+12], value=textlist[3*count+13].replace("{{{newline}}}", f"\n"), inline=inline)
+    embed.add_field(name=textlist[3*x+12], value=textlist[3*x+13].replace("{{{newline}}}", f"\n"), inline=inline)
   return embed
 
 def setup(bot):

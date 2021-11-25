@@ -5,8 +5,8 @@ from shared import *
 @commands.command(aliases=['buttons'])
 async def button(ctx, *, disposed = None):
   sample_buttons_view = ui.View(timeout=None)
-  for count in sample_buttons(ctx):
-    sample_buttons_view.add_item(count)
+  for x in sample_buttons(ctx):
+    sample_buttons_view.add_item(x)
   await ctx.reply("All buttons will not timeout.", view = sample_buttons_view)
 
 @commands.command()
@@ -69,8 +69,8 @@ async def play(ctx, volume: typing.Optional[int]=100, *, song="rickroll"):
 @commands.command(aliases=['selectmenu', 'menu', 'option', 'options'])
 async def select(ctx, *, disposed = None):
   sample_select_view = ui.View(timeout=None)
-  for count in sample_menus():
-    sample_select_view.add_item(count)
+  for x in sample_menus():
+    sample_select_view.add_item(x)
   await ctx.reply("All menus will not timeout.", view = sample_select_view)
 
 def setup(bot):
