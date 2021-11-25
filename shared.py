@@ -161,9 +161,9 @@ def format_fps(stream):
     return 'No vid.'
 
 def try_delete(*filenames):
-  for count in filenames:
+  for x in filenames:
     try:
-      os.remove(count)
+      os.remove(x)
     except:
       pass
 
@@ -417,16 +417,16 @@ badges_real = {
 }
 
 server_permission_options = [discord.SelectOption(label="None", description="Select this if you do not want permissions from this category.")]
-for count, count2 in server_real.items():
-  server_permission_options.append(discord.SelectOption(label=count2, value=count))
+for x, y in server_real.items():
+  server_permission_options.append(discord.SelectOption(label=y, value=x))
 
 text_permission_options = [discord.SelectOption(label="None", description="Select this if you do not want permissions from this category.")]
-for count, count2 in text_channel_real.items():
-  text_permission_options.append(discord.SelectOption(label=count2, value=count))
+for x, y in text_channel_real.items():
+  text_permission_options.append(discord.SelectOption(label=y, value=x))
 
 voice_permission_options = [discord.SelectOption(label="None", description="Select this if you do not want permissions from this category.")]
-for count, count2 in voice_channel_real.items():
-  voice_permission_options.append(discord.SelectOption(label=count2, value=count))
+for x, y in voice_channel_real.items():
+  voice_permission_options.append(discord.SelectOption(label=y, value=x))
 
 permission_menus = [
   ui.Select(placeholder="Server",       min_values=1, max_values=14,custom_id="permission_server_selection",row=0, options=server_permission_options),
@@ -443,9 +443,9 @@ youtube_headers={'cookie':'SID=CghejA2ZNiG3ffH-ea-xuLc9tIaHBbwGapD38onoVwAzAbkHn
 
 def badges_itop(integer):
   cache3 = ""
-  for count, count2 in badges_real.items():
-    if integer & 1 << count:
-      cache3 += count2 + ", "
+  for x, y in badges_real.items():
+    if integer & 1 << x:
+      cache3 += y + ", "
   if len(cache3) > 2:
     return cache3[:-2]
   else:
@@ -453,9 +453,9 @@ def badges_itop(integer):
 
 def server_itop(integer):
   cache3 = ""
-  for count, count2 in server_real.items():
-    if integer & 1 << count:
-      cache3 += count2 + ", "
+  for x, y in server_real.items():
+    if integer & 1 << x:
+      cache3 += y + ", "
   if len(cache3) > 2:
     return cache3[:-2]
   else:
@@ -463,9 +463,9 @@ def server_itop(integer):
 
 def tc_itop(integer):
   cache3 = ""
-  for count, count2 in text_channel_real.items():
-    if integer & 1 << count:
-      cache3 += count2 + ", "
+  for x, y in text_channel_real.items():
+    if integer & 1 << x:
+      cache3 += y + ", "
   if len(cache3) > 2:
     return cache3[:-2]
   else:
@@ -473,9 +473,9 @@ def tc_itop(integer):
 
 def vc_itop(integer):
   cache3 = ""
-  for count, count2 in voice_channel_real.items():
-    if integer & 1 << count:
-      cache3 += count2 + ", "
+  for x, y in voice_channel_real.items():
+    if integer & 1 << x:
+      cache3 += y + ", "
   if len(cache3) > 2:
     return cache3[:-2]
   else:

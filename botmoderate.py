@@ -278,7 +278,7 @@ async def purge(ctx, num : int):
   if ctx.channel.permissions_for(ctx.author).manage_messages or botadmin(ctx):
     deleted = await ctx.channel.purge(limit=num+1)
     msg = await ctx.reply("Purging completed.")
-    authors = f'\n'.join({f"{count.author.name}#{x.author.discriminator}{' **bot**' if x.author.bot else ''}" for x in deleted})
+    authors = f'\n'.join({f"{x.author.name}#{x.author.discriminator}{' **bot**' if x.author.bot else ''}" for x in deleted})
     await msg.edit(f"Purged {len(deleted)} messages from:\n{authors}", delete_after = 5)
   else:
     await ctx.reply("You don't have the required permission: Manage messages.")

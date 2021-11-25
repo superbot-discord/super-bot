@@ -322,11 +322,11 @@ async def poll(ctx, *, text):
       poll_options_cache[optn] = rect
       reactions.append(ems.encode(rect))
     else:
-      ti = ti + count + " "
+      ti += f"{x} "
   embed = discord.Embed(title = ti, description = ems.encode(desc))
   poll = await ctx.reply(embed=embed)
   for x in reactions:
-    await poll.add_reaction(count)
+    await poll.add_reaction(x)
   polls.append(poll.id)
   poll_options[poll.id] = poll_options_cache
 

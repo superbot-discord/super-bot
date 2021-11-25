@@ -11,13 +11,13 @@ unsortedsrclangdict = translatorvar.glanguage().get("sl")
 langkeys = list(unsortedlangdict.keys())
 langkeys.sort()
 langdict = {}
-for count in langkeys:
-  langdict[count] = unsortedlangdict[count]
+for x in langkeys:
+  langdict[x] = unsortedlangdict[x]
 srclangkeys = list(unsortedsrclangdict.keys())
 srclangkeys.sort()
 srclangdict = {}
-for count in srclangkeys:
-  srclangdict[count] = unsortedsrclangdict[count]
+for x in srclangkeys:
+  srclangdict[x] = unsortedsrclangdict[x]
 wikipedia.set_lang("en")
 
 yt_pattern = re.compile(r'search\s[0-5]\s.*')
@@ -30,10 +30,10 @@ async def definition(ctx, *, word):
     definitions = dictionary.meaning(word)
   except:
     await ctx.reply("Invalid word. Please try again.")
-  for count, count3 in definitions.items():
-    desc = desc + f"**{count}**\n"
-    for count2 in count3:
-      desc = desc + count2 + f"\n"
+  for x, y in definitions.items():
+    desc = desc + f"**{x}**\n"
+    for z in y:
+      desc = desc + z + f"\n"
   embed = discord.Embed(title=f"Definition of {word}", description=desc[:1023])
   try:
     synonyms = dictionary.synonym(word)
@@ -101,9 +101,9 @@ async def minecraft(ctx, *, item="tnt"):
   soup=BeautifulSoup(r.content, features="html.parser")
   table = soup.findAll('table')[0].findAll('tbody')[0]
   results = soup.findAll("p")
-  for count in results:
-    if len(count.findAll('b')) != 0 and count.parent.name != "td":
-      desc = str(count)
+  for x in results:
+    if len(x.findAll('b')) != 0 and x.parent.name != "td":
+      desc = str(x)
       break
   try:
     desc = re.sub(r'<a (class=".+?" )?href="\/([\w/]+?)" title="([\s\S]+?)">([\s\S]+?)<\/a>', r'[\4](https://minecraft.fandom.com/\2)', desc)
@@ -113,14 +113,14 @@ async def minecraft(ctx, *, item="tnt"):
     desc = re.sub(r'<([a-z]+?)( ([a-z]+?)=".*?")*?>(.*?)<\/\1>', '', desc)
     embed = discord.Embed(title = "Minecraft: "+item, description=desc, url=f"https://minecraft.fandom.com/wiki/{item}")
     try:
-      for count in table.findAll('tr'):
-        if count.findAll('td')[0].text.replace("<p>", "").replace("</p>", "").replace(" ", "").replace("\n", "") != "":
-          embed.add_field(name=count.findAll('th')[0].text.replace("<p>", "").replace("</p>", ""), value=count.findAll('td')[0].text.replace("<p>", "").replace("</p>", ""))
+      for x in table.findAll('tr'):
+        if x.findAll('td')[0].text.replace("<p>", "").replace("</p>", "").replace(" ", "").replace("\n", "") != "":
+          embed.add_field(name=x.findAll('th')[0].text.replace("<p>", "").replace("</p>", ""), value=x.findAll('td')[0].text.replace("<p>", "").replace("</p>", ""))
     except:
       pass
-    """for count in soup.findAll("h3"):
-      if count.text.replace("[edit]", "") not in ["ID", "Metadata", "Share", "Views", "More", "Search", "Minecraft Wiki", "Games", "Useful pages", "Minecraft links", "Gamepedia", "Tools", "In other languages", "Namespaces", "Variants"]:
-        desc = str(count.next_element.next_element.next_element.next_element.next_element.next_element.next_element.next_element.next_element.next_element.next_element).replace("<p>", "").replace("</p>", "")
+    """for x in soup.findAll("h3"):
+      if x.text.replace("[edit]", "") not in ["ID", "Metadata", "Share", "Views", "More", "Search", "Minecraft Wiki", "Games", "Useful pages", "Minecraft links", "Gamepedia", "Tools", "In other languages", "Namespaces", "Variants"]:
+        desc = str(x.next_element.next_element.next_element.next_element.next_element.next_element.next_element.next_element.next_element.next_element.next_element).replace("<p>", "").replace("</p>", "")
         desc = re.sub(r'<a (class=".+?" )?href="\/([\w/]+?)"( title="([\s\S]+?))?">([\s\S]+?)<\/a>', r'[\5](https://minecraft.fandom.com/\4)', desc)
         desc = re.sub(r'<b>([\s\S]*?)<\/b>', r'**\1**', desc)
         desc = re.sub(r'<i>([\s\S]*?)<\/i>', r'*\1*', desc)
@@ -128,7 +128,7 @@ async def minecraft(ctx, *, item="tnt"):
         desc = re.sub(r'\s', '', desc)
         try:
           if len(desc.replace(" ", "").replace(f"\n", "").replace("[edit]", "")) != 0:
-            embed.add_field(name=count.text.replace("[edit]", ""), value=desc, inline=False)
+            embed.add_field(name=x.text.replace("[edit]", ""), value=desc, inline=False)
         except:
           pass
     """
@@ -191,25 +191,24 @@ async def unscramble(ctx, text, length="0"):
   soup=BeautifulSoup(r.content, features="html.parser")
   raw_everything = soup.findAll('a', target="_blank")[:-7]
   everything = []
-  for count in raw_everything:
-    formatted = re.sub(r'<a class="wordWrapper" data-word="([\S\s]+?)" href="/dictionary/([\S\s]+?)" target="_blank" title="Lookup ([\S\s]+?) in Dictionary">', '', str(count))
+  for x in raw_everything:
+    formatted = re.sub(r'<a class="wordWrapper" data-word="([\S\s]+?)" href="/dictionary/([\S\s]+?)" target="_blank" title="Lookup ([\S\s]+?) in Dictionary">', '', str(x))
     formatted = re.sub(r'</a>', '', formatted)
     formatted = re.sub(r"<span>(\w+?)<\/span>", r"\1", formatted)
-    formatted = formatted.replace('<sub><span class="score-wrapper"></span></sub>', '')
-    formatted = formatted.replace(" ", "").replace(f"\n","")
+    formatted = formatted.replace('<sub><span class="score-wrapper"></span></sub>', '').replace(" ", "").replace(f"\n","")
     formatted = re.sub(r'<span class="marked-letter">(\w)<\/span>', lambda pat: pat.group(1).upper(), formatted)
     everything.append(formatted)
   output = discord.Embed(title=f"Unscrambled results for {text}")
   _sorted = {}
-  for count in everything:
-    _sorted.setdefault(len(count), []).append(count)
+  for x in everything:
+    _sorted.setdefault(len(x), []).append(x)
   everything = list(_sorted.values())
-  for count in everything:
+  for x in everything:
     current = ""
-    length = str(len(count[0].rstrip(" ").replace(f"\n","")))
-    for count2 in count:
-      if len(current+count2.rstrip(" ").replace(f"\n",""))<1021:
-        current += "`" + count2.rstrip(" ").replace(f"\n","") + "` "
+    length = str(len(x[0].rstrip(" ").replace(f"\n","")))
+    for y in x:
+      if len(current+y.rstrip(" ").replace(f"\n",""))<1021:
+        current += "`" + y.rstrip(" ").replace(f"\n","") + "` "
       else:
         current += "…"
         break
@@ -219,11 +218,11 @@ async def unscramble(ctx, text, length="0"):
       output.add_field(name = f"{length}-letters", value=current, inline=False)
   
   text = f"WORD: {text}\n\n"
-  for count in everything:
-    if ilength == 0 or ilength == len(count[0].rstrip(" ").replace(f"\n","")):
-      text += f"\n" + str(len(count[0].rstrip(" ").replace(f"\n",""))) + "-LETTER WORDS\n"
-      for count2 in count:
-        formatted = count2.rstrip(" ").replace(f"\n","")
+  for x in everything:
+    if ilength == 0 or ilength == len(x[0].rstrip(" ").replace(f"\n","")):
+      text += f"\n" + str(len(x[0].rstrip(" ").replace(f"\n",""))) + "-LETTER WORDS\n"
+      for y in x:
+        formatted = y.rstrip(" ").replace(f"\n","")
         text += f"{formatted}\n"
       
   f = open("output.txt", "w")
@@ -274,12 +273,12 @@ async def wiki(ctx, *, query):
     wpage = wikipedia.page(title=query, auto_suggest=True, redirect=True, preload=False)
     embed = discord.Embed(title=wpage.title, url="https://en.wikipedia.org/wiki/"+wpage.title.replace(" ","_"), description=desc)
     counter = 0
-    for count in wpage.sections:
-      if counter >=4 or totallen + len(wpage.section(count)) >= 6000:
+    for x in wpage.sections:
+      if counter >=4 or totallen + len(wpage.section(x)) >= 6000:
         break
-      if len(wpage.section(count))!=0:
-        embed.add_field(name=count, value=wpage.section(count)[:499], inline=False)
-        totallen = totallen + len(wpage.section(count))
+      if len(wpage.section(x))!=0:
+        embed.add_field(name=x, value=wpage.section(x)[:499], inline=False)
+        totallen = totallen + len(wpage.section(x))
         counter = counter + 1
     if len(wpage.images)>=1:
       embed.set_image(url = wpage.images[1])
@@ -302,7 +301,7 @@ async def youtube(ctx, *, link):
     else:
       searches = 1
     try:
-      for count in range(searches+1):
+      for x in range(searches+1):
         searching.get_next_results()
     except:
       pass
@@ -311,8 +310,8 @@ async def youtube(ctx, *, link):
     except:
       videos = searching.results[0:20]
     desc = ""
-    for count in videos:
-      desc+=f"**[{count.title}]({count.watch_url})**\n{format_length(count.length)} | {count.views:,} Views | By [{pytube.Channel(count.channel_url).channel_name}]({count.channel_url})\n"
+    for x in videos:
+      desc+=f"**[{x.title}]({x.watch_url})**\n{format_length(x.length)} | {x.views:,} Views | By [{pytube.Channel(x.channel_url).channel_name}]({x.channel_url})\n"
     embed = discord.Embed(title="Search results", description=desc)
     embed.set_footer(text="Use =youtube [Link] to download videos.")
     await ctx.reply(embed=embed)
@@ -320,18 +319,18 @@ async def youtube(ctx, *, link):
     chnl = pytube.Channel(link)
     videos = chnl.videos
     desc = f"**Videos ({len(chnl.videos):,})**:\n"
-    for count,count2 in zip(videos, range(12)):
-      desc+=f"[{count.title}]({count.watch_url})\n{count.views:,} Views | {round(count.rating*20, 3)}% Liked | {format_length(count.length)}\n\n"
+    for x,y in zip(videos, range(12)):
+      desc+=f"[{x.title}]({x.watch_url})\n{x.views:,} Views | {round(x.rating*20, 3)}% Liked | {format_length(x.length)}\n\n"
     embed = discord.Embed(title=chnl.channel_name, description=desc, url=chnl.videos_url)
     embed.set_footer(text="Use =youtube [Link] to download videos. | Analysing additional info…")
     yt_msg = await ctx.reply(embed=embed)
     totallen = 0
     totalrating = 0
     totalview = 0
-    for count in videos:
-      totallen += count.length
-      totalrating += count.rating
-      totalview += count.views
+    for x in videos:
+      totallen += x.length
+      totalrating += x.rating
+      totalview += x.views
     embed.add_field(name="Total views", value=f"{totalview:,}", inline=True)
     embed.add_field(name="Total length", value=format_length(totallen), inline=True)
     embed.add_field(name="Total rating", value=f"{str(round(totalrating*20, 3))}%", inline=True)
@@ -344,8 +343,8 @@ async def youtube(ctx, *, link):
     try:
       playlist = pytube.Playlist(link)
       text = ""
-      for count in playlist.videos:
-        text=text+str(count)+"  "+count.streams.filter(mime_type="video/mp4").filter(progressive="True").filter(type="video").order_by("resolution").first().url+f"\n"
+      for x in playlist.videos:
+        text=f"{text}{x}  {x.streams.filter(mime_type='video/mp4').filter(progressive='True').filter(type='video').order_by('resolution').first().url}\n"
       f = open("output.txt", "w")
       f.write(text)
       f.flush()
@@ -381,21 +380,21 @@ async def youtube(ctx, *, link):
       video6 = filtered8[0]
 
       videox1 = None
-      for count in filtered8.__reversed__():
-        if count.filesize < 8000000:
-          videox1 = count
+      for x in filtered8.__reversed__():
+        if x.filesize < 8000000:
+          videox1 = x
           break
       
       videox2 = None
-      for count in filtered7.__reversed__():
-        if count.filesize < 8000000:
-          videox2 = count
+      for x in filtered7.__reversed__():
+        if x.filesize < 8000000:
+          videox2 = x
           break
       
       videox3 = None
-      for count in filtered6.__reversed__():
-        if count.filesize < 8000000:
-          videox3 = count
+      for x in filtered6.__reversed__():
+        if x.filesize < 8000000:
+          videox3 = x
           break
       videox1_text = format_video(videox1) if videox1 else "There is no progressive video less than 8MB."
       videox2_text = format_video(videox2) if videox2 else "There is no audio less than 8MB."

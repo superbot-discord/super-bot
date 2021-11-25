@@ -27,11 +27,11 @@ async def covid(ctx, *, country="world"):
   exec("country_pattern = re.compile(r'"+country+"', re.IGNORECASE)", globals())
   covidtable = soup.findAll('table')[0].findAll('tbody')[0]
   found = 0
-  for count in covidtable.findAll('tr'):
+  for x in covidtable.findAll('tr'):
     try:
-      match = country_pattern.fullmatch(count.findAll('td')[1].string)
+      match = country_pattern.fullmatch(x.findAll('td')[1].string)
       if match:
-        needrow = count
+        needrow = x
         found = 1
         break
     except:
@@ -40,7 +40,7 @@ async def covid(ctx, *, country="world"):
     if country == "world":
       embed = discord.Embed(title="Coronavirus statistics worldwide")
     else:
-      embed = discord.Embed(title="Coronavirus statistics in "+country)
+      embed = discord.Embed(title=f"Coronavirus statistics in {country}")
     tcases = needrow.findAll('td')[2].string
     trecovered = needrow.findAll('td')[6].string
     ttest = needrow.findAll('td')[12].string

@@ -174,7 +174,7 @@ def botett(msg):
   desc = desc + f"\n"
   if 'fields' in ekeys:
     for x in edict['fields']:
-      desc = f"{desc}{x['inline']}\n{x['name']}\n{x['value'].replace(f'\n', '{{{newline}}}')}\n"
+      desc = f"{desc}{x['inline']}\n{x['name']}\n"+x['value'].replace(f'\n', '{{{newline}}}')+f"\n"
   return desc
 
 def botembed(text):
@@ -225,7 +225,7 @@ def botembed(text):
   except:
     pass
   for x in range((len(textlist)-11)//3):
-    inline = textlist[3*count+11].lower()
+    inline = textlist[3*x+11].lower()
     inline = inline.startswith("y") or inline.startswith("1") or inline.startswith("e") or inline.startswith("on")
     embed.add_field(name=textlist[3*x+12], value=textlist[3*x+13].replace("{{{newline}}}", f"\n"), inline=inline)
   return embed
