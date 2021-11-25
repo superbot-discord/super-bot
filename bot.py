@@ -7,11 +7,11 @@ banned_text = []
 bot_ = commands.Bot(command_prefix=commands.when_mentioned_or("="), intents=discord.Intents.all(), allowed_mentions=discord.AllowedMentions(everyone=False, users=True, roles=False, replied_user=False),
   case_insensitive=True, strip_after_prefix=True)
 bot_.remove_command('help')
-bot_.load_extension("botapis__int")
 bot_.load_extension("botapis_animal")
 bot_.load_extension("botapis_hk")
 bot_.load_extension("botbasic")
 bot_.load_extension("botcalc")
+bot_.load_extension("botconvert")
 bot_.load_extension("botdevelopment")
 bot_.load_extension("botdinfo")
 bot_.load_extension("botembed")

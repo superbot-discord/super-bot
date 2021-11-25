@@ -17,7 +17,7 @@ async def editembed(ctx, message : discord.Message = None, *,text):
 @commands.command()
 async def embed(ctx, *, text):
   embed = botembed(text)
-  await ctx.reply(embed=embed)
+  await ctx.send(embed=embed)
 
 @commands.command()
 async def ett(ctx, msg : discord.Message = None):
@@ -96,7 +96,7 @@ async def quickembed(ctx, *, text):
     embed.description      = f"\n".join(textlist[3:])
   except:
     pass
-  await ctx.reply(embed=embed)
+  await ctx.send(embed=embed)
 
 @commands.command(aliases=['simpembed', 'simplembed', 'sembed'])
 async def simpleembed(ctx, *, text):
@@ -122,7 +122,7 @@ async def simpleembed(ctx, *, text):
     inline = textlist[3*x+4].lower()
     inline = inline.startswith("y") or inline.startswith("1") or inline.startswith("e") or inline.startswith("on")
     embed.add_field(name=textlist[3*x+5], value=textlist[3*x+6].replace("{{{newline}}}", f"\n"), inline=inline)
-  await ctx.reply(embed=embed)
+  await ctx.send(embed=embed)
 
 def botett(msg):
   #for x in msg.embeds:

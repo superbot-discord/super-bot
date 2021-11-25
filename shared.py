@@ -147,7 +147,7 @@ specialbool     =lambda input          : input.lower() in ["1", "ok", "yes", "ye
 has_perms       =lambda chn, memb, perm: (chn.permissions_for(memb).value  & 1 << perm) or (chn.permissions_for(memb).value  & 1 << 8) or memb.id in db["botadmins"]
 naiveness       =lambda dt             : "Naive" if (dt.tzinfo is None or dt.tzinfo.utcoffset(dt) is None) else "Not Naive"
 chance          =lambda ratio          : ra.randint(1, ratio) == ratio
-unix_timestamp  =lambda dt, flag="F"   : f"<t:{datetime.timestamp(dt)}:{flag}>"
+unix_timestamp  =lambda dt, flag="F"   : f"<t:{round(datetime.timestamp(dt))}:{flag}>"
 st_nd_th_format =lambda n              : "st" if str(n).endswith("1") and not str(n).endswith("11") else ("th" if str(n).endswith("2") and not str(n).endswith("12") else "nd")
 permission_messages={}
 
