@@ -14,7 +14,7 @@ async def convert(ctx, num: typing.Optional[int] = 1, unit : str = "m"):
   unit_ = None
   for x in ["length"]:
     if unit in udb[f"{x}I"].keys():
-      unit_ = num*db[f"{x}I"][unit]
+      unit_ = num*udb[f"{x}I"][unit]
       x_ = x
       break
   if not unit_:
@@ -22,9 +22,9 @@ async def convert(ctx, num: typing.Optional[int] = 1, unit : str = "m"):
     return
   desc = ""
   units = udb[f"{x_}O"]
-  for x, y in units.values():
+  for x, y in units.items():
     desc += f"**{x.title()}** {unit_/y}\n"
-  embed = discord.Embed(title=f"{num} {unit_} is equal to…", description="")
+  embed = discord.Embed(title=f"{num} {unit} is equal to…", description=desc)
   await ctx.reply(embed=embed)
 
 @commands.command()
