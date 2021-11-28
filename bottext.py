@@ -1,10 +1,14 @@
 import base64
+import collections
 import hashlib
 
+import bitarray
 import emojis as em
+import huffman
 import pytz
-from unicode_charnames import search_charnames, charname, codepoint
 from spellwise import Typox
+from unicode_charnames import charname, codepoint, search_charnames
+
 from shared import *
 
 spell_checker = Typox()
@@ -27,6 +31,26 @@ async def choice(ctx,*options):
   await ctx.reply(embed=embed)
 
 @commands.command()
+async def compress(ctx, *, text):
+  lengths = list(collections.Counter(text).items())
+  huffman_encoder = huffman.codebook(lengths)
+  compressed = ""
+  for x in text:
+    compressed += huffman_encoder[x]
+  compressed_int = int(compressed, 2)
+  compressed_bytes = compressed_int.to_bytes(len(compressed)//8+(len(compressed)%8>0), byteorder="big")
+  f=open("compressed.txt", "wb")
+  f.write(compressed_bytes)
+  f.close()
+  compress_key = ""
+  for x, y in lengths:
+    compress_key += x.replace("_", "UNDERSCORE")+f"{y}_"
+  print(lengths)
+  print(huffman_encoder)
+  await ctx.reply(f"Estimated file size: {os.path.getsize('compressed.txt')} bytes\nKey:\n```\n{compress_key[:-1]}\n```", file = discord.File("compressed.txt"))
+  try_delete("compressed.txt")
+
+@commands.command()
 async def decode(ctx, code, *, text):
   if SequenceMatcher(None, code, 'base64').ratio()>0.6:
     coder = base64.b64decode(bytes(text, encoding='utf-8'))
@@ -45,6 +69,30 @@ async def decode(ctx, code, *, text):
     await ctx.reply(encrypted)
   else:
     await ctx.reply("Encoding not found!")
+
+@commands.command()
+async def decompress(ctx, *, key):
+  if not ctx.message.attachments:
+    await ctx.reply("The message does not include (that many) attachments.")
+    return
+  await ctx.message.attachments[0].save('decompress.txt')
+  f=open("decompress.txt", "rb")
+  decompress_bytes=f.read()
+  f.close()
+  try_delete("decompress.txt")
+  lengths = []
+  for x in key.split("_"):
+    x=x.replace("UNDERSCORE", "_")
+    lengths.append((x[0], int(x[1:])))
+  huffman_encoder = huffman.codebook(lengths)
+  print(lengths)
+  print(huffman_encoder)
+  for x, y in huffman_encoder.items():
+    huffman_encoder[x] = bitarray.bitarray(y)
+  x=bitarray.bitarray()
+  x.frombytes(decompress_bytes)
+  desc = ''.join(x.decode(huffman_encoder))
+  await ctx.reply(f"```\n{desc}\n```")
 
 @commands.command()
 async def emoji(ctx, *, text):
@@ -158,27 +206,15 @@ async def insert(ctx,emoji, *, text):
 
 @commands.command()
 async def length(ctx, *, text):
-  full_analysis = f"Freq.\tCharacter\n"
-  length_analysis = {}
-  for x in text:
-    length_analysis[x] = length_analysis.get(x, 0) + 1
-  length_analysis = {x: y for x, y in sorted(length_analysis.items(), key=lambda item: item[1], reverse=True)}
-  for x, y in length_analysis.items():
-    full_analysis += f"{y}\t{x}\n"
+  analysis = collections.Counter(text).items()
+  desc = f"Freq.\tCharacter\n"+f"\n".join([f"{x[1]}\t{x[0]}" for x in analysis])
   f = open('analysis.txt', 'w')
-  f.write(full_analysis)
+  f.write(desc)
   f.flush()
   f.close()
   desc = f"The piece of text contains {len(text)} characters."
   length_msg = await ctx.reply(desc, file=discord.File('analysis.txt'))
   try_delete('analysis.txt')
-  desc += f"\n**Most common characters:**\n"
-  for (x, y),z in zip(length_analysis.items(), range(5)):
-    desc += f"`{x}` ({y})\n"
-  desc += f"\n**Least common characters:**\n"
-  for x, y,z in zip(reversed(length_analysis.keys()), reversed(length_analysis.values()), range(5)):
-    desc += f"`{x}` ({y})\n"
-  await length_msg.edit(desc)
 
 @commands.command()
 async def pick(ctx, lower:int, upper:int, times:int):
@@ -319,7 +355,9 @@ async def unix(ctx, *, text = "now"):
 def setup(bot):
   bot.add_command(case)
   bot.add_command(choice)
+  bot.add_command(compress)
   bot.add_command(decode)
+  bot.add_command(decompress)
   bot.add_command(emoji)
   bot.add_command(encode)
   bot.add_command(insert)

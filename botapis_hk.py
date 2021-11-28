@@ -164,7 +164,7 @@ async def hk_lr(ctx, station : int):
     desc = ""
     if p.get('route_list', None):
       for t in p['route_list']:
-        desc += f"""<:Train1:912268792808243200> {'<:Transparent:912206780015190038>'if t['train_length']==1 else'<:Train2:912268792908890132>'} **{t['route_no']}** to {t['dest_en']} ({t['dest_ch']}) {db['mtr']['lr_status'][t['arrival_departure']]} {f"in {t['time_en']}" if t['time_en'][0].isdigit() else f"({t['time_en']})"}\n"""
+        desc += f"""<:Train1:912268792808243200>{'<:Transparent:912206780015190038>'if t['train_length']==1 else'<:Train2:912268792908890132>'}**{t['route_no']}** to {t['dest_en']} ({t['dest_ch']}) {db['mtr']['lr_status'][t['arrival_departure']]} {f"in {t['time_en']}" if t['time_en'][0].isdigit() else f"({t['time_en']})"}\n"""
       embed.add_field(name=f"Platform {p['platform_id']}", value=desc, inline=False)
   if len(embed.fields):
     await ctx.reply(embed=embed)
