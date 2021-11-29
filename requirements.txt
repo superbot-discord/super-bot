@@ -10,6 +10,10 @@ googletrans==4.0.0-rc1
 pydictionary==2.0.1
 spellwise==0.8.1
 
+# Huffman + dependencies
+huffman==0.1.2
+bitarray==2.3.4
+
 # Matplotlib + other math + dependencies
 matplotlib==3.4.3
 numpy==1.21.3
