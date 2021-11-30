@@ -9,6 +9,7 @@ bot_ = commands.Bot(command_prefix=commands.when_mentioned_or("="), intents=disc
 bot_.remove_command('help')
 bot_.load_extension("botapis_animal")
 bot_.load_extension("botapis_hk")
+bot_.load_extension("botapis_uk")
 bot_.load_extension("botbasic")
 bot_.load_extension("botcalc")
 bot_.load_extension("botconvert")
