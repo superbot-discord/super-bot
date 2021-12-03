@@ -860,11 +860,11 @@ async def server(ctx, text = "regular"):
       f5v="Not Required"
     f6v=str(guild.verification_level)
     ecf=guild.explicit_content_filter
-    if str(ecf)=="disabled":
+    if ecf==discord.ContentFilter.disabled:
       f7v="Disabled"
-    elif str(ecf)=="no_role":
+    elif ecf==discord.ContentFilter.no_role:
       f7v="Members without roles"
-    elif str(ecf)=="all_members":
+    elif ecf==discord.ContentFilter.all_members:
       f7v="All Members"
     f8v=""
     for x in guild.members:
@@ -912,7 +912,7 @@ async def server(ctx, text = "regular"):
     if "PUBLIC" in guild.features:
       embed.add_field(name="Public", value="This is a public server.", inline=True)
     if "PARTNERED" in guild.features:
-      embed.add_field(name="Partnered", value="This is a partnered (with Discord) server.", inline=True)
+      embed.add_field(name="Partnered", value="This is a partnered server (with Discord).", inline=True)
     if "VERIFIED" in guild.features:
       embed.add_field(name="Verified", value="This is a verified server.", inline=True)
     embed.add_field(name="Description", value=f13v, inline=False)
@@ -929,8 +929,8 @@ async def server(ctx, text = "regular"):
     for x in f1valist:
       if len(f"{f1va}{x.name}") > 500:
         break
-      f1va = f"{f1va}{x.name}, "
-    f1va = f1va [:-2] + "…"
+      f1va += f"{x.name}, "
+    f1va = f"{f1va[:-2]}…"
     embed.set_field_at(3, name=f"Roles ({len(guild.roles)})", value=f1va, inline=False)
     await ctx.reply(embed=embed)
 
@@ -942,9 +942,9 @@ async def status(ctx, member : discord.Member = None):
     desc = str(member.status)+" on mobile"
   else:
     desc = str(member.status)+" on desktop"
-  embed = discord.Embed(title="Status: "+member.name, description=desc)
+  embed = discord.Embed(title=f"Status: {member.name}", description=desc)
   for x in member.activities:
-    if str(x.type)=="ActivityType.custom":
+    if x.type==discord.ActivityType.custom:
       if x.emoji==None:
         field=x.name
       else:
