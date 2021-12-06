@@ -287,7 +287,7 @@ async def wiki_search(ctx, *, query):
     f0n = y['title'] + (f" ({y['description']})" if y.get('description', None) else "")
     if len(f0n+y['extract'])>5973-z:
       break
-    z+=len(f0n+y['extract']-2)
+    z+=len(f0n+y['extract'])-2
     embed.add_field(name=f0n, value=y['extract'].replace('"', '')[:1025], inline=False)
   await ctx.reply(embed=embed)
 
