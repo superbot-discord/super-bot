@@ -1,5 +1,4 @@
 import pytube
-import wikipedia
 from PyDictionary import PyDictionary
 from pygoogletranslation import Translator
 from shared import *
@@ -18,7 +17,6 @@ srclangkeys.sort()
 srclangdict = {}
 for x in srclangkeys:
   srclangdict[x] = unsortedsrclangdict[x]
-wikipedia.set_lang("en")
 
 yt_pattern = re.compile(r'search\s[0-5]\s.*')
 
@@ -266,28 +264,31 @@ async def weather(ctx, *, location):
 @commands.command()
 async def wiki(ctx, *, query):
   await ctx.channel.trigger_typing()
-  totallen = 0
-  try:
-    desc = wikipedia.summary(query)[:2047]
-    totallen = totallen + len(wikipedia.summary(query)) + len(desc) + len(query)
-    wpage = wikipedia.page(title=query, auto_suggest=True, redirect=True, preload=False)
-    embed = discord.Embed(title=wpage.title, url="https://en.wikipedia.org/wiki/"+wpage.title.replace(" ","_"), description=desc)
-    counter = 0
-    for x in wpage.sections:
-      if counter >=4 or totallen + len(wpage.section(x)) >= 6000:
-        break
-      if len(wpage.section(x))!=0:
-        embed.add_field(name=x, value=wpage.section(x)[:499], inline=False)
-        totallen = totallen + len(wpage.section(x))
-        counter = counter + 1
-    if len(wpage.images)>=1:
-      embed.set_image(url = wpage.images[1])
-    if len(wpage.images)>=2:
-      embed.set_thumbnail(url = wpage.images[0])
-  except:
-    results = wikipedia.search(query, results=20, suggestion=False)
-    desc = f"**Please make one of these searches:**\n`{'` `'.join(results)}`"
-    embed = discord.Embed(title=query, description=desc)
+  r1=requests.get(f"https://en.wikipedia.org/w/api.php?format=json&action=parse&page={query}&prop=text|headhtml&formatversion=2").json().get('parse', None)
+  if not r1:
+    await ctx.reply("Invalid page. Please try again or use `wiki_search` to get a list of related pages.")
+    return
+  r2=list(requests.get(f"https://en.wikipedia.org/w/api.php?format=json&action=query&generator=search&gsrnamespace=0&gsrsearch={query}&gsrlimit=1&prop=extracts|description&exintro&exsentences=10&exlimit=max&explaintext&exintro").json()['query']['pages'].items())[0]
+  embed=discord.Embed(title=f"Wikipedia: {r1['title']} ({r2[1]['description']})", description=r2[1]['extract'])
+  html_head = re.sub(r'<link rel="stylesheet" href="[\w./&;=?%]+?"\/>', r'', r1['headhtml']).replace('<head>', '<head><link rel="stylesheet" href="wiki_css.css"><base href="http://en.wikipedia.org">')
+  f=open(f"Wiki_{ctx.message.id}", 'x')
+  f.write(f"{html_head}{r1['text']}</head>")
+  f.close()
+  await ctx.reply(embed=embed, files=[discord.File(f"Wiki_{ctx.message.id}"), discord.File("wiki_css.css")])
+  try_delete(f"Wiki_{ctx.message.id}")
+
+@commands.command()
+async def wiki_search(ctx, *, query):
+  await ctx.channel.trigger_typing()
+  r=requests.get(f"https://en.wikipedia.org/w/api.php?format=json&action=query&generator=search&gsrnamespace=0&gsrsearch={query}&gsrlimit=20&prop=extracts|description&exintro&exsentences=5&exlimit=max&explaintext&exintro").json()['query']['pages']
+  z=len(query)
+  embed=discord.Embed(title=f"Wikipedia search results for {query}")
+  for x, y in r.items():
+    f0n = y['title'] + (f" ({y['description']})" if y.get('description', None) else "")
+    if len(f0n+y['extract'])>5973-z:
+      break
+    z+=len(f0n+y['extract']-2)
+    embed.add_field(name=f0n, value=y['extract'].replace('"', '')[:1025], inline=False)
   await ctx.reply(embed=embed)
 
 @commands.command()
@@ -473,4 +474,5 @@ def setup(bot):
   bot.add_command(unscramble)
   bot.add_command(weather)
   bot.add_command(wiki)
+  bot.add_command(wiki_search)
   bot.add_command(youtube)
