@@ -10,6 +10,6 @@ def test_for(text : str, min_ratio : typing.Union[float, int], *choices : list[s
     return list(tested)[0]
 
 def many_replace(text : str, replacer : dict[str : str]):
-  for i, j in replacer.items():
-    text = text.replace(i, j)
+  for x, y in replacer.items():
+    text = text.replace(x, y)
   return text

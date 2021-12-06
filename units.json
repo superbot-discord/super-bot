@@ -1,0 +1,40 @@
+{
+  "lengthI" : {
+    "nm" : 0.000000001, "nanometer"  : 0.000000001, "nanometre" : 0.000000001,
+    "mcm": 0.000001   , "micrometer" : 0.000001   , "micrometre": 0.000001   , "um": 0.000001, "μm": 0.000001,
+    "mm" : 0.001      , "millimeter" : 0.001      , "millimetre": 0.001      ,
+    "cm" : 0.01       , "centimeter" : 0.01       , "centimetre": 0.01       ,
+    "dm" : 0.1        , "decimeter"  : 0.1        , "decimetre" : 0.1        ,
+    "m"  : 1          , "meter"      : 1          , "metre"     : 1          ,
+    "dam": 10         , "decameter"  : 10         , "decametre" : 10         ,
+    "hm" : 100        , "hectometer" : 100        , "hectometre": 100        ,
+    "km" : 1000       , "kilometer"  : 1000       , "kilometre" : 1000       ,
+    "Mm" : 1000000    , "megameter"  : 1000000    , "megametre" : 1000000    ,
+    "Gm" : 1000000000 , "gigameter"  : 1000000000 , "gigametre" : 1000000000 ,
+
+    "in" : 0.0254     , "inch"       : 0.0254     , "\""        : 0.0254     ,
+    "ft" : 0.3048     , "foot"       : 0.3048     , "'"         : 0.3048     , "feet": 0.3048,
+    "yd" : 0.9144     , "yard"       : 0.9144     ,
+    "mi" : 1609.344   , "mile"       : 1609.344   ,
+    "Nm" : 1609.344   , "nauticalmile":1852       
+  },
+  "lengthO" : {
+    "nanometres"    : 0.000000001,
+    "micrometres"   : 0.000001   ,
+    "millimetres"   : 0.001      ,
+    "centimetres"   : 0.01       ,
+    "decimetres"    : 0.1        ,
+    "metres"        : 1          ,
+    "decametres"    : 10         ,
+    "hectometres"   : 100        ,
+    "kilometres"    : 1000       ,
+    "megametres"    : 1000000    ,
+    "gigametres"    : 1000000000 ,
+
+    "inches"        : 0.0254     ,
+    "feet"          : 0.3048     ,
+    "yards"         : 0.9144     ,
+    "miles"         : 1609.344   ,
+    "nautical miles": 1852       
+  }
+}

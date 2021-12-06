@@ -13,6 +13,20 @@ import ascii2 as asc
 from shared import *
 
 cimage = ImageCaptcha()
+aw = [[(230, 153), "#3F91F0FF"], [(296, 170), "#69D880FF"], [(342, 220), "#DE9F41FF"], [(362, 283), "#9886E1FF"], [(342, 345), "#C8EC66FF"], [(296, 394), "#D56569FF"], [(231, 412), "#56AFE1FF"], [(165, 395), "#F2E872FF"], [(118, 347), "#E295C2FF"]]
+
+@commands.command()
+async def apple_watch(ctx, *, text = "NEVERGONNAGIVEYUUP"):
+  texts = [text[x*2:x*2+2] for x in range(0, floor(len(text)/2))]
+  img = Image.open("fonts/aw.png")
+  draw = ImageDraw.Draw(img)
+  for x, y in zip(aw, texts):
+    draw.text(x[0], y, font=sf_pro_r, fill=x[1], anchor="mt")
+  aw_fn = f"AppleWatch_{ctx.message.id}.png"
+  img.save(aw_fn)
+  await ctx.reply(file = discord.File(aw_fn))
+  try_delete(aw_fn)
+
 @commands.command()
 async def captcha(ctx, *, text = None):
   if text == None:
@@ -159,19 +173,19 @@ def analyse(scale, colors):
   draw = ImageDraw.Draw(newimg)
   counter = 0
   r_total = g_total = b_total = h_total = s_total = l_total = 0
-  for count in palette:
-    rgb_tuple = count.rgb
-    hsl_tuple = count.hsl
+  for x in palette:
+    rgb_tuple = x.rgb
+    hsl_tuple = x.hsl
     r_total += rgb_tuple.r
     g_total += rgb_tuple.g
     b_total += rgb_tuple.b
     h_total += hsl_tuple.h
     s_total += hsl_tuple.s
     l_total += hsl_tuple.l
-    draw.rectangle((counter, 0, counter+count.proportion*scale, round(scale/3)), (rgb_tuple.r, rgb_tuple.g, rgb_tuple.b))
+    draw.rectangle((counter, 0, counter+x.proportion*scale, round(scale/3)), (rgb_tuple.r, rgb_tuple.g, rgb_tuple.b))
     hexcode = f'{((rgb_tuple.r << 16) + (rgb_tuple.g << 8) + rgb_tuple.b):02x}'.upper().zfill(6)
-    desc += f"{rgb_tuple.r}\t{rgb_tuple.g}\t{rgb_tuple.b}\t{hsl_tuple.h}\t{hsl_tuple.s}\t{hsl_tuple.l}\t{hexcode}\t{str(count.proportion*100)}%\n"
-    counter += count.proportion*scale
+    desc += f"{rgb_tuple.r}\t{rgb_tuple.g}\t{rgb_tuple.b}\t{hsl_tuple.h}\t{hsl_tuple.s}\t{hsl_tuple.l}\t{hexcode}\t{x.proportion*100}%\n"
+    counter += x.proportion*scale
   newimg.save('output_amount.png')
   avg_hexcode = f'#{((round(r_total/colors) << 16) + (round(g_total/colors) << 8) + round(b_total/colors)):02x}'.upper().zfill(6)
   desc += f"Average:\n{round(r_total/colors,2)}\t{round(g_total/colors,2)}\t{round(b_total/colors,2)}\t{round(h_total/colors,2)}\t{round(s_total/colors,2)}\t{round(l_total/colors,2)}\t{avg_hexcode}"
@@ -180,22 +194,22 @@ def analyse(scale, colors):
   newimg = Image.new('RGB', (scale, round(scale/3)), (255, 255, 255))
   draw = ImageDraw.Draw(newimg)
   counter = 0
-  for count in palette:
-    rgb_tuple = count.rgb
-    hsl_tuple = count.hsl
-    draw.rectangle((counter, 0, counter+count.proportion*scale, round(scale/3)), (rgb_tuple.r, rgb_tuple.g, rgb_tuple.b))
-    counter += count.proportion*scale
+  for x in palette:
+    rgb_tuple = x.rgb
+    hsl_tuple = x.hsl
+    draw.rectangle((counter, 0, counter+x.proportion*scale, round(scale/3)), (rgb_tuple.r, rgb_tuple.g, rgb_tuple.b))
+    counter += x.proportion*scale
   newimg.save('output_lightness.png')
   
   palette.sort(key=lambda c: c.hsl.h)
   newimg = Image.new('RGB', (scale, round(scale/3)), (255, 255, 255))
   draw = ImageDraw.Draw(newimg)
   counter = 0
-  for count in palette:
-    rgb_tuple = count.rgb
-    hsl_tuple = count.hsl
-    draw.rectangle((counter, 0, counter+count.proportion*scale, round(scale/3)), (rgb_tuple.r, rgb_tuple.g, rgb_tuple.b))
-    counter += count.proportion*scale
+  for x in palette:
+    rgb_tuple = x.rgb
+    hsl_tuple = x.hsl
+    draw.rectangle((counter, 0, counter+x.proportion*scale, round(scale/3)), (rgb_tuple.r, rgb_tuple.g, rgb_tuple.b))
+    counter += x.proportion*scale
   newimg.save('output_hue.png')
 
   dominant = ColorThief('input.png').get_color(quality=1)
@@ -306,8 +320,8 @@ async def mandelbrot(ctx, size:int = 1024):
 @commands.command()
 async def ocr(ctx, lang="eng", *, disposed = None):
   images = ctx.message.attachments
-  for count in images:
-    await count.save('input.png')
+  for x in images:
+    await x.save('input.png')
     img = Image.open('input.png')
     desc=pytesseract.image_to_string(img, lang=lang)
     if not desc.replace(" ",""):
@@ -316,16 +330,16 @@ async def ocr(ctx, lang="eng", *, disposed = None):
 
 @commands.command(aliases=['scan'])
 async def qr(ctx, *, disposed = None):
-  for count in ctx.message.attachments:
-    await count.save("input.png")
+  for x in ctx.message.attachments:
+    await x.save("input.png")
     image = Image.open("input.png").convert("RGBA")
     image_decoded =  pyzbar.decode(image)
     if not image_decoded:
       await ctx.reply("No codes found!")
     else:
-      for count2 in image_decoded:
-        poly = count2.polygon
-        rectangle = count2.rect
+      for y in image_decoded:
+        poly = y.polygon
+        rectangle = y.rect
         draw = ImageDraw.Draw(image)
         draw.rectangle([rectangle.left, rectangle.top, rectangle.left+rectangle.width, rectangle.top+rectangle.height], outline="#00FF00A0", width=8)
         points = [(i.x, i.y) for i in poly]
@@ -335,18 +349,18 @@ async def qr(ctx, *, disposed = None):
         draw.line(points, fill="#FF0000A0", width=8)
         image.save('qrcode.png')
         try:
-          await ctx.reply(count2.data.decode("utf-8"), file=discord.File('qrcode.png'))
+          await ctx.reply(y.data.decode("utf-8"), file=discord.File('qrcode.png'))
         except:
-          await ctx.reply(count2.data.decode("utf-8"))
+          await ctx.reply(y.data.decode("utf-8"))
     try_delete('input.png', 'qrcode.png')
 
 @commands.command()
 async def render(ctx, width:float=1):
   att = ctx.message.attachments[0]
   att_width = att.width
-  for count in range(100,0, -5):
+  for x in range(100,0, -5):
     try:
-      output = asc.loadFromUrl(att.url, columns=int(att_width*count/100*width), color=False)
+      output = asc.loadFromUrl(att.url, columns=int(att_width*x/100*width), color=False)
       f = open('output.txt', 'w')
       f.write(output)
       f.flush()
@@ -360,13 +374,13 @@ async def render(ctx, width:float=1):
 @commands.command()
 async def text(ctx, *, text = None):
   files = ctx.message.attachments
-  for count in files:
-    cname = count.filename
-    await count.save(cname)
+  for x in files:
+    cname = x.filename
+    await x.save(cname)
     if cname.endswith(".pdf"):
       images = convert_from_path(cname)
-      for count in images:
-        desc=pytesseract.image_to_string(count)
+      for x in images:
+        desc=pytesseract.image_to_string(x)
       try_delete(cname)
     elif cname.endswith(".txt"):
       f = open('data.txt', 'r')
@@ -391,6 +405,7 @@ async def transparent(ctx, alpha = 128):
   try_delete('Transparent.png')
 
 def setup(bot):
+  bot.add_command(apple_watch)
   bot.add_command(image)
   bot.add_command(captcha)
   bot.add_command(mandelbrot)

@@ -27,8 +27,8 @@ async def prefix(ctx, *, disposed = None):
 @commands.command(aliases=['supportserver', 'supports', 'johann', 'johannlau', 'supporting', 'team', 'dev', 'developer'])
 async def support(ctx, *, disposed = None):
   support_view = ui.View(timeout=0)
-  for count in support_buttons:
-    support_view.add_item(count)
+  for x in support_buttons:
+    support_view.add_item(x)
   await ctx.reply(embed=support_embed, view=support_view)
 
 def setup(bot):

@@ -13,8 +13,8 @@ async def craftbot(ctx, *, disposed = None):
 @commands.command(aliases=['partners', 'otherbots', 'otherbot', 'bots'])
 async def partner(ctx, *, disposed = None):
   partners_view = ui.View(timeout=0)
-  for count in partners_buttons(ctx):
-    partners_view.add_item(count)
+  for x in partners_buttons(ctx):
+    partners_view.add_item(x)
   await ctx.reply(embed=partners_embed, view=partners_view)
 
 def setup(bot):

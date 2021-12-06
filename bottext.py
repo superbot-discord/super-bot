@@ -1,10 +1,14 @@
 import base64
+import collections
 import hashlib
 
+import bitarray
 import emojis as em
+import huffman
 import pytz
-from unicode_charnames import search_charnames, charname, codepoint
 from spellwise import Typox
+from unicode_charnames import charname, codepoint, search_charnames
+
 from shared import *
 
 spell_checker = Typox()
@@ -27,6 +31,26 @@ async def choice(ctx,*options):
   await ctx.reply(embed=embed)
 
 @commands.command()
+async def compress(ctx, *, text):
+  lengths = list(collections.Counter(text).items())
+  huffman_encoder = huffman.codebook(lengths)
+  compressed = ""
+  for x in text:
+    compressed += huffman_encoder[x]
+  compressed_int = int(compressed, 2)
+  compressed_bytes = compressed_int.to_bytes(len(compressed)//8+(len(compressed)%8>0), byteorder="big")
+  f=open("compressed.txt", "wb")
+  f.write(compressed_bytes)
+  f.close()
+  compress_key = ""
+  for x, y in lengths:
+    compress_key += x.replace("_", "UNDERSCORE")+f"{y}_"
+  print(lengths)
+  print(huffman_encoder)
+  await ctx.reply(f"Estimated file size: {os.path.getsize('compressed.txt')} bytes\nKey:\n```\n{compress_key[:-1]}\n```", file = discord.File("compressed.txt"))
+  try_delete("compressed.txt")
+
+@commands.command()
 async def decode(ctx, code, *, text):
   if SequenceMatcher(None, code, 'base64').ratio()>0.6:
     coder = base64.b64decode(bytes(text, encoding='utf-8'))
@@ -40,11 +64,35 @@ async def decode(ctx, code, *, text):
   elif SequenceMatcher(None, code, 'caesar').ratio()>0.6 or code.startswith("caesar"):
     encrypted = ""
     distance = int(code.replace("caesar", "", 1))
-    for count in text:
-      encrypted += chr(ord(count) - distance % 128)
+    for x in text:
+      encrypted += chr(ord(x) - distance % 128)
     await ctx.reply(encrypted)
   else:
     await ctx.reply("Encoding not found!")
+
+@commands.command()
+async def decompress(ctx, *, key):
+  if not ctx.message.attachments:
+    await ctx.reply("The message does not include (that many) attachments.")
+    return
+  await ctx.message.attachments[0].save('decompress.txt')
+  f=open("decompress.txt", "rb")
+  decompress_bytes=f.read()
+  f.close()
+  try_delete("decompress.txt")
+  lengths = []
+  for x in key.split("_"):
+    x=x.replace("UNDERSCORE", "_")
+    lengths.append((x[0], int(x[1:])))
+  huffman_encoder = huffman.codebook(lengths)
+  print(lengths)
+  print(huffman_encoder)
+  for x, y in huffman_encoder.items():
+    huffman_encoder[x] = bitarray.bitarray(y)
+  x=bitarray.bitarray()
+  x.frombytes(decompress_bytes)
+  desc = ''.join(x.decode(huffman_encoder))
+  await ctx.reply(f"```\n{desc}\n```")
 
 @commands.command()
 async def emoji(ctx, *, text):
@@ -145,8 +193,8 @@ async def encode(ctx, code, *, text):
   elif SequenceMatcher(None, code, 'caesar').ratio()>0.6 or code.startswith("caesar"):
     encrypted = ""
     distance = int(code.replace("caesar", "", 1))
-    for count in text:
-      encrypted += chr(ord(count) + distance % 128)
+    for x in text:
+      encrypted += chr(ord(x) + distance % 128)
     await ctx.reply(encrypted)
   else:
     await ctx.reply("Encoding not found!")
@@ -158,27 +206,15 @@ async def insert(ctx,emoji, *, text):
 
 @commands.command()
 async def length(ctx, *, text):
-  full_analysis = f"Freq.\tCharacter\n"
-  length_analysis = {}
-  for count in text:
-    length_analysis[count] = length_analysis.get(count, 0) + 1
-  length_analysis = {count1: count2 for count1, count2 in sorted(length_analysis.items(), key=lambda item: item[1], reverse=True)}
-  for count1, count2 in length_analysis.items():
-    full_analysis += f"{count2}\t{count1}\n"
+  analysis = collections.Counter(text).items()
+  desc = f"Freq.\tCharacter\n"+f"\n".join([f"{x[1]}\t{x[0]}" for x in analysis])
   f = open('analysis.txt', 'w')
-  f.write(full_analysis)
+  f.write(desc)
   f.flush()
   f.close()
   desc = f"The piece of text contains {len(text)} characters."
   length_msg = await ctx.reply(desc, file=discord.File('analysis.txt'))
   try_delete('analysis.txt')
-  desc += f"\n**Most common characters:**\n"
-  for (count1, count2),count3 in zip(length_analysis.items(), range(5)):
-    desc += f"`{count1}` ({count2})\n"
-  desc += f"\n**Least common characters:**\n"
-  for count1, count2,count3 in zip(reversed(length_analysis.keys()), reversed(length_analysis.values()), range(5)):
-    desc += f"`{count1}` ({count2})\n"
-  await length_msg.edit(desc)
 
 @commands.command()
 async def pick(ctx, lower:int, upper:int, times:int):
@@ -190,10 +226,10 @@ async def pick(ctx, lower:int, upper:int, times:int):
   if times <= (upper-lower+1):
     rand = list(range(lower, upper+1))
     ra.shuffle(rand)
-    for count,count2 in zip(range(times), rand):
-      desc += f"||`{str(count2).zfill(upper_length)}`||  "
+    for x,y in zip(range(times), rand):
+      desc += f"||`{str(y).zfill(upper_length)}`||  "
   else:
-    for count in range(times):
+    for x in range(times):
       desc += f"||`{str(ra.randint(lower,upper)).zfill(upper_length)}`||  "
   embed=discord.Embed(title=ti, description=desc)
   await ctx.reply(embed=embed)
@@ -211,7 +247,7 @@ async def random(ctx,lower:int,upper:int):
 async def raffle(ctx,lower:int,upper:int,times:int):
   ti=f"{times} random number(s) between {lower} and {upper}"
   desc=f"Your random number(s) is/are:\n"
-  for count in range(times):
+  for x in range(times):
     rand=ra.randint(lower,upper)
     desc += f"||`{str(rand).zfill(len(str(upper)))}`||  "
   embed=discord.Embed(title=ti, description=desc)
@@ -237,9 +273,9 @@ async def reverse(ctx, *, text):
 async def spellcheck(ctx, text, distance : typing.Optional[int] = 3, *, disposed = None):
   results = spell_checker.get_suggestions(text, max_distance = distance)
   desc = f"QWERTY-spellchecking results for {text}"
-  distances = {count["distance"] for count in results}
-  for count in distances:
-    desc += f"\n\nDISTANCE: {count+1}\n{', '.join([count3 for count3 in [count4['word'] for count4 in results if count4['distance'] == count]])}"
+  distances = {x["distance"] for x in results}
+  for x in distances:
+    desc += f"\n\nDISTANCE: {x+1}\n{', '.join([y for y in [z['word'] for z in results if z['distance'] == x]])}"
   f = open("output.txt", "w")
   f.write(desc)
   f.flush()
@@ -265,16 +301,16 @@ async def spoil(ctx, msg : discord.Message = None, *, text="Reply to a message, 
 async def unicode(ctx, *query):
   embed = discord.Embed(title = f"Search results for: {' '.join(query)}")
   all_results = []
-  for count in query:
+  for x in query:
     current_results = []
-    for count in search_charnames(count):
-      current_results.append(count)
+    for y in search_charnames(x):
+      current_results.append(y)
     all_results.append(current_results)
   intersected_results = []
   x=sum(all_results, [])
-  for count in x:
-    if count not in intersected_results and all([count in y for y in all_results]):
-      intersected_results.append(count)
+  for y in x:
+    if y not in intersected_results and all([y in y for y in all_results]):
+      intersected_results.append(y)
   characters_added = int(len(query[0]) == 1)
   try:
     hex_character = chr(int(query[0], 16))
@@ -282,11 +318,11 @@ async def unicode(ctx, *query):
     add_hex_character = True
   except:
     add_hex_character = False
-  for count, count2 in zip(intersected_results, range(25-characters_added)):
-    embed.add_field(name = count[1].title(), value = f"U+{count[0]} `"+eval(f'u\'\\u{count[0]}\'')+"`")
+  for x, y in zip(intersected_results, range(25-characters_added)):
+    embed.add_field(name = x[1].title(), value = f"U+{x[0]} `"+eval(f'u\'\\u{x[0]}\'')+"`")
   desc = f"Code\tChar.\tName\n\n"
-  for count in intersected_results:
-    desc += f"U+{count[0]}\t" + eval(f'u\'\\u{count[0]}\'') + f"\t{count[1].title()}\n"
+  for x in intersected_results:
+    desc += f"U+{x[0]}\t" + eval(f'u\'\\u{x[0]}\'') + f"\t{x[1].title()}\n"
   if int(len(query[0]) == 1):
     embed.add_field(name = f"INPUT - {charname(query[0]).title()}", value = f"U+{codepoint(charname(query[0]))} `"+eval(f'u\'\\u{codepoint(charname(query[0]))}\'')+"`")
     desc += f"U+{codepoint(charname(query[0]))}\t" + eval(f'u\'\\u{codepoint(charname(query[0]))}\'') + f"\t{charname(query[0]).title()}"
@@ -319,7 +355,9 @@ async def unix(ctx, *, text = "now"):
 def setup(bot):
   bot.add_command(case)
   bot.add_command(choice)
+  bot.add_command(compress)
   bot.add_command(decode)
+  bot.add_command(decompress)
   bot.add_command(emoji)
   bot.add_command(encode)
   bot.add_command(insert)

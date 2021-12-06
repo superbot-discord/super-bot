@@ -77,7 +77,7 @@ async def engrave(ctx, product = "list", *, text = "Your text goes here."):
       embed.set_image(url="https://www.apple.com/shop/preview/engrave/PYFN2LL/A?th="+text+"&tl=&s=2")
     else:
       embed.set_image(url="https://www.apple.com/shop/preview/engrave/PYFN2LL/A?th="+split[0]+"&tl="+split[1]+"&s=2")
-  elif product == "ipadairrose" or product == "ipadairrosegold" or product == "padairrose" or product == "padairrosegold":
+  elif product == "ipadairrose" or product == "ipadairgold" or product == "ipadairrosegold" or product == "padairrose" or product == "padairrosegold":
     embed = discord.Embed(title="Engrave on iPad Air (Rose Gold)")
     split = text.splitlines()
     if len(split) == 1:

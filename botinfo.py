@@ -3,7 +3,11 @@ from shared import *
 
 set(pytz.all_timezones_set)
 hexstring_pattern = re.compile(r'#?([0-9A-F]{2})([0-9A-F]{2})([0-9A-F]{2})', re.IGNORECASE)
-rgbtoper = lambda input: str(round(input/0.0255)/100)+"%"
+rgbtoper = lambda input: f"{round(input/0.0255)/100}%"
+
+f = open('database_periodic.json', 'r')
+pdb = json.loads(f.read())['elements']
+f.close()
 
 @commands.command(aliases=["colour"])
 async def color(ctx, *, name):
@@ -25,24 +29,50 @@ async def color(ctx, *, name):
   if len(hex_)!=6:
     while len(hex_)<6:
       hex_="0"+hex_
-  page = requests.get('https://www.colorhexa.com/'+hex_)
+  page = requests.get(f"https://www.colorhexa.com/{hex_}")
   soup = BeautifulSoup(page.content, 'html.parser')
   result1 = soup.find(id='header-title')
   ti = re.sub(r'([\w]+?) \/ #[\da-f]{6} hex color',r'\1',result1.text)
   result2 = soup.find_all("strong")[2].text
-  embed = discord.Embed(title='Colour information: '+ti, description=result2, color=deci)
-  embed.add_field(name='RGB', value=f'{r}, {g}, {b}\n{r1}, {g1}, {b1}', inline=True)
-  embed.add_field(name='Hex Code', value=f'#{hex_}', inline=True)
-  embed.add_field(name='Decimal Value', value=deci, inline=True)
-  embed.set_thumbnail(url='attachment://color.png')
+  embed = discord.Embed(title=f"Colour information: {ti}", description=result2, color=deci)
+  embed.add_field(name="RGB", value=f"{r}, {g}, {b}\n{r1}, {g1}, {b1}", inline=True)
+  embed.add_field(name="Hex Code", value=f"#{hex_}", inline=True)
+  embed.add_field(name="Decimal Value", value=deci, inline=True)
+  embed.set_thumbnail(url="attachment://color.png")
   img = Image.new('RGB', (64, 64), (r, g, b))
   img.save('color.png')
   await ctx.reply(embed=embed, file=discord.File('color.png'))
   try_delete('color.png')
 
 @commands.command()
+async def element(ctx, *, query):
+  query = query.lower()
+  if len(query) > 2:
+    pdb_ = list(filter(lambda x: query in x['name'].lower() or query == str(x['number']) or query in x['symbol'].lower(), pdb))
+  else:
+    pdb_ = list(filter(lambda x: query == str(x['number']) or query == x['symbol'].lower(), pdb))
+  if not len(pdb_):
+    await ctx.reply("No elements could be found!")
+    return
+  if len(pdb_) == 1:
+    element_ = pdb_[0]
+    embed = discord.Embed(title=f"{element_['name']} ({element_['symbol']})", description=element_['summary'], url=element_['source'])
+    embed.add_field(name="Atomic Mass", value=f"{element_['atomic_mass']} Dalton")
+    embed.add_field(name="Melting Point", value=f"{element_['melt']} Kelvin")
+    embed.add_field(name="Boiling Point", value=f"{element_['boil']} Kelvin")
+    embed.add_field(name="Density", value=f"{element_['density']} Kelvin")
+    for x, y in {"Appearance":'appearance', "Discovered by":'discovered_by', "Named after":'named_by'}.items():
+      if element_[y]:
+        embed.add_field(name=x, value=element_[y])
+    if element_['spectral_img']:
+      embed.set_image(url=element_['spectral_img'])
+  else:
+    embed = discord.Embed(title=f"Search results", description=f"\n".join([f"[**{x['number']}** {x['symbol']}: {x['name']}]({x['source']})" for x in pdb_]))
+  await ctx.reply(embed=embed)
+
+@commands.command()
 async def regex(ctx, regularexp, *, text):
-  theregex = r"(?P<LargestCapturingGroup>"+regularexp+")"
+  theregex = f"(?P<LargestCapturingGroup>{regularexp})"
   newtext = re.sub(theregex, "**\g<LargestCapturingGroup>**", text)
   matches = len(re.findall(theregex, text))
   if matches == 1:
@@ -98,6 +128,7 @@ async def time(ctx, *, timezoneinput="0"):
 
 def setup(bot):
   bot.add_command(color)
+  bot.add_command(element)
   bot.add_command(regex)
   bot.add_command(regsub)
   bot.add_command(time)

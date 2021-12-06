@@ -105,49 +105,49 @@ async def trivia(ctx, number=1):
 
 def botbunny(number):
   desc = ""
-  for count in range(1, number+1):
+  for x in range(1, number+1):
     r = requests.get('https://api.bunnies.io/v2/loop/random/?media=gif')
     desc += f"{r.json()['media']['gif']}\n"
   return desc
 
 def botcat(number):
   desc = ""
-  for count in range(1, number+1):
+  for x in range(1, number+1):
     r=requests.get("https://api.thecatapi.com/v1/images/search")
     desc += f"{r.json()[0]['url']}\n"
   return desc
 
 def botdish(number):
   desc = ""
-  for count in range(1, number+1):
+  for x in range(1, number+1):
     r = requests.get('https://foodish-api.herokuapp.com/api/')
     desc += f"{r.json()['image']}\n"
   return desc
 
 def botdog(number):
   desc = ""
-  for count in range(1, number+1):
+  for x in range(1, number+1):
     r=requests.get("https://dog.ceo/api/breeds/image/random")
     desc += f"{r.json()['message']}\n"
   return desc
 
 def botduck(number):
   desc = ""
-  for count in range(1, number+1):
+  for x in range(1, number+1):
     r = requests.get('https://random-d.uk/api/v1/random')
     desc += f"{r.json()['url']}\n"
   return desc
 
 def botfox(number):
   desc = ""
-  for count in range(1, number+1):
+  for x in range(1, number+1):
     r = requests.get('https://randomfox.ca/floof/')
     desc += f"{r.json()['image']}\n"
   return desc
 
 def botjoke(number):
   desc = ""
-  for count in range(1, number+1):
+  for x in range(1, number+1):
     r = requests.get('https://v2.jokeapi.dev/joke/Any?blacklistFlags=nsfw,religious,political,racist,sexist,explicit').json()
     if r.get("setup", None):
       desc += f"{r['setup']} ||{r['delivery']}||\n"
@@ -157,14 +157,14 @@ def botjoke(number):
 
 def botkoala(number):
   desc = ""
-  for count in range(1, number+1):
+  for x in range(1, number+1):
     r=requests.get("https://some-random-api.ml/img/koala")
     desc += f"{r.json()['link']}\n"
   return desc
 
 def botlizard(number):
   desc = ""
-  for count in range(1, number+1):
+  for x in range(1, number+1):
     r = requests.get('https://nekos.life/api/v2/img/lizard')
     desc += f"{r.json()['url']}\n"
   return desc
@@ -176,7 +176,7 @@ def botnasa():
 
 def botpanda(number):
   desc = ""
-  for count in range(1, number+1):
+  for x in range(1, number+1):
     r=requests.get("https://some-random-api.ml/img/panda")
     desc += f"{r.json()['link']}\n"
   return desc
@@ -187,14 +187,14 @@ def botparagraph(number):
 
 def botquote(number):
   desc = ""
-  for count in range(1, number+1):
+  for x in range(1, number+1):
     r=requests.get("http://api.forismatic.com/api/1.0/?method=getQuote&lang=en&format=json").json()
     desc += f"> {r['quoteText']}\n—By {r['quoteAuthor']}\n\n"
   return desc
 
 def botshiba(number):
   desc = ""
-  for count in range(1, number+1):
+  for x in range(1, number+1):
     r=requests.get("http://shibe.online/api/shibes")
     desc += f"{r.json()[0]}\n"
   return desc
@@ -210,16 +210,16 @@ def bottrivia(number):
     r=requests.get(f"https://opentdb.com/api.php?amount={number}&encoding=base64").json()["results"]
   except:
     return "The country code could not be found!"
-  for count in r:
-    desc += f"**{count['category']} - {count['difficulty']}**  - {html.unescape(count['question'])}\n"
-    if count["type"] == "multiple":
-      list_temp = [html.unescape(x) for x in count["incorrect_answers"]] + [html.unescape(count["correct_answer"])]
+  for x in r:
+    desc += f"**{x['category']} - {x['difficulty']}**  - {html.unescape(x['question'])}\n"
+    if x["type"] == "multiple":
+      list_temp = [html.unescape(x) for x in x["incorrect_answers"]] + [html.unescape(x["correct_answer"])]
       random.shuffle(list_temp)
       for x in list_temp:
         desc += f'  • {x}\n'
-      desc += f"Answer: ||{html.unescape(count['correct_answer'])}||\n"
+      desc += f"Answer: ||{html.unescape(x['correct_answer'])}||\n"
     else:
-      desc += f"True or False?\nAnswer: ||{html.unescape(count['correct_answer'])}||\n"
+      desc += f"True or False?\nAnswer: ||{html.unescape(x['correct_answer'])}||\n"
   return desc
 
 

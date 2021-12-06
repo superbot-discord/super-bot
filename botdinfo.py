@@ -45,24 +45,24 @@ async def avatar(ctx,user: discord.Member=None):
     embed.add_field(name=f"Default avatar", value=base_url1, inline=False)
   if base_url2:
     base_url2 = base_url2.url
-    for count1 in ['png', 'jpg', 'webp']:
+    for x in ['png', 'jpg', 'webp']:
       desc = ""
-      base_url2 = user.avatar.url.replace('.png', f'.{count1}')
-      for count in range(5, 13):
-        size = str(2**count)
+      base_url2 = user.avatar.url.replace('.png', f'.{x}')
+      for y in range(5, 13):
+        size = str(2**y)
         temp = base_url2.replace("?size=1024", f"?size={size}")
         desc += f"[{size}]({temp}) "
-      embed.add_field(name=f"Custom {count1.upper()}s", value=desc)
+      embed.add_field(name=f"Custom {x.upper()}s", value=desc)
   if base_url3:
     base_url3 = base_url3.url
-    for count1 in ['png', 'jpg', 'webp']:
+    for x in ['png', 'jpg', 'webp']:
       desc = ""
-      base_url3 = user.avatar.url.replace('.png', f'.{count1}')
-      for count in range(5, 13):
-        size = str(2**count)
+      base_url3 = user.avatar.url.replace('.png', f'.{x}')
+      for y in range(5, 13):
+        size = str(2**y)
         temp = base_url3.replace("?size=1024", f"?size={size}")
         desc += f"[{size}]({temp}) "
-      embed.add_field(name=f"Server {count1.upper()}s", value=desc)
+      embed.add_field(name=f"Server {x.upper()}s", value=desc)
   embed.set_image(url=user.display_avatar.url)
   await ctx.reply(embed=embed)
 
@@ -93,14 +93,14 @@ async def banner(ctx, user: typing.Union[discord.User, discord.Member]=None):
     desc = f"Banner of {user.mention}\n"
     embed=discord.Embed(title="Banner", description=desc)
     embed.set_image(url=base_url)
-    for count1 in ['png', 'jpg', 'webp']:
+    for x in ['png', 'jpg', 'webp']:
       desc = ""
-      second_base_url = base_url.replace('.png', f'.{count1}')
-      for count in range(4, 13):
-        size = str(2**count)
+      second_base_url = base_url.replace('.png', f'.{x}')
+      for y in range(4, 13):
+        size = str(2**y)
         temp = second_base_url.replace("?size=512", f"?size={size}")
         desc += f"[{size}]({temp}) "
-      embed.add_field(name=f"{count1.upper()}s", value=desc)
+      embed.add_field(name=f"{x.upper()}s", value=desc)
   else:
     try:
       base_url = ctx.guild.banner.url
@@ -110,14 +110,14 @@ async def banner(ctx, user: typing.Union[discord.User, discord.Member]=None):
     desc = f"Banner of the server\n"
     embed=discord.Embed(title="Banner", description=desc)
     embed.set_image(url=ctx.guild.banner.url)
-    for count1 in ['png', 'jpg', 'webp']:
+    for x in ['png', 'jpg', 'webp']:
       desc = ""
-      base_url = ctx.guild.banner.url.replace('.png', f'.{count1}')
-      for count in range(4, 13):
-        size = str(2**count)
+      base_url = ctx.guild.banner.url.replace('.png', f'.{x}')
+      for y in range(4, 13):
+        size = str(2**y)
         temp = base_url.replace("?size=1024", f"?size={size}")
         desc += f"[{size}]({temp}) "
-      embed.add_field(name=f"{count1.upper()}s", value=desc)
+      embed.add_field(name=f"{x.upper()}s", value=desc)
   await ctx.reply(embed=embed)
 
 @commands.command()
@@ -178,25 +178,25 @@ async def bottchannel(channel):
   desc=f"{channel.mention} Created at {unix_timestamp(channel.created_at)}"
   embed=discord.Embed(title=ti, description=desc)
   f1v = channel.slowmode_delay
-  f2v = [count.name for count in channel.threads]
+  f2v = [x.name for x in channel.threads]
   f3v=str(channel.topic)
   try:
     f5v=" ".join(await channel.invites())
   except:
     f5v="Cannot get invites without Manage Invites permission."
   f8v = ""
-  for count in channel.members:
-    f8v=f8v+count.mention+" "
+  for x in channel.members:
+    f8v=f"{f8v}{x.mention} "
   f8v=f8v[:-1]
   if len(f8v) > 500:
     f8v = ""
-    for count in channel.members:
-      if len(f8v + count.name) > 500:
+    for x in channel.members:
+      if len(f8v + x.name) > 500:
         break
-      f8v = f8v+count.name+", "
-    f8v = f8v [:-2] + "…"
-  async for count in channel.history(limit=1, oldest_first=True):
-    f9v=count
+      f8v = f"{f8v}{x.name}, "
+    f8v = f"{f8v [:-2]} …"
+  async for x in channel.history(limit=1, oldest_first=True):
+    f9v=x
   if len(f3v)>=45:
     embed.add_field(name="Topic", value=f3v, inline=False)
   else:
@@ -225,8 +225,8 @@ async def botvchannel(channel):
   try:
     f2vlist=await channel.invites()
     f2v=""
-    for count in f2vlist:
-      f2v=f2v+count.url+"  "
+    for x in f2vlist:
+      f2v=f"{f2v}{x.url}  "
     f2v=f2v[:-2]
   except:
     f2v = "Cannot get invites without Manage Invites permission."
@@ -292,12 +292,12 @@ async def botthread(channel):
   embed=discord.Embed(title=ti, description=desc)
   f1v = channel.slowmode_delay
   f8v = ""
-  for count in channel.members:
-    if len(f"{f8v}<@{count.id}> ") >= 500:
+  for x in channel.members:
+    if len(f"{f8v}<@{x.id}> ") >= 500:
       f8v += "…"
-    f8v+= f"<@{count.id}> "
-  async for count in channel.history(limit=1, oldest_first=True):
-    f9v=count
+    f8v+= f"<@{x.id}> "
+  async for x in channel.history(limit=1, oldest_first=True):
+    f9v=x
   embed.add_field(name="Category", value=str(channel.category), inline=True)
   if f1v:
     embed.add_field(name="Slowmode delay", value=f"{f1v} seconds", inline=True)
@@ -338,11 +338,11 @@ async def emojiinfo(ctx,emoji_ : typing.Union[discord.Emoji, str]):
 async def emojis(ctx, *, disposed = None):
   desc = ""
   sent_desc = ""
-  for count in ctx.guild.emojis:
-    #temp_desc = f"<:{count.name}:{count.id}>{' (Animated)' if count.animated else ''}"
-    temp_desc = f"{count}{' (Animated)' if count.animated else ''}"
-    desc += f":{(count.name+':'):<35} {temp_desc:<60}{count.url}\n"
-    sent_desc += f"{count} "
+  for x in ctx.guild.emojis:
+    #temp_desc = f"<:{y.name}:{y.id}>{' (Animated)' if y.animated else ''}"
+    temp_desc = f"{x}{' (Animated)' if x.animated else ''}"
+    desc += f":{(x.name+':'):<35} {temp_desc:<60}{x.url}\n"
+    sent_desc += f"{x} "
   f = open('output.txt', 'w')
   f.write(desc)
   f.flush()
@@ -358,9 +358,9 @@ async def invitelink(ctx, *, invite_input: discord.Invite):
   invite_has_info = False
   try:
     allinvites=await invite_input.guild.invites()
-    for count in allinvites:
-      if count == invite_input:
-        invite = count
+    for x in allinvites:
+      if x == invite_input:
+        invite = x
         break
     assert invite
     invite_has_info = True
@@ -400,25 +400,25 @@ async def invitelink(ctx, *, invite_input: discord.Invite):
     if invite_guild.banner:
       base_url1 = invite_guild.banner.url
       embed.set_image(url=base_url1)
-      for count1 in ['png', 'jpg', 'webp']:
+      for x in ['png', 'jpg', 'webp']:
         desc = ""
-        base_url1 = invite_guild.banner.url.replace('.png', f'.{count1}')
-        for count in range(4, 13):
-          size = str(2**count)
+        base_url1 = invite_guild.banner.url.replace('.png', f'.{x}')
+        for y in range(4, 13):
+          size = str(2**y)
           temp = base_url1.replace("?size=1024", f"?size={size}")
           desc += f"[{size}]({temp}) "
-        embed.add_field(name=f"{'Ser.' if count1 == 'webp' else 'Server'} {count1.upper()} banners", value=desc)
+        embed.add_field(name=f"{'Ser.' if x == 'webp' else 'Server'} {x.upper()} banners", value=desc)
     if invite_guild.banner:
       base_url1 = invite_guild.banner.url
       embed.set_image(url=base_url1)
-      for count1 in ['png', 'jpg', 'webp']:
+      for x in ['png', 'jpg', 'webp']:
         desc = ""
-        base_url1 = invite_guild.banner.url.replace('.png', f'.{count1}')
-        for count in range(5, 13):
-          size = str(2**count)
+        base_url1 = invite_guild.banner.url.replace('.png', f'.{x}')
+        for y in range(5, 13):
+          size = str(2**y)
           temp = base_url1.replace("?size=1024", f"?size={size}")
           desc += f"[{size}]({temp}) "
-        embed.add_field(name=f"Server {count1.upper()} icons", value=desc)
+        embed.add_field(name=f"Server {x.upper()} icons", value=desc)
     embed.add_field(name="Server Verification Level", value=str(invite_guild.verification_level))
     if invite_guild.description:
       embed.add_field(name="Server Description", value=invite_guild.description, inline=False)
@@ -479,53 +479,53 @@ async def message(ctx, message: discord.Message=None):
     desc += f"\n**Message content: **\n{contents}"
   f0vraw = message.reactions
   f0v = ""
-  for count in f0vraw:
-    if count.custom_emoji:
-      f0v += f":{count.emoji}:   ("+str(count.count)+")"
+  for x in f0vraw:
+    if x.custom_emoji:
+      f0v += f":{x.emoji}:   ({x.count})"
     else:
-      f0v += f"{count.emoji}   ("+str(count.count)+")"
+      f0v += f"{x.emoji}   ({x.count})"
   f1vraw = message.attachments
   f1v = ""
-  for count in f1vraw:
-    if count.is_spoiler():
-      f1v += f"[{count.filename}]({count.url}) ({sizer(count.size)}, marked as spoiler)\n"
+  for x in f1vraw:
+    if x.is_spoiler():
+      f1v += f"[{x.filename}]({x.url}) ({sizer(x.size)}, marked as spoiler)\n"
     else:
-      f1v += f"[{count.filename}]({count.url}) ({sizer(count.size)})\n"
+      f1v += f"[{x.filename}]({x.url}) ({sizer(x.size)})\n"
   f2vraw = message.channel_mentions
   f2v = ""
-  for count in f2vraw:
-    f2v += count.mention + " "
+  for x in f2vraw:
+    f2v += x.mention + " "
   f3vraw = message.role_mentions
   f3v = ""
-  for count in f3vraw:
-    f3v += count.mention + " "
+  for x in f3vraw:
+    f3v += x.mention + " "
   f4vraw = message.mentions
   f4v = ""
-  for count in f4vraw:
-    f4v += count.mention + " "
+  for x in f4vraw:
+    f4v += x.mention + " "
   f5vraw = message.components
   msg_buttons = msg_menus = msg_dbuttons = msg_dmenus = 0
-  for count in f5vraw:
-    if count.type == discord.ComponentType.action_row:
-      for count2 in count.children:
-        if count2.type == discord.ComponentType.button:
-          if count2.disabled:
+  for x in f5vraw:
+    if x.type == discord.ComponentType.action_row:
+      for y in x.children:
+        if y.type == discord.ComponentType.button:
+          if y.disabled:
             msg_dbuttons += 1
           else:
             msg_buttons += 1
         else:
-          if count2.disabled:
+          if y.disabled:
             msg_dmenus += 1
           else:
             msg_menus += 1
     else:
-      if count.type == discord.ComponentType.button:
-        if count.disabled:
+      if x.type == discord.ComponentType.button:
+        if x.disabled:
           msg_dbuttons += 1
         else:
           msg_buttons += 1
       else:
-        if count.disabled:
+        if x.disabled:
           msg_dmenus += 1
         else:
           msg_menus += 1
@@ -599,8 +599,8 @@ async def overwrites(ctx, channel_:typing.Union[discord.TextChannel, discord.Voi
   if not channel_:
     channel_ = ctx.channel
   desc = f"{channel_.mention}\n"
-  for count, count2 in channel_.overwrites.items().__reversed__():
-    desc += f"**{count.mention}**\nAllowed: {count2.pair()[0].value} Denied: {count2.pair()[1].value}\n"
+  for x, y in channel_.overwrites.items().__reversed__():
+    desc += f"**{x.mention}**\nAllowed: {y.pair()[0].value} Denied: {y.pair()[1].value}\n"
   embed = discord.Embed(title=f"Overwrites information", description=desc[:4096])
   await ctx.reply(embed=embed)
 
@@ -623,12 +623,12 @@ async def permissions(ctx, integer="help"):
       embed.add_field(name = "Voice permissions", value=vc_itop(int(integer)), inline=False)
     except:
       try:
-        for count,count2 in custom_permissions.items():
-          if SequenceMatcher(None, integer, count).ratio() >= 0.75:
+        for x, y in custom_permissions.items():
+          if SequenceMatcher(None, integer, x).ratio() >= 0.75:
             embed = discord.Embed(title = f"Custom permission {integer}")
-            embed.add_field(name = "Server permissions", value=server_itop(count2.value), inline=False)
-            embed.add_field(name = "Text permissions", value=tc_itop(count2.value), inline=False)
-            embed.add_field(name = "Voice permissions", value=vc_itop(count2.value), inline=False)
+            embed.add_field(name = "Server permissions", value=server_itop(y.value), inline=False)
+            embed.add_field(name = "Text permissions", value=tc_itop(y.value), inline=False)
+            embed.add_field(name = "Voice permissions", value=vc_itop(y.value), inline=False)
             break
         embed
       except:
@@ -638,10 +638,10 @@ async def permissions(ctx, integer="help"):
 @commands.command(aliases= ['permgen', 'permsgen', 'permgenerate', 'permsgenerate', 'permission_gen', 'permissions_gen' 'permission_generate'])
 async def permission_generate(ctx, *, disposed = None):
   permission_view = ui.View(timeout=None)
-  for count in permission_menus:
-    permission_view.add_item(count)
-  #for count in permission_buttons:
-  #  permission_view.add_item(count)
+  for x in permission_menus:
+    permission_view.add_item(x)
+  #for x in permission_buttons:
+  #  permission_view.add_item(x)
   #print(len(permission_view))
   msg = await ctx.reply("Select the permissions! You can select multiple options.", view = permission_view)
   permission_messages[msg] = {"permission_server_selection": [], "permission_text_selection": [], "permission_voice_selection": []}
@@ -682,17 +682,17 @@ async def reactions(ctx, *, msg : discord.Message = None):
   reactions = msg.reactions
   numlist = []
   mylabels = []
-  for counter in reactions:
-    numlist.append(counter.count)
+  for x in reactions:
+    numlist.append(x.count)
     try:
-      mylabels.append(ems.decode(counter.emoji))
+      mylabels.append(ems.decode(x.emoji))
     except:
-      mylabels.append(f"*{counter.emoji.name}")
+      mylabels.append(f"*{x.emoji.name}")
   mylabels = tuple(mylabels)
   y = np.array(numlist)
   mycolors = []
-  for count in range(len(numlist)):
-    mycolors.append(cmaphsv(count/len(numlist)))
+  for x in range(len(numlist)):
+    mycolors.append(cmaphsv(x/len(numlist)))
   patches, labels, pct_texts = plt.pie(y, labels=mylabels, colors=mycolors, rotatelabels=True,
   pctdistance=0.6, autopct=lambda pct: func(pct, y),textprops = db["font_dicts"]["label"])
   for label, pct_text in zip(labels, pct_texts):
@@ -717,8 +717,8 @@ async def role(ctx,role: discord.Role=None):
     f0v = "No members assigned with this role."
   else:
     f0v = ""
-    for count in memberlist:
-      f0v = f0v + count.mention + " "
+    for x in memberlist:
+      f0v = f"{f0v}{x.mention} "
     f0v = f0v[:-1]
   mention=role.mentionable
   f1v=("Mentionable by everyone" if mention else "Not mentionable by everyone")
@@ -747,8 +747,8 @@ async def server(ctx, text = "regular"):
   try:
     base_url = guild.icon.url
     desc += f"\nServer Icon: "
-    for count in range(5, 13):
-      size = str(2**count)
+    for x in range(5, 13):
+      size = str(2**x)
       temp = base_url.replace("?size=1024", f"?size={size}")
       desc += f"[{size}]({temp}) "
   except:
@@ -756,8 +756,8 @@ async def server(ctx, text = "regular"):
   try:
     base_url = guild.banner.url
     desc += f"\nServer Banner: "
-    for count in range(4, 13):
-      size = str(2**count)
+    for x in range(4, 13):
+      size = str(2**x)
       temp = base_url.replace("?size=1024", f"?size={size}")
       desc += f"[{size}]({temp}) "
   except:
@@ -765,8 +765,8 @@ async def server(ctx, text = "regular"):
   try:
     base_url = guild.splash.url
     desc += f"\nServer Invite Splash: "
-    for count in range(4, 13):
-      size = str(2**count)
+    for x in range(4, 13):
+      size = str(2**x)
       temp = base_url.replace("?size=1024", f"?size={size}")
       desc += f"[{size}]({temp}) "
   except:
@@ -780,8 +780,8 @@ async def server(ctx, text = "regular"):
     try:
       f1vlist=await guild.bans()
       f1v=""
-      for count in f1vlist:
-        f1v=f1v+count.user.mention+" "
+      for x in f1vlist:
+        f1v=f"{f1v}{x.user.mention} "
       f1v=f1v[:-1]
     except:
       f1v="Unable to get banned members without Ban-members permission."
@@ -795,60 +795,60 @@ async def server(ctx, text = "regular"):
       embed.add_field(name="Invites", value=f2v, inline=True)
   else:
     f0v=""
-    for count in guild.text_channels:
-      if len(f0v+str(count.mention)+", ") > 1024:
+    for x in guild.text_channels:
+      if len(f"{f0v}{x.mention}, ") > 1024:
         f0v = ""
-        for count2 in guild.text_channels:
-          if len(f0v+count2.name+", ") > 1024:
+        for y in guild.text_channels:
+          if len(f"{f0v}{y.name}, ") > 1024:
             f0v += "… "
             break
-          f0v += count2.name + ", "
+          f0v += f"{y.name}, "
         break
-      f0v += f"{count.mention}, "
+      f0v += f"{x.mention}, "
     f1v=""
     f0v=f0v[:-1]
     if len(guild.voice_channels)==0:
       f1v="No Voice Channels"
     else:
       f1v = ""
-      for count in guild.voice_channels:
-        f1v = f1v + count.name + ", "
+      for x in guild.voice_channels:
+        f1v = f"{f1v}{x.name}, "
       f1v = f1v[:-2]
       if len(f1v) > 500:
         f1v = ""
-        for count in guild.voice_channels:
-          if len(f1v + count.name) > 500:
+        for x in guild.voice_channels:
+          if len(f"{f1v}{x.name}") > 500:
             break
-          f1v = f1v+count.name+", "
+          f1v = f"{f1v}{x.name}, "
         f1v = f1v [:-2] + "…"
     if len(guild.stage_channels)==0:
       f1vc="No Voice Channels"
     else:
       f1vc = ""
-      for count in guild.stage_channels:
-        f1vc = f1vc + count.name + ", "
+      for x in guild.stage_channels:
+        f1vc = f"{f1vc}{x.name}, "
       f1vc = f1vc[:-2]
       if len(f1vc) > 500:
         f1vc = ""
-        for count in guild.stage_channels:
-          if len(f1vc + count.name) > 500:
+        for x in guild.stage_channels:
+          if len(f"{f1vc}{x.name}") > 500:
             break
-          f1vc = f1vc+count.name+", "
-        f1vc = f1vc [:-2] + "…"
+          f1vc = f"{f1vc}{x.name}, "
+        f1vc = f"{f1vc[:-2]}…"
     f1vb=""
     if len(guild.categories)==0:
       f1vb="No Categories"
     else:
-      for count in guild.categories:
-        f1vb=f1vb+str(count.name)+", "
+      for x in guild.categories:
+        f1vb=f"{f1vb}{x.name}, "
       f1vb = f1vb[:-2]
     f1va = ""
     f1valist = guild.roles
     f1valist.reverse()
-    for count in f1valist:
-      if len(f1va + count.mention) > 1024:
+    for x in f1valist:
+      if len(f"{f1va}{x.mention}") > 1024:
         break
-      f1va = f1va + count.mention+" "
+      f1va = f"{f1va}{x.mention} "
     f1va = f1va[:-1]
     f2v = f"{guild.bitrate_limit//1000} kbps"
     f3v = f"{guild.filesize_limit//1048576} MB"
@@ -860,23 +860,23 @@ async def server(ctx, text = "regular"):
       f5v="Not Required"
     f6v=str(guild.verification_level)
     ecf=guild.explicit_content_filter
-    if str(ecf)=="disabled":
+    if ecf==discord.ContentFilter.disabled:
       f7v="Disabled"
-    elif str(ecf)=="no_role":
+    elif ecf==discord.ContentFilter.no_role:
       f7v="Members without roles"
-    elif str(ecf)=="all_members":
+    elif ecf==discord.ContentFilter.all_members:
       f7v="All Members"
     f8v=""
-    for count in guild.members:
-      f8v=f8v+count.mention+" "
+    for x in guild.members:
+      f8v=f"{f8v}{x.mention} "
     f8v=f8v[:-1]
     if len(f8v) > 500:
       f8v = ""
-      for count in guild.members:
-        if len(f8v + count.name) > 500:
+      for x in guild.members:
+        if len(f"{f8v}{x.name}") > 500:
           break
-        f8v = f8v+count.name+", "
-      f8v = f8v [:-2] + "…"
+        f8v = f"{f8v}{x.name}, "
+      f8v = f"{f8v[:-2]}…"
     f10va = str(guild.id)
     f13v = guild.description
     if f13v == None:
@@ -912,7 +912,7 @@ async def server(ctx, text = "regular"):
     if "PUBLIC" in guild.features:
       embed.add_field(name="Public", value="This is a public server.", inline=True)
     if "PARTNERED" in guild.features:
-      embed.add_field(name="Partnered", value="This is a partnered (with Discord) server.", inline=True)
+      embed.add_field(name="Partnered", value="This is a partnered server (with Discord).", inline=True)
     if "VERIFIED" in guild.features:
       embed.add_field(name="Verified", value="This is a verified server.", inline=True)
     embed.add_field(name="Description", value=f13v, inline=False)
@@ -926,12 +926,12 @@ async def server(ctx, text = "regular"):
     await ctx.reply(embed=embed)
   except:
     f1va = ""
-    for count in f1valist:
-      if len(f1va + count.name) > 500:
+    for x in f1valist:
+      if len(f"{f1va}{x.name}") > 500:
         break
-      f1va = f1va + count.name+", "
-    f1va = f1va [:-2] + "…"
-    embed.set_field_at(3, name="Roles ("+str(len(guild.roles))+")", value=f1va, inline=False)
+      f1va += f"{x.name}, "
+    f1va = f"{f1va[:-2]}…"
+    embed.set_field_at(3, name=f"Roles ({len(guild.roles)})", value=f1va, inline=False)
     await ctx.reply(embed=embed)
 
 @commands.command(aliases=["sta"])
@@ -942,53 +942,53 @@ async def status(ctx, member : discord.Member = None):
     desc = str(member.status)+" on mobile"
   else:
     desc = str(member.status)+" on desktop"
-  embed = discord.Embed(title="Status: "+member.name, description=desc)
-  for count in member.activities:
-    if str(count.type)=="ActivityType.custom":
-      if count.emoji==None:
-        field=count.name
+  embed = discord.Embed(title=f"Status: {member.name}", description=desc)
+  for x in member.activities:
+    if x.type==discord.ActivityType.custom:
+      if x.emoji==None:
+        field=x.name
       else:
         try:
-          field=":"+count.emoji.name+": "+count.name
+          field=":"+x.emoji.name+": "+x.name
         except:
           try:
-            field=count.name
+            field=x.name
           except:
-            field=":"+count.emoji.name+":"
+            field=":"+x.emoji.name+":"
       embed.add_field(name="Status", value=field, inline=False)
-    if str(count.type)=="ActivityType.playing":
-      field=count.name+f"\nStarted: {unix_timestamp(count.start)}"
+    if x.type==discord.ActivityType.playing:
+      field=x.name+f"\nStarted: {unix_timestamp(x.start)}"
       embed.add_field(name="Game", value=field, inline=False)
-    if str(count.type)=="ActivityType.streaming":
-      field=f"[{count.platform}: {count.name}]({count.url})\nStarted: {unix_timestamp(count.start)}"
+    if x.type==discord.ActivityType.streaming:
+      field=f"[{x.platform}: {x.name}]({x.url})\nStarted: {unix_timestamp(x.start)}"
       embed.add_field(name="Game", value=field, inline=False)
-      embed.set_thumbnail(url=count.large_image_url)
-    if str(count.type)=="ActivityType.listening":
-      field=f"{count.artist}: {count.title}\nStarted: "
-      embed.add_field(name=f"Spotify: {count.album}", value=field, inline=False)
-      embed.set_thumbnail(url=count.album_cover_url)
+      embed.set_thumbnail(url=x.large_image_url)
+    if x.type==discord.ActivityType.listening:
+      field=f"{x.artist}: {x.title}\nStarted: "
+      embed.add_field(name=f"Spotify: {x.album}", value=field, inline=False)
+      embed.set_thumbnail(url=x.album_cover_url)
   await ctx.reply(embed=embed)
 
 @commands.command(aliases=["sts"])
 async def statuses(ctx, *, disposed = None):
   bot_onlines = bot_dnds = bot_idles = bot_offlines = 0
   usr_onlines = usr_dnds = usr_idles = usr_offlines = 0
-  for count in ctx.guild.members:
-    if count.bot:
-      if count.status == discord.Status.online:
+  for x in ctx.guild.members:
+    if x.bot:
+      if x.status == discord.Status.online:
         bot_onlines += 1
-      elif count.status == discord.Status.dnd:
+      elif x.status == discord.Status.dnd:
         bot_dnds += 1
-      elif count.status == discord.Status.idle:
+      elif x.status == discord.Status.idle:
         bot_idles += 1
       else:
         bot_offlines += 1
     else:
-      if count.status == discord.Status.online:
+      if x.status == discord.Status.online:
         usr_onlines += 1
-      elif count.status == discord.Status.dnd:
+      elif x.status == discord.Status.dnd:
         usr_dnds += 1
-      elif count.status == discord.Status.idle:
+      elif x.status == discord.Status.idle:
         usr_idles += 1
       else:
         usr_offlines += 1
@@ -1058,8 +1058,8 @@ async def sticker(ctx, message: discord.Message=None):
 @commands.command()
 async def stickers(ctx, *, disposed = None):
   desc = ""
-  for count in ctx.guild.stickers:
-    desc += f"{count.emoji} {count.name} (ID: {count.id})\n  {count.description}\n"
+  for x in ctx.guild.stickers:
+    desc += f"{x.emoji} {x.name} (ID: {x.id})\n  {x.description}\n"
   f = open('output.txt', 'w')
   f.write(desc)
   f.flush()
@@ -1166,8 +1166,8 @@ async def user(ctx, user: discord.Member = None, channel: discord.TextChannel = 
   if len(allroles) > 1:
     allroles.reverse()
     allroles = allroles[:-1]
-    for count in allroles:
-      f4v = f4v + count.mention+" "
+    for x in allroles:
+      f4v = f"{f4v}{x.mention} "
     f4v = f4v[:-1]
   else:
     f4v="No roles"

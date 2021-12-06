@@ -9,7 +9,8 @@
     "semi_title" :{"color":"#AAA", "fontsize":10, "fontweight":"demi"},
     "label"      :{"color":"#AAA", "fontsize":8 , "fontweight":"book"},
     "tiny"       :{"color":"#AAA", "fontsize":5 , "fontweight":"light"},
-    "mini"       :{"color":"#AAA", "fontsize":4 , "fontweight":"light"},
+    "mini"       :{"color":"#AAA", "fontsize":4 , "fontweight":"ultralight"},
+    "small_label":{"color":"#FFF", "fontsize":10, "fontweight":"medium"},
     "light_label":{"color":"#FFF", "fontsize":8 , "fontweight":"book"},
     "light_tiny" :{"color":"#FFF", "fontsize":5 , "fontweight":"light"},
     "light_mini" :{"color":"#FFF", "fontsize":4 , "fontweight":"light"},
@@ -33,6 +34,22 @@
     "twdark":{"fg":"#E9EDEFFF", "bg":"#00000000"}, "twlight":{"fg":"#0F181DFF", "bg":"#BDE3E600"}
   },
   "air_quality" : {"1":"Good", "2":"Fair", "3":"Moderate", "4":"Poor", "5":"Very poor"},
+  "compass_points" : {"North":"↑", "Northeast":"↗︎", "East":"→", "Southeast":"↘︎", "South":"↓", "Southwest":"↙︎", "West":"←", "Northwest":"↖︎", "Variable":"", "Calm":"", "N/A":""},
+  "mtr" : {
+    "stations" : ["AWE", "AIR", "TUC", "SUN", "TSY", "LAK", "NAC", "OLY", "KOW", "HOK", "TUM", "SIH", "TIS", "LOP", "YUL", "KSR", "TWW", "NOP", "QUB", "YAT", "TIK", "TKO", "LHP", "HAH", "POA",
+                  "MEF", "AUS", "ETS", "HUH", "HOM", "TKW", "SUW", "KAI", "DIH", "HIK", "TAW", "CKT", "STW", "CIO", "SHM", "TSH", "HEO", "MOS", "WKS"],
+    "lines"    : ["AEL", "TCL", "TML", "TKL"],
+    "lr_stations" : [1,10,15,20,30,40,50,60,70,75,80,90,100,110,120,130,140,150,160,170,180,190,200,212,220,230,240,250,260,265,270,275,280,295,300,
+                    310,320,330,340,350,360,370,380,390,400,425,430,435,445,448,450,455,460,468,480,490,500,510,520,530,540,550,560,570,580,590,600,920],
+    "lr_status" : {"A":"arriving", "D":"departing"}
+  },
+  "kmb_bound" : {"I":"inbound", "O":"outbound"},
+  "currencies":["AED", "AFN", "ALL", "AMD", "ANG", "AOA", "ARS", "AUD", "AWG", "AZN", "BAM", "BBD", "BDT", "BGN", "BHD", "BIF", "BMD", "BND", "BOB", "BRL", "BSD", "BTC", "BTN", "BWP", "BYN", "BZD", "CAD", "CDF",
+                "CHF", "CLF", "CLP", "CNH", "CNY", "COP", "CRC", "CUC", "CUP", "CVE", "CZK", "DJF", "DKK", "DOP", "DZD", "EGP", "ERN", "ETB", "EUR", "FJD", "FKP", "GBP", "GEL", "GGP", "GHS", "GIP", "GMD", "GNF",
+                "GTQ", "GYD", "HKD", "HNL", "HRK", "HTG", "HUF", "IDR", "ILS", "IMP", "INR", "IQD", "IRR", "ISK", "JEP", "JMD", "JOD", "JPY", "KES", "KGS", "KHR", "KMF", "KPW", "KRW", "KWD", "KYD", "KZT", "LAK",
+                "LBP", "LKR", "LRD", "LSL", "LYD", "MAD", "MDL", "MGA", "MKD", "MMK", "MNT", "MOP", "MRO", "MRU", "MUR", "MVR", "MWK", "MXN", "MYR", "MZN", "NAD", "NGN", "NIO", "NOK", "NPR", "NZD", "OMR", "PAB",
+                "PEN", "PGK", "PHP", "PKR", "PLN", "PYG", "QAR", "RON", "RSD", "RUB", "RWF", "SAR", "SBD", "SCR", "SDG", "SEK", "SGD", "SHP", "SLL", "SOS", "SRD", "SSP", "STD", "STN", "SVC", "SYP", "SZL", "THB", "TJS",
+                "TMT", "TND", "TOP", "TRY", "TTD", "TWD", "TZS", "UAH", "UGX", "USD", "UYU", "UZS", "VES", "VND", "VUV", "WST", "XAF", "XAG", "XAU", "XCD", "XDR", "XOF", "XPD", "XPF", "XPT", "YER", "ZAR", "ZMW", "ZWL"],
   "thread_archive" : {
     "1": 60,
     "2": 1440,

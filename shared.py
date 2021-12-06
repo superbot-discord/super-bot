@@ -15,6 +15,7 @@ import emojis as ems
 import folium
 import matplotlib.gridspec as gridspec
 import matplotlib.pyplot as plt
+import matplotlib as mpl
 import numpy as np
 import pytz
 import selenium
@@ -82,6 +83,7 @@ font_lcd3_3   = ImageFont.truetype("fonts/lcd3_3.ttf", 50)
 font_lcd3_3i  = ImageFont.truetype("fonts/lcd3_3i.ttf", 50)
 
 whitney       = ImageFont.truetype("fonts/whitney.otf", 34)
+sf_pro_r      = ImageFont.truetype("fonts/awf.ttf", 23)
 
 led_font_dict = {
   font_led      :  {"spacing" : 20, "padding" : 3  , "height_plus" : 15 , "required_height_plus" : 3  , "unneeded_width" : 8 , "unneeded_padding" : 12},
@@ -131,6 +133,8 @@ led_font_dict = {
   font_lcd3_3i   : {"spacing" : 20, "padding" : 3 , "height_plus" : 3 , "unneeded_width" : 9  }
 }
 
+plt.style.use('mpl.mplstyle')
+
 func            =lambda pct, allvals   : "{:d} ({:.1f}%)".format(int(pct/100*np.sum(allvals)), round(pct, 1))
 botadmin        =lambda context        : context.author.id in db["botadmins"]
 number_to_emoji =lambda a              : a.replace("1",":one: ").replace("2",":two: ").replace("3",":three: ").replace("4",":four: ").replace("5",":five: ").replace("6",":six: ").replace("7",":seven: ").replace("8",":eight: ").replace("9",":nine: ").replace("0",":zero: ")
@@ -143,7 +147,8 @@ specialbool     =lambda input          : input.lower() in ["1", "ok", "yes", "ye
 has_perms       =lambda chn, memb, perm: (chn.permissions_for(memb).value  & 1 << perm) or (chn.permissions_for(memb).value  & 1 << 8) or memb.id in db["botadmins"]
 naiveness       =lambda dt             : "Naive" if (dt.tzinfo is None or dt.tzinfo.utcoffset(dt) is None) else "Not Naive"
 chance          =lambda ratio          : ra.randint(1, ratio) == ratio
-unix_timestamp  =lambda dt, flag="F"   : f"<t:{datetime.timestamp(dt)}:{flag}>"
+unix_timestamp  =lambda dt, flag="F"   : f"<t:{round(datetime.timestamp(dt))}:{flag}>"
+st_nd_th_format =lambda n              : "st" if str(n).endswith("1") and not str(n).endswith("11") else ("th" if str(n).endswith("2") and not str(n).endswith("12") else "nd")
 permission_messages={}
 
 forecast_formatter = """
@@ -156,9 +161,9 @@ def format_fps(stream):
     return 'No vid.'
 
 def try_delete(*filenames):
-  for count in filenames:
+  for x in filenames:
     try:
-      os.remove(count)
+      os.remove(x)
     except:
       pass
 
@@ -412,16 +417,16 @@ badges_real = {
 }
 
 server_permission_options = [discord.SelectOption(label="None", description="Select this if you do not want permissions from this category.")]
-for count, count2 in server_real.items():
-  server_permission_options.append(discord.SelectOption(label=count2, value=count))
+for x, y in server_real.items():
+  server_permission_options.append(discord.SelectOption(label=y, value=x))
 
 text_permission_options = [discord.SelectOption(label="None", description="Select this if you do not want permissions from this category.")]
-for count, count2 in text_channel_real.items():
-  text_permission_options.append(discord.SelectOption(label=count2, value=count))
+for x, y in text_channel_real.items():
+  text_permission_options.append(discord.SelectOption(label=y, value=x))
 
 voice_permission_options = [discord.SelectOption(label="None", description="Select this if you do not want permissions from this category.")]
-for count, count2 in voice_channel_real.items():
-  voice_permission_options.append(discord.SelectOption(label=count2, value=count))
+for x, y in voice_channel_real.items():
+  voice_permission_options.append(discord.SelectOption(label=y, value=x))
 
 permission_menus = [
   ui.Select(placeholder="Server",       min_values=1, max_values=14,custom_id="permission_server_selection",row=0, options=server_permission_options),
@@ -438,9 +443,9 @@ youtube_headers={'cookie':'SID=CghejA2ZNiG3ffH-ea-xuLc9tIaHBbwGapD38onoVwAzAbkHn
 
 def badges_itop(integer):
   cache3 = ""
-  for count, count2 in badges_real.items():
-    if integer & 1 << count:
-      cache3 += count2 + ", "
+  for x, y in badges_real.items():
+    if integer & 1 << x:
+      cache3 += y + ", "
   if len(cache3) > 2:
     return cache3[:-2]
   else:
@@ -448,9 +453,9 @@ def badges_itop(integer):
 
 def server_itop(integer):
   cache3 = ""
-  for count, count2 in server_real.items():
-    if integer & 1 << count:
-      cache3 += count2 + ", "
+  for x, y in server_real.items():
+    if integer & 1 << x:
+      cache3 += y + ", "
   if len(cache3) > 2:
     return cache3[:-2]
   else:
@@ -458,9 +463,9 @@ def server_itop(integer):
 
 def tc_itop(integer):
   cache3 = ""
-  for count, count2 in text_channel_real.items():
-    if integer & 1 << count:
-      cache3 += count2 + ", "
+  for x, y in text_channel_real.items():
+    if integer & 1 << x:
+      cache3 += y + ", "
   if len(cache3) > 2:
     return cache3[:-2]
   else:
@@ -468,9 +473,9 @@ def tc_itop(integer):
 
 def vc_itop(integer):
   cache3 = ""
-  for count, count2 in voice_channel_real.items():
-    if integer & 1 << count:
-      cache3 += count2 + ", "
+  for x, y in voice_channel_real.items():
+    if integer & 1 << x:
+      cache3 += y + ", "
   if len(cache3) > 2:
     return cache3[:-2]
   else:
@@ -481,7 +486,7 @@ help_all = discord.Embed(title="SuperBot#4073 (ID:796686363604680755)", descript
 **Basic Commands**
 `help` `inter_help` `support` `invite` `prefix` `ping` `botpurge`\n
 **Discord Information Commands**
-`server` `invitelink` `role` `channel` `user` `avatar` `banner` `status` `leftuser` `message` `raw` `rawraw` `reactions` `emojiinfo` `sticker` `template`
+`server` `statuses` `invitelink` `role` `channel` `user` `avatar` `banner` `status` `leftuser` `message` `raw` `rawraw` `reactions` `emojiinfo` `sticker` `template`
 `permissions` `badges` `stickers` `emojis` `led_server` `led2_server` `led3_server` `led4_server`\n
 **Discord Commands**
 `react` `snipe` `clearsnipe` `pretend` `pretendembed` `embed` `editembed` `simpleembed` `quickembed` `ett` `tts`\n
@@ -492,7 +497,7 @@ help_all = discord.Embed(title="SuperBot#4073 (ID:796686363604680755)", descript
 **Information Commands**
 `color` `simplecolor` `translate` `definition` `unix` `time` `rtimer` `ttimer` `terminate` `unscramble` `unicode` `random` `choice` `raffle` `pick`\n
 **Web Commands**
-`redirect` `screenshot` `youtube` `wiki` `minecraft` `engrave` `covid` `population` `map`
+`redirect` `screenshot` `youtube` `wiki` `minecraft` `engrave` `covid` `population` `states` `map` `weather` `forecast`
 `bunny` `cat` `dog` `duck` `fox` `koala` `lizard` `panda` `shiba` `error` `errorcat` `errordog`\n
 **Plot/Drawing Commands**
 `ascii` `table` `render` `captcha` `graph` `bline` `bline2` `pie` `barh` `barv` `hist` `sankey` `snow` `mandelbrot`\n

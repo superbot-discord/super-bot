@@ -15,10 +15,10 @@ channel_sort   = lambda    c      : 1 if c.type in [discord.ChannelType.voice, d
 def autowrap(needed_width, font, text):
   output = ""
   cache_text = ""
-  for count in text.split(' '):
-    width = font.getsize_multiline(cache_text+count)[0]
+  for x in text.split(' '):
+    width = font.getsize_multiline(f"{cache_text}{x}")[0]
     if width < needed_width or cache_text == "":
-      cache_text += f"{count} "
+      cache_text += f"{x} "
     else:
       output += f"{cache_text}\n"
       cache_text = ""
@@ -49,18 +49,18 @@ def led_server_info(server : discord.Guild):
       return ""
   led_server_channels = list(filter(lambda i: i.type != discord.ChannelType.category, server.channels))
   led_server_channels.sort(key=channel_sort)
-  for count in led_server_channels:
-    if not count.category:
-      desc += desc_add(count)
+  for x in led_server_channels:
+    if not x.category:
+      desc += desc_add(x)
   led_server_categories = server.categories
   led_server_categories.sort(key=lambda i: i.position)
-  for count in led_server_categories:
-    desc += desc_add(count)
-    led_in_category_channels = count.channels
+  for x in led_server_categories:
+    desc += desc_add(x)
+    led_in_category_channels = x.channels
     #led_in_category_channels.sort(key=lambda i: i.position)
     led_in_category_channels.sort(key=channel_sort)
-    for count2 in led_in_category_channels:
-      desc += desc_add(count2)
+    for y in led_in_category_channels:
+      desc += desc_add(y)
   return desc
 
 @commands.command()
@@ -290,9 +290,9 @@ async def led4_server(ctx, mode: led_34_modes = '1', color: led_colors = 'red', 
 #   width = width if width else total/3.3028
 #   image = Image.new("RGBA", (total*20, width), color=db["led_colors"][color]["bg"])
 #   draw = ImageDraw.Draw(image)
-#   for count in range(step):
-#     for count2 in range(5):
-#       draw.rectangle([round(count*width/5), round(count2*width/5+1), round(count*width/5+width/5.5), round(count2*width/5+width/5.5)], fill=db["led_colors"][color]["fg"])
+#   for x in range(step):
+#     for y in range(5):
+#       draw.rectangle([round(x*width/5), round(y*width/5+1), round(x*width/5+width/5.5), round(y*width/5+width/5.5)], fill=db["led_colors"][color]["fg"])
 #   image.save('output.png')
 #   await ctx.reply(file=discord.File('output.png'))
 #   try_delete('output.png')
@@ -302,9 +302,9 @@ async def led_bar(ctx, total : int, step : int, color: led_colors = 'red', width
   #width = width if width else round(total/66.0555)
   image = Image.new("RGBA", (total*20, width*20), color=db["led_colors"][color]["bg"])
   draw = ImageDraw.Draw(image)
-  for count in range(step):
-    for count2 in range(width):
-      draw.rectangle([count*20, count2*20+1, count*20+17, count2*20+18], fill=db["led_colors"][color]["fg"])
+  for x in range(step):
+    for y in range(width):
+      draw.rectangle([x*20, y*20+1, x*20+17, y*20+18], fill=db["led_colors"][color]["fg"])
   image.save('output.png')
   await ctx.reply(file=discord.File('output.png'))
   try_delete('output.png')
