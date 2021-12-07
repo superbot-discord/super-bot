@@ -98,7 +98,9 @@ async def google(ctx, *, query):
   r=requests.get(f"https://customsearch.googleapis.com/customsearch/v1?q={query}&key=AIzaSyD1MZMlUhPVKfBwpuzpB8DRxK_rGRf900c&cx=6231cd28c1acb6c83").json()['items']
   desc = ""
   for x in r:
-    desc += f"**[{html_to_md(x['htmlTitle'])}]({x['link']})**{' (Family unsafe)' if x['pagemap']['document'][0]['family_unsafe'] else ''}"+f"Alternative title: {x['pagemap']['metatags'][0]['og:title']}\n" if x['pagemap']['metatags'][0].get('og:title', None) else ''+f"{html_to_md(x['htmlSnippet'])}\n"
+    if x['pagemap'].get('document', None):
+      x_ = ' (Family unsafe)' if x['pagemap']['document'][0]['family_unsafe'] else ''
+    desc += f"**[{html_to_md(x['htmlTitle'])}]({x['link']})**{x_ if x['pagemap'].get('document', None) else ''}"+f"Alternative title: {x['pagemap']['metatags'][0]['og:title']}\n" if x['pagemap']['metatags'][0].get('og:title', None) else ''+f"{html_to_md(x['htmlSnippet'])}\n"
   embed = discord.Embed(title=f"Google search results for {query}", description=desc)
   await ctx.reply(embed=embed)
 

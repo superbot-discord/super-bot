@@ -475,55 +475,39 @@ async def table(ctx, *, text):
     splitted.insert(0, "")
   header = splitted[0]
   footer = splitted[1]
-  everythingelse = splitted[2:len(splitted)]
+  everythingelse = splitted[2:]
   if "|||" in header:
     rawstyle = re.sub(r"([\w]*?)\|\|\|([\s\S]*)", r"\1", header)
     header = re.sub(r"([\w]*?)\|\|\|([\s\S]*)", r"\2", header)
   else:
     rawstyle = ""
+  fch = False
+  lch = False
   if header.startswith("$F$"):
-    first_col_heading = True
+    fch = True
     header = header.replace("$F$", "", 1)
-  else:
-    first_col_heading = False
   if header.startswith("$L$"):
-    last_col_heading = True
+    lch = True
     header = header.replace("$L$", "", 1)
-  else:
-    last_col_heading = False
   if rawstyle.replace(" ", "") == "":
     style = PresetStyle.double_thin_compact
   else:
     try:
-      style = eval("PresetStyle."+rawstyle)
+      style = eval(f"PresetStyle.{rawstyle}")
     except:
       style = PresetStyle.double_thin_compact
   try:
-    headers = header.split(",")
-    footers = footer.split(",")
+    headers = header.split(",") if header else []
+    footers = footer.split(",") if footer else []
   except:
     pass
   rawbodies = everythingelse#.split(f"\n")
   bodies = []
   for x in rawbodies:
     bodies.append(x.split(","))
-  try:
-    output = table2ascii(header=headers, footer=footers, body=bodies, style=style, first_col_heading=first_col_heading,  last_col_heading=last_col_heading)
-  except:
-    try:
-      output = table2ascii(footer=footers, body=bodies, style=style)
-    except:
-      try:
-        output = table2ascii(header=headers, body=bodies, style=style)
-      except:
-        try:
-          output = table2ascii(body=bodies, style=style)
-        except:
-          await ctx.reply("Invalid syntax, please try again.")
-          return
+  output = table2ascii(header=headers, footer=footers, body=bodies, style=style, first_col_heading=fch, last_col_heading=lch)
   f = open("table.txt", "w")
   f.write(output)
-  f.flush()
   f.close()
   await ctx.reply(f"```{output}```", file=discord.File('table.txt'))
   try_delete('table.txt')
