@@ -2,6 +2,7 @@ import pytube
 from PyDictionary import PyDictionary
 from pygoogletranslation import Translator
 from shared import *
+from functions import *
 
 dictionary    = PyDictionary()
 translatorvar = Translator()
@@ -91,6 +92,16 @@ async def gender(ctx, *, name):
     await ctx.reply(f"{name} is {round(gender_json['probability']*100, 2)}% a {gender_json['gender']}.")
   else:
     await ctx.reply("No gender was found for the name.")
+
+@commands.command()
+async def google(ctx, *, query):
+  r=requests.get(f"https://customsearch.googleapis.com/customsearch/v1?q={query}&key=AIzaSyD1MZMlUhPVKfBwpuzpB8DRxK_rGRf900c&cx=6231cd28c1acb6c83").json()['items']
+  desc = ""
+  for x in r:
+    desc += f"""**[{html_to_md(x['htmlTitle'])}]({x['link']})**{' (Family unsafe)' if x['pagemap']['document'][0]['family_unsafe'] else ''}
+    {f'Alternative title: {x["pagemap"]["metatags"][0]["og:title"]}\n' if x["pagemap"]["metatags"][0].get("og:title", None) else ''}{html_to_md(x['htmlSnippet'])}\n"""
+  embed = discord.Embed(title=f"Google search results for {query}", description=desc)
+  await ctx.reply(embed=embed)
 
 @commands.command()
 async def minecraft(ctx, *, item="tnt"):
@@ -284,11 +295,12 @@ async def wiki_search(ctx, *, query):
   z=len(query)
   embed=discord.Embed(title=f"Wikipedia search results for {query}")
   for x, y in r.items():
+    y_extract = y['extract'].replace('"', '')
     f0n = y['title'] + (f" ({y['description']})" if y.get('description', None) else "")
-    if len(f0n+y['extract'])>5973-z:
+    if len(f0n+y_extract)>5971-z:
       break
-    z+=len(f0n+y['extract'])-2
-    embed.add_field(name=f0n, value=y['extract'].replace('"', '')[:1025], inline=False)
+    z+=len(f0n+y_extract)
+    embed.add_field(name=f0n, value=f"{y_extract[:1023]}…" if len(y_extract) > 1024 else y_extract, inline=False)
   await ctx.reply(embed=embed)
 
 @commands.command()
@@ -468,6 +480,7 @@ def setup(bot):
   bot.add_command(errordog)
   bot.add_command(forecast)
   bot.add_command(gender)
+  bot.add_command(google)
   bot.add_command(minecraft)
   bot.add_command(redirect)
   bot.add_command(translate)
