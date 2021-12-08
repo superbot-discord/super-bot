@@ -1,4 +1,5 @@
 import pytz
+import statistics
 from shared import *
 
 set(pytz.all_timezones_set)
@@ -101,6 +102,18 @@ async def regsub(ctx, regular1, regular2, *, text):
   await ctx.reply(embed=embed)
 
 @commands.command()
+async def stats(ctx, *numbers: int):
+  numbers = list(numbers) if len(numbers) > 1 else [numbers]
+  desc = f"Field\t\t\tValue\tExplanation\nArithmetic Mean\t\t{statistics.mean(numbers)}\t∑÷n\t\t\t\tAlso known as average\nGeometric Mean\t\t{statistics.geometric_mean(numbers)}\tⁿ√(∏)\t\t\t\tGood for handling exponents\nHarmonic Mean\t\t{statistics.harmonic_mean(numbers)}\tn÷(1÷a+1÷b+…)\t\t\tUsed to calculate the average speed of a trip\nMedian\t\t"
+  desc += (str(statistics.median(numbers)) if statistics.median_high(numbers)==statistics.median_low(numbers) else f"{statistics.median_low(numbers)} & {statistics.median_high(numbers)}") + f"\tMiddle item of the data\nVariance\t{statistics.variance(numbers)}\t((Mean-a)²+(Mean-b)²+…)÷n\tDeviation of the data; cannot be used directly\nStandard Dev\t{statistics.stdev(numbers)}\t√(Variance)\t\t\tDeviation of the data; in large data sets, ~68% will be within Mean±Standard-Deviation"
+  desc += f"\nVariance*\t{statistics.pvariance(numbers)}\t((Mean-a)²+(Mean-b)²+…)÷(n-1)\tDeviation of the data; cannot be used directly\nStandard Dev*\t{statistics.stdev(numbers)}\t√(Variance*)\t\t\tDeviation of the data; in large data sets, ~68% will be within Mean±Standard-Deviation\n\n*In Variance* and SD*, the sum of squares is divided by n-1 instead of n. This method (Bessel's correction) is used when the data is a small selection (sample) of the large data set (population)."
+  f=open("statistics.txt", "w")
+  f.write(desc)
+  f.close()
+  await ctx.send(f"```\n{desc}```", file=discord.File('statistics.txt'))
+  try_delete('statistics.txt')
+
+@commands.command()
 async def time(ctx, *, timezoneinput="0"):
   if timezoneinput.replace(".","").isnumeric():
     timezone=float(timezoneinput)
@@ -131,4 +144,5 @@ def setup(bot):
   bot.add_command(element)
   bot.add_command(regex)
   bot.add_command(regsub)
+  bot.add_command(stats)
   bot.add_command(time)
