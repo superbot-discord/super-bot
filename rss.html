@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <link rel="stylesheet" id="mystyle" href="rss_css.css">
+</head>
+
+<body>
+  <div id="D1" style="width: 79vw; float: left;">
+    <h1>{d.feed.title}</h1>
+  </div>
+  <div id="D2" style="width: 19vw; float: right;">
+    <img src="{d.feed.image}"/>
+  </div>
+  <script>
+    var new_height = String(Math.max(document.getElementById("D1").clientHeight, document.getElementById("D2").clientHeight))+"px"
+    document.getElementById("D1").style.height = new_height
+    document.getElementById("D2").style.height = new_height
+  </script>

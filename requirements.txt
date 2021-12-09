@@ -36,6 +36,7 @@ art==5.3
 
 # Web info
 beautifulsoup4==4.10.0
+feedparser==6.0.8
 selenium==4.1.0
 pytube==11.0.1
 

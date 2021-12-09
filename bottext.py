@@ -45,8 +45,6 @@ async def compress(ctx, *, text):
   compress_key = ""
   for x, y in lengths:
     compress_key += x.replace("_", "UNDERSCORE")+f"{y}_"
-  print(lengths)
-  print(huffman_encoder)
   await ctx.reply(f"Estimated file size: {os.path.getsize('compressed.txt')} bytes\nKey:\n```\n{compress_key[:-1]}\n```", file = discord.File("compressed.txt"))
   try_delete("compressed.txt")
 
@@ -85,8 +83,6 @@ async def decompress(ctx, *, key):
     x=x.replace("UNDERSCORE", "_")
     lengths.append((x[0], int(x[1:])))
   huffman_encoder = huffman.codebook(lengths)
-  print(lengths)
-  print(huffman_encoder)
   for x, y in huffman_encoder.items():
     huffman_encoder[x] = bitarray.bitarray(y)
   x=bitarray.bitarray()

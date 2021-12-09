@@ -1,8 +1,10 @@
+import feedparser
 import pytube
 from PyDictionary import PyDictionary
 from pygoogletranslation import Translator
-from shared import *
+
 from functions import *
+from shared import *
 
 dictionary    = PyDictionary()
 translatorvar = Translator()
@@ -165,6 +167,27 @@ async def redirect(ctx, *, url):
       await ctx.reply("Initial URL: "+urllist[0]+f"\n"+f"\n".join([f"{i.status_code}: {i.url}" for i in urllist[1:urlend]])+"Final URL: "+urllist[len(urllist)-1])
   except:
     await ctx.reply("Invalid URL. Please try again.")
+
+@commands.command()
+async def rss(ctx, *, url):
+  try:
+    d = feedparser.parse(url)
+  except:
+    await ctx.reply('Invalid URL. Make sure that the URL ends with `.xml`. If the error persists, please contact JohannLau#6541.')
+    return
+  e=d.entries[0]
+  embed = discord.Embed(title=e.title, description=e.summary, url=e.id)
+  embed.set_footer(text=f"Published {e.published}")
+  f = open("rss.html", "r")
+  desc = eval('f"""'+f.read()+'"""')
+  f.close()
+  for x in d.entries:
+    desc += f'<h2><a href="{x.id}">{x.title}</a></h2><p>{x.summary}</p>'
+  f = open(f"rss{ctx.message.id}.html", "w")
+  f.write(desc+"</body>")
+  f.close()
+  await ctx.reply(embed=embed, files=[discord.File(f"rss{ctx.message.id}.html"), discord.File("rss_css.css")])
+  try_delete(f"rss{ctx.message.id}.html")
 
 @commands.command()
 async def translate(ctx, lang = "list", fromlang = "auto", *, text = "Sample text"):
@@ -484,6 +507,7 @@ def setup(bot):
   bot.add_command(google)
   bot.add_command(minecraft)
   bot.add_command(redirect)
+  bot.add_command(rss)
   bot.add_command(translate)
   bot.add_command(unscramble)
   bot.add_command(weather)

@@ -239,3 +239,4 @@ def setup(bot):
   bot.add_command(shiba)
   bot.add_command(states)
   bot.add_command(trivia)
+  print("Started loading modules")

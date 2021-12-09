@@ -1,0 +1,44 @@
+html {
+  scroll-behavior: smooth;
+  font-family: Roboto, 'Segoe UI', Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+a:link {
+  color: #0000d0;
+}
+
+a:visited {
+  color: #6000d0;
+}
+
+a:hover {
+  color: #4090ff;
+}
+
+a:active {
+  color: #1060cf;
+}
+
+h1, h2, h3 {
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+h1 {
+  font-size: 32px;
+}
+
+h2 {
+  font-size: 28px;
+}
+
+h3 {
+  font-size: 25px;
+}
+
+p {
+  font-size: 20px;
+}
+
+div.overflow {
+  overflow-x: scroll;
+}
