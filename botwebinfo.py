@@ -176,9 +176,9 @@ async def rss(ctx, *, url):
     await ctx.reply('Invalid URL. If the error persists, please contact JohannLau#6541.')
     return
   e=d.entries[0]
-  embed = discord.Embed(title=e.title, description=e.summary)
-  if e.id.startswith("http"):
-    embed.url = e.id
+  embed = discord.Embed(title=e.title, description=e.summary, url=d.entries[0].link)
+  #if e.link.startswith("http"):
+  #  embed.url = e.link
   embed.set_footer(text=f"Published {e.published}")
   f = open("rss.html", "r")
   desc = eval('f"""'+f.read()+'"""')
