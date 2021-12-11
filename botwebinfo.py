@@ -156,12 +156,12 @@ async def redirect(ctx, *, url):
   try:
     r = requests.get(url, allow_redirects=True)
     urllist = r.history
-    if len(urllist) == 0:
-      await ctx.reply("Invalid URL. Please try again.")
+    if len(urllist) == 2:
+      await ctx.reply(f"URL redirected to: {urllist[1].url} with status code {urllist[1].status_code}")
     elif len(urllist) == 1:
-      await ctx.reply("No redirects found for that URL.")
-    elif len(urllist) == 2:
-      await ctx.reply("URL redirected to: "+urllist[1].url+" with status code "+str(urllist[1].status_code))
+      await ctx.reply(f"URL moved to: {r.url} with status code {urllist[1].status_code}")
+    elif len(urllist) == 0:
+      await ctx.reply("No redirects or moves found for that URL.")
     else:
       urlend = len(urllist)-2
       await ctx.reply("Initial URL: "+urllist[0]+f"\n"+f"\n".join([f"{i.status_code}: {i.url}" for i in urllist[1:urlend]])+"Final URL: "+urllist[len(urllist)-1])
@@ -173,7 +173,7 @@ async def rss(ctx, *, url):
   try:
     d = feedparser.parse(url)
   except:
-    await ctx.reply('Invalid URL. Make sure that the URL ends with `.xml`. If the error persists, please contact JohannLau#6541.')
+    await ctx.reply('Invalid URL. If the error persists, please contact JohannLau#6541.')
     return
   e=d.entries[0]
   embed = discord.Embed(title=e.title, description=e.summary, url=e.id)

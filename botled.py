@@ -69,7 +69,7 @@ async def fakemsg(ctx, size: typing.Optional[typing.Literal['mobile', 'tablet', 
   text = autowrap(true_size, whitney, text_input)
   image = Image.new("RGBA", (true_size, whitney.getsize_multiline(text)[1]+8), color=db["led_colors"][theme]["bg"])
   draw = ImageDraw.Draw(image)
-  draw.multiline_text((0, 0), text, font=whitney, fill=db["led_colors"][theme]["fg"], spacing=0, align="left")
+  draw.multiline_text((-1, 0), text, font=whitney, fill=db["led_colors"][theme]["fg"], spacing=0, align="left")
   image.save('output.png')
   await ctx.reply(file=discord.File('output.png'))
   try_delete('output.png')
