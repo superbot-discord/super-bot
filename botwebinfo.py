@@ -159,7 +159,7 @@ async def redirect(ctx, *, url):
     if len(urllist) == 2:
       await ctx.reply(f"URL redirected to: {urllist[1].url} with status code {urllist[1].status_code}")
     elif len(urllist) == 1:
-      await ctx.reply(f"URL moved to: {r.url} with status code {urllist[1].status_code}")
+      await ctx.reply(f"URL moved to: {r.url} with status code {urllist[0].status_code}")
     elif len(urllist) == 0:
       await ctx.reply("No redirects or moves found for that URL.")
     else:
@@ -176,7 +176,9 @@ async def rss(ctx, *, url):
     await ctx.reply('Invalid URL. If the error persists, please contact JohannLau#6541.')
     return
   e=d.entries[0]
-  embed = discord.Embed(title=e.title, description=e.summary, url=e.id)
+  embed = discord.Embed(title=e.title, description=e.summary)
+  if e.id.startswith("http"):
+    embed.url = e.id
   embed.set_footer(text=f"Published {e.published}")
   f = open("rss.html", "r")
   desc = eval('f"""'+f.read()+'"""')
