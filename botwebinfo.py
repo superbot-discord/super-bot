@@ -177,14 +177,12 @@ async def rss(ctx, *, url):
     return
   e=d.entries[0]
   embed = discord.Embed(title=e.title, description=e.summary, url=d.entries[0].link)
-  #if e.link.startswith("http"):
-  #  embed.url = e.link
   embed.set_footer(text=f"Published {e.published}")
   f = open("rss.html", "r")
   desc = eval('f"""'+f.read()+'"""')
   f.close()
   for x in d.entries:
-    desc += f'<h2><a href="{x.id}">{x.title}</a></h2><p>{x.summary}</p>'
+    desc += f'<h2><a href="{x.link}">{x.title}</a></h2><p>{x.summary}</p>'
   f = open(f"rss{ctx.message.id}.html", "w")
   f.write(desc+"</body>")
   f.close()

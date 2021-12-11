@@ -1,10 +1,15 @@
 import re
+import regex
 import typing
 from difflib import SequenceMatcher
 
 def html_to_md(text : str):
   text = re.sub(r'<b>(.+?)</b>', r'**\1**', text)
   text = re.sub(r'<i>(.+?)</i>', r'*\1*', text)
+  text = re.sub(r'<i>(.+?)</i>', r'*\1*', text)
+  text = re.sub(r'<a href="([\w?:/\&%]+?)"( target="_[A-Za-z]+?")>(.+?)</a>', r'[\2](\1)', text)
+  text = regex.sub(r'(?<=<ol>\n?(<li>[A-Za-z\s]+<\/li>\n?)*)(<li>([A-Za-z\s]+)<\/li>)(?=\n?(<li>[A-Za-z\s]+<\/li>\n?)*<\/ol>)', '• \3', text)
+  text = regex.sub(r'(?<=<ul>\n?(<li>[A-Za-z\s]+<\/li>\n?)*)(<li>([A-Za-z\s]+)<\/li>)(?=\n?(<li>[A-Za-z\s]+<\/li>\n?)*<\/ul>)', '• \3', text)
   return text
 
 def many_replace(text : str, replacer : dict[str : str]):
