@@ -330,7 +330,7 @@ async def emojiinfo(ctx,emoji_ : typing.Union[discord.Emoji, str]):
     if not cemoji:
       await ctx.send(f"Emoji not found!\nNote: regional indicators are not emojis in the technical sense.")
       return
-    embed = discord.Embed(title="Emoji Info", description = (f"{cemoji[1]} :{':, :'.join(cemoji[0])}:"))
+    embed = discord.Embed(title="Emoji Info", description = (cemoji[1]+"\:" + ':, \:'.join(cemoji[0]) +":"))
     embed.add_field(name="Category", value=cemoji[3], inline=True)
     embed.add_field(name="Unicode Version", value=cemoji[4], inline=True)
     if len(cemoji[2]) > 0:
