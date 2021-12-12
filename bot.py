@@ -57,6 +57,8 @@ async def on_command_error(ctx, error):
     available_commands = [cmd.name for cmd in bot_.commands]
     matches = {cmd: SequenceMatcher(None, cmd, used_command).ratio() for cmd in available_commands}
     command = max(matches.items(), key=lambda item: item[1])[0]
+    if SequenceMatcher(None, used_command, used_command).ratio() <= 0.7:
+      await ctx.reply(f'Your might have made a (serious) typo and your command has been ignored.', delete_after=4)
     try:
       arguments = message.content.split(" ", 1)[1]
     except IndexError:

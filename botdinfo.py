@@ -325,8 +325,11 @@ async def emojiinfo(ctx,emoji_ : typing.Union[discord.Emoji, str]):
     embed.set_image(url = emoji_.url)
   except:
     cemoji = ems.db.get_emoji_by_alias(emoji_)
-    if cemoji == None:
+    if not cemoji:
       cemoji = ems.db.get_emoji_by_code(emoji_)
+    if not cemoji:
+      await ctx.send(f"Emoji not found!\nNote: regional indicators are not emojis in the technical sense.")
+      return
     embed = discord.Embed(title="Emoji Info", description = (f"{cemoji[1]} :{':, :'.join(cemoji[0])}:"))
     embed.add_field(name="Category", value=cemoji[3], inline=True)
     embed.add_field(name="Unicode Version", value=cemoji[4], inline=True)

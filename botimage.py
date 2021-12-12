@@ -60,7 +60,11 @@ async def image(ctx, *, mode):
       colors = int(mode.split(" ")[2])
     except:
       colors = 5
-    dominant = analyse(scale, colors)
+    try:
+      dominant = analyse(scale, colors)
+    except Exception('Empty pixels when quantize.'):
+      await ctx.send("The image contains empty pixels.")
+      return
     try:
       await ctx.reply(f"Images are sorted by amount, brightness and hue respectively.\nDominant color: {dominant}", files=[discord.File('output_amount.png'), discord.File('output_lightness.png'), discord.File('output_hue.png'), discord.File('analysis.txt')])
     except:
