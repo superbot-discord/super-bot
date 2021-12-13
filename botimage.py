@@ -332,6 +332,14 @@ async def ocr(ctx, lang="eng", *, disposed = None):
       desc="There was no text."
     await ctx.reply(desc)
 
+@commands.command(aliases=['image_gen'])
+async def image_generate(ctx, color, width: int, height: int = None, format: typing.Literal["bmp", "gif", "jpg", "png", "tiff"] = "png", mode: typing.Literal["1", "L", "P", "RGB", "RGBA", "CMYK", "YCbCr", "LAB", "HSV", "I", "F"] = "RGBA"):
+  height = height if height else width
+  img = Image.new(mode, (width, height), color)
+  img.save(f'image.{format}')
+  await ctx.reply(file=discord.File(f'image.{format}'))
+  try_delete(f'image.{format}')
+
 @commands.command(aliases=['scan'])
 async def qr(ctx, *, disposed = None):
   for x in ctx.message.attachments:
@@ -410,8 +418,9 @@ async def transparent(ctx, alpha = 128):
 
 def setup(bot):
   bot.add_command(apple_watch)
-  bot.add_command(image)
   bot.add_command(captcha)
+  bot.add_command(image)
+  bot.add_command(image_generate)
   bot.add_command(mandelbrot)
   bot.add_command(ocr)
   bot.add_command(qr)

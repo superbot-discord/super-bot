@@ -73,9 +73,11 @@ async def on_command_error(ctx, error):
     await ctx.reply(f'One or more of your arguments is/are not in the correct format! Please read the documentation.')
   elif isinstance(error, commands.NotOwner):
     await ctx.reply(f'Unfortunately, only the owner of the bot is allowed to use this.')
+  elif isinstance(error, commands.errors.CommandInvokeError(FileNotFoundError)):
+    await ctx.reply(f'Unfortunately, the file could not be generated.')
   else:
     try:
-      await ctx.reply(f"An error occured:\n```{''.join(traceback.format_exception(type(error), error, error.__traceback__))}```\nIf you think that this is an issue with the bot, please kindly inform JohannLau#6541 about this issue.")
+      await ctx.reply(f"Sorry! An error occured:\n```{''.join(traceback.format_exception(type(error), error, error.__traceback__))}```\n If the error persists, please kindly inform JohannLau#6541 about this issue.")
     except:
       print(''.join(traceback.format_exception(type(error), error, error.__traceback__)))
       await ctx.reply(f"Sorry! An error occured. The error was too long but it had been shown to JohannLau#6541. If the error persists, Please kindly inform him about this issue.")

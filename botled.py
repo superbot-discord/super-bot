@@ -285,18 +285,6 @@ async def led4_server(ctx, mode: led_34_modes = '1', color: led_colors = 'red', 
   await ctx.reply(file=discord.File('output.png'))
   try_delete('output.png')
 
-# @commands.command()
-# async def led_bar(ctx, total : int, step : int, color: led_colors = 'red', width : int = None):
-#   width = width if width else total/3.3028
-#   image = Image.new("RGBA", (total*20, width), color=db["led_colors"][color]["bg"])
-#   draw = ImageDraw.Draw(image)
-#   for x in range(step):
-#     for y in range(5):
-#       draw.rectangle([round(x*width/5), round(y*width/5+1), round(x*width/5+width/5.5), round(y*width/5+width/5.5)], fill=db["led_colors"][color]["fg"])
-#   image.save('output.png')
-#   await ctx.reply(file=discord.File('output.png'))
-#   try_delete('output.png')
-
 @commands.command()
 async def led_bar(ctx, total : int, step : int, color: led_colors = 'red', width : int = 5):
   #width = width if width else round(total/66.0555)
