@@ -186,3 +186,4 @@ async def engrave(ctx, product = "list", *, text = "Your text goes here."):
 
 def setup(bot):
   bot.add_command(engrave)
+  print("Midway through loading modules")

@@ -498,7 +498,9 @@ help_all = discord.Embed(title="SuperBot#4073 (ID:796686363604680755)", descript
 `color` `simplecolor` `translate` `definition` `unix` `time` `rtimer` `ttimer` `terminate` `unscramble` `unicode` `random` `choice` `raffle` `pick`\n
 **Web Commands**
 `redirect` `screenshot` `youtube` `wiki` `minecraft` `engrave` `covid` `population` `states` `map` `weather` `forecast`
-`bunny` `cat` `dog` `duck` `fox` `koala` `lizard` `panda` `shiba` `error` `errorcat` `errordog`\n
+`bird` `bunny` `cat` `dog` `duck` `fox` `kangaroo` `koala` `lizard` `panda` `raccoon`
+Add `_fact` to each of the 11 animal commands above (e.g. `bird_fact`) to get a fun fact about the animal.
+`dish` `nasa` `joke` `quote` `trivia` `shiba` `error` `errorcat` `errordog`\n
 **Plot/Drawing Commands**
 `ascii` `table` `render` `captcha` `graph` `bline` `bline2` `pie` `barh` `barv` `hist` `sankey` `snow` `mandelbrot`\n
 **Developer Tools and Miscellaneous Commands**

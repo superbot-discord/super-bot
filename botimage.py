@@ -17,7 +17,7 @@ aw = [[(230, 153), "#3F91F0FF"], [(296, 170), "#69D880FF"], [(342, 220), "#DE9F4
 
 @commands.command()
 async def apple_watch(ctx, *, text = "NEVERGONNAGIVEYUUP"):
-  texts = [text[x*2:x*2+2] for x in range(0, floor(len(text)/2))]
+  texts = [text[x*2:x*2+2] for x in range(floor(len(text)/2))]
   img = Image.open("fonts/aw.png")
   draw = ImageDraw.Draw(img)
   for x, y in zip(aw, texts):
