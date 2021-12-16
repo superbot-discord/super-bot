@@ -6,6 +6,7 @@ PyNaCl==1.4.0
 
 # Literal + dependencies
 pygoogletranslation==2.0.6
+googletrans==4.0.0-rc1
 pydictionary==2.0.1
 spellwise==0.8.1
 
