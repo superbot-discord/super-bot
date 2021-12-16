@@ -73,7 +73,7 @@ async def on_command_error(ctx, error):
     await ctx.reply(f'One or more of your arguments is/are not in the correct format! Please read the documentation.')
   elif isinstance(error, commands.NotOwner):
     await ctx.reply(f'Unfortunately, only the owner of the bot is allowed to use this.')
-  elif isinstance(error, commands.errors.CommandInvokeError(FileNotFoundError)):
+  elif isinstance(error, FileNotFoundError):
     await ctx.reply(f'Unfortunately, the file could not be generated.')
   else:
     try:

@@ -1,5 +1,6 @@
 import asyncio
 import json
+import math
 import os
 import random as ra
 import re
@@ -8,29 +9,29 @@ import traceback
 import typing
 from datetime import datetime, timedelta, timezone
 from difflib import SequenceMatcher
-from math import *
 
-import discord
 import emojis as ems
 import folium
+import matplotlib as mpl
 import matplotlib.gridspec as gridspec
 import matplotlib.pyplot as plt
-import matplotlib as mpl
 import numpy as np
 import pytz
 import selenium
 from bs4 import BeautifulSoup
-from discord import Embed, Permissions, ui
-from discord.enums import VoiceRegion
-from discord.ext import commands
 from markdown2 import Markdown
-from PIL import Image, ImageDraw, ImageEnhance, ImageFilter, ImageFont, ImageOps
+from PIL import (Image, ImageDraw, ImageEnhance, ImageFilter, ImageFont,
+                 ImageOps)
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 
+import discord
 import requests
+from discord import Embed, Permissions, ui
+from discord.enums import VoiceRegion
+from discord.ext import commands
 
 f = open('database.json', 'r')
 db = json.loads(f.read())
@@ -497,18 +498,18 @@ help_all = discord.Embed(title="SuperBot#4073 (ID:796686363604680755)", descript
 **Information Commands**
 `color` `simplecolor` `translate` `definition` `unix` `time` `rtimer` `ttimer` `terminate` `unscramble` `unicode` `random` `choice` `raffle` `pick`\n
 **Web Commands**
-`redirect` `screenshot` `youtube` `wiki` `minecraft` `engrave` `covid` `population` `states` `map` `weather` `forecast`
+`redirect` `screenshot` `rss` `wiki` `wiki_search` `google` `youtube` `minecraft` `engrave` `covid` `population` `states` `map` `weather` `forecast` `gender`
 `bird` `bunny` `cat` `dog` `duck` `fox` `kangaroo` `koala` `lizard` `panda` `raccoon`
 Add `_fact` to each of the 11 animal commands above (e.g. `bird_fact`) to get a fun fact about the animal.
 `dish` `nasa` `joke` `quote` `trivia` `shiba` `error` `errorcat` `errordog`\n
 **Plot/Drawing Commands**
-`ascii` `table` `render` `captcha` `graph` `bline` `bline2` `pie` `barh` `barv` `hist` `sankey` `snow` `mandelbrot`\n
+`ascii` `fonts` `table` `captcha` `graph` `bline` `bline2` `pie` `barh` `barv` `hist` `sankey` `snow` `mandelbrot`\n
 **Developer Tools and Miscellaneous Commands**
 `html` `md` `regex` `regsub` `button` `menu`\n
 **Image Commands**
 `analyse` `histogram` `resize` `rotate` `brightness` `contrast` `sharpen` `edge` `contour` `blur` `invert` `hue` `recolor`
 To use the 13 commands above, type `=image ` first, then upload an image. Example: `=image analyse`. Supply a user name to work on his avatar, e.g. `=image SuperBot#4073 analyse`
-`lcd` `led` `led2` `led3` `led4` `led_bar` `ocr` `qr` `qrmake` `transparent` `text`\n
+`render` `lcd` `led` `led2` `led3` `led4` `led_bar` `ocr` `qr` `qrmake` `transparent` `text`\n
 `hello` leads you to death\nNeed help? check the [documentation](https://superbot-discord.github.io/documentation)!""")
 
 def help_menu_options(ctx):

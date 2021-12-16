@@ -269,6 +269,8 @@ async def graph(ctx, func, range_low:float=-10.0, range_high:float=10.0, equaliz
     for x in ['top', 'bottom', 'left', 'right']:
       ax.spines[x].set_color("w")
     ax.tick_params(axis='both', colors='w')
+    if equalize:
+      ax.axis('equal')
     if title != "No_title_required":
       plt.title(title, fontdict=db["font_dicts"]["title"])
     plt.savefig("graph.png", transparent=True)
@@ -351,38 +353,38 @@ async def multigraph(ctx, func, range_low:float=-10.0, range_high:float=10.0, *,
 
 @commands.command(aliases=["piechart", "circlechart"])
 async def pie(ctx, numbers, label="", *, title="No_title_required"):
-  try:
-    numlist = numbers.split(",")
-    numlist = list(map(float, numlist))
-    mycolors = []
-    y = np.array(numlist)
-    for x in range(len(numlist)):
-      mycolors.append(cmaphsv(x/len(numlist)))
-    if label:
-      labels = label.split(",")
-      if len(labels) > len(numlist):
-        labels = labels[:len(numlist)-1]
-      elif len(numlist) > len(labels):
-        numlist = numlist[:len(labels)-1]
-      patches, labels, pct_texts = plt.pie(y, labels=labels, colors=mycolors, autopct=lambda pct: func(pct, y),
-      rotatelabels=True, pctdistance=0.6, textprops = db["font_dicts"]["label"])
-    else:
-      patches, labels, pct_texts = plt.pie(y, colors=mycolors, autopct=lambda pct: func(pct, y),
-      rotatelabels=True, pctdistance=0.6, textprops = db["font_dicts"]["label"])
-    for label, pct_text in zip(labels, pct_texts):
-      pct_text.set_rotation(label.get_rotation())
-      pct_text.update(db["font_dicts"]["light_label"])
-    plt.legend(prop=db["font_dicts"]["legend"])
-    if title != "No_title_required":
-      plt.title(title, fontdict=db["font_dicts"]["title"])
-    plt.savefig("piechart.png", transparent=True)
-    plt.savefig("piechart.svg", transparent=True)
-    plt.clf()
-    await ctx.reply(files=[discord.File("piechart.png"), discord.File("piechart.svg")])
-    try_delete('piechart.png')
-    try_delete('piechart.svg')
-  except:
-    await ctx.reply("Invalid input. Please try again.")
+  #try:
+  numlist = numbers.split(",")
+  numlist = list(map(float, numlist))
+  mycolors = []
+  y = np.array(numlist)
+  for x in range(len(numlist)):
+    mycolors.append(cmaphsv(x/len(numlist)))
+  if label:
+    labels = label.split(",")
+    if len(labels) > len(numlist):
+      labels = labels[:len(numlist)-1]
+    elif len(numlist) > len(labels):
+      numlist = numlist[:len(labels)-1]
+    patches, labels, pct_texts = plt.pie(y, labels=labels, colors=mycolors, autopct=lambda pct: func(pct, y),
+    rotatelabels=True, pctdistance=0.6, textprops = db["font_dicts"]["label"])
+  else:
+    patches, labels, pct_texts = plt.pie(y, colors=mycolors, autopct=lambda pct: func(pct, y),
+    rotatelabels=True, pctdistance=0.6, textprops = db["font_dicts"]["label"])
+  for label, pct_text in zip(labels, pct_texts):
+    pct_text.set_rotation(label.get_rotation())
+    pct_text.update(db["font_dicts"]["light_label"])
+  plt.legend(prop = db["font_dicts"]["legend"])
+  if title != "No_title_required":
+    plt.title(title, fontdict=db["font_dicts"]["title"])
+  plt.savefig("piechart.png", transparent=True)
+  plt.savefig("piechart.svg", transparent=True)
+  plt.clf()
+  await ctx.reply(files=[discord.File("piechart.png"), discord.File("piechart.svg")])
+  try_delete('piechart.png')
+  try_delete('piechart.svg')
+  #except:
+  #  await ctx.reply("Invalid input. Please try again.")
 
 @commands.command()
 async def qrmake(ctx, *, text):
@@ -512,6 +514,39 @@ async def table(ctx, *, text):
   await ctx.reply(f"```{output}```", file=discord.File('table.txt'))
   try_delete('table.txt')
 
+@commands.command()
+async def table_plain(ctx, *, text):
+  contents = text.split(f"\n")
+  if "|||" in contents[0]:
+    rawstyle = re.sub(r"([\w]*?)\|\|\|([\s\S]*)", r"\1", contents[0])
+    contents[0] = re.sub(r"([\w]*?)\|\|\|([\s\S]*)", r"\2", contents[0])
+  else:
+    rawstyle = ""
+  fch = False
+  lch = False
+  if contents[0].startswith("$F$"):
+    fch = True
+    contents[0] = contents[0].replace("$F$", "", 1)
+  if contents[0].startswith("$L$"):
+    lch = True
+    contents[0] = contents[0].replace("$L$", "", 1)
+  if rawstyle.replace(" ", "") == "":
+    style = PresetStyle.double_thin_compact
+  else:
+    try:
+      style = eval(f"PresetStyle.{rawstyle}")
+    except:
+      style = PresetStyle.double_thin_compact
+  bodies = []
+  for x in contents:
+    bodies.append(x.split(","))
+  output = table2ascii(body=bodies, style=style, first_col_heading=fch, last_col_heading=lch)
+  f = open("table.txt", "w")
+  f.write(output)
+  f.close()
+  await ctx.reply(f"```{output}```", file=discord.File('table.txt'))
+  try_delete('table.txt')
+
 def setup(bot):
   bot.add_command(ascii)
   bot.add_command(barh)
@@ -528,3 +563,5 @@ def setup(bot):
   bot.add_command(simpcolor)
   bot.add_command(snow)
   bot.add_command(table)
+  bot.add_command(table_plain)
+  print("Midway through loading modules")

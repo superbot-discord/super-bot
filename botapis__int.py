@@ -85,7 +85,7 @@ async def joke(ctx, number=1):
   if number<10:
     await ctx.reply(botjoke(number))
   else:
-    await ctx.reply("There are too many pictures to show! I can only display up to 9 pictures.")
+    await ctx.reply("There are too many jokes to show! I can only display up to 9 jokes.")
 
 @commands.command()
 async def kangaroo(ctx, number=1):
@@ -168,8 +168,8 @@ async def shiba(ctx, number=1):
   else:
     await ctx.reply("There are too many pictures to show! I can only display up to 9 pictures.")
 
-@commands.command()
-async def states(ctx, country="UK"):
+@commands.command(aliases=["provinces", "districts"])
+async def states(ctx, country="US"):
   await ctx.reply(botstates(country.upper()))
 
 @commands.command(aliases=["quiz", "questions"])

@@ -14,7 +14,7 @@
     "light_label":{"color":"#FFF", "fontsize":8 , "fontweight":"book"},
     "light_tiny" :{"color":"#FFF", "fontsize":5 , "fontweight":"light"},
     "light_mini" :{"color":"#FFF", "fontsize":4 , "fontweight":"light"},
-    "legend"     :{"color":"#111", "fontsize":8 , "fontweight":"semibold"}
+    "legend"     :{"size":8 , "weight":"semibold"}
   },
   "led_colors" : {
     "cyan" : {"fg":"#3C3E2CFF", "bg":"#A8C64EFF"}, "icyan" : {"fg":"#A8C64EFF", "bg":"#101400FF"},
