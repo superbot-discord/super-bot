@@ -231,22 +231,27 @@ async def pick(ctx, lower:int, upper:int, times:int):
   await ctx.reply(embed=embed)
 
 @commands.command()
-async def random(ctx,lower:int,upper:int):
-  ti=f"Random number between {lower} and {upper}"
-  rand=ra.randint(lower,upper)
-  rand=str(rand)
-  desc="Your random number is "+rand
-  embed=discord.Embed(title=ti, description=desc)
+async def quantum_random(ctx, size:typing.Literal['256', '65536']='256', amount:int = 1):
+  api_size = {'256':8, '65536':16}[size]
+  r=requests.get(f"https://qrng.anu.edu.au/API/jsonI.php?length={amount}&type=uint{api_size}").json()['data']
+  desc=f"Your quantum random number(s) is/are:\n{', '.join(r)}"
+  embed=discord.Embed(title=f"{amount} random number(s) between 0 and {int(size)-1}", description=desc)
   await ctx.reply(embed=embed)
 
 @commands.command()
-async def raffle(ctx,lower:int,upper:int,times:int):
-  ti=f"{times} random number(s) between {lower} and {upper}"
+async def random(ctx,lower:int,upper:int):
+  rand=str(ra.randint(lower,upper))
+  desc="Your random number is {rand}"
+  embed=discord.Embed(title=f"Random number between {lower} and {upper}", description=desc)
+  await ctx.reply(embed=embed)
+
+@commands.command()
+async def raffle(ctx,lower:int,upper:int,amount:int):
   desc=f"Your random number(s) is/are:\n"
-  for x in range(times):
+  for x in range(amount):
     rand=ra.randint(lower,upper)
     desc += f"||`{str(rand).zfill(len(str(upper)))}`||  "
-  embed=discord.Embed(title=ti, description=desc)
+  embed=discord.Embed(title=f"{amount} random number(s) between {lower} and {upper}", description=desc)
   await ctx.reply(embed=embed)
 
 @commands.command()
@@ -359,6 +364,7 @@ def setup(bot):
   bot.add_command(insert)
   bot.add_command(length)
   bot.add_command(pick)
+  bot.add_command(quantum_random)
   bot.add_command(raffle)
   bot.add_command(random)
   bot.add_command(rawspoiler)
