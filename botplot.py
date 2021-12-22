@@ -260,17 +260,17 @@ async def fonts(ctx, *, text):
   try_delete('fonts.txt')
 
 @commands.command(aliases=["mathplot", "mathgraph"])
-async def graph(ctx, func, range_low:float=-10.0, range_high:float=10.0, equalize:specialbool=False,*, title="No_title_required"):
+async def graph(ctx, func, range_low:float=-10.0, range_high:float=10.0, equalize:specialbool=False, *, title="No_title_required"):
   try:
     x_ = np.linspace(range_low, range_high, 200)
     y_axis = eval(func)
     fig, ax = plt.subplots()
     plt.plot(x_, y_axis)
+    if equalize:
+      ax.set_aspect(1, adjustable='datalim')
     for x in ['top', 'bottom', 'left', 'right']:
       ax.spines[x].set_color("w")
     ax.tick_params(axis='both', colors='w')
-    if equalize:
-      ax.axis('equal')
     if title != "No_title_required":
       plt.title(title, fontdict=db["font_dicts"]["title"])
     plt.savefig("graph.png", transparent=True)
@@ -330,7 +330,7 @@ async def multibline(ctx, numbers, labels, *, title="No_title_required"):
     await ctx.reply("Invalid input. Please try again.")
 
 @commands.command(aliases=["multimathplot", "multimathgraph"])
-async def multigraph(ctx, func, range_low:float=-10.0, range_high:float=10.0, *, title="No_title_required"):
+async def multigraph(ctx, func, range_low:float=-10.0, range_high:float=10.0, equalize:specialbool=False, *, title="No_title_required"):
   try:
     x_ = np.linspace(range_low, range_high, 200)
     fig, ax = plt.subplots()
