@@ -234,6 +234,7 @@ async def pick(ctx, lower:int, upper:int, times:int):
 async def quantum_random(ctx, size:typing.Literal['256', '65536']='256', amount:int = 1):
   api_size = {'256':8, '65536':16}[size]
   r=requests.get(f"https://qrng.anu.edu.au/API/jsonI.php?length={amount}&type=uint{api_size}").json()['data']
+  r=[str(x) for x in r]
   desc=f"Your quantum random number(s) is/are:\n{', '.join(r)}"
   embed=discord.Embed(title=f"{amount} random number(s) between 0 and {int(size)-1}", description=desc)
   await ctx.reply(embed=embed)
