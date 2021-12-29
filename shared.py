@@ -482,7 +482,7 @@ def vc_itop(integer):
   else:
     return "No voice channel permissions"
 
-invite_embed = discord.Embed(title="Invite", description = "The bot can be invited [here](https://discord.com/api/oauth2/authorize?client_id=796686363604680755&permissions=8&redirect_uri=https%3A%2F%2Fsuperbot-discord.github.io&scope=bot%20applications.commands).")
+invite_embed = discord.Embed(title="Invite", description = "The bot can be invited [here](https://discord.com/api/oauth2/authorize?client_id=796686363604680755&permissions=8&scope=bot%20applications.commands).")
 help_all = discord.Embed(title="SuperBot#4073 (ID:796686363604680755)", description=f"""**Prefix: **`=`
 **Basic Commands**
 `help` `inter_help` `support` `invite` `prefix` `ping` `botpurge`\n
