@@ -1191,7 +1191,7 @@ async def user(ctx, user: discord.Member = None, channel: discord.TextChannel = 
   f5v = f5v + (f"**HypeSquad:** The user is in the HypeSquad Bravery House.\n"             if user_public_flags.hypesquad_bravery else "")
   f5v = f5v + (f"**HypeSquad:** The user is in the HypeSquad Brilliance House.\n"          if user_public_flags.hypesquad_brilliance else "")
   f5v = f5v + (f"**HypeSquad:** The user is in the HypeSquad Balance House.\n"             if user_public_flags.hypesquad_balance else "")
-  f5v = "No badges" if len(f5v) == "" else f5v
+  f5v = "No badges" if f5v == "" else f5v
 
   embed.add_field(name="Name", value=f0v, inline=False)
   embed.add_field(name="Registered", value=f1v, inline=True)
