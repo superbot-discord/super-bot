@@ -623,6 +623,7 @@ async def permissions(ctx, integer="help"):
           integer = ctx.channel.permissions_for(commands.MemberConverter().convert(ctx, integer)).value
       embed = discord.Embed(title = f"Permission integer {integer}")
       embed.add_field(name = "Server permissions", value=server_itop(int(integer)), inline=False)
+      embed.add_field(name = "Membership permissions", value=ms_itop(int(integer)), inline=False)
       embed.add_field(name = "Text permissions", value=tc_itop(int(integer)), inline=False)
       embed.add_field(name = "Voice permissions", value=vc_itop(int(integer)), inline=False)
     except:
@@ -631,6 +632,7 @@ async def permissions(ctx, integer="help"):
           if SequenceMatcher(None, integer, x).ratio() >= 0.75:
             embed = discord.Embed(title = f"Custom permission {integer}")
             embed.add_field(name = "Server permissions", value=server_itop(y.value), inline=False)
+            embed.add_field(name = "Membership permissions", value=ms_itop(y.value), inline=False)
             embed.add_field(name = "Text permissions", value=tc_itop(y.value), inline=False)
             embed.add_field(name = "Voice permissions", value=vc_itop(y.value), inline=False)
             break
@@ -648,7 +650,7 @@ async def permission_generate(ctx, *, disposed = None):
   #  permission_view.add_item(x)
   #print(len(permission_view))
   msg = await ctx.reply("Select the permissions! You can select multiple options.", view = permission_view)
-  permission_messages[msg] = {"permission_server_selection": [], "permission_text_selection": [], "permission_voice_selection": []}
+  permission_messages[msg] = {"permission_server_selection": [], "permission_membership_selection": [], "permission_text_selection": [], "permission_voice_selection": []}
 
 @commands.command()
 async def raw(ctx, msg : discord.Message = None):

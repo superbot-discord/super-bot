@@ -278,19 +278,24 @@ custom_permissions = {
 server_permtext = """```
 Index Permission
 3     Administrator
-5     Manage Server
-28    Manage Roles
+33    Manage Events
+10    View Channels
 4     Manage Channels
-1     Kick Members
-2     Ban Members
-0     Generate Invites
-27    Manage Nicknames
-26    Change Nickname
+28    Manage Roles
 30    Manage Emojis and Stickers
-29    Manage Webhooks
 7     View Audit Logs
 19    View Server Insights
-10    View Channels
+29    Manage Webhooks
+5     Manage Server
+```"""
+
+member_permtext = """```
+0     Create Invites
+26    Change Nickname
+27    Manage Nicknames
+1     Kick Members
+2     Ban Members
+40    Timeout Members
 ```"""
 
 tc_permtext = """```
@@ -299,17 +304,17 @@ Index Permission
 38    Send Messages in Threads
 35    Create Public Threads
 36    Create Private Threads
-12    Send TTS Messages
-13    Manage Messages
-32    Manage Threads
 14    Embed Links
 15    Attach Files
-16    Read Message History
-17    Mention Everyone
 6     Add Reactions
 18    Use External Emojis
 37    Use External Stickers
-31    Use Slash Commands
+17    Mention Everyone
+13    Manage Messages
+32    Manage Threads
+16    Read Message History
+12    Send TTS Messages
+31    Use Application Commands
 ```"""
 
 vc_permtext = """```
@@ -317,11 +322,13 @@ Index Permission
 20    Connect to Voice
 21    Speak (Audio)
 9     Stream (Video)
+39    Start Activities
+25    Use Voice Activity
+8     Priority Speaker
 22    Mute Members
 23    Deafen Members
 24    Move Members
-25    Use Voice Activity
-8     Priority Speaker
+32    Request to Speak
 ```"""
 
 badges_text = """```
@@ -346,6 +353,7 @@ Permission integers allow you to store permissions quickly. To represent some pe
 For example, to specify kick members, manage channels and stream, calculate `2^1+2^4+2^9`, which is 2+16+512, or 530.
 Alternatively, if you know binary, put a `1` in the permission indices' places, which is `1000010010` in this case. Then run `=base 2 10 [Your binary]` to get the decimal equivalent.""")
 perms_guide.add_field(name="Server permissions", value=server_permtext, inline=False)
+perms_guide.add_field(name="Membership permissions", value=member_permtext, inline=False)
 perms_guide.add_field(name="Text channel permissions", value=tc_permtext, inline=False)
 perms_guide.add_field(name="Voice channel permissions", value=vc_permtext, inline=False)
 
@@ -357,19 +365,23 @@ badges_guide.add_field(name="Badges", value=badges_text, inline=False)
 
 server_real = {
   3 : "Administrator",
-  5 : "Manage Server",
-  28: "Manage Roles",
+  33: "Manage Events",
+  10: "View Channels",
   4 : "Manage Channels",
-  1 : "Kick Members",
-  2 : "Ban Members",
-  0 : "Generate Invites",
-  27: "Manage Nicknames",
-  26: "Change Nickname",
+  28: "Manage Roles",
   30: "Manage Emojis and Stickers",
-  29: "Manage Webhooks",
   7 : "View Audit Logs",
   19: "View Server Insights",
-  10: "View Channels"
+  29: "Manage Webhooks",
+  5 : "Manage Server"
+}
+membership_real = {
+  0 : "Create Invites",
+  26: "Change Nickname",
+  27: "Manage Nicknames",
+  1 : "Kick Members",
+  2 : "Ban Members",
+  40: "Timeout Members"
 }
 
 text_channel_real = {
@@ -377,28 +389,30 @@ text_channel_real = {
   38: "Send Messages in Threads",
   35: "Create Public Threads",
   36: "Create Private Threads",
-  12: "Send TTS Messages",
-  13: "Manage Messages",
-  32: "Manage Threads",
   14: "Embed Links",
   15: "Attach Files",
-  16: "Read Message History",
-  17: "Mention Everyone",
   6 : "Add Reactions",
   18: "Use External Emojis",
   37: "Use External Stickers",
-  31: "Use Slash Commands"
+  17: "Mention Everyone",
+  13: "Manage Messages",
+  32: "Manage Threads",
+  16: "Read Message History",
+  12: "Send TTS Messages",
+  31: "Use Application Commands"
 }
 
 voice_channel_real = {
   20: "Connect to Voice",
   21: "Speak (Audio)",
   9 : "Stream (Video)",
+  39: "Start Activities",
+  25: "Use Voice Activity",
+  8 : "Priority Speaker",
   22: "Mute Members",
   23: "Deafen Members",
   24: "Move Members",
-  25: "Use Voice Activity",
-  8 : "Priority Speaker"
+  32: "Request to Speak"
 }
 
 badges_real = {
@@ -421,6 +435,10 @@ server_permission_options = [discord.SelectOption(label="None", description="Sel
 for x, y in server_real.items():
   server_permission_options.append(discord.SelectOption(label=y, value=x))
 
+membership_permission_options = [discord.SelectOption(label="None", description="Select this if you do not want permissions from this category.")]
+for x, y in membership_real.items():
+  membership_permission_options.append(discord.SelectOption(label=y, value=x))
+
 text_permission_options = [discord.SelectOption(label="None", description="Select this if you do not want permissions from this category.")]
 for x, y in text_channel_real.items():
   text_permission_options.append(discord.SelectOption(label=y, value=x))
@@ -430,9 +448,10 @@ for x, y in voice_channel_real.items():
   voice_permission_options.append(discord.SelectOption(label=y, value=x))
 
 permission_menus = [
-  ui.Select(placeholder="Server",       min_values=1, max_values=14,custom_id="permission_server_selection",row=0, options=server_permission_options),
-  ui.Select(placeholder="Text channel", min_values=1, max_values=15,custom_id="permission_text_selection",  row=1, options=text_permission_options),
-  ui.Select(placeholder="Voice channel",min_values=1, max_values=8, custom_id="permission_voice_selection", row=2, options=voice_permission_options)
+  ui.Select(placeholder="Server",       min_values=1, max_values=10,custom_id="permission_server_selection",row=0,    options=server_permission_options),
+  ui.Select(placeholder="Membership",   min_values=1, max_values=6, custom_id="permission_membership_selection",row=1,options=membership_permission_options),
+  ui.Select(placeholder="Text channel", min_values=1, max_values=15,custom_id="permission_text_selection",  row=2,    options=text_permission_options),
+  ui.Select(placeholder="Voice channel",min_values=1, max_values=10,custom_id="permission_voice_selection", row=3,    options=voice_permission_options)
 ]
 
 # permission_buttons = [
@@ -455,6 +474,16 @@ def badges_itop(integer):
 def server_itop(integer):
   cache3 = ""
   for x, y in server_real.items():
+    if integer & 1 << x:
+      cache3 += y + ", "
+  if len(cache3) > 2:
+    return cache3[:-2]
+  else:
+    return "No server permissions"
+
+def ms_itop(integer):
+  cache3 = ""
+  for x, y in membership_real.items():
     if integer & 1 << x:
       cache3 += y + ", "
   if len(cache3) > 2:

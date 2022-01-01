@@ -207,7 +207,7 @@ async def on_interaction(interaction):
           await interaction.edit_original_message(embed=eval(interaction_first_option))
         else:
           await interaction.followup.send(f"You selected {', '.join(interaction_select_option)} in the {interaction_custom_id} menu.", ephemeral=True)
-      elif interaction_custom_id in ["permission_server_selection", "permission_text_selection", "permission_voice_selection"]:
+      elif interaction_custom_id in ["permission_server_selection", "permission_membership_selection", "permission_text_selection", "permission_voice_selection"]:
         permission_messages[interaction_original_message][interaction_custom_id] = interaction.data["values"]
         permission_integer = 0
         for x in permission_messages[interaction_original_message].values():
