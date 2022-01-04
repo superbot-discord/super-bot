@@ -81,7 +81,7 @@ async def badges(ctx, integer="help"):
       embed = badges_guide
   await ctx.reply(embed=embed)
 
-@commands.command()
+@commands.command(aliases=['bn'])
 async def banner(ctx, user: typing.Union[discord.User, discord.Member]=None):
   if user:
     try:
@@ -1076,10 +1076,10 @@ async def stickers(ctx, *, disposed = None):
   await ctx.reply(file=discord.File('output.txt'))
   try_delete('output.txt')
 
-@commands.command()
+@commands.command(aliases=['tm'])
 async def template(ctx, *, tempinput):
   try:
-    temp = ctx.bot.fetch_template(tempinput)
+    temp = await ctx.bot.fetch_template(tempinput)
   except:
     await ctx.reply("Invalid input. Please try again.")
     return
