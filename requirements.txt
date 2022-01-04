@@ -15,7 +15,7 @@ huffman==0.1.2
 bitarray==2.3.4
 
 # Matplotlib + other math + dependencies
-matplotlib==3.5.0
+matplotlib==3.5.1
 numpy==1.22.0
 six==1.16.0
 
