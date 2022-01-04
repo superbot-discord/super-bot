@@ -551,6 +551,30 @@ class Permissions(BaseFlags):
         """
         return 1 << 38
 
+    @flag_value
+    def start_activities(self) -> int:
+        """:class:`bool`: Returns ``True`` if a user can start activities in voice channels.
+
+        .. versionadded:: 2.1
+        """
+        return 1 << 39
+
+    @flag_value
+    def moderate_members(self) -> int:
+        """:class:`bool`: Returns ``True`` if a user can timeout other members.
+
+        .. versionadded:: 2.1
+        """
+        return 1 << 40
+
+    @make_permission_alias('moderate_members')
+    def timeout_members(self) -> int:
+        """:class:`bool`: An alias for :attr:`moderate_members`.
+
+        .. versionadded:: 2.1
+        """
+        return 1 << 40
+
 PO = TypeVar('PO', bound='PermissionOverwrite')
 
 def _augment_from_permissions(cls):

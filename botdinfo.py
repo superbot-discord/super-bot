@@ -312,7 +312,7 @@ async def botthread(channel):
     embed.add_field(name="Private", value="This is a private thread.", inline=True)
   return embed
 
-@commands.command()
+@commands.command(aliases=['emi'])
 async def emojiinfo(ctx, emoji_: typing.Union[discord.Emoji, str]):
   try:
     try:
@@ -978,7 +978,7 @@ async def status(ctx, member : discord.Member = None):
       embed.set_thumbnail(url=x.album_cover_url)
   await ctx.reply(embed=embed)
 
-@commands.command(aliases=["sts"])
+@commands.command(aliases=["stu"])
 async def statuses(ctx, *, disposed = None):
   bot_onlines = bot_dnds = bot_idles = bot_offlines = 0
   usr_onlines = usr_dnds = usr_idles = usr_offlines = 0

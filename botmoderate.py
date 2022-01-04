@@ -350,6 +350,33 @@ async def purgeuser(ctx, num, *userinput : discord.User):
   else:
     await ctx.reply("You don't have the required permission: Manage messages.")
 
+@commands.command()
+async def timeout(ctx, member_ : discord.Member, duration, *, reason = None):
+  if ctx.channel.permissions_for(ctx.author).moderate_members or botadmin(ctx):
+    sec = int(timedelta(**{
+      UNITS.get(m.group('unit').lower(), 'seconds'): int(m.group('val'))
+      for m in re.finditer(r'(?P<val>\d+)(?P<unit>[smhdw]?)', duration, flags=re.I)
+    }).total_seconds())
+    end = datetime.now(timezone.utc) + timedelta(seconds = sec)
+    if reason:
+      await member_.edit(timeout_until = end.isoformat(), reason=reason)
+    else:
+      await member_.edit(timeout_until = end.isoformat())
+    await ctx.send("Timeout success")
+  else:
+    await ctx.reply("You don't have the required permission: Moderate members.")
+
+@commands.command()
+async def untimeout(ctx, member_ : discord.Member, *, reason = None):
+  if ctx.channel.permissions_for(ctx.author).moderate_members or botadmin(ctx):
+    if reason:
+      await member_.edit(timeout_until = None, reason=reason)
+    else:
+      await member_.edit(timeout_until = None)
+    await ctx.send("Un-Timeout success")
+  else:
+    await ctx.reply("You don't have the required permission: Moderate members.")
+
 def setup(bot):
   bot.add_command(ban)
   bot.add_command(getrole)
@@ -370,3 +397,5 @@ def setup(bot):
   bot.add_command(purgeuser)
   bot.add_command(purgepy)
   bot.add_command(purgepygex)
+  bot.add_command(timeout)
+  bot.add_command(untimeout)

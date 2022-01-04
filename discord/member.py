@@ -643,6 +643,7 @@ class Member(discord.abc.Messageable, _UserTag):
         suppress: bool = MISSING,
         roles: List[discord.abc.Snowflake] = MISSING,
         voice_channel: Optional[VocalGuildChannel] = MISSING,
+        timeout_until: int = MISSING,
         reason: Optional[str] = None,
     ) -> Optional[Member]:
         """|coro|
@@ -691,6 +692,9 @@ class Member(discord.abc.Messageable, _UserTag):
         voice_channel: Optional[:class:`VoiceChannel`]
             The voice channel to move the member to.
             Pass ``None`` to kick them from voice.
+        timeout_until: Optional[:class:`int`]
+            The unix time at which their timeout should be lifted.
+            Pass ``None`` to remove the timeout.
         reason: Optional[:class:`str`]
             The reason for editing this member. Shows up on the audit log.
 
@@ -743,6 +747,9 @@ class Member(discord.abc.Messageable, _UserTag):
 
         if voice_channel is not MISSING:
             payload['channel_id'] = voice_channel and voice_channel.id
+        
+        if timeout_until is not MISSING:
+            payload['communication_disabled_until'] = timeout_until
 
         if roles is not MISSING:
             payload['roles'] = tuple(r.id for r in roles)
