@@ -338,7 +338,7 @@ async def emojiinfo(ctx, emoji_: typing.Union[discord.Emoji, str]):
       embed.add_field(name="Tags", value=", ".join(cemoji[2]), inline=True)
   await ctx.reply(embed=embed)
 
-@commands.command()
+@commands.command(aliases=['ems'])
 async def emojis(ctx, *, disposed = None):
   desc = ""
   sent_desc = ""
@@ -1064,7 +1064,7 @@ async def sticker(ctx, message: discord.Message=None):
   #embed.set(_sticker.url)
   await ctx.reply(embed=embed)
 
-@commands.command()
+@commands.command(aliases=['sts'])
 async def stickers(ctx, *, disposed = None):
   desc = ""
   for x in ctx.guild.stickers:
