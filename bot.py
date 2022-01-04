@@ -392,13 +392,12 @@ async def nick(ctx, *, new_nick):
     await ctx.reply("Unable to change nickname.")
 
 @bot_.command()
-async def botpurge(ctx, *, num):
+async def botpurge(ctx, *, num : int = 1):
   try:
     await ctx.message.delete()
   except:
     pass
   if ctx.channel.permissions_for(ctx.author).manage_messages or botadmin(ctx):
-    num = int(num)
     purged = 0
     async for x in ctx.channel.history(limit=1000):
       if x.author.id == 796686363604680755:

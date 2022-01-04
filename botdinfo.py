@@ -31,7 +31,7 @@ async def attachment(ctx, message: discord.Message=None, index: int = 1):
   embed.add_field(name="Alternative URL (Does not always work!)", value=f3v, inline=False)
   await ctx.reply(embed=embed)
 
-@commands.command()
+@commands.command(aliases=['av'])
 async def avatar(ctx,user: discord.Member=None):
   if not user:
     user=ctx.author
@@ -149,7 +149,7 @@ async def category(ctx, category_: discord.CategoryChannel = None):
     embed.add_field(name=f"Stage Channels ({len(f2valist)})", value=f2v, inline=True)
   await ctx.reply(embed=embed)
 
-@commands.command()
+@commands.command(aliases=['ch'])
 async def channel(ctx, channel:typing.Union[discord.TextChannel, discord.VoiceChannel, discord.StageChannel]=None):
   if not channel:
     channel = ctx.channel
@@ -357,7 +357,7 @@ async def emojis(ctx, *, disposed = None):
     await ctx.reply(file=discord.File('output.txt'))
   try_delete('output.txt')
 
-@commands.command()
+@commands.command(aliases=['il'])
 async def invitelink(ctx, *, invite_input: discord.Invite):
   invite_has_info = False
   try:
@@ -746,7 +746,7 @@ async def role(ctx,role: discord.Role=None):
   await ctx.reply(embed=embed)
 
 @commands.command(aliases=["guild", "se"])
-async def server(ctx, text = "regular"):
+async def server(ctx, *, text = "regular"):
   guild=ctx.guild
   ti=guild.name
   desc=f"Created at {unix_timestamp(guild.created_at)} by {guild.owner.mention}\nRegion: {guild.region}"
@@ -790,15 +790,18 @@ async def server(ctx, text = "regular"):
         f1v=f"{f1v}{x.user.mention} "
       f1v=f1v[:-1]
     except:
-      f1v="Unable to get banned members without Ban-members permission."
+      f1v="Unable to get banned members without the Ban Members permission."
+      if len(f1v)==0:
+        f1v = "No banned members."
     if len(f1v)!=0:
       embed.add_field(name="Banned Users", value=f1v, inline=True)
     try:
       f2v=" ".join(await guild.invites())
+      if len(f2v)==0:
+        f2v = "No invites."
     except:
-      f2v="Unable to get invites without Manage-server permission."
-    if len(f2v)!=0:
-      embed.add_field(name="Invites", value=f2v, inline=True)
+      f2v="Unable to get invites without the Manage Server permission."
+    embed.add_field(name="Invites", value=f2v, inline=True)
   else:
     f0v=""
     for x in guild.text_channels:
