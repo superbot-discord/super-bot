@@ -48,7 +48,7 @@ allid=[]
 #async def sba_marks():
 #  sba_channel = bot_.get_channel(909445785509326859)
 #  await sba_channel.send(f"5m <@757416033811169351> <@752335217339007067>\nFun fact: this is the {sba_marks.current_loop}{st_nd_th_format(sba_marks.current_loop)} time of SBA marks claiming since the last deploy!")
-
+#  i dont know you so well, your hearts been aching but i dont give a shit
 @bot_.event
 async def on_command_error(ctx, error):
   if isinstance(error, commands.CommandNotFound):
