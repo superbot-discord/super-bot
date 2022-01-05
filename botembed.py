@@ -131,46 +131,46 @@ def botett(msg):
   ekeys = list(edict)
   desc = "=embed "
   if 'title' in ekeys:
-    desc = desc + edict['title']
+    desc += edict['title']
   desc += f"\n"
   if 'description' in ekeys:
-    desc = desc + edict['description'].replace(f"\n", "{{{newline}}}")
+    desc += edict['description'].replace(f"\n", "{{{newline}}}")
   desc += f"\n"
   if 'color' in ekeys:
-    desc = desc + str(edict['color'])
+    desc += str(edict['color'])
   desc += f"\n"
   if 'url' in ekeys:
-    desc = desc + edict['url']
+    desc += edict['url']
   desc += f"\n"
   if 'author' in ekeys:
     eauthor = edict['author']
     authorkeys = list(eauthor)
     if 'name' in authorkeys:
-      desc = desc + eauthor['name']
+      desc += eauthor['name']
   desc += f"\n"
   if 'footer' in ekeys:
     efooter = edict['footer']
     footerkeys = list(efooter)
     if 'text' in footerkeys:
-      desc = desc + efooter['text']
+      desc += efooter['text']
   desc += f"\n"
   if 'author' in ekeys:
     if 'url' in authorkeys:
-      desc = desc + eauthor['url']
+      desc += eauthor['url']
   desc += f"\n"
   if 'image' in ekeys:
-    desc = desc + (edict['image'])['url']
+    desc += (edict['image'])['url']
   desc += f"\n"
   if 'thumbnail' in ekeys:
-    desc = desc + (edict['thumbnail'])['url']
+    desc += (edict['thumbnail'])['url']
   desc += f"\n"
   if 'author' in ekeys:
     if 'icon_url' in authorkeys:
-      desc = desc + eauthor['icon_url']
+      desc += eauthor['icon_url']
   desc += f"\n"
   if 'footer' in ekeys:
     if 'icon_url' in footerkeys:
-      desc = desc + efooter['icon_url']
+      desc += efooter['icon_url']
   desc += f"\n"
   if 'fields' in ekeys:
     for x in edict['fields']:

@@ -1,7 +1,7 @@
 # Discord
 #git+git://github.com/Rapptz/discord.py
 aiohttp==4.0.0a1
-async-timeout==4.0.2
+async-timeout
 PyNaCl==1.4.0
 
 # Literal + dependencies
