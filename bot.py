@@ -4,7 +4,9 @@ from shared import *
 #              LED Spammer
 banned_ids =  [753526161732141067]
 banned_text = []
-bot_ = commands.Bot(command_prefix=commands.when_mentioned_or("="), intents=discord.Intents.all(), allowed_mentions=discord.AllowedMentions(everyone=False, users=True, roles=False, replied_user=False),
+bot_ = commands.Bot(command_prefix=commands.when_mentioned_or("="),intents=discord.Intents.all(),
+                    allowed_mentions=discord.AllowedMentions(everyone=False, users=True,
+                    roles=False, replied_user=False),
   case_insensitive=True, strip_after_prefix=True)
 bot_.remove_command('help')
 bot_.load_extension("botapis__int")
@@ -47,7 +49,7 @@ allid=[]
 #@tasks.loop(hours=24)
 #async def sba_marks():
 #  sba_channel = bot_.get_channel(909445785509326859)
-#  await sba_channel.send(f"5m <@757416033811169351> <@752335217339007067>\nFun fact: this is the {sba_marks.current_loop}{st_nd_th_format(sba_marks.current_loop)} time of SBA marks claiming since the last deploy!")
+#  await sba_channel.send(f"5m")
 #  i dont know you so well, your hearts been aching but i dont give a shit
 @bot_.event
 async def on_command_error(ctx, error):

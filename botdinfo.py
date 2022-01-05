@@ -74,7 +74,7 @@ async def badges(ctx, integer="help"):
     try:
       try:
         int(integer)
-      except:
+      except ValueError:
         integer = ctx.author.public_flags.value
       embed = discord.Embed(title = f"Badges integer {integer}", description=badges_itop(int(integer)))
     except:
