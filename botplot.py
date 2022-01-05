@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 import qrcode
-from art import *
+from art import text2art
 from ascii_canvas import canvas, item
 from table2ascii import PresetStyle, table2ascii
 

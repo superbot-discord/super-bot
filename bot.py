@@ -71,15 +71,20 @@ async def on_command_error(ctx, error):
   elif isinstance(error, commands.MissingRequiredArgument):
     await ctx.reply(f'You missed one or more arguments! {len(ctx.command.clean_params.keys())} argument(s) are required.\nNote: Multiline arguments are treated as one argument. Optional arguments are counted as well.')
   elif isinstance(error, commands.UserInputError):
-    await ctx.reply(f'One or more of your arguments is/are not in the correct format! Please read the documentation.')
+    await ctx.reply('One or more of your arguments is/are not in the correct format! Please read the documentation.')
   elif isinstance(error, commands.NotOwner):
-    await ctx.reply(f'Unfortunately, only the owner of the bot is allowed to use this.')
+    await ctx.reply('Unfortunately, only the owner of the bot is allowed to use this.')
   elif isinstance(error, FileNotFoundError):
-    await ctx.reply(f'Unfortunately, the file could not be generated.')
+    await ctx.reply('Unfortunately, the file could not be generated.')
+  elif isinstance(error, discord.HTTPException):
+    if error.code == 40005:
+      await ctx.reply('Unfortunately, the output file is too large.')
+    elif error.code == 50035:
+      await ctx.reply('Unfortunately, the output text is too long.')
   else:
     try:
       await ctx.reply(f"Sorry! An error occured:\n```{''.join(traceback.format_exception(type(error), error, error.__traceback__))}```\n If the error persists, please kindly inform JohannLau#6541 about this issue.")
-    except:
+    except discord.HTTPException:
       print(''.join(traceback.format_exception(type(error), error, error.__traceback__)))
       await ctx.reply(f"Sorry! An error occured. The error was too long but it had been shown to JohannLau#6541. If the error persists, Please kindly inform him about this issue.")
 
@@ -101,14 +106,14 @@ async def on_voice_state_update(member, before, after):
       supchat = member.guild.get_channel(822753048510070784)
       await supchat.purge(limit=1000)
       await supchat.set_permissions(member, overwrite=None)
-  except:
+  except discord.NotFound:
     pass
   try:
     if before.channel == None and after.channel.id == 822750915466493982:
       supchat = member.guild.get_channel(822753048510070784)
       await supchat.purge(limit=1000)
       await supchat.set_permissions(member, overwrite=view_overwrite)
-  except:
+  except discord.NotFound:
     pass
 
 @bot_.event
@@ -388,14 +393,14 @@ async def nick(ctx, *, new_nick):
   try:
     await ctx.guild.me.edit(nick=(None if new_nick == "clear" else new_nick))
     await ctx.reply("Changed nickname.")
-  except:
+  except discord.Forbidden:
     await ctx.reply("Unable to change nickname.")
 
 @bot_.command()
 async def botpurge(ctx, *, num : int = 1):
   try:
     await ctx.message.delete()
-  except:
+  except discord.Forbidden:
     pass
   if ctx.channel.permissions_for(ctx.author).manage_messages or botadmin(ctx):
     purged = 0
