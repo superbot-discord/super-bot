@@ -179,7 +179,6 @@ async def engrave(ctx, product = "list", *, text = "Your text goes here."):
     embed.add_field(name="iPad Pro", value="`ipadpro` `ipadprosilver`", inline=False)
     embed.add_field(name="iPad Air", value="`ipadair` `ipadairsilver` `ipadairrose` `ipadairgreen` `ipadairblue`", inline=False)
     embed.add_field(name="iPod Touch", value="`ipod` `ipodgray` `ipodsilver` `ipodgold` `ipodred` `ipodpink` `ipodblue`", inline=False)
-    
   else:
     embed = discord.Embed(title="Invalid product", description="")
   await ctx.reply(embed = embed)

@@ -16,7 +16,7 @@
     "ft" : 0.3048     , "foot"       : 0.3048     , "'"         : 0.3048     , "feet": 0.3048,
     "yd" : 0.9144     , "yard"       : 0.9144     ,
     "mi" : 1609.344   , "mile"       : 1609.344   ,
-    "Nm" : 1609.344   , "nauticalmile":1852       
+    "Nm" : 1609.344   , "nauticalmile":1852
   },
   "lengthO" : {
     "nanometres"    : 0.000000001,
@@ -35,6 +35,6 @@
     "feet"          : 0.3048     ,
     "yards"         : 0.9144     ,
     "miles"         : 1609.344   ,
-    "nautical miles": 1852       
+    "nautical miles": 1852
   }
 }

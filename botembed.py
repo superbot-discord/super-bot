@@ -63,18 +63,18 @@ async def pretendembed(ctx, member : discord.Member, *, text):
   ourweb = False
   for x in whl:
     if x.name == "Pretender":
+      wh = x
       ourweb = True
-      token = x.token
-      identify = x.id
-  if len(whl) == 0 or ourweb == False:
+      break
+  if not ourweb:
     wh = await ctx.channel.create_webhook(name = "Pretender")
-    token = wh.token
-    identify = wh.id
+  print(wh)
+  token = wh.token
+  identify = wh.id
   async with aiohttp.ClientSession() as session:
     webhook = Webhook.partial(identify, token, session=session)
-  embed = botembed(text)
-  await webhook.send(embed=embed, username=member.name, avatar_url=member.display_avatar.url)
-
+    embed = botembed(text)
+    await webhook.send(embed=embed, username=member.name, avatar_url=member.display_avatar.url)
 
 @commands.command(aliases=["fastembed", "qe"])
 async def quickembed(ctx, *, text):

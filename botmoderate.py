@@ -20,8 +20,8 @@ class SearchFlags(commands.FlagConverter):
 async def ban(ctx, user: discord.User, delete : int = 0, *, reason = "No reason provided"):
   if ctx.channel.permissions_for(ctx.author).ban_members or botadmin(ctx):
     try:
-      await ctx.guild.ban(user, delete_message_days=delete, reason=reason)
-    except:
+      await ctx.guild.ban(user, delete_message_days=delete, reason=reason + f" (requested by {ctx.author.username}#{ctx.author.discriminator})")
+    except discord.Forbidden:
       await ctx.reply("The bot doesn't have the required permission: Ban members.")
       return
     embed1 = discord.Embed(title=f"You were banned from the server.", description=f"Reason: {reason}\nBy: {ctx.author.mention}")
@@ -63,8 +63,8 @@ async def getrole(ctx, roles : commands.Greedy[discord.Role], member: discord.Me
 async def kick(ctx, user: discord.Member, *, reason="No reason provided"):
   if has_perms(ctx.channel, ctx.author, 1):
     try:
-      await user.kick(reason=reason)
-    except:
+      await user.kick(reason=reason + f" (requested by {ctx.author.username}#{ctx.author.discriminator})")
+    except discord.Forbidden:
       await ctx.reply("The bot doesn't have the required permission: Kick members.")
       return
     embed1 = discord.Embed(title=f"You were kicked from the server.", description=f"Reason: {reason}\nBy: {ctx.author.mention}")
@@ -108,6 +108,84 @@ async def makethreads(ctx, times : int = 1, archive:typing.Literal['1', '2', '3'
     await ctx.reply("Successfully created thread(s).")
   else:
     await ctx.reply("You don't have the required permission: Manage Threads.")
+
+@commands.command()
+async def purge(ctx, num : int):
+  try_delete_message(ctx.message)
+  if ctx.channel.permissions_for(ctx.author).manage_messages or botadmin(ctx):
+    deleted = await ctx.channel.purge(limit=num+1)
+    msg = await ctx.reply("Purging completed.")
+    authors = f'\n'.join({f"{x.author.name}#{x.author.discriminator}{' **bot**' if x.author.bot else ''}" for x in deleted})
+    await msg.edit(f"Purged {len(deleted)} messages from:\n{authors}", delete_after = 5)
+  else:
+    await ctx.reply("You don't have the required permission: Manage messages.")
+
+@commands.command()
+async def purgepy(ctx, num : int, pyscript):
+  try_delete_message(ctx.message)
+  if ctx.channel.permissions_for(ctx.author).manage_messages or botadmin(ctx):
+    num=int(num)
+    deleted = await ctx.channel.purge(limit=num+1, check = lambda msg: eval(pyscript))
+    msg = await ctx.reply("Purging completed.")
+    authors = f'\n'.join({f"{x.author.name}#{x.author.discriminator}{' **bot**' if x.author.bot else ''}" for x in deleted})
+    await msg.edit(f"Purged {len(deleted)} messages from:\n{authors}", delete_after = 5)
+  else:
+    await ctx.reply("You don't have the required permission: Manage messages.")
+
+@commands.command()
+async def purgepygex(ctx, num : int, regex, *, pyscript):
+  try_delete_message(ctx.message)
+  if ctx.channel.permissions_for(ctx.author).manage_messages or botadmin(ctx):
+    purge_pattern = re.compile(regex)
+    deleted = await ctx.channel.purge(limit=num+1, check = lambda msg: eval(pyscript) and purge_pattern.fullmatch(msg.content))
+    msg = await ctx.reply("Purging completed.")
+    authors = f'\n'.join({f"{x.author.name}#{x.author.discriminator}{' **bot**' if x.author.bot else ''}" for x in deleted})
+    await msg.edit(f"Purged {len(deleted)} messages from:\n{authors}", delete_after = 5)
+  else:
+    await ctx.reply("You don't have the required permission: Manage messages.")
+
+@commands.command()
+async def purgereactions(ctx, messages, emoji: discord.Emoji = None):
+  if emoji == None:
+    async for message in ctx.channel.history(limit=int(messages)+1):
+      await message.clear_reactions()
+  else:
+    async for message in ctx.channel.history(limit=int(messages)+1):
+      await message.clear_reaction(emoji)
+
+@commands.command()
+async def purgeregex(ctx, num : int, *, regex):
+  try_delete_message(ctx.message)
+  if ctx.channel.permissions_for(ctx.author).manage_messages or botadmin(ctx):
+    purge_pattern = re.compile(regex)
+    deleted = await ctx.channel.purge(limit=num+1, check = lambda msg: purge_pattern.fullmatch(msg.content))
+    msg = await ctx.reply("Purging completed.")
+    authors = f'\n'.join({f"{x.author.name}#{x.author.discriminator}{' **bot**' if x.author.bot else ''}" for x in deleted})
+    await msg.edit(f"Purged {len(deleted)} messages from:\n{authors}", delete_after = 5)
+  else:
+    await ctx.reply("You don't have the required permission: Manage messages.")
+
+@commands.command()
+async def purgerole(ctx, num, roleinput : discord.Role):
+  try_delete_message(ctx.message)
+  if ctx.channel.permissions_for(ctx.author).manage_messages or botadmin(ctx):
+    deleted = await ctx.channel.purge(limit=num+1, check = lambda msg: roleinput in msg.author.roles)
+    msg = await ctx.reply("Purging completed.")
+    authors = f'\n'.join({f"{x.author.name}#{x.author.discriminator}{' **bot**' if x.author.bot else ''}" for x in deleted})
+    await msg.edit(f"Purged {len(deleted)} messages from:\n{authors}", delete_after = 5)
+  else:
+    await ctx.reply("You don't have the required permission: Manage messages.")
+
+@commands.command()
+async def purgeuser(ctx, num, *userinput : discord.User):
+  try_delete_message(ctx.message)
+  if ctx.channel.permissions_for(ctx.author).manage_messages or botadmin(ctx):
+    deleted = await ctx.channel.purge(limit=num+1, check = lambda msg: msg.author in userinput)
+    msg = await ctx.reply("Purging completed.")
+    authors = f'\n'.join({f"{x.author.name}#{x.author.discriminator}{' **bot**' if x.author.bot else ''}" for x in deleted})
+    await msg.edit(f"Purged {len(deleted)} messages from:\n{authors}", delete_after = 5)
+  else:
+    await ctx.reply("You don't have the required permission: Manage messages.")
 
 @commands.command()
 async def react(ctx, emoji : discord.Emoji, message = None):
@@ -252,13 +330,32 @@ async def slowmode(ctx, sec = None, *channels:typing.Union[discord.TextChannel,s
 
 @commands.command()
 async def tts(ctx, *, desc):
-  await ctx.reply(desc, tts = True)
+  if ctx.channel.permissions_for(ctx.author).send_tts_messages or botadmin(ctx):
+    await ctx.reply(desc, tts = True)
+  else:
+    await ctx.reply("You don't have the required permission: Send TTS messages.")
+
+@commands.command()
+async def timeout(ctx, member_ : discord.Member, duration, *, reason = None):
+  if ctx.channel.permissions_for(ctx.author).moderate_members or botadmin(ctx):
+    sec = int(timedelta(**{
+      UNITS.get(m.group('unit').lower(), 'seconds'): int(m.group('val'))
+      for m in re.finditer(r'(?P<val>\d+)(?P<unit>[smhdw]?)', duration, flags=re.I)
+    }).total_seconds())
+    end = datetime.now(timezone.utc) + timedelta(seconds = sec)
+    if reason:
+      await member_.edit(timeout_until = end.isoformat(), reason=reason + f" (requested by {ctx.author.username}#{ctx.author.discriminator})")
+    else:
+      await member_.edit(timeout_until = end.isoformat())
+    await ctx.send("Timeout success")
+  else:
+    await ctx.reply("You don't have the required permission: Moderate members.")
 
 @commands.command()
 async def unban(ctx, user: discord.User, *, reason="No reason provided"):
   if ctx.channel.permissions_for(ctx.author).ban_members or botadmin(ctx):
     try:
-      await ctx.guild.unban(user, reason=reason)
+      await ctx.guild.unban(user, reason=reason + f" (requested by {ctx.author.username}#{ctx.author.discriminator})")
     except:
       await ctx.reply("The bot doesn't have the required permission: Ban members.")
       return
@@ -273,104 +370,10 @@ async def unban(ctx, user: discord.User, *, reason="No reason provided"):
     await ctx.reply("You don't have the required permission: Ban members.")
 
 @commands.command()
-async def purge(ctx, num : int):
-  try_delete_message(ctx.message)
-  if ctx.channel.permissions_for(ctx.author).manage_messages or botadmin(ctx):
-    deleted = await ctx.channel.purge(limit=num+1)
-    msg = await ctx.reply("Purging completed.")
-    authors = f'\n'.join({f"{x.author.name}#{x.author.discriminator}{' **bot**' if x.author.bot else ''}" for x in deleted})
-    await msg.edit(f"Purged {len(deleted)} messages from:\n{authors}", delete_after = 5)
-  else:
-    await ctx.reply("You don't have the required permission: Manage messages.")
-
-@commands.command()
-async def purgepy(ctx, num : int, pyscript):
-  try_delete_message(ctx.message)
-  if ctx.channel.permissions_for(ctx.author).manage_messages or botadmin(ctx):
-    num=int(num)
-    deleted = await ctx.channel.purge(limit=num+1, check = lambda msg: eval(pyscript))
-    msg = await ctx.reply("Purging completed.")
-    authors = f'\n'.join({f"{x.author.name}#{x.author.discriminator}{' **bot**' if x.author.bot else ''}" for x in deleted})
-    await msg.edit(f"Purged {len(deleted)} messages from:\n{authors}", delete_after = 5)
-  else:
-    await ctx.reply("You don't have the required permission: Manage messages.")
-
-@commands.command()
-async def purgepygex(ctx, num : int, regex, *, pyscript):
-  try_delete_message(ctx.message)
-  if ctx.channel.permissions_for(ctx.author).manage_messages or botadmin(ctx):
-    purge_pattern = re.compile(regex)
-    deleted = await ctx.channel.purge(limit=num+1, check = lambda msg: eval(pyscript) and purge_pattern.fullmatch(msg.content))
-    msg = await ctx.reply("Purging completed.")
-    authors = f'\n'.join({f"{x.author.name}#{x.author.discriminator}{' **bot**' if x.author.bot else ''}" for x in deleted})
-    await msg.edit(f"Purged {len(deleted)} messages from:\n{authors}", delete_after = 5)
-  else:
-    await ctx.reply("You don't have the required permission: Manage messages.")
-
-@commands.command()
-async def purgereactions(ctx, messages, emoji: discord.Emoji = None):
-  if emoji == None:
-    async for message in ctx.channel.history(limit=int(messages)+1):
-      await message.clear_reactions()
-  else:
-    async for message in ctx.channel.history(limit=int(messages)+1):
-      await message.clear_reaction(emoji)
-
-@commands.command()
-async def purgeregex(ctx, num : int, *, regex):
-  try_delete_message(ctx.message)
-  if ctx.channel.permissions_for(ctx.author).manage_messages or botadmin(ctx):
-    purge_pattern = re.compile(regex)
-    deleted = await ctx.channel.purge(limit=num+1, check = lambda msg: purge_pattern.fullmatch(msg.content))
-    msg = await ctx.reply("Purging completed.")
-    authors = f'\n'.join({f"{x.author.name}#{x.author.discriminator}{' **bot**' if x.author.bot else ''}" for x in deleted})
-    await msg.edit(f"Purged {len(deleted)} messages from:\n{authors}", delete_after = 5)
-  else:
-    await ctx.reply("You don't have the required permission: Manage messages.")
-
-@commands.command()
-async def purgerole(ctx, num, roleinput : discord.Role):
-  try_delete_message(ctx.message)
-  if ctx.channel.permissions_for(ctx.author).manage_messages or botadmin(ctx):
-    deleted = await ctx.channel.purge(limit=num+1, check = lambda msg: roleinput in msg.author.roles)
-    msg = await ctx.reply("Purging completed.")
-    authors = f'\n'.join({f"{x.author.name}#{x.author.discriminator}{' **bot**' if x.author.bot else ''}" for x in deleted})
-    await msg.edit(f"Purged {len(deleted)} messages from:\n{authors}", delete_after = 5)
-  else:
-    await ctx.reply("You don't have the required permission: Manage messages.")
-
-@commands.command()
-async def purgeuser(ctx, num, *userinput : discord.User):
-  try_delete_message(ctx.message)
-  if ctx.channel.permissions_for(ctx.author).manage_messages or botadmin(ctx):
-    deleted = await ctx.channel.purge(limit=num+1, check = lambda msg: msg.author in userinput)
-    msg = await ctx.reply("Purging completed.")
-    authors = f'\n'.join({f"{x.author.name}#{x.author.discriminator}{' **bot**' if x.author.bot else ''}" for x in deleted})
-    await msg.edit(f"Purged {len(deleted)} messages from:\n{authors}", delete_after = 5)
-  else:
-    await ctx.reply("You don't have the required permission: Manage messages.")
-
-@commands.command()
-async def timeout(ctx, member_ : discord.Member, duration, *, reason = None):
-  if ctx.channel.permissions_for(ctx.author).moderate_members or botadmin(ctx):
-    sec = int(timedelta(**{
-      UNITS.get(m.group('unit').lower(), 'seconds'): int(m.group('val'))
-      for m in re.finditer(r'(?P<val>\d+)(?P<unit>[smhdw]?)', duration, flags=re.I)
-    }).total_seconds())
-    end = datetime.now(timezone.utc) + timedelta(seconds = sec)
-    if reason:
-      await member_.edit(timeout_until = end.isoformat(), reason=reason)
-    else:
-      await member_.edit(timeout_until = end.isoformat())
-    await ctx.send("Timeout success")
-  else:
-    await ctx.reply("You don't have the required permission: Moderate members.")
-
-@commands.command()
 async def untimeout(ctx, member_ : discord.Member, *, reason = None):
   if ctx.channel.permissions_for(ctx.author).moderate_members or botadmin(ctx):
     if reason:
-      await member_.edit(timeout_until = None, reason=reason)
+      await member_.edit(timeout_until = None, reason=reason + f" (requested by {ctx.author.username}#{ctx.author.discriminator})")
     else:
       await member_.edit(timeout_until = None)
     await ctx.send("Un-Timeout success")

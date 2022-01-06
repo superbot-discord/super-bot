@@ -85,7 +85,7 @@ async def on_command_error(ctx, error):
       await ctx.reply('Unfortunately, the output text is too long.')
   else:
     try:
-      await ctx.reply(f"Sorry! An error occured:\n```{''.join(traceback.format_exception(type(error), error, error.__traceback__))}```\n If the error persists, please kindly inform JohannLau#6541 about this issue.")
+      await ctx.send(f"Sorry! An error occured:\n```{''.join(traceback.format_exception(type(error), error, error.__traceback__))}```\n If the error persists, please kindly inform JohannLau#6541 about this issue.")
     except discord.HTTPException:
       print(''.join(traceback.format_exception(type(error), error, error.__traceback__)))
       await ctx.reply(f"Sorry! An error occured. The error was too long but it had been shown to JohannLau#6541. If the error persists, Please kindly inform him about this issue.")
@@ -412,7 +412,6 @@ async def botpurge(ctx, *, num : int = 1):
         purged = purged + 1
         if purged >= num:
           break
-        
     await ctx.reply("Bot purging completed.", delete_after = 5)
   else:
     await ctx.reply("You don't have the required permission: Manage messages.")
