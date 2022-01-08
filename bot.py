@@ -51,6 +51,7 @@ allid=[]
 #  sba_channel = bot_.get_channel(909445785509326859)
 #  await sba_channel.send(f"5m")
 #  i dont know you so well, your hearts been aching but i dont give a shit
+
 @bot_.event
 async def on_command_error(ctx, error):
   if isinstance(error, commands.CommandNotFound):
