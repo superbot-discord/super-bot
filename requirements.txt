@@ -1,5 +1,8 @@
 # Discord
 #git+git://github.com/Rapptz/discord.py
+discord-py-interactions==4.0.1
+colorama==0.4.4
+orjson==3.6.5
 aiohttp==3.7.4
 async-timeout==3.0.1
 PyNaCl==1.4.0
