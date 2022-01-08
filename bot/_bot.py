@@ -431,7 +431,7 @@ async def ping(ctx, *, disposed = None):
 @ui.slash.command(name="ping", description="Checks whether the bot is online or not.")
 async def ping(ctx):
   now1 = datetime.now(timezone.utc)
-  message = await ctx.send("Pong!")
+  message = await ctx.respond("Pong!")
   mcs = str(int((datetime.now(timezone.utc) - now1).microseconds)+int(((datetime.now(timezone.utc) - now1).total_seconds())%60))
   await message.edit(content=f"Pong! 🏓\n```Message delay: {mcs} microseconds\nBot latency  : {round(bot_.latency*1000000, 2)} microseconds```")
 
