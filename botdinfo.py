@@ -641,7 +641,7 @@ async def permissions(ctx, integer="help"):
         embed = perms_guide
   await ctx.reply(embed=embed)
 
-@commands.command(aliases= ['permgen', 'permsgen', 'permgenerate', 'permsgenerate', 'permission_gen', 'permissions_gen' 'permission_generate'])
+@commands.command(aliases=['permgen', 'permsgen', 'permgenerate', 'permsgenerate', 'permission_gen', 'permissions_gen' 'permission_generate'])
 async def permission_generate(ctx, *, disposed = None):
   permission_view = ui.View(timeout=None)
   for x in permission_menus:
@@ -1096,7 +1096,7 @@ async def template(ctx, *, tempinput):
   embed.add_field(name="Original Server", value=f3v, inline=True)
   await ctx.reply(embed=embed)
 
-@commands.command(['member', 'mem', 'us'])
+@commands.command(aliases=['member', 'mem', 'us'])
 async def user(ctx, user: discord.Member = None, channel: discord.TextChannel = None):
   if user==None:
     user=ctx.author
