@@ -13,6 +13,7 @@ from shared import *
 
 spell_checker = Typox()
 spell_checker.add_from_path("fonts/dictionary.txt")
+allid=[]
 
 @commands.command(aliases=["lower", "upper", "capital", "capitalise", "capitalize", "lowercase", "lower_case", "uppercase", "upper_case"])
 async def case(ctx, *, text):
@@ -272,6 +273,66 @@ async def reverse(ctx, *, text):
   await ctx.reply(text[::-1])
 
 @commands.command()
+async def rtimer(ctx, timetocount, *, Text = None):
+  sec = int(timedelta(**{
+    UNITS.get(m.group('unit').lower(), 'seconds'): int(m.group('val'))
+    for m in re.finditer(r'(?P<val>\d+)(?P<unit>[smhdw]?)', timetocount, flags=re.I)
+  }).total_seconds())
+  end = datetime.now(timezone.utc) + timedelta(seconds = sec)
+  seconds = int((end - datetime.now(timezone.utc)).total_seconds())
+  idcode = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"[ra.randint(0, 25)]+"ABCDEFGHIJKLMNOPQRSTUVWXYZ"[ra.randint(0, 25)]+"ABCDEFGHIJKLMNOPQRSTUVWXYZ"[ra.randint(0, 25)]+"ABCDEFGHIJKLMNOPQRSTUVWXYZ"[ra.randint(0, 25)]+"ABCDEFGHIJKLMNOPQRSTUVWXYZ"[ra.randint(0, 25)]
+  exec(f"terminate{idcode.lower()}{ctx.guild.id}=0",globals())
+  newidcode=idcode.lower()
+  allid.append(idcode+str(ctx.guild.id))
+  desc = "Initializing countdown…"
+  message = await ctx.reply(desc)
+  while seconds>=1 and eval("terminate"+idcode.lower()+str(ctx.guild.id))==0:
+    seconds = int((end - datetime.now(timezone.utc)).total_seconds())
+    newsec=str(seconds%60)
+    newmin=str((seconds%3600)//60)
+    newhrs=str(seconds%86400//3600)
+    newday=str(seconds//86400)
+    if int(newsec) <= 9:
+      newsec = "0"+newsec
+    if int(newmin) <= 9:
+      newmin = "0"+newmin
+    if int(newhrs) <= 9:
+      newhrs = "0"+newhrs
+    if int(newday) <= 9:
+      newday = "0"+newday
+    newsec=number_to_emoji(newsec)
+    newmin=number_to_emoji(newmin)
+    newhrs=number_to_emoji(newhrs)
+    newday=number_to_emoji(newday)
+    prevdesc = desc
+    if seconds<0:
+      break
+    desc=newidcode+f"\n"+newday+":regional_indicator_d:   "+newhrs+":regional_indicator_h:   "+newmin+":regional_indicator_m:   "+newsec+":regional_indicator_s:"
+    if desc != prevdesc:
+      await message.edit(content = desc)
+  desc = "Countdown for "
+  if sec >= 604800:
+    desc = desc + str(sec//604800) + " weeks "
+    sec = sec%604800
+  if sec >= 86400:
+    desc = desc + str(sec//86400) + " days "
+    sec = sec%86400
+  if sec >= 3600:
+    desc = desc + str(sec//3600) + " hours "
+    sec = sec%3600
+  if sec >= 60:
+    desc = desc + str(sec//60) + " minutes "
+    sec = sec%60
+  if sec >= 1:
+    desc = desc + str(sec//1) + " seconds "
+  desc = desc + "completed!"
+  await message.edit(content=desc)
+  if Text==None:
+    await message.reply("Countdown complete!")
+  else:
+    await message.reply(f"Countdown complete!\n"+Text)
+
+@commands.command()
 async def spellcheck(ctx, text, distance : typing.Optional[int] = 3, *, disposed = None):
   results = spell_checker.get_suggestions(text, max_distance = distance)
   desc = f"QWERTY-spellchecking results for {text}"
@@ -298,6 +359,73 @@ async def spoil(ctx, msg : discord.Message = None, *, text="Reply to a message, 
   if msg:
     text = msg.content
   await ctx.reply(text.replace("||", ""))
+
+@commands.command()
+async def terminate(ctx, *, idc):
+  if id_pattern.fullmatch(idc) and len(idc)==5:
+    if f"{idc.upper()}{ctx.guild.id}" in allid:
+      exec(f"terminate{idc.lower()}{ctx.guild.id}=1",globals())
+      allid.remove(idc.upper()+str(ctx.guild.id))
+      await ctx.reply("Timer terminated!")
+    else:
+      await ctx.reply("Please provide a valid timer code. A timer code could be found at the beginning of a running timer.")
+  else:
+    await ctx.reply("Please provide an 5-alphabet ID code. Example: `ABCDE`")
+
+@commands.command()
+async def ttimer(ctx, timetocount, *, Text = None):
+  sec = int(timedelta(**{
+    UNITS.get(m.group('unit').lower(), 'seconds'): int(m.group('val'))
+    for m in re.finditer(r'(?P<val>\d+)(?P<unit>[smhdw]?)', timetocount, flags=re.I)
+  }).total_seconds())
+  end = datetime.now(timezone.utc) + timedelta(seconds = sec)
+  seconds = int((end - datetime.now(timezone.utc)).total_seconds())
+  newidcode = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"[ra.randint(0, 25)]+"ABCDEFGHIJKLMNOPQRSTUVWXYZ"[ra.randint(0, 25)]+"ABCDEFGHIJKLMNOPQRSTUVWXYZ"[ra.randint(0, 25)]+"ABCDEFGHIJKLMNOPQRSTUVWXYZ"[ra.randint(0, 25)]+"ABCDEFGHIJKLMNOPQRSTUVWXYZ"[ra.randint(0, 25)]
+  exec(f"terminate{newidcode.lower()}{ctx.guild.id}=0",globals())
+  allid.append(newidcode+str(ctx.guild.id))
+  desc = "Initializing countdown…"
+  message = await ctx.reply(desc)
+  while seconds>=1 and eval("terminate"+newidcode.lower()+str(ctx.guild.id))==0:
+    seconds = int((end - datetime.now(timezone.utc)).total_seconds())
+    newsec=str(seconds%60)
+    newmin=str((seconds%3600)//60)
+    newhrs=str(seconds%86400//3600)
+    newday=str(seconds//86400)
+    if int(newsec) <= 9:
+      newsec = "0"+newsec
+    if int(newmin) <= 9:
+      newmin = "0"+newmin
+    if int(newhrs) <= 9:
+      newhrs = "0"+newhrs
+    if int(newday) <= 9:
+      newday = "0"+newday
+    prevdesc = desc
+    if seconds<0:
+      break
+    desc="Timer (Terminate with `=terminate "+newidcode+f"`)\n**"+newday+"** d   **"+newhrs+"** h   **"+newmin+"** m   **"+newsec+"**s"
+    if desc != prevdesc:
+      await message.edit(content = desc)
+  desc = "Countdown for "
+  if sec >= 604800:
+    desc = desc + str(sec//604800) + " weeks "
+    sec = sec%604800
+  if sec >= 86400:
+    desc = desc + str(sec//86400) + " days "
+    sec = sec%86400
+  if sec >= 3600:
+    desc = desc + str(sec//3600) + " hours "
+    sec = sec%3600
+  if sec >= 60:
+    desc = desc + str(sec//60) + " minutes "
+    sec = sec%60
+  if sec >= 1:
+    desc = desc + str(sec//1) + " seconds "
+  desc = desc + "completed!"
+  await message.edit(content=desc)
+  if Text==None:
+    await message.reply("Countdown complete!")
+  else:
+    await message.reply(f"Countdown complete!\n"+Text)
 
 @commands.command()
 async def unicode(ctx, *query):
@@ -371,8 +499,11 @@ def setup(bot):
   bot.add_command(rawspoiler)
   bot.add_command(rawrawspoiler)
   bot.add_command(reverse)
+  bot.add_command(rtimer)
   bot.add_command(spellcheck)
   bot.add_command(spoiler)
   bot.add_command(spoil)
+  bot.add_command(terminate)
+  bot.add_command(ttimer)
   bot.add_command(unicode)
   bot.add_command(unix)
