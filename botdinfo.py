@@ -2,7 +2,7 @@ from shared import *
 
 cmaphsv = plt.cm.hsv
 
-@commands.command(aliases=["att", "atch"])
+@commands.command(aliases=['att', 'atch'])
 async def attachment(ctx, message: discord.Message=None, index: int = 1):
   if message==None:
     potential_reference = ctx.message.reference
@@ -120,7 +120,7 @@ async def banner(ctx, user: typing.Union[discord.User, discord.Member]=None):
       embed.add_field(name=f"{x.upper()}s", value=desc)
   await ctx.reply(embed=embed)
 
-@commands.command()
+@commands.command(aliases=['ca'])
 async def category(ctx, category_: discord.CategoryChannel = None):
   if not category_:
     if ctx.channel.category:
@@ -440,7 +440,7 @@ async def invitelink(ctx, *, invite_input: discord.Invite):
   embed.add_field(name="Expired?", value=f6v, inline=True)
   await ctx.reply(embed=embed)
 
-@commands.command(aliases=["lu"])
+@commands.command(aliases=['lu'])
 async def leftuser(ctx, *, userinput):
   lfuser = await ctx.bot.fetch_user(int(userinput))
   ti="Left User Information"
@@ -466,7 +466,7 @@ async def leftuser(ctx, *, userinput):
   embed.add_field(name="Registered", value=f1v, inline=True)
   await ctx.reply(embed=embed)
 
-@commands.command(aliases=["msg", "ms"])
+@commands.command(aliases=['msg', 'ms'])
 async def message(ctx, message: discord.Message=None):
   if message==None:
     potential_reference = ctx.message.reference
@@ -598,7 +598,7 @@ async def message(ctx, message: discord.Message=None):
     embed.add_field(name=f"User mentions ({len(f4vraw)})", value=f4v, inline=False)
   await ctx.reply(embed=embed)
 
-@commands.command()
+@commands.command(aliases=['ov'])
 async def overwrites(ctx, channel_:typing.Union[discord.TextChannel, discord.VoiceChannel, discord.StageChannel, discord.CategoryChannel] = None):
   if not channel_:
     channel_ = ctx.channel
@@ -676,7 +676,7 @@ async def rawraw(ctx, msg : discord.Message = None):
   embed = discord.Embed(title = "Raw message", url = msg.jump_url, description = f"```{discord.utils.escape_markdown(msg.content, as_needed=True)}```")
   await ctx.reply(embed=embed)
 
-@commands.command(aliases=["rea"])
+@commands.command(aliases=['rea'])
 async def reactions(ctx, *, msg : discord.Message = None):
   if msg==None:
     potential_reference = ctx.message.reference
@@ -711,7 +711,7 @@ async def reactions(ctx, *, msg : discord.Message = None):
   await ctx.reply(files = [discord.File('reactions.png'), discord.File('reactions.svg')])
   plt.clf()
 
-@commands.command(aliases=["ro"])
+@commands.command(aliases=['ro'])
 async def role(ctx,role: discord.Role=None):
   if role==None:
     role=ctx.author.top_role
@@ -745,7 +745,7 @@ async def role(ctx,role: discord.Role=None):
   #embed.add_field(name="Channel Permissions", value=f3vb, inline=False)
   await ctx.reply(embed=embed)
 
-@commands.command(aliases=["guild", "se"])
+@commands.command(aliases=['guild', 'se'])
 async def server(ctx, *, text = "regular"):
   guild=ctx.guild
   ti=guild.name
@@ -943,7 +943,7 @@ async def server(ctx, *, text = "regular"):
     embed.set_field_at(3, name=f"Roles ({len(guild.roles)})", value=f1va, inline=False)
     await ctx.reply(embed=embed)
 
-@commands.command(aliases=["sta"])
+@commands.command(aliases=['sta'])
 async def status(ctx, member : discord.Member = None):
   if member==None:
     member=ctx.author
@@ -978,7 +978,7 @@ async def status(ctx, member : discord.Member = None):
       embed.set_thumbnail(url=x.album_cover_url)
   await ctx.reply(embed=embed)
 
-@commands.command(aliases=["stu"])
+@commands.command(aliases=['stu'])
 async def statuses(ctx, *, disposed = None):
   bot_onlines = bot_dnds = bot_idles = bot_offlines = 0
   usr_onlines = usr_dnds = usr_idles = usr_offlines = 0
@@ -1040,7 +1040,7 @@ async def statuses(ctx, *, disposed = None):
   plt.clf()
   try_delete('statuses.png', 'statuses.svg')
 
-@commands.command(aliases=["stick", "st"])
+@commands.command(aliases=['stick', 'st'])
 async def sticker(ctx, message: discord.Message=None):
   if message==None:
     potential_reference = ctx.message.reference
@@ -1096,7 +1096,7 @@ async def template(ctx, *, tempinput):
   embed.add_field(name="Original Server", value=f3v, inline=True)
   await ctx.reply(embed=embed)
 
-@commands.command(aliases=["member", "mem", "us"])
+@commands.command(['member', 'mem', 'us'])
 async def user(ctx, user: discord.Member = None, channel: discord.TextChannel = None):
   if user==None:
     user=ctx.author
@@ -1219,7 +1219,7 @@ async def user(ctx, user: discord.Member = None, channel: discord.TextChannel = 
 async def widget(ctx, *, disposed = None):
   try:
     widget_ = await ctx.guild.widget()
-  except:
+  except discord.NotFound:
     await ctx.reply("This server does not have a widget.")
     return
   invite_has_info = False
@@ -1234,6 +1234,7 @@ async def widget(ctx, *, disposed = None):
   await ctx.reply(embed=embed)
 
 def setup(bot):
+  bot.add_command(attachment)
   bot.add_command(avatar)
   bot.add_command(badges)
   bot.add_command(banner)

@@ -336,7 +336,7 @@ async def tts(ctx, *, desc):
     await ctx.reply("You don't have the required permission: Send TTS messages.")
 
 @commands.command()
-async def timeout(ctx, member_ : discord.Member, duration, *, reason = None):
+async def timeout(ctx, member_ : discord.Member, duration = "0s", *, reason = None):
   if ctx.channel.permissions_for(ctx.author).moderate_members or botadmin(ctx):
     sec = int(timedelta(**{
       UNITS.get(m.group('unit').lower(), 'seconds'): int(m.group('val'))
@@ -347,7 +347,8 @@ async def timeout(ctx, member_ : discord.Member, duration, *, reason = None):
       await member_.edit(timeout_until = end.isoformat(), reason=reason + f" (requested by {ctx.author.username}#{ctx.author.discriminator})")
     else:
       await member_.edit(timeout_until = end.isoformat())
-    await ctx.send("Timeout success")
+    embed = discord.Embed(title=f"{member_.name} was timed out.", description=f"Until: {unix_timestamp(end)}\nReason: {reason}\nBy: {ctx.author.mention}")
+    await ctx.send(embed = embed)
   else:
     await ctx.reply("You don't have the required permission: Moderate members.")
 

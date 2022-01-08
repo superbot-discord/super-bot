@@ -76,11 +76,15 @@ async def on_command_error(ctx, error):
     await ctx.reply('One or more of your arguments is/are not in the correct format! Please read the documentation.')
   elif isinstance(error, commands.NotOwner):
     await ctx.reply('Unfortunately, only the owner of the bot is allowed to use this.')
-  elif isinstance(error, FileNotFoundError):
-    await ctx.reply('Unfortunately, the file could not be generated.')
+  elif isinstance(error, commands.CommandInvokeError):
+    error_ = error.original
+    if isinstance(error_, FileNotFoundError):
+      await ctx.reply('Unfortunately, the file could not be generated.')
   elif isinstance(error, discord.HTTPException):
     if error.code == 40005:
       await ctx.reply('Unfortunately, the output file is too large.')
+    elif error.code == 50006:
+      await ctx.reply('Unfortunately, there is no output.')
     elif error.code == 50035:
       await ctx.reply('Unfortunately, the output text is too long.')
   else:
@@ -412,9 +416,9 @@ async def botpurge(ctx, *, num : int = 1):
         purged = purged + 1
         if purged >= num:
           break
-    await ctx.reply("Bot purging completed.", delete_after = 5)
+    await ctx.send("Bot purging completed.", delete_after = 5)
   else:
-    await ctx.reply("You don't have the required permission: Manage messages.")
+    await ctx.send("You don't have the required permission: Manage messages.")
 
 @bot_.command(aliases=["online"])
 async def ping(ctx, *, disposed = None):
