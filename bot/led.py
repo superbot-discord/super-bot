@@ -1,5 +1,103 @@
 from shared import *
 #"icyan" : {"fg":"#87B33FFF", "bg":"#131402FF"}
+
+font_led      = ImageFont.truetype("fonts/led.ttf", 50)
+font_led_bold = ImageFont.truetype("fonts/led_bold.ttf", 50)
+font_led_caps = ImageFont.truetype("fonts/led_caps.ttf", 50)
+font_led_mono = ImageFont.truetype("fonts/led_mono.ttf", 50)
+font_led_serif= ImageFont.truetype("fonts/led_serif.ttf", 50)
+
+font_led2      = ImageFont.truetype("fonts/led2.ttf", 50)
+font_led2_bold = ImageFont.truetype("fonts/led2_bold.ttf", 50)
+font_led2_caps = ImageFont.truetype("fonts/led2_caps.ttf", 50)
+font_led2_fat  = ImageFont.truetype("fonts/led2_fat.ttf", 50)
+font_led2_modern=ImageFont.truetype("fonts/led2_modern.ttf", 50)
+font_led2_serif= ImageFont.truetype("fonts/led2_serif.ttf", 50)
+
+font_led3_1   = ImageFont.truetype("fonts/led3_1.ttf", 50)
+font_led3_1i  = ImageFont.truetype("fonts/led3_1i.ttf", 50)
+font_led3_2   = ImageFont.truetype("fonts/led3_2.ttf", 50)
+font_led3_2i  = ImageFont.truetype("fonts/led3_2i.ttf", 50)
+font_led3_3   = ImageFont.truetype("fonts/led3_3.ttf", 50)
+font_led3_3i  = ImageFont.truetype("fonts/led3_3i.ttf", 50)
+
+font_led4_1   = ImageFont.truetype("fonts/led4_1.ttf", 50)
+font_led4_1i  = ImageFont.truetype("fonts/led4_1i.ttf", 50)
+font_led4_2   = ImageFont.truetype("fonts/led4_2.ttf", 50)
+font_led4_2i  = ImageFont.truetype("fonts/led4_2i.ttf", 50)
+font_led4_3   = ImageFont.truetype("fonts/led4_3.ttf", 50)
+font_led4_3i  = ImageFont.truetype("fonts/led4_3i.ttf", 50)
+
+font_lcd      = ImageFont.truetype("fonts/lcd.ttf", 50)
+font_lcd_calc = ImageFont.truetype("fonts/lcd_calc.ttf", 50)
+font_lcd_dense= ImageFont.truetype("fonts/lcd_dense.otf", 50)
+font_lcd_mono = ImageFont.truetype("fonts/lcd_mono.otf", 50)
+
+font_lcd2_1   = ImageFont.truetype("fonts/lcd2_1.ttf", 50)
+font_lcd2_1i  = ImageFont.truetype("fonts/lcd2_1i.ttf", 50)
+font_lcd2_2   = ImageFont.truetype("fonts/lcd2_2.ttf", 50)
+font_lcd2_2i  = ImageFont.truetype("fonts/lcd2_2i.ttf", 50)
+font_lcd2_3   = ImageFont.truetype("fonts/lcd2_3.ttf", 50)
+font_lcd2_3i  = ImageFont.truetype("fonts/lcd2_3i.ttf", 50)
+
+font_lcd3_1   = ImageFont.truetype("fonts/lcd3_1.ttf", 50)
+font_lcd3_1i  = ImageFont.truetype("fonts/lcd3_1i.ttf", 50)
+font_lcd3_2   = ImageFont.truetype("fonts/lcd3_2.ttf", 50)
+font_lcd3_2i  = ImageFont.truetype("fonts/lcd3_2i.ttf", 50)
+font_lcd3_3   = ImageFont.truetype("fonts/lcd3_3.ttf", 50)
+font_lcd3_3i  = ImageFont.truetype("fonts/lcd3_3i.ttf", 50)
+
+whitney       = ImageFont.truetype("fonts/whitney.otf", 34)
+sf_pro_r      = ImageFont.truetype("fonts/awf.ttf", 23)
+
+led_font_dict = {
+  font_led      :  {"spacing" : 20, "padding" : 3  , "height_plus" : 15 , "required_height_plus" : 3  , "unneeded_width" : 8 , "unneeded_padding" : 12},
+  font_led_bold :  {"spacing" : 20, "padding" : 3  , "height_plus" : 15 , "required_height_plus" : 3  , "unneeded_width" : 6 , "unneeded_padding" : 12},
+  font_led_caps :  {"spacing" : 10, "padding" : -10, "height_plus" : -10, "required_height_plus" : -10, "unneeded_width" : 7 , "unneeded_padding" : 0},
+  font_led_mono :  {"spacing" : 10, "padding" : -12, "height_plus" : -13, "required_height_plus" : -13, "unneeded_width" : 7 , "unneeded_padding" : 14},
+  font_led_serif:  {"spacing" : 25, "padding" : 9  , "height_plus" : 22 , "required_height_plus" : 8  , "unneeded_width" : 6 , "unneeded_padding" : 12},
+
+  font_led2       :{"spacing" : 10, "padding" : -5 , "height_plus" : 5  , "required_height_plus" : -5 , "unneeded_width" : 5 , "unneeded_padding" : 10},
+  font_led2_bold  :{"spacing" : 50, "padding" : 20 , "height_plus" : 40 , "required_height_plus" : 20 , "unneeded_width" : 8 , "unneeded_padding" : 20},
+  font_led2_caps  :{"spacing" : 10, "padding" : -15, "height_plus" : -15, "required_height_plus" : -15, "unneeded_width" : 5 , "unneeded_padding" : 0},
+  font_led2_fat   :{"spacing" : 10, "padding" : -15, "height_plus" : -15, "required_height_plus" : -15, "unneeded_width" : 5 , "unneeded_padding" : 0},
+  font_led2_modern:{"spacing" : 20, "padding" : 0  , "height_plus" : 10 , "required_height_plus" : -10, "unneeded_width" : 5 , "unneeded_padding" : 4},
+  font_led2_serif :{"spacing" : 25, "padding" : 5  , "height_plus" : 15 , "required_height_plus" : 5  , "unneeded_width" : 5 , "unneeded_padding" : 10},
+
+  font_led3_1    : {"spacing" : 20, "padding" : 3 , "height_plus" : 3 , "unneeded_width" : 11 },
+  font_led3_1i   : {"spacing" : 20, "padding" : 3 , "height_plus" : 3 , "unneeded_width" : 11 },
+  font_led3_2    : {"spacing" : 20, "padding" : 3 , "height_plus" : 3 , "unneeded_width" : 10 },
+  font_led3_2i   : {"spacing" : 20, "padding" : 3 , "height_plus" : 3 , "unneeded_width" : 10 },
+  font_led3_3    : {"spacing" : 20, "padding" : 3 , "height_plus" : 3 , "unneeded_width" : 9  },
+  font_led3_3i   : {"spacing" : 20, "padding" : 3 , "height_plus" : 3 , "unneeded_width" : 9  },
+
+  font_led4_1    : {"spacing" : 20, "padding" : 3 , "height_plus" : 3 , "unneeded_width" : 11 },
+  font_led4_1i   : {"spacing" : 20, "padding" : 3 , "height_plus" : 3 , "unneeded_width" : 11 },
+  font_led4_2    : {"spacing" : 20, "padding" : 3 , "height_plus" : 3 , "unneeded_width" : 10 },
+  font_led4_2i   : {"spacing" : 20, "padding" : 3 , "height_plus" : 3 , "unneeded_width" : 10 },
+  font_led4_3    : {"spacing" : 20, "padding" : 3 , "height_plus" : 3 , "unneeded_width" : 9  },
+  font_led4_3i   : {"spacing" : 20, "padding" : 3 , "height_plus" : 3 , "unneeded_width" : 9  },
+
+  font_lcd       : {"spacing" : 20, "padding" : 3,  "height_plus" : 15},
+  font_lcd_calc  : {"spacing" : 20, "padding" : 3,  "height_plus" : 15},
+  font_lcd_dense : {"spacing" : 20, "padding" : 3,  "height_plus" : 15},
+  font_lcd_mono  : {"spacing" : 20, "padding" : 3,  "height_plus" : 15},
+
+  font_lcd2_1    : {"spacing" : 20, "padding" : 3 , "height_plus" : 3 , "unneeded_width" : 11 },
+  font_lcd2_1i   : {"spacing" : 20, "padding" : 3 , "height_plus" : 3 , "unneeded_width" : 11 },
+  font_lcd2_2    : {"spacing" : 20, "padding" : 3 , "height_plus" : 3 , "unneeded_width" : 10 },
+  font_lcd2_2i   : {"spacing" : 20, "padding" : 3 , "height_plus" : 3 , "unneeded_width" : 10 },
+  font_lcd2_3    : {"spacing" : 20, "padding" : 3 , "height_plus" : 3 , "unneeded_width" : 9  },
+  font_lcd2_3i   : {"spacing" : 20, "padding" : 3 , "height_plus" : 3 , "unneeded_width" : 9  },
+
+  font_lcd3_1    : {"spacing" : 20, "padding" : 3 , "height_plus" : 3 , "unneeded_width" : 11 },
+  font_lcd3_1i   : {"spacing" : 20, "padding" : 3 , "height_plus" : 3 , "unneeded_width" : 11 },
+  font_lcd3_2    : {"spacing" : 20, "padding" : 3 , "height_plus" : 3 , "unneeded_width" : 10 },
+  font_lcd3_2i   : {"spacing" : 20, "padding" : 3 , "height_plus" : 3 , "unneeded_width" : 10 },
+  font_lcd3_3    : {"spacing" : 20, "padding" : 3 , "height_plus" : 3 , "unneeded_width" : 9  },
+  font_lcd3_3i   : {"spacing" : 20, "padding" : 3 , "height_plus" : 3 , "unneeded_width" : 9  }
+}
+
 led_colors = typing.Optional[typing.Literal["cyan", "icyan", "crystal", "icrystal", "amber", "iamber", "red", "ired", "green", "igreen", "blue", "iblue", "purple", "ipurple", "yellow", "iyellow",
                                             "teal", "iteal", "black", "white", "tblack", "twhite", "dark", "light", "tdark", "tlight", "wdark", "wlight", "twdark", "twlight"]]
 led_alignment = typing.Optional[typing.Literal['left', 'center', 'right']]

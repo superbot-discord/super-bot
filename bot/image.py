@@ -54,7 +54,9 @@ async def image(ctx, *, mode):
       downloaded_obj = requests.get(user_input)
     with open("input.png", "wb") as f:
       f.write(downloaded_obj.content)
-  if mode.startswith("analyse") or mode.startswith("analyze"):
+  if not mode:
+    await ctx.send("Please provide a mode: `analyse` `blur` `edge` `rotate`")
+  elif mode.startswith("analyse") or mode.startswith("analyze"):
     try:
       scale = int(mode.split(" ")[1])
     except:

@@ -6,7 +6,7 @@ banned_text = []
 bot_ = commands.Bot(command_prefix=commands.when_mentioned_or("="),intents=discord.Intents.all(),
                     allowed_mentions=discord.AllowedMentions(everyone=False, users=True,
                     roles=False, replied_user=False), case_insensitive=True, strip_after_prefix=True)
-ui = UI(bot_)
+ui_ = ui.UI(bot_)
 
 bot_.remove_command('help')
 bot_.load_extension("apis__int")
@@ -44,6 +44,14 @@ sniperdict={}
 sniping={}
 poll_options={}
 polls=[]
+
+snipe_buttons = [
+  ui.Button(color='primary', custom_id="Snipe1", emoji="⏪"),
+  ui.Button(color='primary', custom_id="Snipe2", emoji="⬅️"),
+  ui.Button(color='primary', custom_id="Snipe3", emoji="📌"),
+  ui.Button(color='primary', custom_id="Snipe4", emoji="➡️"),
+  ui.Button(color='primary', custom_id="Snipe5", emoji="⏩")
+]
 
 #@tasks.loop(hours=24)
 #async def sba_marks():
@@ -203,28 +211,18 @@ async def on_message(message):
   except:
     pass
 
+"""
 @bot_.event
 async def on_interaction(interaction):
   interaction_select_option = interaction.data.get("values", None)
   interaction_original_message = interaction.message
   if interaction.type == discord.InteractionType.component:
     interaction_custom_id = interaction.data["custom_id"]
-    if interaction_custom_id in ["primary", "secondary", "green", "red"]:
-      await interaction.followup.send(f"You pressed on the {interaction_custom_id} button.", ephemeral=True)
-    elif interaction_select_option:
+    if interaction_select_option:
       if interaction_custom_id in ["single-selection", "multi-selection"]:
         interaction_first_option = interaction_select_option[0]
         if interaction_first_option.startswith("help_"):
           await interaction.edit_original_message(embed=eval(interaction_first_option))
-        else:
-          await interaction.followup.send(f"You selected {', '.join(interaction_select_option)} in the {interaction_custom_id} menu.", ephemeral=True)
-      elif interaction_custom_id in ["permission_server_selection", "permission_membership_selection", "permission_text_selection", "permission_voice_selection"]:
-        permission_messages[interaction_original_message][interaction_custom_id] = interaction.data["values"]
-        permission_integer = 0
-        for x in permission_messages[interaction_original_message].values():
-          for y in x:
-            permission_integer += (2**int(y) if y != 'None' else 0)
-        await interaction.followup.send(f"Decimal permission integer: {permission_integer}", ephemeral=True)
     elif interaction_custom_id in ["Snipe1", "Snipe2", "Snipe3", "Snipe4", "Snipe5"]:
       keyname = f"{interaction_original_message.guild.id}{interaction_original_message.channel.id}"
       if interaction_custom_id == "Snipe1":
@@ -271,7 +269,7 @@ async def on_interaction(interaction):
       embed = discord.Embed(title=ti, description=desc)
       embed.set_footer(text=foot)
       await interaction_original_message.edit(embed=embed)
-
+"""
 @bot_.command(aliases=['sniper'])
 async def snipe(ctx, *, text = None):
   chnl = ctx.channel
@@ -298,13 +296,10 @@ async def snipe(ctx, *, text = None):
         foot = sniperdate1[keyname]
       embed = discord.Embed(title=ti, description=desc)
       embed.set_footer(text=foot)
-      snipe_view = ui.View(timeout=120)
-      for x in snipe_buttons:
-        snipe_view.add_item(x)
       if chance(1000):
-        cmsg = await ctx.reply("Did someone just ghostping you?", embed=embed, view=snipe_view)
+        cmsg = await ctx.reply("Did someone just ghostping you?", embed= embed, components= snipe_buttons)
       else:
-        cmsg = await ctx.reply(embed=embed, view=snipe_view)
+        cmsg = await ctx.reply(embed= embed, components= snipe_buttons)
       sniperdict[cmsg] = 1
     else:
       await ctx.reply("Snipping is disabled. Please ask someone with manage messages permission to re-enable it.")
@@ -363,12 +358,12 @@ async def clearsnipe(ctx, *, chnl : discord.TextChannel = None):
 
 @bot_.command()
 @commands.is_owner()
-async def purgeserver(ctx, text, condition="1==1", *, disposed = None):
+async def purgeserver(ctx, text, condition="True", *, disposed = None):
   text = text.lower()
   if text.startswith("role"):
     allroles = ctx.guild.roles()
     for _role in allroles:
-      if condition:
+      if eval(condition):
         await _role.delete()
     await ctx.reply("Role purging completed.")
 
@@ -427,7 +422,7 @@ async def ping(ctx, *, disposed = None):
   mcs = str(int((datetime.now(timezone.utc) - now1).microseconds)+int(((datetime.now(timezone.utc) - now1).total_seconds())%60))
   await message.edit(content=f"Pong! 🏓\n```Message delay: {mcs} microseconds\nBot latency  : {round(bot_.latency*1000000, 2)} microseconds```")
 
-@ui.slash.command(name="ping", description="Checks whether the bot is online or not.")
+@ui_.slash.command(name="ping", description="Checks whether the bot is online or not.")
 async def ping(ctx):
   now1 = datetime.now(timezone.utc)
   message = await ctx.respond("Pong!")

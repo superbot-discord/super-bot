@@ -1,6 +1,145 @@
 from shared import *
-
 cmaphsv = plt.cm.hsv
+
+server_permtext = """```
+Index Permission
+3     Administrator
+33    Manage Events
+10    View Channels
+4     Manage Channels
+28    Manage Roles
+30    Manage Emojis and Stickers
+7     View Audit Logs
+19    View Server Insights
+29    Manage Webhooks
+5     Manage Server
+```"""
+
+member_permtext = """```
+0     Create Invites
+26    Change Nickname
+27    Manage Nicknames
+1     Kick Members
+2     Ban Members
+40    Time Out Members
+```"""
+
+tc_permtext = """```
+Index Permission
+11    Send Messages
+38    Send Messages in Threads
+35    Create Public Threads
+36    Create Private Threads
+14    Embed Links
+15    Attach Files
+6     Add Reactions
+18    Use External Emojis
+37    Use External Stickers
+17    Mention Everyone
+13    Manage Messages
+32    Manage Threads
+16    Read Message History
+12    Send TTS Messages
+31    Use Application Commands
+```"""
+
+vc_permtext = """```
+Index Permission
+20    Connect to Voice
+21    Speak (Audio)
+9     Stream (Video)
+39    Start Activities
+25    Use Voice Activity
+8     Priority Speaker
+22    Mute Members
+23    Deafen Members
+24    Move Members
+32    Request to Speak
+```"""
+
+badges_text = """```
+Index Badge
+0     Staff (Discord Employee)
+1     Partnered Server Owner
+2     HypeSquad Events member
+9     Early Supporter
+10    Team User
+3     Bug Hunter (Level 1)
+14    Bug Hunter (Level 2)
+12    System User
+17    Early Verified Bot Developer
+16    Verified Bot
+6     HypeSquad Bravery House
+7     HypeSquad Brilliance House
+8     HypeSquad Balance House
+```"""
+
+perms_guide = Embed(title="Permission integers", description="""
+Permission integers allow you to store permissions quickly. To represent some permissions, calculate the sum of 2 to the power of the permission index.
+For example, to specify kick members, manage channels and stream, calculate `2^1+2^4+2^9`, which is 2+16+512, or 530.
+Alternatively, if you know binary, put a `1` in the permission indices' places, which is `1000010010` in this case. Then run `=base 2 10 [Your binary]` to get the decimal equivalent.
+Or you can simply run `=permsgen`!""")
+perms_guide.add_field(name="Server permissions", value=server_permtext, inline=False)
+perms_guide.add_field(name="Membership permissions", value=member_permtext, inline=False)
+perms_guide.add_field(name="Text channel permissions", value=tc_permtext, inline=False)
+perms_guide.add_field(name="Voice channel permissions", value=vc_permtext, inline=False)
+
+badges_guide = Embed(title="Badge integers", description="""
+Badge integers allow you to store badges quickly. To represent some badges, calculate the sum of 2 to the power of the badge index.
+For example, to specify Discord employee, HypeSquad Events Member and System User, calculate `2^0+2^2+2^12`, which is 1+4+4096, or 4101.
+Alternatively, if you know binary, put a `1` in the badge indices' places, which is `1000000000101` in this case. Then run `=base 2 10 [Your binary]` to get the decimal equivalent.""")
+badges_guide.add_field(name="Badges", value=badges_text, inline=False)
+
+async def permission_select_update(ctx: ui.SelectInteraction):
+  permission_messages[ctx.message][ctx.custom_id] = ctx.selected_values
+  permission_integer = 0
+  for x in permission_messages[ctx.message].values():
+    for y in x:
+      permission_integer += (2**int(y) if y != 'None' else 0)
+  await ctx.respond(f"Decimal permission integer: {permission_integer}", hidden= True)
+
+
+class PermsGenL(ui.listener.Listener):
+  @ui.Listener.select("permission_server_selection")
+  async def server_select(self_, ctx: ui.SelectInteraction):
+    await permission_select_update(ctx)
+
+  @ui.Listener.select("permission_membership_selection")
+  async def membership_select(self_, ctx: ui.SelectInteraction):
+    await permission_select_update(ctx)
+
+  @ui.Listener.select("permission_text_selection")
+  async def text_select(self_, ctx: ui.SelectInteraction):
+    await permission_select_update(ctx)
+
+  @ui.Listener.select("permission_voice_selection")
+  async def voice_select(self_, ctx: ui.SelectInteraction):
+    await permission_select_update(ctx)
+
+
+server_permission_options = []
+for x, y in server_real.items():
+  server_permission_options.append(ui.SelectOption(label=y, value=x))
+
+membership_permission_options = []
+for x, y in membership_real.items():
+  membership_permission_options.append(ui.SelectOption(label=y, value=x))
+
+text_permission_options = []
+for x, y in text_channel_real.items():
+  text_permission_options.append(ui.SelectOption(label=y, value=x))
+
+voice_permission_options = []
+for x, y in voice_channel_real.items():
+  voice_permission_options.append(ui.SelectOption(label=y, value=x))
+
+permission_menus = [
+  ui.SelectMenu(placeholder="Server",       min_values=0, max_values=9,custom_id="permission_server_selection",    options=server_permission_options),
+  ui.SelectMenu(placeholder="Membership",   min_values=0, max_values=5,custom_id="permission_membership_selection",options=membership_permission_options),
+  ui.SelectMenu(placeholder="Text channel", min_values=0,max_values=14,custom_id="permission_text_selection",      options=text_permission_options),
+  ui.SelectMenu(placeholder="Voice channel",min_values=0, max_values=9,custom_id="permission_voice_selection",     options=voice_permission_options)
+]
+
 
 @commands.command(aliases=['att', 'atch'])
 async def attachment(ctx, message: discord.Message=None, index: int = 1):
@@ -150,7 +289,7 @@ async def category(ctx, category_: discord.CategoryChannel = None):
   await ctx.reply(embed=embed)
 
 @commands.command(aliases=['ch'])
-async def channel(ctx, channel:typing.Union[discord.TextChannel, discord.VoiceChannel, discord.StageChannel]=None):
+async def channel(ctx, channel:typing.Union[discord.TextChannel, discord.VoiceChannel, discord.StageChannel, discord.Thread]=None):
   if not channel:
     channel = ctx.channel
   if channel.type == discord.ChannelType.text:
@@ -643,13 +782,7 @@ async def permissions(ctx, integer="help"):
 
 @commands.command(aliases=['permgen', 'permsgen', 'permgenerate', 'permsgenerate', 'permission_gen', 'permissions_gen' 'permission_generate'])
 async def permission_generate(ctx, *, disposed = None):
-  permission_view = ui.View(timeout=None)
-  for x in permission_menus:
-    permission_view.add_item(x)
-  #for x in permission_buttons:
-  #  permission_view.add_item(x)
-  #print(len(permission_view))
-  msg = await ctx.reply("Select the permissions! You can select multiple options.", view = permission_view)
+  msg = await ctx.reply("Select the permissions! You can select multiple options.", components= permission_menus, listener= PermsGenL())
   permission_messages[msg] = {"permission_server_selection": [], "permission_membership_selection": [], "permission_text_selection": [], "permission_voice_selection": []}
 
 @commands.command()
