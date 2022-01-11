@@ -84,7 +84,7 @@ class SnipeL(ui.listener.Listener):
 
 
 @bot_.command(aliases=['sniper'])
-async def snipe(ctx, *, text=None):
+async def snipe(ctx, *, text= None):
   chnl = ctx.channel
   if not text:
     if sniping.get(chnl, True):
@@ -113,6 +113,10 @@ async def snipe(ctx, *, text=None):
     await ctx.reply("""If you want to view sniped messages, please run `=snipe` without any arguments.
     If you intend to enable/disable sniping, you are missing the Manage Channels permission.""")
 
+@ui_.slash.command(name="snipe", description="View up to 8 most recently deleted messages in this channel.")
+async def snipe_(ctx):
+  await snipe(ctx)
+
 @bot_.event
 async def on_message_delete(message):
   keyname = f"{message.guild.id}{message.channel.id}"
@@ -127,7 +131,7 @@ async def on_message_delete(message):
   sniper[message.channel] = sniper[message.channel][:8]
 
 @bot_.command()
-async def clearsnipe(ctx, *, chnl : discord.TextChannel = None):
+async def clearsnipe(ctx, *, chnl: discord.TextChannel = None):
   if chnl == None:
     chnl = ctx.channel
   if chnl.permissions_for(ctx.author).manage_channels or botadmin(ctx):
@@ -135,6 +139,13 @@ async def clearsnipe(ctx, *, chnl : discord.TextChannel = None):
     await ctx.reply(f"Cleared snipe database for {chnl.mention}.")
   else:
     await ctx.reply("You don't have the required permission: Manage channels. Error: [`lol_imagine_trying_you_peasant`]")
+
+@ui_.slash.command(name="clearsnipe", description="Removes the snipe database for a channel.",
+                   options=[ui.SlashOption(name= "Channel", type= discord.TextChannel, description=
+                   "The channel to remove the snipe database of. Defaults to the current channel.")]
+                   , default_permission= discord.Permissions(16))
+async def clearsnipe_(ctx, channel= None):
+  await snipe(ctx, channel)
 
 #@tasks.loop(hours=24)
 #async def sba_marks():
@@ -159,25 +170,25 @@ async def on_command_error(ctx, error):
       arguments = ""
     new_content = f"{used_prefix}{command} {arguments}".strip()
     message.content = new_content
-    await ctx.reply(f'Your might have made a typo and your command has been interpreted as `{command}`.', delete_after=4)
+    await ctx.reply(f"Your might have made a typo and your command has been interpreted as `{command}`.", delete_after=4)
     await bot_.process_commands(message)
   elif isinstance(error, commands.MissingRequiredArgument):
-    await ctx.reply(f'You missed one or more arguments! {len(ctx.command.clean_params.keys())} argument(s) are required.\nNote: Multiline arguments are treated as one argument. Optional arguments are counted as well.')
+    await ctx.reply(f"You missed one or more arguments! {len(ctx.command.clean_params.keys())} argument(s) are required.\nNote: Multiline arguments are treated as one argument. Optional arguments are counted as well.")
   elif isinstance(error, commands.UserInputError):
-    await ctx.reply('One or more of your arguments is/are not in the correct format! Please read the documentation. Error: `touch_grass`')
+    await ctx.reply("One or more of your arguments is/are not in the correct format! Please read the documentation.")
   elif isinstance(error, commands.NotOwner):
-    await ctx.reply('Unfortunately, only the owner of the bot is allowed to use this.')
+    await ctx.reply("Unfortunately, only the owner of the bot is allowed to use this.")
   elif isinstance(error, commands.CommandInvokeError):
     error_ = error.original
     if isinstance(error_, FileNotFoundError):
-      await ctx.reply('Unfortunately, the file could not be generated.')
+      await ctx.reply("Unfortunately, the file could not be generated.")
   elif isinstance(error, discord.HTTPException):
     if error.code == 40005:
-      await ctx.reply('Unfortunately, the output file is too large.')
+      await ctx.reply("Unfortunately, the output file is too large.")
     elif error.code == 50006:
-      await ctx.reply('Unfortunately, there is no output.')
+      await ctx.reply("Unfortunately, there is no output.")
     elif error.code == 50035:
-      await ctx.reply('Unfortunately, the output text is too long.')
+      await ctx.reply("Unfortunately, the output text is too long.")
   else:
     try:
       await ctx.send(f"Sorry! An error occured:\n```{''.join(traceback.format_exception(type(error), error, error.__traceback__))}```\n If the error persists, please kindly inform JohannLau#6541 about this issue.")
@@ -365,15 +376,13 @@ async def botpurge(ctx, *, num : int = 1):
 async def ping(ctx, *, disposed= None):
   now1 = datetime.now(timezone.utc)
   message = await ctx.send("Pong!")
-  mcs = str(int((datetime.now(timezone.utc) - now1).microseconds)+int(((datetime.now(timezone.utc) - now1).total_seconds())%60))
-  await message.edit(content=f"Pong! 🏓\n```Message delay: {mcs} microseconds\nBot latency  : {round(bot_.latency*1000000, 2)} microseconds```")
+  response_time = datetime.now(timezone.utc) - now1
+  mcs = str(int(response_time.microseconds)+int((response_time.total_seconds())%60))
+  await message.edit(content=f"Pong! 🏓\n```Message delay: {mcs:<10}microseconds\nBot latency  : {round(bot_.latency*1000000, 2):<10}microseconds```")
 
-@ui_.slash.command(name="ping", description="Checks whether the bot is online or not.")
-async def ping(ctx):
-  now1 = datetime.now(timezone.utc)
-  message = await ctx.respond("Pong!")
-  mcs = str(int((datetime.now(timezone.utc) - now1).microseconds)+int(((datetime.now(timezone.utc) - now1).total_seconds())%60))
-  await message.edit(content=f"Pong! 🏓\n```Message delay: {mcs} microseconds\nBot latency  : {round(bot_.latency*1000000, 2)} microseconds```")
+@ui_.slash.command(name="ping", description="Check whether the bot is online or not and see the latency & response time.")
+async def ping_(ctx):
+  await ping(ctx)
 
 @bot_.event
 async def on_ready():
