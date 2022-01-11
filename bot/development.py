@@ -18,7 +18,7 @@ class SampleSelectL(ui.listener.Listener):
 
 
 class ThinkForeverL(ui.listener.Listener):
-  @ui.Listener.button("think")
+  @ui.Listener.button(custom_id= "think")
   async def think(self_, ctx: ui.ButtonInteraction):
     await ctx.message.edit("I will now think forever. Have fun waiting!", components=[think_buttons[1]])
     await ctx.defer()
@@ -119,7 +119,7 @@ async def play(ctx, volume: typing.Optional[int]=100, *, song="rickroll"):
   await ctx.reply("Playing the song.")
 
 @commands.command(aliases=['selectmenu', 'menu', 'option', 'options'])
-async def select(ctx, *, disposed = None):
+async def select(ctx, *, disposed= None):
   await ctx.reply("All menus will not timeout.", components= sample_menus, listener=SampleSelectL())
 
 @commands.command(aliases=['think'])

@@ -478,7 +478,7 @@ async def emojiinfo(ctx, emoji_: typing.Union[discord.Emoji, str]):
   await ctx.reply(embed=embed)
 
 @commands.command(aliases=['ems'])
-async def emojis(ctx, *, disposed = None):
+async def emojis(ctx, *, disposed= None):
   desc = ""
   sent_desc = ""
   for x in ctx.guild.emojis:
@@ -781,7 +781,7 @@ async def permissions(ctx, integer="help"):
   await ctx.reply(embed=embed)
 
 @commands.command(aliases=['permgen', 'permsgen', 'permgenerate', 'permsgenerate', 'permission_gen', 'permissions_gen' 'permission_generate'])
-async def permission_generate(ctx, *, disposed = None):
+async def permission_generate(ctx, *, disposed= None):
   msg = await ctx.reply("Select the permissions! You can select multiple options.", components= permission_menus, listener= PermsGenL())
   permission_messages[msg] = {"permission_server_selection": [], "permission_membership_selection": [], "permission_text_selection": [], "permission_voice_selection": []}
 
@@ -1112,7 +1112,7 @@ async def status(ctx, member : discord.Member = None):
   await ctx.reply(embed=embed)
 
 @commands.command(aliases=['stu'])
-async def statuses(ctx, *, disposed = None):
+async def statuses(ctx, *, disposed= None):
   bot_onlines = bot_dnds = bot_idles = bot_offlines = 0
   usr_onlines = usr_dnds = usr_idles = usr_offlines = 0
   for x in ctx.guild.members:
@@ -1198,7 +1198,7 @@ async def sticker(ctx, message: discord.Message=None):
   await ctx.reply(embed=embed)
 
 @commands.command(aliases=['sts'])
-async def stickers(ctx, *, disposed = None):
+async def stickers(ctx, *, disposed= None):
   desc = ""
   for x in ctx.guild.stickers:
     desc += f"{x.emoji} {x.name} (ID: {x.id})\n  {x.description}\n"
@@ -1349,7 +1349,7 @@ async def user(ctx, user: discord.Member = None, channel: discord.TextChannel = 
   await ctx.reply(embed=embed)
 
 @commands.command()
-async def widget(ctx, *, disposed = None):
+async def widget(ctx, *, disposed= None):
   try:
     widget_ = await ctx.guild.widget()
   except discord.NotFound:

@@ -52,23 +52,23 @@ async def snipe_update(ctx: ui.ButtonInteraction, msg: discord.Message, number: 
   await msg.edit((msg.content if msg.content else "a"), embed= embed, components= snipe_buttons)
 
 class SnipeL(ui.listener.Listener):
-  @ui.Listener.button("Snipe1")
+  @ui.Listener.button(custom_id= "Snipe1")
   async def snipe1(self_, ctx: ui.ButtonInteraction):
     await snipe_update(ctx, ctx.message, 1)
 
-  @ui.Listener.button("Snipe2")
+  @ui.Listener.button(custom_id= "Snipe2")
   async def snipe2(self_, ctx: ui.ButtonInteraction):
     await snipe_update(ctx, ctx.message, max(sniperdict[ctx.message][0]-1, 1))
 
-  @ui.Listener.button("Snipe4")
+  @ui.Listener.button(custom_id= "Snipe4")
   async def snipe4(self_, ctx: ui.ButtonInteraction):
     await snipe_update(ctx, ctx.message, min(sniperdict[ctx.message][0]+1, sniperdict[ctx.message][1]))
 
-  @ui.Listener.button("Snipe5")
+  @ui.Listener.button(custom_id= "Snipe5")
   async def snipe5(self_, ctx: ui.ButtonInteraction):
     await snipe_update(ctx, ctx.message, sniperdict[ctx.message][1])
 
-  @ui.Listener.button("Snipe3")
+  @ui.Listener.button(custom_id= "Snipe3")
   async def snipe3(self_, ctx: ui.ButtonInteraction):
     sniperdict[ctx.message] -= 1
     if ctx.channel.permissions_for(ctx.guild.get_member(796686363604680755)).manage_messages:
@@ -82,19 +82,6 @@ class SnipeL(ui.listener.Listener):
       await ctx.respond("Unable to Pin/Unpin messages without the Manage Server permission.", hidden= True)
       return
 
-
-"""
-@bot_.event
-async def on_interaction(interaction):
-  interaction_select_option = interaction.data.get("values", None)
-  interaction_original_message = interaction.message
-  interaction_custom_id = interaction.data["custom_id"]
-  if interaction_select_option:
-    if interaction_custom_id in ["single-selection", "multi-selection"]:
-      interaction_first_option = interaction_select_option[0]
-      if interaction_first_option.startswith("help_"):
-        await interaction.edit_original_message(embed=eval(interaction_first_option))
-"""
 
 @bot_.command(aliases=['sniper'])
 async def snipe(ctx, *, text=None):
@@ -132,11 +119,12 @@ async def on_message_delete(message):
   val = message.content
   if not val.replace(" ",""):
     return
-  adt = f"By {message.author.name}#{message.author.discriminator} at {time_display(message.created_at)}"
+  footer = f"""By {message.author.name}#{message.author.discriminator} at {time_display(message.created_at)}
+   • Note: the most recently deleted message is stored as the first one."""
   if not sniper.get(message.channel):
     sniper[message.channel] = []
-  sniper[message.channel].insert(0, [val, adt])
-  sniper[message.channel] = sniper[message.channel][:5]
+  sniper[message.channel].insert(0, [val, footer])
+  sniper[message.channel] = sniper[message.channel][:8]
 
 @bot_.command()
 async def clearsnipe(ctx, *, chnl : discord.TextChannel = None):
@@ -316,7 +304,7 @@ async def poll(ctx, *, text):
 
 @bot_.command()
 @commands.is_owner()
-async def purgeserver(ctx, text, condition="True", *, disposed = None):
+async def purgeserver(ctx, text, condition="True", *, disposed= None):
   text = text.lower()
   if text.startswith("role"):
     allroles = ctx.guild.roles()
@@ -374,7 +362,7 @@ async def botpurge(ctx, *, num : int = 1):
     await ctx.send("You don't have the required permission: Manage messages.")
 
 @bot_.command(aliases=["online"])
-async def ping(ctx, *, disposed = None):
+async def ping(ctx, *, disposed= None):
   now1 = datetime.now(timezone.utc)
   message = await ctx.send("Pong!")
   mcs = str(int((datetime.now(timezone.utc) - now1).microseconds)+int(((datetime.now(timezone.utc) - now1).total_seconds())%60))

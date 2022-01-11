@@ -49,7 +49,7 @@ async def definition(ctx, *, word):
   await ctx.reply(embed=embed)
 
 @commands.command(aliases=['http', 'https', 'statuscode'])
-async def error(ctx, code="404", *, disposed = None):
+async def error(ctx, code="404", *, disposed= None):
   try:
     if int(code) in (db["httpcat"]+db["httpdog"]):
       await ctx.reply(f'https://http.cat/{code}\nhttps://httpstatusdogs.com/img/{code}.jpg')
@@ -59,14 +59,14 @@ async def error(ctx, code="404", *, disposed = None):
     await ctx.reply("Invalid code!")
 
 @commands.command(aliases=['httpcat', 'httpscat', 'httpcats', 'httpscats'])
-async def errorcat(ctx, code="404", *, disposed = None):
+async def errorcat(ctx, code="404", *, disposed= None):
   if int(code) in db["httpcat"]:
     await ctx.reply(f'https://http.cat/{code}')
   else:
     await ctx.reply("Invalid code!")
 
 @commands.command(aliases=['httpdog', 'httpsdog', 'httpdogs', 'httpsdogs'])
-async def errordog(ctx, code="404", *, disposed = None):
+async def errordog(ctx, code="404", *, disposed= None):
   if int(code) in db["httpdog"]:
     await ctx.reply(f'https://httpstatusdogs.com/img/{code}.jpg')
   else:

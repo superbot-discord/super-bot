@@ -1,7 +1,12 @@
 from shared import *
 
-invite_embed = discord.Embed(title="Invite", description = "The bot can be invited [here](https://discord.com/api/oauth2/authorize?client_id=796686363604680755&permissions=8&scope=bot%20applications.commands).")
-help_all = discord.Embed(title="SuperBot#4073 (ID:796686363604680755)", description=f"""**Prefix: **`=`
+class InteractiveHelpL(ui.listener.Listener):
+  @ui.Listener.select(custom_id= "interactive_help")
+  async def interactive_help(self_, ctx: ui.SelectInteraction):
+    await ctx.respond(embed= eval(ctx.selected_values[0]), hidden= True)
+
+invite_embed = discord.Embed(title= "Invite", description= "The bot can be invited [here](https://discord.com/api/oauth2/authorize?client_id=796686363604680755&permissions=8&scope=bot%20applications.commands).")
+help_all = discord.Embed(title= "SuperBot#4073 (ID:796686363604680755)", description= f"""**Prefix: **`=`
 **Basic Commands**
 `help` `inter_help` `support` `invite` `prefix` `ping` `botpurge`\n
 **Discord Information Commands**
@@ -28,7 +33,7 @@ Add `_fact` to each of the 11 animal commands above (e.g. `bird_fact`) to get a 
 `analyse` `histogram` `resize` `rotate` `brightness` `contrast` `sharpen` `edge` `contour` `blur` `invert` `hue` `recolor`
 To use the 13 commands above, type `=image ` first, then upload an image. Example: `=image analyse`. Supply a user name to work on his avatar, e.g. `=image SuperBot#4073 analyse`
 `render` `lcd` `led` `led2` `led3` `led4` `led_bar` `ocr` `qr` `qrmake` `transparent` `text`\n
-`hello` leads you to death\nNeed help? check the [documentation](https://superbot-discord.github.io/documentation)!""")
+`hello` leads you to death\nNeed help? check the [documentation](https://superbot-discord.vercel.com/Documentation)!""")
 
 def help_menu_options(ctx):
   return [
@@ -144,52 +149,59 @@ help_info = discord.Embed(title="SuperBot Information Commands", description=f""
 Need help? check the [documentation](https://superbot-discord.github.io/documentation)!
 """)
 
-craftbot_embed = discord.Embed(title="CraftBot", description=f"""
-CraftBot is a fun-oriented bot developed by me (Johann, also developer of SuperBot) and Murvon (my real-life friend).
+craftbot_embed = discord.Embed(title= "CraftBot", description= f"""
+CraftBot is a fun-oriented bot developed by me (Johann, developer of SuperBot) and Murvon (my real-life friend).
 Its commands are highly related to Minecraft; though non-players will be entertained by the bot as well.
 The most important fact is that it does not have "votewalls" (vote-for-rewards) or excessive "paywalls" (pay-for-features).
 Note: The button allows you to invite CraftBot without opening a browser.
 """.replace(f"\n", " "))
-def craftbot_buttons(ctx):
-  return ui.LinkButton(label="Invite!", url="https://discord.com/api/oauth2/authorize?client_id=814444200946434069&permissions=909631057&scope=bot", emoji=ctx.bot.get_emoji(891265683801923604))
 
-partners_embed = discord.Embed(title="SuperBot Partners")
-partners_embed.add_field(name="CraftBot", value="Minecraft-oriented bot with rock-paper-scissors and a lyrics index.", inline=False)
+def craftbot_buttons(ctx):
+  return ui.LinkButton(label= "Invite!", url= "https://discord.com/api/oauth2/authorize?client_id=814444200946434069&permissions=909631057&scope=bot", emoji=ctx.bot.get_emoji(891265683801923604))
+
+partners_embed = discord.Embed(title= "SuperBot Partners")
+partners_embed.add_field(name= "CraftBot", value= "Minecraft-oriented bot with rock-paper-scissors and a lyrics index.", inline=False)
 def partners_buttons(ctx):
   return [
-    ui.LinkButton(label="CraftBot", url="https://discord.com/api/oauth2/authorize?client_id=814444200946434069&permissions=909631057&scope=bot", emoji=ctx.bot.get_emoji(891265683801923604))
+    ui.LinkButton(label= "CraftBot", url= "https://discord.com/api/oauth2/authorize?client_id=814444200946434069&permissions=909631057&scope=bot", emoji=ctx.bot.get_emoji(891265683801923604))
   ]
 
+support_embed = discord.Embed(title= "Support", description= f"""If you need support, please kindly 
+join the support server or directly contact JohannLau#6541. Here are some links you might find useful:
+""".replace(f"\n", " "))
+
+support_buttons = [
+  ui.LinkButton(label= "Support server", url= "https://discord.gg/sesedKMWHH"),
+  ui.LinkButton(label= "Website", url= "https://superbot-website.vercel.com"),
+  ui.LinkButton(label= "Documentation", url= "https://superbot-website.vercel.com/Documentation"),
+]
+
 @commands.command()
-async def hello(ctx, *, disposed = None):
-  embed = discord.Embed(title="Leaderboard", description="We upload the leaderboard to YouTube every week. You can find the leaderboard [here](https://youtu.be/4spCNEPawyQ).")
-  await ctx.reply(embed=embed)
+async def hello(ctx, *, disposed= None):
+  embed = discord.Embed(title= "Leaderboard", description= """We upload the leaderboard to YouTube
+  every week. You can find the leaderboard [here](https://youtu.be/4spCNEPawyQ).""".replace(f"\n", ""))
+  await ctx.reply(embed= embed)
 
 @commands.command(aliases=["commands"])
-async def help(ctx, *, cat=None):
-  await ctx.reply(embed=help_all)
+async def help(ctx, *, cat= None):
+  await ctx.reply(embed= help_all)
 
 @commands.command(aliases=["inter_help", "interactive"])
-async def interactive_help(ctx, *, disposed = None):
-  help_menu_view = ui.View(timeout=None)
-  help_menu = ui.Select(options=help_menu_options(ctx), placeholder="Select a category…")
-  help_menu_view.add_item(help_menu)
-  await ctx.reply("Please select a category to continue.", view = help_menu_view)
+async def interactive_help(ctx, *, disposed= None):
+  await ctx.reply("Please select a category to continue.", components= [ui.SelectMenu(custom_id="interactive_help",
+    options= help_menu_options(ctx), placeholder= "Select")], listener= InteractiveHelpL())
 
 @commands.command()
-async def invite(ctx, *, disposed = None):
+async def invite(ctx, *, disposed= None):
   await ctx.reply(embed=invite_embed)
 
 @commands.command()
-async def prefix(ctx, *, disposed = None):
+async def prefix(ctx, *, disposed= None):
   await ctx.reply("The prefix for SuperBot is `=` (an equal sign).")
 
 @commands.command(aliases=['supportserver', 'supports', 'johann', 'johannlau', 'supporting', 'team', 'dev', 'developer'])
-async def support(ctx, *, disposed = None):
-  support_view = ui.View(timeout=0)
-  for x in support_buttons:
-    support_view.add_item(x)
-  await ctx.reply(embed=support_embed, view=support_view)
+async def support(ctx, *, disposed= None):
+  await ctx.reply(embed= support_embed, components= support_buttons)
 
 def setup(bot):
   bot.add_command(hello)

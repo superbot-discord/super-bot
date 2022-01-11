@@ -118,14 +118,6 @@ clickers = {}
 vclients={}
 timestamp_pattern = re.compile(r'<t:-?[\d]{1,13}(:[FfDdTtR])?>')
 
-support_embed = discord.Embed(title="Support", description=f"""
-If you need support, please kindly join the support server or directly contact JohannLau#6541.
-""".replace(f"\n", " "))
-
-support_buttons = [
-  ui.LinkButton(label="Support server", url="https://discord.gg/sesedKMWHH"),
-  ui.LinkButton(label="Website", url="https://superbot-website.vercel.com/"),
-]
 #clicker_button = ui.Button(style=discord.ButtonStyle.primary, row=0, custom_id="clicker", label="Click me!")
 
 custom_permissions = {
