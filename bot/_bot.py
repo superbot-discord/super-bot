@@ -30,18 +30,9 @@ bot_.load_extension("text")
 bot_.load_extension("webinfo")
 bot_.load_extension("webscrape")
 
-sniper1={}
-sniper2={}
-sniper3={}
-sniper4={}
-sniper5={}
-sniperdate1={}
-sniperdate2={}
-sniperdate3={}
-sniperdate4={}
-sniperdate5={}
-sniperdict={}
+sniper={}
 sniping={}
+sniperdict={}
 poll_options={}
 polls=[]
 
@@ -52,6 +43,110 @@ snipe_buttons = [
   ui.Button(color='primary', custom_id="Snipe4", emoji="➡️"),
   ui.Button(color='primary', custom_id="Snipe5", emoji="⏩")
 ]
+
+async def snipe_update(ctx: ui.ButtonInteraction, msg: discord.Message, number: int):
+  await ctx.respond()
+  sniperdict[msg][0] = number
+  embed = discord.Embed(title= f"Snipped message ({number}/{len(sniper[msg.channel])})", description= sniper[msg.channel][number-1][0])
+  embed.set_footer(text= sniper[msg.channel][number-1][1])
+  await msg.edit((msg.content if msg.content else "a"), embed= embed, components= snipe_buttons)
+
+class SnipeL(ui.listener.Listener):
+  @ui.Listener.button("Snipe1")
+  async def snipe1(self_, ctx: ui.ButtonInteraction):
+    await snipe_update(ctx, ctx.message, 1)
+
+  @ui.Listener.button("Snipe2")
+  async def snipe2(self_, ctx: ui.ButtonInteraction):
+    await snipe_update(ctx, ctx.message, max(sniperdict[ctx.message][0]-1, 1))
+
+  @ui.Listener.button("Snipe4")
+  async def snipe4(self_, ctx: ui.ButtonInteraction):
+    await snipe_update(ctx, ctx.message, min(sniperdict[ctx.message][0]+1, sniperdict[ctx.message][1]))
+
+  @ui.Listener.button("Snipe5")
+  async def snipe5(self_, ctx: ui.ButtonInteraction):
+    await snipe_update(ctx, ctx.message, sniperdict[ctx.message][1])
+
+  @ui.Listener.button("Snipe3")
+  async def snipe3(self_, ctx: ui.ButtonInteraction):
+    sniperdict[ctx.message] -= 1
+    if ctx.channel.permissions_for(ctx.guild.get_member(796686363604680755)).manage_messages:
+      if ctx.message.pinned:
+        await ctx.message.unpin()
+      else:
+        await ctx.message.pin()
+        pinmsg = await ctx.channel.fetch_message(ctx.channel.last_message_id)
+        await pinmsg.delete()
+    else:
+      await ctx.respond("Unable to Pin/Unpin messages without the Manage Server permission.", hidden= True)
+      return
+
+
+"""
+@bot_.event
+async def on_interaction(interaction):
+  interaction_select_option = interaction.data.get("values", None)
+  interaction_original_message = interaction.message
+  interaction_custom_id = interaction.data["custom_id"]
+  if interaction_select_option:
+    if interaction_custom_id in ["single-selection", "multi-selection"]:
+      interaction_first_option = interaction_select_option[0]
+      if interaction_first_option.startswith("help_"):
+        await interaction.edit_original_message(embed=eval(interaction_first_option))
+"""
+
+@bot_.command(aliases=['sniper'])
+async def snipe(ctx, *, text=None):
+  chnl = ctx.channel
+  if not text:
+    if sniping.get(chnl, True):
+      if not sniper.get(chnl, None):
+        embed = discord.Embed(title= "Empty", description= "Nothing to snipe from this channel.")
+        await ctx.reply(embed=embed)
+        return
+      else:
+        embed = discord.Embed(title= f"Snipped message (1/{len(sniper[chnl])})", description= sniper[chnl][0][0])
+        embed.set_footer(text= sniper[chnl][0][1])
+      if chance(1000):
+        msg = await ctx.reply("Did someone just ghostping you?", embed= embed, components= snipe_buttons, listener= SnipeL())
+      else:
+        msg = await ctx.reply("a", embed= embed, components= snipe_buttons, listener= SnipeL())
+      sniperdict[msg] = [1, len(sniper[chnl])]
+    else:
+      await ctx.reply("Snipping is disabled. Please ask someone with manage messages permission to re-enable it.")
+  elif has_perms(ctx.channel, ctx.author, 13):
+    if specialbool(text):
+      sniping[chnl] = True
+      await ctx.reply("Sniping is now enabled.")
+    else:
+      sniping[chnl] = False
+      await ctx.reply("Sniping is now disabled.")
+  else:
+    await ctx.reply("""If you want to view sniped messages, please run `=snipe` without any arguments.
+    If you intend to enable/disable sniping, you are missing the Manage Channels permission.""")
+
+@bot_.event
+async def on_message_delete(message):
+  keyname = f"{message.guild.id}{message.channel.id}"
+  val = message.content
+  if not val.replace(" ",""):
+    return
+  adt = f"By {message.author.name}#{message.author.discriminator} at {time_display(message.created_at)}"
+  if not sniper.get(message.channel):
+    sniper[message.channel] = []
+  sniper[message.channel].insert(0, [val, adt])
+  sniper[message.channel] = sniper[message.channel][:5]
+
+@bot_.command()
+async def clearsnipe(ctx, *, chnl : discord.TextChannel = None):
+  if chnl == None:
+    chnl = ctx.channel
+  if chnl.permissions_for(ctx.author).manage_channels or botadmin(ctx):
+    sniper[chnl] = []
+    await ctx.reply(f"Cleared snipe database for {chnl.mention}.")
+  else:
+    await ctx.reply("You don't have the required permission: Manage channels.")
 
 #@tasks.loop(hours=24)
 #async def sba_marks():
@@ -131,29 +226,6 @@ async def on_voice_state_update(member, before, after):
     pass
 
 @bot_.event
-async def on_message_delete(message):
-  keyname = f"{message.guild.id}{message.channel.id}"
-  val = message.content
-  if val.replace(" ","") == "":
-    return
-  adt = f"By {message.author.name}#{str(message.author.discriminator)} at {unix_timestamp(message.created_at)}"
-  if sniper1.get(keyname, 1) == 1:
-    sniper1[keyname] = val
-    sniperdate1[keyname] = adt
-  elif sniper2.get(keyname, 1) == 1:
-    sniper2[keyname], sniper1[keyname] = sniper1[keyname], val
-    sniperdate2[keyname], sniperdate1[keyname] = sniperdate1[keyname], adt
-  elif sniper3.get(keyname, 1) == 1:
-    sniper3[keyname], sniper2[keyname], sniper1[keyname] = sniper2[keyname], sniper1[keyname], val
-    sniperdate3[keyname], sniperdate2[keyname], sniperdate1[keyname] = sniperdate2[keyname], sniperdate1[keyname], adt
-  elif sniper4.get(keyname, 1) == 1:
-    sniper4[keyname], sniper3[keyname], sniper2[keyname], sniper1[keyname] = sniper3[keyname], sniper2[keyname], sniper1[keyname], val
-    sniperdate4[keyname], sniperdate3[keyname], sniperdate2[keyname], sniperdate1[keyname] = sniperdate3[keyname], sniperdate2[keyname], sniperdate1[keyname], adt
-  else:
-    sniper5[keyname], sniper4[keyname], sniper3[keyname], sniper2[keyname], sniper1[keyname] = sniper4[keyname], sniper3[keyname], sniper2[keyname], sniper1[keyname], val
-    sniperdate5[keyname], sniperdate4[keyname], sniperdate3[keyname], sniperdate2[keyname], sniperdate1[keyname] = sniperdate4[keyname], sniperdate3[keyname], sniperdate2[keyname], sniperdate1[keyname], adt
-
-@bot_.event
 async def on_reaction_add(reaction, user):
   msg = reaction.message
   if msg.id in polls and user.id != 796686363604680755:
@@ -211,106 +283,6 @@ async def on_message(message):
   except:
     pass
 
-"""
-@bot_.event
-async def on_interaction(interaction):
-  interaction_select_option = interaction.data.get("values", None)
-  interaction_original_message = interaction.message
-  if interaction.type == discord.InteractionType.component:
-    interaction_custom_id = interaction.data["custom_id"]
-    if interaction_select_option:
-      if interaction_custom_id in ["single-selection", "multi-selection"]:
-        interaction_first_option = interaction_select_option[0]
-        if interaction_first_option.startswith("help_"):
-          await interaction.edit_original_message(embed=eval(interaction_first_option))
-    elif interaction_custom_id in ["Snipe1", "Snipe2", "Snipe3", "Snipe4", "Snipe5"]:
-      keyname = f"{interaction_original_message.guild.id}{interaction_original_message.channel.id}"
-      if interaction_custom_id == "Snipe1":
-        sniperdict[interaction_original_message] = 1
-      elif interaction_custom_id == "Snipe2" and sniperdict[interaction_original_message] > 1:
-        sniperdict[interaction_original_message] = sniperdict[interaction_original_message] - 1
-      elif interaction_custom_id == "Snipe3" and interaction_original_message.pinned == False:
-        if interaction_original_message.channel.permissions_for(interaction_original_message.guild.get_member(796686363604680755)).manage_messages:
-          if not interaction_original_message.pinned:
-            await interaction_original_message.pin()
-            pinmsg = await interaction_original_message.channel.fetch_message(interaction_original_message.channel.last_message_id)
-            await pinmsg.delete()
-          else:
-            await interaction_original_message.unpin()
-        else:
-          await interaction.followup.send("Unable to Pin/Unpin messages without `Manage Server` permission.", ephemeral=True)
-          return
-      elif interaction_custom_id == "Snipe4":
-        if sniperdict[interaction_original_message] < 5 and eval(f"sniper{sniperdict[interaction_original_message]+1}.get(keyname, 1)") != 1:
-          sniperdict[interaction_original_message] += 1
-        elif sniper5.get(keyname, 1) != 1:
-          sniperdict[interaction_original_message] = 5
-        elif sniper4.get(keyname, 1) != 1:
-          sniperdict[interaction_original_message] = 4
-        elif sniper3.get(keyname, 1) != 1:
-          sniperdict[interaction_original_message] = 3
-        elif sniper2.get(keyname, 1) != 1:
-          sniperdict[interaction_original_message] = 2
-        elif sniper1.get(keyname, 1) != 1:
-          sniperdict[interaction_original_message] = 1
-      if sniper2.get(keyname, 1) == 1:
-        maxc = 1
-      elif sniper3.get(keyname, 1) == 1:
-        maxc = 2
-      elif sniper4.get(keyname, 1) == 1:
-        maxc = 3
-      elif sniper5.get(keyname, 1) == 1:
-        maxc = 4
-      else:
-        maxc = 5
-      ti = f"Snipped message ({sniperdict[interaction_original_message]}/{maxc})"
-      desc = eval(f"sniper{sniperdict[interaction_original_message]}[keyname]")
-      foot = eval(f"sniperdate{sniperdict[interaction_original_message]}[keyname]")
-      embed = discord.Embed(title=ti, description=desc)
-      embed.set_footer(text=foot)
-      await interaction_original_message.edit(embed=embed)
-"""
-@bot_.command(aliases=['sniper'])
-async def snipe(ctx, *, text = None):
-  chnl = ctx.channel
-  keyname = str(ctx.guild.id)+str(chnl.id)
-  if text == None:
-    if sniping.get(keyname, 1) == 1 or sniping[keyname] == True:
-      if sniper1.get(keyname, 1) == 1:
-        embed = discord.Embed(title="Error", description="Nothing to snipe from this channel.")
-        await ctx.reply(embed=embed)
-        return
-      else:
-        if sniper2.get(keyname, 1) == 1:
-          maxc = 1
-        elif sniper3.get(keyname, 1) == 1:
-          maxc = 2
-        elif sniper4.get(keyname, 1) == 1:
-          maxc = 3
-        elif sniper5.get(keyname, 1) == 1:
-          maxc = 4
-        else:
-          maxc = 5
-        ti = f"Snipped message (1/{maxc})"
-        desc = sniper1[keyname]
-        foot = sniperdate1[keyname]
-      embed = discord.Embed(title=ti, description=desc)
-      embed.set_footer(text=foot)
-      if chance(1000):
-        cmsg = await ctx.reply("Did someone just ghostping you?", embed= embed, components= snipe_buttons)
-      else:
-        cmsg = await ctx.reply(embed= embed, components= snipe_buttons)
-      sniperdict[cmsg] = 1
-    else:
-      await ctx.reply("Snipping is disabled. Please ask someone with manage messages permission to re-enable it.")
-  elif has_perms(ctx.channel, ctx.author, 13):
-    if text.startswith("y") or text.startswith("t") or text.startswith("e") or text.replace(" ","")=="1":
-      sniping[keyname] = True
-      await ctx.reply("Sniping is now enabled.")
-    else:
-      sniping[keyname] = False
-      await ctx.reply("Sniping is now disabled.")
-
 @bot_.event
 async def on_voice_state_update(member, before, after):
   if member.id == 796686363604680755:
@@ -341,20 +313,6 @@ async def poll(ctx, *, text):
     await poll.add_reaction(x)
   polls.append(poll.id)
   poll_options[poll.id] = poll_options_cache
-
-@bot_.command()
-async def clearsnipe(ctx, *, chnl : discord.TextChannel = None):
-  if chnl == None:
-    chnl = ctx.channel
-  if chnl.permissions_for(ctx.author).manage_channels or botadmin(ctx):
-    sniper1.pop(str(ctx.guild.id)+str(chnl.id))
-    sniper2.pop(str(ctx.guild.id)+str(chnl.id))
-    sniper3.pop(str(ctx.guild.id)+str(chnl.id))
-    sniper4.pop(str(ctx.guild.id)+str(chnl.id))
-    sniper5.pop(str(ctx.guild.id)+str(chnl.id))
-    await ctx.reply('Cleared snipe database for '+chnl.mention+'.')
-  else:
-    await ctx.reply("You don't have the required permission: Manage channels.")
 
 @bot_.command()
 @commands.is_owner()

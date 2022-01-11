@@ -16,18 +16,26 @@ class SampleSelectL(ui.listener.Listener):
   async def sample_multi_select(self_, ctx: ui.SelectInteraction):
     await ctx.respond(f"You selected {', '.join([x.label for x in ctx.selected_options])} in the multi-selection menu.", hidden= True)
 
+
+class ThinkForeverL(ui.listener.Listener):
+  @ui.Listener.button("think")
+  async def think(self_, ctx: ui.ButtonInteraction):
+    await ctx.message.edit("I will now think forever. Have fun waiting!", components=[think_buttons[1]])
+    await ctx.defer()
+
+
 def sample_buttons(ctx):
   return [
-  ui.Button(color='primary',   custom_id="primary", emoji="🟢",                                 label="Primary (blurple)"),
-  ui.Button(color='secondary',custom_id="secondary",emoji=ctx.bot.get_emoji(824680026858717234),label="Secondary (grey)"),
-  ui.Button(color='success',   custom_id="green",                                               label="Success (green)"),
-  ui.Button(color='danger',    custom_id="red",                                                 label="Danger (red)"),
-  ui.LinkButton(url=ctx.message.jump_url,                                                       label="URL (grey)"),
-  ui.Button(color='primary',  emoji="🟢",                                 disabled=True, label="Primary (blurple)", new_line=True),
-  ui.Button(color='secondary',emoji=ctx.bot.get_emoji(824680026858717234),disabled=True, label="Secondary (grey)"),
-  ui.Button(color='success',                                              disabled=True, label="Success (green)"),
-  ui.Button(color='danger',                                               disabled=True, label="Danger (red)"),
-  ui.LinkButton(url=ctx.message.jump_url,                                 disabled=True, label="URL (grey)")]
+  ui.Button(color='primary',  custom_id="p", label="Primary (blurple)", emoji="🟢"),
+  ui.Button(color='secondary',custom_id="s", label="Secondary (grey)", emoji=ctx.bot.get_emoji(824680026858717234)),
+  ui.Button(color='green',    custom_id="g", label="Success (green)"),
+  ui.Button(color='red',      custom_id="r", label="Danger (red)"),
+  ui.LinkButton(url=ctx.message.jump_url,    label="URL (grey)"),
+  ui.Button(color='primary',  disabled=True, label="Primary (blurple)", emoji="🟢", new_line=True),
+  ui.Button(color='secondary',disabled=True, label="Secondary (grey)", emoji=ctx.bot.get_emoji(824680026858717234)),
+  ui.Button(color='green',    disabled=True, label="Success (green)"),
+  ui.Button(color='red',      disabled=True, label="Danger (red)"),
+  ui.LinkButton(url=ctx.message.jump_url, disabled=True, label="URL (grey)")]
 
 sample_options = [
   ui.SelectOption(value="Red"   , label="Red"   , description="Roses are red"              , emoji="🔴"),
@@ -44,25 +52,30 @@ sample_menus = [
   ui.SelectMenu(placeholder="Select one option",          disabled=True, options=sample_options),
   ui.SelectMenu(placeholder="Select two to five options", disabled=True, min_values=2, max_values=5, options=sample_options)]
 
+think_buttons = [
+  ui.Button(label="Think", custom_id="think", color='primary', emoji="🧠"),
+  ui.Button(label="Think", custom_id="think", color='primary', emoji="🧠", disabled=True)
+]
+
 @commands.command(aliases=['buttons'])
-async def button(ctx, *, disposed = None):
-  await ctx.reply("All buttons will not timeout.", components = sample_buttons(ctx))
+async def button(ctx, *, disposed=None):
+  await ctx.reply("All buttons will not timeout.", components= sample_buttons(ctx), listener= SampleButtonL())
 
 @commands.command()
-async def join(ctx, vc:discord.VoiceChannel = None, *, disposed = None):
+async def join(ctx, vc: discord.VoiceChannel = None, *, disposed=None):
   if not vc:
     vc = ctx.author.voice.channel
   vclients[ctx.guild] = await vc.connect()
   await ctx.reply("Joined the channel.")
 
 @commands.command()
-async def leave(ctx, *, disposed = None):
+async def leave(ctx, *, disposed=None):
   await ctx.guild.voice_client.disconnect()
   del vclients[ctx.guild]
   await ctx.reply("Left the channel.")
 
 @commands.command()
-async def loop(ctx, *, disposed = None):
+async def loop(ctx, *, disposed=None):
   if vclients.get(ctx.guild, None).loop:
     vclients.get(ctx.guild, None).loop = False
     await ctx.reply('Disabled loop.')
@@ -72,7 +85,7 @@ async def loop(ctx, *, disposed = None):
 
 @commands.command()
 @commands.cooldown(2, 10, commands.BucketType.user)
-async def patience(ctx, *, disposed = None):
+async def patience(ctx, *, disposed=None):
   await ctx.reply("Success!")
 
 @patience.error
@@ -80,7 +93,7 @@ async def patience_error(ctx, error):
   await ctx.reply("This command is on cooldown! You can only use it twice per 10 seconds.")
 
 @commands.command(aliases=['continue', 'resume', 'paused'])
-async def pause(ctx, *, disposed = None):
+async def pause(ctx, *, disposed=None):
   if vclients.get(ctx.guild, None).is_playing():
     vclients.get(ctx.guild, None).pause()
     await ctx.reply("Paused the song.")
@@ -107,7 +120,11 @@ async def play(ctx, volume: typing.Optional[int]=100, *, song="rickroll"):
 
 @commands.command(aliases=['selectmenu', 'menu', 'option', 'options'])
 async def select(ctx, *, disposed = None):
-  await ctx.reply("All menus will not timeout.", components = sample_menus, listener=SampleSelectL())
+  await ctx.reply("All menus will not timeout.", components= sample_menus, listener=SampleSelectL())
+
+@commands.command(aliases=['think'])
+async def think_forever(ctx, *, disposed=None):
+  await ctx.reply("It is easy to make me think forever. Just click on the button!", components=[think_buttons[0]], listener= ThinkForeverL())
 
 def setup(bot):
   bot.add_command(button)
@@ -118,3 +135,4 @@ def setup(bot):
   bot.add_command(pause)
   bot.add_command(play)
   bot.add_command(select)
+  bot.add_command(think_forever)
