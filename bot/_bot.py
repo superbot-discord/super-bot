@@ -7,6 +7,7 @@ bot_ = commands.Bot(command_prefix=commands.when_mentioned_or("="),intents=disco
                     allowed_mentions=discord.AllowedMentions(everyone=False, users=True,
                     roles=False, replied_user=False), case_insensitive=True, strip_after_prefix=True)
 ui_ = ui.UI(bot_)
+slash = ui.Slash(bot_)
 
 bot_.remove_command('help')
 bot_.load_extension("apis__int")
@@ -137,14 +138,15 @@ async def snipe(ctx: ui.SlashInteraction):
   else:
     await ctx.respond("Snipping is disabled. Please ask someone with manage messages permission to re-enable it.")
 
-@ui_.slash.command(name="snipe_toggle", description="Enables or disables sniping in this channel.",
-                   options=[ui.SlashOption(name= "Toggle", choices= [{'name': "Enable", 'value':
-                   True}, {'name': "Disable", 'value':False}])], default_permission=
-                   discord.Permissions(16))
-async def snipe_toggle(ctx: ui.SlashInteraction, Toggle):
+@ui_.slash.command(name="snipe_toggle", description="Enable or disable sniping in this channel.",
+                   options=[ui.SlashOption(name= "Toggle", type= bool, description=
+                   "Whether to enable or disable sniping. Toggles the current option by default.")])
+async def snipe_toggle(ctx: ui.SlashInteraction, toggle= None):
   chnl = ctx.channel
-  sniping[chnl] = Toggle
-  await ctx.respond(f"Sniping is now {'enabled' if Toggle else 'disabled'}.")
+  if toggle == None:
+    toggle = not sniping[chnl]
+  sniping[chnl] = toggle
+  await ctx.respond(f"Sniping is now {'enabled' if toggle else 'disabled'}.")
 
 @bot_.event
 async def on_message_delete(message):
@@ -167,14 +169,20 @@ async def clearsnipe(ctx, *, chnl: discord.TextChannel = None):
     sniper[chnl] = []
     await ctx.reply(f"Cleared snipe database for {chnl.mention}.")
   else:
-    await ctx.reply("You don't have the required permission: Manage channels. Error: [`lol_imagine_trying_you_peasant`]")
+    await ctx.reply("You don't have the required permission: Manage channels.")
 
-@ui_.slash.command(name="clearsnipe", description="Removes the snipe database for a channel.",
-                   options=[ui.SlashOption(name= "Channel", type= discord.TextChannel, description=
-                   "The channel to remove the snipe database of. Defaults to the current channel.")]
-                   , default_permission= discord.Permissions(16))
+@ui_.slash.command(name="clearsnipe", description="Clear the snipe database for a channel.",
+                   options=[ui.SlashOption(name= "Channel", type= discord.TextChannel,
+                   channel_types= [discord.ChannelType.text], description=
+                   "The channel to clear the snipe database of. Defaults to the current channel.")])
 async def clearsnipe_(ctx, channel= None):
-  pass
+  if channel == None:
+    channel = ctx.channel
+  if channel.permissions_for(ctx.author).manage_channels or botadmin(ctx):
+    sniper[channel] = []
+    await ctx.reply(f"Cleared snipe database for {channel.mention}.")
+  else:
+    await ctx.reply("You don't have the required permission: Manage Channels.")
 
 #@tasks.loop(hours=24)
 #async def sba_marks():
@@ -409,7 +417,7 @@ async def ping(ctx, *, disposed= None):
   mcs = str(int(response_time.microseconds)+int((response_time.total_seconds())%60))
   await message.edit(content=f"Pong! 🏓\n```Message delay: {mcs:<10}microseconds\nBot latency  : {round(bot_.latency*1000000, 2):<10}microseconds```")
 
-@ui_.slash.command(name="ping", description="Check whether the bot is online or not and see the latency & response time.")
+@slash.command(name="ping", description="Check whether the bot is online or not and see the latency & response time.")
 async def ping_(ctx):
   await ping(ctx)
 
