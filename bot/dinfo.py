@@ -748,36 +748,36 @@ async def overwrites(ctx, channel_:typing.Union[discord.TextChannel, discord.Voi
   await ctx.reply(embed=embed)
 
 @commands.command(aliases = ['perm', 'perms', 'permission'])
-async def permissions(ctx, integer="help"):
+async def permissions(ctx, integer= "help"):
+  try:
+    integer = int(integer)
+  except ValueError:
+    try:
+      x = await commands.RoleConverter().convert(ctx, integer)
+      integer = x.permissions.value
+    except:
+      try:
+        x = await commands.MemberConverter().convert(ctx, integer)
+        integer = ctx.channel.permissions_for(x).value
+      except:
+        try:
+          for x, y in custom_permissions.items():
+            if SequenceMatcher(None, integer, x).ratio() >= 0.75:
+              embed = discord.Embed(title = f"Custom permission {integer}")
+              integer = y.value
+              break
+          embed
+        except:
+          integer = "help"
   if integer == "help":
     embed = perms_guide
   else:
-    try:
-      try:
-        int(integer)
-      except:
-        try:
-          integer = commands.RoleConverter().convert(ctx, integer).permissions.value
-        except:
-          integer = ctx.channel.permissions_for(commands.MemberConverter().convert(ctx, integer)).value
-      embed = discord.Embed(title = f"Permission integer {integer}")
-      embed.add_field(name = "Server permissions", value=server_itop(int(integer)), inline=False)
-      embed.add_field(name = "Membership permissions", value=ms_itop(int(integer)), inline=False)
-      embed.add_field(name = "Text permissions", value=tc_itop(int(integer)), inline=False)
-      embed.add_field(name = "Voice permissions", value=vc_itop(int(integer)), inline=False)
-    except:
-      try:
-        for x, y in custom_permissions.items():
-          if SequenceMatcher(None, integer, x).ratio() >= 0.75:
-            embed = discord.Embed(title = f"Custom permission {integer}")
-            embed.add_field(name = "Server permissions", value=server_itop(y.value), inline=False)
-            embed.add_field(name = "Membership permissions", value=ms_itop(y.value), inline=False)
-            embed.add_field(name = "Text permissions", value=tc_itop(y.value), inline=False)
-            embed.add_field(name = "Voice permissions", value=vc_itop(y.value), inline=False)
-            break
-        embed
-      except:
-        embed = perms_guide
+    embed = discord.Embed(title = f"Permission integer {integer}")
+    embed.add_field(name = "Voice permissions", value=vc_itop(), inline=False)
+    embed.add_field(name = "Server permissions", value=server_itop(y.value), inline=False)
+    embed.add_field(name = "Membership permissions", value=ms_itop(y.value), inline=False)
+    embed.add_field(name = "Text permissions", value=tc_itop(y.value), inline=False)
+    embed.add_field(name = "Voice permissions", value=vc_itop(y.value), inline=False)
   await ctx.reply(embed=embed)
 
 @commands.command(aliases=['permgen', 'permsgen', 'permgenerate', 'permsgenerate', 'permission_gen', 'permissions_gen' 'permission_generate'])

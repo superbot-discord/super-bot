@@ -20,7 +20,7 @@ class SearchFlags(commands.FlagConverter):
 async def ban(ctx, user: discord.User, delete : int = 0, *, reason = "No reason provided"):
   if ctx.channel.permissions_for(ctx.author).ban_members or botadmin(ctx):
     try:
-      await ctx.guild.ban(user, delete_message_days=delete, reason=reason + f" (requested by {ctx.author.username}#{ctx.author.discriminator})")
+      await ctx.guild.ban(user, delete_message_days= delete, reason= f"{reason} (requested by {ctx.author.name}#{ctx.author.discriminator})")
     except discord.Forbidden:
       await ctx.reply("The bot doesn't have the required permission: Ban members.")
       return
@@ -63,7 +63,7 @@ async def getrole(ctx, roles : commands.Greedy[discord.Role], member: discord.Me
 async def kick(ctx, user: discord.Member, *, reason="No reason provided"):
   if has_perms(ctx.channel, ctx.author, 1):
     try:
-      await user.kick(reason=reason + f" (requested by {ctx.author.username}#{ctx.author.discriminator})")
+      await user.kick(reason= f"{reason} (requested by {ctx.author.name}#{ctx.author.discriminator})")
     except discord.Forbidden:
       await ctx.reply("The bot doesn't have the required permission: Kick members.")
       return
@@ -78,7 +78,7 @@ async def kick(ctx, user: discord.Member, *, reason="No reason provided"):
     await ctx.reply("You don't have the required permission: Kick members.")
 
 @commands.command()
-async def makeinvite(ctx, timetocount = "0", uses : int = 0):
+async def makeinvite(ctx, timetocount="0", uses: int = 0):
   if has_perms(ctx.channel, ctx.author, 0):
     seconds = int(timedelta(**{
       UNITS.get(m.group('unit').lower(), 'seconds'): int(m.group('val'))
@@ -344,7 +344,7 @@ async def timeout(ctx, member_ : discord.Member, duration = "0s", *, reason = No
     }).total_seconds())
     end = datetime.now(timezone.utc) + timedelta(seconds = sec)
     if reason:
-      await member_.edit(timeout_until = end, reason=reason + f" (requested by {ctx.author.username}#{ctx.author.discriminator})")
+      await member_.edit(timeout_until = end, reason= f"{reason} (requested by {ctx.author.name}#{ctx.author.discriminator})")
     else:
       await member_.edit(timeout_until = end)
     embed = discord.Embed(title=f"{member_.name} was timed out.", description=f"Until: {unix_timestamp(end)}\nReason: {reason}\nBy: {ctx.author.mention}")
@@ -356,7 +356,7 @@ async def timeout(ctx, member_ : discord.Member, duration = "0s", *, reason = No
 async def unban(ctx, user: discord.User, *, reason="No reason provided"):
   if ctx.channel.permissions_for(ctx.author).ban_members or botadmin(ctx):
     try:
-      await ctx.guild.unban(user, reason=reason + f" (requested by {ctx.author.username}#{ctx.author.discriminator})")
+      await ctx.guild.unban(user, reason= f"{reason} (requested by {ctx.author.name}#{ctx.author.discriminator})")
     except:
       await ctx.reply("The bot doesn't have the required permission: Ban members.")
       return
@@ -374,7 +374,7 @@ async def unban(ctx, user: discord.User, *, reason="No reason provided"):
 async def untimeout(ctx, member_ : discord.Member, *, reason = None):
   if ctx.channel.permissions_for(ctx.author).moderate_members or botadmin(ctx):
     if reason:
-      await member_.edit(timeout_until = None, reason=reason + f" (requested by {ctx.author.username}#{ctx.author.discriminator})")
+      await member_.edit(timeout_until = None, reason= f"{reason} (requested by {ctx.author.name}#{ctx.author.discriminator})")
     else:
       await member_.edit(timeout_until = None)
     await ctx.send("Un-Timeout success")
