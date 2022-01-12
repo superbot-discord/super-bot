@@ -79,8 +79,12 @@ class SnipeL(ui.listener.Listener):
         pinmsg = await ctx.channel.fetch_message(ctx.channel.last_message_id)
         await pinmsg.delete()
     else:
-      await ctx.respond("Unable to Pin/Unpin messages without the Manage Server permission. Error: `[L]`", hidden= True)
+      await ctx.respond("Unable to Pin/Unpin messages without the Manage Server permission.", hidden= True)
       return
+  
+  @ui.Listener.wrong_user()
+  async def wrong_user(self, ctx):
+    await ctx.send("Please use `/snipe` on your own in order to browse snipped messages.")
 
 
 @bot_.command(aliases=['sniper'])
@@ -98,11 +102,11 @@ async def snipe(ctx, *, text= None):
       if chance(1000):
         msg = await ctx.reply("Did someone just ghostping you?", embed= embed, components= snipe_buttons, listener= SnipeL())
       else:
-        msg = await ctx.reply("a", embed= embed, components= snipe_buttons, listener= SnipeL())
+        msg = await ctx.reply(embed= embed, components= snipe_buttons, listener= SnipeL())
       sniperdict[msg] = [1, len(sniper[chnl])]
     else:
-      await ctx.reply("Snipping is disabled. Please ask someone with manage messages permission to re-enable it. [Error: `lol_you_tried`]")
-  elif has_perms(ctx.channel, ctx.author, 13):
+      await ctx.reply("Snipping is disabled. Please ask someone with manage messages permission to re-enable it.")
+  elif has_perms(ctx.channel, ctx.author, 4):
     if specialbool(text):
       sniping[chnl] = True
       await ctx.reply("Sniping is now enabled.")
@@ -114,8 +118,33 @@ async def snipe(ctx, *, text= None):
     If you intend to enable/disable sniping, you are missing the Manage Channels permission.""")
 
 @ui_.slash.command(name="snipe", description="View up to 8 most recently deleted messages in this channel.")
-async def snipe_(ctx):
-  await snipe(ctx)
+async def snipe(ctx: ui.SlashInteraction):
+  chnl = ctx.channel
+  if sniping.get(chnl, True):
+    if not sniper.get(chnl, None):
+      embed = discord.Embed(title= "Empty", description= "Nothing to snipe from this channel.")
+      await ctx.respond(embed=embed)
+      return
+    else:
+      embed = discord.Embed(title= f"Snipped message (1/{len(sniper[chnl])})", description= sniper[chnl][0][0])
+      embed.set_footer(text= sniper[chnl][0][1])
+    if chance(1000):
+      msg = await ctx.respond("Did someone just ghostping you?", embed= embed, components=
+                              snipe_buttons, listener= SnipeL(target_users= [ctx.author]))
+    else:
+      msg = await ctx.respond(embed= embed, components= snipe_buttons, listener= SnipeL())
+    sniperdict[msg] = [1, len(sniper[chnl])]
+  else:
+    await ctx.respond("Snipping is disabled. Please ask someone with manage messages permission to re-enable it.")
+
+@ui_.slash.command(name="snipe_toggle", description="Enables or disables sniping in this channel.",
+                   options=[ui.SlashOption(name= "Toggle", choices= [{'name': "Enable", 'value':
+                   True}, {'name': "Disable", 'value':False}])], default_permission=
+                   discord.Permissions(16))
+async def snipe_toggle(ctx: ui.SlashInteraction, Toggle):
+  chnl = ctx.channel
+  sniping[chnl] = Toggle
+  await ctx.respond(f"Sniping is now {'enabled' if Toggle else 'disabled'}.")
 
 @bot_.event
 async def on_message_delete(message):
@@ -145,7 +174,7 @@ async def clearsnipe(ctx, *, chnl: discord.TextChannel = None):
                    "The channel to remove the snipe database of. Defaults to the current channel.")]
                    , default_permission= discord.Permissions(16))
 async def clearsnipe_(ctx, channel= None):
-  await snipe(ctx, channel)
+  pass
 
 #@tasks.loop(hours=24)
 #async def sba_marks():
@@ -163,7 +192,7 @@ async def on_command_error(ctx, error):
     matches = {cmd: SequenceMatcher(None, cmd, used_command).ratio() for cmd in available_commands}
     command = max(matches.items(), key=lambda item: item[1])[0]
     if SequenceMatcher(None, used_command, used_command).ratio() <= 0.7:
-      await ctx.reply(f'Your might have made a (serious) typo and your command has been ignored. [Error: `grammarly_can_help_you`]', delete_after=4)
+      await ctx.reply(f"Your might have made a (serious) typo and your command has been ignored.", delete_after=4)
     try:
       arguments = message.content.split(" ", 1)[1]
     except IndexError:
@@ -194,7 +223,7 @@ async def on_command_error(ctx, error):
       await ctx.send(f"Sorry! An error occured:\n```{''.join(traceback.format_exception(type(error), error, error.__traceback__))}```\n If the error persists, please kindly inform JohannLau#6541 about this issue.")
     except discord.HTTPException:
       print(''.join(traceback.format_exception(type(error), error, error.__traceback__)))
-      await ctx.reply(f"Sorry! An error occured. The error was too long but it had been shown to JohannLau#6541. If the error persists, Please kindly inform him about this issue. [Error: `when_did_humans_exceed_bots`]")
+      await ctx.reply(f"Sorry! An error occured. The error was too long but it had been shown to JohannLau#6541. If the error persists, Please kindly inform him about this issue.")
 
 # @bot_.event
 # async def on_thread_update(before, after):
