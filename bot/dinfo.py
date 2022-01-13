@@ -774,12 +774,13 @@ async def permissions(ctx, integer="help"):
   if integer == "help":
     embed = perms_guide
   else:
-    embed = embed2 = discord.Embed(title= f"Permission integer {integer}")
+    embed = discord.Embed(title= f"Permission integer {integer}")
     embed.add_field(name= "Server permissions", value= server_itop(integer), inline= False)
     embed.add_field(name= "Membership permissions", value= ms_itop(integer), inline= False)
     embed.add_field(name= "Text permissions", value= tc_itop(integer), inline= False)
     embed.add_field(name= "Voice permissions", value= vc_itop(integer), inline= False)
 
+    embed2 = discord.Embed(title= f"Permission integer {integer}")
     embed2.add_field(name= "Server permissions", value= server_itod(integer), inline= False)
     embed2.add_field(name= "Membership permissions", value= ms_itod(integer), inline= False)
     embed2.add_field(name= "Text permissions", value= tc_itod(integer), inline= False)
