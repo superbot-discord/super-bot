@@ -31,6 +31,15 @@ bot_.load_extension("text")
 bot_.load_extension("webinfo")
 bot_.load_extension("webscrape")
 
+f = open('./assets/emojis.json', 'r')
+emojis_db = json.loads(f.read())
+f.close()
+
+emoji_options = []
+for x in emojis_db:
+  emoji_options.append({'name': x, 'value': x.partition(" ")[0]})
+emoji_options = emoji_options[:25]
+
 sniper={}
 sniping={}
 sniperdict={}
@@ -344,11 +353,20 @@ async def poll(ctx, *, text):
     else:
       ti += f"{x} "
   embed = discord.Embed(title = ti, description = ems.encode(desc))
-  poll = await ctx.reply(embed=embed)
+  poll = await ctx.send(embed=embed)
   for x in reactions:
     await poll.add_reaction(x)
   polls.append(poll.id)
   poll_options[poll.id] = poll_options_cache
+
+@slash.command(name="poll", description="Starts a reaction-based poll in the channel.", options=[
+  ui.SlashOption(name= "Option 1 Emoji", type= str, required= True, choices= emoji_options),
+  ui.SlashOption(name= "Option 1", type= str, required= True),
+  ui.SlashOption(name= "Option 2 Emoji", type= str, required= True, choices= emoji_options),
+  ui.SlashOption(name= "Option 2", type= str, required= True)
+])
+async def poll_(ctx, option_1_emoji, option_1, option_2_emoji, option_2):
+  pass
 
 @bot_.command()
 @commands.is_owner()

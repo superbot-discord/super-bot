@@ -91,7 +91,7 @@ async def gender(ctx, *, name):
   r=requests.get(f"https://api.genderize.io/?name={name}")
   gender_json = r.json()
   if gender_json["gender"]:
-    await ctx.reply(f"{name} is {round(gender_json['probability']*100, 2)}% a {gender_json['gender']}.")
+    await ctx.reply(f"{name} is {int(gender_json['probability']*100)}% a {gender_json['gender']}.")
   else:
     await ctx.reply("No gender was found for the name.")
 
@@ -140,7 +140,7 @@ async def minecraft(ctx, *, item="tnt"):
         desc = re.sub(r'\s', '', desc)
         try:
           if len(desc.replace(" ", "").replace(f"\n", "").replace("[edit]", "")) != 0:
-            embed.add_field(name=x.text.replace("[edit]", ""), value=desc, inline=False)
+            embed.add_field(name=x.text.replace("[edit]", ""), value=desc, inline= False)
         except:
           pass
     """
@@ -248,7 +248,7 @@ async def unscramble(ctx, text, length="0"):
     if len(output)+len(current) > 5991:
       break
     if ilength == 0 or ilength == int(length):
-      output.add_field(name = f"{length}-letters", value=current, inline=False)
+      output.add_field(name = f"{length}-letters", value=current, inline= False)
   
   text = f"WORD: {text}\n\n"
   for x in everything:
@@ -276,23 +276,23 @@ async def weather(ctx, *, location):
   ti=f"Weather for {r1['name']} ({r1['sys']['country']})"
   desc=f"{r1['weather'][0]['main']}: {r1['weather'][0]['description']}\n{abs(r1['coord']['lat'])}°{'N' if r1['coord']['lat']>0 else 'S'}\n{abs(r1['coord']['lon'])}°{'E' if r1['coord']['lon']>0 else 'W'}"
   embed=discord.Embed(title=f"{ti}", description=desc)
-  embed.add_field(name="Temp. range", value=f"{r1['main']['temp_min']}°C ~ {r1['main']['temp_max']}°C\n{r2['main']['temp_min']}°F ~ {r2['main']['temp_max']}°F", inline=True)
-  embed.add_field(name="Temp. feels like", value=f"{r1['main']['feels_like']}°C / {r2['main']['feels_like']}°F", inline=True)
-  embed.add_field(name="Temperature", value=f"{r1['main']['temp']}°C / {r2['main']['temp']}°F", inline=True)
-  embed.add_field(name="Wind speed", value=f"{r1['wind']['speed']} m/s / {r2['wind']['speed']} mph", inline=True)
-  embed.add_field(name="Wind direction", value=f"{r1['wind']['deg']}°", inline=True)
+  embed.add_field(name="Temp. range", value=f"{r1['main']['temp_min']}°C ~ {r1['main']['temp_max']}°C\n{r2['main']['temp_min']}°F ~ {r2['main']['temp_max']}°F", inline= True)
+  embed.add_field(name="Temp. feels like", value=f"{r1['main']['feels_like']}°C / {r2['main']['feels_like']}°F", inline= True)
+  embed.add_field(name="Temperature", value=f"{r1['main']['temp']}°C / {r2['main']['temp']}°F", inline= True)
+  embed.add_field(name="Wind speed", value=f"{r1['wind']['speed']} m/s / {r2['wind']['speed']} mph", inline= True)
+  embed.add_field(name="Wind direction", value=f"{r1['wind']['deg']}°", inline= True)
   if r1['wind'].get('gust', None):
-    embed.add_field(name="Wind gust", value=f"{r1['wind']['gust']} m/s / {r2['wind']['gust']} mph", inline=True)
-  embed.add_field(name="Humidity", value=f"{r1['main']['humidity']}%", inline=True)
-  embed.add_field(name="Sunrise", value=f"<t:{r1['sys']['sunrise']}:T> <t:{r1['sys']['sunrise']}:R>", inline=True)
-  embed.add_field(name="Sunset", value=f"<t:{r1['sys']['sunset']}:T> <t:{r1['sys']['sunset']}:R>", inline=True)
+    embed.add_field(name="Wind gust", value=f"{r1['wind']['gust']} m/s / {r2['wind']['gust']} mph", inline= True)
+  embed.add_field(name="Humidity", value=f"{r1['main']['humidity']}%", inline= True)
+  embed.add_field(name="Sunrise", value=f"<t:{r1['sys']['sunrise']}:T> <t:{r1['sys']['sunrise']}:R>", inline= True)
+  embed.add_field(name="Sunset", value=f"<t:{r1['sys']['sunset']}:T> <t:{r1['sys']['sunset']}:R>", inline= True)
   if r1['wind'].get('rain', None):
-    embed.add_field(name="Rain in past hour", value=f"{r1['rain']['1h']} mm", inline=True)
-  embed.add_field(name="Cloud Coverage", value=f"{r1['clouds']['all']}%", inline=True)
-  embed.add_field(name="Pressure", value=f"{r1['main']['pressure']} hPa", inline=True)
+    embed.add_field(name="Rain in past hour", value=f"{r1['rain']['1h']} mm", inline= True)
+  embed.add_field(name="Cloud Coverage", value=f"{r1['clouds']['all']}%", inline= True)
+  embed.add_field(name="Pressure", value=f"{r1['main']['pressure']} hPa", inline= True)
   embed.add_field(name="Air Quality", value=f"""{r3['main']['aqi']} ({db['air_quality'][str(r3['main']['aqi'])]})\n{r3['components']['co']} μg/m3 CO (Carbon Monoxide)\n{r3['components']['no']} μg/m3 NO (Nitrogen Monoxide)
 {r3['components']['no2']} μg/m3 NO₂ (Nitrogen Dioxide)\n{r3['components']['o3']} μg/m3 O₃ (Ozone)\n{r3['components']['so2']} μg/m3 SO₂ (Sulphur Dioxide)\n{r3['components']['pm2_5']} μg/m3 PM₂.₅ (Fine Particles patter)
-{r3['components']['pm10']} μg/m3 PM₁₀ (Coarse Particulate Matter)\n{r3['components']['nh3']} μg/m3 NH₃ (Ammonia)""", inline=False)
+{r3['components']['pm10']} μg/m3 PM₁₀ (Coarse Particulate Matter)\n{r3['components']['nh3']} μg/m3 NH₃ (Ammonia)""", inline= False)
   embed.set_thumbnail(url=f"http://openweathermap.org/img/wn/{r1['weather'][0]['icon']}@2x.png")
   await ctx.reply(embed=embed)
 
@@ -324,7 +324,7 @@ async def wiki_search(ctx, *, query):
     if len(f0n+y_extract)>5971-z:
       break
     z+=len(f0n+y_extract)
-    embed.add_field(name=f0n, value=f"{y_extract[:1023]}…" if len(y_extract) > 1024 else y_extract, inline=False)
+    embed.add_field(name=f0n, value=f"{y_extract[:1023]}…" if len(y_extract) > 1024 else y_extract, inline= False)
   await ctx.reply(embed=embed)
 
 @commands.command()
@@ -368,12 +368,12 @@ async def youtube(ctx, *, link):
       totallen += x.length
       totalrating += x.rating
       totalview += x.views
-    embed.add_field(name="Total views", value=f"{totalview:,}", inline=True)
-    embed.add_field(name="Total length", value=format_length(totallen), inline=True)
-    embed.add_field(name="Total rating", value=f"{str(round(totalrating*20, 3))}%", inline=True)
-    embed.add_field(name="Average views", value=f"{round(totalview/len(videos), 3):,}", inline=True)
-    embed.add_field(name="Average length", value=format_length(round(totallen/len(videos))), inline=True)
-    embed.add_field(name="Average rating", value=f"{str(round(totalrating/len(videos)*20, 3))}%", inline=True)
+    embed.add_field(name="Total views", value=f"{totalview:,}", inline= True)
+    embed.add_field(name="Total length", value=format_length(totallen), inline= True)
+    embed.add_field(name="Total rating", value=f"{str(round(totalrating*20, 3))}%", inline= True)
+    embed.add_field(name="Average views", value=f"{round(totalview/len(videos), 3):,}", inline= True)
+    embed.add_field(name="Average length", value=format_length(round(totallen/len(videos))), inline= True)
+    embed.add_field(name="Average rating", value=f"{str(round(totalrating/len(videos)*20, 3))}%", inline= True)
     embed.set_footer(text="Use =youtube [Link] to download videos.")
     await yt_msg.edit(embed=embed)
   else:
@@ -458,23 +458,23 @@ Audio - Minimum size\t\t{format_video(video8)}'''
       ytmsg = await ctx.reply(embed=embed, file=discord.File('extra_downloads.txt'))
       try_delete('extra_downloads.txt')
       embed = discord.Embed(title="Download (Click here)", url=video1.url, description=desc)
-      embed.add_field(name="Title", value=youtube.title, inline=False)
+      embed.add_field(name="Title", value=youtube.title, inline= False)
       if len(youtube.description[:1023].replace(" ", "")) == 0:
-        embed.add_field(name="Description", value="No description provided", inline=False)
+        embed.add_field(name="Description", value="No description provided", inline= False)
       else:
-        embed.add_field(name="Description", value=youtube.description[:1023], inline=False)
+        embed.add_field(name="Description", value=youtube.description[:1023], inline= False)
       if len(youtube.keywords) == 0:
-        embed.add_field(name="Tags", value="No tags provided", inline=False)
+        embed.add_field(name="Tags", value="No tags provided", inline= False)
       else:
-        embed.add_field(name="Tags", value=(", ".join(youtube.keywords))[:1023], inline=False)
-      embed.add_field(name="Views", value=f'{youtube.views:,}', inline=True)
-      embed.add_field(name="Date uploaded", value=unix_timestamp(youtube.publish_date, "D"), inline=True)
-      embed.add_field(name="Length", value=format_length(youtube.length), inline=True)
+        embed.add_field(name="Tags", value=(", ".join(youtube.keywords))[:1023], inline= False)
+      embed.add_field(name="Views", value=f'{youtube.views:,}', inline= True)
+      embed.add_field(name="Date uploaded", value=unix_timestamp(youtube.publish_date, "D"), inline= True)
+      embed.add_field(name="Length", value=format_length(youtube.length), inline= True)
       chnl = pytube.Channel(youtube.channel_url)
-      embed.add_field(name="Rating", value=f"{str(round(youtube.rating*20, 3))}%", inline=True)
-      embed.add_field(name="Channel", value=f"[{chnl.channel_name}]({youtube.channel_url}) ({len(chnl.videos)} videos)", inline=True)
+      embed.add_field(name="Rating", value=f"{str(round(youtube.rating*20, 3))}%", inline= True)
+      embed.add_field(name="Channel", value=f"[{chnl.channel_name}]({youtube.channel_url}) ({len(chnl.videos)} videos)", inline= True)
       if youtube.age_restricted:
-        embed.add_field(name="Restricted", value="This video is age-restricted.", inline=True)
+        embed.add_field(name="Restricted", value="This video is age-restricted.", inline= True)
       embed.set_thumbnail(url=youtube.thumbnail_url)
       await ytmsg.edit(embed=embed)
 

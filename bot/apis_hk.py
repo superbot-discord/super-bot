@@ -56,7 +56,7 @@ async def hk_forecast(ctx, *, disposed=None):
   embed = discord.Embed(title="HKO Forecast", description=f"{r1['generalSituation']}\n{r2['generalSituation']}")
   for d, d2 in zip(r1['weatherForecast'], r2['weatherForecast']):
     embed.add_field(name=f"{d['week']}", value=f"""{d['forecastWeather']} {d2['forecastWeather']}\nTemperature: {d['forecastMintemp']['value']}°C ~ {d['forecastMaxtemp']['value']}°C
-    Humidity: {d['forecastMinrh']['value']}% ~ {d['forecastMaxrh']['value']}%\n{d['PSR']} probability of significant rain\nWind: {d['forecastWind']} {d2['forecastWind']}""", inline=False)
+    Humidity: {d['forecastMinrh']['value']}% ~ {d['forecastMaxrh']['value']}%\n{d['PSR']} probability of significant rain\nWind: {d['forecastWind']} {d2['forecastWind']}""", inline= False)
   f0v = f"Sea temperature at {r1['seaTemp']['place']}: {r1['seaTemp']['value']}°C\n"
   for r in r1['soilTemp']:
     f0v += f"Soil temperature at {r['place']} ({r['depth']['value']}m deep): {r['value']}°C\n"
@@ -150,7 +150,7 @@ async def hk_lightning(ctx, *, disposed=None):
   lightnings_ = [x for x in reader_]
   embed = discord.Embed(title="HKO Lightning Information", description=f"Information within {re.sub(hko_dt_pattern2, hko_dt_pattern2_, lightnings[0]['DateTime'])} HKT (Update frequency: 1 hour)")
   for l, l2 in zip(lightnings, lightnings_):
-    embed.add_field(name=f"{l['Region'].replace('Hong Kong Island', 'HKI')}: {l['Type']}\n{l2['區域']}: {l2['類別']}", value=f"Lightnings: {l['lightning count']}", inline=True)
+    embed.add_field(name=f"{l['Region'].replace('Hong Kong Island', 'HKI')}: {l['Type']}\n{l2['區域']}: {l2['類別']}", value=f"Lightnings: {l['lightning count']}", inline= True)
   await ctx.reply(embed=embed)
 
 @commands.command()
@@ -165,7 +165,7 @@ async def hk_lr(ctx, station : int):
     if p.get('route_list', None):
       for t in p['route_list']:
         desc += f"""<:Train1:912268792808243200>{'<:Transparent:912206780015190038>'if t['train_length']==1 else'<:Train2:912268792908890132>'}**{t['route_no']}** to {t['dest_en']} ({t['dest_ch']}) {db['mtr']['lr_status'][t['arrival_departure']]} {f"in {t['time_en']}" if t['time_en'][0].isdigit() else f"({t['time_en']})"}\n"""
-      embed.add_field(name=f"Platform {p['platform_id']}", value=desc, inline=False)
+      embed.add_field(name=f"Platform {p['platform_id']}", value=desc, inline= False)
   if len(embed.fields):
     await ctx.reply(embed=embed)
   else:
@@ -251,7 +251,7 @@ async def hk_sea_pressure(ctx, *, disposed=None):
   pressures_ = [x for x in reader_]
   embed = discord.Embed(title="HKO Sea Pressure Information", description=f"Information updated at {re.sub(hko_dt_pattern, hko_dt_pattern_, pressures[0]['Date time'])} HKT (Update frequency: 10 minutes)")
   for p, p_ in zip(pressures, pressures_):
-    embed.add_field(name=f"{p['Automatic Weather Station']} {p_['自動氣象站'].replace(' ', '')}", value=f"{p['Mean Sea Level Pressure(hPa)']} hPa", inline=True)
+    embed.add_field(name=f"{p['Automatic Weather Station']} {p_['自動氣象站'].replace(' ', '')}", value=f"{p['Mean Sea Level Pressure(hPa)']} hPa", inline= True)
   await ctx.reply(embed=embed)
 
 @commands.command()
@@ -303,7 +303,7 @@ async def hk_tide(ctx, *, disposed=None):
   tides = [x for x in reader]
   embed = discord.Embed(title="HKO Tide Information", description=f"Information updated at {tides[0]['Time']} HKT (Update frequency: 5 minutes)")
   for t in tides:
-    embed.add_field(name=t['Tide Station'], value=f"{t['Height(m)']} m", inline=True)
+    embed.add_field(name=t['Tide Station'], value=f"{t['Height(m)']} m", inline= True)
   await ctx.reply(embed=embed)
 
 @commands.command()
@@ -315,7 +315,7 @@ async def hk_visibility(ctx, *, disposed=None):
   visibilities = [x for x in reader]
   embed = discord.Embed(title="HKO Visibility Information", description=f"Information updated at {re.sub(hko_dt_pattern, hko_dt_pattern_, visibilities[0]['Date time'])} HKT (Update frequency: 10 minutes)")
   for v in visibilities:
-    embed.add_field(name=v['Automatic Weather Station'], value=v['10 minute mean visibility'].replace("km", " km"), inline=True)
+    embed.add_field(name=v['Automatic Weather Station'], value=v['10 minute mean visibility'].replace("km", " km"), inline= True)
   await ctx.reply(embed=embed)
 
 @commands.command()
@@ -346,7 +346,7 @@ async def hk_weather(ctx, *, disposed=None):
   for x in places_list:
     fv =  f"Rainfall: {r1['rainfall']['data']   [rain_dict[x]]['max']} mm\n"   if x in list(rain_dict) else ""
     fv += f"Temperature: {r1['temperature']['data'][temp_dict[x]]['value']}°C" if x in list(temp_dict) else ""
-    embed.add_field(name=x, value=fv, inline=True)
+    embed.add_field(name=x, value=fv, inline= True)
   f0v = "Humidity: {r1['humidity']['data'][0]['value']}% at {r1['humidity']['data'][0]['place']}"
   if r1.get('uvindex:', None):
     f0v += f"UV Index: {r1['uvindex']['data'][0]['value']} ({r1['uvindex']['data'][0]['desc']}) at {r1['uvindex']['data'][0]['place']}"
@@ -365,7 +365,7 @@ async def hk_wind(ctx, *, disposed=None):
   for w in winds:
     embed.add_field(name=f"{w['Automatic Weather Station']} {db['compass_points'][w['10-Minute Mean Wind Direction(Compass points)']]}",
     value=f"""{w['10-Minute Mean Wind Direction(Compass points)']}{(' at '+w['10-Minute Mean Speed(km/hour)']+' km/h') if w['10-Minute Mean Speed(km/hour)']!="N/A" else ''}
-    {('Maximum Gust: '+w['10-Minute Maximum Gust(km/hour)']+' km/h') if w['10-Minute Maximum Gust(km/hour)']!='N/A' else ''}""", inline=True)
+    {('Maximum Gust: '+w['10-Minute Maximum Gust(km/hour)']+' km/h') if w['10-Minute Maximum Gust(km/hour)']!='N/A' else ''}""", inline= True)
   embed.set_footer(text="Speed and Gust Information might be empty for some weather stations. Directions and Speed are mean values in the past 10 minutes.")
   await ctx.reply(embed=embed)
 

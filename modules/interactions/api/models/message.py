@@ -480,7 +480,7 @@ class EmbedField(DictSerializerMixin):
         interactions.EmbedField(
             name="field title",
             value="blah blah blah",
-            inline=False,
+            inline= False,
         )
 
     :ivar str name: Name of the field.

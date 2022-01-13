@@ -42,21 +42,34 @@ f.close()
 
 plt.style.use('mpl.mplstyle')
 
-func            =lambda pct, allvals : "{:d} ({:.1f}%)".format(int(pct/100*np.sum(allvals)), round(pct, 1))
-botadmin        =lambda context      : context.author.id in db["botadmins"]
-number_to_emoji =lambda a            : a.replace("1",":one: ").replace("2",":two: ").replace("3",":three: ").replace("4",":four: ").replace("5",":five: ").replace("6",":six: ").replace("7",":seven: ").replace("8",":eight: ").replace("9",":nine: ").replace("0",":zero: ")
-sizer           =lambda bytes        : f"{round(bytes,4):,} Bytes" if bytes<1024 else (f"{round(bytes/1024,4):,}KB" if bytes<1048576 else (f"{round(bytes/1048576,4):,}MB" if bytes<1073741824 else f"{round(bytes/1073741824,4):,}GB"))
-sizer2          =lambda bytes        : f"{str(round(bytes,4)).zfill(9)} Bytes" if bytes<1024 else (f"{str(round(bytes/1024,4)).zfill(9)}KB" if bytes<1048576 else (f"{str(round(bytes/1048576,4)).zfill(9)}MB" if bytes<1073741824 else f"{round(bytes/1073741824,4):,}GB"))
-format_abr      =lambda stream       : f"{stream.__getattribute__('abr')}\t" if stream.__getattribute__("abr") else 'No audio'
-format_length   =lambda secs         : f"{secs//86400} days plus {str(secs%21600//3600).zfill(2)}:{str(secs%3600//60).zfill(2)}:{str(secs%60).zfill(2)}" if secs >= 86400 else (f"{str(secs//3600).zfill(2)}:{str(secs%3600//60).zfill(2)}:{str(secs%60).zfill(2)}" if secs >= 3600 else f"{str(secs//60).zfill(2)}:{str(secs%60).zfill(2)}")
-format_video    =lambda stream       : f"{format_abr(stream)}\t{stream.resolution}\t{format_fps(stream)}\t{sizer2(stream.filesize)}\t{stream.url}"
-specialbool     =lambda input        : input.lower() in ["1", "ok", "yes", "ye", "y", "yeah", "enable", "on", "enabled", "tic", "true", "up", "positive", "+"]
-has_perms       =lambda chn,memb,perm: (chn.permissions_for(memb).value  & 1 << perm) or (chn.permissions_for(memb).value  & 1 << 8) or memb.id in db["botadmins"]
-naiveness       =lambda dt           : "Naive" if (dt.tzinfo is None or dt.tzinfo.utcoffset(dt) is None) else "Not Naive"
-chance          =lambda ratio        : ra.randint(1, ratio) == ratio
-unix_timestamp  =lambda dt, flag="F" : f"<t:{round(datetime.timestamp(dt))}:{flag}>"
-time_display    =lambda dt           : dt.strftime("%A, %d %b %Y, %H:%M:%S")
-st_nd_th_format =lambda n            : "st" if str(n).endswith("1") and not str(n).endswith("11") else ("th" if str(n).endswith("2") and not str(n).endswith("12") else "nd")
+youtube_headers={'cookie':"""SID=CghejA2ZNiG3ffH-ea-xuLc9tIaHBbwGapD38onoVwAzAbkHnjoZtpUhHdUAmcNRJO
+HTDw.; __Secure-1PSID=CghejA2ZNiG3ffH-ea-xuLc9tIaHBbwGapD38onoVwAzAbkHEoE3S8JEj0cM-biiWZLVyA.;__Sec
+ure-3PSID=CghejA2ZNiG3ffH-ea-xuLc9tIaHBbwGapD38onoVwAzAbkH4sXzfbXVlttnq4TjWVCEfg.; HSID=A-m2IhioZ3o
+eerjgh; SSID=AbaPAqttHYjZqyPhz; APISID=tPPnfzostQvEsOd-/ALcV81KVGrbqB4Igh; SAPISID=ClVhEot1sUk0cUo-
+/AEEQ1aXT00mYUmE7f; __Secure-1PAPISID=ClVhEot1sUk0cUo-/AEEQ1aXT00mYUmE7f; __Secure-3PAPISID=ClVhEot
+1sUk0cUo-/AEEQ1aXT00mYUmE7f; YSC=33OC1x1sBQc; …:QUQ3MjNmenRqWWtfNkdJSGRkbkhLQkJVVHN0a1lkVE41ajhsTzR
+TTk9RLURmN2FCN1hkZ1JOTGMzYXAxdi1HS3p1NUxFMFRFeXcyVE84Rlg5LWZVRTNNOThHM0RLTDZBQzZucDQ4a0R0VURzYUtOZE
+dtOGJDSUoxRktjckg0QTAxd3JwTGNybzJQYTBUN1c5bUo5NVAxVXNtV2JRNjlmdjZJajg3ZC1MQy1rMGZrcWtkQTFXTmlUcUdYe
+kpEbHRwYmU1YkpILXl6Tmx5RDI5RnJueDN4czRkdXliUzNFd2FUZw==; SIDCC=AJi4QfF-hT3IbtAsSfRNu4EviRtD9WBBt481
+66pXbGGDIX2wN5n4luQgHUDSmwX-WSozfHfc; __Secure-3PSIDCC=AJi4QfFRxCGcdkA1zU8EIyJ7kPmscvGPk9vdyN5QWKwe
+Sv4jI-xcXxr8GtSt2loCC7scCGMS; PREF=f4=4000000&tz=Asia.Hong_Kong""".replace(f"\n", "")}
+
+func            =lambda pct,allvals: "{:d} ({:.1f}%)".format(int(pct/100*np.sum(allvals)), round(pct, 1))
+botadmin        =lambda context    : context.author.id in db["botadmins"]
+number_to_emoji =lambda a          : a.replace("1",":one: ").replace("2",":two: ").replace("3",":three: ").replace("4",":four: ").replace("5",":five: ").replace("6",":six: ").replace("7",":seven: ").replace("8",":eight: ").replace("9",":nine: ").replace("0",":zero: ")
+sizer           =lambda bytes      : f"{round(bytes,4):,} Bytes" if bytes<1024 else (f"{round(bytes/1024,4):,}KB" if bytes<1048576 else (f"{round(bytes/1048576,4):,}MB" if bytes<1073741824 else f"{round(bytes/1073741824,4):,}GB"))
+sizer2          =lambda bytes      : f"{str(round(bytes,4)).zfill(9)} Bytes" if bytes<1024 else (f"{str(round(bytes/1024,4)).zfill(9)}KB" if bytes<1048576 else (f"{str(round(bytes/1048576,4)).zfill(9)}MB" if bytes<1073741824 else f"{round(bytes/1073741824,4):,}GB"))
+format_abr      =lambda stream     : f"{stream.__getattribute__('abr')}\t" if stream.__getattribute__("abr") else 'No audio'
+format_length   =lambda secs       : f"{secs//86400} days plus {str(secs%21600//3600).zfill(2)}:{str(secs%3600//60).zfill(2)}:{str(secs%60).zfill(2)}" if secs >= 86400 else (f"{str(secs//3600).zfill(2)}:{str(secs%3600//60).zfill(2)}:{str(secs%60).zfill(2)}" if secs >= 3600 else f"{str(secs//60).zfill(2)}:{str(secs%60).zfill(2)}")
+format_video    =lambda stream     : f"{format_abr(stream)}\t{stream.resolution}\t{format_fps(stream)}\t{sizer2(stream.filesize)}\t{stream.url}"
+specialbool     =lambda input      : input.lower() in ["1", "ok", "yes", "ye", "y", "yeah", "enable", "on", "enabled", "tic", "true", "up", "positive", "+"]
+has_perms       =lambda ch,mem,prm : (ch.permissions_for(mem).value  & 1 << prm) or (ch.permissions_for(mem).value  & 1 << 8) or mem.id in db["botadmins"]
+naiveness       =lambda dt         : "Naive" if (dt.tzinfo is None or dt.tzinfo.utcoffset(dt) is None) else "Not Naive"
+chance          =lambda ratio      : ra.randint(1, ratio) == ratio
+unix_timestamp  =lambda dt,flag="F": f"<t:{round(datetime.timestamp(dt))}:{flag}>"
+time_display    =lambda dt         : dt.strftime("%A, %d %b %Y, %H:%M:%S")
+st_nd_th_format =lambda n          : "st" if str(n).endswith("1") and not str(n).endswith("11") else ("th" if str(n).endswith("2") and not str(n).endswith("12") else "nd")
+perm_display    =lambda integer, x : "<:pt:931052297117659156><:px:912206780015190038>" if integer & (1 << x) else "<:px:912206780015190038><:pf:931052297134407741>"
 permission_messages={}
 
 forecast_formatter = """
@@ -121,17 +134,17 @@ timestamp_pattern = re.compile(r'<t:-?[\d]{1,13}(:[FfDdTtR])?>')
 #clicker_button = ui.Button(style=discord.ButtonStyle.primary, row=0, custom_id="clicker", label="Click me!")
 
 custom_permissions = {
-  "admin"       : Permissions(8),
-  "semiadmin"   : Permissions(536870911991),
-  "mod"         : Permissions(536602476259),
-  "manager"     : Permissions(466255085123),
-  "speaker"     : Permissions(414598024897),
-  "member"      : Permissions(414568664129),
-  "semimember"  : Permissions(277129449025),
-  "restrict"    : Permissions(274914675777),
-  "mute"        : Permissions(67175425),
-  "freeze"      : Permissions(66560),
-  "none"        : Permissions(0),
+  "admin"     : Permissions(8),
+  "semiadmin" : Permissions(536870911991),
+  "mod"       : Permissions(536602476259),
+  "manager"   : Permissions(466255085123),
+  "speaker"   : Permissions(414598024897),
+  "member"    : Permissions(414568664129),
+  "semimember": Permissions(277129449025),
+  "restrict"  : Permissions(274914675777),
+  "mute"      : Permissions(67175425),
+  "freeze"    : Permissions(66560),
+  "none"      : Permissions(0),
 }
 
 server_real = {
@@ -202,64 +215,17 @@ badges_real = {
   8 : "HypeSquad Balance House"
 }
 
-youtube_headers={'cookie':"""SID=CghejA2ZNiG3ffH-ea-xuLc9tIaHBbwGapD38onoVwAzAbkHnjoZtpUhHdUAmcNRJO
-HTDw.; __Secure-1PSID=CghejA2ZNiG3ffH-ea-xuLc9tIaHBbwGapD38onoVwAzAbkHEoE3S8JEj0cM-biiWZLVyA.;__Sec
-ure-3PSID=CghejA2ZNiG3ffH-ea-xuLc9tIaHBbwGapD38onoVwAzAbkH4sXzfbXVlttnq4TjWVCEfg.; HSID=A-m2IhioZ3o
-eerjgh; SSID=AbaPAqttHYjZqyPhz; APISID=tPPnfzostQvEsOd-/ALcV81KVGrbqB4Igh; SAPISID=ClVhEot1sUk0cUo-
-/AEEQ1aXT00mYUmE7f; __Secure-1PAPISID=ClVhEot1sUk0cUo-/AEEQ1aXT00mYUmE7f; __Secure-3PAPISID=ClVhEot
-1sUk0cUo-/AEEQ1aXT00mYUmE7f; YSC=33OC1x1sBQc; …:QUQ3MjNmenRqWWtfNkdJSGRkbkhLQkJVVHN0a1lkVE41ajhsTzR
-TTk9RLURmN2FCN1hkZ1JOTGMzYXAxdi1HS3p1NUxFMFRFeXcyVE84Rlg5LWZVRTNNOThHM0RLTDZBQzZucDQ4a0R0VURzYUtOZE
-dtOGJDSUoxRktjckg0QTAxd3JwTGNybzJQYTBUN1c5bUo5NVAxVXNtV2JRNjlmdjZJajg3ZC1MQy1rMGZrcWtkQTFXTmlUcUdYe
-kpEbHRwYmU1YkpILXl6Tmx5RDI5RnJueDN4czRkdXliUzNFd2FUZw==; SIDCC=AJi4QfF-hT3IbtAsSfRNu4EviRtD9WBBt481
-66pXbGGDIX2wN5n4luQgHUDSmwX-WSozfHfc; __Secure-3PSIDCC=AJi4QfFRxCGcdkA1zU8EIyJ7kPmscvGPk9vdyN5QWKwe
-Sv4jI-xcXxr8GtSt2loCC7scCGMS; PREF=f4=4000000&tz=Asia.Hong_Kong""".replace(f"\n", "")}
+# Integer TO Permission Utilities
+# Comma-separated permission items - e.g. "Administrator, Manage Channels, Manage Roles"
+badges_itop = lambda integer: (", ".join([y for x,y in badges_real.items() if integer & (1 << x)])) if integer else "No badges"
+server_itop = lambda integer: (", ".join([y for x,y in server_real.items() if integer & (1 << x)])) if integer else "No server permissions"
+ms_itop = lambda integer: (", ".join([y for x,y in membership_real.items() if integer & (1 << x)])) if integer else "No membership permissions"
+tc_itop = lambda integer: (", ".join([y for x,y in text_channel_real.items() if integer & (1 << x)])) if integer else "No text channel permissions"
+vc_itop = lambda integer: (", ".join([y for x,y in voice_channel_real.items() if integer & (1 << x)])) if integer else "No voice channel permissions"
 
-def badges_itop(integer):
-  cache3 = ""
-  for x, y in badges_real.items():
-    if integer & 1 << x:
-      cache3 += y + ", "
-  if len(cache3) > 2:
-    return cache3[:-2]
-  else:
-    return "No badges"
-
-def server_itop(integer):
-  cache3 = ""
-  for x, y in server_real.items():
-    if integer & 1 << x:
-      cache3 += y + ", "
-  if len(cache3) > 2:
-    return cache3[:-2]
-  else:
-    return "No server permissions"
-
-def ms_itop(integer):
-  cache3 = ""
-  for x, y in membership_real.items():
-    if integer & 1 << x:
-      cache3 += y + ", "
-  if len(cache3) > 2:
-    return cache3[:-2]
-  else:
-    return "No server permissions"
-
-def tc_itop(integer):
-  cache3 = ""
-  for x, y in text_channel_real.items():
-    if integer & 1 << x:
-      cache3 += y + ", "
-  if len(cache3) > 2:
-    return cache3[:-2]
-  else:
-    return "No text channel permissions"
-
-def vc_itop(integer):
-  cache3 = ""
-  for x, y in voice_channel_real.items():
-    if integer & 1 << x:
-      cache3 += y + ", "
-  if len(cache3) > 2:
-    return cache3[:-2]
-  else:
-    return "No voice channel permissions"
+# Integer TO Discord Display Utilities
+# All permissions with :pt: or :pf: emoji from SuperBot Support
+server_itod = lambda integer: f"\n".join([perm_display(integer, x) + y for x,y in server_real.items()])
+ms_itod = lambda integer: f"\n".join([perm_display(integer, x) + y for x,y in membership_real.items()])
+tc_itod = lambda integer: f"\n".join([perm_display(integer, x) + y for x,y in text_channel_real.items()])
+vc_itod = lambda integer: f"\n".join([perm_display(integer, x) + y for x,y in voice_channel_real.items()])

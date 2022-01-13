@@ -173,12 +173,12 @@ async def engrave(ctx, product = "list", *, text = "Your text goes here."):
     embed.set_image(url="https://www.apple.com/shop/preview/engrave/PU8F2AM/A?th="+text+"&s=2&tl=")
   elif product == "list" or product == "product" or product == "help" or product == "products":
     embed = discord.Embed(title="List of products")
-    embed.add_field(name="AirPods/Accesories", value="`airpods` `airpodson` `airpodspro` `pencil` `airtag`", inline=False)
-    embed.add_field(name="AirPods Max", value="`airpodsmax` `airpodsmaxgray` `airpodsmaxsilver` `airpodsmaxpink` `airpodsmaxgreen` `airpodsmaxblue`", inline=False)
-    embed.add_field(name="iPad/iPad Mini", value="`ipad` `ipadsilver` `ipadmini` `ipadminiyellow` `ipadminipurple` `ipadminipink`", inline=False)
-    embed.add_field(name="iPad Pro", value="`ipadpro` `ipadprosilver`", inline=False)
-    embed.add_field(name="iPad Air", value="`ipadair` `ipadairsilver` `ipadairrose` `ipadairgreen` `ipadairblue`", inline=False)
-    embed.add_field(name="iPod Touch", value="`ipod` `ipodgray` `ipodsilver` `ipodgold` `ipodred` `ipodpink` `ipodblue`", inline=False)
+    embed.add_field(name="AirPods/Accesories", value="`airpods` `airpodson` `airpodspro` `pencil` `airtag`", inline= False)
+    embed.add_field(name="AirPods Max", value="`airpodsmax` `airpodsmaxgray` `airpodsmaxsilver` `airpodsmaxpink` `airpodsmaxgreen` `airpodsmaxblue`", inline= False)
+    embed.add_field(name="iPad/iPad Mini", value="`ipad` `ipadsilver` `ipadmini` `ipadminiyellow` `ipadminipurple` `ipadminipink`", inline= False)
+    embed.add_field(name="iPad Pro", value="`ipadpro` `ipadprosilver`", inline= False)
+    embed.add_field(name="iPad Air", value="`ipadair` `ipadairsilver` `ipadairrose` `ipadairgreen` `ipadairblue`", inline= False)
+    embed.add_field(name="iPod Touch", value="`ipod` `ipodgray` `ipodsilver` `ipodgold` `ipodred` `ipodpink` `ipodblue`", inline= False)
   else:
     embed = discord.Embed(title="Invalid product", description="")
   await ctx.reply(embed = embed)

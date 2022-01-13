@@ -160,7 +160,7 @@ def craftbot_buttons(ctx):
   return ui.LinkButton(label= "Invite!", url= "https://discord.com/api/oauth2/authorize?client_id=814444200946434069&permissions=909631057&scope=bot", emoji=ctx.bot.get_emoji(891265683801923604))
 
 partners_embed = discord.Embed(title= "SuperBot Partners")
-partners_embed.add_field(name= "CraftBot", value= "Minecraft-oriented bot with rock-paper-scissors and a lyrics index.", inline=False)
+partners_embed.add_field(name= "CraftBot", value= "Minecraft-oriented bot with rock-paper-scissors and a lyrics index.", inline= False)
 def partners_buttons(ctx):
   return [
     ui.LinkButton(label= "CraftBot", url= "https://discord.com/api/oauth2/authorize?client_id=814444200946434069&permissions=909631057&scope=bot", emoji=ctx.bot.get_emoji(891265683801923604))

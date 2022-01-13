@@ -57,22 +57,22 @@ async def covid(ctx, *, country="world"):
         tpopulation = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR,"span[rel='current_population']"))).text
         if "retrieving data" not in tpopulation:
           break
-    embed.add_field(name="Total Cases", value=tcases, inline=True)
-    embed.add_field(name="Total Deaths", value=tdeath, inline=True)
-    embed.add_field(name="Total Recovered", value=trecovered, inline=True)
-    embed.add_field(name="New Cases", value=needrow.findAll('td')[3].string, inline=True)
-    embed.add_field(name="New Deaths", value=needrow.findAll('td')[5].string, inline=True)
-    embed.add_field(name="New Recovered", value=needrow.findAll('td')[7].string, inline=True)
-    embed.add_field(name="Active Cases", value=tactive, inline=True)
-    embed.add_field(name="Serious Cases", value=tserious, inline=True)
+    embed.add_field(name="Total Cases", value=tcases, inline= True)
+    embed.add_field(name="Total Deaths", value=tdeath, inline= True)
+    embed.add_field(name="Total Recovered", value=trecovered, inline= True)
+    embed.add_field(name="New Cases", value=needrow.findAll('td')[3].string, inline= True)
+    embed.add_field(name="New Deaths", value=needrow.findAll('td')[5].string, inline= True)
+    embed.add_field(name="New Recovered", value=needrow.findAll('td')[7].string, inline= True)
+    embed.add_field(name="Active Cases", value=tactive, inline= True)
+    embed.add_field(name="Serious Cases", value=tserious, inline= True)
     if country != "world":
-      embed.add_field(name="Cases/Tests", value=str(int(tcases.replace(",",""))/int(ttest.replace(",",""))), inline=True)
-    embed.add_field(name="Cases/1M", value=needrow.findAll('td')[10].string, inline=True)
-    embed.add_field(name="Deaths/1M", value=needrow.findAll('td')[11].string, inline=True)
+      embed.add_field(name="Cases/Tests", value=str(int(tcases.replace(",",""))/int(ttest.replace(",",""))), inline= True)
+    embed.add_field(name="Cases/1M", value=needrow.findAll('td')[10].string, inline= True)
+    embed.add_field(name="Deaths/1M", value=needrow.findAll('td')[11].string, inline= True)
     if country != "world":
-      embed.add_field(name="Recovered/1M", value=str(int(trecovered.replace(",",""))/int(tpopulation.replace(",",""))*1000000), inline=True)
-      embed.add_field(name="Total Tests", value=ttest, inline=True)
-      embed.add_field(name="Tests/1M", value=needrow.findAll('td')[13].string, inline=True)
+      embed.add_field(name="Recovered/1M", value=str(int(trecovered.replace(",",""))/int(tpopulation.replace(",",""))*1000000), inline= True)
+      embed.add_field(name="Total Tests", value=ttest, inline= True)
+      embed.add_field(name="Tests/1M", value=needrow.findAll('td')[13].string, inline= True)
     mylabels = ["Active (Mild)", "Active (Serious)", "Recovered", "Died"]
     mycolors = ["#5865F2", "#ED4245", "#3BA55D", "#747F8D"]
     y = np.array([int(tactive.replace(",",""))-int(tserious.replace(",","")), int(tserious.replace(",","")), int(trecovered.replace(",","")), int(tdeath.replace(",",""))])
@@ -179,39 +179,39 @@ async def population(ctx, country="current"):
       if "retrieving data" not in item:
         break
     embed = discord.Embed(title="Population statistics of "+country.rstrip("-"))
-    embed.add_field(name="Population", value=item, inline=False)
+    embed.add_field(name="Population", value=item, inline= False)
     if country == "current_":
       embed = discord.Embed(title="Population statistics worldwide", description="Total Population: "+item)
       while True:
         item = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR,"span[rel='births_today']"))).text
         if "retrieving data" not in item:
           break
-      embed.add_field(name="DAILY: Births", value=item, inline=True)
+      embed.add_field(name="DAILY: Births", value=item, inline= True)
       while True:
         item = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR,"span[rel='dth1s_today']"))).text
         if "retrieving data" not in item:
           break
-      embed.add_field(name="Deaths", value=item, inline=True)
+      embed.add_field(name="Deaths", value=item, inline= True)
       while True:
         item = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR,"span[rel='absolute_growth']"))).text
         if "retrieving data" not in item:
           break
-      embed.add_field(name="Net growth", value=item, inline=True)
+      embed.add_field(name="Net growth", value=item, inline= True)
       while True:
         item = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR,"span[rel='births_this_year']"))).text
         if "retrieving data" not in item:
           break
-      embed.add_field(name="ANNUALLY: Births", value=item, inline=True)
+      embed.add_field(name="ANNUALLY: Births", value=item, inline= True)
       while True:
         item = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR,"span[rel='dth1s_this_year']"))).text
         if "retrieving data" not in item:
           break
-      embed.add_field(name="Deaths", value=item, inline=True)
+      embed.add_field(name="Deaths", value=item, inline= True)
       while True:
         item = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR,"span[rel='absolute_growth_year']"))).text
         if "retrieving data" not in item:
           break
-      embed.add_field(name="Net Growth", value=item, inline=True)
+      embed.add_field(name="Net Growth", value=item, inline= True)
     await ctx.reply(embed=embed)
   except selenium.common.exceptions.TimeoutException:
     await ctx.reply("Invalid country. Please try again.")
