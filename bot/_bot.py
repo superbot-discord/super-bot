@@ -3,33 +3,28 @@ from shared import *
 
 banned_ids =  []
 banned_text = []
-bot_ = commands.Bot(command_prefix=commands.when_mentioned_or("="),intents=discord.Intents.all(),
-                    allowed_mentions=discord.AllowedMentions(everyone=False, users=True,
-                    roles=False, replied_user=False), case_insensitive=True, strip_after_prefix=True)
-ui_ = ui.UI(bot_)
-slash = ui.Slash(bot_)
 
 bot_.remove_command('help')
-bot_.load_extension("apis__int")
-bot_.load_extension("apis_hk")
-bot_.load_extension("apis_uk")
-bot_.load_extension("basic")
-bot_.load_extension("calc")
-bot_.load_extension("convert")
-bot_.load_extension("development")
-bot_.load_extension("dinfo")
+# bot_.load_extension("apis__int")
+# bot_.load_extension("apis_hk")
+# bot_.load_extension("apis_uk")
+# bot_.load_extension("basic")
+# bot_.load_extension("calc")
+# bot_.load_extension("convert")
+# bot_.load_extension("development")
+# bot_.load_extension("dinfo")
 bot_.load_extension("embed")
-bot_.load_extension("engrave")
-bot_.load_extension("image")
-bot_.load_extension("info")
-bot_.load_extension("led")
-bot_.load_extension("moderate")
-bot_.load_extension("partners")
-bot_.load_extension("plot")
-bot_.load_extension("statuscode")
-bot_.load_extension("text")
-bot_.load_extension("webinfo")
-bot_.load_extension("webscrape")
+# bot_.load_extension("engrave")
+# bot_.load_extension("image")
+# bot_.load_extension("info")
+# bot_.load_extension("led")
+# bot_.load_extension("moderate")
+# bot_.load_extension("partners")
+# bot_.load_extension("plot")
+# bot_.load_extension("statuscode")
+# bot_.load_extension("text")
+# bot_.load_extension("webinfo")
+# bot_.load_extension("webscrape")
 
 f = open('./assets/emojis.json', 'r')
 emojis_db = json.loads(f.read())
@@ -180,19 +175,6 @@ async def clearsnipe(ctx, *, chnl: discord.TextChannel = None):
   else:
     await ctx.reply("You don't have the required permission: Manage channels.")
 
-@ui_.slash.command(name="clearsnipe", description="Clear the snipe database for a channel.",
-                   options=[ui.SlashOption(name= "Channel", type= discord.TextChannel,
-                   channel_types= [discord.ChannelType.text], description=
-                   "The channel to clear the snipe database of. Defaults to the current channel.")])
-async def clearsnipe_(ctx, channel= None):
-  if channel == None:
-    channel = ctx.channel
-  if channel.permissions_for(ctx.author).manage_channels or botadmin(ctx):
-    sniper[channel] = []
-    await ctx.reply(f"Cleared snipe database for {channel.mention}.")
-  else:
-    await ctx.reply("You don't have the required permission: Manage Channels.")
-
 #@tasks.loop(hours=24)
 #async def sba_marks():
 #  sba_channel = bot_.get_channel(909445785509326859)
@@ -228,6 +210,12 @@ async def on_command_error(ctx, error):
     error_ = error.original
     if isinstance(error_, FileNotFoundError):
       await ctx.reply("Unfortunately, the file could not be generated.")
+    else:
+      try:
+        await ctx.send(f"Sorry! An error occured:\n```{''.join(traceback.format_exception(type(error), error, error.__traceback__))}```\n If the error persists, please kindly inform JohannLau#6541 about this issue.")
+      except discord.HTTPException:
+        print(''.join(traceback.format_exception(type(error), error, error.__traceback__)))
+        await ctx.reply(f"Sorry! An error occured. The error was too long but it had been shown to JohannLau#6541. If the error persists, Please kindly inform him about this issue.")
   elif isinstance(error, discord.HTTPException):
     if error.code == 40005:
       await ctx.reply("Unfortunately, the output file is too large.")
@@ -435,42 +423,15 @@ async def ping(ctx, *, disposed= None):
   mcs = str(int(response_time.microseconds)+int((response_time.total_seconds())%60))
   await message.edit(content=f"Pong! 🏓\n```Message delay: {mcs:<10}microseconds\nBot latency  : {round(bot_.latency*1000000, 2):<10}microseconds```")
 
-@slash.command(name="ping", description="Check whether the bot is online or not and see the latency & response time.")
-async def ping_(ctx):
-  await ping(ctx)
-
 @bot_.event
 async def on_ready():
   activity = discord.Activity(
     type=discord.ActivityType.playing,
-    name=f"with =help in {len(bot_.guilds)} servers",
-    #buttons=db["status_buttons"],
-    timestamps = db["status_timestamps"])
-  await bot_.change_presence(status=discord.Status.idle, activity=activity)
-  # datetime(now_.year, now_.month, now_.day, (0 if now_.hour==23 else now_.hour+1), 0, 0)
-  #sba_marks.start()
-  #for x in bot_.get_guild(805441351033552916).threads:
-  #  if not x.me:
-  #   await x.join()
+    name=f"with =help in {len(bot_.guilds)} servers", timestamps = db["status_timestamps"])
+  await bot_.change_presence(status= discord.Status.idle, activity= activity)
   print(f"Bot is ready!\n")
-  #now_ = datetime.now()
-  #await asyncio.sleep(timedelta(minutes=60-now_.minute, seconds=60-now_.second).total_seconds())
-  #scratch = bot_.get_guild(867962875422081024)
-  #johann = scratch.get_member(687474789342117900)
-  #await johann.add_roles(scratch.get_role(871716868862406756))
-  #for x in bot_.guilds:
-  #  print(x.name)
-  #  print('  ', x.owner.name)
-  #  if x.member_count < 10:
-  #    for y in x.members:
-  #      print(f'\t',y.name)
-  # agree_emoji = bot_.get_emoji(885515344863703121)
-  # message_1 = await bot_.get_channel(894820155761246231).fetch_message(894820888321622058)
-  # message_2 = await bot_.get_channel(894820155761246231).fetch_message(894821177137197067)
-  # message_3 = await bot_.get_channel(894820155761246231).fetch_message(894820846206590986)
-  # await message_1.add_reaction(agree_emoji)
-  # await message_2.add_reaction(agree_emoji)
-  # await message_3.add_reaction(agree_emoji)
+
+
 
 print("Bot is getting started…")
 try:

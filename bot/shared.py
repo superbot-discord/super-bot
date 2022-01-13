@@ -36,6 +36,11 @@ from nextcord.enums import VoiceRegion
 from nextcord.ext import commands
 import discord_ui as ui
 
+bot_ = commands.Bot(command_prefix=commands.when_mentioned_or("="),intents=discord.Intents.all(),
+                    allowed_mentions=discord.AllowedMentions(everyone=False, users=True,
+                    roles=False, replied_user=False), case_insensitive=True, strip_after_prefix=True)
+ui_ = ui.UI(bot_)
+
 f = open('./assets/database.json', 'r')
 db = json.loads(f.read())
 f.close()
@@ -69,7 +74,7 @@ chance          =lambda ratio      : ra.randint(1, ratio) == ratio
 unix_timestamp  =lambda dt,flag="F": f"<t:{round(datetime.timestamp(dt))}:{flag}>"
 time_display    =lambda dt         : dt.strftime("%A, %d %b %Y, %H:%M:%S")
 st_nd_th_format =lambda n          : "st" if str(n).endswith("1") and not str(n).endswith("11") else ("th" if str(n).endswith("2") and not str(n).endswith("12") else "nd")
-perm_display    =lambda integer, x : "<:pt:931052297117659156><:px:912206780015190038>" if integer & (1 << x) else "<:px:912206780015190038><:pf:931052297134407741>"
+perm_display    =lambda integer, x : "<:pt:931052297117659156><:px:912206780015190038> " if integer & (1 << x) else "<:px:912206780015190038><:pf:931052297134407741> "
 permission_messages={}
 
 forecast_formatter = """

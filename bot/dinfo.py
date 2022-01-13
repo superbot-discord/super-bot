@@ -774,20 +774,19 @@ async def permissions(ctx, integer="help"):
   if integer == "help":
     embed = perms_guide
   else:
-    embed = discord.Embed(title= f"Permission integer {integer}")
+    embed = embed2 = discord.Embed(title= f"Permission integer {integer}")
     embed.add_field(name= "Server permissions", value= server_itop(integer), inline= False)
     embed.add_field(name= "Membership permissions", value= ms_itop(integer), inline= False)
     embed.add_field(name= "Text permissions", value= tc_itop(integer), inline= False)
     embed.add_field(name= "Voice permissions", value= vc_itop(integer), inline= False)
 
-    embed2 = discord.Embed(title= f"Permission integer {integer} - Discord format")
     embed2.add_field(name= "Server permissions", value= server_itod(integer), inline= False)
     embed2.add_field(name= "Membership permissions", value= ms_itod(integer), inline= False)
     embed2.add_field(name= "Text permissions", value= tc_itod(integer), inline= False)
     embed2.add_field(name= "Voice permissions", value= vc_itod(integer), inline= False)
   await ctx.reply(embed=embed)
   if 'embed2' in locals():
-    await ctx.reply(embed=embed2)
+    await ctx.send(embed=embed2)
 
 @commands.command(aliases=['permgen', 'permsgen', 'permgenerate', 'permsgenerate', 'permission_gen', 'permissions_gen' 'permission_generate'])
 async def permission_generate(ctx, *, disposed= None):

@@ -32,49 +32,34 @@ async def ett(ctx, msg : discord.Message = None):
   await ctx.reply("```"+text+"```")
 
 
-@commands.command(pass_context=True)
-async def pretend(ctx, member : discord.Member, *, message):
+@commands.command()
+async def pretend(ctx, member: discord.Member, *, message):
   try:
     await ctx.message.delete()
   except:
     pass
-  whl = await ctx.channel.webhooks()
-  ourweb = False
-  for x in whl:
-    if x.name == "Pretender":
-      wh = x
-      ourweb = True
-      break
-  if not ourweb:
-    wh = await ctx.channel.create_webhook(name = "Pretender")
-  token = wh.token
-  identify = wh.id
-  async with aiohttp.ClientSession() as session:
-    webhook = Webhook.partial(identify, token, session=session)
-    await webhook.send(message, username=member.name, avatar_url=member.display_avatar.url)
+  webhooks = await ctx.channel.webhooks()
+  whl = filter(lambda x: x.name == "Pretender", webhooks)
+  if whl:
+    wh = whl[0]
+  else:
+    wh = await ctx.channel.create_webhook(name= "Pretender")
+  await wh.send(message, username= member.name, avatar_url= member.display_avatar.url)
 
-@commands.command(pass_context=True)
-async def pretendembed(ctx, member : discord.Member, *, text):
+@commands.command()
+async def pretendembed(ctx, member: discord.Member, *, text):
+  embed = botembed(text)
   try:
     await ctx.message.delete()
   except:
     pass
-  whl = await ctx.channel.webhooks()
-  ourweb = False
-  for x in whl:
-    if x.name == "Pretender":
-      wh = x
-      ourweb = True
-      break
-  if not ourweb:
-    wh = await ctx.channel.create_webhook(name = "Pretender")
-  print(wh)
-  token = wh.token
-  identify = wh.id
-  async with aiohttp.ClientSession() as session:
-    webhook = Webhook.partial(identify, token, session=session)
-    embed = botembed(text)
-    await webhook.send(embed=embed, username=member.name, avatar_url=member.display_avatar.url)
+  webhooks = await ctx.channel.webhooks()
+  whl = filter(lambda x: x.name == "Pretender", webhooks)
+  if whl:
+    wh = whl[0]
+  else:
+    wh = await ctx.channel.create_webhook(name= "Pretender")
+  await wh.send(embed= embed, username= member.name, avatar_url= member.display_avatar.url)
 
 @commands.command(aliases=["fastembed", "qe"])
 async def quickembed(ctx, *, text):
