@@ -39,7 +39,7 @@ async def pretend(ctx, member: discord.Member, *, message):
   except:
     pass
   webhooks = await ctx.channel.webhooks()
-  whl = filter(lambda x: x.name == "Pretender", webhooks)
+  whl = list(filter(lambda x: x.name == "Pretender", webhooks))
   if whl:
     wh = whl[0]
   else:
@@ -54,7 +54,7 @@ async def pretendembed(ctx, member: discord.Member, *, text):
   except:
     pass
   webhooks = await ctx.channel.webhooks()
-  whl = filter(lambda x: x.name == "Pretender", webhooks)
+  whl = list(filter(lambda x: x.name == "Pretender", webhooks))
   if whl:
     wh = whl[0]
   else:
