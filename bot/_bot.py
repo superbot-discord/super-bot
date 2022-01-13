@@ -359,14 +359,14 @@ async def poll(ctx, *, text):
   polls.append(poll.id)
   poll_options[poll.id] = poll_options_cache
 
-@slash.command(name="poll", description="Starts a reaction-based poll in the channel.", options=[
-  ui.SlashOption(name= "Option 1 Emoji", type= str, required= True, choices= emoji_options),
-  ui.SlashOption(name= "Option 1", type= str, required= True),
-  ui.SlashOption(name= "Option 2 Emoji", type= str, required= True, choices= emoji_options),
-  ui.SlashOption(name= "Option 2", type= str, required= True)
-])
-async def poll_(ctx, option_1_emoji, option_1, option_2_emoji, option_2):
-  pass
+# @slash.command(name="poll", description="Starts a reaction-based poll in the channel.", options=[
+#   ui.SlashOption(name= "Option 1 Emoji", type= str, required= True, choices= emoji_options),
+#   ui.SlashOption(name= "Option 1", type= str, required= True),
+#   ui.SlashOption(name= "Option 2 Emoji", type= str, required= True, choices= emoji_options),
+#   ui.SlashOption(name= "Option 2", type= str, required= True)
+# ])
+# async def poll_(ctx, option_1_emoji, option_1, option_2_emoji, option_2):
+#   pass
 
 @bot_.command()
 @commands.is_owner()
