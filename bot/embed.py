@@ -31,7 +31,6 @@ async def ett(ctx, msg : discord.Message = None):
   text = botett(msg)
   await ctx.reply("```"+text+"```")
 
-
 @commands.command()
 async def pretend(ctx, member: discord.Member, *, message):
   try:

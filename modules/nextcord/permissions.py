@@ -25,6 +25,8 @@ DEALINGS IN THE SOFTWARE.
 from __future__ import annotations
 
 from typing import Callable, Any, ClassVar, Dict, Iterator, Set, TYPE_CHECKING, Tuple, Type, TypeVar, Optional
+
+from numpy import int64, longlong
 from .flags import BaseFlags, flag_value, fill_with_flags, alias_flag_value
 
 __all__ = (
@@ -147,7 +149,7 @@ class Permissions(BaseFlags):
         """A factory method that creates a :class:`Permissions` with all
         permissions set to ``True``.
         """
-        return cls(-1)
+        return cls(0b11111111111111111111111111111111111111111)
 
     @classmethod
     def all_channel(cls: Type[P]) -> P:

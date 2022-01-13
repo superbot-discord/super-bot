@@ -288,6 +288,13 @@ class Role(Hashable):
         return Permissions(self._permissions)
 
     @property
+    def permissions_int(self) -> int:
+        """:class:`int`: Returns the role's permissions in raw
+        format.
+        """
+        return self._permissions
+
+    @property
     def colour(self) -> Colour:
         """:class:`Colour`: Returns the role colour. An alias exists under ``color``."""
         return Colour(self._colour)

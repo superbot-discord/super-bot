@@ -612,6 +612,32 @@ class Member(abc.Messageable, _UserTag):
         return base
 
     @property
+    def guild_permissions_int(self) -> int:
+        """:class:`int`: Returns the member's guild permissions in raw
+        format.
+
+        This only takes into consideration the guild permissions
+        and not most of the implied permissions or any of the
+        channel permission overwrites. For 100% accurate permission
+        calculation, please use :meth:`abc.GuildChannel.permissions_for`.
+
+        This does take into consideration guild ownership and the
+        administrator implication.
+        """
+
+        if self.guild.owner_id == self.id:
+            return 0b11111111111111111111111111111111111111111
+
+        base = 0
+        for r in self.roles:
+            base |= r.permissions_int
+
+        if base.administrator:
+            return 0b11111111111111111111111111111111111111111
+
+        return base
+
+    @property
     def voice(self) -> Optional[VoiceState]:
         """Optional[:class:`VoiceState`]: Returns the member's current voice state."""
         return self.guild._voice_state_for(self._user.id)
