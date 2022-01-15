@@ -435,6 +435,6 @@ async def on_ready():
 
 print("Bot is getting started…")
 try:
-  # bot_.run('Nzk2Njg2MzYzNjA0NjgwNzU1.X_bh_g.t51TSXlWn07tXR0IalasHr3a59I')
+  bot_.run('Nzk2Njg2MzYzNjA0NjgwNzU1.X_bh_g.srcnkfakBLnHmE4XPQB2QnWfW68')
 except:
   pass
