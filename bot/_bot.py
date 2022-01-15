@@ -361,11 +361,21 @@ async def poll(ctx, *, text):
 async def purgeserver(ctx, text, condition="True", *, disposed= None):
   text = text.lower()
   if text.startswith("role"):
-    allroles = ctx.guild.roles()
-    for _role in allroles:
-      if eval(condition):
-        await _role.delete()
-    await ctx.reply("Role purging completed.")
+    all_objects = ctx.guild.roles()
+    await ctx.reply("Role purging started.")
+  elif text.startswith("emoji"):
+    all_objects = ctx.guild.emojis()
+    await ctx.reply("Emoji purging started.")
+  elif text.startswith("event"):
+    all_objects = ctx.guild.scheduled_events()
+    await ctx.reply("Event purging started.")
+  else:
+    await ctx.reply("Please use `role` or `emoji` to purge the respective items.")
+    return
+  for x in all_objects:
+    if eval(condition):
+      await x.delete()
+  await ctx.reply("Purging completed.")
 
 @bot_.command()
 @commands.check(botadmin)
@@ -384,7 +394,7 @@ async def botunban(ctx, user : discord.User):
 
 # @bot_.command()
 # @commands.is_owner()
-# async def botadmin(ctx, user : discord.User):
+# async def botadmin(ctx, user: discord.User):
 #   bot_admins.append(user.id)
 #   await ctx.reply("Added user as bot admin.")
 
@@ -435,6 +445,6 @@ async def on_ready():
 
 print("Bot is getting started…")
 try:
-  bot_.run('Nzk2Njg2MzYzNjA0NjgwNzU1.X_bh_g.srcnkfakBLnHmE4XPQB2QnWfW68')
+  bot_.run(os.environ['TOKEN'])
 except:
   pass

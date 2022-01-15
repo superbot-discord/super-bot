@@ -1281,7 +1281,6 @@ async def user(ctx, user: discord.Member = None, channel: discord.TextChannel = 
   allroles=user.roles
   f3v_raw1 = channel.permissions_for(user).value
   f3v_raw2 = user.guild_permissions.value
-  #print(user.guild_permissions_int)
   if user.status == discord.Status.online:
     f3vd = "Online"
   elif user.status == discord.Status.idle:
