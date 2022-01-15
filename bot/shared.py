@@ -139,9 +139,10 @@ timestamp_pattern = re.compile(r'<t:-?[\d]{1,13}(:[FfDdTtR])?>')
 #clicker_button = ui.Button(style=discord.ButtonStyle.primary, row=0, custom_id="clicker", label="Click me!")
 
 custom_permissions = {
-  "admin"     : Permissions(8),
-  "semiadmin" : Permissions(536870911991),
-  "mod"       : Permissions(536602476259),
+  # Tens of digits            4         3         2         1         0
+  "admin"     : Permissions(0b00000000000000000000000000000000000001000),
+  "semiadmin" : Permissions(0b11111111111111111111111111111111111110111),
+  "mod"       : Permissions(0b11111110011101111111111111111111011100011),
   "manager"   : Permissions(466255085123),
   "speaker"   : Permissions(414598024897),
   "member"    : Permissions(414568664129),
@@ -186,7 +187,7 @@ text_channel_real = {
   37: "Use External Stickers",
   17: "Mention Everyone",
   13: "Manage Messages",
-  32: "Manage Threads",
+  34: "Manage Threads",
   16: "Read Message History",
   12: "Send TTS Messages",
   31: "Use Application Commands"

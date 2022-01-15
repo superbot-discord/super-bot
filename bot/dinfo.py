@@ -38,7 +38,7 @@ Index Permission
 37    Use External Stickers
 17    Mention Everyone
 13    Manage Messages
-32    Manage Threads
+34    Manage Threads
 16    Read Message History
 12    Send TTS Messages
 31    Use Application Commands

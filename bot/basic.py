@@ -171,7 +171,7 @@ join the support server or directly contact JohannLau#6541. Here are some links 
 """.replace(f"\n", " "))
 
 support_buttons = [
-  ui.LinkButton(label= "Support server", url= "https://discord.gg/sesedKMWHH"),
+  ui.LinkButton(label= "Support server", url= "https://discord.gg/RtRttctJYq"),
   ui.LinkButton(label= "Website", url= "https://superbot-website.vercel.com"),
   ui.LinkButton(label= "Documentation", url= "https://superbot-website.vercel.com/Documentation"),
 ]
