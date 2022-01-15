@@ -164,6 +164,7 @@ server_real = {
   29: "Manage Webhooks",
   5 : "Manage Server"
 }
+
 membership_real = {
   0 : "Create Invites",
   26: "Change Nickname",
@@ -222,11 +223,21 @@ badges_real = {
 
 # Integer TO Permission Utilities
 # Comma-separated permission items - e.g. "Administrator, Manage Channels, Manage Roles"
-badges_itop = lambda integer: (", ".join([y for x,y in badges_real.items() if integer & (1 << x)])) if integer else "No badges"
-server_itop = lambda integer: (", ".join([y for x,y in server_real.items() if integer & (1 << x)])) if integer else "No server permissions"
-ms_itop = lambda integer: (", ".join([y for x,y in membership_real.items() if integer & (1 << x)])) if integer else "No membership permissions"
-tc_itop = lambda integer: (", ".join([y for x,y in text_channel_real.items() if integer & (1 << x)])) if integer else "No text channel permissions"
-vc_itop = lambda integer: (", ".join([y for x,y in voice_channel_real.items() if integer & (1 << x)])) if integer else "No voice channel permissions"
+def badges_itop(integer: int):
+  x = (", ".join([y for x,y in badges_real.items() if integer & (1 << x)]))
+  return x if x else "No badges"
+def server_itop(integer: int):
+  x = (", ".join([y for x,y in server_real.items() if integer & (1 << x)]))
+  return x if x else "No server permissions"
+def ms_itop(integer: int):
+  x = (", ".join([y for x,y in membership_real.items() if integer & (1 << x)]))
+  return x if x else "No membership permissions"
+def tc_itop(integer: int):
+  x = (", ".join([y for x,y in text_channel_real.items() if integer & (1 << x)]))
+  return x if x else "No text channel permissions"
+def vc_itop(integer: int):
+  x = (", ".join([y for x,y in voice_channel_real.items() if integer & (1 << x)]))
+  return x if x else "No voice channel permissions"
 
 # Integer TO Discord Display Utilities
 # All permissions with :pt: or :pf: emoji from SuperBot Support

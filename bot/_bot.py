@@ -361,21 +361,21 @@ async def poll(ctx, *, text):
 async def purgeserver(ctx, text, condition="True", *, disposed= None):
   text = text.lower()
   if text.startswith("role"):
-    all_objects = ctx.guild.roles()
-    await ctx.reply("Role purging started.")
+    all_objects = ctx.guild.roles
+    msg = await ctx.reply("Role purging started.")
   elif text.startswith("emoji"):
-    all_objects = ctx.guild.emojis()
-    await ctx.reply("Emoji purging started.")
+    all_objects = ctx.guild.emojis
+    msg = await ctx.reply("Emoji purging started.")
   elif text.startswith("event"):
-    all_objects = ctx.guild.scheduled_events()
-    await ctx.reply("Event purging started.")
+    all_objects = ctx.guild.scheduled_events
+    msg = await ctx.reply("Event purging started.")
   else:
     await ctx.reply("Please use `role` or `emoji` to purge the respective items.")
     return
   for x in all_objects:
     if eval(condition):
       await x.delete()
-  await ctx.reply("Purging completed.")
+  await msg.edit(msg.content.replace("started.", "completed!"))
 
 @bot_.command()
 @commands.check(botadmin)
