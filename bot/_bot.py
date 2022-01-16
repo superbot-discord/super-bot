@@ -48,6 +48,10 @@ snipe_buttons = [
   ui.Button(color='primary', custom_id="Snipe5", emoji="⏩")
 ]
 
+bot_admin_guilds = [841330908560228412, 805441351033552916]
+bot_admin_slash = {841330908560228412: ui.SlashPermission(allowed= db['botadmins']),
+                   805441351033552916: ui.SlashPermission(allowed= db['botadmins'])}
+
 async def snipe_update(ctx: ui.ButtonInteraction, msg: discord.Message, number: int):
   await ctx.respond()
   sniperdict[msg][0] = number
@@ -94,6 +98,26 @@ class SnipeL(ui.listener.Listener):
     await ctx.send("Please use `/snipe` on your own in order to browse snipped messages.")
 
 
+@bu.slash.command(name="snipe", description="View up to 8 most recently deleted messages in this channel.")
+async def snipe_(ctx: ui.SlashInteraction):
+  chnl = ctx.channel
+  if sniping.get(chnl, True):
+    if not sniper.get(chnl, None):
+      embed = discord.Embed(title= "Empty", description= "Nothing to snipe from this channel.")
+      await ctx.respond(embed=embed)
+      return
+    else:
+      embed = discord.Embed(title= f"Snipped message (1/{len(sniper[chnl])})", description= sniper[chnl][0][0])
+      embed.set_footer(text= sniper[chnl][0][1])
+    if chance(1000):
+      msg = await ctx.respond("Did someone just ghostping you?", embed= embed, components=
+                              snipe_buttons, listener= SnipeL(ctx.author.id))
+    else:
+      msg = await ctx.respond(embed= embed, components= snipe_buttons, listener= SnipeL(ctx.author.id))
+    sniperdict[msg] = [1, len(sniper[chnl])]
+  else:
+    await ctx.respond("Snipping is disabled. Please ask someone with manage messages permission to re-enable it.")
+
 @bot_.command(aliases=['sniper'])
 async def snipe(ctx, *, text= None):
   chnl = ctx.channel
@@ -124,29 +148,9 @@ async def snipe(ctx, *, text= None):
     await ctx.reply("""If you want to view sniped messages, please run `=snipe` without any arguments.
     If you intend to enable/disable sniping, you are missing the Manage Channels permission.""")
 
-@ui_.slash.command(name="snipe", description="View up to 8 most recently deleted messages in this channel.")
-async def snipe(ctx: ui.SlashInteraction):
-  chnl = ctx.channel
-  if sniping.get(chnl, True):
-    if not sniper.get(chnl, None):
-      embed = discord.Embed(title= "Empty", description= "Nothing to snipe from this channel.")
-      await ctx.respond(embed=embed)
-      return
-    else:
-      embed = discord.Embed(title= f"Snipped message (1/{len(sniper[chnl])})", description= sniper[chnl][0][0])
-      embed.set_footer(text= sniper[chnl][0][1])
-    if chance(1000):
-      msg = await ctx.respond("Did someone just ghostping you?", embed= embed, components=
-                              snipe_buttons, listener= SnipeL(ctx.author.id))
-    else:
-      msg = await ctx.respond(embed= embed, components= snipe_buttons, listener= SnipeL(ctx.author.id))
-    sniperdict[msg] = [1, len(sniper[chnl])]
-  else:
-    await ctx.respond("Snipping is disabled. Please ask someone with manage messages permission to re-enable it.")
-
-@ui_.slash.command(name="snipe_toggle", description="Enable or disable sniping in this channel.",
-                   options=[ui.SlashOption(name= "Toggle", type= bool, description=
-                   "Whether to enable or disable sniping. Toggles the current option by default.")])
+@bu.slash.command(name="snipe_toggle", description="Enable or disable sniping in this channel.",
+                  options=[ui.SlashOption(name= "Toggle", type= bool, description=
+                  "Whether to enable or disable sniping. Toggles the current option by default.")])
 async def snipe_toggle(ctx: ui.SlashInteraction, toggle= None):
   chnl = ctx.channel
   if toggle == None:
@@ -154,10 +158,10 @@ async def snipe_toggle(ctx: ui.SlashInteraction, toggle= None):
   sniping[chnl] = toggle
   await ctx.respond(f"Sniping is now {'enabled' if toggle else 'disabled'}.")
 
-@ui_.slash.command(name="snipe_clear", description="Clears the snipe database for a channel.",
-                   options=[ui.SlashOption(name= "Channel", type= discord.TextChannel, description=
-                   "The channel to clear the database of. Defaults to the current channel.",
-                   channel_types= [discord.ChannelType.text])])
+@bu.slash.command(name="snipe_clear", description="Clears the snipe database for a channel.",
+                  options=[ui.SlashOption(name= "Channel", type= discord.TextChannel, description=
+                  "The channel to clear the database of. Defaults to the current channel.",
+                  channel_types= [discord.ChannelType.text])])
 async def clearsnipe_(ctx: ui.SlashInteraction, channel: discord.TextChannel = None):
   channel = ctx.channel if not channel else channel
   if channel.permissions_for(ctx.author).manage_channels or botadmin(ctx):
@@ -218,7 +222,7 @@ async def poll(ctx, *, text):
 
 @bot_.command()
 @commands.is_owner()
-async def purgeserver(ctx, text, condition="True", *, disposed= None):
+async def purgeserver(ctx, text, condition= "True", *, disposed= None):
   text = text.lower()
   if text.startswith("role"):
     all_objects = ctx.guild.roles
@@ -237,20 +241,30 @@ async def purgeserver(ctx, text, condition="True", *, disposed= None):
       await x.delete()
   await msg.edit(msg.content.replace("started.", "completed!"))
 
-@bot_.command()
-@commands.check(botadmin)
-async def botban(ctx, user : discord.User, *, text="No reason was provided"):
+@bu.slash.command(name="bot_ban", description="Bans a user from using the bot.", options=[
+                  ui.SlashOption(name= "User", type= discord.User, description=
+                  "The user to ban from using the bot.", required= True), ui.SlashOption(name=
+                  "Reason", type=str, description= "The reason to ban the user for.", required=
+                  False)], default_permission= False, guild_ids= bot_admin_guilds,
+                  guild_permissions= bot_admin_slash)
+async def bot_ban(ctx, user: discord.User, *, reason= "No reason was provided"):
   banned_ids.append(user.id)
-  banned_text.append(text)
-  await ctx.reply("Banned user from using the bot.")
+  banned_text.append(reason)
+  await ctx.respond("Banned user from using the bot.", hidden= True)
+  await owner.send(f"{user.name}#{user.discriminator} (ID: {user.id}) has been bot-banned.")
 
-@bot_.command()
-@commands.check(botadmin)
-async def botunban(ctx, user : discord.User):
+@bu.slash.command(name="bot_unban", description="Unbans a user from using the bot.", options=[
+                  ui.SlashOption(name= "User", type= discord.User, description=
+                  "The user to remove the ban of.", required= True)], default_permission= False,
+                  guild_ids= bot_admin_guilds, guild_permissions= bot_admin_slash)
+async def bot_unban(ctx, user: discord.User):
   if user.id in banned_ids:
     banned_text.remove(banned_text[banned_ids.index(user.id)])
     banned_ids.remove(user.id)
-    await ctx.reply("Unbanned user from using the bot.")
+    await ctx.respond("Unbanned user from using the bot.", hidden= True)
+    await owner.send(f"{user.name}#{user.discriminator} (ID: {user.id}) has been bot-unbanned.")
+  else:
+    await ctx.respond("The user is not banned.", hidden= True)
 
 @bot_.command()
 @commands.is_owner()
@@ -268,7 +282,7 @@ async def nick(ctx, *, new_nick):
     await ctx.reply("Unable to change nickname.")
 
 @bot_.command()
-async def botpurge(ctx, *, num : int = 1):
+async def botpurge(ctx, *, num: int = 1):
   try:
     await ctx.message.delete()
   except discord.Forbidden:
@@ -284,6 +298,14 @@ async def botpurge(ctx, *, num : int = 1):
     await ctx.send("Bot purging completed.", delete_after = 5)
   else:
     await ctx.send("You don't have the required permission: Manage messages.")
+
+@bu.slash.command(name="ping", description="Views the response time and latency of the bot.")
+async def ping_(ctx):
+  now1 = datetime.now(timezone.utc)
+  message = await ctx.respond("Pong!")
+  response_time = datetime.now(timezone.utc) - now1
+  mcs = str(int(response_time.microseconds)+int((response_time.total_seconds())%60))
+  await message.edit(content=f"Pong! 🏓\n```Message delay: {mcs:<10}microseconds\nBot latency  : {round(bot_.latency*1000000, 2):<10}microseconds```")
 
 @bot_.command(aliases=["online"])
 async def ping(ctx, *, disposed= None):
@@ -448,11 +470,13 @@ async def on_voice_state_update(member, before, after):
 
 @bot_.event
 async def on_ready():
+  global owner
   activity = discord.Activity(
     type=discord.ActivityType.playing,
     name=f"with =help in {len(bot_.guilds)} servers", timestamps = db["status_timestamps"])
   await bot_.change_presence(status= discord.Status.idle, activity= activity)
-  print(f"Bot is ready!\n")
+  print(f"Bot is ready!")
+  owner = bot_.get_user(687474789342117900)
 
 print("Bot is getting started…")
 try:

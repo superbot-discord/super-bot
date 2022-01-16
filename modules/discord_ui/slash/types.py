@@ -486,7 +486,7 @@ class SlashPermission():
             elif isinstance(allowed, list):
                 for t in allowed:
                     self._json.append({
-                        "id": t.id,
+                        "id": (t if isinstance(t, int) else t.id),
                         "type": SlashPermission.USER if isinstance(t, (discord.User, discord.Member)) else SlashPermission.ROLE,
                         "permission": True
                     })

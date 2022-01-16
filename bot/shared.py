@@ -38,7 +38,7 @@ import discord_ui as ui
 bot_ = commands.Bot(command_prefix=commands.when_mentioned_or("="),intents=discord.Intents.all(),
                     allowed_mentions=discord.AllowedMentions(everyone=False, users=True,
                     roles=False, replied_user=False), case_insensitive=True, strip_after_prefix=True)
-ui_ = ui.UI(bot_)
+bu = ui.UI(bot_)
 
 f = open('./assets/database.json', 'r')
 db = json.loads(f.read())

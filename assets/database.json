@@ -1,4 +1,8 @@
 {
+  "botadmins": [
+    687474789342117900,
+    752335217339007067
+  ],
   "fakemsg_size":{
     "mobile" : 900,
     "tablet" : 1800,
@@ -63,10 +67,6 @@
   "status_timestamps" : {
     "start":1610000820
   },
-  "botadmins": [
-    687474789342117900,
-    752335217339007067
-  ],
   "getrole_bypass_ids": [
     "LSC Bots Python & JS Professor",
     890238783306477600,
