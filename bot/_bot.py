@@ -21,7 +21,6 @@ bot_.load_extension("led")
 bot_.load_extension("moderate")
 bot_.load_extension("partners")
 bot_.load_extension("plot")
-bot_.load_extension("statuscode")
 bot_.load_extension("text")
 bot_.load_extension("webinfo")
 bot_.load_extension("webscrape")
@@ -54,9 +53,12 @@ async def snipe_update(ctx: ui.ButtonInteraction, msg: discord.Message, number: 
   sniperdict[msg][0] = number
   embed = discord.Embed(title= f"Snipped message ({number}/{len(sniper[msg.channel])})", description= sniper[msg.channel][number-1][0])
   embed.set_footer(text= sniper[msg.channel][number-1][1])
-  await msg.edit((msg.content if msg.content else "a"), embed= embed, components= snipe_buttons)
+  await msg.edit((msg.content if msg.content else ""), embed= embed, components= snipe_buttons)
 
 class SnipeL(ui.listener.Listener):
+  def __init__(self, user_id: int):
+    self.target_users = [user_id]
+
   @ui.Listener.button(custom_id= "Snipe1")
   async def snipe1(self_, ctx: ui.ButtonInteraction):
     await snipe_update(ctx, ctx.message, 1)
@@ -105,9 +107,9 @@ async def snipe(ctx, *, text= None):
         embed = discord.Embed(title= f"Snipped message (1/{len(sniper[chnl])})", description= sniper[chnl][0][0])
         embed.set_footer(text= sniper[chnl][0][1])
       if chance(1000):
-        msg = await ctx.reply("Did someone just ghostping you?", embed= embed, components= snipe_buttons, listener= SnipeL())
+        msg = await ctx.reply("Did someone just ghostping you?", embed= embed, components= snipe_buttons, listener= SnipeL(ctx.author.id))
       else:
-        msg = await ctx.reply(embed= embed, components= snipe_buttons, listener= SnipeL())
+        msg = await ctx.reply(embed= embed, components= snipe_buttons, listener= SnipeL(ctx.author.id))
       sniperdict[msg] = [1, len(sniper[chnl])]
     else:
       await ctx.reply("Snipping is disabled. Please ask someone with manage messages permission to re-enable it.")
@@ -135,9 +137,9 @@ async def snipe(ctx: ui.SlashInteraction):
       embed.set_footer(text= sniper[chnl][0][1])
     if chance(1000):
       msg = await ctx.respond("Did someone just ghostping you?", embed= embed, components=
-                              snipe_buttons, listener= SnipeL(target_users= [ctx.author]))
+                              snipe_buttons, listener= SnipeL(ctx.author.id))
     else:
-      msg = await ctx.respond(embed= embed, components= snipe_buttons, listener= SnipeL())
+      msg = await ctx.respond(embed= embed, components= snipe_buttons, listener= SnipeL(ctx.author.id))
     sniperdict[msg] = [1, len(sniper[chnl])]
   else:
     await ctx.respond("Snipping is disabled. Please ask someone with manage messages permission to re-enable it.")
@@ -152,18 +154,17 @@ async def snipe_toggle(ctx: ui.SlashInteraction, toggle= None):
   sniping[chnl] = toggle
   await ctx.respond(f"Sniping is now {'enabled' if toggle else 'disabled'}.")
 
-@bot_.event
-async def on_message_delete(message):
-  keyname = f"{message.guild.id}{message.channel.id}"
-  val = message.content
-  if not val.replace(" ",""):
-    return
-  footer = f"""By {message.author.name}#{message.author.discriminator} at {time_display(message.created_at)}
-   • Note: the most recently deleted message is stored as the first one."""
-  if not sniper.get(message.channel):
-    sniper[message.channel] = []
-  sniper[message.channel].insert(0, [val, footer])
-  sniper[message.channel] = sniper[message.channel][:8]
+@ui_.slash.command(name="snipe_clear", description="Clears the snipe database for a channel.",
+                   options=[ui.SlashOption(name= "Channel", type= discord.TextChannel, description=
+                   "The channel to clear the database of. Defaults to the current channel.",
+                   channel_types= [discord.ChannelType.text])])
+async def clearsnipe_(ctx: ui.SlashInteraction, channel: discord.TextChannel = None):
+  channel = ctx.channel if not channel else channel
+  if channel.permissions_for(ctx.author).manage_channels or botadmin(ctx):
+    sniper[channel] = []
+    await ctx.respond(f"Cleared snipe database for {channel.mention}.")
+  else:
+    await ctx.respond("You don't have the required permission: Manage channels.")
 
 @bot_.command()
 async def clearsnipe(ctx, *, chnl: discord.TextChannel = None):
@@ -179,7 +180,118 @@ async def clearsnipe(ctx, *, chnl: discord.TextChannel = None):
 #async def sba_marks():
 #  sba_channel = bot_.get_channel(909445785509326859)
 #  await sba_channel.send(f"5m")
-#  i dont know you so well, your hearts been aching but i dont give a shit
+
+@bot_.command()
+async def poll(ctx, *, text):
+  options = []
+  reactions = []
+  textlist = text.split(" ")
+  ti = ""
+  desc = ""
+  poll_options_cache = {}
+  for x in textlist: # ([\w]+?)(:\w{2,32}:|[\uD800-\uDBFF])
+    match = poll_pattern.fullmatch(ems.decode(x))
+    if match:
+      optn = re.sub(poll_pattern, r'\1', ems.decode(x))
+      rect = re.sub(poll_pattern, r'\2', ems.decode(x))
+      desc = desc + f"{rect} {optn} (0)\n"
+      options.append(optn)
+      poll_options_cache[optn] = rect
+      reactions.append(ems.encode(rect))
+    else:
+      ti += f"{x} "
+  embed = discord.Embed(title = ti, description = ems.encode(desc))
+  poll = await ctx.send(embed=embed)
+  for x in reactions:
+    await poll.add_reaction(x)
+  polls.append(poll.id)
+  poll_options[poll.id] = poll_options_cache
+
+# @slash.command(name="poll", description="Starts a reaction-based poll in the channel.", options=[
+#   ui.SlashOption(name= "Option 1 Emoji", type= str, required= True, choices= emoji_options),
+#   ui.SlashOption(name= "Option 1", type= str, required= True),
+#   ui.SlashOption(name= "Option 2 Emoji", type= str, required= True, choices= emoji_options),
+#   ui.SlashOption(name= "Option 2", type= str, required= True)
+# ])
+# async def poll_(ctx, option_1_emoji, option_1, option_2_emoji, option_2):
+#   pass
+
+@bot_.command()
+@commands.is_owner()
+async def purgeserver(ctx, text, condition="True", *, disposed= None):
+  text = text.lower()
+  if text.startswith("role"):
+    all_objects = ctx.guild.roles
+    msg = await ctx.reply("Role purging started.")
+  elif text.startswith("emoji"):
+    all_objects = ctx.guild.emojis
+    msg = await ctx.reply("Emoji purging started.")
+  elif text.startswith("event"):
+    all_objects = ctx.guild.scheduled_events
+    msg = await ctx.reply("Event purging started.")
+  else:
+    await ctx.reply("Please use `role` or `emoji` to purge the respective items.")
+    return
+  for x in all_objects:
+    if eval(condition):
+      await x.delete()
+  await msg.edit(msg.content.replace("started.", "completed!"))
+
+@bot_.command()
+@commands.check(botadmin)
+async def botban(ctx, user : discord.User, *, text="No reason was provided"):
+  banned_ids.append(user.id)
+  banned_text.append(text)
+  await ctx.reply("Banned user from using the bot.")
+
+@bot_.command()
+@commands.check(botadmin)
+async def botunban(ctx, user : discord.User):
+  if user.id in banned_ids:
+    banned_text.remove(banned_text[banned_ids.index(user.id)])
+    banned_ids.remove(user.id)
+    await ctx.reply("Unbanned user from using the bot.")
+
+@bot_.command()
+@commands.is_owner()
+async def botadmin(ctx, user: discord.User):
+  db['botadmins'].append(user.id)
+  await ctx.reply("Added user as bot admin.")
+
+@bot_.command()
+@commands.is_owner()
+async def nick(ctx, *, new_nick):
+  try:
+    await ctx.guild.me.edit(nick=(None if new_nick == "clear" else new_nick))
+    await ctx.reply("Changed nickname.")
+  except discord.Forbidden:
+    await ctx.reply("Unable to change nickname.")
+
+@bot_.command()
+async def botpurge(ctx, *, num : int = 1):
+  try:
+    await ctx.message.delete()
+  except discord.Forbidden:
+    pass
+  if ctx.channel.permissions_for(ctx.author).manage_messages or botadmin(ctx):
+    purged = 0
+    async for x in ctx.channel.history(limit=1000):
+      if x.author.id == 796686363604680755:
+        await x.delete()
+        purged = purged + 1
+        if purged >= num:
+          break
+    await ctx.send("Bot purging completed.", delete_after = 5)
+  else:
+    await ctx.send("You don't have the required permission: Manage messages.")
+
+@bot_.command(aliases=["online"])
+async def ping(ctx, *, disposed= None):
+  now1 = datetime.now(timezone.utc)
+  message = await ctx.send("Pong!")
+  response_time = datetime.now(timezone.utc) - now1
+  mcs = str(int(response_time.microseconds)+int((response_time.total_seconds())%60))
+  await message.edit(content=f"Pong! 🏓\n```Message delay: {mcs:<10}microseconds\nBot latency  : {round(bot_.latency*1000000, 2):<10}microseconds```")
 
 @bot_.event
 async def on_command_error(ctx, error):
@@ -229,6 +341,19 @@ async def on_command_error(ctx, error):
     except discord.HTTPException:
       print(''.join(traceback.format_exception(type(error), error, error.__traceback__)))
       await ctx.reply(f"Sorry! An error occured. The error was too long but it had been shown to JohannLau#6541. If the error persists, Please kindly inform him about this issue.")
+
+@bot_.event
+async def on_message_delete(message):
+  keyname = f"{message.guild.id}{message.channel.id}"
+  val = message.content
+  if not val.replace(" ",""):
+    return
+  footer = f"""By {message.author.name}#{message.author.discriminator} at {time_display(message.created_at)}
+   • Note: the most recently deleted message is stored as the first one."""
+  if not sniper.get(message.channel):
+    sniper[message.channel] = []
+  sniper[message.channel].insert(0, [val, footer])
+  sniper[message.channel] = sniper[message.channel][:8]
 
 # @bot_.event
 # async def on_thread_update(before, after):
@@ -306,8 +431,8 @@ async def on_message(message):
     if message.guild.id == 852899227004305458 and message.author.id != 796686363604680755 and message.channel.id in [856053769149874196, 864757953121878026, 864754633910255646]:
       await message.add_reaction("<:UpArrowSquare:864762633194569728>")
       await message.add_reaction("<:DownArrowSquare:864762633625534485>")
-      #                         SuperBot #news      #new-features       #github             LSC Bots CraftBot   SuperBot            DolphinBot          WalkerBot           Waffles
-    elif message.channel.id in [805459414001778739, 805462208414089217, 880076327783370812, 888254659502936074, 888254911740018708, 888256046496382988, 888256348268138556, 890227476452753448]:
+      #                         SuperBot #news      #github             LSC Bots CraftBot   SuperBot            DolphinBot          WalkerBot           Waffles
+    elif message.channel.id in [931899053376163850, 931899079653470218, 888254659502936074, 888254911740018708, 888256046496382988, 888256348268138556, 890227476452753448]:
       await message.publish()
     if message.author.id not in banned_ids and message.content.startswith("==")==False:
       await bot_.process_commands(message)
@@ -321,118 +446,6 @@ async def on_voice_state_update(member, before, after):
   if member.id == 796686363604680755:
     pass
 
-@bot_.command()
-async def poll(ctx, *, text):
-  options = []
-  reactions = []
-  textlist = text.split(" ")
-  ti = ""
-  desc = ""
-  poll_options_cache = {}
-  for x in textlist: # ([\w]+?)(:\w{2,32}:|[\uD800-\uDBFF])
-    match = poll_pattern.fullmatch(ems.decode(x))
-    if match:
-      optn = re.sub(poll_pattern, r'\1', ems.decode(x))
-      rect = re.sub(poll_pattern, r'\2', ems.decode(x))
-      desc = desc + f"{rect} {optn} (0)\n"
-      options.append(optn)
-      poll_options_cache[optn] = rect
-      reactions.append(ems.encode(rect))
-    else:
-      ti += f"{x} "
-  embed = discord.Embed(title = ti, description = ems.encode(desc))
-  poll = await ctx.send(embed=embed)
-  for x in reactions:
-    await poll.add_reaction(x)
-  polls.append(poll.id)
-  poll_options[poll.id] = poll_options_cache
-
-# @slash.command(name="poll", description="Starts a reaction-based poll in the channel.", options=[
-#   ui.SlashOption(name= "Option 1 Emoji", type= str, required= True, choices= emoji_options),
-#   ui.SlashOption(name= "Option 1", type= str, required= True),
-#   ui.SlashOption(name= "Option 2 Emoji", type= str, required= True, choices= emoji_options),
-#   ui.SlashOption(name= "Option 2", type= str, required= True)
-# ])
-# async def poll_(ctx, option_1_emoji, option_1, option_2_emoji, option_2):
-#   pass
-
-@bot_.command()
-@commands.is_owner()
-async def purgeserver(ctx, text, condition="True", *, disposed= None):
-  text = text.lower()
-  if text.startswith("role"):
-    all_objects = ctx.guild.roles
-    msg = await ctx.reply("Role purging started.")
-  elif text.startswith("emoji"):
-    all_objects = ctx.guild.emojis
-    msg = await ctx.reply("Emoji purging started.")
-  elif text.startswith("event"):
-    all_objects = ctx.guild.scheduled_events
-    msg = await ctx.reply("Event purging started.")
-  else:
-    await ctx.reply("Please use `role` or `emoji` to purge the respective items.")
-    return
-  for x in all_objects:
-    if eval(condition):
-      await x.delete()
-  await msg.edit(msg.content.replace("started.", "completed!"))
-
-@bot_.command()
-@commands.check(botadmin)
-async def botban(ctx, user : discord.User, *, text="No reason was provided"):
-  banned_ids.append(user.id)
-  banned_text.append(text)
-  await ctx.reply("Banned user from using the bot.")
-
-@bot_.command()
-@commands.check(botadmin)
-async def botunban(ctx, user : discord.User):
-  if user.id in banned_ids:
-    banned_text.remove(banned_text[banned_ids.index(user.id)])
-    banned_ids.remove(user.id)
-    await ctx.reply("Unbanned user from using the bot.")
-
-# @bot_.command()
-# @commands.is_owner()
-# async def botadmin(ctx, user: discord.User):
-#   bot_admins.append(user.id)
-#   await ctx.reply("Added user as bot admin.")
-
-@bot_.command()
-@commands.is_owner()
-async def nick(ctx, *, new_nick):
-  try:
-    await ctx.guild.me.edit(nick=(None if new_nick == "clear" else new_nick))
-    await ctx.reply("Changed nickname.")
-  except discord.Forbidden:
-    await ctx.reply("Unable to change nickname.")
-
-@bot_.command()
-async def botpurge(ctx, *, num : int = 1):
-  try:
-    await ctx.message.delete()
-  except discord.Forbidden:
-    pass
-  if ctx.channel.permissions_for(ctx.author).manage_messages or botadmin(ctx):
-    purged = 0
-    async for x in ctx.channel.history(limit=1000):
-      if x.author.id == 796686363604680755:
-        await x.delete()
-        purged = purged + 1
-        if purged >= num:
-          break
-    await ctx.send("Bot purging completed.", delete_after = 5)
-  else:
-    await ctx.send("You don't have the required permission: Manage messages.")
-
-@bot_.command(aliases=["online"])
-async def ping(ctx, *, disposed= None):
-  now1 = datetime.now(timezone.utc)
-  message = await ctx.send("Pong!")
-  response_time = datetime.now(timezone.utc) - now1
-  mcs = str(int(response_time.microseconds)+int((response_time.total_seconds())%60))
-  await message.edit(content=f"Pong! 🏓\n```Message delay: {mcs:<10}microseconds\nBot latency  : {round(bot_.latency*1000000, 2):<10}microseconds```")
-
 @bot_.event
 async def on_ready():
   activity = discord.Activity(
@@ -440,8 +453,6 @@ async def on_ready():
     name=f"with =help in {len(bot_.guilds)} servers", timestamps = db["status_timestamps"])
   await bot_.change_presence(status= discord.Status.idle, activity= activity)
   print(f"Bot is ready!\n")
-
-
 
 print("Bot is getting started…")
 try:

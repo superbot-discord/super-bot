@@ -149,23 +149,6 @@ help_info = discord.Embed(title="SuperBot Information Commands", description=f""
 Need help? check the [documentation](https://superbot-discord.github.io/documentation)!
 """)
 
-craftbot_embed = discord.Embed(title= "CraftBot", description= f"""
-CraftBot is a fun-oriented bot developed by me (Johann, developer of SuperBot) and Murvon (my real-life friend).
-Its commands are highly related to Minecraft; though non-players will be entertained by the bot as well.
-The most important fact is that it does not have "votewalls" (vote-for-rewards) or excessive "paywalls" (pay-for-features).
-Note: The button allows you to invite CraftBot without opening a browser.
-""".replace(f"\n", " "))
-
-def craftbot_buttons(ctx):
-  return ui.LinkButton(label= "Invite!", url= "https://discord.com/api/oauth2/authorize?client_id=814444200946434069&permissions=909631057&scope=bot", emoji=ctx.bot.get_emoji(891265683801923604))
-
-partners_embed = discord.Embed(title= "SuperBot Partners")
-partners_embed.add_field(name= "CraftBot", value= "Minecraft-oriented bot with rock-paper-scissors and a lyrics index.", inline= False)
-def partners_buttons(ctx):
-  return [
-    ui.LinkButton(label= "CraftBot", url= "https://discord.com/api/oauth2/authorize?client_id=814444200946434069&permissions=909631057&scope=bot", emoji=ctx.bot.get_emoji(891265683801923604))
-  ]
-
 support_embed = discord.Embed(title= "Support", description= f"""If you need support, please kindly 
 join the support server or directly contact JohannLau#6541. Here are some links you might find useful:
 """.replace(f"\n", " "))

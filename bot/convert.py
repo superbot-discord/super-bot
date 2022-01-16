@@ -28,7 +28,7 @@ async def convert(ctx, num: typing.Optional[int] = 1, unit : str = "m"):
   await ctx.reply(embed=embed)
 
 @commands.command()
-async def exchange(ctx, currency:exchange_currencies="USD", amount:int=1, *, disposed=None):
+async def exchange(ctx, currency:exchange_currencies="USD", amount:int=1, *, disposed= None):
   r=requests.get(f"https://api.exchangerate.host/latest?base={currency}&amount={amount}").json()['rates']
   desc = ""
   for x, y in r.items():

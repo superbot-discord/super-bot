@@ -5,7 +5,6 @@ import hashlib
 import bitarray
 import emojis as em
 import huffman
-import pytz
 from spellwise import Typox
 from unicode_charnames import charname, codepoint, search_charnames
 

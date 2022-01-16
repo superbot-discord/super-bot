@@ -16,7 +16,6 @@ import matplotlib as mpl
 import matplotlib.gridspec as gridspec
 import matplotlib.pyplot as plt
 import numpy as np
-import pytz
 import selenium
 from bs4 import BeautifulSoup
 from markdown2 import Markdown
@@ -60,7 +59,7 @@ kpEbHRwYmU1YkpILXl6Tmx5RDI5RnJueDN4czRkdXliUzNFd2FUZw==; SIDCC=AJi4QfF-hT3IbtAsS
 Sv4jI-xcXxr8GtSt2loCC7scCGMS; PREF=f4=4000000&tz=Asia.Hong_Kong""".replace(f"\n", "")}
 
 func            =lambda pct,allvals: "{:d} ({:.1f}%)".format(int(pct/100*np.sum(allvals)), round(pct, 1))
-botadmin        =lambda context    : context.author.id in db["botadmins"]
+botadmin        =lambda context    : context.author.id in db['botadmins']
 number_to_emoji =lambda a          : a.replace("1",":one: ").replace("2",":two: ").replace("3",":three: ").replace("4",":four: ").replace("5",":five: ").replace("6",":six: ").replace("7",":seven: ").replace("8",":eight: ").replace("9",":nine: ").replace("0",":zero: ")
 sizer           =lambda bytes      : f"{round(bytes,4):,} Bytes" if bytes<1024 else (f"{round(bytes/1024,4):,}KB" if bytes<1048576 else (f"{round(bytes/1048576,4):,}MB" if bytes<1073741824 else f"{round(bytes/1073741824,4):,}GB"))
 sizer2          =lambda bytes      : f"{str(round(bytes,4)).zfill(9)} Bytes" if bytes<1024 else (f"{str(round(bytes/1024,4)).zfill(9)}KB" if bytes<1048576 else (f"{str(round(bytes/1048576,4)).zfill(9)}MB" if bytes<1073741824 else f"{round(bytes/1073741824,4):,}GB"))
@@ -74,7 +73,7 @@ chance          =lambda ratio      : ra.randint(1, ratio) == ratio
 unix_timestamp  =lambda dt,flag="F": f"<t:{round(datetime.timestamp(dt))}:{flag}>"
 time_display    =lambda dt         : dt.strftime("%A, %d %b %Y, %H:%M:%S")
 st_nd_th_format =lambda n          : "st" if str(n).endswith("1") and not str(n).endswith("11") else ("th" if str(n).endswith("2") and not str(n).endswith("12") else "nd")
-perm_display    =lambda integer, x : "<:pt:931052297117659156><:px:912206780015190038> " if integer & (1 << x) else "<:px:912206780015190038><:pf:931052297134407741> "
+perm_display    =lambda integer, x : "<:pt:932171999936135168><:tr:932189462648209468> " if integer & (1 << x) else "<:px:912206780015190038><:tr:932189462648209468> "
 permission_messages={}
 
 forecast_formatter = """

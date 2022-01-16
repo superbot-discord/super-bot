@@ -23,7 +23,7 @@ gmb_routes_KLN = requests.get("https://data.etagmb.gov.hk/route/KLN/").json()['d
 gmb_routes_NT  = requests.get("https://data.etagmb.gov.hk/route/NT/").json()['data']['routes']
 
 @commands.command()
-async def hk_aqi(ctx, *, disposed=None):
+async def hk_aqi(ctx, *, disposed= None):
   await ctx.channel.trigger_typing()
   r1=requests.get("https://ogciopsi.blob.core.windows.net/dataset/aqhi/aqhi.json").json()
   r2=requests.get("https://ogciopsi.blob.core.windows.net/dataset/aqhi/aqhi-forecast.json").json()
@@ -39,7 +39,7 @@ async def hk_aqi(ctx, *, disposed=None):
   await ctx.reply(embed=embed)
 
 @commands.command()
-async def hk_ferry_1(ctx, *, disposed=None):
+async def hk_ferry_1(ctx, *, disposed= None):
   await ctx.channel.trigger_typing()
   r1=requests.get("https://www.hongkongwatertaxi.com.hk/eta/?route=HHCL").json()['data'][0]
   r2=requests.get("https://www.hongkongwatertaxi.com.hk/eta/?route=CLHH").json()['data'][0]
@@ -49,7 +49,7 @@ async def hk_ferry_1(ctx, *, disposed=None):
   await ctx.reply(embed=embed)
 
 @commands.command()
-async def hk_forecast(ctx, *, disposed=None):
+async def hk_forecast(ctx, *, disposed= None):
   await ctx.channel.trigger_typing()
   r1=requests.get("https://data.weather.gov.hk/weatherAPI/opendata/weather.php?dataType=fnd&lang=en").json()
   r2=requests.get("https://data.weather.gov.hk/weatherAPI/opendata/weather.php?dataType=fnd&lang=tc").json()
@@ -138,7 +138,7 @@ async def hk_kmb(ctx, line):
       await ctx.reply(embed=embed)
 
 @commands.command()
-async def hk_lightning(ctx, *, disposed=None):
+async def hk_lightning(ctx, *, disposed= None):
   await ctx.channel.trigger_typing()
   r1=requests.get("https://data.weather.gov.hk/weatherAPI/opendata/opendata.php?dataType=LHL&lang=en&rformat=csv")
   r2=requests.get("https://data.weather.gov.hk/weatherAPI/opendata/opendata.php?dataType=LHL&lang=tc&rformat=csv")
@@ -154,7 +154,7 @@ async def hk_lightning(ctx, *, disposed=None):
   await ctx.reply(embed=embed)
 
 @commands.command()
-async def hk_lr(ctx, station : int):
+async def hk_lr(ctx, station: int):
   if station not in db["mtr"]["lr_stations"]:
     await ctx.reply(f"Please supply a 1~3-digit station code! Available codes are `{'` `'.join(db['mtr']['stations'])}`")
     return
@@ -164,7 +164,7 @@ async def hk_lr(ctx, station : int):
     desc = ""
     if p.get('route_list', None):
       for t in p['route_list']:
-        desc += f"""<:Train1:912268792808243200>{'<:Transparent:912206780015190038>'if t['train_length']==1 else'<:Train2:912268792908890132>'}**{t['route_no']}** to {t['dest_en']} ({t['dest_ch']}) {db['mtr']['lr_status'][t['arrival_departure']]} {f"in {t['time_en']}" if t['time_en'][0].isdigit() else f"({t['time_en']})"}\n"""
+        desc += f"""<:t1:932189099723460608>{'<:tr:932189462648209468>'if t['train_length']==1 else'<:t2:932189099752841246>'}**{t['route_no']}** to {t['dest_en']} ({t['dest_ch']}) {db['mtr']['lr_status'][t['arrival_departure']]} {f"in {t['time_en']}" if t['time_en'][0].isdigit() else f"({t['time_en']})"}\n"""
       embed.add_field(name=f"Platform {p['platform_id']}", value=desc, inline= False)
   if len(embed.fields):
     await ctx.reply(embed=embed)
@@ -172,7 +172,7 @@ async def hk_lr(ctx, station : int):
     await ctx.reply("No information could be fetched.")
 
 @commands.command()
-async def hk_moon(ctx, *, disposed=None):
+async def hk_moon(ctx, *, disposed= None):
   await ctx.channel.trigger_typing()
   r=requests.get(f"https://data.weather.gov.hk/weatherAPI/opendata/opendata.php?dataType=MRS&year=2021&rformat=csv")
   sun =r.content.decode("utf-8")[1:-1]
@@ -239,7 +239,7 @@ async def hk_nwfb(ctx, line):
   await ctx.reply(embed=embed)
 
 @commands.command()
-async def hk_sea_pressure(ctx, *, disposed=None):
+async def hk_sea_pressure(ctx, *, disposed= None):
   await ctx.channel.trigger_typing()
   r=requests.get("https://data.weather.gov.hk/weatherAPI/hko_data/regional-weather/latest_1min_pressure.csv")
   r1=requests.get("https://data.weather.gov.hk/weatherAPI/hko_data/regional-weather/latest_1min_pressure_uc.csv")
@@ -255,7 +255,7 @@ async def hk_sea_pressure(ctx, *, disposed=None):
   await ctx.reply(embed=embed)
 
 @commands.command()
-async def hk_sun(ctx, *, disposed=None):
+async def hk_sun(ctx, *, disposed= None):
   await ctx.channel.trigger_typing()
   r=requests.get(f"https://data.weather.gov.hk/weatherAPI/opendata/opendata.php?dataType=SRS&year=2021&rformat=csv")
   sun =r.content.decode("utf-8")[1:-1]
@@ -295,7 +295,7 @@ async def hk_sun(ctx, *, disposed=None):
   await ctx.reply(files=[discord.File("sun.png"), discord.File("sun.svg")])
 
 @commands.command()
-async def hk_tide(ctx, *, disposed=None):
+async def hk_tide(ctx, *, disposed= None):
   await ctx.channel.trigger_typing()
   r=requests.get("https://data.weather.gov.hk/weatherAPI/hko_data/tide/ALL_en.csv")
   tide=r.content.decode("utf-8")[1:]
@@ -307,7 +307,7 @@ async def hk_tide(ctx, *, disposed=None):
   await ctx.reply(embed=embed)
 
 @commands.command()
-async def hk_visibility(ctx, *, disposed=None):
+async def hk_visibility(ctx, *, disposed= None):
   await ctx.channel.trigger_typing()
   r=requests.get("https://data.weather.gov.hk/weatherAPI/opendata/opendata.php?dataType=LTMV&lang=en&rformat=csv")
   visibility=r.content.decode("utf-8")[1:-1]
@@ -319,7 +319,7 @@ async def hk_visibility(ctx, *, disposed=None):
   await ctx.reply(embed=embed)
 
 @commands.command()
-async def hk_weather(ctx, *, disposed=None):
+async def hk_weather(ctx, *, disposed= None):
   await ctx.channel.trigger_typing()
   r1=requests.get("https://data.weather.gov.hk/weatherAPI/opendata/weather.php?dataType=rhrread&lang=en").json()
   r2=requests.get("https://data.weather.gov.hk/weatherAPI/opendata/weather.php?dataType=rhrread&lang=tc").json()
@@ -355,7 +355,7 @@ async def hk_weather(ctx, *, disposed=None):
   await ctx.reply(embed=embed)
 
 @commands.command()
-async def hk_wind(ctx, *, disposed=None):
+async def hk_wind(ctx, *, disposed= None):
   await ctx.channel.trigger_typing()
   r=requests.get("https://data.weather.gov.hk/weatherAPI/hko_data/regional-weather/latest_10min_wind.csv")
   wind=r.content.decode("utf-8")[:-1]

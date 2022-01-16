@@ -1,6 +1,7 @@
 import aiohttp
-from nextcord import Webhook
 from shared import *
+sys.path.append(os.path.abspath('./modules'))
+from nextcord import Webhook
 
 @commands.command()
 async def editembed(ctx, message : discord.Message = None, *,text):
