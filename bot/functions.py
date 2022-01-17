@@ -17,6 +17,15 @@ def many_replace(text: str, replacer: dict[str: str]):
     text = text.replace(x, y)
   return text
 
+def x_fill(text: str, char: str, chars: int):
+  """
+  Pads a character to a ``str`` until it reaches a length.
+  ```
+  x_fill("123", "$", 7) # Returns "$$$$123"
+  ```
+  """
+  return max(chars - len(text), 0) * char + text
+
 def test_for(text: str, min_ratio: typing.Union[float, int], *choices: list[str]):
   choices = [choices[0]] if len(choices) == 1 else list(choices)
   raw_tested = {x:SequenceMatcher(None, x, text).ratio() for x in choices}

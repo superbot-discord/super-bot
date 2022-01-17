@@ -33,7 +33,7 @@ Add `_fact` to each of the 11 animal commands above (e.g. `bird_fact`) to get a 
 `analyse` `histogram` `resize` `rotate` `brightness` `contrast` `sharpen` `edge` `contour` `blur` `invert` `hue` `recolor`
 To use the 13 commands above, type `=image ` first, then upload an image. Example: `=image analyse`. Supply a user name to work on his avatar, e.g. `=image SuperBot#4073 analyse`
 `render` `lcd` `led` `led2` `led3` `led4` `led_bar` `ocr` `qr` `qrmake` `transparent` `text`\n
-`hello` leads you to death\nNeed help? check the [documentation](https://superbot-discord.vercel.com/Documentation)!""")
+`hello` leads you to death\nNeed help? check the [documentation](https://superbot-website.vercel.app/Documentation)!""")
 
 def help_menu_options(ctx):
   return [
@@ -59,7 +59,7 @@ help_basic = discord.Embed(title="SuperBot Basic Commands", description=f"""
 **prefix** Views the prefix of the bot (`=`).
 **ping** Checks whether the bot is online and shows the latency.
 **botpurge [Number]** Purges messages sent by the bot. Requires `Manage Messages`.
-\nNeed help? check the [documentation](https://superbot-discord.github.io/documentation)!""")
+\nNeed help? check the [documentation](https://superbot-wevsite.vercel.app/Documentation/)!""")
 
 help_dinfo = discord.Embed(title="SuperBot Discord Information Commands", description=f"""
 **Discord Information Commands**
@@ -79,7 +79,7 @@ help_dinfo = discord.Embed(title="SuperBot Discord Information Commands", descri
 **emojiinfo** Views information about an emoji.
 **template** Views information about a server template.\n
 You need to supply arguments for most commands.
-Need help? check the [documentation](https://superbot-discord.github.io/documentation)!""")
+Need help? check the [documentation](https://superbot-wevsite.vercel.app/Documentation/)!""")
 
 help_discord = discord.Embed(title="SuperBot Discord Commands", description=f"""
 **react [Message] [Emoji ID]** Temporarily reacts with an emoji. Replaces Nitro.
@@ -95,7 +95,7 @@ help_discord = discord.Embed(title="SuperBot Discord Commands", description=f"""
 **ett [Message]** Converts an embed into `=embed`-compatible format.
 **tts [Content]** Sends a message with TTS. Bot and you need `Send TTS Messages`.\n
 Check [how to supply embeds](https://superbot-discord.github.io/Appendices/A1/). `=pretendembed` and `=editembed` takes the same arguments as `=embed`.
-Need help? check the [documentation](https://superbot-discord.github.io/documentation)!""")
+Need help? check the [documentation](https://superbot-wevsite.vercel.app/Documentation/)!""")
 
 help_mod = discord.Embed(title="SuperBot Moderation Commands", description=f"""
 **kick [User] {{Reason}}** Kicks a user. Bot and you need `Kick members`.
@@ -110,7 +110,7 @@ help_mod = discord.Embed(title="SuperBot Moderation Commands", description=f"""
 **purgereactions [No.]** Purges all reactions from [No.] of the most recent messages.¹
 **makeinvite [Valid duration (secs)] {{Max. uses}}** Creates an invite link with a maximum number of uses (default: infinity). Bot and you need `Create invites`.\n
 1: Bot and you need `Manage messages`.
-Need help? check the [documentation](https://superbot-discord.github.io/documentation)!
+Need help? check the [documentation](https://superbot-wevsite.vercel.app/Documentation/)!
 """)
 
 help_text = discord.Embed(title="SuperBot Text Commands", description=f"""
@@ -127,7 +127,7 @@ help_text = discord.Embed(title="SuperBot Text Commands", description=f"""
 **length [Text]** Calculates the length of the text and analyses the most frequent characters.
 **spellcheck [Word]** Spellchecks a word based on the QWERTY keyboard layout. 
 **case [Text]** Converts the case (capitalization) of the text.
-Need help? check the [documentation](https://superbot-discord.github.io/documentation)!
+Need help? check the [documentation](https://superbot-wevsite.vercel.app/Documentation/)!
 """)
 
 help_info = discord.Embed(title="SuperBot Information Commands", description=f"""
@@ -146,7 +146,7 @@ help_info = discord.Embed(title="SuperBot Information Commands", description=f""
 **choice [Choices]** Draws an option out of choices. Example: `=choice Apple Banana Cherry`
 **raffle [L] [H] [T]** Draws [T] random integer(s) betwene [L] and [H] in spoilers.
 **pick [L] [H] [T]** Same as `=raffle`, but integers do not repeat.
-Need help? check the [documentation](https://superbot-discord.github.io/documentation)!
+Need help? check the [documentation](https://superbot-wevsite.vercel.app/Documentation/)!
 """)
 
 support_embed = discord.Embed(title= "Support", description= f"""If you need support, please kindly 
@@ -155,8 +155,8 @@ join the support server or directly contact JohannLau#6541. Here are some links 
 
 support_buttons = [
   ui.LinkButton(label= "Support server", url= "https://discord.gg/RtRttctJYq"),
-  ui.LinkButton(label= "Website", url= "https://superbot-website.vercel.com"),
-  ui.LinkButton(label= "Documentation", url= "https://superbot-website.vercel.com/Documentation"),
+  ui.LinkButton(label= "Website", url= "https://superbot-website.vercel.app"),
+  ui.LinkButton(label= "Documentation", url= "https://superbot-website.vercel.app/Documentation"),
 ]
 
 @commands.command()

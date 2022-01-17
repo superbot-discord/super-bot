@@ -9,6 +9,7 @@ from spellwise import Typox
 from unicode_charnames import charname, codepoint, search_charnames
 
 from shared import *
+from functions import *
 
 spell_checker = Typox()
 spell_checker.add_from_path("fonts/dictionary.txt")
@@ -23,12 +24,11 @@ async def case(ctx, *, text):
   try_delete('output.txt')
 
 @commands.command()
-async def choice(ctx,*options):
-  ti="Random choice"
-  rand=ra.choice(options)
-  desc="Your random option is "+rand
-  embed=discord.Embed(title=ti, description=desc)
-  await ctx.reply(embed=embed)
+async def choice(ctx, *options): # T
+  rand = ra.choice(options)
+  desc = f"Your random option is {rand}"
+  embed = discord.Embed(title= "Random choice", description= desc)
+  await ctx.reply(embed= embed)
 
 @commands.command()
 async def compress(ctx, *, text):
@@ -213,25 +213,24 @@ async def length(ctx, *, text):
   try_delete('analysis.txt')
 
 @commands.command()
-async def pick(ctx, lower:int, upper:int, times:int):
-  ti=f"{times} random number(s) between {lower} and {upper}"
-  desc=f"Your random number(s) is/are:\n"
+async def pick(ctx, lower: int, upper: int, times: int): # MS
+  desc = ""
   if lower > upper:
     lower, upper = upper, lower
   upper_length = len(str(upper))
-  if times <= (upper-lower+1):
-    rand = list(range(lower, upper+1))
+  if times <= (upper - lower + 1):
+    rand = list(range(lower, upper + 1))
     ra.shuffle(rand)
-    for x,y in zip(range(times), rand):
+    for x, y in zip(range(times), rand):
       desc += f"||`{str(y).zfill(upper_length)}`||  "
   else:
     for x in range(times):
       desc += f"||`{str(ra.randint(lower,upper)).zfill(upper_length)}`||  "
-  embed=discord.Embed(title=ti, description=desc)
-  await ctx.reply(embed=embed)
+  embed=discord.Embed(title= f"{times} random number(s) between {lower} and {upper}", description= desc)
+  await ctx.reply(embed= embed)
 
 @commands.command()
-async def quantum_random(ctx, size:typing.Literal['256', '65536']='256', amount:int = 1):
+async def quantum_random(ctx, size: typing.Literal['256', '65536'] = '256', amount: int = 1):
   api_size = {'256':8, '65536':16}[size]
   r=requests.get(f"https://qrng.anu.edu.au/API/jsonI.php?length={amount}&type=uint{api_size}").json()['data']
   r=[str(x) for x in r]
@@ -239,21 +238,93 @@ async def quantum_random(ctx, size:typing.Literal['256', '65536']='256', amount:
   embed=discord.Embed(title=f"{amount} random number(s) between 0 and {int(size)-1}", description=desc)
   await ctx.reply(embed=embed)
 
-@commands.command()
-async def random(ctx,lower:int,upper:int):
-  rand=str(ra.randint(lower,upper))
-  desc="Your random number is {rand}"
-  embed=discord.Embed(title=f"Random number between {lower} and {upper}", description=desc)
-  await ctx.reply(embed=embed)
+# NON-QUANTUM RANDOM
+# 7/12 migrated
+# M: Multiple values   R: Can repeat   S: Spoilers   T: Text choices
+#    One value            Cannot repeat   Unformatted   Integral choice(s)
+# =random{_{m{r}}{s}{t}}
 
 @commands.command()
-async def raffle(ctx,lower:int,upper:int,amount:int):
-  desc=f"Your random number(s) is/are:\n"
+async def random(ctx, lower: int, upper: int):
+  await ctx.reply(f"Your random number is {ra.randint(lower,upper)}")
+
+@commands.command()
+async def random_m(ctx, times: int, lower: int, upper: int):
+  if lower > upper:
+    lower, upper = upper, lower
+  if times <= (upper - lower + 1):
+    desc = ""
+    rand = list(range(lower, upper + 1))
+    ra.shuffle(rand)
+    for x, y in zip(range(times), rand):
+      desc += f"{y}, "
+  else:
+    desc = ", ".join(ra.sample(range(lower, upper + 1), times))
+  embed = discord.Embed(title= f"{times} random number(s) between {lower} and {upper}", description= desc)
+  await ctx.reply(embed= embed)
+
+@commands.command()
+async def random_s(ctx, lower: int, upper: int):
+  if lower > upper:
+    lower, upper = upper, lower
+  await ctx.reply(f"Your random number is ||`{x_fill(ra.randint(lower,upper), ' ', len(str(upper)))}`||.")
+
+@commands.command()
+async def random_t(ctx, *options):
+  await ctx.reply(f"Your random choice is {ra.choice(options)}")
+
+@commands.command()
+async def random_mr(ctx, times: int, lower: int, upper: int):
+  desc = ""
+  if lower > upper:
+    lower, upper = upper, lower
+  zfill_length = len(str(upper))
+  for x in range(times):
+    desc += f"{ra.randint(lower,upper)}, "
+  embed = discord.Embed(title= f"{times} random number(s) between {lower} and {upper}", description= desc)
+  await ctx.reply(embed= embed)
+
+@commands.command()
+async def random_ms(ctx, times: int, lower: int, upper: int):
+  desc = ""
+  if lower > upper:
+    lower, upper = upper, lower
+  upper_length = len(str(upper))
+  if times <= (upper - lower + 1):
+    rand = list(range(lower, upper + 1))
+    ra.shuffle(rand)
+    for x, y in zip(range(times), rand):
+      desc += f"||`{str(y).zfill(upper_length)}`||  "
+  else:
+    for x in range(times):
+      desc += f"||`{str(ra.randint(lower,upper)).zfill(upper_length)}`||  "
+  embed=discord.Embed(title=f"{times} random number(s) between {lower} and {upper}", description= desc)
+  await ctx.reply(embed= embed)
+
+@commands.command()
+async def random_mt(ctx, times: int, *options):
+  options = list(options) if isinstance(options, tuple) else [options]
+  if times <= (len(options)):
+    desc = ""
+    ra.shuffle(options)
+    for x, y in zip(range(times), options):
+      desc += f"{y}, "
+  else:
+    desc = ", ".join(ra.sample(options, times))
+  embed = discord.Embed(title= f"{times} random choice(s)", description= desc)
+  await ctx.reply(embed= embed)
+
+@commands.command()
+async def raffle(ctx,lower: int, upper: int, amount: int): # MRS
+  desc = ""
+  if lower > upper:
+    lower, upper = upper, lower
+  upper_length = len(str(upper))
   for x in range(amount):
-    rand=ra.randint(lower,upper)
-    desc += f"||`{str(rand).zfill(len(str(upper)))}`||  "
-  embed=discord.Embed(title=f"{amount} random number(s) between {lower} and {upper}", description=desc)
-  await ctx.reply(embed=embed)
+    rand = ra.randint(lower,upper)
+    desc += f"||`{str(rand).zfill(upper_length)}`||  "
+  embed=discord.Embed(title= f"{amount} random number(s) between {lower} and {upper}", description= desc)
+  await ctx.reply(embed= embed)
 
 @commands.command()
 async def rawspoiler(ctx, *, text):
@@ -332,7 +403,7 @@ async def rtimer(ctx, timetocount, *, Text = None):
     await message.reply(f"Countdown complete!\n"+Text)
 
 @commands.command()
-async def spellcheck(ctx, text, distance : typing.Optional[int] = 3, *, disposed= None):
+async def spellcheck(ctx, text, distance: typing.Optional[int] = 3, *, disposed= None):
   results = spell_checker.get_suggestions(text, max_distance = distance)
   desc = f"QWERTY-spellchecking results for {text}"
   distances = {x["distance"] for x in results}
@@ -351,7 +422,7 @@ async def spoiler(ctx, *, text):
   await ctx.reply(f"||{text}||")
 
 @commands.command(aliases=['antispoiler', 'antispoilers', 'aspoiler', 'aspoilers', 'spoils'])
-async def spoil(ctx, msg : discord.Message = None, *, text="Reply to a message, add a message ID/link or add some text to remove the spoilers!"):
+async def spoil(ctx, msg: discord.Message = None, *, text="Reply to a message, add a message ID/link or add some text to remove the spoilers!"):
   potential_reference = ctx.message.reference
   if potential_reference and not msg:
     msg = await ctx.bot.get_channel(potential_reference.channel_id).fetch_message(potential_reference.message_id)
@@ -372,7 +443,7 @@ async def terminate(ctx, *, idc):
     await ctx.reply("Please provide an 5-alphabet ID code. Example: `ABCDE`")
 
 @commands.command()
-async def ttimer(ctx, timetocount, *, Text = None):
+async def ttimer(ctx, timetocount, *, Text= None):
   sec = int(timedelta(**{
     UNITS.get(m.group('unit').lower(), 'seconds'): int(m.group('val'))
     for m in re.finditer(r'(?P<val>\d+)(?P<unit>[smhdw]?)', timetocount, flags=re.I)
@@ -469,7 +540,7 @@ async def unicode(ctx, *query):
   try_delete("unicode.txt")
 
 @commands.command(aliases=["timestamp", "posix"])
-async def unix(ctx, *, text = "now"):
+async def unix(ctx, *, text= "now"):
   now = datetime.now(tz=timezone.utc)
   dateParts = {
     m[-1]: int(m[:-1]) for m in re.findall(r'([\d]{1,4}[yMdhms])', text)

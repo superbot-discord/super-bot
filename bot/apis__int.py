@@ -304,7 +304,7 @@ def botlizard(number):
 def botnasa():
   r = requests.get('https://apodapi.herokuapp.com/api').json()
   desc = f"**{r['title']}** by {r['copyright']}\n{r['hdurl']}\n\n{r['description']}"
-  return desc[:1023]
+  return desc[:1024]
 
 def botpanda(number):
   desc = ""

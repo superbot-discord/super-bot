@@ -95,7 +95,7 @@ class SnipeL(ui.listener.Listener):
   
   @ui.Listener.wrong_user()
   async def wrong_user(self, ctx):
-    await ctx.send("Please use `/snipe` on your own in order to browse snipped messages.")
+    await ctx.respond("Please use `/snipe` on your own in order to browse snipped messages.", hidden= True)
 
 
 @bu.slash.command(name="snipe", description="View up to 8 most recently deleted messages in this channel.")
@@ -162,7 +162,7 @@ async def snipe_toggle(ctx: ui.SlashInteraction, toggle= None):
                   options=[ui.SlashOption(name= "Channel", type= discord.TextChannel, description=
                   "The channel to clear the database of. Defaults to the current channel.",
                   channel_types= [discord.ChannelType.text])])
-async def clearsnipe_(ctx: ui.SlashInteraction, channel: discord.TextChannel = None):
+async def snipe_clear(ctx: ui.SlashInteraction, channel: discord.TextChannel = None):
   channel = ctx.channel if not channel else channel
   if channel.permissions_for(ctx.author).manage_channels or botadmin(ctx):
     sniper[channel] = []
@@ -324,7 +324,7 @@ async def on_command_error(ctx, error):
     available_commands = [cmd.name for cmd in bot_.commands]
     matches = {cmd: SequenceMatcher(None, cmd, used_command).ratio() for cmd in available_commands}
     command = max(matches.items(), key=lambda item: item[1])[0]
-    if SequenceMatcher(None, used_command, used_command).ratio() <= 0.7:
+    if SequenceMatcher(None, command, used_command).ratio() <= 0.7:
       await ctx.reply(f"Your might have made a (serious) typo and your command has been ignored.", delete_after=4)
     try:
       arguments = message.content.split(" ", 1)[1]
