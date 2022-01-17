@@ -470,7 +470,7 @@ async def spoiler(ctx, *, text):
   await ctx.reply(f"||{text}||")
 
 @commands.command(aliases=['antispoiler', 'antispoilers', 'aspoiler', 'aspoilers', 'spoils'])
-async def spoil(ctx, msg: discord.Message = None, *, text="Reply to a message, add a message ID/link or add some text to remove the spoilers!"):
+async def spoil(ctx, msg: discord.Message = None, *, text= "Reply to a message, add a message ID/link or add some text to remove the spoilers!"):
   potential_reference = ctx.message.reference
   if potential_reference and not msg:
     msg = await ctx.bot.get_channel(potential_reference.channel_id).fetch_message(potential_reference.message_id)

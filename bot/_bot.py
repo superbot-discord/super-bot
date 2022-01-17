@@ -315,6 +315,12 @@ async def ping(ctx, *, disposed= None):
   mcs = str(int(response_time.microseconds)+int((response_time.total_seconds())%60))
   await message.edit(content=f"Pong! 🏓\n```Message delay: {mcs:<10}microseconds\nBot latency  : {round(bot_.latency*1000000, 2):<10}microseconds```")
 
+
+@bu.message_command(name="Spoil spoilers")
+async def spoil_(ctx, message):
+  await ctx.respond(message.content.replace("||", ""), hidden= True)
+
+
 @bot_.event
 async def on_command_error(ctx, error):
   if isinstance(error, commands.CommandNotFound):

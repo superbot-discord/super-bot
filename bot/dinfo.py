@@ -615,7 +615,7 @@ async def message(ctx, message: discord.Message = None):
     else:
       await ctx.reply("Please reply to a message or add a message ID/Link.")
       return
-  desc=f"Sent by {message.author.mention} at {unix_timestamp(message.created_at)}"
+  desc = f"Sent by {message.author.mention} at {unix_timestamp(message.created_at)}"
   if message.edited_at != None:
     desc += f"Edited at {unix_timestamp(message.edited_at)}"
   contents = message.content
@@ -673,7 +673,7 @@ async def message(ctx, message: discord.Message = None):
           msg_dmenus += 1
         else:
           msg_menus += 1
-  embed=discord.Embed(title="Message Information", description=desc[:2047], url=message.jump_url)
+  embed=discord.Embed(title= "Message Information", description= desc[:2047], url= message.jump_url)
   embed.add_field(name="In channel", value=message.channel.mention, inline= True)
   if message.pinned:
     embed.add_field(name="Pinned", value="This message is pinned.", inline= True)
