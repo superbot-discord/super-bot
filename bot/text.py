@@ -239,7 +239,6 @@ async def quantum_random(ctx, size: typing.Literal['256', '65536'] = '256', amou
   await ctx.reply(embed=embed)
 
 # NON-QUANTUM RANDOM
-# 7/12 migrated
 # M: Multiple values   R: Can repeat   S: Spoilers   T: Text choices
 #    One value            Cannot repeat   Unformatted   Integral choice(s)
 # =random{_{m{r}}{s}{t}}
@@ -264,24 +263,43 @@ async def random_m(ctx, times: int, lower: int, upper: int):
   await ctx.reply(embed= embed)
 
 @commands.command()
-async def random_s(ctx, lower: int, upper: int):
-  if lower > upper:
-    lower, upper = upper, lower
-  await ctx.reply(f"Your random number is ||`{x_fill(ra.randint(lower,upper), ' ', len(str(upper)))}`||.")
-
-@commands.command()
-async def random_t(ctx, *options):
-  await ctx.reply(f"Your random choice is {ra.choice(options)}")
-
-@commands.command()
 async def random_mr(ctx, times: int, lower: int, upper: int):
   desc = ""
   if lower > upper:
     lower, upper = upper, lower
-  zfill_length = len(str(upper))
   for x in range(times):
     desc += f"{ra.randint(lower,upper)}, "
   embed = discord.Embed(title= f"{times} random number(s) between {lower} and {upper}", description= desc)
+  await ctx.reply(embed= embed)
+
+@commands.command()
+async def random_mrs(ctx, times: int, lower: int, upper: int):
+  desc = ""
+  if lower > upper:
+    lower, upper = upper, lower
+  upper_length = len(str(upper))
+  for x in range(times):
+    desc += f"||`{xfill(ra.randint(lower,upper), upper_length)}`||  "
+  embed=discord.Embed(title=f"{times} random number(s) between {lower} and {upper}", description= desc)
+  await ctx.reply(embed= embed)
+
+@commands.command()
+async def random_mrst(ctx, times: int, *options):
+  options = list(options) if isinstance(options, tuple) else [options]
+  upper_length = max([len(x) for x in options])
+  desc = ""
+  for x in range(times):
+    desc += f"||`{xfill(ra.choice(upper_length), upper_length)}`||  "
+  embed = discord.Embed(title= f"{times} random choice(s)", description= desc)
+  await ctx.reply(embed= embed)
+
+@commands.command()
+async def random_mrt(ctx, times: int, *options):
+  options = list(options) if isinstance(options, tuple) else [options]
+  desc = ""
+  for x in range(times):
+    desc += f"{ra.choice(options)}, "
+  embed = discord.Embed(title= f"{times} random choice(s)", description= desc)
   await ctx.reply(embed= embed)
 
 @commands.command()
@@ -297,8 +315,23 @@ async def random_ms(ctx, times: int, lower: int, upper: int):
       desc += f"||`{str(y).zfill(upper_length)}`||  "
   else:
     for x in range(times):
-      desc += f"||`{str(ra.randint(lower,upper)).zfill(upper_length)}`||  "
+      desc += f"||`{xfill(ra.randint(lower,upper), upper_length)}`||  "
   embed=discord.Embed(title=f"{times} random number(s) between {lower} and {upper}", description= desc)
+  await ctx.reply(embed= embed)
+
+@commands.command()
+async def random_mst(ctx, times: int, *options):
+  options = list(options) if isinstance(options, tuple) else [options]
+  upper_length = max([len(x) for x in options])
+  desc = ""
+  if times <= (len(options)):
+    ra.shuffle(options)
+    for x, y in zip(range(times), options):
+      desc += f"||`{y}`||  "
+  else:
+    for x in range(times):
+      desc += f"||`{xfill(ra.choice(upper_length), upper_length)}`||  "
+  embed = discord.Embed(title= f"{times} random choice(s)", description= desc)
   await ctx.reply(embed= embed)
 
 @commands.command()
@@ -315,7 +348,22 @@ async def random_mt(ctx, times: int, *options):
   await ctx.reply(embed= embed)
 
 @commands.command()
-async def raffle(ctx,lower: int, upper: int, amount: int): # MRS
+async def random_s(ctx, lower: int, upper: int):
+  if lower > upper:
+    lower, upper = upper, lower
+  await ctx.reply(f"Your random number is ||`{xfill(ra.randint(lower,upper), len(str(upper)))}`||.")
+
+@commands.command()
+async def random_st(ctx, *options):
+  options = list(options) if isinstance(options, tuple) else [options]
+  await ctx.reply(f"Your random choice is ||`{xfill(ra.choice(options), max([len(x) for x in options]))}`||.")
+
+@commands.command()
+async def random_t(ctx, *options):
+  await ctx.reply(f"Your random choice is {ra.choice(options)}")
+
+@commands.command()
+async def raffle(ctx, lower: int, upper: int, amount: int): # MRS
   desc = ""
   if lower > upper:
     lower, upper = upper, lower
@@ -566,6 +614,17 @@ def setup(bot):
   bot.add_command(quantum_random)
   bot.add_command(raffle)
   bot.add_command(random)
+  bot.add_command(random_m)
+  bot.add_command(random_mr)
+  bot.add_command(random_mrs)
+  bot.add_command(random_mrst)
+  bot.add_command(random_mrt)
+  bot.add_command(random_ms)
+  bot.add_command(random_mst)
+  bot.add_command(random_mt)
+  bot.add_command(random_s)
+  bot.add_command(random_st)
+  bot.add_command(random_t)
   bot.add_command(rawspoiler)
   bot.add_command(rawrawspoiler)
   bot.add_command(reverse)

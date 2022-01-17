@@ -17,7 +17,7 @@ def many_replace(text: str, replacer: dict[str: str]):
     text = text.replace(x, y)
   return text
 
-def x_fill(text: str, char: str, chars: int):
+def xfill(text: str, chars: int, char: str = " "):
   """
   Pads a character to a ``str`` until it reaches a length.
   ```
