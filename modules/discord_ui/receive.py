@@ -136,9 +136,9 @@ class Interaction():
             The raw message content
         tts: :class:`bool`
             Whether the message should be send with text-to-speech
-        embed: :class:``
+        embed: :class:`discord.Embed`
             Embed rich content
-        embeds: List[:class:``]
+        embeds: List[:class:`discord.Embed`]
             A list of embeds for the message
         file: :class:`discord.File`
             The file which will be attached to the message
@@ -237,9 +237,9 @@ class Interaction():
             The raw message content
         tts: :class:`bool`, optional
             Whether the message should be send with text-to-speech
-        embed: :class:``, optional
+        embed: :class:`discord.Embed`, optional
             Embed rich content
-        embeds: List[:class:``], optional
+        embeds: List[:class:`discord.Embed`], optional
             A list of embeds for the message
         file: :class:`discord.File`, optional
             The file which will be attached to the message
@@ -511,9 +511,9 @@ class Message(discord.Message):
         ----------------
         content: :class:`str`
             The new message content
-        embed: :class:``
+        embed: :class:`discord.Embed`
             The new embed of the message
-        embeds: List[:class:``]
+        embeds: List[:class:`discord.Embed`]
             The new list of discord embeds
         attachments: List[:class:`discord.Attachment`]
             A list of new attachments
