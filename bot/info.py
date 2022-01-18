@@ -1,6 +1,7 @@
 import pytz
 import statistics
-from shared import *
+from shared import (BeautifulSoup, commands, datetime, discord, Embed, Image, json, re, requests,
+                    timedelta, try_delete)
 
 set(pytz.all_timezones_set)
 hexstring_pattern = re.compile(r'#?([0-9A-F]{2})([0-9A-F]{2})([0-9A-F]{2})', re.IGNORECASE)
@@ -27,22 +28,22 @@ async def color(ctx, *, name):
   r1, g1, b1 = (rgbtoper(r), rgbtoper(g), rgbtoper(b))
   deci = (r << 16) + (g << 8) + b
   hex_ = f'{deci:02x}'.upper()
-  if len(hex_)!=6:
-    while len(hex_)<6:
+  if len(hex_) != 6:
+    while len(hex_) < 6:
       hex_="0"+hex_
   page = requests.get(f"https://www.colorhexa.com/{hex_}")
   soup = BeautifulSoup(page.content, 'html.parser')
-  result1 = soup.find(id='header-title')
+  result1 = soup.find(id= 'header-title')
   ti = re.sub(r'([\w]+?) \/ #[\da-f]{6} hex color',r'\1',result1.text)
   result2 = soup.find_all("strong")[2].text
-  embed = discord.Embed(title=f"Colour information: {ti}", description=result2, color=deci)
+  embed = Embed(title=f"Colour information: {ti}", description=result2, color=deci)
   embed.add_field(name="RGB", value=f"{r}, {g}, {b}\n{r1}, {g1}, {b1}", inline= True)
   embed.add_field(name="Hex Code", value=f"#{hex_}", inline= True)
   embed.add_field(name="Decimal Value", value=deci, inline= True)
   embed.set_thumbnail(url="attachment://color.png")
   img = Image.new('RGB', (64, 64), (r, g, b))
   img.save('color.png')
-  await ctx.reply(embed=embed, file=discord.File('color.png'))
+  await ctx.reply(embed= embed, file=discord.File('color.png'))
   try_delete('color.png')
 
 @commands.command()
@@ -57,19 +58,19 @@ async def element(ctx, *, query):
     return
   if len(pdb_) == 1:
     element_ = pdb_[0]
-    embed = discord.Embed(title=f"{element_['name']} ({element_['symbol']})", description=element_['summary'], url=element_['source'])
-    embed.add_field(name="Atomic Mass", value=f"{element_['atomic_mass']} Dalton")
-    embed.add_field(name="Melting Point", value=f"{element_['melt']} Kelvin")
-    embed.add_field(name="Boiling Point", value=f"{element_['boil']} Kelvin")
-    embed.add_field(name="Density", value=f"{element_['density']} Kelvin")
-    for x, y in {"Appearance":'appearance', "Discovered by":'discovered_by', "Named after":'named_by'}.items():
+    embed = Embed(title=f"{element_['name']} ({element_['symbol']})", description=element_['summary'], url=element_['source'])
+    embed.add_field(name= "Atomic Mass", value= f"{element_['atomic_mass']} Dalton")
+    embed.add_field(name= "Melting Point", value= f"{element_['melt']} Kelvin")
+    embed.add_field(name= "Boiling Point", value= f"{element_['boil']} Kelvin")
+    embed.add_field(name= "Density", value= f"{element_['density']} Kelvin")
+    for x, y in {"Appearance": 'appearance', "Discovered by": 'discovered_by', "Named after": 'named_by'}.items():
       if element_[y]:
         embed.add_field(name=x, value=element_[y])
     if element_['spectral_img']:
       embed.set_image(url=element_['spectral_img'])
   else:
-    embed = discord.Embed(title=f"Search results", description=f"\n".join([f"[**{x['number']}** {x['symbol']}: {x['name']}]({x['source']})" for x in pdb_]))
-  await ctx.reply(embed=embed)
+    embed = Embed(title=f"Search results", description=f"\n".join([f"[**{x['number']}** {x['symbol']}: {x['name']}]({x['source']})" for x in pdb_]))
+  await ctx.reply(embed= embed)
 
 @commands.command()
 async def regex(ctx, regularexp, *, text):
@@ -82,10 +83,10 @@ async def regex(ctx, regularexp, *, text):
     ti = "There was no occurrences."
   elif matches >= 2:
     ti = f"There were {matches} occurrences."
-  embed = discord.Embed(title = ti, description = newtext.replace("****",""))
+  embed = Embed(title = ti, description = newtext.replace("****",""))
   embed.set_author(name=f"Match Results for {regularexp}")
   embed.set_footer(text="Match Results are highlighted in bold")
-  await ctx.reply(embed=embed)
+  await ctx.reply(embed= embed)
 
 @commands.command()
 async def regsub(ctx, regular1, regular2, *, text):
@@ -97,9 +98,9 @@ async def regsub(ctx, regular1, regular2, *, text):
     ti = "There was no occurrences."
   elif matches >= 2:
     ti = f"There were {matches} occurrences."
-  embed = discord.Embed(title = ti, description = f"`{newtext}`")
+  embed = Embed(title = ti, description = f"`{newtext}`")
   embed.set_author(name=f"Substitution Result for {regular1}")
-  await ctx.reply(embed=embed)
+  await ctx.reply(embed= embed)
 
 @commands.command()
 async def stats(ctx, *numbers: int):
@@ -124,8 +125,8 @@ async def time(ctx, *, timezoneinput="0"):
       return "Invalid timezone! Timezone must be below 15, above -15 and divisible by 0.25."
   elif timezoneinput=="all":
     desc = f"**[ISO 3166 Country Codes](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2#Officially_assigned_code_elements)**:\n```AD AE AF AG AI AL AM AO AQ AR AS AT AU AW AX AZ BA BB BD BE BF BG BH BI BJ BL BM BN BO BQ BR BS BT BV BW BY BZ CA CC CD CF CG CH CI CK CL CM CN CO CR CU CV CW CX CY CZ DE DJ DK DM DO DZ EC EE EG EH ER ES ET FI FJ FK FM FO FR GA GB GD GE GF GG GH GI GL GM GN GP GQ GR GS GT GU GW GY HK HM HN HR HT HU ID IE IL IM IN IO IQ IR IS IT JE JM JO JP KE KG KH KI KM KN KP KR KW KY KZ LA LB LC LI LK LR LS LT LU LV LY MA MC MD ME MF MG MH MK ML MM MN MO MP MQ MR MS MT MU MV MW MX MY MZ NA NC NE NF NG NI NL NO NP NR NU NZ OM PA PE PF PG PH PK PL PM PN PR PS PT PW PY QA RE RO RS RU RW SA SB SC SD SE SG SH SI SJ SK SL SM SN SO SR SS ST SV SX SY SZ TC TD TF TG TH TJ TK TLa TM TN TO TR TT TV TW TZ UA UG UM US UY UZ VA VC VE VG VI VN VU WF WS YE YT ZA ZM ZW```\nIn addition, **[TZ Database Names](http://worldtimeapi.org/api/timezone.txt)** and **UTC Timezone Numbers** (between -15 and 15, divisible by 0.25) are supported."
-    embed = discord.Embed(title="All timezone formats supported", description=desc)
-    await ctx.reply(embed=embed)
+    embed = Embed(title="All timezone formats supported", description=desc)
+    await ctx.reply(embed= embed)
   elif len(timezoneinput)==2 and timezoneinput.isalpha():
     try:
       tz = pytz.timezone(pytz.country_timezones[timezoneinput][0])

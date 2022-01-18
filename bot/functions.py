@@ -1,7 +1,5 @@
-import re
 import regex
-import typing
-from difflib import SequenceMatcher
+from shared import re, SequenceMatcher, typing
 
 def html_to_md(text: str):
   text = re.sub(r'<b>(.+?)</b>', r'**\1**', text)
@@ -33,3 +31,6 @@ def test_for(text: str, min_ratio: typing.Union[float, int], *choices: list[str]
   print(tested)
   if tested[list(tested)[0]] >= min_ratio:
     return list(tested)[0]
+
+def trim(text: str, width: int):
+  return text if len(text) <= width else text[:width - 1] + "…"

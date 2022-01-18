@@ -1,6 +1,8 @@
-import requests
 import html
-from shared import *
+
+from functions import trim
+from shared import chance, ra, requests, commands
+
 
 @commands.command(aliases=["birb"])
 async def bird(ctx, number=1):
@@ -304,7 +306,7 @@ def botlizard(number):
 def botnasa():
   r = requests.get('https://apodapi.herokuapp.com/api').json()
   desc = f"**{r['title']}** by {r['copyright']}\n{r['hdurl']}\n\n{r['description']}"
-  return desc[:1024]
+  return trim(desc, 1024)
 
 def botpanda(number):
   desc = ""

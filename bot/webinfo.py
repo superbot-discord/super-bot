@@ -35,7 +35,7 @@ async def definition(ctx, *, word):
     desc = desc + f"**{x}**\n"
     for z in y:
       desc = desc + z + f"\n"
-  embed = discord.Embed(title=f"Definition of {word}", description=desc[:1023])
+  embed = Embed(title=f"Definition of {word}", description=desc[:1023])
   try:
     synonyms = dictionary.synonym(word)
     embed.add_field(name="Synonyms", value=", ".join(synonyms))
@@ -46,7 +46,7 @@ async def definition(ctx, *, word):
     embed.add_field(name="Antonyms", value=", ".join(antonyms))
   except:
     pass
-  await ctx.reply(embed=embed)
+  await ctx.reply(embed= embed)
 
 @commands.command(aliases=['http', 'https', 'statuscode'])
 async def error(ctx, code="404", *, disposed= None):
@@ -103,8 +103,8 @@ async def google(ctx, *, query):
     if x['pagemap'].get('document', None):
       x_ = ' (Family unsafe)' if x['pagemap']['document'][0]['family_unsafe'] else ''
     desc += f"[{html_to_md(x['htmlTitle'])}]({x['link']}){x_ if x['pagemap'].get('document', None) else ''}\n"+(f"Alternative title: {x['pagemap']['metatags'][0]['og:title']}\n" if x['pagemap']['metatags'][0].get('og:title', None) else '')+f"{html_to_md(x['htmlSnippet'])}\n"
-  embed = discord.Embed(title=f"Google search results for {query}", description=desc)
-  await ctx.reply(embed=embed)
+  embed = Embed(title=f"Google search results for {query}", description=desc)
+  await ctx.reply(embed= embed)
 
 @commands.command()
 async def minecraft(ctx, *, item="tnt"):
@@ -123,7 +123,7 @@ async def minecraft(ctx, *, item="tnt"):
     desc = re.sub(r'<i>([\s\S]*?)<\/i>', r'*\1*', desc)
     desc = desc.replace("<p>", "").replace("</p>", "")
     desc = re.sub(r'<([a-z]+?)( ([a-z]+?)=".*?")*?>(.*?)<\/\1>', '', desc)
-    embed = discord.Embed(title = "Minecraft: "+item, description=desc, url=f"https://minecraft.fandom.com/wiki/{item}")
+    embed = Embed(title = "Minecraft: "+item, description=desc, url=f"https://minecraft.fandom.com/wiki/{item}")
     try:
       for x in table.findAll('tr'):
         if x.findAll('td')[0].text.replace("<p>", "").replace("</p>", "").replace(" ", "").replace("\n", "") != "":
@@ -146,7 +146,7 @@ async def minecraft(ctx, *, item="tnt"):
     """
     image = soup.findAll("img")[2]['data-src']
     embed.set_image(url = image)
-    await ctx.reply(embed=embed)
+    await ctx.reply(embed= embed)
   except:
     await ctx.reply("No Wiki page with that name found.")
 
@@ -176,7 +176,7 @@ async def rss(ctx, *, url):
     await ctx.reply('Invalid URL. If the error persists, please contact JohannLau#6541.')
     return
   e=d.entries[0]
-  embed = discord.Embed(title=e.title, description=e.summary, url=d.entries[0].link)
+  embed = Embed(title=e.title, description=e.summary, url=d.entries[0].link)
   embed.set_footer(text=f"Published {e.published}")
   f = open("./assets/rss.html", "r")
   desc = eval('f"""'+f.read()+'"""')
@@ -186,14 +186,14 @@ async def rss(ctx, *, url):
   f = open(f"rss{ctx.message.id}.html", "w")
   f.write(desc+"</body>")
   f.close()
-  await ctx.reply(embed=embed, files=[discord.File(f"rss{ctx.message.id}.html"), discord.File("./assets/rss_css.css")])
+  await ctx.reply(embed= embed, files=[discord.File(f"rss{ctx.message.id}.html"), discord.File("./assets/rss_css.css")])
   try_delete(f"rss{ctx.message.id}.html")
 
 @commands.command()
 async def translate(ctx, lang = "list", fromlang = "auto", *, text = "Sample text"):
   if lang == "list" or lang == "all":
-    await ctx.reply(embed=discord.Embed(description = f"**List of Language Input (Abbreviations)**\n```{'  '.join(list(srclangdict.keys()))}```\n\n**List of Language Input (Full Names)**\n{', '.join(list(srclangdict.values()))}"))
-    await ctx.reply(embed=discord.Embed(description = f"**List of Language Output (Abbreviations)**\n```{' '.join(list(langdict.keys()))}```\n\n**List of Language Output (Full Names)**\n{', '.join(list(langdict.values()))}"))
+    await ctx.reply(embed = Embed(description = f"**List of Language Input (Abbreviations)**\n```{'  '.join(list(srclangdict.keys()))}```\n\n**List of Language Input (Full Names)**\n{', '.join(list(srclangdict.values()))}"))
+    await ctx.reply(embed = Embed(description = f"**List of Language Output (Abbreviations)**\n```{' '.join(list(langdict.keys()))}```\n\n**List of Language Output (Full Names)**\n{', '.join(list(langdict.values()))}"))
   else:
     if "," in lang:
       lang_split = lang.split(",")
@@ -231,7 +231,7 @@ async def unscramble(ctx, text, length="0"):
     formatted = formatted.replace('<sub><span class="score-wrapper"></span></sub>', '').replace(" ", "").replace(f"\n","")
     formatted = re.sub(r'<span class="marked-letter">(\w)<\/span>', lambda pat: pat.group(1).upper(), formatted)
     everything.append(formatted)
-  output = discord.Embed(title=f"Unscrambled results for {text}")
+  output = Embed(title= f"Unscrambled results for {text}")
   _sorted = {}
   for x in everything:
     _sorted.setdefault(len(x), []).append(x)
@@ -275,7 +275,7 @@ async def weather(ctx, *, location):
   r3=requests.get(f"http://api.openweathermap.org/data/2.5/air_pollution?lat={r1['coord']['lat']}&lon={r1['coord']['lon']}&appid=a920f6ea8a76b95a520a52e904965b14").json()['list'][0]
   ti=f"Weather for {r1['name']} ({r1['sys']['country']})"
   desc=f"{r1['weather'][0]['main']}: {r1['weather'][0]['description']}\n{abs(r1['coord']['lat'])}°{'N' if r1['coord']['lat']>0 else 'S'}\n{abs(r1['coord']['lon'])}°{'E' if r1['coord']['lon']>0 else 'W'}"
-  embed=discord.Embed(title=f"{ti}", description=desc)
+  embed = Embed(title=f"{ti}", description=desc)
   embed.add_field(name="Temp. range", value=f"{r1['main']['temp_min']}°C ~ {r1['main']['temp_max']}°C\n{r2['main']['temp_min']}°F ~ {r2['main']['temp_max']}°F", inline= True)
   embed.add_field(name="Temp. feels like", value=f"{r1['main']['feels_like']}°C / {r2['main']['feels_like']}°F", inline= True)
   embed.add_field(name="Temperature", value=f"{r1['main']['temp']}°C / {r2['main']['temp']}°F", inline= True)
@@ -294,7 +294,7 @@ async def weather(ctx, *, location):
 {r3['components']['no2']} μg/m3 NO₂ (Nitrogen Dioxide)\n{r3['components']['o3']} μg/m3 O₃ (Ozone)\n{r3['components']['so2']} μg/m3 SO₂ (Sulphur Dioxide)\n{r3['components']['pm2_5']} μg/m3 PM₂.₅ (Fine Particles patter)
 {r3['components']['pm10']} μg/m3 PM₁₀ (Coarse Particulate Matter)\n{r3['components']['nh3']} μg/m3 NH₃ (Ammonia)""", inline= False)
   embed.set_thumbnail(url=f"http://openweathermap.org/img/wn/{r1['weather'][0]['icon']}@2x.png")
-  await ctx.reply(embed=embed)
+  await ctx.reply(embed= embed)
 
 @commands.command()
 async def wiki(ctx, *, query):
@@ -304,12 +304,12 @@ async def wiki(ctx, *, query):
     await ctx.reply("Invalid page. Please try again or use `wiki_search` to get a list of related pages.")
     return
   r2=list(requests.get(f"https://en.wikipedia.org/w/api.php?format=json&action=query&generator=search&gsrnamespace=0&gsrsearch={query}&gsrlimit=1&prop=extracts|description&exintro&exsentences=10&exlimit=max&explaintext&exintro").json()['query']['pages'].items())[0]
-  embed=discord.Embed(title=f"Wikipedia: {r1['title']} ({r2[1]['description']})", description=r2[1]['extract'])
+  embed = Embed(title=f"Wikipedia: {r1['title']} ({r2[1]['description']})", description=r2[1]['extract'])
   html_head = re.sub(r'<link rel="stylesheet" href="[\w./&;=?%]+?"\/>', r'', r1['headhtml']).replace('<head>', '<head><link rel="stylesheet" href="wiki_css.css"><base href="http://en.wikipedia.org">')
   f=open(f"Wiki_{ctx.message.id}", 'x')
   f.write(f"{html_head}{r1['text']}</head>")
   f.close()
-  await ctx.reply(embed=embed, files=[discord.File(f"Wiki_{ctx.message.id}"), discord.File("wiki_css.css")])
+  await ctx.reply(embed= embed, files=[discord.File(f"Wiki_{ctx.message.id}"), discord.File("wiki_css.css")])
   try_delete(f"Wiki_{ctx.message.id}")
 
 @commands.command()
@@ -317,7 +317,7 @@ async def wiki_search(ctx, *, query):
   await ctx.channel.trigger_typing()
   r=requests.get(f"https://en.wikipedia.org/w/api.php?format=json&action=query&generator=search&gsrnamespace=0&gsrsearch={query}&gsrlimit=20&prop=extracts|description&exintro&exsentences=5&exlimit=max&explaintext&exintro").json()['query']['pages']
   z=len(query)
-  embed=discord.Embed(title=f"Wikipedia search results for {query}")
+  embed = Embed(title=f"Wikipedia search results for {query}")
   for x, y in r.items():
     y_extract = y['extract'].replace('"', '')
     f0n = y['title'] + (f" ({y['description']})" if y.get('description', None) else "")
@@ -325,7 +325,7 @@ async def wiki_search(ctx, *, query):
       break
     z+=len(f0n+y_extract)
     embed.add_field(name=f0n, value=f"{y_extract[:1023]}…" if len(y_extract) > 1024 else y_extract, inline= False)
-  await ctx.reply(embed=embed)
+  await ctx.reply(embed= embed)
 
 @commands.command()
 async def youtube(ctx, *, link):
@@ -349,18 +349,18 @@ async def youtube(ctx, *, link):
     desc = ""
     for x in videos:
       desc+=f"**[{x.title}]({x.watch_url})**\n{format_length(x.length)} | {x.views:,} Views | By [{pytube.Channel(x.channel_url).channel_name}]({x.channel_url})\n"
-    embed = discord.Embed(title="Search results", description=desc)
+    embed = Embed(title="Search results", description=desc)
     embed.set_footer(text="Use =youtube [Link] to download videos.")
-    await ctx.reply(embed=embed)
+    await ctx.reply(embed= embed)
   elif link.startswith("channel "):
     chnl = pytube.Channel(link)
     videos = chnl.videos
     desc = f"**Videos ({len(chnl.videos):,})**:\n"
     for x,y in zip(videos, range(12)):
       desc+=f"[{x.title}]({x.watch_url})\n{x.views:,} Views | {round(x.rating*20, 3)}% Liked | {format_length(x.length)}\n\n"
-    embed = discord.Embed(title=chnl.channel_name, description=desc, url=chnl.videos_url)
+    embed = Embed(title=chnl.channel_name, description=desc, url=chnl.videos_url)
     embed.set_footer(text="Use =youtube [Link] to download videos. | Analysing additional info…")
-    yt_msg = await ctx.reply(embed=embed)
+    yt_msg = await ctx.reply(embed= embed)
     totallen = 0
     totalrating = 0
     totalview = 0
@@ -398,7 +398,7 @@ async def youtube(ctx, *, link):
       video1 = filtered1[len(filtered1)-1]
       additional_desc = " Warning: Do not use a small data plan for videos this large!" if video1.filesize >= 52428800 else ""
       desc = f"This video has a size of around {sizer(video1.filesize)}.{additional_desc}"
-      embed = discord.Embed(title="Download (Click here)", url=video1.url, description=f"{desc}\nNote: This message will be edited with more information.")
+      embed = Embed(title="Download (Click here)", url=video1.url, description=f"{desc}\nNote: This message will be edited with more information.")
       allvideos = yt_streams.filter(type="video")
       allaudios = yt_streams.filter(only_audio=True)
       filtered2 = allvideos.order_by("resolution")
@@ -455,9 +455,9 @@ Audio - Minimum size\t\t{format_video(video8)}'''
       f.write(extra_downloads)
       f.flush()
       f.close()
-      ytmsg = await ctx.reply(embed=embed, file=discord.File('extra_downloads.txt'))
+      ytmsg = await ctx.reply(embed= embed, file=discord.File('extra_downloads.txt'))
       try_delete('extra_downloads.txt')
-      embed = discord.Embed(title="Download (Click here)", url=video1.url, description=desc)
+      embed = Embed(title="Download (Click here)", url=video1.url, description=desc)
       embed.add_field(name="Title", value=youtube.title, inline= False)
       if len(youtube.description[:1023].replace(" ", "")) == 0:
         embed.add_field(name="Description", value="No description provided", inline= False)

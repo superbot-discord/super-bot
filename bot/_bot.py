@@ -1,9 +1,13 @@
 #from discord.ext import tasks
 from shared import *
 
+bot_ = commands.Bot(command_prefix=commands.when_mentioned_or("="),intents=discord.Intents.all(),
+                    allowed_mentions=discord.AllowedMentions(everyone=False, users=True,
+                    roles=False, replied_user=False), case_insensitive=True, strip_after_prefix=True)
+bu = ui.UI(bot_)
+
 banned_ids =  []
 banned_text = []
-
 bot_.remove_command('help')
 bot_.load_extension("apis__int")
 bot_.load_extension("apis_hk")
@@ -55,7 +59,7 @@ bot_admin_slash = {841330908560228412: ui.SlashPermission(allowed= db['botadmins
 async def snipe_update(ctx: ui.ButtonInteraction, msg: discord.Message, number: int):
   await ctx.respond()
   sniperdict[msg][0] = number
-  embed = discord.Embed(title= f"Snipped message ({number}/{len(sniper[msg.channel])})", description= sniper[msg.channel][number-1][0])
+  embed = Embed(title= f"Snipped message ({number}/{len(sniper[msg.channel])})", description= sniper[msg.channel][number-1][0])
   embed.set_footer(text= sniper[msg.channel][number-1][1])
   await msg.edit((msg.content if msg.content else ""), embed= embed, components= snipe_buttons)
 
@@ -103,11 +107,11 @@ async def snipe_(ctx: ui.SlashInteraction):
   chnl = ctx.channel
   if sniping.get(chnl, True):
     if not sniper.get(chnl, None):
-      embed = discord.Embed(title= "Empty", description= "Nothing to snipe from this channel.")
+      embed = Embed(title= "Empty", description= "Nothing to snipe from this channel.")
       await ctx.respond(embed=embed)
       return
     else:
-      embed = discord.Embed(title= f"Snipped message (1/{len(sniper[chnl])})", description= sniper[chnl][0][0])
+      embed = Embed(title= f"Snipped message (1/{len(sniper[chnl])})", description= sniper[chnl][0][0])
       embed.set_footer(text= sniper[chnl][0][1])
     if chance(1000):
       msg = await ctx.respond("Did someone just ghostping you?", embed= embed, components=
@@ -124,11 +128,11 @@ async def snipe(ctx, *, text= None):
   if not text:
     if sniping.get(chnl, True):
       if not sniper.get(chnl, None):
-        embed = discord.Embed(title= "Empty", description= "Nothing to snipe from this channel.")
-        await ctx.reply(embed=embed)
+        embed = Embed(title= "Empty", description= "Nothing to snipe from this channel.")
+        await ctx.reply(embed= embed)
         return
       else:
-        embed = discord.Embed(title= f"Snipped message (1/{len(sniper[chnl])})", description= sniper[chnl][0][0])
+        embed = Embed(title= f"Snipped message (1/{len(sniper[chnl])})", description= sniper[chnl][0][0])
         embed.set_footer(text= sniper[chnl][0][1])
       if chance(1000):
         msg = await ctx.reply("Did someone just ghostping you?", embed= embed, components= snipe_buttons, listener= SnipeL(ctx.author.id))
@@ -204,7 +208,7 @@ async def poll(ctx, *, text):
       reactions.append(ems.encode(rect))
     else:
       ti += f"{x} "
-  embed = discord.Embed(title = ti, description = ems.encode(desc))
+  embed = Embed(title = ti, description = ems.encode(desc))
   poll = await ctx.send(embed=embed)
   for x in reactions:
     await poll.add_reaction(x)
@@ -381,7 +385,7 @@ async def on_message_delete(message):
   if not sniper.get(message.channel):
     sniper[message.channel] = []
   sniper[message.channel].insert(0, [val, footer])
-  sniper[message.channel] = sniper[message.channel][:8]
+  sniper[message.channel] = sniper[message.channel][:10]
 
 # @bot_.event
 # async def on_thread_update(before, after):
@@ -429,8 +433,8 @@ async def on_reaction_add(reaction, user):
             if z.id != 796686363604680755:
               counter = counter + 1
           desc = desc + f"{y.emoji} {x} ("+ str(counter) +f")\n"
-    cache = discord.Embed(title = cache_embed.title, description = ems.encode(desc))
-    await msg.edit(embed=cache)
+    cache = Embed(title = cache_embed.title, description = ems.encode(desc))
+    await msg.edit(embed= cache)
 
 @bot_.event
 async def on_reaction_remove(reaction, user):
@@ -450,8 +454,8 @@ async def on_reaction_remove(reaction, user):
             if z.id != 796686363604680755:
               counter = counter + 1
           desc = desc + f"{y.emoji} {x} ("+ str(counter) +f")\n"
-    cache = discord.Embed(title = cache_embed.title, description = ems.encode(desc))
-    await msg.edit(embed=cache)
+    cache = Embed(title = cache_embed.title, description = ems.encode(desc))
+    await msg.edit(embed= cache)
 
 @bot_.event
 async def on_message(message):

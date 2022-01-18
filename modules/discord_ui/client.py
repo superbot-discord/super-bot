@@ -800,7 +800,7 @@ class Components():
             True if this is a text-to-speech message; default False
         embed: :class:`discord.Message`, optional
             Embedded rich content (up to 6000 characters)
-        embeds: List[:class:`discord.Embed`], optional
+        embeds: List[:class:``], optional
             Up to 10 embeds; default None
         file: :class:`discord.File`, optional
             A file sent as an attachment to the message; default None
@@ -881,9 +881,9 @@ class Components():
             true if this is a TTS message; default False
         files: :class:`discord.File`
             A list of files which will be sent as attachment
-        embed: :class:`discord.Embed`
+        embed: :class:``
             Embed rich content, optional
-        embeds: List[:class:`discord.Embed`], optional
+        embeds: List[:class:``], optional
             embedded rich content; default None
         allowed_mentions: :class:`discord.AllowedMentions`, optional
             allowed mentions for the message; default None

@@ -1,4 +1,4 @@
-from shared import *
+from shared import commands, db, discord, Image, ImageDraw, ImageFont, try_delete, typing
 #"icyan" : {"fg":"#87B33FFF", "bg":"#131402FF"}
 
 font_led      = ImageFont.truetype("fonts/led.ttf", 50)
@@ -48,7 +48,6 @@ font_lcd3_3   = ImageFont.truetype("fonts/lcd3_3.ttf", 50)
 font_lcd3_3i  = ImageFont.truetype("fonts/lcd3_3i.ttf", 50)
 
 whitney       = ImageFont.truetype("fonts/whitney.otf", 34)
-sf_pro_r      = ImageFont.truetype("fonts/awf.ttf", 23)
 
 led_font_dict = {
   font_led      :  {"spacing" : 20, "padding" : 3  , "height_plus" : 15 , "required_height_plus" : 3  , "unneeded_width" : 8 , "unneeded_padding" : 12},
@@ -123,7 +122,7 @@ def autowrap(needed_width, font, text):
   output += f"{cache_text}"
   return output
 
-def led_server_info(server : discord.Guild):
+def led_server_info(server: discord.Guild):
   desc = server.name
   def desc_add(ch):
     if ch.type == discord.ChannelType.category:

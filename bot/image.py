@@ -1,20 +1,19 @@
 import colorsys
 
-import matplotlib.pyplot as plt
 import pytesseract
 from captcha.image import ImageCaptcha
 from colorgram import extract
 from colorthief import ColorThief
-from nextcord.ext import commands
 from pdf2image import convert_from_path
 #from pyzbar import pyzbar
-from shared import *
+from shared import (commands, discord, Image, ImageDraw, ImageFont, math, os, plt, ra, requests,
+                    sys, try_delete, typing)
+from PIL import ImageEnhance, ImageFilter, ImageOps
 
-import sys
-import os
 sys.path.append(os.path.abspath('./modules'))
 import ascii2 as asc
 
+sf_pro_r      = ImageFont.truetype("fonts/awf.ttf", 23)
 cimage = ImageCaptcha()
 aw = [[(230, 153), "#3F91F0FF"], [(296, 170), "#69D880FF"], [(342, 220), "#DE9F41FF"], [(362, 283), "#9886E1FF"], [(342, 345), "#C8EC66FF"], [(296, 394), "#D56569FF"], [(231, 412), "#56AFE1FF"], [(165, 395), "#F2E872FF"], [(118, 347), "#E295C2FF"]]
 

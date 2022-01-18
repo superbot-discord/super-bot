@@ -1,5 +1,6 @@
-from shared import *
+from shared import commands, discord, ra, SequenceMatcher, typing, ui
 
+vclients = {}
 
 class SampleButtonL(ui.listener.Listener):
   @ui.Listener.button()

@@ -8,12 +8,15 @@ import huffman
 from spellwise import Typox
 from unicode_charnames import charname, codepoint, search_charnames
 
-from shared import *
-from functions import *
+from shared import (commands, datetime, discord, Embed, os, ra, re, requests, SequenceMatcher,
+                    timedelta, timezone, try_delete, typing, UNITS)
+from functions import many_replace, xfill
 
 spell_checker = Typox()
 spell_checker.add_from_path("fonts/dictionary.txt")
-allid=[]
+id_pattern = re.compile(r'([A-Z]{5})', re.IGNORECASE)
+allid = []
+number_to_emoji = lambda x: many_replace(x, {'1': ":one: ", '2': ":two: ", '3': ":three: ", '4': ":four: ", '5': ":five: ", '6': ":six: ", '7': ":seven: ", '8': ":eight: ", '9': ":nine: ", '0': ":zero: "})
 
 @commands.command(aliases=["lower", "upper", "capital", "capitalise", "capitalize", "lowercase", "lower_case", "uppercase", "upper_case"])
 async def case(ctx, *, text):
@@ -27,7 +30,7 @@ async def case(ctx, *, text):
 async def choice(ctx, *options): # T
   rand = ra.choice(options)
   desc = f"Your random option is {rand}"
-  embed = discord.Embed(title= "Random choice", description= desc)
+  embed = Embed(title= "Random choice", description= desc)
   await ctx.reply(embed= embed)
 
 @commands.command()
@@ -226,7 +229,7 @@ async def pick(ctx, lower: int, upper: int, times: int): # MS
   else:
     for x in range(times):
       desc += f"||`{str(ra.randint(lower,upper)).zfill(upper_length)}`||  "
-  embed=discord.Embed(title= f"{times} random number(s) between {lower} and {upper}", description= desc)
+  embed = Embed(title= f"{times} random number(s) between {lower} and {upper}", description= desc)
   await ctx.reply(embed= embed)
 
 @commands.command()
@@ -235,8 +238,8 @@ async def quantum_random(ctx, size: typing.Literal['256', '65536'] = '256', amou
   r=requests.get(f"https://qrng.anu.edu.au/API/jsonI.php?length={amount}&type=uint{api_size}").json()['data']
   r=[str(x) for x in r]
   desc=f"Your quantum random number(s) is/are:\n{', '.join(r)}"
-  embed=discord.Embed(title=f"{amount} random number(s) between 0 and {int(size)-1}", description=desc)
-  await ctx.reply(embed=embed)
+  embed = Embed(title=f"{amount} random number(s) between 0 and {int(size)-1}", description=desc)
+  await ctx.reply(embed= embed)
 
 # NON-QUANTUM RANDOM
 # M: Multiple values   R: Can repeat   S: Spoilers   T: Text choices
@@ -259,7 +262,7 @@ async def random_m(ctx, times: int, lower: int, upper: int):
       desc += f"{y}, "
   else:
     desc = ", ".join(ra.sample(range(lower, upper + 1), times))
-  embed = discord.Embed(title= f"{times} random number(s) between {lower} and {upper}", description= desc)
+  embed = Embed(title= f"{times} random number(s) between {lower} and {upper}", description= desc)
   await ctx.reply(embed= embed)
 
 @commands.command()
@@ -269,7 +272,7 @@ async def random_mr(ctx, times: int, lower: int, upper: int):
     lower, upper = upper, lower
   for x in range(times):
     desc += f"{ra.randint(lower,upper)}, "
-  embed = discord.Embed(title= f"{times} random number(s) between {lower} and {upper}", description= desc)
+  embed = Embed(title= f"{times} random number(s) between {lower} and {upper}", description= desc)
   await ctx.reply(embed= embed)
 
 @commands.command()
@@ -280,7 +283,7 @@ async def random_mrs(ctx, times: int, lower: int, upper: int):
   upper_length = len(str(upper))
   for x in range(times):
     desc += f"||`{xfill(ra.randint(lower,upper), upper_length)}`||  "
-  embed=discord.Embed(title=f"{times} random number(s) between {lower} and {upper}", description= desc)
+  embed = Embed(title=f"{times} random number(s) between {lower} and {upper}", description= desc)
   await ctx.reply(embed= embed)
 
 @commands.command()
@@ -290,7 +293,7 @@ async def random_mrst(ctx, times: int, *options):
   desc = ""
   for x in range(times):
     desc += f"||`{xfill(ra.choice(upper_length), upper_length)}`||  "
-  embed = discord.Embed(title= f"{times} random choice(s)", description= desc)
+  embed = Embed(title= f"{times} random choice(s)", description= desc)
   await ctx.reply(embed= embed)
 
 @commands.command()
@@ -299,7 +302,7 @@ async def random_mrt(ctx, times: int, *options):
   desc = ""
   for x in range(times):
     desc += f"{ra.choice(options)}, "
-  embed = discord.Embed(title= f"{times} random choice(s)", description= desc)
+  embed = Embed(title= f"{times} random choice(s)", description= desc)
   await ctx.reply(embed= embed)
 
 @commands.command()
@@ -316,7 +319,7 @@ async def random_ms(ctx, times: int, lower: int, upper: int):
   else:
     for x in range(times):
       desc += f"||`{xfill(ra.randint(lower,upper), upper_length)}`||  "
-  embed=discord.Embed(title=f"{times} random number(s) between {lower} and {upper}", description= desc)
+  embed = Embed(title=f"{times} random number(s) between {lower} and {upper}", description= desc)
   await ctx.reply(embed= embed)
 
 @commands.command()
@@ -331,7 +334,7 @@ async def random_mst(ctx, times: int, *options):
   else:
     for x in range(times):
       desc += f"||`{xfill(ra.choice(upper_length), upper_length)}`||  "
-  embed = discord.Embed(title= f"{times} random choice(s)", description= desc)
+  embed = Embed(title= f"{times} random choice(s)", description= desc)
   await ctx.reply(embed= embed)
 
 @commands.command()
@@ -344,7 +347,7 @@ async def random_mt(ctx, times: int, *options):
       desc += f"{y}, "
   else:
     desc = ", ".join(ra.sample(options, times))
-  embed = discord.Embed(title= f"{times} random choice(s)", description= desc)
+  embed = Embed(title= f"{times} random choice(s)", description= desc)
   await ctx.reply(embed= embed)
 
 @commands.command()
@@ -371,20 +374,16 @@ async def raffle(ctx, lower: int, upper: int, amount: int): # MRS
   for x in range(amount):
     rand = ra.randint(lower,upper)
     desc += f"||`{str(rand).zfill(upper_length)}`||  "
-  embed=discord.Embed(title= f"{amount} random number(s) between {lower} and {upper}", description= desc)
+  embed = Embed(title= f"{amount} random number(s) between {lower} and {upper}", description= desc)
   await ctx.reply(embed= embed)
 
 @commands.command()
 async def rawspoiler(ctx, *, text):
-  text="\|\|\|\|".join(text)
-  text="\|\|"+text+"\|\|"
-  await ctx.reply(text)
+  await ctx.reply(r"\|\|" + r"\|\|\|\|".join(text) + r"\|\|")
 
 @commands.command()
 async def rawrawspoiler(ctx, *, text):
-  text="\\\|\\\|\\\|\\\|".join(text)
-  text="\\\|\\\|"+text+"\\\|\\\|"
-  await ctx.reply(text)
+  await ctx.reply(r"\\|\\|" + r"\\|\\|\\|\\|".join(text) + r"\\|\\|")
 
 @commands.command()
 async def reverse(ctx, *, text):
@@ -547,7 +546,7 @@ async def ttimer(ctx, timetocount, *, Text= None):
 
 @commands.command()
 async def unicode(ctx, *query):
-  embed = discord.Embed(title = f"Search results for: {' '.join(query)}")
+  embed = Embed(title = f"Search results for: {' '.join(query)}")
   all_results = []
   for x in query:
     current_results = []
@@ -584,7 +583,7 @@ async def unicode(ctx, *query):
   f.write(desc)
   f.flush()
   f.close()
-  await ctx.reply(embed=embed, file=discord.File("unicode.txt"))
+  await ctx.reply(embed= embed, file=discord.File("unicode.txt"))
   try_delete("unicode.txt")
 
 @commands.command(aliases=["timestamp", "posix"])

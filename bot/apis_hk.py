@@ -1,4 +1,5 @@
-from shared import *
+from shared import (commands, datetime, db, discord, Embed, mpl, plt, re, requests, timedelta,
+                    timezone, try_delete)
 import html
 import csv
 
@@ -12,9 +13,10 @@ fake_headers = {'User-Agent' : "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv
 mtr_time   = lambda rt: re.sub(r'\d{4}-\d{2}-\d{2} (\d{2}:\d{2}:\d{2})', r'\1', rt)
 aqi_range1 = lambda min, max: min if min == max else f"{min}~{max}"
 aqi_range2 = lambda min, max: min if min == max else f"{min} ~ {max}"
-gmb_weekday= lambda x:"Everyday " if x==[True]*7 else ("Mon ~ Sat" if x==[True]*6+[False] else ("Mon ~ Fri" if x==[True]*5+[False]*2 else (
-  "Sat ~ Sun" if x==[False]*5+[True]*2 else ", ".join([gmb_weekdays[y] for y in x if y]))))
-gmb_ph = {True:"including", False:"excluding"}
+gmb_weekday= lambda x: "Everyday " if x == [True] * 7 else (
+  "Mon ~ Sat" if x == [True] * 6 + [False] else ("Mon ~ Fri" if x == [True] * 5 + [False] * 2 else (
+  "Sat ~ Sun" if x == [False] * 5 + [True] * 2 else ", ".join([gmb_weekdays[y] for y in x if y]))))
+gmb_ph = {True: "including", False: "excluding"}
 
 kmb_stops = requests.get("https://data.etabus.gov.hk/v1/transport/kmb/stop").json()['data']
 kmb_routes= requests.get("https://data.etabus.gov.hk/v1/transport/kmb/route/").json()['data']
@@ -28,7 +30,7 @@ async def hk_aqi(ctx, *, disposed= None):
   r1=requests.get("https://ogciopsi.blob.core.windows.net/dataset/aqhi/aqhi.json").json()
   r2=requests.get("https://ogciopsi.blob.core.windows.net/dataset/aqhi/aqhi-forecast.json").json()
   r3=requests.get("https://dashboard.data.gov.hk/api/aqhi-individual?format=json", headers=fake_headers).json()
-  embed = discord.Embed(title="HK OGCIO AQI Info", description=f"""**Current (All HK)**\nGeneral: {aqi_range1(r1[0]['aqhi_min'], r1[0]['aqhi_max'])} ({aqi_range2(r1[0]['health_risk_min'], r1[0]['health_risk_max'])})
+  embed = Embed(title="HK OGCIO AQI Info", description=f"""**Current (All HK)**\nGeneral: {aqi_range1(r1[0]['aqhi_min'], r1[0]['aqhi_max'])} ({aqi_range2(r1[0]['health_risk_min'], r1[0]['health_risk_max'])})
   Roadside: {aqi_range1(r1[1]['aqhi_min'], r1[1]['aqhi_max'])} ({aqi_range2(r1[1]['health_risk_min'], r1[1]['health_risk_max'])})\n**Tomorrow (All HK) AM**
   General: {aqi_range2(r2[0]['health_risk_min'], r2[0]['health_risk_max'])}
   Roadside: {aqi_range2(r2[1]['health_risk_min'], r2[1]['health_risk_max'])}\n**Tomorrow (All HK) PM**
@@ -36,24 +38,24 @@ async def hk_aqi(ctx, *, disposed= None):
   Roadside: {aqi_range2(r2[3]['health_risk_min'], r2[3]['health_risk_max'])}""")
   for a in r3:
     embed.add_field(name=a['station'], value=f"{a['aqhi']} ({a['health_risk']})")
-  await ctx.reply(embed=embed)
+  await ctx.reply(embed= embed)
 
 @commands.command()
 async def hk_ferry_1(ctx, *, disposed= None):
   await ctx.channel.trigger_typing()
   r1=requests.get("https://www.hongkongwatertaxi.com.hk/eta/?route=HHCL").json()['data'][0]
   r2=requests.get("https://www.hongkongwatertaxi.com.hk/eta/?route=CLHH").json()['data'][0]
-  embed = discord.Embed(title="Fortune Ferry Information")
+  embed = Embed(title="Fortune Ferry Information")
   for r in [r1, r2]:
     embed.add_field(name=r['route_en'].replace("-", "→").replace("Hung Hom", "Hung Hom 紅磡").replace("Central", "Central 中環"), value=f"Next departure at {r['depart_time']}{(' (Vessel Code: '+r['vesselcode']+')') if r.get('vesselcode', None) else ''}")
-  await ctx.reply(embed=embed)
+  await ctx.reply(embed= embed)
 
 @commands.command()
 async def hk_forecast(ctx, *, disposed= None):
   await ctx.channel.trigger_typing()
   r1=requests.get("https://data.weather.gov.hk/weatherAPI/opendata/weather.php?dataType=fnd&lang=en").json()
   r2=requests.get("https://data.weather.gov.hk/weatherAPI/opendata/weather.php?dataType=fnd&lang=tc").json()
-  embed = discord.Embed(title="HKO Forecast", description=f"{r1['generalSituation']}\n{r2['generalSituation']}")
+  embed = Embed(title="HKO Forecast", description=f"{r1['generalSituation']}\n{r2['generalSituation']}")
   for d, d2 in zip(r1['weatherForecast'], r2['weatherForecast']):
     embed.add_field(name=f"{d['week']}", value=f"""{d['forecastWeather']} {d2['forecastWeather']}\nTemperature: {d['forecastMintemp']['value']}°C ~ {d['forecastMaxtemp']['value']}°C
     Humidity: {d['forecastMinrh']['value']}% ~ {d['forecastMaxrh']['value']}%\n{d['PSR']} probability of significant rain\nWind: {d['forecastWind']} {d2['forecastWind']}""", inline= False)
@@ -61,7 +63,7 @@ async def hk_forecast(ctx, *, disposed= None):
   for r in r1['soilTemp']:
     f0v += f"Soil temperature at {r['place']} ({r['depth']['value']}m deep): {r['value']}°C\n"
   embed.add_field(name="Extra Information", value=f0v)
-  await ctx.reply(embed=embed)
+  await ctx.reply(embed= embed)
   await ctx.channel.trigger_typing()
   plt.rcdefaults()
   fig, (ax, ax2) = plt.subplots(2, 1)
@@ -110,8 +112,8 @@ async def hk_gmb(ctx, region, line):
         desc += f"\n**{r3_['name_tc']} {r3_['name_en']}**"
         if r4:
           desc += f"\nCar(s) at {', '.join([datetime.fromisoformat(x['timestamp']).strftime('%H:%M:%S') for x in r4])}"
-      embed=discord.Embed(title=f"{r2_['orig_en']} {r2_['orig_tc']} → {r2_['dest_en']} {r2_['dest_tc']}", description=desc)
-      await ctx.reply(embed=embed)
+      embed = Embed(title=f"{r2_['orig_en']} {r2_['orig_tc']} → {r2_['dest_en']} {r2_['dest_tc']}", description=desc)
+      await ctx.reply(embed= embed)
 
 @commands.command()
 async def hk_kmb(ctx, line):
@@ -134,8 +136,8 @@ async def hk_kmb(ctx, line):
         if len(rt2):
           rt2_etas=[datetime.fromisoformat(x['eta']).strftime('%H:%M:%S') for x in rt2]
           desc += f"\nBus(es) at {', '.join(rt2_etas)}"
-      embed=discord.Embed(title=r1_['route']+(f" {r1_['orig_en']} {r1_['orig_tc']} → {r1_['dest_en']} {r1_['dest_tc']}" if r1_['bound']=='outbound' else f" {r1_['dest_en']} {r1_['dest_tc']} → {r1_['orig_en']} {r1_['orig_tc']}"), description=desc)
-      await ctx.reply(embed=embed)
+      embed = Embed(title=r1_['route']+(f" {r1_['orig_en']} {r1_['orig_tc']} → {r1_['dest_en']} {r1_['dest_tc']}" if r1_['bound']=='outbound' else f" {r1_['dest_en']} {r1_['dest_tc']} → {r1_['orig_en']} {r1_['orig_tc']}"), description=desc)
+      await ctx.reply(embed= embed)
 
 @commands.command()
 async def hk_lightning(ctx, *, disposed= None):
@@ -148,10 +150,10 @@ async def hk_lightning(ctx, *, disposed= None):
   lightning_=r2.content.decode("utf-8")[1:-1]
   reader_ = csv.DictReader(lightning_.splitlines())
   lightnings_ = [x for x in reader_]
-  embed = discord.Embed(title="HKO Lightning Information", description=f"Information within {re.sub(hko_dt_pattern2, hko_dt_pattern2_, lightnings[0]['DateTime'])} HKT (Update frequency: 1 hour)")
+  embed = Embed(title="HKO Lightning Information", description=f"Information within {re.sub(hko_dt_pattern2, hko_dt_pattern2_, lightnings[0]['DateTime'])} HKT (Update frequency: 1 hour)")
   for l, l2 in zip(lightnings, lightnings_):
     embed.add_field(name=f"{l['Region'].replace('Hong Kong Island', 'HKI')}: {l['Type']}\n{l2['區域']}: {l2['類別']}", value=f"Lightnings: {l['lightning count']}", inline= True)
-  await ctx.reply(embed=embed)
+  await ctx.reply(embed= embed)
 
 @commands.command()
 async def hk_lr(ctx, station: int):
@@ -159,7 +161,7 @@ async def hk_lr(ctx, station: int):
     await ctx.reply(f"Please supply a 1~3-digit station code! Available codes are `{'` `'.join(db['mtr']['stations'])}`")
     return
   r=requests.get(f"https://rt.data.gov.hk/v1/transport/mtr/lrt/getSchedule?station_id={station}").json()['platform_list']
-  embed=discord.Embed(title="Light Rail ETA")
+  embed = Embed(title="Light Rail ETA")
   for p in r:
     desc = ""
     if p.get('route_list', None):
@@ -167,7 +169,7 @@ async def hk_lr(ctx, station: int):
         desc += f"""<:t1:932189099723460608>{'<:tr:932189462648209468>'if t['train_length']==1 else'<:t2:932189099752841246>'}**{t['route_no']}** to {t['dest_en']} ({t['dest_ch']}) {db['mtr']['lr_status'][t['arrival_departure']]} {f"in {t['time_en']}" if t['time_en'][0].isdigit() else f"({t['time_en']})"}\n"""
       embed.add_field(name=f"Platform {p['platform_id']}", value=desc, inline= False)
   if len(embed.fields):
-    await ctx.reply(embed=embed)
+    await ctx.reply(embed= embed)
   else:
     await ctx.reply("No information could be fetched.")
 
@@ -179,12 +181,12 @@ async def hk_moon(ctx, *, disposed= None):
   reader = csv.DictReader(sun.splitlines())
   current_day = int(datetime.now(tz=timezone(timedelta(hours=8))).strftime("%j"))
   moons = [x for x in reader][current_day-1:current_day+24]
-  embed = discord.Embed(title="HKO Moon Information")
+  embed = Embed(title="HKO Moon Information")
   embed.set_footer(text="""The owner has checked with the data source and it was not apparent why some data was empty (Maybe it was astronomically correct?)
   The same also happened in the data supplied for 2018~2023. Please do not contact the developers for information on that.""".replace(f"\n", ""))
   for m in moons:
     embed.add_field(name=m['YYYY-MM-DD'], value=f"Rise-Set: {m['RISE']} ~ {m['SET']}\nTransitional Period: {m['TRAN.']}")
-  await ctx.reply(embed=embed)
+  await ctx.reply(embed= embed)
 
 @commands.command()
 async def hk_mtr(ctx, station, line):
@@ -195,12 +197,12 @@ async def hk_mtr(ctx, station, line):
     await ctx.reply(f"Please supply a 3-digit line code! Available codes are `{'` `'.join(db['mtr']['lines'])}`")
     return
   r=list(requests.get(f"https://rt.data.gov.hk/v1/transport/mtr/getSchedule.php?line={line}&sta={station}").json()['data'].values())[0]
-  embed=discord.Embed(title="MTR Trains")
+  embed = Embed(title="MTR Trains")
   if r.get('UP', None):
     embed.add_field(name="Up", value=f"\n".join([f"To {x['dest']} from platform {x['plat']} in {x['ttnt']} minutes ({mtr_time(x['time'])})" for x in r['UP']]))
   if r.get('DOWN', None):
     embed.add_field(name="Down", value=f"\n".join([f"To {x['dest']} from platform {x['plat']} in {x['ttnt']} minutes ({mtr_time(x['time'])})" for x in r['DOWN']]))
-  await ctx.reply(embed=embed)
+  await ctx.reply(embed= embed)
 
 @commands.command()
 async def hk_nwfb(ctx, line):
@@ -220,8 +222,8 @@ async def hk_nwfb(ctx, line):
     if rt2:
       rt2_eta=datetime.fromisoformat(rt2[0]['eta'])
       desc += f" (Bus at {rt2_eta.strftime('%H:%M:%S')})"
-  embed=discord.Embed(title=f"{r1['route']} {r1['dest_en']} {r1['dest_tc']} → {r1['orig_en']} {r1['orig_tc']}", description=desc)
-  await ctx.reply(embed=embed)
+  embed = Embed(title=f"{r1['route']} {r1['dest_en']} {r1['dest_tc']} → {r1['orig_en']} {r1['orig_tc']}", description=desc)
+  await ctx.reply(embed= embed)
   await ctx.channel.trigger_typing()
   r1=requests.get(f"https://rt.data.gov.hk/v1/transport/citybus-nwfb/route/nwfb/{line}/").json()['data']
   r2=requests.get(f"https://rt.data.gov.hk/v1/transport/citybus-nwfb/route-stop/nwfb/{line}/outbound").json()['data']
@@ -235,8 +237,8 @@ async def hk_nwfb(ctx, line):
     if rt2:
       rt2_eta=datetime.fromisoformat(rt2[0]['eta'])
       desc += f" (Bus at {rt2_eta.strftime('%H:%M:%S')})"
-  embed=discord.Embed(title=f"{r1['route']} {r1['orig_en']} {r1['orig_tc']} → {r1['dest_en']} {r1['dest_tc']}", description=desc)
-  await ctx.reply(embed=embed)
+  embed = Embed(title=f"{r1['route']} {r1['orig_en']} {r1['orig_tc']} → {r1['dest_en']} {r1['dest_tc']}", description=desc)
+  await ctx.reply(embed= embed)
 
 @commands.command()
 async def hk_sea_pressure(ctx, *, disposed= None):
@@ -249,10 +251,10 @@ async def hk_sea_pressure(ctx, *, disposed= None):
   pressure_=r1.content.decode("utf-8")[:-1]
   reader_ = csv.DictReader(pressure_.splitlines())
   pressures_ = [x for x in reader_]
-  embed = discord.Embed(title="HKO Sea Pressure Information", description=f"Information updated at {re.sub(hko_dt_pattern, hko_dt_pattern_, pressures[0]['Date time'])} HKT (Update frequency: 10 minutes)")
+  embed = Embed(title="HKO Sea Pressure Information", description=f"Information updated at {re.sub(hko_dt_pattern, hko_dt_pattern_, pressures[0]['Date time'])} HKT (Update frequency: 10 minutes)")
   for p, p_ in zip(pressures, pressures_):
     embed.add_field(name=f"{p['Automatic Weather Station']} {p_['自動氣象站'].replace(' ', '')}", value=f"{p['Mean Sea Level Pressure(hPa)']} hPa", inline= True)
-  await ctx.reply(embed=embed)
+  await ctx.reply(embed= embed)
 
 @commands.command()
 async def hk_sun(ctx, *, disposed= None):
@@ -262,10 +264,10 @@ async def hk_sun(ctx, *, disposed= None):
   reader = csv.DictReader(sun.splitlines())
   current_day = int(datetime.now(tz=timezone(timedelta(hours=8))).strftime("%j"))
   suns = [x for x in reader][current_day-1:current_day+24]
-  embed = discord.Embed(title="HKO Sun Information")
+  embed = Embed(title="HKO Sun Information")
   for s in suns:
     embed.add_field(name=s['YYYY-MM-DD'], value=f"Rise-Set: {s['RISE']} ~ {s['SET']}\nTransitional Period: {s['TRAN.']}")
-  await ctx.reply(embed=embed)
+  await ctx.reply(embed= embed)
   plt.rcdefaults()
   fig, (ax1, ax2, ax3) = plt.subplots(3, 1, sharex=True)
   dates = [datetime.strptime(x['YYYY-MM-DD'], "%Y-%m-%d") for x in suns]
@@ -301,10 +303,10 @@ async def hk_tide(ctx, *, disposed= None):
   tide=r.content.decode("utf-8")[1:]
   reader = csv.DictReader(tide.splitlines())
   tides = [x for x in reader]
-  embed = discord.Embed(title="HKO Tide Information", description=f"Information updated at {tides[0]['Time']} HKT (Update frequency: 5 minutes)")
+  embed = Embed(title="HKO Tide Information", description=f"Information updated at {tides[0]['Time']} HKT (Update frequency: 5 minutes)")
   for t in tides:
     embed.add_field(name=t['Tide Station'], value=f"{t['Height(m)']} m", inline= True)
-  await ctx.reply(embed=embed)
+  await ctx.reply(embed= embed)
 
 @commands.command()
 async def hk_visibility(ctx, *, disposed= None):
@@ -313,10 +315,10 @@ async def hk_visibility(ctx, *, disposed= None):
   visibility=r.content.decode("utf-8")[1:-1]
   reader = csv.DictReader(visibility.splitlines())
   visibilities = [x for x in reader]
-  embed = discord.Embed(title="HKO Visibility Information", description=f"Information updated at {re.sub(hko_dt_pattern, hko_dt_pattern_, visibilities[0]['Date time'])} HKT (Update frequency: 10 minutes)")
+  embed = Embed(title="HKO Visibility Information", description=f"Information updated at {re.sub(hko_dt_pattern, hko_dt_pattern_, visibilities[0]['Date time'])} HKT (Update frequency: 10 minutes)")
   for v in visibilities:
     embed.add_field(name=v['Automatic Weather Station'], value=v['10 minute mean visibility'].replace("km", " km"), inline= True)
-  await ctx.reply(embed=embed)
+  await ctx.reply(embed= embed)
 
 @commands.command()
 async def hk_weather(ctx, *, disposed= None):
@@ -338,7 +340,7 @@ async def hk_weather(ctx, *, disposed= None):
   if r1['warningMessage']:
     for w, w_ in zip(r1['warningMessage'], r2['warningMessage']):
       desc += f"\n{w} {w_}"
-  embed = discord.Embed(title="HKO Weather Information", description=desc)
+  embed = Embed(title="HKO Weather Information", description=desc)
   rain_dict = {html.unescape(f"{x1['place']} {x2['place']}"): y for x1, x2, y in zip(r1['rainfall']['data']   , r2['rainfall']['data']   , range(18))}
   temp_dict = {html.unescape(f"{x1['place']} {x2['place']}"): y for x1, x2, y in zip(r1['temperature']['data'], r2['temperature']['data'], range(27))}
   places_list = list(set(list(rain_dict) + list(temp_dict)))
@@ -352,7 +354,7 @@ async def hk_weather(ctx, *, disposed= None):
     f0v += f"UV Index: {r1['uvindex']['data'][0]['value']} ({r1['uvindex']['data'][0]['desc']}) at {r1['uvindex']['data'][0]['place']}"
   embed.add_field(name="Extra Information", value=f0v)
   embed.set_image(url=f"https://www.hko.gov.hk/images/HKOWxIconOutline/pic{r1['icon'][0]}.png")
-  await ctx.reply(embed=embed)
+  await ctx.reply(embed= embed)
 
 @commands.command()
 async def hk_wind(ctx, *, disposed= None):
@@ -361,13 +363,13 @@ async def hk_wind(ctx, *, disposed= None):
   wind=r.content.decode("utf-8")[:-1]
   reader = csv.DictReader(wind.splitlines())
   winds = [x for x in reader]
-  embed = discord.Embed(title="HKO Wind Information", description=f"Information updated at {re.sub(hko_dt_pattern, hko_dt_pattern_, winds[0]['Date time'])} HKT (Update frequency: 10 minutes)")
+  embed = Embed(title="HKO Wind Information", description=f"Information updated at {re.sub(hko_dt_pattern, hko_dt_pattern_, winds[0]['Date time'])} HKT (Update frequency: 10 minutes)")
   for w in winds:
     embed.add_field(name=f"{w['Automatic Weather Station']} {db['compass_points'][w['10-Minute Mean Wind Direction(Compass points)']]}",
     value=f"""{w['10-Minute Mean Wind Direction(Compass points)']}{(' at '+w['10-Minute Mean Speed(km/hour)']+' km/h') if w['10-Minute Mean Speed(km/hour)']!="N/A" else ''}
     {('Maximum Gust: '+w['10-Minute Maximum Gust(km/hour)']+' km/h') if w['10-Minute Maximum Gust(km/hour)']!='N/A' else ''}""", inline= True)
   embed.set_footer(text="Speed and Gust Information might be empty for some weather stations. Directions and Speed are mean values in the past 10 minutes.")
-  await ctx.reply(embed=embed)
+  await ctx.reply(embed= embed)
 
 def setup(bot):
   bot.add_command(hk_aqi)

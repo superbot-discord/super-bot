@@ -1,4 +1,4 @@
-from shared import *
+from shared import commands, db, Embed, json, requests, typing
 
 f = open('./assets/units.json', 'r')
 udb = json.loads(f.read())
@@ -24,8 +24,8 @@ async def convert(ctx, num: typing.Optional[int] = 1, unit : str = "m"):
   units = udb[f"{x_}O"]
   for x, y in units.items():
     desc += f"**{x.title()}** {unit_/y}\n"
-  embed = discord.Embed(title=f"{num} {unit} is equal to…", description=desc)
-  await ctx.reply(embed=embed)
+  embed = Embed(title=f"{num} {unit} is equal to…", description=desc)
+  await ctx.reply(embed= embed)
 
 @commands.command()
 async def exchange(ctx, currency:exchange_currencies="USD", amount:int=1, *, disposed= None):
@@ -33,8 +33,8 @@ async def exchange(ctx, currency:exchange_currencies="USD", amount:int=1, *, dis
   desc = ""
   for x, y in r.items():
     desc += f"**{x}**: {y}\n"
-  embed = discord.Embed(title=f"{amount} {currency} is equal to…", description=desc)
-  await ctx.reply(embed=embed)
+  embed = Embed(title=f"{amount} {currency} is equal to…", description=desc)
+  await ctx.reply(embed= embed)
 
 def setup(bot):
   bot.add_command(convert)

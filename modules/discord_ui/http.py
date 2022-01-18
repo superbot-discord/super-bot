@@ -38,7 +38,7 @@ async def send_files(route, files, payload, http):
 
     return await http.request(route, form=form, files=files)
 
-def get_message_payload(content=MISSING, tts=False, embed: discord.Embed=MISSING, embeds: List[discord.Embed]=MISSING, attachments: List[discord.Attachment]=MISSING, nonce: int=MISSING, delete_after: float=MISSING,
+def get_message_payload(content=MISSING, tts=False, embed: =MISSING, embeds: List[]=MISSING, attachments: List[discord.Attachment]=MISSING, nonce: int=MISSING, delete_after: float=MISSING,
                 allowed_mentions: discord.AllowedMentions=MISSING, reference: discord.MessageReference=MISSING, mention_author: bool=MISSING, components: list=MISSING, stickers: List[discord.Sticker]=MISSING, suppress: bool=MISSING, flags=MISSING):
     """Turns parameters from send functions into a payload for requests"""
     
@@ -68,8 +68,8 @@ def get_message_payload(content=MISSING, tts=False, embed: discord.Embed=MISSING
         elif embed in [MISSING, None] and embeds not in [MISSING, None]:
             embeds = embed
         # check type things
-        elif not all(isinstance(x, discord.Embed) for x in embeds):
-            raise WrongType("embeds", embeds, 'list[discord.Embed]')
+        elif not all(isinstance(x, ) for x in embeds):
+            raise WrongType("embeds", embeds, 'list[]')
         payload["embeds"] = [em.to_dict() for em in embeds]
 
     if attachments is not MISSING:

@@ -1,5 +1,11 @@
-from shared import *
-from functions import *
+from shared import (asyncio, commands, discord, Embed, ems, np, plt, re, SequenceMatcher,
+                    timedelta, typing, ui)
+from shared import (sr_real, ms_real, tc_real, vc_real, bg_itop, custom_permissions, datetime, db,
+                    sr_itop, ms_itop, tc_itop, vc_itop, func, gridspec, sizer, timezone, try_delete,
+                    sr_itod, ms_itod, tc_itod, vc_itod, unix_timestamp, voice_region_format)
+from functions import many_replace, trim
+
+permission_messages = {}
 cmaphsv = plt.cm.hsv
 
 server_permtext = """```
@@ -119,19 +125,19 @@ class PermsGenL(ui.listener.Listener):
 
 
 server_permission_options = []
-for x, y in server_real.items():
+for x, y in sr_real.items():
   server_permission_options.append(ui.SelectOption(label=y, value=x))
 
 membership_permission_options = []
-for x, y in membership_real.items():
+for x, y in ms_real.items():
   membership_permission_options.append(ui.SelectOption(label=y, value=x))
 
 text_permission_options = []
-for x, y in text_channel_real.items():
+for x, y in tc_real.items():
   text_permission_options.append(ui.SelectOption(label=y, value=x))
 
 voice_permission_options = []
-for x, y in voice_channel_real.items():
+for x, y in vc_real.items():
   voice_permission_options.append(ui.SelectOption(label=y, value=x))
 
 permission_menus = [
@@ -160,7 +166,7 @@ async def attachment(ctx, message: discord.Message = None, index: int = 1):
     desc=f"{attachment_.width} (W) × {attachment_.height} (H)"
   else:
     desc=""
-  embed = discord.Embed(title=ti, description=desc, url=attachment_.url)
+  embed = Embed(title=ti, description=desc, url=attachment_.url)
   f0v = attachment_.id
   f1v = sizer(attachment_.size)
   f2v = attachment_.content_type
@@ -169,7 +175,7 @@ async def attachment(ctx, message: discord.Message = None, index: int = 1):
   embed.add_field(name="Size", value=f1v, inline= True)
   embed.add_field(name="MIME Type", value=f2v, inline= True)
   embed.add_field(name="Alternative URL (Does not always work!)", value=f3v, inline= False)
-  await ctx.reply(embed=embed)
+  await ctx.reply(embed= embed)
 
 @commands.command(aliases=['av'])
 async def avatar(ctx,user: discord.Member = None):
@@ -179,7 +185,7 @@ async def avatar(ctx,user: discord.Member = None):
   base_url2 = user.avatar
   base_url3 = user.guild_avatar
   desc = f"Avatar of {user.mention}\n"
-  embed=discord.Embed(title="Avatars", description=desc)
+  embed = Embed(title="Avatars", description=desc)
   if base_url1:
     base_url1 = base_url1.url
     embed.add_field(name=f"Default avatar", value=base_url1, inline= False)
@@ -204,7 +210,7 @@ async def avatar(ctx,user: discord.Member = None):
         desc += f"[{size}]({temp}) "
       embed.add_field(name=f"Server {x.upper()}s", value=desc)
   embed.set_image(url=user.display_avatar.url)
-  await ctx.reply(embed=embed)
+  await ctx.reply(embed= embed)
 
 @commands.command(aliases = ['badge', 'flag', 'flags'])
 async def badges(ctx, integer = "help"):
@@ -216,10 +222,10 @@ async def badges(ctx, integer = "help"):
         int(integer)
       except ValueError:
         integer = ctx.author.public_flags.value
-      embed = discord.Embed(title = f"Badges integer {integer}", description=badges_itop(int(integer)))
+      embed = Embed(title = f"Badges integer {integer}", description=bg_itop(int(integer)))
     except:
       embed = badges_guide
-  await ctx.reply(embed=embed)
+  await ctx.reply(embed= embed)
 
 @commands.command(aliases=['bn'])
 async def banner(ctx, user: typing.Union[discord.User, discord.Member] = None):
@@ -231,7 +237,7 @@ async def banner(ctx, user: typing.Union[discord.User, discord.Member] = None):
       await ctx.reply("The user does not have a banner.")
       return
     desc = f"Banner of {user.mention}\n"
-    embed=discord.Embed(title="Banner", description=desc)
+    embed = Embed(title="Banner", description=desc)
     embed.set_image(url=base_url)
     for x in ['png', 'jpg', 'webp']:
       desc = ""
@@ -248,7 +254,7 @@ async def banner(ctx, user: typing.Union[discord.User, discord.Member] = None):
       await ctx.reply("The server does not have a banner.")
       return
     desc = f"Banner of the server\n"
-    embed=discord.Embed(title="Banner", description=desc)
+    embed = Embed(title="Banner", description=desc)
     embed.set_image(url=ctx.guild.banner.url)
     for x in ['png', 'jpg', 'webp']:
       desc = ""
@@ -258,7 +264,7 @@ async def banner(ctx, user: typing.Union[discord.User, discord.Member] = None):
         temp = base_url.replace("?size=1024", f"?size={size}")
         desc += f"[{size}]({temp}) "
       embed.add_field(name=f"{x.upper()}s", value=desc)
-  await ctx.reply(embed=embed)
+  await ctx.reply(embed= embed)
 
 @commands.command(aliases=['ca'])
 async def category(ctx, category_: discord.CategoryChannel = None):
@@ -270,7 +276,7 @@ async def category(ctx, category_: discord.CategoryChannel = None):
       return
   ti=f"Category Information: {category_.name}"
   desc=f"Created at {unix_timestamp(category_.created_at)}"
-  embed = discord.Embed(title=ti, description=desc)
+  embed = Embed(title=ti, description=desc)
   f0valist=category_.text_channels
   f0v=" ".join([x.mention for x in f0valist])
   f1valist=category_.voice_channels
@@ -287,7 +293,7 @@ async def category(ctx, category_: discord.CategoryChannel = None):
     embed.add_field(name=f"Voice Channels ({len(f1valist)})", value=f1v, inline= True)
   if len(f2valist)!=0:
     embed.add_field(name=f"Stage Channels ({len(f2valist)})", value=f2v, inline= True)
-  await ctx.reply(embed=embed)
+  await ctx.reply(embed= embed)
 
 @commands.command(aliases=['ch'])
 async def channel(ctx, channel: typing.Union[discord.TextChannel, discord.VoiceChannel, discord.StageChannel, discord.Thread] = None):
@@ -310,13 +316,13 @@ async def channel(ctx, channel: typing.Union[discord.TextChannel, discord.VoiceC
     await task
     await ctx.reply(embed=task.result())
   else:
-    embed = discord.Embed(desc = "Invalid input.")
-    await ctx.reply(embed=embed)
+    embed = Embed(desc = "Invalid input.")
+    await ctx.reply(embed= embed)
 
 async def bottchannel(channel):
   ti=f"Channel Information: {channel.name}"
   desc=f"{channel.mention} Created at {unix_timestamp(channel.created_at)}"
-  embed=discord.Embed(title=ti, description=desc)
+  embed = Embed(title=ti, description=desc)
   f1v = channel.slowmode_delay
   f2v = [x.name for x in channel.threads]
   f3v=str(channel.topic)
@@ -360,7 +366,7 @@ async def bottchannel(channel):
 async def botvchannel(channel):
   ti=f"Voice Channel Information: {channel.name}"
   desc=f"{channel.mention} created at {unix_timestamp(channel.created_at)}"
-  embed=discord.Embed(title=ti, description=desc)
+  embed = Embed(title=ti, description=desc)
   f1v = channel.video_quality_mode
   try:
     f2vlist=await channel.invites()
@@ -397,7 +403,7 @@ async def botstagec(channel):
     desc=f"{channel.mention}  {channel.topic}\nCreated at {unix_timestamp(channel.created_at)}"
   else:
     desc=f"{channel.name}\nCreated at {unix_timestamp(channel.created_at)}"
-  embed=discord.Embed(title=ti, description=desc)
+  embed = Embed(title=ti, description=desc)
   f2vlist=await channel.invites()
   f2v="  ".join([x.url for x in f2vlist])
   f3v=f"{channel.bitrate//1024} kbps"
@@ -429,7 +435,7 @@ async def botstagec(channel):
 async def botthread(channel):
   ti=f"Thread Information: {channel.name}"
   desc=f"{channel.mention} Created by {channel.owner.mention}\nArchives at {unix_timestamp(channel.archive_timestamp)}"
-  embed=discord.Embed(title=ti, description=desc)
+  embed = Embed(title=ti, description=desc)
   f1v = channel.slowmode_delay
   f8v = ""
   for x in channel.members:
@@ -460,7 +466,7 @@ async def emojiinfo(ctx, emoji_: typing.Union[discord.Emoji, str]):
       desc = f"{str(emoji_)} {emoji_.name}\nCreated by {str(creator.user.mention)} at {unix_timestamp(emoji_.created_at)}"
     except:
       desc = f"{emoji_}\n`Created by` field can only be retrieved with the manage-emojis permission.\nCreated at {unix_timestamp(emoji_.created_at)}"
-    embed = discord.Embed(title=f"Emoji Info: {emoji_.name}", description=desc)
+    embed = Embed(title=f"Emoji Info: {emoji_.name}", description=desc)
     embed.add_field(name="ID", value=emoji_.id, inline= True)
     embed.set_image(url = emoji_.url)
   except:
@@ -470,13 +476,13 @@ async def emojiinfo(ctx, emoji_: typing.Union[discord.Emoji, str]):
     if not cemoji:
       await ctx.send(f"Emoji not found!\nNote: regional indicators are not emojis in the technical sense.")
       return
-    embed = discord.Embed(title="Emoji Info", description = (cemoji[1]+" \:" + ':, \:'.join(cemoji[0]) +":"))
+    embed = Embed(title="Emoji Info", description = (cemoji[1]+" \:" + ':, \:'.join(cemoji[0]) +":"))
     embed.add_field(name="Category", value=cemoji[3], inline= True)
     if cemoji[4]:
       embed.add_field(name="Unicode Version", value=cemoji[4], inline= True)
     if len(cemoji[2]) > 0:
       embed.add_field(name="Tags", value=", ".join(cemoji[2]), inline= True)
-  await ctx.reply(embed=embed)
+  await ctx.reply(embed= embed)
 
 @commands.command(aliases=['ems'])
 async def emojis(ctx, *, disposed= None):
@@ -536,7 +542,7 @@ async def invitelink(ctx, *, invite_input: discord.Invite):
       f0v = f"{invite.uses}/{invite.max_uses}"
   else:
     desc= f"Created by {invite.inviter}\nNote: Some information cannot be retrieved as the invite does not come from the current server!"
-  embed=discord.Embed(title=ti, description=desc)
+  embed = Embed(title=ti, description=desc)
   f6v=str(invite.revoked)
   invite_guild = invite.guild
   if invite_guild:
@@ -578,7 +584,7 @@ async def invitelink(ctx, *, invite_input: discord.Invite):
     embed.add_field(name="Expires", value=f7v, inline= True)
     embed.add_field(name="Valid Duration", value=f5v, inline= True)
   embed.add_field(name="Expired?", value=f6v, inline= True)
-  await ctx.reply(embed=embed)
+  await ctx.reply(embed= embed)
 
 @commands.command(aliases=['lu'])
 async def leftuser(ctx, *, userinput):
@@ -591,7 +597,7 @@ async def leftuser(ctx, *, userinput):
     desc = f"{lfuser.mention} (bot)"
   else:
     desc = f"{lfuser.mention} (human)"
-  embed=discord.Embed(title=ti,color=lfuser.color, description=desc)
+  embed = Embed(title=ti,color=lfuser.color, description=desc)
   embed.set_thumbnail(url=lfuser.display_avatar.url)
   f0v=f"{lfuser.name}#{lfuser.discriminator}"
   f1v={unix_timestamp(lfuser.created_at)}
@@ -604,7 +610,7 @@ async def leftuser(ctx, *, userinput):
   embed.add_field(name="Name", value=f0v, inline= False)
   embed.add_field(name="Time since user registered", value=f1va, inline= True)
   embed.add_field(name="Registered", value=f1v, inline= True)
-  await ctx.reply(embed=embed)
+  await ctx.reply(embed= embed)
 
 @commands.command(aliases=['msg', 'ms'])
 async def message(ctx, message: discord.Message = None):
@@ -673,7 +679,7 @@ async def message(ctx, message: discord.Message = None):
           msg_dmenus += 1
         else:
           msg_menus += 1
-  embed=discord.Embed(title= "Message Information", description= desc[:2047], url= message.jump_url)
+  embed = Embed(title= "Message Information", description= trim(desc, 2048), url= message.jump_url)
   embed.add_field(name="In channel", value=message.channel.mention, inline= True)
   if message.pinned:
     embed.add_field(name="Pinned", value="This message is pinned.", inline= True)
@@ -726,6 +732,7 @@ async def message(ctx, message: discord.Message = None):
     embed.add_field(name=f"Reactions ({len(f0vraw)})", value=f0v, inline= False)
   if len(f1vraw) != 0:
     embed.add_field(name=f"Attachments ({len(f1vraw)})", value=f1v, inline= False)
+    embed.set_footer(text= "Use `=attachment [Message] [Index]` to view in-depth information about a specific attachment of the message.")
   if len(message.embeds) != 0:
     embed.add_field(name="Embeds", value=f"{len(message.embeds)} embed(s) are added to the message.", inline= False)
   if len(f5vraw) != 0:
@@ -736,7 +743,7 @@ async def message(ctx, message: discord.Message = None):
     embed.add_field(name=f"Role mentions ({len(f3vraw)})", value=f3v, inline= False)
   if len(f4vraw) != 0:
     embed.add_field(name=f"User mentions ({len(f4vraw)})", value=f4v, inline= False)
-  await ctx.reply(embed=embed)
+  await ctx.reply(embed= embed)
 
 @commands.command(aliases=['ov'])
 async def overwrites(ctx, channel_: typing.Union[discord.TextChannel, discord.VoiceChannel, discord.StageChannel, discord.CategoryChannel] = None):
@@ -745,11 +752,11 @@ async def overwrites(ctx, channel_: typing.Union[discord.TextChannel, discord.Vo
   desc = f"{channel_.mention}\n"
   for x, y in channel_.overwrites.items().__reversed__():
     desc += f"**{x.mention}**\n  Allowed: {y.pair()[0].value}\n  Denied: {y.pair()[1].value}\n"
-  embed = discord.Embed(title=f"Channel Overwrites", description=desc[:4096])
-  await ctx.reply(embed=embed)
+  embed = Embed(title=f"Channel Overwrites", description=desc[:4096])
+  await ctx.reply(embed= embed)
 
 @commands.command(aliases = ['perm', 'perms', 'permission'])
-async def permissions(ctx, integer="help"):
+async def permissions(ctx, integer= "help"):
   try:
     integer = int(integer)
   except ValueError:
@@ -765,7 +772,7 @@ async def permissions(ctx, integer="help"):
         try:
           for x, y in custom_permissions.items():
             if SequenceMatcher(None, integer, x).ratio() >= 0.75:
-              embed = discord.Embed(title = f"Custom permission '{x.title()}' ({integer})")
+              embed = Embed(title = f"Custom permission '{x.title()}' ({integer})")
               integer = y.value
               break
           embed
@@ -774,18 +781,18 @@ async def permissions(ctx, integer="help"):
   if integer == "help":
     embed = perms_guide
   else:
-    embed = discord.Embed(title= f"Permission integer {integer}")
-    embed.add_field(name= "Server permissions", value= server_itop(integer), inline= False)
+    embed = Embed(title= f"Permission integer {integer}")
+    embed.add_field(name= "Server permissions", value= sr_itop(integer), inline= False)
     embed.add_field(name= "Membership permissions", value= ms_itop(integer), inline= False)
     embed.add_field(name= "Text permissions", value= tc_itop(integer), inline= False)
     embed.add_field(name= "Voice permissions", value= vc_itop(integer), inline= False)
 
-    embed2 = discord.Embed(title= f"Permission integer {integer}")
-    embed2.add_field(name= "Server permissions", value= server_itod(integer), inline= False)
+    embed2 = Embed(title= f"Permission integer {integer}")
+    embed2.add_field(name= "Server permissions", value= sr_itod(integer), inline= False)
     embed2.add_field(name= "Membership permissions", value= ms_itod(integer), inline= False)
     embed2.add_field(name= "Text permissions", value= tc_itod(integer), inline= False)
     embed2.add_field(name= "Voice permissions", value= vc_itod(integer), inline= False)
-  await ctx.reply(embed=embed)
+  await ctx.reply(embed= embed)
   if 'embed2' in locals():
     await ctx.send(embed=embed2)
 
@@ -795,7 +802,7 @@ async def permission_generate(ctx, *, disposed= None):
   permission_messages[msg] = {"permission_server_selection": [], "permission_membership_selection": [], "permission_text_selection": [], "permission_voice_selection": []}
 
 @commands.command()
-async def raw(ctx, msg : discord.Message = None):
+async def raw(ctx, msg: discord.Message = None):
   if msg==None:
     potential_reference = ctx.message.reference
     if potential_reference:
@@ -803,11 +810,11 @@ async def raw(ctx, msg : discord.Message = None):
     else:
       await ctx.reply("Please reply to a message or add a message ID/Link.")
       return
-  embed = discord.Embed(title = "Raw message", url = msg.jump_url, description = "```"+msg.content.replace('```', r'\`\`\`')+"```")
-  await ctx.reply(embed=embed)
+  embed = Embed(title = "Raw message", url = msg.jump_url, description = "```"+msg.content.replace('```', r'\`\`\`')+"```")
+  await ctx.reply(embed= embed)
 
 @commands.command()
-async def rawraw(ctx, msg : discord.Message = None):
+async def rawraw(ctx, msg: discord.Message = None):
   if msg==None:
     potential_reference = ctx.message.reference
     if potential_reference:
@@ -815,11 +822,11 @@ async def rawraw(ctx, msg : discord.Message = None):
     else:
       await ctx.reply("Please reply to a message or add a message ID/Link.")
       return
-  embed = discord.Embed(title = "Raw message", url = msg.jump_url, description = f"```{discord.utils.escape_markdown(msg.content, as_needed=True)}```")
-  await ctx.reply(embed=embed)
+  embed = Embed(title = "Raw message", url = msg.jump_url, description = f"```{discord.utils.escape_markdown(msg.content, as_needed=True)}```")
+  await ctx.reply(embed= embed)
 
 @commands.command(aliases=['rea'])
-async def reactions(ctx, *, msg : discord.Message = None):
+async def reactions(ctx, *, msg: discord.Message = None):
   if msg==None:
     potential_reference = ctx.message.reference
     if potential_reference:
@@ -854,12 +861,12 @@ async def reactions(ctx, *, msg : discord.Message = None):
   plt.clf()
 
 @commands.command(aliases=['ro'])
-async def role(ctx,role: discord.Role=None):
+async def role(ctx,role: discord.Role = None):
   if role==None:
     role=ctx.author.top_role
   ti=f"Role Information: {role.name}"
   desc=f"{role.mention} created at {unix_timestamp(role.created_at)}"
-  embed=discord.Embed(title=ti,color=role.color, description=desc)
+  embed = Embed(title=ti,color=role.color, description=desc)
   memberlist=role.members
   if len(memberlist) == 0:
     f0v = "No members assigned with this role."
@@ -885,10 +892,10 @@ async def role(ctx,role: discord.Role=None):
     embed.add_field(name="Bot", value="This is the Discord Booster role.", inline= False)
   embed.add_field(name="Members ("+str(len(memberlist))+")", value=f0v[:5950-len(embed)], inline= False)
   #embed.add_field(name="Channel Permissions", value=f3vb, inline= False)
-  await ctx.reply(embed=embed)
+  await ctx.reply(embed= embed)
 
 @commands.command(aliases=['guild', 'se'])
-async def server(ctx, *, text = "regular"):
+async def server(ctx, *, text="regular"):
   guild=ctx.guild
   ti=guild.name
   desc=f"Created at {unix_timestamp(guild.created_at)} by {guild.owner.mention}\nRegion: {guild.region}"
@@ -919,7 +926,7 @@ async def server(ctx, *, text = "regular"):
       desc += f"[{size}]({temp}) "
   except:
     pass
-  embed=discord.Embed(title=ti, description=desc)
+  embed = Embed(title=ti, description=desc)
   try:
     embed.set_author(name="Server Information",icon_url=guild.icon.url)
   except:
@@ -1074,7 +1081,7 @@ async def server(ctx, *, text = "regular"):
     except:
       pass
   try:
-    await ctx.reply(embed=embed)
+    await ctx.reply(embed= embed)
   except:
     f1va = ""
     for x in f1valist:
@@ -1083,17 +1090,17 @@ async def server(ctx, *, text = "regular"):
       f1va += f"{x.name}, "
     f1va = f"{f1va[:-2]}…"
     embed.set_field_at(3, name=f"Roles ({len(guild.roles)})", value=f1va, inline= False)
-    await ctx.reply(embed=embed)
+    await ctx.reply(embed= embed)
 
 @commands.command(aliases=['sta'])
-async def status(ctx, member : discord.Member = None):
+async def status(ctx, member: discord.Member = None):
   if member==None:
     member=ctx.author
   if member.is_on_mobile==True:
     desc = str(member.status)+" on mobile"
   else:
     desc = str(member.status)+" on desktop"
-  embed = discord.Embed(title=f"Status: {member.name}", description=desc)
+  embed = Embed(title=f"Status: {member.name}", description=desc)
   for x in member.activities:
     if x.type==discord.ActivityType.custom:
       if x.emoji==None:
@@ -1118,7 +1125,7 @@ async def status(ctx, member : discord.Member = None):
       field=f"{x.artist}: {x.title}\nStarted: "
       embed.add_field(name=f"Spotify: {x.album}", value=field, inline= False)
       embed.set_thumbnail(url=x.album_cover_url)
-  await ctx.reply(embed=embed)
+  await ctx.reply(embed= embed)
 
 @commands.command(aliases=['stu'])
 async def statuses(ctx, *, disposed= None):
@@ -1183,7 +1190,7 @@ async def statuses(ctx, *, disposed= None):
   try_delete('statuses.png', 'statuses.svg')
 
 @commands.command(aliases=['stick', 'st'])
-async def sticker(ctx, message: discord.Message=None):
+async def sticker(ctx, message: discord.Message = None):
   if message==None:
     potential_reference = ctx.message.reference
     if potential_reference:
@@ -1198,13 +1205,13 @@ async def sticker(ctx, message: discord.Message=None):
   _sticker = await _sticker[0].fetch()
   sticker_pack = await _sticker.pack()
   desc=f"**{_sticker.name}**\nSent by {message.author.mention} at {unix_timestamp(message.created_at)}\nDescription: {_sticker.description}"
-  embed=discord.Embed(title="Sticker Information", description=desc, url=message.jump_url)
+  embed = Embed(title="Sticker Information", description=desc, url=message.jump_url)
   embed.add_field(name="Tags", value=", ".join(_sticker.tags), inline= False)
   embed.add_field(name="ID", value=_sticker.id, inline= True)
   embed.add_field(name="Type", value=("PNG" if _sticker.type==discord.StickerFormatType.png else ("APNG" if _sticker.type==discord.StickerFormatType.apng else "Lottie")), inline= True)
   embed.add_field(name=f"Pack ({_sticker.sort_value}/{len(sticker_pack.stickers)})", value=f"**ID:** {sticker_pack.id}\n**Cover: **{sticker_pack.cover_sticker.name}\n**{sticker_pack.name}**\nDescription: {sticker_pack.description}", inline= False)
   #embed.set(_sticker.url)
-  await ctx.reply(embed=embed)
+  await ctx.reply(embed= embed)
 
 @commands.command(aliases=['sts'])
 async def stickers(ctx, *, disposed= None):
@@ -1227,7 +1234,7 @@ async def template(ctx, *, tempinput):
     return
   ti=f"Template Information: {temp.name} ({temp.code})"
   desc=f"Created at {unix_timestamp(temp.created_at)} by {temp.creator.mention}"
-  embed=discord.Embed(title=ti, description=desc)
+  embed = Embed(title=ti, description=desc)
   f0v=temp.description
   f1v=temp.uses
   f2v={unix_timestamp(temp.updated_at)}
@@ -1236,7 +1243,7 @@ async def template(ctx, *, tempinput):
   embed.add_field(name="Uses", value=f1v, inline= True)
   embed.add_field(name="Synced", value=f2v, inline= True)
   embed.add_field(name="Original Server", value=f3v, inline= True)
-  await ctx.reply(embed=embed)
+  await ctx.reply(embed= embed)
 
 @commands.command(aliases=['member', 'mem', 'us'])
 async def user(ctx, user: discord.Member = None, channel: discord.TextChannel = None):
@@ -1251,7 +1258,7 @@ async def user(ctx, user: discord.Member = None, channel: discord.TextChannel = 
     desc=f"{user.mention} (human)"
   fetched_user = await ctx.bot.fetch_user(user.id)
   fetched_color = fetched_user.accent_color
-  embed=discord.Embed(title="User Information", color=fetched_color if fetched_color else user.color, description=desc)
+  embed = Embed(title="User Information", color=fetched_color if fetched_color else user.color, description=desc)
   if user.name==user.display_name:
     f0v=f"{user.name}#{user.discriminator}"
   else:
@@ -1344,7 +1351,7 @@ async def user(ctx, user: discord.Member = None, channel: discord.TextChannel = 
   embed.add_field(name="Registered", value=f1v, inline= True)
   embed.add_field(name="Joined", value=f2v, inline= True)
   embed.add_field(name="Roles", value=f4v, inline= False)
-  embed.add_field(name="Server Permissions", value=server_itop(f3v_raw2), inline= False)
+  embed.add_field(name="Server Permissions", value=sr_itop(f3v_raw2), inline= False)
   embed.add_field(name="Text Channel Permissions", value=tc_itop(f3v_raw1), inline= False)
   embed.add_field(name="Voice/Stage Channel Permissions", value=vc_itop(f3v_raw2), inline= False)
   embed.add_field(name="Status", value=f3vd, inline= True)
@@ -1355,7 +1362,7 @@ async def user(ctx, user: discord.Member = None, channel: discord.TextChannel = 
   embed.add_field(name="Permission integer", value=str(f3v_raw2), inline= True)
   embed.add_field(name="Boosting since", value=f6v, inline= False)
   embed.add_field(name=f"Badges (Integer: {user_public_flags.value})", value=f5v, inline= False)
-  await ctx.reply(embed=embed)
+  await ctx.reply(embed= embed)
 
 @commands.command()
 async def widget(ctx, *, disposed= None):
@@ -1367,13 +1374,13 @@ async def widget(ctx, *, disposed= None):
   invite_has_info = False
   ti=f"Widget Information: {widget_.name}"
   desc= f"{widget_.invite_url}\nCreated at {unix_timestamp(widget_.created_at)}"
-  embed=discord.Embed(title=ti, description=desc)
+  embed = Embed(title=ti, description=desc)
   f0v = ", ".join([x.name for x in widget_.channels])
   f1v = ", ".join([f"{x.name}#{x.discriminator}" for x in widget_.members])
   embed.add_field(name="Channels", value=f0v, inline= False)
   embed.add_field(name="Members listed", value=f1v[:1024], inline= False)
   embed.url = widget_.json_url
-  await ctx.reply(embed=embed)
+  await ctx.reply(embed= embed)
 
 def setup(bot):
   bot.add_command(attachment)

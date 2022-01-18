@@ -1,12 +1,12 @@
-from shared import *
+from shared import commands, discord, Embed, ui
 
 class InteractiveHelpL(ui.listener.Listener):
   @ui.Listener.select(custom_id= "interactive_help")
   async def interactive_help(self_, ctx: ui.SelectInteraction):
     await ctx.respond(embed= eval(ctx.selected_values[0]), hidden= True)
 
-invite_embed = discord.Embed(title= "Invite", description= "The bot can be invited [here](https://discord.com/api/oauth2/authorize?client_id=796686363604680755&permissions=8&scope=bot%20applications.commands).")
-help_all = discord.Embed(title= "SuperBot#4073 (ID:796686363604680755)", description= f"""**Prefix: **`=`
+invite_embed = Embed(title= "Invite", description= "The bot can be invited [here](https://discord.com/api/oauth2/authorize?client_id=796686363604680755&permissions=8&scope=bot%20applications.commands).")
+help_all = Embed(title= "SuperBot#4073 (ID:796686363604680755)", description= f"""**Prefix: **`=`
 **Basic Commands**
 `help` `inter_help` `support` `invite` `prefix` `ping` `botpurge`\n
 **Discord Information Commands**
@@ -51,7 +51,7 @@ def help_menu_options(ctx):
     ui.SelectOption(label="General Documentation", description="Quick links and documentation website",              value="help_general",emoji=ctx.bot.get_emoji(891363286078066749)),
   ]
 
-help_basic = discord.Embed(title="SuperBot Basic Commands", description=f"""
+help_basic = Embed(title="SuperBot Basic Commands", description=f"""
 **help** Views a rough list of all commands.
 **inter_help** Interactive version of `help` with fancy buttons.
 **support** Shows you an invite to the support server.
@@ -61,7 +61,7 @@ help_basic = discord.Embed(title="SuperBot Basic Commands", description=f"""
 **botpurge [Number]** Purges messages sent by the bot. Requires `Manage Messages`.
 \nNeed help? check the [documentation](https://superbot-wevsite.vercel.app/Documentation/)!""")
 
-help_dinfo = discord.Embed(title="SuperBot Discord Information Commands", description=f"""
+help_dinfo = Embed(title="SuperBot Discord Information Commands", description=f"""
 **Discord Information Commands**
 **server** Views information about the current server.
 **server mod** Views banned members and invite links of the current server.
@@ -81,7 +81,7 @@ help_dinfo = discord.Embed(title="SuperBot Discord Information Commands", descri
 You need to supply arguments for most commands.
 Need help? check the [documentation](https://superbot-wevsite.vercel.app/Documentation/)!""")
 
-help_discord = discord.Embed(title="SuperBot Discord Commands", description=f"""
+help_discord = Embed(title="SuperBot Discord Commands", description=f"""
 **react [Message] [Emoji ID]** Temporarily reacts with an emoji. Replaces Nitro.
 **snipe** Snipes the 5 most recently deleted messages.
 **snipe [0/1]** Enables or disables sniping in the current channel. Requires `Manage Messages`.
@@ -97,7 +97,7 @@ help_discord = discord.Embed(title="SuperBot Discord Commands", description=f"""
 Check [how to supply embeds](https://superbot-discord.github.io/Appendices/A1/). `=pretendembed` and `=editembed` takes the same arguments as `=embed`.
 Need help? check the [documentation](https://superbot-wevsite.vercel.app/Documentation/)!""")
 
-help_mod = discord.Embed(title="SuperBot Moderation Commands", description=f"""
+help_mod = Embed(title="SuperBot Moderation Commands", description=f"""
 **kick [User] {{Reason}}** Kicks a user. Bot and you need `Kick members`.
 **ban [User] {{Days}} {{Reason}}** Bans a user and delete 0-7 (default: 0) days of messages. Bot and you need `Ban members`.
 **unban [User] {{Reason}}** Unbans a user. Bot and you need `Ban members`.
@@ -113,7 +113,7 @@ help_mod = discord.Embed(title="SuperBot Moderation Commands", description=f"""
 Need help? check the [documentation](https://superbot-wevsite.vercel.app/Documentation/)!
 """)
 
-help_text = discord.Embed(title="SuperBot Text Commands", description=f"""
+help_text = Embed(title="SuperBot Text Commands", description=f"""
 **poll [Title] [Options]** Starts a poll. Example: `=poll Do you like pizza? Yes🍕 No😟`
 **insert [Emoji] [Text]** Inserts an emoji. Example: `=insert 👏 This is a sentence.`
 **spoiler [Text]** Turns each character of the text into a spoiler.
@@ -130,7 +130,7 @@ help_text = discord.Embed(title="SuperBot Text Commands", description=f"""
 Need help? check the [documentation](https://superbot-wevsite.vercel.app/Documentation/)!
 """)
 
-help_info = discord.Embed(title="SuperBot Information Commands", description=f"""
+help_info = Embed(title="SuperBot Information Commands", description=f"""
 **color [Color]** Views information about a color. Supports Decimal, `R G B` and `#Hex`.
 **simplecolor [Color]** Draws a color of gradient. Supports [these colors](https://raw.githubusercontent.com/johann-lau/Bot/main/Colours001.jpeg).
 **translate [Language] [Text]** Translates the text into the [Language].
@@ -149,7 +149,7 @@ help_info = discord.Embed(title="SuperBot Information Commands", description=f""
 Need help? check the [documentation](https://superbot-wevsite.vercel.app/Documentation/)!
 """)
 
-support_embed = discord.Embed(title= "Support", description= f"""If you need support, please kindly 
+support_embed = Embed(title= "Support", description= f"""If you need support, please kindly 
 join the support server or directly contact JohannLau#6541. Here are some links you might find useful:
 """.replace(f"\n", " "))
 
@@ -161,7 +161,7 @@ support_buttons = [
 
 @commands.command()
 async def hello(ctx, *, disposed= None):
-  embed = discord.Embed(title= "Leaderboard", description= """We upload the leaderboard to YouTube
+  embed = Embed(title= "Leaderboard", description= """We upload the leaderboard to YouTube
   every week. You can find the leaderboard [here](https://youtu.be/4spCNEPawyQ).""".replace(f"\n", ""))
   await ctx.reply(embed= embed)
 
@@ -176,7 +176,7 @@ async def interactive_help(ctx, *, disposed= None):
 
 @commands.command()
 async def invite(ctx, *, disposed= None):
-  await ctx.reply(embed=invite_embed)
+  await ctx.reply(embed= invite_embed)
 
 @commands.command()
 async def prefix(ctx, *, disposed= None):

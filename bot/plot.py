@@ -4,11 +4,8 @@ from art import text2art
 from ascii_canvas import canvas, item
 from table2ascii import PresetStyle, table2ascii
 
-from shared import *
+from shared import commands, db, discord, func, np, plt, re, specialbool, try_delete
 cmaphsv = plt.cm.hsv
-def func(pct, allvals):
-  absolute = int(pct/100*np.sum(allvals))
-  return "{:d} ({:.1f}%)".format(absolute, int(pct))
 
 def koch_snowflake(order):
   def _koch_snowflake_complex(order):

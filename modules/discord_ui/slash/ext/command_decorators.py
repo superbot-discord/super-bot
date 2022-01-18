@@ -65,9 +65,9 @@ def check_failed(content=None, hidden=False, **fields):
         The raw message content
     tts: :class:`bool`
         Whether the message should be send with text-to-speech
-    embed: :class:`discord.Embed`
+    embed: :class:``
         Embed rich content
-    embeds: List[:class:`discord.Embed`]
+    embeds: List[:class:``]
         A list of embeds for the message
     file: :class:`discord.File`
         The file which will be attached to the message
@@ -132,9 +132,9 @@ def any_failure_response(content, hidden=False, **fields):
         The raw message content
     tts: :class:`bool`
         Whether the message should be send with text-to-speech
-    embed: :class:`discord.Embed`
+    embed: :class:``
         Embed rich content
-    embeds: List[:class:`discord.Embed`]
+    embeds: List[:class:``]
         A list of embeds for the message
     file: :class:`discord.File`
         The file which will be attached to the message

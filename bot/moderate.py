@@ -1,6 +1,7 @@
-from shared import *
+from shared import (asyncio, botadmin, commands, custom_permissions, datetime, db, discord, Embed,
+                    has_perms, re, SequenceMatcher, specialbool, timedelta, timestamp_pattern,
+                    timezone, try_delete, try_delete_message, typing, UNITS, unix_timestamp)
 
-UNITS = {'s':'seconds', 'm':'minutes', 'h':'hours', 'd':'days', 'w':'weeks'}
 class SearchFlags(commands.FlagConverter):
   channels         : typing.Tuple[discord.TextChannel,...] = []
   search           : typing.Tuple[str,...]                 = []
@@ -24,18 +25,18 @@ async def ban(ctx, user: discord.User, delete: int = 0, *, reason="No reason pro
     except discord.Forbidden:
       await ctx.reply("The bot doesn't have the required permission: Ban members.")
       return
-    embed1 = discord.Embed(title=f"You were banned from the server.", description=f"Reason: {reason}\nBy: {ctx.author.mention}")
-    embed2 = discord.Embed(title=f"{user.name} was banned.", description=f"Reason: {reason}\nBy: {ctx.author.mention}")
+    embed1 = Embed(title= f"You were banned from the server.", description= f"Reason: {reason}\nBy: {ctx.author.mention}")
+    embed2 = Embed(title= f"{user.name} was banned.", description= f"Reason: {reason}\nBy: {ctx.author.mention}")
     try:
       await user.send(embed=embed1)
     except:
       pass
-    await ctx.reply(embed=embed2)
+    await ctx.reply(embed= embed2)
   else:
     await ctx.reply("You don't have the required permission: Ban members.")
 
 @commands.command()
-async def getrole(ctx, roles : commands.Greedy[discord.Role], member: discord.Member = None):
+async def getrole(ctx, roles: commands.Greedy[discord.Role], member: discord.Member = None):
   if member == None:
     member = ctx.author
   if has_perms(ctx.channel, ctx.author, 28) or False not in [x in db["getrole_bypass_ids"] for x in roles]:
@@ -67,18 +68,18 @@ async def kick(ctx, user: discord.Member, *, reason="No reason provided"):
     except discord.Forbidden:
       await ctx.reply("The bot doesn't have the required permission: Kick members.")
       return
-    embed1 = discord.Embed(title=f"You were kicked from the server.", description=f"Reason: {reason}\nBy: {ctx.author.mention}")
-    embed2 = discord.Embed(title=f"{user.name} was kicked.", description=f"Reason: {reason}\nBy: {ctx.author.mention}")
+    embed1 = Embed(title=f"You were kicked from the server.", description=f"Reason: {reason}\nBy: {ctx.author.mention}")
+    embed2 = Embed(title=f"{user.name} was kicked.", description=f"Reason: {reason}\nBy: {ctx.author.mention}")
     try:
       await user.send(embed=embed1)
     except:
       pass
-    await ctx.reply(embed=embed2)
+    await ctx.reply(embed= embed2)
   else:
     await ctx.reply("You don't have the required permission: Kick members.")
 
 @commands.command()
-async def makeinvite(ctx, timetocount="0", uses: int = 0):
+async def makeinvite(ctx, timetocount = "0", uses: int = 0):
   if has_perms(ctx.channel, ctx.author, 0):
     seconds = int(timedelta(**{
       UNITS.get(m.group('unit').lower(), 'seconds'): int(m.group('val'))
@@ -113,8 +114,8 @@ async def makethreads(ctx, times: int = 1, archive: typing.Literal['1', '2', '3'
 async def purge(ctx, num: int):
   try_delete_message(ctx.message)
   if ctx.channel.permissions_for(ctx.author).manage_messages or botadmin(ctx):
-    deleted = await ctx.channel.purge(limit=num+1)
-    msg = await ctx.reply("Purging completed.")
+    deleted = await ctx.channel.purge(limit = num + 1)
+    msg = await ctx.send("Purging completed.")
     authors = f'\n'.join({f"{x.author.name}#{x.author.discriminator}{' **bot**' if x.author.bot else ''}" for x in deleted})
     await msg.edit(f"Purged {len(deleted)} messages from:\n{authors}", delete_after = 5)
   else:
@@ -126,7 +127,7 @@ async def purgepy(ctx, num: int, pyscript):
   if ctx.channel.permissions_for(ctx.author).manage_messages or botadmin(ctx):
     num=int(num)
     deleted = await ctx.channel.purge(limit=num+1, check = lambda msg: eval(pyscript))
-    msg = await ctx.reply("Purging completed.")
+    msg = await ctx.send("Purging completed.")
     authors = f'\n'.join({f"{x.author.name}#{x.author.discriminator}{' **bot**' if x.author.bot else ''}" for x in deleted})
     await msg.edit(f"Purged {len(deleted)} messages from:\n{authors}", delete_after = 5)
   else:
@@ -138,7 +139,7 @@ async def purgepygex(ctx, num: int, regex, *, pyscript):
   if ctx.channel.permissions_for(ctx.author).manage_messages or botadmin(ctx):
     purge_pattern = re.compile(regex)
     deleted = await ctx.channel.purge(limit=num+1, check = lambda msg: eval(pyscript) and purge_pattern.fullmatch(msg.content))
-    msg = await ctx.reply("Purging completed.")
+    msg = await ctx.send("Purging completed.")
     authors = f'\n'.join({f"{x.author.name}#{x.author.discriminator}{' **bot**' if x.author.bot else ''}" for x in deleted})
     await msg.edit(f"Purged {len(deleted)} messages from:\n{authors}", delete_after = 5)
   else:
@@ -159,7 +160,7 @@ async def purgeregex(ctx, num: int, *, regex):
   if ctx.channel.permissions_for(ctx.author).manage_messages or botadmin(ctx):
     purge_pattern = re.compile(regex)
     deleted = await ctx.channel.purge(limit=num+1, check = lambda msg: purge_pattern.fullmatch(msg.content))
-    msg = await ctx.reply("Purging completed.")
+    msg = await ctx.send("Purging completed.")
     authors = f'\n'.join({f"{x.author.name}#{x.author.discriminator}{' **bot**' if x.author.bot else ''}" for x in deleted})
     await msg.edit(f"Purged {len(deleted)} messages from:\n{authors}", delete_after = 5)
   else:
@@ -347,7 +348,7 @@ async def timeout(ctx, member: discord.Member, duration="0s", *, reason="No reas
       await member.edit(timeout_until = end, reason= f"{reason} (requested by {ctx.author.name}#{ctx.author.discriminator})")
     else:
       await member.edit(timeout_until = end)
-    embed = discord.Embed(title=f"{member.name} was timed out.", description=f"Until: {unix_timestamp(end)}\nReason: {reason}\nBy: {ctx.author.mention}")
+    embed = Embed(title=f"{member.name} was timed out.", description=f"Until: {unix_timestamp(end)}\nReason: {reason}\nBy: {ctx.author.mention}")
     await ctx.send(embed = embed)
   else:
     await ctx.reply("You don't have the required permission: Moderate members.")
@@ -360,13 +361,13 @@ async def unban(ctx, user: discord.User, *, reason="No reason provided"):
     except:
       await ctx.reply("The bot doesn't have the required permission: Ban members.")
       return
-    embed1 = discord.Embed(title=f"You were unbanned from the server.", description=f"Reason: {reason}\nBy: {ctx.author.mention}")
-    embed2 = discord.Embed(title=f"{user.name} was unbanned.", description=f"Reason: {reason}\nBy: {ctx.author.mention}")
+    embed1 = Embed(title=f"You were unbanned from the server.", description=f"Reason: {reason}\nBy: {ctx.author.mention}")
+    embed2 = Embed(title=f"{user.name} was unbanned.", description=f"Reason: {reason}\nBy: {ctx.author.mention}")
     try:
       await user.send(embed=embed1)
     except:
       pass
-    await ctx.reply(embed=embed2)
+    await ctx.reply(embed= embed2)
   else:
     await ctx.reply("You don't have the required permission: Ban members.")
 

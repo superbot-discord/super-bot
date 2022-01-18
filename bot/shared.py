@@ -19,7 +19,7 @@ import numpy as np
 import selenium
 from bs4 import BeautifulSoup
 from markdown2 import Markdown
-from PIL import Image, ImageDraw, ImageEnhance, ImageFilter, ImageFont, ImageOps
+from PIL import Image, ImageDraw, ImageFont
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
@@ -34,11 +34,6 @@ from nextcord import Embed, Permissions
 from nextcord.enums import VoiceRegion
 from nextcord.ext import commands
 import discord_ui as ui
-
-bot_ = commands.Bot(command_prefix=commands.when_mentioned_or("="),intents=discord.Intents.all(),
-                    allowed_mentions=discord.AllowedMentions(everyone=False, users=True,
-                    roles=False, replied_user=False), case_insensitive=True, strip_after_prefix=True)
-bu = ui.UI(bot_)
 
 f = open('./assets/database.json', 'r')
 db = json.loads(f.read())
@@ -60,7 +55,6 @@ Sv4jI-xcXxr8GtSt2loCC7scCGMS; PREF=f4=4000000&tz=Asia.Hong_Kong""".replace(f"\n"
 
 func            =lambda pct,allvals: "{:d} ({:.1f}%)".format(int(pct/100*np.sum(allvals)), round(pct, 1))
 botadmin        =lambda context    : context.author.id in db['botadmins']
-number_to_emoji =lambda a          : a.replace("1",":one: ").replace("2",":two: ").replace("3",":three: ").replace("4",":four: ").replace("5",":five: ").replace("6",":six: ").replace("7",":seven: ").replace("8",":eight: ").replace("9",":nine: ").replace("0",":zero: ")
 sizer           =lambda bytes      : f"{round(bytes,4):,} Bytes" if bytes<1024 else (f"{round(bytes/1024,4):,}KB" if bytes<1048576 else (f"{round(bytes/1048576,4):,}MB" if bytes<1073741824 else f"{round(bytes/1073741824,4):,}GB"))
 sizer2          =lambda bytes      : f"{str(round(bytes,4)).zfill(9)} Bytes" if bytes<1024 else (f"{str(round(bytes/1024,4)).zfill(9)}KB" if bytes<1048576 else (f"{str(round(bytes/1048576,4)).zfill(9)}MB" if bytes<1073741824 else f"{round(bytes/1073741824,4):,}GB"))
 format_abr      =lambda stream     : f"{stream.__getattribute__('abr')}\t" if stream.__getattribute__("abr") else 'No audio'
@@ -74,7 +68,6 @@ unix_timestamp  =lambda dt,flag="F": f"<t:{round(datetime.timestamp(dt))}:{flag}
 time_display    =lambda dt         : dt.strftime("%A, %d %b %Y, %H:%M:%S")
 st_nd_th_format =lambda n          : "st" if str(n).endswith("1") and not str(n).endswith("11") else ("th" if str(n).endswith("2") and not str(n).endswith("12") else "nd")
 perm_display    =lambda integer, x : "<:pt:932171999936135168><:tr:932189462648209468> " if integer & (1 << x) else "<:px:912206780015190038><:tr:932189462648209468> "
-permission_messages={}
 
 forecast_formatter = """
 """
@@ -126,13 +119,11 @@ def voice_region_format(region):
   return "An error occured."
 
 verify_pattern = re.compile(r'[^ ⠀][\s\S]{0,30}?[^ ⠀]#?[\d]{4}(,|, | )?[\d+\-*/×÷%xyz()\[\]\{\}]{1,50}=[\d+\-*/×÷%xyz()\[\]\{\}]{1,50}(,|, | )?[\S ]{3,20}(,|, | )?(Red|Orange|Yellow|Green|Light( |_)?Green|Dark( |_)?Green|Cyan|Blue|Light( |_)?Blue|Dark( |_)?Blue|Purple|Pink|Brown)', re.IGNORECASE)
-id_pattern = re.compile(r'([A-Z]{5})', re.IGNORECASE)
 poll_pattern = re.compile(r'([\w]+?)(:\w{1,32}:|[\uD800-\uDBFF])')
 UNITS = {'s':'seconds', 'm':'minutes', 'h':'hours', 'd':'days', 'w':'weeks'}
 view_overwrite = discord.PermissionOverwrite()
 view_overwrite.view_channel = True
 clickers = {}
-vclients={}
 timestamp_pattern = re.compile(r'<t:-?[\d]{1,13}(:[FfDdTtR])?>')
 
 #clicker_button = ui.Button(style=discord.ButtonStyle.primary, row=0, custom_id="clicker", label="Click me!")
@@ -152,7 +143,7 @@ custom_permissions = {
   "none"      : Permissions(0),
 }
 
-server_real = {
+sr_real = {
   3 : "Administrator",
   33: "Manage Events",
   10: "View Channels",
@@ -165,7 +156,7 @@ server_real = {
   5 : "Manage Server"
 }
 
-membership_real = {
+ms_real = {
   0 : "Create Invites",
   26: "Change Nickname",
   27: "Manage Nicknames",
@@ -174,7 +165,7 @@ membership_real = {
   40: "Timeout Members"
 }
 
-text_channel_real = {
+tc_real = {
   11: "Send Messages",
   38: "Send Messages in Threads",
   35: "Create Public Threads",
@@ -192,7 +183,7 @@ text_channel_real = {
   31: "Use Application Commands"
 }
 
-voice_channel_real = {
+vc_real = {
   20: "Connect to Voice",
   21: "Speak (Audio)",
   9 : "Stream (Video)",
@@ -205,7 +196,7 @@ voice_channel_real = {
   32: "Request to Speak"
 }
 
-badges_real = {
+bg_real = {
   0 : "Staff (Discord Employee)",
   1 : "Partnered Server Owner",
   2 : "HypeSquad Events member",
@@ -223,25 +214,25 @@ badges_real = {
 
 # Integer TO Permission Utilities
 # Comma-separated permission items - e.g. "Administrator, Manage Channels, Manage Roles"
-def badges_itop(integer: int):
-  x = (", ".join([y for x,y in badges_real.items() if integer & (1 << x)]))
+def bg_itop(integer: int):
+  x = (", ".join([y for x,y in bg_real.items() if integer & (1 << x)]))
   return x if x else "No badges"
-def server_itop(integer: int):
-  x = (", ".join([y for x,y in server_real.items() if integer & (1 << x)]))
+def sr_itop(integer: int):
+  x = (", ".join([y for x,y in sr_real.items() if integer & (1 << x)]))
   return x if x else "No server permissions"
 def ms_itop(integer: int):
-  x = (", ".join([y for x,y in membership_real.items() if integer & (1 << x)]))
+  x = (", ".join([y for x,y in ms_real.items() if integer & (1 << x)]))
   return x if x else "No membership permissions"
 def tc_itop(integer: int):
-  x = (", ".join([y for x,y in text_channel_real.items() if integer & (1 << x)]))
+  x = (", ".join([y for x,y in tc_real.items() if integer & (1 << x)]))
   return x if x else "No text channel permissions"
 def vc_itop(integer: int):
-  x = (", ".join([y for x,y in voice_channel_real.items() if integer & (1 << x)]))
+  x = (", ".join([y for x,y in vc_real.items() if integer & (1 << x)]))
   return x if x else "No voice channel permissions"
 
 # Integer TO Discord Display Utilities
 # All permissions with :pt: or :pf: emoji from SuperBot Support
-server_itod = lambda integer: f"\n".join([perm_display(integer, x) + y for x,y in server_real.items()])
-ms_itod = lambda integer: f"\n".join([perm_display(integer, x) + y for x,y in membership_real.items()])
-tc_itod = lambda integer: f"\n".join([perm_display(integer, x) + y for x,y in text_channel_real.items()])
-vc_itod = lambda integer: f"\n".join([perm_display(integer, x) + y for x,y in voice_channel_real.items()])
+sr_itod = lambda integer: f"\n".join([perm_display(integer, x) + y for x,y in sr_real.items()])
+ms_itod = lambda integer: f"\n".join([perm_display(integer, x) + y for x,y in ms_real.items()])
+tc_itod = lambda integer: f"\n".join([perm_display(integer, x) + y for x,y in tc_real.items()])
+vc_itod = lambda integer: f"\n".join([perm_display(integer, x) + y for x,y in vc_real.items()])

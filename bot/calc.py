@@ -1,6 +1,4 @@
-from nextcord.ext import commands
-
-from shared import db
+from shared import commands, db
 
 SY2VA = db["decoder"]
 ASCII = db["encoder"]

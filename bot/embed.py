@@ -1,31 +1,28 @@
-import aiohttp
-from shared import *
-sys.path.append(os.path.abspath('./modules'))
-from nextcord import Webhook
+from shared import commands, discord, Embed, os, sys
 
 @commands.command()
 async def editembed(ctx, message : discord.Message = None, *,text):
-  if message==None:
+  if message == None:
     potential_reference = ctx.message.reference
     if potential_reference:
-      message=await ctx.bot.get_channel(potential_reference.channel_id).fetch_message(potential_reference.message_id)
+      message = await ctx.bot.get_channel(potential_reference.channel_id).fetch_message(potential_reference.message_id)
     else:
       await ctx.reply("Please reply to a message or add a message ID/Link.")
       return
   embed = botembed(text)
-  await message.edit(embed=embed)
+  await message.edit(embed= embed)
 
 @commands.command()
 async def embed(ctx, *, text):
   embed = botembed(text)
-  await ctx.send(embed=embed)
+  await ctx.send(embed= embed)
 
 @commands.command()
 async def ett(ctx, msg : discord.Message = None):
-  if msg==None:
+  if msg == None:
     potential_reference = ctx.message.reference
     if potential_reference:
-      msg=await ctx.bot.get_channel(potential_reference.channel_id).fetch_message(potential_reference.message_id)
+      msg = await ctx.bot.get_channel(potential_reference.channel_id).fetch_message(potential_reference.message_id)
     else:
       await ctx.reply("Please reply to a message or add a message ID/Link.")
       return
@@ -64,7 +61,7 @@ async def pretendembed(ctx, member: discord.Member, *, text):
 @commands.command(aliases=["fastembed", "qe"])
 async def quickembed(ctx, *, text):
   textlist=text.splitlines()
-  embed = discord.Embed()
+  embed = Embed()
   try:
     embed.title            = textlist[0]
   except:
@@ -86,7 +83,7 @@ async def quickembed(ctx, *, text):
 @commands.command(aliases=['simpembed', 'simplembed', 'sembed'])
 async def simpleembed(ctx, *, text):
   textlist=text.splitlines()
-  embed = discord.Embed()
+  embed = Embed()
   try:
     embed.title            = textlist[0]
   except:
@@ -164,7 +161,7 @@ def botett(msg):
 
 def botembed(text):
   textlist=text.splitlines()
-  embed = discord.Embed()
+  embed = Embed()
   try:
     embed.title        = textlist[0]
   except:

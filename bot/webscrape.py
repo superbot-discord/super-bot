@@ -38,9 +38,9 @@ async def covid(ctx, *, country="world"):
       pass
   if found == 1:
     if country == "world":
-      embed = discord.Embed(title="Coronavirus statistics worldwide")
+      embed = Embed(title="Coronavirus statistics worldwide")
     else:
-      embed = discord.Embed(title=f"Coronavirus statistics in {country}")
+      embed = Embed(title=f"Coronavirus statistics in {country}")
     tcases = needrow.findAll('td')[2].string
     trecovered = needrow.findAll('td')[6].string
     ttest = needrow.findAll('td')[12].string
@@ -178,10 +178,10 @@ async def population(ctx, country="current"):
       item = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR,"span[rel='"+country.lower()+"population']"))).text
       if "retrieving data" not in item:
         break
-    embed = discord.Embed(title="Population statistics of "+country.rstrip("-"))
+    embed = Embed(title="Population statistics of "+country.rstrip("-"))
     embed.add_field(name="Population", value=item, inline= False)
     if country == "current_":
-      embed = discord.Embed(title="Population statistics worldwide", description="Total Population: "+item)
+      embed = Embed(title="Population statistics worldwide", description="Total Population: "+item)
       while True:
         item = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR,"span[rel='births_today']"))).text
         if "retrieving data" not in item:
@@ -212,7 +212,7 @@ async def population(ctx, country="current"):
         if "retrieving data" not in item:
           break
       embed.add_field(name="Net Growth", value=item, inline= True)
-    await ctx.reply(embed=embed)
+    await ctx.reply(embed= embed)
   except selenium.common.exceptions.TimeoutException:
     await ctx.reply("Invalid country. Please try again.")
 
