@@ -324,6 +324,10 @@ async def ping(ctx, *, disposed= None):
 async def spoil_(ctx, message):
   await ctx.respond(message.content.replace("||", ""), hidden= True)
 
+@bu.user_command(name="Test")
+async def rickroller_(ctx, message):
+  await ctx.respond("Never gonna give you up!", hidden= True)
+
 
 @bot_.event
 async def on_command_error(ctx, error):
