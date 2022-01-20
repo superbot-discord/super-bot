@@ -75,7 +75,7 @@ class AllowedMentions:
         roles are in the message content.
     replied_user: :class:`bool`
         Whether to mention the author of the message being replied to. Defaults
-        to ``True``.
+        to ``False``.
 
         .. versionadded:: 1.6
     """
@@ -85,10 +85,10 @@ class AllowedMentions:
     def __init__(
         self,
         *,
-        everyone: bool = default,
-        users: Union[bool, List[Snowflake]] = default,
-        roles: Union[bool, List[Snowflake]] = default,
-        replied_user: bool = default,
+        everyone: bool = False,
+        users: Union[bool, List[Snowflake]] = False,
+        roles: Union[bool, List[Snowflake]] = False,
+        replied_user: bool = False,
     ):
         self.everyone = everyone
         self.users = users
@@ -101,7 +101,7 @@ class AllowedMentions:
 
         .. versionadded:: 1.5
         """
-        return cls(everyone=True, users=True, roles=True, replied_user=True)
+        return cls(everyone=True, users=True, roles=True, replied_user=False)
 
     @classmethod
     def none(cls: Type[A]) -> A:
@@ -129,7 +129,7 @@ class AllowedMentions:
             data['roles'] = [x.id for x in self.roles]
 
         if self.replied_user:
-            data['replied_user'] = True
+            data['replied_user'] = False
 
         data['parse'] = parse
         return data  # type: ignore
@@ -141,7 +141,7 @@ class AllowedMentions:
         everyone = self.everyone if other.everyone is default else other.everyone
         users = self.users if other.users is default else other.users
         roles = self.roles if other.roles is default else other.roles
-        replied_user = self.replied_user if other.replied_user is default else other.replied_user
+        replied_user = False#self.replied_user if other.replied_user is default else other.replied_user
         return AllowedMentions(everyone=everyone, roles=roles, users=users, replied_user=replied_user)
 
     def __repr__(self) -> str:

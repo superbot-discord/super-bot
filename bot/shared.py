@@ -119,7 +119,6 @@ def voice_region_format(region):
   return "An error occured."
 
 verify_pattern = re.compile(r'[^ ⠀][\s\S]{0,30}?[^ ⠀]#?[\d]{4}(,|, | )?[\d+\-*/×÷%xyz()\[\]\{\}]{1,50}=[\d+\-*/×÷%xyz()\[\]\{\}]{1,50}(,|, | )?[\S ]{3,20}(,|, | )?(Red|Orange|Yellow|Green|Light( |_)?Green|Dark( |_)?Green|Cyan|Blue|Light( |_)?Blue|Dark( |_)?Blue|Purple|Pink|Brown)', re.IGNORECASE)
-poll_pattern = re.compile(r'([\w]+?)(:\w{1,32}:|[\uD800-\uDBFF])')
 UNITS = {'s':'seconds', 'm':'minutes', 'h':'hours', 'd':'days', 'w':'weeks'}
 view_overwrite = discord.PermissionOverwrite()
 view_overwrite.view_channel = True

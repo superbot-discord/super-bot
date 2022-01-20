@@ -1,0 +1,6 @@
+snipe
+clearsnipe
+poll
+botpurge
+ping
+spoil

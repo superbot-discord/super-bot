@@ -1,5 +1,6 @@
 import html
 
+from _bot import bu
 from functions import trim
 from shared import chance, ra, requests, commands
 
@@ -376,7 +377,6 @@ def bottrivia(number):
     else:
       desc += f"True or False?\nAnswer: ||{html.unescape(x['correct_answer'])}||\n"
   return desc
-
 
 def setup(bot):
   bot.add_command(bird)

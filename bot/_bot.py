@@ -1,14 +1,18 @@
 #from discord.ext import tasks
-from shared import *
+from shared import (commands, datetime, db, discord, Embed, ems,
+                    has_perms, json, os, re, SequenceMatcher, timezone, traceback, ui,
+                    view_overwrite)
 
-bot_ = commands.Bot(command_prefix=commands.when_mentioned_or("="),intents=discord.Intents.all(),
-                    allowed_mentions=discord.AllowedMentions(everyone=False, users=True,
-                    roles=False, replied_user=False), case_insensitive=True, strip_after_prefix=True)
+
+bot_ = commands.Bot(command_prefix= commands.when_mentioned_or("="), intents= discord.Intents.all(),
+                    allowed_mentions= discord.AllowedMentions(everyone= False, users= True,
+                    roles= False, replied_user= False), case_insensitive= True, strip_after_prefix= True)
 bu = ui.UI(bot_)
-
-banned_ids =  []
+banned_ids = []
 banned_text = []
+
 bot_.remove_command('help')
+bot_.load_extension("admin")
 bot_.load_extension("apis__int")
 bot_.load_extension("apis_hk")
 bot_.load_extension("apis_uk")
@@ -17,7 +21,7 @@ bot_.load_extension("calc")
 bot_.load_extension("convert")
 bot_.load_extension("development")
 bot_.load_extension("dinfo")
-bot_.load_extension("embed")
+bot_.load_extension("discord_")
 bot_.load_extension("engrave")
 bot_.load_extension("image")
 bot_.load_extension("info")
@@ -38,151 +42,10 @@ for x in emojis_db:
   emoji_options.append({'name': x, 'value': x.partition(" ")[0]})
 emoji_options = emoji_options[:25]
 
-sniper={}
-sniping={}
-sniperdict={}
 poll_options={}
 polls=[]
+poll_pattern = re.compile(r'([\w]+?)(:\w{1,32}:|[\uD800-\uDBFF])')
 
-snipe_buttons = [
-  ui.Button(color='primary', custom_id="Snipe1", emoji="⏪"),
-  ui.Button(color='primary', custom_id="Snipe2", emoji="⬅️"),
-  ui.Button(color='primary', custom_id="Snipe3", emoji="📌"),
-  ui.Button(color='primary', custom_id="Snipe4", emoji="➡️"),
-  ui.Button(color='primary', custom_id="Snipe5", emoji="⏩")
-]
-
-bot_admin_guilds = [841330908560228412, 805441351033552916]
-bot_admin_slash = {841330908560228412: ui.SlashPermission(allowed= db['botadmins']),
-                   805441351033552916: ui.SlashPermission(allowed= db['botadmins'])}
-
-async def snipe_update(ctx: ui.ButtonInteraction, msg: discord.Message, number: int):
-  await ctx.respond()
-  sniperdict[msg][0] = number
-  embed = Embed(title= f"Snipped message ({number}/{len(sniper[msg.channel])})", description= sniper[msg.channel][number-1][0])
-  embed.set_footer(text= sniper[msg.channel][number-1][1])
-  await msg.edit((msg.content if msg.content else ""), embed= embed, components= snipe_buttons)
-
-class SnipeL(ui.listener.Listener):
-  def __init__(self, user_id: int):
-    self.target_users = [user_id]
-
-  @ui.Listener.button(custom_id= "Snipe1")
-  async def snipe1(self_, ctx: ui.ButtonInteraction):
-    await snipe_update(ctx, ctx.message, 1)
-
-  @ui.Listener.button(custom_id= "Snipe2")
-  async def snipe2(self_, ctx: ui.ButtonInteraction):
-    await snipe_update(ctx, ctx.message, max(sniperdict[ctx.message][0]-1, 1))
-
-  @ui.Listener.button(custom_id= "Snipe4")
-  async def snipe4(self_, ctx: ui.ButtonInteraction):
-    await snipe_update(ctx, ctx.message, min(sniperdict[ctx.message][0]+1, sniperdict[ctx.message][1]))
-
-  @ui.Listener.button(custom_id= "Snipe5")
-  async def snipe5(self_, ctx: ui.ButtonInteraction):
-    await snipe_update(ctx, ctx.message, sniperdict[ctx.message][1])
-
-  @ui.Listener.button(custom_id= "Snipe3")
-  async def snipe3(self_, ctx: ui.ButtonInteraction):
-    sniperdict[ctx.message] -= 1
-    if ctx.channel.permissions_for(ctx.guild.get_member(796686363604680755)).manage_messages:
-      if ctx.message.pinned:
-        await ctx.message.unpin()
-      else:
-        await ctx.message.pin()
-        pinmsg = await ctx.channel.fetch_message(ctx.channel.last_message_id)
-        await pinmsg.delete()
-    else:
-      await ctx.respond("Unable to Pin/Unpin messages without the Manage Server permission.", hidden= True)
-      return
-  
-  @ui.Listener.wrong_user()
-  async def wrong_user(self, ctx):
-    await ctx.respond("Please use `/snipe` on your own in order to browse snipped messages.", hidden= True)
-
-
-@bu.slash.command(name="snipe", description="View up to 8 most recently deleted messages in this channel.")
-async def snipe_(ctx: ui.SlashInteraction):
-  chnl = ctx.channel
-  if sniping.get(chnl, True):
-    if not sniper.get(chnl, None):
-      embed = Embed(title= "Empty", description= "Nothing to snipe from this channel.")
-      await ctx.respond(embed=embed)
-      return
-    else:
-      embed = Embed(title= f"Snipped message (1/{len(sniper[chnl])})", description= sniper[chnl][0][0])
-      embed.set_footer(text= sniper[chnl][0][1])
-    if chance(1000):
-      msg = await ctx.respond("Did someone just ghostping you?", embed= embed, components=
-                              snipe_buttons, listener= SnipeL(ctx.author.id))
-    else:
-      msg = await ctx.respond(embed= embed, components= snipe_buttons, listener= SnipeL(ctx.author.id))
-    sniperdict[msg] = [1, len(sniper[chnl])]
-  else:
-    await ctx.respond("Snipping is disabled. Please ask someone with manage messages permission to re-enable it.")
-
-@bot_.command(aliases=['sniper'])
-async def snipe(ctx, *, text= None):
-  chnl = ctx.channel
-  if not text:
-    if sniping.get(chnl, True):
-      if not sniper.get(chnl, None):
-        embed = Embed(title= "Empty", description= "Nothing to snipe from this channel.")
-        await ctx.reply(embed= embed)
-        return
-      else:
-        embed = Embed(title= f"Snipped message (1/{len(sniper[chnl])})", description= sniper[chnl][0][0])
-        embed.set_footer(text= sniper[chnl][0][1])
-      if chance(1000):
-        msg = await ctx.reply("Did someone just ghostping you?", embed= embed, components= snipe_buttons, listener= SnipeL(ctx.author.id))
-      else:
-        msg = await ctx.reply(embed= embed, components= snipe_buttons, listener= SnipeL(ctx.author.id))
-      sniperdict[msg] = [1, len(sniper[chnl])]
-    else:
-      await ctx.reply("Snipping is disabled. Please ask someone with manage messages permission to re-enable it.")
-  elif has_perms(ctx.channel, ctx.author, 4):
-    if specialbool(text):
-      sniping[chnl] = True
-      await ctx.reply("Sniping is now enabled.")
-    else:
-      sniping[chnl] = False
-      await ctx.reply("Sniping is now disabled.")
-  else:
-    await ctx.reply("""If you want to view sniped messages, please run `=snipe` without any arguments.
-    If you intend to enable/disable sniping, you are missing the Manage Channels permission.""")
-
-@bu.slash.command(name="snipe_toggle", description="Enable or disable sniping in this channel.",
-                  options=[ui.SlashOption(name= "Toggle", type= bool, description=
-                  "Whether to enable or disable sniping. Toggles the current option by default.")])
-async def snipe_toggle(ctx: ui.SlashInteraction, toggle= None):
-  chnl = ctx.channel
-  if toggle == None:
-    toggle = not sniping[chnl]
-  sniping[chnl] = toggle
-  await ctx.respond(f"Sniping is now {'enabled' if toggle else 'disabled'}.")
-
-@bu.slash.command(name="snipe_clear", description="Clears the snipe database for a channel.",
-                  options=[ui.SlashOption(name= "Channel", type= discord.TextChannel, description=
-                  "The channel to clear the database of. Defaults to the current channel.",
-                  channel_types= [discord.ChannelType.text])])
-async def snipe_clear(ctx: ui.SlashInteraction, channel: discord.TextChannel = None):
-  channel = ctx.channel if not channel else channel
-  if channel.permissions_for(ctx.author).manage_channels or botadmin(ctx):
-    sniper[channel] = []
-    await ctx.respond(f"Cleared snipe database for {channel.mention}.")
-  else:
-    await ctx.respond("You don't have the required permission: Manage channels.")
-
-@bot_.command()
-async def clearsnipe(ctx, *, chnl: discord.TextChannel = None):
-  if chnl == None:
-    chnl = ctx.channel
-  if chnl.permissions_for(ctx.author).manage_channels or botadmin(ctx):
-    sniper[chnl] = []
-    await ctx.reply(f"Cleared snipe database for {chnl.mention}.")
-  else:
-    await ctx.reply("You don't have the required permission: Manage channels.")
 
 #@tasks.loop(hours=24)
 #async def sba_marks():
@@ -226,58 +89,6 @@ async def poll(ctx, *, text):
 
 @bot_.command()
 @commands.is_owner()
-async def purgeserver(ctx, text, condition= "True", *, disposed= None):
-  text = text.lower()
-  if text.startswith("role"):
-    all_objects = ctx.guild.roles
-    msg = await ctx.reply("Role purging started.")
-  elif text.startswith("emoji"):
-    all_objects = ctx.guild.emojis
-    msg = await ctx.reply("Emoji purging started.")
-  elif text.startswith("event"):
-    all_objects = ctx.guild.scheduled_events
-    msg = await ctx.reply("Event purging started.")
-  else:
-    await ctx.reply("Please use `role` or `emoji` to purge the respective items.")
-    return
-  for x in all_objects:
-    if eval(condition):
-      await x.delete()
-  await msg.edit(msg.content.replace("started.", "completed!"))
-
-@bu.slash.command(name="bot_ban", description="Bans a user from using the bot.", options=[
-                  ui.SlashOption(name= "User", type= discord.User, description=
-                  "The user to ban from using the bot.", required= True), ui.SlashOption(name=
-                  "Reason", type=str, description= "The reason to ban the user for.", required=
-                  False)], default_permission= False, guild_ids= bot_admin_guilds,
-                  guild_permissions= bot_admin_slash)
-async def bot_ban(ctx, user: discord.User, *, reason= "No reason was provided"):
-  banned_ids.append(user.id)
-  banned_text.append(reason)
-  await ctx.respond("Banned user from using the bot.", hidden= True)
-  await owner.send(f"{user.name}#{user.discriminator} (ID: {user.id}) has been bot-banned.")
-
-@bu.slash.command(name="bot_unban", description="Unbans a user from using the bot.", options=[
-                  ui.SlashOption(name= "User", type= discord.User, description=
-                  "The user to remove the ban of.", required= True)], default_permission= False,
-                  guild_ids= bot_admin_guilds, guild_permissions= bot_admin_slash)
-async def bot_unban(ctx, user: discord.User):
-  if user.id in banned_ids:
-    banned_text.remove(banned_text[banned_ids.index(user.id)])
-    banned_ids.remove(user.id)
-    await ctx.respond("Unbanned user from using the bot.", hidden= True)
-    await owner.send(f"{user.name}#{user.discriminator} (ID: {user.id}) has been bot-unbanned.")
-  else:
-    await ctx.respond("The user is not banned.", hidden= True)
-
-@bot_.command()
-@commands.is_owner()
-async def botadmin(ctx, user: discord.User):
-  db['botadmins'].append(user.id)
-  await ctx.reply("Added user as bot admin.")
-
-@bot_.command()
-@commands.is_owner()
 async def nick(ctx, *, new_nick):
   try:
     await ctx.guild.me.edit(nick=(None if new_nick == "clear" else new_nick))
@@ -291,7 +102,7 @@ async def botpurge(ctx, *, num: int = 1):
     await ctx.message.delete()
   except discord.Forbidden:
     pass
-  if ctx.channel.permissions_for(ctx.author).manage_messages or botadmin(ctx):
+  if has_perms(ctx.channel, ctx.author, 13):
     purged = 0
     async for x in ctx.channel.history(limit=1000):
       if x.author.id == 796686363604680755:
@@ -303,7 +114,7 @@ async def botpurge(ctx, *, num: int = 1):
   else:
     await ctx.send("You don't have the required permission: Manage messages.")
 
-@bu.slash.command(name="ping", description="Views the response time and latency of the bot.")
+@bu.slash.command(name= "ping_1", description= "Views the response time and latency of the bot.")
 async def ping_(ctx):
   now1 = datetime.now(timezone.utc)
   message = await ctx.respond("Pong!")
@@ -311,7 +122,7 @@ async def ping_(ctx):
   mcs = str(int(response_time.microseconds)+int((response_time.total_seconds())%60))
   await message.edit(content=f"Pong! 🏓\n```Message delay: {mcs:<10}microseconds\nBot latency  : {round(bot_.latency*1000000, 2):<10}microseconds```")
 
-@bot_.command(aliases=["online"])
+@bot_.command(aliases= ["online"])
 async def ping(ctx, *, disposed= None):
   now1 = datetime.now(timezone.utc)
   message = await ctx.send("Pong!")
@@ -320,81 +131,68 @@ async def ping(ctx, *, disposed= None):
   await message.edit(content=f"Pong! 🏓\n```Message delay: {mcs:<10}microseconds\nBot latency  : {round(bot_.latency*1000000, 2):<10}microseconds```")
 
 
-@bu.message_command(name="Spoil spoilers")
+@bu.message_command(name= "Spoil spoilers")
 async def spoil_(ctx, message):
   await ctx.respond(message.content.replace("||", ""), hidden= True)
 
-@bu.user_command(name="Test")
+@bu.user_command(name= "Test")
 async def rickroller_(ctx, message):
   await ctx.respond("Never gonna give you up!", hidden= True)
 
 
-@bot_.event
-async def on_command_error(ctx, error):
-  if isinstance(error, commands.CommandNotFound):
-    message = ctx.message
-    used_prefix = ctx.prefix
-    used_command = message.content.split()[0][len(used_prefix):].lower()
-    available_commands = [cmd.name for cmd in bot_.commands]
-    matches = {cmd: SequenceMatcher(None, cmd, used_command).ratio() for cmd in available_commands}
-    command = max(matches.items(), key=lambda item: item[1])[0]
-    if SequenceMatcher(None, command, used_command).ratio() <= 0.7:
-      await ctx.reply(f"Your might have made a (serious) typo and your command has been ignored.", delete_after=4)
-    try:
-      arguments = message.content.split(" ", 1)[1]
-    except IndexError:
-      arguments = ""
-    new_content = f"{used_prefix}{command} {arguments}".strip()
-    message.content = new_content
-    await ctx.reply(f"Your might have made a typo and your command has been interpreted as `{command}`.", delete_after=4)
-    await bot_.process_commands(message)
-  elif isinstance(error, commands.MissingRequiredArgument):
-    await ctx.reply(f"You missed one or more arguments! {len(ctx.command.clean_params.keys())} argument(s) are required.\nNote: Multiline arguments are treated as one argument. Optional arguments are counted as well.")
-  elif isinstance(error, commands.UserInputError):
-    await ctx.reply("One or more of your arguments is/are not in the correct format! Please read the documentation.")
-  elif isinstance(error, commands.NotOwner):
-    await ctx.reply("Unfortunately, only the owner of the bot is allowed to use this.")
-  elif isinstance(error, commands.CommandInvokeError):
-    error_ = error.original
-    if isinstance(error_, FileNotFoundError):
-      await ctx.reply("Unfortunately, the file could not be generated.")
-    else:
-      try:
-        await ctx.send(f"Sorry! An error occured:\n```{''.join(traceback.format_exception(type(error), error, error.__traceback__))}```\n If the error persists, please kindly inform JohannLau#6541 about this issue.")
-      except discord.HTTPException:
-        print(''.join(traceback.format_exception(type(error), error, error.__traceback__)))
-        await ctx.reply(f"Sorry! An error occured. The error was too long but it had been shown to JohannLau#6541. If the error persists, Please kindly inform him about this issue.")
-  elif isinstance(error, discord.HTTPException):
-    if error.code == 40005:
-      await ctx.reply("Unfortunately, the output file is too large.")
-    elif error.code == 50006:
-      await ctx.reply("Unfortunately, there is no output.")
-    elif error.code == 50035:
-      await ctx.reply("Unfortunately, the output text is too long.")
-  else:
-    try:
-      await ctx.send(f"Sorry! An error occured:\n```{''.join(traceback.format_exception(type(error), error, error.__traceback__))}```\n If the error persists, please kindly inform JohannLau#6541 about this issue.")
-    except discord.HTTPException:
-      print(''.join(traceback.format_exception(type(error), error, error.__traceback__)))
-      await ctx.reply(f"Sorry! An error occured. The error was too long but it had been shown to JohannLau#6541. If the error persists, Please kindly inform him about this issue.")
-
-@bot_.event
-async def on_message_delete(message):
-  keyname = f"{message.guild.id}{message.channel.id}"
-  val = message.content
-  if not val.replace(" ",""):
-    return
-  footer = f"""By {message.author.name}#{message.author.discriminator} at {time_display(message.created_at)}
-   • Note: the most recently deleted message is stored as the first one."""
-  if not sniper.get(message.channel):
-    sniper[message.channel] = []
-  sniper[message.channel].insert(0, [val, footer])
-  sniper[message.channel] = sniper[message.channel][:10]
+# @bot_.event
+# async def on_command_error(ctx, error):
+#   if isinstance(error, commands.CommandNotFound):
+#     message = ctx.message
+#     used_prefix = ctx.prefix
+#     used_command = message.content.split()[0][len(used_prefix):].lower()
+#     available_commands = [cmd.name for cmd in bot_.commands]
+#     matches = {cmd: SequenceMatcher(None, cmd, used_command).ratio() for cmd in available_commands}
+#     command = max(matches.items(), key=lambda item: item[1])[0]
+#     if SequenceMatcher(None, command, used_command).ratio() <= 0.7:
+#       await ctx.reply(f"Your might have made a (serious) typo and your command has been ignored.", delete_after=4)
+#     try:
+#       arguments = message.content.split(" ", 1)[1]
+#     except IndexError:
+#       arguments = ""
+#     new_content = f"{used_prefix}{command} {arguments}".strip()
+#     message.content = new_content
+#     await ctx.reply(f"Your might have made a typo and your command has been interpreted as `{command}`.", delete_after=4)
+#     await bot_.process_commands(message)
+#   elif isinstance(error, commands.MissingRequiredArgument):
+#     await ctx.reply(f"You missed one or more arguments! {len(ctx.command.clean_params.keys())} argument(s) are required.\nNote: Multiline arguments are treated as one argument. Optional arguments are counted as well.")
+#   elif isinstance(error, commands.UserInputError):
+#     await ctx.reply("One or more of your arguments is/are not in the correct format! Please read the documentation.")
+#   elif isinstance(error, commands.NotOwner):
+#     await ctx.reply("Unfortunately, only the owner of the bot is allowed to use this.")
+#   elif isinstance(error, commands.CommandInvokeError):
+#     error_ = error.original
+#     if isinstance(error_, FileNotFoundError):
+#       await ctx.reply("Unfortunately, the file could not be generated.")
+#     else:
+#       try:
+#         await ctx.send(f"Sorry! An error occured:\n```{''.join(traceback.format_exception(type(error), error, error.__traceback__))}```\n If the error persists, please kindly inform JohannLau#6541 about this issue.")
+#       except discord.HTTPException:
+#         print(''.join(traceback.format_exception(type(error), error, error.__traceback__)))
+#         await ctx.reply(f"Sorry! An error occured. The error was too long but it had been shown to JohannLau#6541. If the error persists, Please kindly inform him about this issue.")
+#   elif isinstance(error, discord.HTTPException):
+#     if error.code == 40005:
+#       await ctx.reply("Unfortunately, the output file is too large.")
+#     elif error.code == 50006:
+#       await ctx.reply("Unfortunately, there is no output.")
+#     elif error.code == 50035:
+#       await ctx.reply("Unfortunately, the output text is too long.")
+#   else:
+#     try:
+#       await ctx.send(f"Sorry! An error occured:\n```{''.join(traceback.format_exception(type(error), error, error.__traceback__))}```\n If the error persists, please kindly inform JohannLau#6541 about this issue.")
+#     except discord.HTTPException:
+#       print(''.join(traceback.format_exception(type(error), error, error.__traceback__)))
+#       await ctx.reply(f"Sorry! An error occured. The error was too long but it had been shown to JohannLau#6541. If the error persists, Please kindly inform him about this issue.")
 
 # @bot_.event
 # async def on_thread_update(before, after):
 #   if after.id == 887562599191941121 and after.archived:
-#     await after.edit(archived=False)
+#     await after.edit(archived= False)
 #     await after.send("I hate Discord's short auto-archive period when I don't buy Nitro, so I auto-unarchived it!")
 
 # @bot_.event
@@ -490,7 +288,8 @@ async def on_ready():
     name=f"with =help in {len(bot_.guilds)} servers", timestamps = db["status_timestamps"])
   await bot_.change_presence(status= discord.Status.idle, activity= activity)
   print(f"Bot is ready!")
-  owner = bot_.get_user(687474789342117900)
+  owner = await bot_.fetch_user(687474789342117900)
+
 
 print("Bot is getting started…")
 try:

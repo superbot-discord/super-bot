@@ -19,7 +19,7 @@ class SearchFlags(commands.FlagConverter):
 
 @commands.command()
 async def ban(ctx, user: discord.User, delete: int = 0, *, reason="No reason provided"):
-  if ctx.channel.permissions_for(ctx.author).ban_members or botadmin(ctx):
+  if has_perms(ctx.channel, ctx.author, 2):
     try:
       await ctx.guild.ban(user, delete_message_days= delete, reason= f"{reason} (requested by {ctx.author.name}#{ctx.author.discriminator})")
     except discord.Forbidden:
@@ -40,7 +40,7 @@ async def getrole(ctx, roles: commands.Greedy[discord.Role], member: discord.Mem
   if member == None:
     member = ctx.author
   if has_perms(ctx.channel, ctx.author, 28) or False not in [x in db["getrole_bypass_ids"] for x in roles]:
-    member_roles=member.roles
+    member_roles = member.roles
     addrole_count = removerole_count = 0
     for x in roles:
       if x in member_roles:
@@ -113,7 +113,7 @@ async def makethreads(ctx, times: int = 1, archive: typing.Literal['1', '2', '3'
 @commands.command()
 async def purge(ctx, num: int):
   try_delete_message(ctx.message)
-  if ctx.channel.permissions_for(ctx.author).manage_messages or botadmin(ctx):
+  if has_perms(ctx.channel, ctx.author, 13):
     deleted = await ctx.channel.purge(limit = num + 1)
     msg = await ctx.send("Purging completed.")
     authors = f'\n'.join({f"{x.author.name}#{x.author.discriminator}{' **bot**' if x.author.bot else ''}" for x in deleted})
@@ -124,9 +124,9 @@ async def purge(ctx, num: int):
 @commands.command()
 async def purgepy(ctx, num: int, pyscript):
   try_delete_message(ctx.message)
-  if ctx.channel.permissions_for(ctx.author).manage_messages or botadmin(ctx):
+  if has_perms(ctx.channel, ctx.author, 13):
     num=int(num)
-    deleted = await ctx.channel.purge(limit=num+1, check = lambda msg: eval(pyscript))
+    deleted = await ctx.channel.purge(limit= num + 1, check = lambda msg: eval(pyscript))
     msg = await ctx.send("Purging completed.")
     authors = f'\n'.join({f"{x.author.name}#{x.author.discriminator}{' **bot**' if x.author.bot else ''}" for x in deleted})
     await msg.edit(f"Purged {len(deleted)} messages from:\n{authors}", delete_after = 5)
@@ -136,9 +136,9 @@ async def purgepy(ctx, num: int, pyscript):
 @commands.command()
 async def purgepygex(ctx, num: int, regex, *, pyscript):
   try_delete_message(ctx.message)
-  if ctx.channel.permissions_for(ctx.author).manage_messages or botadmin(ctx):
+  if has_perms(ctx.channel, ctx.author, 13):
     purge_pattern = re.compile(regex)
-    deleted = await ctx.channel.purge(limit=num+1, check = lambda msg: eval(pyscript) and purge_pattern.fullmatch(msg.content))
+    deleted = await ctx.channel.purge(limit= num + 1, check= lambda msg: eval(pyscript) and purge_pattern.fullmatch(msg.content))
     msg = await ctx.send("Purging completed.")
     authors = f'\n'.join({f"{x.author.name}#{x.author.discriminator}{' **bot**' if x.author.bot else ''}" for x in deleted})
     await msg.edit(f"Purged {len(deleted)} messages from:\n{authors}", delete_after = 5)
@@ -146,20 +146,24 @@ async def purgepygex(ctx, num: int, regex, *, pyscript):
     await ctx.reply("You don't have the required permission: Manage messages.")
 
 @commands.command()
-async def purgereactions(ctx, messages, emoji: discord.Emoji = None):
-  if emoji == None:
-    async for message in ctx.channel.history(limit=int(messages)+1):
-      await message.clear_reactions()
+async def purgereactions(ctx, num: int, emoji: discord.Emoji = None):
+  try_delete_message(ctx.message)
+  if has_perms(ctx.channel, ctx.author, 13):
+    if emoji == None:
+      async for message in ctx.channel.history(limit= num + 1):
+        await message.clear_reactions()
+    else:
+      async for message in ctx.channel.history(limit= num + 1):
+        await message.clear_reaction(emoji)
   else:
-    async for message in ctx.channel.history(limit=int(messages)+1):
-      await message.clear_reaction(emoji)
+    await ctx.reply("You don't have the required permission: Manage messages.")
 
 @commands.command()
 async def purgeregex(ctx, num: int, *, regex):
   try_delete_message(ctx.message)
-  if ctx.channel.permissions_for(ctx.author).manage_messages or botadmin(ctx):
+  if has_perms(ctx.channel, ctx.author, 13):
     purge_pattern = re.compile(regex)
-    deleted = await ctx.channel.purge(limit=num+1, check = lambda msg: purge_pattern.fullmatch(msg.content))
+    deleted = await ctx.channel.purge(limit= num + 1, check= lambda msg: purge_pattern.fullmatch(msg.content))
     msg = await ctx.send("Purging completed.")
     authors = f'\n'.join({f"{x.author.name}#{x.author.discriminator}{' **bot**' if x.author.bot else ''}" for x in deleted})
     await msg.edit(f"Purged {len(deleted)} messages from:\n{authors}", delete_after = 5)
@@ -167,10 +171,10 @@ async def purgeregex(ctx, num: int, *, regex):
     await ctx.reply("You don't have the required permission: Manage messages.")
 
 @commands.command()
-async def purgerole(ctx, num, roleinput: discord.Role):
+async def purgerole(ctx, num: int, role: discord.Role):
   try_delete_message(ctx.message)
-  if ctx.channel.permissions_for(ctx.author).manage_messages or botadmin(ctx):
-    deleted = await ctx.channel.purge(limit=num+1, check = lambda msg: roleinput in msg.author.roles)
+  if has_perms(ctx.channel, ctx.author, 13):
+    deleted = await ctx.channel.purge(limit= num + 1, check= lambda msg: role in msg.author.roles)
     msg = await ctx.reply("Purging completed.")
     authors = f'\n'.join({f"{x.author.name}#{x.author.discriminator}{' **bot**' if x.author.bot else ''}" for x in deleted})
     await msg.edit(f"Purged {len(deleted)} messages from:\n{authors}", delete_after = 5)
@@ -178,9 +182,9 @@ async def purgerole(ctx, num, roleinput: discord.Role):
     await ctx.reply("You don't have the required permission: Manage messages.")
 
 @commands.command()
-async def purgeuser(ctx, num, *userinput: discord.User):
+async def purgeuser(ctx, num: int, *userinput: discord.User):
   try_delete_message(ctx.message)
-  if ctx.channel.permissions_for(ctx.author).manage_messages or botadmin(ctx):
+  if has_perms(ctx.channel, ctx.author, 13):
     deleted = await ctx.channel.purge(limit=num+1, check = lambda msg: msg.author in userinput)
     msg = await ctx.reply("Purging completed.")
     authors = f'\n'.join({f"{x.author.name}#{x.author.discriminator}{' **bot**' if x.author.bot else ''}" for x in deleted})
@@ -316,13 +320,13 @@ async def slowmode(ctx, sec=None, *channels: typing.Union[discord.TextChannel,st
     for x in allchannel:
       if type(x) == str:
         continue
-      if x.permissions_for(ctx.author).manage_channels or botadmin(ctx):
-        orsec = str(x.slowmode_delay)
+      if has_perms(x, ctx.author, 4):
+        orsec = x.slowmode_delay
         await x.edit(slowmode_delay = sec)
         channellist.append(x.mention)
-    if len(channellist)==0:
+    if len(channellist) == 0:
       await ctx.reply("You don't have the required permission: Manage channels.")
-    elif len(channellist)==1:
+    elif len(channellist) == 1:
       await ctx.reply(f"Set slowmode from {orsec} second(s) to {sec} second(s) for {channellist[0]}.")
     else:
       await ctx.reply(f"Set slowmode to {sec} second(s) for these channels: {' '.join(channellist)}.")
@@ -331,14 +335,14 @@ async def slowmode(ctx, sec=None, *channels: typing.Union[discord.TextChannel,st
 
 @commands.command()
 async def tts(ctx, *, desc):
-  if ctx.channel.permissions_for(ctx.author).send_tts_messages or botadmin(ctx):
-    await ctx.reply(desc, tts = True)
+  if has_perms(ctx.channel, ctx.author, 12):
+    await ctx.reply(desc, tts= True)
   else:
     await ctx.reply("You don't have the required permission: Send TTS messages.")
 
 @commands.command()
 async def timeout(ctx, member: discord.Member, duration="0s", *, reason="No reason provided"):
-  if ctx.channel.permissions_for(ctx.author).moderate_members or botadmin(ctx):
+  if has_perms(ctx.channel, ctx.author, 40):
     sec = int(timedelta(**{
       UNITS.get(m.group('unit').lower(), 'seconds'): int(m.group('val'))
       for m in re.finditer(r'(?P<val>\d+)(?P<unit>[smhdw]?)', duration, flags=re.I)
@@ -355,7 +359,7 @@ async def timeout(ctx, member: discord.Member, duration="0s", *, reason="No reas
 
 @commands.command()
 async def unban(ctx, user: discord.User, *, reason="No reason provided"):
-  if ctx.channel.permissions_for(ctx.author).ban_members or botadmin(ctx):
+  if has_perms(ctx.channel, ctx.author, 2):
     try:
       await ctx.guild.unban(user, reason= f"{reason} (requested by {ctx.author.name}#{ctx.author.discriminator})")
     except:
@@ -373,7 +377,7 @@ async def unban(ctx, user: discord.User, *, reason="No reason provided"):
 
 @commands.command()
 async def untimeout(ctx, member: discord.Member, *, reason="No reason provided"):
-  if ctx.channel.permissions_for(ctx.author).moderate_members or botadmin(ctx):
+  if has_perms(ctx.channel, ctx.author, 40):
     if reason:
       await member.edit(timeout_until = None, reason= f"{reason} (requested by {ctx.author.name}#{ctx.author.discriminator})")
     else:
