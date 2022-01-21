@@ -1,6 +1,6 @@
 import html
 
-from _bot import bu
+#import _bot
 from functions import trim
 from shared import chance, ra, requests, commands
 

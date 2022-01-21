@@ -1,13 +1,8 @@
 from shared import commands, db, discord, ui
-import _bot
+from _bot import banned_ids, banned_text, bot_
 
 bot_admin_guilds = [841330908560228412, 805441351033552916]
 bot_admin_slash = {x: ui.SlashPermission(allowed= {ui.SlashPermission.User: db['botadmins']}) for x in bot_admin_guilds}
-
-bu = _bot.bu
-owner = _bot.owner
-banned_ids = _bot.banned_ids
-banned_text = _bot.banned_text
 
 @commands.command()
 @commands.is_owner()
@@ -30,19 +25,19 @@ async def purgeserver(ctx, text, condition= "True", *, disposed= None):
       await x.delete()
   await msg.edit(msg.content.replace("started.", "completed!"))
 
-@bu.slash.command(name="bot_ban", description= "Bans a user from using the bot.", options=[
-                  ui.SlashOption(name= "User", type= discord.User, description=
-                  "The user to ban from using the bot.", required= True), ui.SlashOption(name=
-                  "Reason", type= str, description= "The reason to ban the user for.", required=
-                  False)], default_permission= False, guild_ids= bot_admin_guilds,
-                  guild_permissions= bot_admin_slash)
+@bs.command(name="bot_ban", description= "Bans a user from using the bot.", options=[ui.SlashOption
+           (name= "User", type= discord.User, description="The user to ban from using the bot.",
+           required= True), ui.SlashOption(name= "Reason", type= str, description=
+           "The reason to ban the user for.", required= False)], default_permission= False,
+           guild_ids= bot_admin_guilds, guild_permissions= bot_admin_slash)
 async def bot_ban(ctx, user: discord.User, *, reason: str = "No reason was provided"):
   banned_ids.append(user.id)
   banned_text.append(reason)
   await ctx.respond("Banned user from using the bot.", hidden= True)
+  owner = await ctx.bot.fetch_user(687474789342117900)
   await owner.send(f"{user.name}#{user.discriminator} (ID: {user.id}) has been bot-banned by {ctx.author.name}#{ctx.author.discriminator}.")
 
-@bu.slash.command(name= "bot_unban", description= "Unbans a user from using the bot.", options=[
+@bs.command(name= "bot_unban", description= "Unbans a user from using the bot.", options=[
                   ui.SlashOption(name= "User", type= discord.User, description=
                   "The user to remove the ban of.", required= True)], default_permission= False,
                   guild_ids= bot_admin_guilds, guild_permissions= bot_admin_slash)
@@ -51,21 +46,23 @@ async def bot_unban(ctx, user: discord.User):
     banned_text.remove(banned_text[banned_ids.index(user.id)])
     banned_ids.remove(user.id)
     await ctx.respond("Unbanned user from using the bot.", hidden= True)
+    owner = await ctx.bot.fetch_user(687474789342117900)
     await owner.send(f"{user.name}#{user.discriminator} (ID: {user.id}) has been bot-unbanned.")
   else:
     await ctx.respond("The user is not banned.", hidden= True)
 
-@bu.slash.command(name="bot_admin", description="Temporarily adds a user as a bot admin.", options=
-                  [ui.SlashOption(name= "User", type= discord.User, description=
+@bs.command(name="bot_admin", description="Temporarily adds a user as a bot admin.",
+                  options= [ui.SlashOption(name= "User", type= discord.User, description=
                   "The user to add to the list of bot admins.", required= True)],
                   default_permission= False, guild_ids= bot_admin_guilds,
                   guild_permissions= bot_admin_slash)
 async def botadmin(ctx, user: discord.User):
   db['botadmins'].append(user.id)
   await ctx.respond("Added user as bot admin.")
+  owner = await ctx.bot.fetch_user(687474789342117900)
   await owner.send(f"{user.name}#{user.discriminator} (ID: {user.id}) has been bot-banned.")
 
-@bu.slash.command(name="tester", description="Tester.")
+@bs.command(name= "tester", description= "Tester.")
 async def tester(ctx):
   await ctx.respond("test never gonna give you up")
 
