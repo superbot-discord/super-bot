@@ -14,7 +14,7 @@ banned_text = []
 
 if __name__ == '__main__':
   bot_.remove_command('help')
-  bot_.load_extension("admin_")
+  #bot_.load_extension("admin_")
   bot_.load_extension("apis__int")
   bot_.load_extension("apis_hk")
   bot_.load_extension("apis_uk")
