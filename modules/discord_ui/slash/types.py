@@ -486,7 +486,7 @@ class SlashPermission():
             elif isinstance(allowed, list):
                 for t in allowed:
                     self._json.append({
-                        "id": (t if isinstance(t, int) else t.id),
+                        "id": t.id,
                         "type": SlashPermission.USER if isinstance(t, (discord.User, discord.Member)) else SlashPermission.ROLE,
                         "permission": True
                     })
@@ -681,7 +681,7 @@ class BaseCommand():
         ) or "\u200b"
         self.default_permission = default_permission if default_permission is not None else True
         if guild_permissions is not None:
-            for _id, perm in list(guild_permissions.items()):
+            for _id, perm in guild_permissions.items():
                 if not isinstance(_id, (str, int, discord.User, discord.Member, discord.Role)):
                     raise WrongType("guild_permissions key " + str(_id), _id, ["str", "int", "discord.User", "discord.Member", "discord.Role"])
                 if not isinstance(perm, SlashPermission):
@@ -1564,7 +1564,7 @@ class CommandCache():
                         # get permissions for the command
                         api_permissions = await http.get_command_permissions(api_command["id"], guild)
                     # the guild permissions for the current guild
-                    command_perms = base.guild_permissions and (base.guild_permissions.get(int(guild)) or base.guild_permissions.get(str(guild)))
+                    command_perms = base.guild_permissions.get(int(guild)) or base.guild_permissions.get(str(guild))
                     global_command = await self.api.get_global_command(base.name, base.command_type)
                     # If no command in that guild or a global one was found
                     if api_command is None or global_command is not None:

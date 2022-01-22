@@ -1,8 +1,11 @@
 from shared import commands, db, discord, ui
-from _bot import banned_ids, banned_text, bot_
+from _bot import bs
 
-bot_admin_guilds = [841330908560228412, 805441351033552916]
+bot_admin_guilds = [805441351033552916]
+#bot_admin_slash = {x: ui.SlashPermission(allowed= {ui.SlashPermission.User: db['botadmins']}) for x in bot_admin_guilds}
 bot_admin_slash = {x: ui.SlashPermission(allowed= {ui.SlashPermission.User: db['botadmins']}) for x in bot_admin_guilds}
+banned_ids = []
+banned_text = []
 
 @commands.command()
 @commands.is_owner()
@@ -60,7 +63,7 @@ async def botadmin(ctx, user: discord.User):
   db['botadmins'].append(user.id)
   await ctx.respond("Added user as bot admin.")
   owner = await ctx.bot.fetch_user(687474789342117900)
-  await owner.send(f"{user.name}#{user.discriminator} (ID: {user.id}) has been bot-banned.")
+  await owner.send(f"{user.name}#{user.discriminator} (ID: {user.id}) has been added as a bot-admin.")
 
 @bs.command(name= "tester", description= "Tester.")
 async def tester(ctx):

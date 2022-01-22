@@ -63,18 +63,18 @@ def override_dpy():
     module.message.Message.__new__ = message_override
     #endregion
 
-    #region webhook override (disabled by Johann myself)
-    # def send_webhook(self: discord.Webhook, content=MISSING, *, wait=False, username=MISSING, avatar_url=MISSING, tts=False, files=None, embed=MISSING, embeds=MISSING, allowed_mentions=MISSING, components=MISSING):
-    #     payload = get_message_payload(content, tts=tts, embed=embed, embeds=embeds, allowed_mentions=allowed_mentions, components=components)
+    #region webhook override
+    def send_webhook(self: discord.Webhook, content=MISSING, *, wait=False, username=MISSING, avatar_url=MISSING, tts=False, files=None, embed=MISSING, embeds=MISSING, allowed_mentions=MISSING, components=MISSING):
+        payload = get_message_payload(content, tts=tts, embed=embed, embeds=embeds, allowed_mentions=allowed_mentions, components=components)
 
-    #     if username is not None:
-    #         payload["username"] = username
-    #     if avatar_url is not None:
-    #         payload["avatar_url"] = str(avatar_url)
+        if username is not None:
+            payload["username"] = username
+        if avatar_url is not None:
+            payload["avatar_url"] = str(avatar_url)
         
-    #     return self._adapter.execute_webhook(payload=payload, wait=wait, files=files)
+        return self._adapter.execute_webhook(payload=payload, wait=wait, files=files)
 
-    # module.webhook.Webhook.send = send_webhook
+    module.webhook.Webhook.send = send_webhook
     #endregion
 
     # override for dpy forks
