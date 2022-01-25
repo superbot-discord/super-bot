@@ -471,7 +471,7 @@ Audio - Minimum size\t\t{format_video(video8)}'''
       embed.add_field(name="Date uploaded", value=unix_timestamp(youtube.publish_date, "D"), inline= True)
       embed.add_field(name="Length", value=format_length(youtube.length), inline= True)
       chnl = pytube.Channel(youtube.channel_url)
-      embed.add_field(name="Rating", value=f"{str(round(youtube.rating*20, 3))}%", inline= True)
+      embed.add_field(name="Rating", value=f"{str(round(youtube.rating * 20, 3))}%" if youtube.rating else "No ratings", inline= True)
       embed.add_field(name="Channel", value=f"[{chnl.channel_name}]({youtube.channel_url}) ({len(chnl.videos)} videos)", inline= True)
       if youtube.age_restricted:
         embed.add_field(name="Restricted", value="This video is age-restricted.", inline= True)

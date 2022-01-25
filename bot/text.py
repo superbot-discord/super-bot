@@ -232,13 +232,16 @@ async def pick(ctx, lower: int, upper: int, times: int): # MS
   embed = Embed(title= f"{times} random number(s) between {lower} and {upper}", description= desc)
   await ctx.reply(embed= embed)
 
-@commands.command()
-async def quantum_random(ctx, size: typing.Literal['256', '65536'] = '256', amount: int = 1):
-  api_size = {'256':8, '65536':16}[size]
-  r=requests.get(f"https://qrng.anu.edu.au/API/jsonI.php?length={amount}&type=uint{api_size}").json()['data']
-  r=[str(x) for x in r]
-  desc=f"Your quantum random number(s) is/are:\n{', '.join(r)}"
-  embed = Embed(title=f"{amount} random number(s) between 0 and {int(size)-1}", description=desc)
+@commands.command(aliases= ['qrng'])
+async def quantum_random(ctx, size: typing.Literal['256', '65536', 'ascii', 'unicode'] = '256', times: int = 1):
+  api_size = {'256': 8, '65536': 16, 'ascii': 8, 'unicode': 16}[size]
+  r = requests.get(f"https://qrng.anu.edu.au/API/jsonI.php?length={times}&type=uint{api_size}").json()['data']
+  r = [str(x) for x in r] if size in ['256', '65536'] else [chr(x) for x in r]
+  if times == 1:
+    await ctx.reply(f"Your quantum random number between 0 and {int(size)-1} is **{r[0]}**.")
+    return
+  desc = ", ".join(r)
+  embed = Embed(title= f"{times} quantum random number(s) between 0 and {int(size)-1}", description= desc)
   await ctx.reply(embed= embed)
 
 # NON-QUANTUM RANDOM
@@ -246,9 +249,9 @@ async def quantum_random(ctx, size: typing.Literal['256', '65536'] = '256', amou
 #    One value            Cannot repeat   Unformatted   Integral choice(s)
 # =random{_{m{r}}{s}{t}}
 
-@commands.command()
+@commands.command(aliases= ['rng'])
 async def random(ctx, lower: int, upper: int):
-  await ctx.reply(f"Your random number is {ra.randint(lower,upper)}")
+  await ctx.reply(f"Your random number is **{ra.randint(lower,upper)}**")
 
 @commands.command()
 async def random_m(ctx, times: int, lower: int, upper: int):
@@ -477,6 +480,20 @@ async def spoil(ctx, msg: discord.Message = None, *, text= "Reply to a message, 
     text = msg.content
   await ctx.reply(text.replace("||", ""))
 
+@commands.command(aliases=['sub'])
+async def subscript(ctx, *, text):
+  await ctx.send(many_replace(text, {'0': "₀", '1': "₁", '2': "₂", '3': "₃", '4': "₄", '5': "₅",
+                                     '6': "₆", '7': "₇", '8': "₈", '9': "₉", '+': "₊", '-': "₋",
+                                     '=': "₌", '(': "₍", ')': "₎", 'a': "ₐ", 'e': "ₑ", 'o': "ₒ",
+                                     'x': "ₓ", 'h': "ₕ", 'k': "ₖ", 'l': "ₗ", 'm': "ₘ", 'n': "ₙ",
+                                     'p': "ₚ", 's': "ₛ", 't': "ₜ"}))
+
+@commands.command(aliases=['sup', 'super'])
+async def superscript(ctx, *, text):
+  await ctx.send(many_replace(text, {'0': "⁰", '1': "¹", '2': "²", '3': "³", '4': "⁴", '5': "⁵",
+                                     '6': "⁶", '7': "⁷", '8': "⁸", '9': "⁹", '+': "⁺", '-': "⁻",
+                                     '=': "⁼", '(': "⁽", ')': "⁾", 'i': "ⁱ", 'n': "ⁿ"}))
+
 @commands.command()
 async def terminate(ctx, *, idc):
   if id_pattern.fullmatch(idc) and len(idc)==5:
@@ -547,17 +564,8 @@ async def ttimer(ctx, timetocount, *, Text= None):
 @commands.command()
 async def unicode(ctx, *query):
   embed = Embed(title = f"Search results for: {' '.join(query)}")
-  all_results = []
-  for x in query:
-    current_results = []
-    for y in search_charnames(x):
-      current_results.append(y)
-    all_results.append(current_results)
-  intersected_results = []
-  x=sum(all_results, [])
-  for y in x:
-    if y not in intersected_results and all([y in y for y in all_results]):
-      intersected_results.append(y)
+  raw_results = [list(search_charnames(x)) for x in query]
+  intersected_results = set.intersection(*map(set, raw_results))
   characters_added = int(len(query[0]) == 1)
   try:
     hex_character = chr(int(query[0], 16))
@@ -565,7 +573,7 @@ async def unicode(ctx, *query):
     add_hex_character = True
   except:
     add_hex_character = False
-  for x, y in zip(intersected_results, range(25-characters_added)):
+  for x, y in zip(intersected_results, range(25 - characters_added)):
     embed.add_field(name = x[1].title(), value = f"U+{x[0]} `"+eval(f'u\'\\u{x[0]}\'')+"`")
   desc = f"Code\tChar.\tName\n\n"
   for x in intersected_results:
@@ -631,6 +639,8 @@ def setup(bot):
   bot.add_command(spellcheck)
   bot.add_command(spoiler)
   bot.add_command(spoil)
+  bot.add_command(subscript)
+  bot.add_command(superscript)
   bot.add_command(terminate)
   bot.add_command(ttimer)
   bot.add_command(unicode)
