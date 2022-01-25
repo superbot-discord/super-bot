@@ -233,15 +233,20 @@ async def pick(ctx, lower: int, upper: int, times: int): # MS
   await ctx.reply(embed= embed)
 
 @commands.command(aliases= ['qrng'])
-async def quantum_random(ctx, size: typing.Literal['256', '65536', 'ascii', 'unicode'] = '256', times: int = 1):
+async def quantum_random(ctx, size: typing.Literal['256', '65536', 'alpha', 'ascii', 'unicode', 'ASCII', 'UNICODE'] = '256', times: int = 1):
   api_size = {'256': 8, '65536': 16, 'ascii': 8, 'unicode': 16}[size]
   r = requests.get(f"https://qrng.anu.edu.au/API/jsonI.php?length={times}&type=uint{api_size}").json()['data']
-  r = [str(x) for x in r] if size in ['256', '65536'] else [chr(x) for x in r]
+  if not size.isdigit():
+    r = [chr(x) for x in r]
+    await ctx.reply(f"Your quantum random {size.upper()} string is {''.join(r)}.")
+    return
+  range_text = f"number{'' if times == 1 else 's'} between 0 and {int(size) - 1}"
+  r = [str(x) for x in r]
   if times == 1:
-    await ctx.reply(f"Your quantum random number between 0 and {int(size)-1} is **{r[0]}**.")
+    await ctx.reply(f"Your quantum random {range_text} is **{r[0]}**.")
     return
   desc = ", ".join(r)
-  embed = Embed(title= f"{times} quantum random number(s) between 0 and {int(size)-1}", description= desc)
+  embed = Embed(title= f"{times} quantum random {range_text}", description= desc)
   await ctx.reply(embed= embed)
 
 # NON-QUANTUM RANDOM
