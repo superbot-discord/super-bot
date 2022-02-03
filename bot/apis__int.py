@@ -2,8 +2,26 @@ import html
 
 #import _bot
 from functions import trim
-from shared import chance, ra, requests, commands
+from shared import commands, chance, ra, requests, ui
 
+class TriviaRevealL(ui.listener.Listener):
+  def __init__(self, answer_1, answer_2, answer_3, multi):
+    self.a1 = answer_1
+    self.a2 = answer_2
+    self.a3 = answer_3
+    self.multi = multi
+
+  @ui.Listener.button(custom_id= "reveal1")
+  async def show_a1(self_, ctx: ui.ButtonInteraction):
+    await ctx.respond(f"The answer {'for Q1 ' if self_.multi else ''}is: {self_.a1}", hidden= True)
+  
+  @ui.Listener.button(custom_id= "reveal2")
+  async def show_a2(self_, ctx: ui.ButtonInteraction):
+    await ctx.respond(f"The answer for Q2 is: {self_.a2}", hidden= True)
+  
+  @ui.Listener.button(custom_id= "reveal3")
+  async def show_a3(self_, ctx: ui.ButtonInteraction):
+    await ctx.respond(f"The answer for Q3 is: {self_.a3}", hidden= True)
 
 @commands.command(aliases=["birb"])
 async def bird(ctx, number=1):
@@ -176,8 +194,10 @@ async def states(ctx, country="US"):
 
 @commands.command(aliases=["quiz", "questions"])
 async def trivia(ctx, number=1):
-  if number<4:
-    await ctx.reply(bottrivia(number))
+  if number < 4:
+    data = bottrivia(number)
+    multi = number > 1
+    await ctx.reply(data[0], components= data[2],listener= TriviaRevealL(*data[1], multi))
   else:
     await ctx.reply("There are too many questions to show! I can only display up to 3 questions.")
 
@@ -362,21 +382,26 @@ def botstates(country):
 
 def bottrivia(number):
   desc = ""
+  answers = []
   try:
     r=requests.get(f"https://opentdb.com/api.php?amount={number}&encoding=base64").json()["results"]
   except:
-    return "Invalid input!"
+    return ["Invalid input!", [], None]
   for x in r:
     desc += f"**{x['category']} - {x['difficulty']}**  - {html.unescape(x['question'])}\n"
-    if x["type"] == "multiple":
-      list_temp = [html.unescape(x) for x in x["incorrect_answers"]] + [html.unescape(x["correct_answer"])]
+    if x['type'] == "multiple":
+      list_temp = [html.unescape(x) for x in x['incorrect_answers']] + [html.unescape(x['correct_answer'])]
       ra.shuffle(list_temp)
-      for x in list_temp:
-        desc += f'  • {x}\n'
-      desc += f"Answer: ||{html.unescape(x['correct_answer'])}||\n"
+      for y in list_temp:
+        desc += f'  • {y}\n'
     else:
-      desc += f"True or False?\nAnswer: ||{html.unescape(x['correct_answer'])}||\n"
-  return desc
+      desc += f"True or False?\n"
+    answers.append(html.unescape(x['correct_answer']))
+    desc += f"\n"
+  components = [ui.Button(label=f"Reveal{f' Q{x+1}' if len(answers) > 1 else ''}", color= 'green',
+                custom_id= f"reveal{x+1}") for x in range(3) if len(answers) > x]
+  answers = [answers[x] if len(answers) > x else None for x in range(3)] # pad answers to length 3
+  return [desc, answers, components]
 
 def setup(bot):
   bot.add_command(bird)

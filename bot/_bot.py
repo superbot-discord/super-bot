@@ -173,10 +173,10 @@ async def on_command_error(ctx, error):
     else:
       try:
         await ctx.send(f"Sorry! An error occured:\n```{''.join(traceback.format_exception(type(error), error, error.__traceback__))}```\n If the error persists, please kindly inform JohannLau#6541 about this issue.")
-      except discord.HTTPException:
+      except discord.errors.HTTPException:
         print(''.join(traceback.format_exception(type(error), error, error.__traceback__)))
         await ctx.reply(f"Sorry! An error occured. The error was too long but it had been shown to JohannLau#6541. If the error persists, Please kindly inform him about this issue.")
-  elif isinstance(error, discord.HTTPException):
+  elif isinstance(error, discord.errors.HTTPException):
     if error.code == 40005:
       await ctx.reply("Unfortunately, the output file is too large.")
     elif error.code == 50006:

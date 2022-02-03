@@ -1,4 +1,4 @@
-from shared import (asyncio, botadmin, commands, custom_permissions, datetime, db, discord, Embed,
+from shared import (asyncio, commands, custom_permissions, datetime, db, discord, Embed,
                     has_perms, re, SequenceMatcher, specialbool, timedelta, timestamp_pattern,
                     timezone, try_delete, try_delete_message, typing, UNITS, unix_timestamp)
 

@@ -234,6 +234,9 @@ async def pick(ctx, lower: int, upper: int, times: int): # MS
 
 @commands.command(aliases= ['qrng'])
 async def quantum_random(ctx, size: typing.Literal['256', '65536', 'alpha', 'ascii', 'unicode', 'ASCII', 'UNICODE'] = '256', times: int = 1):
+  if times >= 1024:
+    await ctx.reply(f"There are too many numbers/characters to generate! I can only generate 1024 numbers/characters at a time.")
+    return
   api_size = {'256': 8, '65536': 16, 'ascii': 8, 'unicode': 16}[size]
   r = requests.get(f"https://qrng.anu.edu.au/API/jsonI.php?length={times}&type=uint{api_size}").json()['data']
   if not size.isdigit():

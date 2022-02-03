@@ -1,4 +1,4 @@
-from shared import commands, discord, Embed, ui
+from shared import commands, Embed, ui
 
 class InteractiveHelpL(ui.listener.Listener):
   @ui.Listener.select(custom_id= "interactive_help")
