@@ -1247,10 +1247,10 @@ async def template(ctx, *, tempinput):
 
 @commands.command(aliases=['member', 'mem', 'us'])
 async def user(ctx, user: discord.Member = None, channel: discord.TextChannel = None):
-  if user==None:
-    user=ctx.author
-  if channel==None:
-    channel=ctx.channel
+  if user == None:
+    user = ctx.author
+  if channel == None:
+    channel = ctx.channel
   bottrue = user.bot
   if bottrue == True:
     desc=f"{user.mention} (bot)"
@@ -1270,7 +1270,7 @@ async def user(ctx, user: discord.Member = None, channel: discord.TextChannel = 
   else:
     days = int(re.sub(r'([\d]+) days, [\s\S]*', r'\1', f1ts))
     f1v += re.sub(r'([\d]+) days, (\d{1,2}):(\d{2}):(\d{2})', r'\1 days \2 hrs \3 mins \4 secs', f1ts)[:-7] + f"\n≈ {(int(f1ts.split(' days, ')[0]))//365} years {int(f1ts.split(' days, ')[0]) % 365} days"
-  f2v=f"{unix_timestamp(user.joined_at)}\nFrom now:\n"
+  f2v = f"{unix_timestamp(user.joined_at)}\nFrom now:\n"
   f2ts = str(datetime.now(timezone.utc) - user.joined_at)
   if " days, " not in f2ts:
     f2v += re.sub(r'(\d{1,2}):(\d{2}):(\d{2})', r'\1 hours \2 minutes \3 seconds', f2ts) + f"\n≈ {f2ts.split(':')[0]} hours"
@@ -1285,7 +1285,7 @@ async def user(ctx, user: discord.Member = None, channel: discord.TextChannel = 
       f6v += re.sub(r'([\d]+) days, (\d{1,2}):(\d{2}):(\d{2})', r'\1 days \2 hrs \3 mins \4 secs', f6ts)[:-7] + f"\n≈ {(int(f6ts.split(' days, ')[0]))//365} years {int(f6ts.split(' days, ')[0]) % 365} days"
   else:
     f6v = "No server boosting"
-  allroles=user.roles
+  allroles = user.roles
   f3v_raw1 = channel.permissions_for(user).value
   f3v_raw2 = user.guild_permissions.value
   if user.status == discord.Status.online:
@@ -1321,7 +1321,7 @@ async def user(ctx, user: discord.Member = None, channel: discord.TextChannel = 
         f3vc = f":{f3vcraw.emoji.name}:"
   except:
     pass
-  f4v=""
+  f4v = ""
   if len(allroles) > 1:
     allroles.reverse()
     allroles = allroles[:-1]
@@ -1346,22 +1346,25 @@ async def user(ctx, user: discord.Member = None, channel: discord.TextChannel = 
   f5v = f5v + (f"**HypeSquad:** The user is in the HypeSquad Brilliance House.\n"          if user_public_flags.hypesquad_brilliance else "")
   f5v = f5v + (f"**HypeSquad:** The user is in the HypeSquad Balance House.\n"             if user_public_flags.hypesquad_balance else "")
   f5v = "No badges" if f5v == "" else f5v
+  f7vraw = user.timeout
+  f7v = f"Until {unix_timestamp(f7vraw)}" if f7vraw else "None"
 
-  embed.add_field(name="Name", value=f0v, inline= False)
-  embed.add_field(name="Registered", value=f1v, inline= True)
-  embed.add_field(name="Joined", value=f2v, inline= True)
-  embed.add_field(name="Roles", value=f4v, inline= False)
-  embed.add_field(name="Server Permissions", value=sr_itop(f3v_raw2), inline= False)
-  embed.add_field(name="Text Channel Permissions", value=tc_itop(f3v_raw1), inline= False)
-  embed.add_field(name="Voice/Stage Channel Permissions", value=vc_itop(f3v_raw2), inline= False)
-  embed.add_field(name="Status", value=f3vd, inline= True)
+  embed.add_field(name= "Name", value= f0v, inline= False)
+  embed.add_field(name= "Registered", value= f1v, inline= True)
+  embed.add_field(name= "Joined", value= f2v, inline= True)
+  embed.add_field(name= "Timeout", value= f7v, inline= True)
+  embed.add_field(name= "Roles", value= f4v, inline= False)
+  embed.add_field(name= "Server Permissions", value= sr_itop(f3v_raw2), inline= False)
+  embed.add_field(name= "Text Channel Permissions", value= tc_itop(f3v_raw1), inline= False)
+  embed.add_field(name= "Voice/Stage Channel Permissions", value= vc_itop(f3v_raw2), inline= False)
+  embed.add_field(name= "Status", value= f3vd, inline= True)
   try:
     embed.add_field(name="Activity", value=f3vc, inline= True)
   except:
     pass
-  embed.add_field(name="Permission integer", value=str(f3v_raw2), inline= True)
-  embed.add_field(name="Boosting since", value=f6v, inline= False)
-  embed.add_field(name=f"Badges (Integer: {user_public_flags.value})", value=f5v, inline= False)
+  embed.add_field(name= "Permission integer", value= str(f3v_raw2), inline= True)
+  embed.add_field(name= "Boosting since", value= f6v, inline= False)
+  embed.add_field(name= f"Badges (Integer: {user_public_flags.value})", value= f5v, inline= False)
   await ctx.reply(embed= embed)
 
 @commands.command()
