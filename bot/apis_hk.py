@@ -422,14 +422,14 @@ async def mameiha(ctx):
   else:
     desc += "暫時沒有班次"
   
-  desc += f"**79X往皇后山**\n"
+  desc += f"\n\n**79X往皇后山**\n"
   r3 = requests.get("https://rt.data.gov.hk/v1/transport/citybus-nwfb/eta/ctb/003675/79X").json()['data']
   if r3:
     desc += f"\n".join([tc_eta(x) if x['eta'] else "錯誤" for x in r3])
   else:
     desc += "暫時沒有班次"
   
-  desc += f"**79X往奧運、旺角及長沙灣**\n"
+  desc += f"\n\n**79X往奧運、旺角及長沙灣**\n"
   r4 = requests.get("https://rt.data.gov.hk/v1/transport/citybus-nwfb/eta/ctb/003668/79X").json()['data']
   if r4:
     desc += f"\n".join([tc_eta(x) if x['eta'] else "錯誤" for x in r4])
