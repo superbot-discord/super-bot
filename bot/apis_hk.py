@@ -372,42 +372,46 @@ async def hk_wind(ctx, *, disposed= None):
   embed.set_footer(text="Speed and Gust Information might be empty for some weather stations. Directions and Speed are mean values in the past 10 minutes.")
   await ctx.reply(embed= embed)
 
-"""
-Ma mei ha KMB
-to stk  EA6152DD7165E9DC  Outbound
-to ss   54B6C89217D49521  Inbound
-
-Ma mei ha CTB
-to kln  003668  Outbound
-to qh   003675  Inbound
-
-line = "78K"
-r1 = list(filter(lambda x: x['route'] == line, kmb_routes))
-for r1_ in r1:
-  async with ctx.channel.typing():
-    for x in [r1_['dest_en'], r1_['orig_en']]:
-      x = x.title()
-    route_url = f"{r1_['route']}/{db['kmb_bound'][r1_['bound']]}/{r1_['service_type']}"
-    r2 = requests.get(f"https://data.etabus.gov.hk/v1/transport/kmb/route-stop/{route_url}").json()['data']
-    desc = ""
-    for s in r2:
-      rt1 = list(filter(lambda x: x['stop'] == s['stop'], kmb_stops))[0]
-      rt2 = requests.get(f"https://data.etabus.gov.hk/v1/transport/kmb/eta/{s['stop']}/{r1_['route']}/{r1_['service_type']}").json()['data'][:2]
-      desc += f"\n**{s['seq']}: {rt1['name_en'].title()} {rt1['name_tc']}**"
-      if len(rt2):
-        rt2_etas = [datetime.fromisoformat(x['eta']).strftime('%H:%M:%S') if x['eta'] else "unavailable" for x in rt2]
-        desc += f"\nBus(es) at {', '.join(rt2_etas)}"
-    embed = Embed(title= f"{r1_['route']} {r1_['orig_en']} {r1_['orig_tc']} → {r1_['dest_en']} {r1_['dest_tc']}", description= desc)
-    await ctx.reply(embed= embed)
-"""
-
 tc_eta = lambda x: datetime.fromisoformat(x['eta']).strftime('%H:%M:%S') + ("（未開出）"if x['rmk_en'] == "Scheduled Bus" else "")
 
 # Special
-@bs.command(name= "mameiha", description= "查看馬尾下巴士", guild_ids= [880686520678371369],
-            guild_permissions= {880686520678371369: ui.SlashPermission(allowed= {
-            ui.SlashPermission.User: [880701121574875146, 687474789342117900]})})
+@commands.command()
 async def mameiha(ctx):
+  async with ctx.channel.typing():
+    desc = f"**78K往沙頭角**\n"
+    r1 = requests.get("https://data.etabus.gov.hk/v1/transport/kmb/eta/EA6152DD7165E9DC/78K/1").json()['data']
+    if r1:
+      desc += f"\n".join([tc_eta(x) if x['eta'] else "錯誤" for x in r1])
+    else:
+      desc += "暫時沒有班次"
+    
+    desc += f"\n\n**78K往市區**\n"
+    r2 = requests.get("https://data.etabus.gov.hk/v1/transport/kmb/eta/54B6C89217D49521/78K/1").json()['data']
+    if r1:
+      desc += f"\n".join([f"{tc_eta(x)} 往{x['dest_tc']}" if x['eta'] else "錯誤" for x in r2])
+    else:
+      desc += "暫時沒有班次"
+    
+    desc += f"\n\n**79X往皇后山**\n"
+    r3 = requests.get("https://rt.data.gov.hk/v1/transport/citybus-nwfb/eta/ctb/003675/79X").json()['data']
+    if r3:
+      desc += f"\n".join([tc_eta(x) if x['eta'] else "錯誤" for x in r3])
+    else:
+      desc += "暫時沒有班次"
+    
+    desc += f"\n\n**79X往奧運、旺角及長沙灣**\n"
+    r4 = requests.get("https://rt.data.gov.hk/v1/transport/citybus-nwfb/eta/ctb/003668/79X").json()['data']
+    if r4:
+      desc += f"\n".join([tc_eta(x) if x['eta'] else "錯誤" for x in r4])
+    else:
+      desc += "暫時沒有班次"
+    await ctx.send(desc)
+
+@bs.command(name= "mameiha", description= "78K, 79K", guild_ids= [880686520678371369],
+            default_permission= False, guild_permissions= {880686520678371369: ui.SlashPermission(
+            allowed= {ui.SlashPermission.User: [880701121574875146, 687474789342117900]})})
+async def ma_mei_ha(ctx):
+  await ctx.defer()
   desc = f"**78K往沙頭角**\n"
   r1 = requests.get("https://data.etabus.gov.hk/v1/transport/kmb/eta/EA6152DD7165E9DC/78K/1").json()['data']
   if r1:
@@ -456,3 +460,4 @@ def setup(bot):
   bot.add_command(hk_visibility)
   bot.add_command(hk_weather)
   bot.add_command(hk_wind)
+  bot.add_command(mameiha)
