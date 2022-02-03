@@ -349,9 +349,9 @@ async def timeout(ctx, member: discord.Member, duration="0s", *, reason="No reas
     }).total_seconds())
     end = datetime.now(timezone.utc) + timedelta(seconds = sec)
     if reason:
-      await member.edit(timeout_until = end, reason= f"{reason} (requested by {ctx.author.name}#{ctx.author.discriminator})")
+      await member.edit(timeout = end, reason= f"{reason} (requested by {ctx.author.name}#{ctx.author.discriminator})")
     else:
-      await member.edit(timeout_until = end)
+      await member.edit(timeout = end)
     embed = Embed(title=f"{member.name} was timed out.", description=f"Until: {unix_timestamp(end)}\nReason: {reason}\nBy: {ctx.author.mention}")
     await ctx.send(embed = embed)
   else:
@@ -379,9 +379,9 @@ async def unban(ctx, user: discord.User, *, reason="No reason provided"):
 async def untimeout(ctx, member: discord.Member, *, reason="No reason provided"):
   if has_perms(ctx.channel, ctx.author, 40):
     if reason:
-      await member.edit(timeout_until = None, reason= f"{reason} (requested by {ctx.author.name}#{ctx.author.discriminator})")
+      await member.edit(timeout = None, reason= f"{reason} (requested by {ctx.author.name}#{ctx.author.discriminator})")
     else:
-      await member.edit(timeout_until = None)
+      await member.edit(timeout = None)
     await ctx.send("Un-Timeout success")
   else:
     await ctx.reply("You don't have the required permission: Moderate members.")
