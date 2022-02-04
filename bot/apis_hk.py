@@ -411,20 +411,55 @@ async def mameiha(ctx):
 @commands.command()
 async def luenwohui(ctx):
   async with ctx.channel.typing():
-    desc = f"**現在時間為 {datetime.now(tz= timezone(timedelta(hours=8))).strftime('%H:%M:%S')}**\n\n**278K往粉嶺站（循環線）**\n"
-    r1 = requests.get("https://data.etabus.gov.hk/v1/transport/kmb/eta/1AB800949FF1203B/278K/1").json()['data']
+    desc = f"**現在時間為 {datetime.now(tz= timezone(timedelta(hours=8))).strftime('%H:%M:%S')}**\n\n**78K往沙頭角**\n"
+    r1 = requests.get("https://data.etabus.gov.hk/v1/transport/kmb/eta/EA6152DD7165E9DC/78K/1").json()['data']
     if r1:
-      desc += f"\n".join([tc_eta(x) if x['eta'] else "錯誤" for x in r1 if x['seq'] == 1])
+      desc += f"\n".join([tc_eta(x) if x['eta'] else "錯誤" for x in r1])
     else:
       desc += "暫時沒有班次"
-    
+
     desc += f"\n\n**78K往市區**\n"
-    r2 = requests.get("https://data.etabus.gov.hk/v1/transport/kmb/eta/E057FE733052DDD7/78K/1").json()['data']
-    if r1:
+    r2 = requests.get("https://data.etabus.gov.hk/v1/transport/kmb/eta/54B6C89217D49521/78K/1").json()['data']
+    if r2:
       desc += f"\n".join([f"{tc_eta(x)} 往{x['dest_tc']}" if x['eta'] else "錯誤" for x in r2])
     else:
       desc += "暫時沒有班次"
-    
+
+    desc += f"\n\n**78X往皇后山**\n"
+    r3 = requests.get("https://rt.data.gov.hk/v1/transport/citybus-nwfb/eta/ctb/003675/78X").json()['data']
+    if r3:
+      desc += f"\n".join([tc_eta(x) if x['eta'] else "錯誤" for x in r3])
+    else:
+      desc += "暫時沒有班次"
+
+    desc += f"\n\n**78X往牛頭角、九龍灣及啟德**\n"
+    r4 = requests.get("https://rt.data.gov.hk/v1/transport/citybus-nwfb/eta/ctb/003668/78X").json()['data']
+    if r4:
+      desc += f"\n".join([tc_eta(x) if x['eta'] else "錯誤" for x in r4])
+    else:
+      desc += "暫時沒有班次"
+
+    desc += f"\n\n**79X往皇后山**\n"
+    r5 = requests.get("https://rt.data.gov.hk/v1/transport/citybus-nwfb/eta/ctb/003675/79X").json()['data']
+    if r5:
+      desc += f"\n".join([tc_eta(x) if x['eta'] else "錯誤" for x in r5])
+    else:
+      desc += "暫時沒有班次"
+
+    desc += f"\n\n**79X往奧運、旺角及長沙灣**\n"
+    r6 = requests.get("https://rt.data.gov.hk/v1/transport/citybus-nwfb/eta/ctb/003668/79X").json()['data']
+    if r6:
+      desc += f"\n".join([tc_eta(x) if x['eta'] else "錯誤" for x in r6])
+    else:
+      desc += "暫時沒有班次"
+
+    desc += f"\n\n**55K小巴往上水**\n"
+    r7 = requests.get("https://data.etagmb.gov.hk/eta/route-stop/2001013/2/6").json()['data']['eta']
+    if r7:
+      desc += f"\n".join([mtc_eta(x) if x['timestamp'] else "錯誤" for x in r7])
+    else:
+      desc += "暫時沒有班次"
+
     await ctx.send(desc)
 
 @bs.command(name= "mameiha", description= "78K, 79K", guild_ids= [880686520678371369],
