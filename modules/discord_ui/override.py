@@ -41,6 +41,8 @@ def override_dpy():
             elif kwargs.get("files") is not None:
                 files = kwargs.pop("files")
             
+            kwargs_ = kwargs
+            kwargs_.pop('delete_after')
             payload = get_message_payload(content=content, **kwargs)
             r = await send_files(route, files=files, payload=payload, http=self._state.http)
         
