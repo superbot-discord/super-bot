@@ -378,7 +378,7 @@ tc_eta = lambda x: datetime.fromisoformat(x['eta']).strftime('%H:%M:%S') + ("（
 @commands.command()
 async def mameiha(ctx):
   async with ctx.channel.typing():
-    desc = f"**78K往沙頭角**\n"
+    desc = f"**現在時間為 {datetime.now(tz= timezone(timedelta(hours=8))).strftime('%H:%M:%S')}**\n\n**78K往沙頭角**\n"
     r1 = requests.get("https://data.etabus.gov.hk/v1/transport/kmb/eta/EA6152DD7165E9DC/78K/1").json()['data']
     if r1:
       desc += f"\n".join([tc_eta(x) if x['eta'] else "錯誤" for x in r1])
@@ -412,7 +412,7 @@ async def mameiha(ctx):
             allowed= {ui.SlashPermission.User: [880701121574875146, 687474789342117900]})})
 async def ma_mei_ha(ctx):
   await ctx.defer()
-  desc = f"**78K往沙頭角**\n"
+  desc = f"**現在時間為 {datetime.now(tz= timezone(timedelta(hours=8))).strftime('%H:%M:%S')}**\n\n**78K往沙頭角**\n"
   r1 = requests.get("https://data.etabus.gov.hk/v1/transport/kmb/eta/EA6152DD7165E9DC/78K/1").json()['data']
   if r1:
     desc += f"\n".join([tc_eta(x) if x['eta'] else "錯誤" for x in r1])
