@@ -407,6 +407,25 @@ async def mameiha(ctx):
       desc += "暫時沒有班次"
     await ctx.send(desc)
 
+@commands.command()
+async def luenwohui(ctx):
+  async with ctx.channel.typing():
+    desc = f"**現在時間為 {datetime.now(tz= timezone(timedelta(hours=8))).strftime('%H:%M:%S')}**\n\n**278K往粉嶺站（循環線）**\n"
+    r1 = requests.get("https://data.etabus.gov.hk/v1/transport/kmb/eta/1AB800949FF1203B/278K/1").json()['data']
+    if r1:
+      desc += f"\n".join([tc_eta(x) if x['eta'] else "錯誤" for x in r1])
+    else:
+      desc += "暫時沒有班次"
+    
+    desc += f"\n\n**78K往市區**\n"
+    r2 = requests.get("https://data.etabus.gov.hk/v1/transport/kmb/eta/E057FE733052DDD7/78K/1").json()['data']
+    if r1:
+      desc += f"\n".join([f"{tc_eta(x)} 往{x['dest_tc']}" if x['eta'] else "錯誤" for x in r2])
+    else:
+      desc += "暫時沒有班次"
+    
+    await ctx.send(desc)
+
 @bs.command(name= "mameiha", description= "78K, 79K", guild_ids= [880686520678371369],
             default_permission= False, guild_permissions= {880686520678371369: ui.SlashPermission(
             allowed= {ui.SlashPermission.User: [880701121574875146, 687474789342117900]})})
@@ -421,7 +440,7 @@ async def ma_mei_ha(ctx):
   
   desc += f"\n\n**78K往市區**\n"
   r2 = requests.get("https://data.etabus.gov.hk/v1/transport/kmb/eta/54B6C89217D49521/78K/1").json()['data']
-  if r1:
+  if r2:
     desc += f"\n".join([f"{tc_eta(x)} 往{x['dest_tc']}" if x['eta'] else "錯誤" for x in r2])
   else:
     desc += "暫時沒有班次"
@@ -461,3 +480,4 @@ def setup(bot):
   bot.add_command(hk_weather)
   bot.add_command(hk_wind)
   bot.add_command(mameiha)
+  bot.add_command(luenwohui)
