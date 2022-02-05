@@ -4,7 +4,7 @@ from _bot import bs
 from functions import trim
 from shared import commands, chance, ra, requests, ui
 
-country_option = ui.SlashOption(name= "Country/Region Code", description= "")
+#country_option = ui.SlashOption(name= "Country/Region Code", description= "")
 countries = [ # 19 x 12 = 228 items
   "AD","AE","AF","AG","AI","AL","AM","AO","AR","AS","AT","AU","AX","AZ","BA","BB","BD","BE","BF",
   "BG","BH","BI","BJ","BM","BN","BO","BQ","BR","BS","BT","BW","BY","BZ","CA","CD","CF","CG","CH",
