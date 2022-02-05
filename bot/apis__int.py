@@ -4,7 +4,8 @@ from _bot import bs
 from functions import trim
 from shared import commands, chance, ra, requests, ui
 
-#country_option = ui.SlashOption(name= "Country/Region Code", description= "")
+"""country_option = ui.SlashOption(name= "Country/Region Code", description= "The country code", type= str, required=
+                                True, autocomplete= True)
 countries = [ # 19 x 12 = 228 items
   "AD","AE","AF","AG","AI","AL","AM","AO","AR","AS","AT","AU","AX","AZ","BA","BB","BD","BE","BF",
   "BG","BH","BI","BJ","BM","BN","BO","BQ","BR","BS","BT","BW","BY","BZ","CA","CD","CF","CG","CH",
@@ -18,7 +19,7 @@ countries = [ # 19 x 12 = 228 items
   "RO","RS","RU","RW","SA","SB","SC","SD","SE","SH","SI","SJ","SK","SL","SM","SN","SO","SR","SS",
   "ST","SV","SY","SZ","TD","TF","TG","TH","TJ","TK","TL","TM","TN","TO","TR","TT","TV","TW","TZ",
   "UA","UG","UM","US","UY","UZ","VC","VE","VI","VN","VU","WF","WS","XK","YE","YT","ZA","ZM","ZW"
-]
+]"""
 
 class TriviaRevealL(ui.listener.Listener):
   def __init__(self, answer_1, answer_2, answer_3, multi):

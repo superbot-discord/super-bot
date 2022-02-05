@@ -3,6 +3,7 @@ from shared import (asyncio, commands, discord, Embed, ems, np, plt, re, Sequenc
 from shared import (sr_real, ms_real, tc_real, vc_real, bg_itop, custom_permissions, datetime, db,
                     sr_itop, ms_itop, tc_itop, vc_itop, func, gridspec, sizer, timezone, try_delete,
                     sr_itod, ms_itod, tc_itod, vc_itod, unix_timestamp, voice_region_format)
+from _bot import bs
 from functions import many_replace, trim
 
 permission_messages = {}
@@ -267,24 +268,66 @@ async def banner(ctx, user: typing.Union[discord.User, discord.Member] = None):
   await ctx.reply(embed= embed)
 
 @commands.command(aliases=['ca'])
-async def category(ctx, category_: discord.CategoryChannel = None):
-  if not category_:
+async def category(ctx, category: discord.CategoryChannel = None):
+  if not category:
     if ctx.channel.category:
-      category_ = ctx.channel.category
+      category = ctx.channel.category
     else:
       await ctx.reply("Please specify a category.")
       return
-  ti=f"Category Information: {category_.name}"
-  desc=f"Created at {unix_timestamp(category_.created_at)}"
+  task = asyncio.create_task(botcategory(category))
+  await task
+  await ctx.reply(embed= task.result())
+
+@commands.command(aliases=['ch'])
+async def channel(ctx, channel: typing.Union[discord.TextChannel, discord.VoiceChannel, discord.StageChannel, discord.Thread] = None):
+  if not channel:
+    channel = ctx.channel
+  if channel.type == discord.ChannelType.text:
+    task = asyncio.create_task(bottchannel(channel))
+  elif channel.type == discord.ChannelType.voice:
+    task = asyncio.create_task(botvchannel(channel))
+  elif channel.type == discord.ChannelType.stage_voice:
+    task = asyncio.create_task(botstagec(channel))
+  elif channel.type in [discord.ChannelType.public_thread, discord.ChannelType.private_thread]:
+    task = asyncio.create_task(botthread(channel))
+  await task
+  await ctx.reply(embed=task.result())
+
+@bs.command(name= "channel_info", description= "Shows information about a category, channel or thread.",
+           options=[ui.SlashOption(name= "Channel",type= discord.abc.GuildChannel, required= True,
+           description= "The category, channel or thread to show information about.",
+           channel_types= [discord.TextChannel, discord.VoiceChannel, discord.StageChannel,
+           discord.Thread, discord.CategoryChannel], required= False)])
+async def _channel(ctx, channel: typing.Union[discord.TextChannel, discord.VoiceChannel,
+                   discord.StageChannel, discord.Thread, discord.CategoryChannel] = None):
+  if not channel:
+    channel = ctx.channel
+  if channel.type == discord.ChannelType.category:
+    task = asyncio.create_task(botcategory(channel))
+  elif channel.type == discord.ChannelType.text:
+    task = asyncio.create_task(bottchannel(channel))
+  elif channel.type == discord.ChannelType.voice:
+    task = asyncio.create_task(botvchannel(channel))
+  elif channel.type == discord.ChannelType.stage_voice:
+    task = asyncio.create_task(botstagec(channel))
+  elif channel.type in [discord.ChannelType.public_thread, discord.ChannelType.private_thread]:
+    task = asyncio.create_task(botthread(channel))
+  await task
+  await ctx.reply(embed=task.result())
+
+async def botcategory(category):
+  ti = f"Category Information: {category.name}"
+  desc = f"Created at {unix_timestamp(category.created_at)}"
   embed = Embed(title=ti, description=desc)
-  f0valist=category_.text_channels
+  f0valist=category.text_channels
   f0v=" ".join([x.mention for x in f0valist])
-  f1valist=category_.voice_channels
+  f1valist=category.voice_channels
   f1v=" ".join([x.name for x in f1valist])
-  f2valist=category_.stage_channels
+  f2valist=category.stage_channels
   f2v=" ".join([x.name for x in f2valist])
-  f3v=category_.id
-  f4v=category_.position
+  f3v=category.id
+  f4v=category.position
   embed.add_field(name="ID", value=f3v, inline= True)
   embed.add_field(name="Position", value=f4v, inline= True)
   if len(f0valist)!=0:
@@ -293,31 +336,7 @@ async def category(ctx, category_: discord.CategoryChannel = None):
     embed.add_field(name=f"Voice Channels ({len(f1valist)})", value=f1v, inline= True)
   if len(f2valist)!=0:
     embed.add_field(name=f"Stage Channels ({len(f2valist)})", value=f2v, inline= True)
-  await ctx.reply(embed= embed)
-
-@commands.command(aliases=['ch'])
-async def channel(ctx, channel: typing.Union[discord.TextChannel, discord.VoiceChannel, discord.StageChannel, discord.Thread] = None):
-  if not channel:
-    channel = ctx.channel
-  if channel.type == discord.ChannelType.text:
-    task = asyncio.create_task(bottchannel(channel))
-    await task
-    await ctx.reply(embed=task.result())
-  elif channel.type == discord.ChannelType.voice:
-    task = asyncio.create_task(botvchannel(channel))
-    await task
-    await ctx.reply(embed=task.result())
-  elif channel.type == discord.ChannelType.stage_voice:
-    task = asyncio.create_task(botstagec(channel))
-    await task
-    await ctx.reply(embed=task.result())
-  elif channel.type in [discord.ChannelType.public_thread, discord.ChannelType.private_thread]:
-    task = asyncio.create_task(botthread(channel))
-    await task
-    await ctx.reply(embed=task.result())
-  else:
-    embed = Embed(desc = "Invalid input.")
-    await ctx.reply(embed= embed)
+  return embed
 
 async def bottchannel(channel):
   ti=f"Channel Information: {channel.name}"
@@ -1094,29 +1113,29 @@ async def server(ctx, *, text="regular"):
 
 @commands.command(aliases=['sta'])
 async def status(ctx, member: discord.Member = None):
-  if member==None:
-    member=ctx.author
-  if member.is_on_mobile==True:
-    desc = str(member.status)+" on mobile"
+  if member == None:
+    member = ctx.author
+  if member.is_on_mobile == True:
+    desc = str(member.status) + " on mobile"
   else:
-    desc = str(member.status)+" on desktop"
+    desc = str(member.status) + " on desktop"
   embed = Embed(title=f"Status: {member.name}", description=desc)
   for x in member.activities:
-    if x.type==discord.ActivityType.custom:
-      if x.emoji==None:
-        field=x.name
+    if x.type == discord.ActivityType.custom:
+      if x.emoji == None:
+        field = x.name
       else:
         try:
-          field=":"+x.emoji.name+": "+x.name
+          field = f"{x.emoji.name} {x.name}"
         except:
           try:
-            field=x.name
+            field = x.name
           except:
-            field=":"+x.emoji.name+":"
-      embed.add_field(name="Status", value=field, inline= False)
-    if x.type==discord.ActivityType.playing:
-      field=x.name+f"\nStarted: {unix_timestamp(x.start)}"
-      embed.add_field(name="Game", value=field, inline= False)
+            field = x.emoji.name
+      embed.add_field(name= "Status", value= field, inline= False)
+    if x.type == discord.ActivityType.playing:
+      field = x.name+f"\nStarted: {unix_timestamp(x.start)}"
+      embed.add_field(name= "Game", value= field, inline= False)
     if x.type==discord.ActivityType.streaming:
       field=f"[{x.platform}: {x.name}]({x.url})\nStarted: {unix_timestamp(x.start)}"
       embed.add_field(name="Game", value=field, inline= False)
