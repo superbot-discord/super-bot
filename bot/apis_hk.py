@@ -379,7 +379,7 @@ mtc_eta = lambda x: datetime.fromisoformat(x['timestamp']).strftime('%H:%M:%S') 
 @commands.command()
 async def mameiha(ctx):
   async with ctx.channel.typing():
-    desc = f"**現在時間為 {datetime.now(tz= timezone(timedelta(hours=8))).strftime('%H:%M:%S')}**\n\n**78K往沙頭角**\n"
+    desc = f"**78K往沙頭角**\n"
     r1 = requests.get("https://data.etabus.gov.hk/v1/transport/kmb/eta/EA6152DD7165E9DC/78K/1").json()['data']
     if r1:
       desc += f"\n".join([tc_eta(x) if x['eta'] else "錯誤" for x in r1])
@@ -428,7 +428,8 @@ async def mameiha(ctx):
     else:
       desc += "暫時沒有班次"
 
-    await ctx.send(desc)
+    desc = f"**現在時間為 {datetime.now(tz= timezone(timedelta(hours=8))).strftime('%H:%M:%S')}**\n\n{desc}"
+  await ctx.send(desc)
 
 @commands.command()
 async def luenwohui(ctx):
@@ -447,7 +448,7 @@ async def luenwohui(ctx):
     else:
       desc += "暫時沒有班次"
 
-    await ctx.send(desc)
+  await ctx.send(desc)
 
 @bs.command(name= "mameiha", description= "78K, 79K", guild_ids= [880686520678371369],
             default_permission= False, guild_permissions= {880686520678371369: ui.SlashPermission(

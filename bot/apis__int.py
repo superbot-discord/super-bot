@@ -1,6 +1,6 @@
 import html
 
-#import _bot
+from _bot import bs
 from functions import trim
 from shared import commands, chance, ra, requests, ui
 
@@ -201,6 +201,31 @@ async def trivia(ctx, number=1):
   else:
     await ctx.reply("There are too many questions to show! I can only display up to 3 questions.")
 
+animal_choices = [{'name': "Bird", 'value': "bird"}, {'name': "Bunny", 'value': "bunny"},
+                  {'name': "Cat", 'value': "cat"}, {'name': "Dog", 'value': "dog"},
+                  {'name': "Duck", 'value': "duck"}, {'name': "Fox", 'value': "fox"},
+                  {'name': "Kangaroo", 'value': "kangaroo"}, {'name': "Koala", 'value': "koala"},
+                  {'name': "Lizard", 'value': "lizard"}, {'name': "Panda", 'value': "panda"},
+                  {'name': "Raccoon", 'value': "raccoon"}, {'name': "Shiba Inu", 'value': "shiba"},
+]
+animal_fact_choices = filter(lambda x: x['value'] not in ['bunny', 'duck', 'lizard', 'shiba'],
+                             animal_choices)
+
+@bs.command(name= "animal_image", description= "Shows up to 9 images of an animal.", options=[
+           ui.SlashOption(name= "Animal", description= "The animal to show image(s) of.",
+           type= str, required= True, choices= animal_choices), ui.SlashOption(name= "Number",
+           description= "The number of images to show. Defaults to 1.", type= int, required= False,
+           min_value= 1, max_value= 9)])
+async def animal_image(ctx: ui.SlashInteraction, animal: str, number: int = 1):
+  await ctx.respond(eval(f"bot{animal}({number})"))
+
+@bs.command(name= "animal_fact", description= "Shows up to 9 fun facts about an animal.", options=[
+           ui.SlashOption(name= "Animal", description= "The animal to show fact(s) of.",
+           type= str, required= True, choices= animal_fact_choices), ui.SlashOption(name= "Number",
+           description= "The number of fun facts to show. Defaults to 1.", type= int,
+           required= False, min_value= 1, max_value= 9)])
+async def animal_fact(ctx: ui.SlashInteraction, animal: str, number: int = 1):
+  await ctx.respond(eval(f"bot{animal}_fact({number})"))
 
 def botbird(number):
   desc = ""
