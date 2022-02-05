@@ -244,6 +244,14 @@ async def animal_image(ctx: ui.SlashInteraction, animal: str, number: int = 1):
 async def animal_fact(ctx: ui.SlashInteraction, animal: str, number: int = 1):
   await ctx.respond(eval(f"bot{animal}_fact({number})"))
 
+@bs.command(name= "trivia", description= "Shows up to 3 trivia questions.", options=[
+           ui.SlashOption(name= "Number", type= int, required= False, min_value= 1, max_value= 3,
+           description= "The no. of questions to show, between 1 and 3 inclusive. Defaults to 1.")])
+async def _trivia(ctx: ui.SlashInteraction, number: int = 1):
+  data = bottrivia(number)
+  multi = number > 1
+  await ctx.respond(data[0], components= data[2],listener= TriviaRevealL(*data[1], multi))
+
 def botbird(number):
   desc = ""
   for x in range(number):
@@ -426,7 +434,7 @@ def bottrivia(number):
   desc = ""
   answers = []
   try:
-    r=requests.get(f"https://opentdb.com/api.php?amount={number}&encoding=base64").json()["results"]
+    r = requests.get(f"https://opentdb.com/api.php?amount={number}&encoding=base64").json()["results"]
   except:
     return ["Invalid input!", [], None]
   for x in r:

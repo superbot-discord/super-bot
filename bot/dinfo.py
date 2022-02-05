@@ -297,10 +297,10 @@ async def channel(ctx, channel: typing.Union[discord.TextChannel, discord.VoiceC
 @bs.command(name= "channel_info", description= "Shows information about a category, channel or thread.",
            options=[ui.SlashOption(name= "Channel",type= discord.abc.GuildChannel, required= True,
            description= "The category, channel or thread to show information about.",
-           channel_types= [discord.TextChannel, discord.VoiceChannel, discord.StageChannel,
-           discord.Thread, discord.CategoryChannel], required= False)])
-async def _channel(ctx, channel: typing.Union[discord.TextChannel, discord.VoiceChannel,
-                   discord.StageChannel, discord.Thread, discord.CategoryChannel] = None):
+           channel_types= [discord.ChannelType.category, discord.ChannelType.text,
+           discord.ChannelType.voice, discord.ChannelType.stage_voice,
+           discord.ChannelType.public_thread, discord.ChannelType.private_thread])])
+async def _channel(ctx, channel = None):
   if not channel:
     channel = ctx.channel
   if channel.type == discord.ChannelType.category:
