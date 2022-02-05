@@ -373,43 +373,11 @@ async def hk_wind(ctx, *, disposed= None):
   await ctx.reply(embed= embed)
 
 tc_eta = lambda x: datetime.fromisoformat(x['eta']).strftime('%H:%M:%S') + ("（未開出）"if x['rmk_en'] == "Scheduled Bus" else "")
-mtc_eta = lambda x: datetime.fromisoformat(x['eta']).strftime('%H:%M:%S') + ("（未開出）"if x['rekarks_en'] == "Scheduled" else "")
+mtc_eta = lambda x: datetime.fromisoformat(x['timestamp']).strftime('%H:%M:%S') + ("（未開出）"if x['remarks_en'] == "Scheduled" else "")
 
 # Special
 @commands.command()
 async def mameiha(ctx):
-  async with ctx.channel.typing():
-    desc = f"**現在時間為 {datetime.now(tz= timezone(timedelta(hours=8))).strftime('%H:%M:%S')}**\n\n**78K往沙頭角**\n"
-    r1 = requests.get("https://data.etabus.gov.hk/v1/transport/kmb/eta/EA6152DD7165E9DC/78K/1").json()['data']
-    if r1:
-      desc += f"\n".join([tc_eta(x) if x['eta'] else "錯誤" for x in r1])
-    else:
-      desc += "暫時沒有班次"
-    
-    desc += f"\n\n**78K往市區**\n"
-    r2 = requests.get("https://data.etabus.gov.hk/v1/transport/kmb/eta/54B6C89217D49521/78K/1").json()['data']
-    if r1:
-      desc += f"\n".join([f"{tc_eta(x)} 往{x['dest_tc']}" if x['eta'] else "錯誤" for x in r2])
-    else:
-      desc += "暫時沒有班次"
-    
-    desc += f"\n\n**79X往皇后山**\n"
-    r3 = requests.get("https://rt.data.gov.hk/v1/transport/citybus-nwfb/eta/ctb/003675/79X").json()['data']
-    if r3:
-      desc += f"\n".join([tc_eta(x) if x['eta'] else "錯誤" for x in r3])
-    else:
-      desc += "暫時沒有班次"
-    
-    desc += f"\n\n**79X往奧運、旺角及長沙灣**\n"
-    r4 = requests.get("https://rt.data.gov.hk/v1/transport/citybus-nwfb/eta/ctb/003668/79X").json()['data']
-    if r4:
-      desc += f"\n".join([tc_eta(x) if x['eta'] else "錯誤" for x in r4])
-    else:
-      desc += "暫時沒有班次"
-    await ctx.send(desc)
-
-@commands.command()
-async def luenwohui(ctx):
   async with ctx.channel.typing():
     desc = f"**現在時間為 {datetime.now(tz= timezone(timedelta(hours=8))).strftime('%H:%M:%S')}**\n\n**78K往沙頭角**\n"
     r1 = requests.get("https://data.etabus.gov.hk/v1/transport/kmb/eta/EA6152DD7165E9DC/78K/1").json()['data']
@@ -462,11 +430,31 @@ async def luenwohui(ctx):
 
     await ctx.send(desc)
 
+@commands.command()
+async def luenwohui(ctx):
+  async with ctx.channel.typing():
+    desc = f"**現在時間為 {datetime.now(tz= timezone(timedelta(hours=8))).strftime('%H:%M:%S')}**\n\n**278K往粉嶺站（循環線）**\n"
+    r1 = requests.get("https://data.etabus.gov.hk/v1/transport/kmb/eta/1AB800949FF1203B/278K/1").json()['data']
+    if r1:
+      desc += f"\n".join([tc_eta(x) if x['eta'] else "錯誤" for x in r1])
+    else:
+      desc += "暫時沒有班次"
+
+    desc += f"\n\n**78K往市區**\n"
+    r2 = requests.get("https://data.etabus.gov.hk/v1/transport/kmb/eta/E057FE733052DDD7/78K/1").json()['data']
+    if r1:
+      desc += f"\n".join([f"{tc_eta(x)} 往{x['dest_tc']}" if x['eta'] else "錯誤" for x in r2])
+    else:
+      desc += "暫時沒有班次"
+
+    await ctx.send(desc)
+
 @bs.command(name= "mameiha", description= "78K, 79K", guild_ids= [880686520678371369],
             default_permission= False, guild_permissions= {880686520678371369: ui.SlashPermission(
-            allowed= {ui.SlashPermission.User: [687474789342117900, 880701121574875146]})})
-async def ma_mei_ha(ctx):
+            allowed= {2: [687474789342117900, 880701121574875146]})}) # 2 represents user
+async def ma_mei_ha(ctx: ui.SlashInteraction):
   await ctx.defer()
+  print(ctx.permissions)
   desc = f"**現在時間為 {datetime.now(tz= timezone(timedelta(hours=8))).strftime('%H:%M:%S')}**\n\n**78K往沙頭角**\n"
   r1 = requests.get("https://data.etabus.gov.hk/v1/transport/kmb/eta/EA6152DD7165E9DC/78K/1").json()['data']
   if r1:

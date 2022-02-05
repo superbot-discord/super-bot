@@ -2,8 +2,8 @@ from shared import commands, db, discord, ui
 from _bot import bs
 
 bot_admin_guilds = [805441351033552916]
-#bot_admin_slash = {x: ui.SlashPermission(allowed= {ui.SlashPermission.User: db['botadmins']}) for x in bot_admin_guilds}
-bot_admin_slash = {x: ui.SlashPermission(allowed= {ui.SlashPermission.User: db['botadmins']}) for x in bot_admin_guilds}
+bot_admin_slash = {x: ui.SlashPermission(allowed= {2: db['botadmins']}) for x in bot_admin_guilds}
+#bot_admin_slash = {x: ui.SlashPermission(allowed= {x: ui.SlashPermission.User for x in db['botadmins']}) for x in bot_admin_guilds}
 banned_ids = []
 banned_text = []
 
