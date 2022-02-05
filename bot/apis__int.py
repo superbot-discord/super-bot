@@ -4,6 +4,22 @@ from _bot import bs
 from functions import trim
 from shared import commands, chance, ra, requests, ui
 
+country_option = ui.SlashOption(name= "Country/Region Code", description= "")
+countries = [ # 19 x 12 = 228 items
+  "AD","AE","AF","AG","AI","AL","AM","AO","AR","AS","AT","AU","AX","AZ","BA","BB","BD","BE","BF",
+  "BG","BH","BI","BJ","BM","BN","BO","BQ","BR","BS","BT","BW","BY","BZ","CA","CD","CF","CG","CH",
+  "CI","CK","CL","CM","CN","CO","CR","CU","CV","CY","CZ","DE","DJ","DK","DM","DO","DZ","EC","EE",
+  "EG","ER","ES","ET","FI","FJ","FM","FO","FR","GA","GB","GD","GE","GF","GG","GH","GL","GM","GN",
+  "GP","GQ","GR","GT","GU","GW","GY","HK","HN","HR","HT","HU","ID","IE","IL","IM","IN","IQ","IR",
+  "IS","IT","JE","JM","JO","JP","KE","KG","KH","KI","KM","KN","KP","KR","KW","KY","KZ","LA","LB",
+  "LC","LI","LK","LR","LS","LT","LU","LV","LY","MA","MC","MD","ME","MG","MH","MK","ML","MM","MN",
+  "MO","MP","MQ","MR","MS","MT","MU","MV","MW","MX","MY","MZ","NA","NC","NE","NG","NI","NL","NO",
+  "NP","NR","NZ","OM","PA","PE","PF","PG","PH","PK","PL","PM","PR","PS","PT","PW","PY","QA","RE",
+  "RO","RS","RU","RW","SA","SB","SC","SD","SE","SH","SI","SJ","SK","SL","SM","SN","SO","SR","SS",
+  "ST","SV","SY","SZ","TD","TF","TG","TH","TJ","TK","TL","TM","TN","TO","TR","TT","TV","TW","TZ",
+  "UA","UG","UM","US","UY","UZ","VC","VE","VI","VN","VU","WF","WS","XK","YE","YT","ZA","ZM","ZW"
+]
+
 class TriviaRevealL(ui.listener.Listener):
   def __init__(self, answer_1, answer_2, answer_3, multi):
     self.a1 = answer_1
@@ -208,22 +224,22 @@ animal_choices = [{'name': "Bird", 'value': "bird"}, {'name': "Bunny", 'value': 
                   {'name': "Lizard", 'value': "lizard"}, {'name': "Panda", 'value': "panda"},
                   {'name': "Raccoon", 'value': "raccoon"}, {'name': "Shiba Inu", 'value': "shiba"},
 ]
-animal_fact_choices = filter(lambda x: x['value'] not in ['bunny', 'duck', 'lizard', 'shiba'],
-                             animal_choices)
+animal_fact_choices = list(filter(lambda x: x['value'] not in ['bunny', 'duck', 'lizard', 'shiba'],
+                                  animal_choices))
 
 @bs.command(name= "animal_image", description= "Shows up to 9 images of an animal.", options=[
            ui.SlashOption(name= "Animal", description= "The animal to show image(s) of.",
            type= str, required= True, choices= animal_choices), ui.SlashOption(name= "Number",
-           description= "The number of images to show. Defaults to 1.", type= int, required= False,
-           min_value= 1, max_value= 9)])
+           description= "The no. of images to show, between 1 and 9 inclusive. Defaults to 1.",
+           type= int, required= False, min_value= 1, max_value= 9)])
 async def animal_image(ctx: ui.SlashInteraction, animal: str, number: int = 1):
   await ctx.respond(eval(f"bot{animal}({number})"))
 
 @bs.command(name= "animal_fact", description= "Shows up to 9 fun facts about an animal.", options=[
-           ui.SlashOption(name= "Animal", description= "The animal to show fact(s) of.",
+           ui.SlashOption(name= "Animal", description= "The animal to show fact(s) about.",
            type= str, required= True, choices= animal_fact_choices), ui.SlashOption(name= "Number",
-           description= "The number of fun facts to show. Defaults to 1.", type= int,
-           required= False, min_value= 1, max_value= 9)])
+           description= "The no. of fun facts to show, between 1 and 9 inclusive. Defaults to 1.",
+           type= int, required= False, min_value= 1, max_value= 9)])
 async def animal_fact(ctx: ui.SlashInteraction, animal: str, number: int = 1):
   await ctx.respond(eval(f"bot{animal}_fact({number})"))
 
