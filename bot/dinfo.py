@@ -267,7 +267,7 @@ async def banner(ctx, user: typing.Union[discord.User, discord.Member] = None):
       embed.add_field(name=f"{x.upper()}s", value=desc)
   await ctx.reply(embed= embed)
 
-@commands.command(aliases=['ca'])
+@commands.command(aliases=['ca']) # Migrated
 async def category(ctx, category: discord.CategoryChannel = None):
   if not category:
     if ctx.channel.category:
@@ -279,7 +279,7 @@ async def category(ctx, category: discord.CategoryChannel = None):
   await task
   await ctx.reply(embed= task.result())
 
-@commands.command(aliases=['ch'])
+@commands.command(aliases=['ch']) # Migrated
 async def channel(ctx, channel: typing.Union[discord.TextChannel, discord.VoiceChannel, discord.StageChannel, discord.Thread] = None):
   if not channel:
     channel = ctx.channel
@@ -295,7 +295,7 @@ async def channel(ctx, channel: typing.Union[discord.TextChannel, discord.VoiceC
   await ctx.reply(embed=task.result())
 
 @bs.command(name= "channel_info", description= "Shows information about a category, channel or thread.",
-           options=[ui.SlashOption(name= "Channel",type= discord.abc.GuildChannel, required= True,
+           options=[ui.SlashOption(name= "Channel", type= discord.TextChannel, required= True,
            description= "The category, channel or thread to show information about.",
            channel_types= [discord.ChannelType.category, discord.ChannelType.text,
            discord.ChannelType.voice, discord.ChannelType.stage_voice,
@@ -314,7 +314,7 @@ async def _channel(ctx, channel = None):
   elif channel.type in [discord.ChannelType.public_thread, discord.ChannelType.private_thread]:
     task = asyncio.create_task(botthread(channel))
   await task
-  await ctx.reply(embed=task.result())
+  await ctx.respond(embed= task.result())
 
 async def botcategory(category):
   ti = f"Category Information: {category.name}"

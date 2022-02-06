@@ -29,7 +29,7 @@ def test_for(text: str, min_ratio: typing.Union[float, int], *choices: str):
   """
   Checks if a ``str`` is close enough to a list of strings, using `difflib.SequenceMatcher`.
   ```
-  test_for("appel", 0.8, "apple", "banana", "cherry") # checks if "appel" is at least 80% close to\
+  test_for("appel", 0.8, "apple", "banana", "cherry") # Checks if "appel" is at least 80% close to\
   one of the listed fruits, returns True
   ```
   """
@@ -41,4 +41,11 @@ def test_for(text: str, min_ratio: typing.Union[float, int], *choices: str):
     return list(tested)[0]
 
 def trim(text: str, width: int):
+  """
+  Trims a ``str`` if it is longer than ``width``.
+  ```
+  trim("Lorem Ipsum", 11) # Returns "Lorem Ipsum" because it is not longer than 11 characters
+  trim("Lorem Ipsum", 9) # Returns "Lorem Ip…"
+  ```
+  """
   return text if len(text) <= width else text[:width - 1] + "…"

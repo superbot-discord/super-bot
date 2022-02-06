@@ -1,9 +1,11 @@
 import html
 
 from _bot import bs
+from bot.shared import try_delete
 from functions import trim
-from shared import commands, chance, ra, requests, ui
+from shared import commands, chance, discord, ra, requests, ui
 
+# All migrated in the file except =joke and =states
 """country_option = ui.SlashOption(name= "Country/Region Code", description= "The country code", type= str, required=
                                 True, autocomplete= True)
 countries = [ # 19 x 12 = 228 items
@@ -161,7 +163,9 @@ async def lizard(ctx, number=1):
 
 @commands.command(aliases=["apod"])
 async def nasa(ctx):
-  await ctx.reply(botnasa())
+  apod = botnasa()
+  await ctx.reply(apod[0], files= apod[1])
+  try_delete("apod.txt")
 
 @commands.command()
 async def panda(ctx, number=1):
@@ -243,6 +247,12 @@ async def animal_image(ctx: ui.SlashInteraction, animal: str, number: int = 1):
            type= int, required= False, min_value= 1, max_value= 9)])
 async def animal_fact(ctx: ui.SlashInteraction, animal: str, number: int = 1):
   await ctx.respond(eval(f"bot{animal}_fact({number})"))
+
+@bs.command(name= "nasa_apod", description= "Shows NASA's Astronomy Picture Of the Day.")
+async def nasa_apod(ctx: ui.SlashInteraction):
+  apod = botnasa()
+  await ctx.respond(apod[0], files= apod[1])
+  try_delete("apod.txt")
 
 @bs.command(name= "trivia", description= "Shows up to 3 trivia questions.", options=[
            ui.SlashOption(name= "Number", type= int, required= False, min_value= 1, max_value= 3,
@@ -377,7 +387,13 @@ def botlizard(number):
 def botnasa():
   r = requests.get('https://apodapi.herokuapp.com/api').json()
   desc = f"**{r['title']}** by {r['copyright']}\n{r['hdurl']}\n\n{r['description']}"
-  return trim(desc, 1024)
+  files = []
+  if len(desc) > 1024:
+    f = open("apod.txt", "w")
+    f.write(f"{r['title']} by {r['copyright']}\n{r['hdurl']}\n\n{r['description']}")
+    f.close()
+    files.append(discord.File("apod.txt"))
+  return [trim(desc, 1024), files]
 
 def botpanda(number):
   desc = ""
