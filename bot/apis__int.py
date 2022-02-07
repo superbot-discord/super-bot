@@ -164,7 +164,9 @@ async def lizard(ctx, number=1):
 @commands.command(aliases=["apod"])
 async def nasa(ctx):
   apod = botnasa()
-  await ctx.reply(apod[0], files= apod[1])
+  await ctx.reply(apod[0])
+  if apod[1]:
+    await ctx.send(file= discord.File("apod.txt"))
   try_delete("apod.txt")
 
 @commands.command()
@@ -251,7 +253,9 @@ async def animal_fact(ctx: ui.SlashInteraction, animal: str, number: int = 1):
 @bs.command(name= "nasa_apod", description= "Shows NASA's Astronomy Picture Of the Day.")
 async def nasa_apod(ctx: ui.SlashInteraction):
   apod = botnasa()
-  await ctx.respond(apod[0], files= apod[1])
+  await ctx.respond(apod[0])
+  if apod[1]:
+    await ctx.send(file= discord.File("apod.txt"))
   try_delete("apod.txt")
 
 @bs.command(name= "trivia", description= "Shows up to 3 trivia questions.", options=[
@@ -387,13 +391,13 @@ def botlizard(number):
 def botnasa():
   r = requests.get("https://api.nasa.gov/planetary/apod?api_key=7wF7KVXkmapwOlTkTt6i6dp9p3ismZLJHeP0OSFp").json()
   desc = f"**{r['title']}**\nStandard-Definition: {r['url']}\nHigh-Definition: {r['hdurl']}\n\n{r['explanation']}"
-  files = []
+  file = False
   if len(desc) > 1024:
     f = open("apod.txt", "w")
     f.write(f"{r['title']}\n{r['url']}\n<{r['hdurl']}>\n\n{r['explanation']}")
     f.close()
-    files.append(discord.File("apod.txt"))
-  return [trim(desc, 1024), files]
+    file = True
+  return [trim(desc, 1024), file]
 
 def botpanda(number):
   desc = ""

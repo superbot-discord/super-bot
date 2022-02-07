@@ -561,4 +561,3 @@ def setup(bot):
   bot.add_command(snow)
   bot.add_command(table)
   bot.add_command(table_plain)
-  print("Midway through loading modules")

@@ -247,7 +247,7 @@ def setup_logger(name):
     Thx redstone ;)
     https://github.com/RedstoneZockt/rotstein-dc-py/blob/main/rotstein_py/logging.py
     """
-    level = logging.ERROR
+    level = logging.DEBUG
 
     logger = logging.getLogger(name)
     logger.setLevel(level)

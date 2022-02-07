@@ -23,10 +23,6 @@ from .listener import Listener
 from .override import override_dpy as override_it
 from .enums import CommandType, InteractionResponseType, ComponentType
 
-from .override import override_dpy as override_it
-from .listener import Listener
-from .enums import InteractionResponseType, ComponentType
-
 
 import nextcord as discord
 from nextcord.ext import commands
@@ -168,6 +164,7 @@ class Slash():
         self._discord.remove_cog = remove_cog_override
         
         async def on_connect():
+            print("Beginning to sync slash commands")
             self.http = SlashHTTP(self._discord)
             self._discord._connection.slash_http = self.http
             self.ready = True
@@ -176,6 +173,7 @@ class Slash():
             await asyncio.sleep(_or(self.wait_sync, 1))
             await self.commands.sync(self.delete_unused)
             # await self.sync_commands(self.delete_unused)
+            print("Finished syncing slash commands")
         self._discord.add_listener(on_connect)
 
     @deprecated("commands.sync")

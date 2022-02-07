@@ -136,10 +136,6 @@ async def ping(ctx, *, disposed= None):
 async def spoil_(ctx, message):
   await ctx.respond(message.content.replace("||", ""), hidden= True)
 
-@bs.user_command(name= "Test")
-async def rickroller_(ctx, user):
-  await ctx.respond("Never gonna give you up!", hidden= True)
-
 
 @bot_.event
 async def on_command_error(ctx, error):
@@ -292,7 +288,4 @@ async def on_ready():
 
 
 print("Bot is getting started…")
-# try:
 bot_.run(os.environ['TOKEN'])
-# except:
-#   pass

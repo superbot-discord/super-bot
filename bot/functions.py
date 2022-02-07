@@ -22,8 +22,12 @@ def enum_mentionables(mentionables, max_length: int, no_text: str, delimiter1: s
   if len(result) > max_length:
     result = delimiter2.join([x.name for x in mentionables])
     if len(result) > max_length:
-      pass
-      # Comma-separate until length too high, then add ellipses
+      result = ""
+      for x in mentionables:
+        if len(result + x.name) + 1 > max_length:
+          break
+        result += x.name + delimiter2
+      result = result[:-2] + "…"
   return result
 
 

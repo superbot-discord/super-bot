@@ -65,9 +65,5 @@ async def botadmin(ctx, user: discord.User):
   owner = await ctx.bot.fetch_user(687474789342117900)
   await owner.send(f"{user.name}#{user.discriminator} (ID: {user.id}) has been added as a bot-admin.")
 
-@bs.command(name= "tester", description= "Tester.")
-async def tester(ctx):
-  await ctx.respond("test never gonna give you up")
-
 def setup(bot):
   bot.add_command(purgeserver)

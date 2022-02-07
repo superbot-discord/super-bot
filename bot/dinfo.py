@@ -4,7 +4,7 @@ from shared import (sr_real, ms_real, tc_real, vc_real, bg_itop, custom_permissi
                     sr_itop, ms_itop, tc_itop, vc_itop, func, gridspec, sizer, timezone, try_delete,
                     sr_itod, ms_itod, tc_itod, vc_itod, unix_timestamp, voice_region_format)
 from _bot import bs
-from functions import many_replace, trim
+from functions import enum_mentionables, many_replace, trim
 
 permission_messages = {}
 cmaphsv = plt.cm.hsv
@@ -323,15 +323,15 @@ async def channel_(ctx, channel = None):
 async def botcategory(category):
   ti = f"Category Information: {category.name}"
   desc = f"Created at {unix_timestamp(category.created_at)}"
-  embed = Embed(title=ti, description=desc)
-  f0valist=category.text_channels
-  f0v=" ".join([x.mention for x in f0valist])
-  f1valist=category.voice_channels
-  f1v=" ".join([x.name for x in f1valist])
-  f2valist=category.stage_channels
-  f2v=" ".join([x.name for x in f2valist])
-  f3v=category.id
-  f4v=category.position
+  embed = Embed(title= ti, description= desc)
+  f0valist = category.text_channels
+  f0v = enum_mentionables(f0valist, 1500, "No text channels")
+  f1valist = category.voice_channels
+  f1v = enum_mentionables(f1valist, 1500, "No voice channels")
+  f2valist = category.stage_channels
+  f2v = enum_mentionables(f2valist, 1500, "No stage channels")
+  f3v = category.id
+  f4v = category.position
   embed.add_field(name="ID", value=f3v, inline= True)
   embed.add_field(name="Position", value=f4v, inline= True)
   if len(f0valist)!=0:
@@ -769,7 +769,7 @@ async def message(ctx, message: discord.Message = None):
     embed.add_field(name=f"User mentions ({len(f4vraw)})", value=f4v, inline= False)
   await ctx.reply(embed= embed)
 
-@bs.message_command(name= "View Information")
+@bs.message_command(name= "View Message Information")
 async def message_(ctx, message):
   desc = f"Sent by {message.author.mention} at {unix_timestamp(message.created_at)}"
   if message.edited_at != None:

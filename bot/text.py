@@ -653,3 +653,4 @@ def setup(bot):
   bot.add_command(ttimer)
   bot.add_command(unicode)
   bot.add_command(unix)
+  print("Midway through loading modules")
