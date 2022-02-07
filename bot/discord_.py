@@ -1,11 +1,10 @@
-import _bot
+from _bot import bs
 from shared import chance, commands, discord, Embed, has_perms, specialbool, time_display, ui
 # specialbool no longer needed once =snipe context command is removed
 
 sniper = {} # List of deleted messages
 sniping = {} # Dict of channel:bool showing the availability of sniping
 sniperdict = {} # List of messages sent by =snipe or /snipe
-bu = _bot.bu
 
 snipe_buttons = [
   ui.Button(color='primary', custom_id="Snipe1", emoji="⏪"),
@@ -314,7 +313,7 @@ async def clearsnipe(ctx, *, chnl: discord.TextChannel = None):
     await ctx.reply("You don't have the required permission: Manage channels.")
 
 
-@bu.slash.command(name="snipe", description="View up to 8 most recently deleted messages in this channel.")
+@bs.command(name="snipe", description="View up to 8 most recently deleted messages in this channel.")
 async def snipe_(ctx: ui.SlashInteraction):
   chnl = ctx.channel
   if sniping.get(chnl, True):
@@ -334,9 +333,9 @@ async def snipe_(ctx: ui.SlashInteraction):
   else:
     await ctx.respond("Snipping is disabled. Please ask someone with manage messages permission to re-enable it.")
 
-@bu.slash.command(name="snipe_toggle", description="Enable or disable sniping in this channel.",
-                  options=[ui.SlashOption(name= "Toggle", type= bool, description=
-                  "Whether to enable or disable sniping. Toggles the current option by default.")])
+@bs.command(name="snipe_toggle", description="Enable or disable sniping in this channel.",
+           options=[ui.SlashOption(name= "Toggle", type= bool, description=
+           "Whether to enable or disable sniping. Toggles the current option by default.")])
 async def snipe_toggle(ctx: ui.SlashInteraction, toggle= None):
   chnl = ctx.channel
   if toggle == None:
@@ -344,10 +343,10 @@ async def snipe_toggle(ctx: ui.SlashInteraction, toggle= None):
   sniping[chnl] = toggle
   await ctx.respond(f"Sniping is now {'enabled' if toggle else 'disabled'}.")
 
-@bu.slash.command(name="snipe_clear", description="Clears the snipe database for a channel.",
-                  options=[ui.SlashOption(name= "Channel", type= discord.TextChannel, description=
-                  "The channel to clear the database of. Defaults to the current channel.",
-                  channel_types= [discord.ChannelType.text])])
+@bs.command(name="snipe_clear", description="Clears the snipe database for a channel.",
+           options=[ui.SlashOption(name= "Channel", type= discord.TextChannel, description=
+           "The channel to clear the database of. Defaults to the current channel.",
+           channel_types= [discord.ChannelType.text])])
 async def snipe_clear(ctx: ui.SlashInteraction, channel: discord.TextChannel = None):
   channel = ctx.channel if not channel else channel
   if has_perms(ctx.channel, ctx.author, 4):

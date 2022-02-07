@@ -1,7 +1,7 @@
 import html
 
 from _bot import bs
-from bot.shared import try_delete
+from shared import try_delete
 from functions import trim
 from shared import commands, chance, discord, ra, requests, ui
 
@@ -390,7 +390,7 @@ def botnasa():
   files = []
   if len(desc) > 1024:
     f = open("apod.txt", "w")
-    f.write(f"{r['title']}\n{r['url']}\n{r['hdurl']}\n\n{r['explanation']}")
+    f.write(f"{r['title']}\n{r['url']}\n<{r['hdurl']}>\n\n{r['explanation']}")
     f.close()
     files.append(discord.File("apod.txt"))
   return [trim(desc, 1024), files]

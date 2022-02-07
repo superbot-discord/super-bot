@@ -304,7 +304,7 @@ async def channel(ctx, channel: typing.Union[discord.TextChannel, discord.VoiceC
            options=[ui.SlashOption(name= "Channel", type= discord.TextChannel, required= True,
            description= "The category, channel or thread to show information about.",
            channel_types= all_channel_types)])
-async def _channel(ctx, channel = None):
+async def channel_(ctx, channel = None):
   if not channel:
     channel = ctx.channel
   if channel.type == discord.ChannelType.category:
@@ -455,7 +455,7 @@ async def botstagec(channel):
   if f7vx:
     f7v = f"Topic: {f7vx.topic}\nDiscovery: {'disabled' if f7vx.discoverable_disabled else 'enabled'}\nPrivacy level: {'server members only' if f7vx.privacy_level == discord.StagePrivacyLevel.closed else 'everyone on Discord'}"
 
-async def botthread(channel):
+async def botthread(channel: discord.Thread):
   ti=f"Thread Information: {channel.name}"
   desc=f"{channel.mention} Created by {channel.owner.mention}\nArchives at {unix_timestamp(channel.archive_timestamp)}"
   embed = Embed(title=ti, description=desc)
@@ -467,18 +467,18 @@ async def botthread(channel):
     f8v+= f"<@{x.id}> "
   async for x in channel.history(limit=1, oldest_first=True):
     f9v=x
-  embed.add_field(name="Category", value=str(channel.category), inline= True)
+  embed.add_field(name= "Category", value= str(channel.category) if channel.category else "None", inline= True)
   if f1v:
-    embed.add_field(name="Slowmode delay", value=f"{f1v} seconds", inline= True)
-  embed.add_field(name="Members", value=f8v, inline= False)
-  embed.add_field(name="ID", value=channel.id, inline= True)
-  embed.add_field(name="First message", value=f"[here]({f9v.jump_url})", inline= True)
+    embed.add_field(name= "Slowmode delay", value= f"{f1v} seconds", inline= True)
+  embed.add_field(name= "Members", value= f8v, inline= False)
+  embed.add_field(name= "ID", value= channel.id, inline= True)
+  embed.add_field(name= "First message", value= f"[here]({f9v.jump_url})", inline= True)
   if channel.is_nsfw():
-    embed.add_field(name="NSFW", value="This is an NSFW thread.", inline= True)
+    embed.add_field(name= "NSFW", value= "This is an NSFW thread.", inline= True)
   if channel.is_news():
-    embed.add_field(name="News", value="This is a news thread.", inline= True)
+    embed.add_field(name= "News", value= "This is a news thread.", inline= True)
   if channel.is_private():
-    embed.add_field(name="Private", value="This is a private thread.", inline= True)
+    embed.add_field(name= "Private", value= "This is a private thread.", inline= True)
   return embed
 
 @commands.command(aliases=['emi'])
@@ -512,13 +512,11 @@ async def emojis(ctx, *, disposed= None):
   desc = ""
   sent_desc = ""
   for x in ctx.guild.emojis:
-    #temp_desc = f"<:{y.name}:{y.id}>{' (Animated)' if y.animated else ''}"
     temp_desc = f"{x}{' (Animated)' if x.animated else ''}"
     desc += f":{(x.name+':'):<35} {temp_desc:<60}{x.url}\n"
     sent_desc += f"{x} "
   f = open('output.txt', 'w')
   f.write(desc)
-  f.flush()
   f.close()
   try:
     await ctx.reply(sent_desc, file=discord.File('output.txt'))
@@ -635,9 +633,9 @@ async def leftuser(ctx, *, userinput):
   embed.add_field(name="Registered", value=f1v, inline= True)
   await ctx.reply(embed= embed)
 
-@commands.command(aliases=['msg', 'ms'])
+@commands.command(aliases=['msg', 'ms']) # Migrated
 async def message(ctx, message: discord.Message = None):
-  if message==None:
+  if message == None:
     potential_reference = ctx.message.reference
     if potential_reference:
       message=await ctx.bot.get_channel(potential_reference.channel_id).fetch_message(potential_reference.message_id)
@@ -709,6 +707,132 @@ async def message(ctx, message: discord.Message = None):
   if message.mention_everyone:
     embed.add_field(name="@everyone", value="This message mentioned everyone.", inline= True)
   embed.add_field(name="ID", value=str(message.id), inline= True)
+  if message.webhook_id != None:
+    embed.add_field(name="Webhook message", value="This message is sent by a webhook.", inline= True)
+  if message.type == discord.MessageType.recipient_add:
+    embed.add_field(name="System message", value="This is a system message indicating that a recipient has been added to the group.", inline= False)
+  elif message.type == discord.MessageType.recipient_remove:
+    embed.add_field(name="System message", value="This is a system message indicating that a recipient has been removed from the group.", inline= False)
+  elif message.type == discord.MessageType.call:
+    embed.add_field(name="System message", value="This is a system message indicating that someone missed or started a call.", inline= False)
+  elif message.type == discord.MessageType.channel_name_change:
+    embed.add_field(name="System message", value="This is a system message indicating that someone changed the group's name.", inline= False)
+  elif message.type == discord.MessageType.channel_icon_change:
+    embed.add_field(name="System message", value="This is a system message indicating that someone changed the group's icon.", inline= False)
+  elif message.type == discord.MessageType.pins_add:
+    embed.add_field(name="System message", value=f"This is a system message indicating that someone pinned [a message]({message.reference.jump_url}).", inline= False)
+  elif message.type == discord.MessageType.new_member:
+    embed.add_field(name="System message", value="This is a system message indicating that someone joined the server.", inline= False)
+  elif message.type == discord.MessageType.premium_guild_subscription:
+    embed.add_field(name="System message", value="This is a system message indicating that someone nitro-boosted the server.", inline= False)
+  elif message.type == discord.MessageType.premium_guild_tier_1:
+    embed.add_field(name="System message", value="This is a system message indicating that someone nitro-boosted the server. It is now level 1.", inline= False)
+  elif message.type == discord.MessageType.premium_guild_tier_2:
+    embed.add_field(name="System message", value="This is a system message indicating that someone nitro-boosted the server. It is now level 2.", inline= False)
+  elif message.type == discord.MessageType.premium_guild_tier_3:
+    embed.add_field(name="System message", value="This is a system message indicating that someone nitro-boosted the server. It is now level 3.", inline= False)
+  elif message.type == discord.MessageType.channel_follow_add:
+    embed.add_field(name="System message", value="This is a system message indicating that someone followed another server's announcement.", inline= False)
+  if message.flags.urgent:
+    embed.add_field(name="Special message", value="This message is sent by Discord's Trust and Safety Team and is urgent.", inline= False)
+  if message.flags.ephemeral:
+    embed.add_field(name="Ephemeral message", value="This is an ephemeral message (can only be seen by you).", inline= False)
+  if message.flags.is_crossposted:
+    embed.add_field(name="Followed message", value="This is a message followed from an announcement channel in another server.", inline= False)
+  if message.flags.crossposted:
+    embed.add_field(name="Published message", value="This is a published message in an announcement channel.", inline= False)
+  if message.flags.source_message_deleted:
+    embed.add_field(name="Source deleted", value="This message's original source has been deleted.", inline= False)
+  if message.flags.has_thread:
+    embed.add_field(name="Thread", value="This message is associated with a thread.", inline= False)
+  if message.flags.suppress_embeds:
+    embed.add_field(name="Suppresed embeds", value="This message's embed(s) are suppressed.", inline= False)
+  if message.application != None:
+    embed.add_field(name=message.application["name"], value=f"This message is created by {message.application['name']}.\n{message.application['description']}", inline= False)
+  if len(f0vraw) != 0:
+    embed.add_field(name=f"Reactions ({len(f0vraw)})", value=f0v, inline= False)
+  if len(f1vraw) != 0:
+    embed.add_field(name=f"Attachments ({len(f1vraw)})", value=f1v, inline= False)
+    embed.set_footer(text= "Use `=attachment [Message] [Index]` to view in-depth information about a specific attachment of the message.")
+  if len(message.embeds) != 0:
+    embed.add_field(name="Embeds", value=f"{len(message.embeds)} embed(s) are added to the message.", inline= False)
+  if len(f5vraw) != 0:
+    embed.add_field(name="Components", value=f"Working buttons & menus: {msg_buttons}, {msg_menus}\nDisabled buttons & menus: {msg_dbuttons}, {msg_dmenus}", inline= False)
+  if len(f2vraw) != 0:
+    embed.add_field(name=f"Channel mentions ({len(f2vraw)})", value=f2v, inline= False)
+  if len(f3vraw) != 0:
+    embed.add_field(name=f"Role mentions ({len(f3vraw)})", value=f3v, inline= False)
+  if len(f4vraw) != 0:
+    embed.add_field(name=f"User mentions ({len(f4vraw)})", value=f4v, inline= False)
+  await ctx.reply(embed= embed)
+
+@bs.message_command(name= "View Information")
+async def message_(ctx, message):
+  desc = f"Sent by {message.author.mention} at {unix_timestamp(message.created_at)}"
+  if message.edited_at != None:
+    desc += f"Edited at {unix_timestamp(message.edited_at)}"
+  contents = message.content
+  if contents:
+    desc += f"\n**Message content: **\n{contents}"
+  f0vraw = message.reactions
+  f0v = ""
+  for x in f0vraw:
+    if x.custom_emoji:
+      f0v += f":{x.emoji}:  ({x.count})"
+    else:
+      f0v += f"{x.emoji}  ({x.count})"
+  f1vraw = message.attachments
+  f1v = ""
+  for x in f1vraw:
+    if x.is_spoiler():
+      f1v += f"[{x.filename}]({x.url}) ({sizer(x.size)}, marked as spoiler)\n"
+    else:
+      f1v += f"[{x.filename}]({x.url}) ({sizer(x.size)})\n"
+  f2vraw = message.channel_mentions
+  f2v = ""
+  for x in f2vraw:
+    f2v += x.mention + " "
+  f3vraw = message.role_mentions
+  f3v = ""
+  for x in f3vraw:
+    f3v += x.mention + " "
+  f4vraw = message.mentions
+  f4v = ""
+  for x in f4vraw:
+    f4v += x.mention + " "
+  f5vraw = message.components
+  msg_buttons = msg_menus = msg_dbuttons = msg_dmenus = 0
+  for x in f5vraw:
+    if x.type == discord.ComponentType.action_row:
+      for y in x.children:
+        if y.type == discord.ComponentType.button:
+          if y.disabled:
+            msg_dbuttons += 1
+          else:
+            msg_buttons += 1
+        else:
+          if y.disabled:
+            msg_dmenus += 1
+          else:
+            msg_menus += 1
+    else:
+      if x.type == discord.ComponentType.button:
+        if x.disabled:
+          msg_dbuttons += 1
+        else:
+          msg_buttons += 1
+      else:
+        if x.disabled:
+          msg_dmenus += 1
+        else:
+          msg_menus += 1
+  embed = Embed(title= "Message Information", description= trim(desc, 2048), url= message.jump_url)
+  embed.add_field(name="In channel", value=message.channel.mention, inline= True)
+  if message.pinned:
+    embed.add_field(name="Pinned", value="This message is pinned.", inline= True)
+  if message.mention_everyone:
+    embed.add_field(name= "@everyone", value="This message mentioned everyone.", inline= True)
+  embed.add_field(name= "ID", value=str(message.id), inline= True)
   if message.webhook_id != None:
     embed.add_field(name="Webhook message", value="This message is sent by a webhook.", inline= True)
   if message.type == discord.MessageType.recipient_add:
@@ -1236,16 +1360,22 @@ async def sticker(ctx, message: discord.Message = None):
   #embed.set(_sticker.url)
   await ctx.reply(embed= embed)
 
-@commands.command(aliases=['sts'])
+@commands.command(aliases=['sts']) # Migrated
 async def stickers(ctx, *, disposed= None):
-  desc = ""
-  for x in ctx.guild.stickers:
-    desc += f"{x.emoji} {x.name} (ID: {x.id})\n  {x.description}\n"
+  desc = "\n".join([f"{x.emoji} {x.name} (ID: {x.id})\n  {x.description}" for x in ctx.guild.stickers])
   f = open('output.txt', 'w')
   f.write(desc)
-  f.flush()
   f.close()
-  await ctx.reply(file=discord.File('output.txt'))
+  await ctx.reply(file= discord.File('output.txt'))
+  try_delete('output.txt')
+
+@bs.command(name= "stickers", description= "Views a list of stickers in the server.")
+async def stickers_(ctx):
+  desc = "\n".join([f"{x.emoji} {x.name} (ID: {x.id})\n  {x.description}" for x in ctx.guild.stickers])
+  f = open('output.txt', 'w')
+  f.write(desc)
+  f.close()
+  await ctx.respond(file= discord.File('output.txt'))
   try_delete('output.txt')
 
 @commands.command(aliases=['tm'])
@@ -1268,7 +1398,7 @@ async def template(ctx, *, tempinput):
   embed.add_field(name="Original Server", value=f3v, inline= True)
   await ctx.reply(embed= embed)
 
-@commands.command(aliases=['member', 'mem', 'us'])
+@commands.command(aliases=['member', 'mem', 'us']) # Migrated
 async def user(ctx, user: discord.Member = None, channel: discord.TextChannel = None):
   if user == None:
     user = ctx.author
@@ -1395,7 +1525,7 @@ async def user(ctx, user: discord.Member = None, channel: discord.TextChannel = 
            description= "The user to show information about. Deafults to you."), ui.SlashOption(
            name= "Channel", type= discord.TextChannel, required= False, channel_types= all_channel_types,
            description= "SuperBot calculates the user's permissions based on this channel. Deafults to the current channel.")])
-async def _user(ctx, user: discord.Member = None, channel: discord.TextChannel = None):
+async def user_info(ctx, user: discord.Member = None, channel: discord.TextChannel = None):
   if user == None:
     user = ctx.author
   if channel == None:
@@ -1498,7 +1628,110 @@ async def _user(ctx, user: discord.Member = None, channel: discord.TextChannel =
   embed.add_field(name= "Permission integer", value= str(f3v_raw2), inline= True)
   embed.add_field(name= "Boosting since", value= f6v, inline= False)
   embed.add_field(name= f"Badges (Integer: {user_public_flags.value})", value= f5v, inline= False)
-  await ctx.reply(embed= embed)
+  await ctx.respond(embed= embed)
+
+@bs.user_command(name= "View Information")
+async def user_(ctx, user):
+  channel = ctx.channel
+  desc = f"{user.mention} ({'bot' if user.bot else 'human'})"
+  fetched_user = await ctx.bot.fetch_user(user.id)
+  fetched_color = fetched_user.accent_color
+  embed = Embed(title="User Information", color=fetched_color if fetched_color else user.color, description=desc)
+  f0v = f"{user.name}#{user.discriminator}  {'' if user.name == user.display_name else f'(Nickname: {user.display_name})'}"
+  f1v = f"{unix_timestamp(user.created_at)}\nFrom now:\n"
+  f1ts = str(datetime.now(timezone.utc) - user.created_at)
+  if " days, " not in f1ts:
+    f1v + re.sub(r'(\d{1,2}):(\d{2}):(\d{2})', r'\1 hours \2 minutes \3 seconds', f1ts) + f"\n≈ {f1ts.split(':')[0]} hours"
+  else:
+    days = int(re.sub(r'([\d]+) days, [\s\S]*', r'\1', f1ts))
+    f1v += re.sub(r'([\d]+) days, (\d{1,2}):(\d{2}):(\d{2})', r'\1 days \2 hrs \3 mins \4 secs', f1ts)[:-7] + f"\n≈ {(int(f1ts.split(' days, ')[0]))//365} years {int(f1ts.split(' days, ')[0]) % 365} days"
+  f2v = f"{unix_timestamp(user.joined_at)}\nFrom now:\n"
+  f2ts = str(datetime.now(timezone.utc) - user.joined_at)
+  if " days, " not in f2ts:
+    f2v += re.sub(r'(\d{1,2}):(\d{2}):(\d{2})', r'\1 hours \2 minutes \3 seconds', f2ts) + f"\n≈ {f2ts.split(':')[0]} hours"
+  else:
+    f2v += re.sub(r'([\d]+) days, (\d{1,2}):(\d{2}):(\d{2})', r'\1 days \2 hrs \3 mins \4 secs', f2ts)[:-7] + f"\n≈ {(int(f2ts.split(' days, ')[0]))//365} years {int(f2ts.split(' days, ')[0]) % 365} days"
+  if user.premium_since:
+    f6v=f"{unix_timestamp(user.premium_since)}\nFrom now:\n"
+    f6ts = str(datetime.now(timezone.utc) - user.joined_at)
+    if " days, " not in f6ts:
+      f6v += re.sub(r'(\d{1,2}):(\d{2}):(\d{2})', r'\1 hours \2 minutes \3 seconds', f6ts) + f"\n≈ {f6ts.split(':')[0]} hours"
+    else:
+      f6v += re.sub(r'([\d]+) days, (\d{1,2}):(\d{2}):(\d{2})', r'\1 days \2 hrs \3 mins \4 secs', f6ts)[:-7] + f"\n≈ {(int(f6ts.split(' days, ')[0]))//365} years {int(f6ts.split(' days, ')[0]) % 365} days"
+  else:
+    f6v = "No server boosting"
+  allroles = user.roles
+  f3v_raw1 = channel.permissions_for(user).value
+  f3v_raw2 = user.guild_permissions.value
+  f3vd = status_to_str[user.status]
+  f3vcraw = user.activity
+  try:
+    if f3vcraw.type.playing:
+      try:
+        f3vc = f"Playing {f3vcraw.name} since {unix_timestamp(f3vcraw.start)}\n{f3vcraw.details}"
+      except:
+        f3vc = f"Playing {f3vcraw.name}"
+    elif f3vcraw.type.streaming:
+      f3vc = f"Streaming [{f3vcraw.name}({f3vcraw.game})]({f3vcraw.url}) via {f3vcraw.platform}\n{f3vcraw.details}"
+    elif f3vcraw.type.listening:
+      f3vc = f"Listening to {f3vcraw.artist}: {f3vcraw.album}: {f3vcraw.title}\nStarted: {unix_timestamp(f3vcraw.created_at)}\n{f3vcraw.details}"
+    elif f3vcraw.type.watching:
+      try:
+        f3vc = f"Watching [{f3vcraw.name}]({f3vcraw.url}) since {unix_timestamp(f3vcraw.start)}\n{f3vcraw.details}"
+      except:
+        f3vc = f"Watching {f3vcraw.name} since {unix_timestamp(f3vcraw.start)}"
+    elif f3vcraw.type.custom:
+      try:
+        f3vc = f":{f3vcraw.emoji.name}: {f3vcraw.details}"
+      except:
+        f3vc = f":{f3vcraw.emoji.name}:"
+  except:
+    pass
+  f4v = ""
+  if len(allroles) > 1:
+    allroles.reverse()
+    allroles = allroles[:-1]
+    for x in allroles:
+      f4v = f"{f4v}{x.mention} "
+    f4v = f4v[:-1]
+  else:
+    f4v = "No roles"
+  f5v = ""
+  user_public_flags = user.public_flags
+  f5v = f5v + (f"**Staff:** The user is a Discord Employee.\n"                             if user_public_flags.staff else "")
+  f5v = f5v + (f"**Partner:** The user is the owner of a Partnered Server.\n"              if user_public_flags.partner else "")
+  f5v = f5v + (f"**HypeSquad Events:** The user is a HypeSquad Events member.\n"           if user_public_flags.hypesquad else "")
+  f5v = f5v + (f"**Early Support:** The user is an Early Supporter.\n"                     if user_public_flags.early_supporter else "")
+  f5v = f5v + (f"**Team User:** The user is a Team User.\n"                                if user_public_flags.team_user else "")
+  f5v = f5v + (f"**Bug Hunter:** The user is a Bug Hunter.\n"                              if user_public_flags.bug_hunter else "")
+  f5v = f5v + (f"**Bug Hunter 2:** The user is a Bug Hunter (Level 2).\n"                  if user_public_flags.bug_hunter_level_2 else "")
+  f5v = f5v + (f"**System:** The user is a system user (represents Discord officially).\n" if user_public_flags.system else "")
+  f5v = f5v + (f"**Early Developer:** The user is an Early Verified Bot Developer.\n"      if user_public_flags.verified_bot_developer else "")
+  f5v = f5v + (f"**✔︎Bot:** The user is a Verified Bot.\n"                                  if user_public_flags.verified_bot else "")
+  f5v = f5v + (f"**HypeSquad:** The user is in the HypeSquad Bravery House.\n"             if user_public_flags.hypesquad_bravery else "")
+  f5v = f5v + (f"**HypeSquad:** The user is in the HypeSquad Brilliance House.\n"          if user_public_flags.hypesquad_brilliance else "")
+  f5v = f5v + (f"**HypeSquad:** The user is in the HypeSquad Balance House.\n"             if user_public_flags.hypesquad_balance else "")
+  f5v = "No badges" if f5v == "" else f5v
+  f7vraw = user.timeout
+  f7v = f"Until {unix_timestamp(f7vraw)}" if f7vraw else "None"
+
+  embed.add_field(name= "Name", value= f0v, inline= False)
+  embed.add_field(name= "Registered", value= f1v, inline= True)
+  embed.add_field(name= "Joined", value= f2v, inline= True)
+  embed.add_field(name= "Timeout", value= f7v, inline= True)
+  embed.add_field(name= "Roles", value= f4v, inline= False)
+  embed.add_field(name= "Server Permissions", value= sr_itop(f3v_raw2), inline= False)
+  embed.add_field(name= "Text Channel Permissions", value= tc_itop(f3v_raw1), inline= False)
+  embed.add_field(name= "Voice/Stage Channel Permissions", value= vc_itop(f3v_raw2), inline= False)
+  embed.add_field(name= "Status", value= f3vd, inline= True)
+  try:
+    embed.add_field(name="Activity", value=f3vc, inline= True)
+  except:
+    pass
+  embed.add_field(name= "Permission integer", value= str(f3v_raw2), inline= True)
+  embed.add_field(name= "Boosting since", value= f6v, inline= False)
+  embed.add_field(name= f"Badges (Integer: {user_public_flags.value})", value= f5v, inline= False)
+  await ctx.respond(embed= embed)
 
 @commands.command()
 async def widget(ctx, *, disposed= None):

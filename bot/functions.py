@@ -1,14 +1,19 @@
 import regex
 from shared import re, SequenceMatcher, typing
 
-def enum_mentionables(mentionables, max_length: int, delimiter1: str, delimiter2: str, no_text: str):
+
+def enum_mentionables(mentionables, max_length: int, no_text: str, delimiter1: str = " ", delimiter2: str = ", "):
   """
   Enumerates a list of instances with properties `mention` and `name`.
 
   To enumerate through `roles` with up to 1024 length, separating role mentions with spaces if\
   possible, otherwise separating names with commas, returning "No roles" if `roles` is empty:
   ```
-  enum_mentionables(roles, 1024, " ", ", ", "No roles")
+  enum_mentionables(roles, 1024, "No roles", " ", ", ")
+  ```
+  Since the delimiters are same as the defaults, they can be omitted.
+  ```
+  enum_mentionables(roles, 1024, "No roles")
   ```
   """
   if not mentionables:
@@ -21,6 +26,7 @@ def enum_mentionables(mentionables, max_length: int, delimiter1: str, delimiter2
       # Comma-separate until length too high, then add ellipses
   return result
 
+
 def html_to_md(text: str):
   text = re.sub(r'<b>(.+?)</b>', r'**\1**', text)
   text = re.sub(r'<i>(.+?)</i>', r'*\1*', text)
@@ -30,10 +36,12 @@ def html_to_md(text: str):
   text = regex.sub(r'(?<=<ul>\n?(<li>[A-Za-z\s]+<\/li>\n?)*)(<li>([A-Za-z\s]+)<\/li>)(?=\n?(<li>[A-Za-z\s]+<\/li>\n?)*<\/ul>)', '• \3', text)
   return text
 
+
 def many_replace(text: str, replacer: dict[str: str]):
   for x, y in replacer.items():
     text = text.replace(x, y)
   return text
+
 
 def xfill(text: str, chars: int, char: str = " "):
   """
@@ -44,6 +52,7 @@ def xfill(text: str, chars: int, char: str = " "):
   ```
   """
   return max(chars - len(text), 0) * char + text
+
 
 def test_for(text: str, min_ratio: typing.Union[float, int], *choices: str):
   """
@@ -59,6 +68,7 @@ def test_for(text: str, min_ratio: typing.Union[float, int], *choices: str):
   print(tested)
   if tested[list(tested)[0]] >= min_ratio:
     return list(tested)[0]
+
 
 def trim(text: str, width: int):
   """

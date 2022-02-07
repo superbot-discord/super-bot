@@ -7,7 +7,6 @@ from shared import (commands, datetime, db, discord, Embed, ems,
 bot_ = commands.Bot(command_prefix= commands.when_mentioned_or("="), intents= discord.Intents.all(),
                     allowed_mentions= discord.AllowedMentions(everyone= False, users= True,
                     roles= False, replied_user= False), case_insensitive= True, strip_after_prefix= True)
-bu = ui.UI(bot_)
 bs = ui.Slash(bot_)
 banned_ids = []
 banned_text = []
@@ -131,13 +130,12 @@ async def ping(ctx, *, disposed= None):
   mcs = str(int(response_time.microseconds)+int((response_time.total_seconds())%60))
   await message.edit(content=f"Pong! 🏓\n```Message delay: {mcs:<10}microseconds\nBot latency  : {round(bot_.latency*1000000, 2):<10}microseconds```")
 
-
 @bs.message_command(name= "Spoil spoilers")
 async def spoil_(ctx, message):
   await ctx.respond(message.content.replace("||", ""), hidden= True)
 
 @bs.user_command(name= "Test")
-async def rickroller_(ctx, message):
+async def rickroller_(ctx, user):
   await ctx.respond("Never gonna give you up!", hidden= True)
 
 
