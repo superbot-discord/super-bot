@@ -9,6 +9,12 @@ from functions import many_replace, trim
 permission_messages = {}
 cmaphsv = plt.cm.hsv
 
+all_channel_types = [discord.ChannelType.category, discord.ChannelType.text,
+  discord.ChannelType.voice, discord.ChannelType.stage_voice, discord.ChannelType.public_thread,
+  discord.ChannelType.private_thread]
+status_to_str = {discord.Status.online: "Online", discord.Status.idle: "Idle", discord.Status.dnd:
+                 "Do not Disturb", discord.Status.offline: "Offline"}
+
 server_permtext = """```
 Index Permission
 3     Administrator
@@ -297,9 +303,7 @@ async def channel(ctx, channel: typing.Union[discord.TextChannel, discord.VoiceC
 @bs.command(name= "channel_info", description= "Shows information about a category, channel or thread.",
            options=[ui.SlashOption(name= "Channel", type= discord.TextChannel, required= True,
            description= "The category, channel or thread to show information about.",
-           channel_types= [discord.ChannelType.category, discord.ChannelType.text,
-           discord.ChannelType.voice, discord.ChannelType.stage_voice,
-           discord.ChannelType.public_thread, discord.ChannelType.private_thread])])
+           channel_types= all_channel_types)])
 async def _channel(ctx, channel = None):
   if not channel:
     channel = ctx.channel
@@ -1354,6 +1358,116 @@ async def user(ctx, user: discord.Member = None, channel: discord.TextChannel = 
   f5v = f5v + (f"**Staff:** The user is a Discord Employee.\n"                             if user_public_flags.staff else "")
   f5v = f5v + (f"**Partner:** The user is the owner of a Partnered Server.\n"              if user_public_flags.partner else "")
   f5v = f5v + (f"**HypeSquad Events:** The user is a HypeSquad Events member.\n"                  if user_public_flags.hypesquad else "")
+  f5v = f5v + (f"**Early Support:** The user is an Early Supporter.\n"                     if user_public_flags.early_supporter else "")
+  f5v = f5v + (f"**Team User:** The user is a Team User.\n"                                if user_public_flags.team_user else "")
+  f5v = f5v + (f"**Bug Hunter:** The user is a Bug Hunter.\n"                              if user_public_flags.bug_hunter else "")
+  f5v = f5v + (f"**Bug Hunter 2:** The user is a Bug Hunter (Level 2).\n"                  if user_public_flags.bug_hunter_level_2 else "")
+  f5v = f5v + (f"**System:** The user is a system user (represents Discord officially).\n" if user_public_flags.system else "")
+  f5v = f5v + (f"**Early Developer:** The user is an Early Verified Bot Developer.\n"      if user_public_flags.verified_bot_developer else "")
+  f5v = f5v + (f"**✔︎Bot:** The user is a Verified Bot.\n"                                  if user_public_flags.verified_bot else "")
+  f5v = f5v + (f"**HypeSquad:** The user is in the HypeSquad Bravery House.\n"             if user_public_flags.hypesquad_bravery else "")
+  f5v = f5v + (f"**HypeSquad:** The user is in the HypeSquad Brilliance House.\n"          if user_public_flags.hypesquad_brilliance else "")
+  f5v = f5v + (f"**HypeSquad:** The user is in the HypeSquad Balance House.\n"             if user_public_flags.hypesquad_balance else "")
+  f5v = "No badges" if f5v == "" else f5v
+  f7vraw = user.timeout
+  f7v = f"Until {unix_timestamp(f7vraw)}" if f7vraw else "None"
+
+  embed.add_field(name= "Name", value= f0v, inline= False)
+  embed.add_field(name= "Registered", value= f1v, inline= True)
+  embed.add_field(name= "Joined", value= f2v, inline= True)
+  embed.add_field(name= "Timeout", value= f7v, inline= True)
+  embed.add_field(name= "Roles", value= f4v, inline= False)
+  embed.add_field(name= "Server Permissions", value= sr_itop(f3v_raw2), inline= False)
+  embed.add_field(name= "Text Channel Permissions", value= tc_itop(f3v_raw1), inline= False)
+  embed.add_field(name= "Voice/Stage Channel Permissions", value= vc_itop(f3v_raw2), inline= False)
+  embed.add_field(name= "Status", value= f3vd, inline= True)
+  try:
+    embed.add_field(name="Activity", value=f3vc, inline= True)
+  except:
+    pass
+  embed.add_field(name= "Permission integer", value= str(f3v_raw2), inline= True)
+  embed.add_field(name= "Boosting since", value= f6v, inline= False)
+  embed.add_field(name= f"Badges (Integer: {user_public_flags.value})", value= f5v, inline= False)
+  await ctx.reply(embed= embed)
+
+@bs.command(name= "user_info", description= "Shows information about a user.", options=[
+           ui.SlashOption(name= "User", type= discord.Member, required= False,
+           description= "The user to show information about. Deafults to you."), ui.SlashOption(
+           name= "Channel", type= discord.TextChannel, required= False, channel_types= all_channel_types,
+           description= "SuperBot calculates the user's permissions based on this channel. Deafults to the current channel.")])
+async def _user(ctx, user: discord.Member = None, channel: discord.TextChannel = None):
+  if user == None:
+    user = ctx.author
+  if channel == None:
+    channel = ctx.channel
+  desc = f"{user.mention} ({'bot' if user.bot else 'human'})"
+  fetched_user = await ctx.bot.fetch_user(user.id)
+  fetched_color = fetched_user.accent_color
+  embed = Embed(title="User Information", color=fetched_color if fetched_color else user.color, description=desc)
+  f0v = f"{user.name}#{user.discriminator}  {'' if user.name == user.display_name else f'(Nickname: {user.display_name})'}"
+  f1v = f"{unix_timestamp(user.created_at)}\nFrom now:\n"
+  f1ts = str(datetime.now(timezone.utc) - user.created_at)
+  if " days, " not in f1ts:
+    f1v + re.sub(r'(\d{1,2}):(\d{2}):(\d{2})', r'\1 hours \2 minutes \3 seconds', f1ts) + f"\n≈ {f1ts.split(':')[0]} hours"
+  else:
+    days = int(re.sub(r'([\d]+) days, [\s\S]*', r'\1', f1ts))
+    f1v += re.sub(r'([\d]+) days, (\d{1,2}):(\d{2}):(\d{2})', r'\1 days \2 hrs \3 mins \4 secs', f1ts)[:-7] + f"\n≈ {(int(f1ts.split(' days, ')[0]))//365} years {int(f1ts.split(' days, ')[0]) % 365} days"
+  f2v = f"{unix_timestamp(user.joined_at)}\nFrom now:\n"
+  f2ts = str(datetime.now(timezone.utc) - user.joined_at)
+  if " days, " not in f2ts:
+    f2v += re.sub(r'(\d{1,2}):(\d{2}):(\d{2})', r'\1 hours \2 minutes \3 seconds', f2ts) + f"\n≈ {f2ts.split(':')[0]} hours"
+  else:
+    f2v += re.sub(r'([\d]+) days, (\d{1,2}):(\d{2}):(\d{2})', r'\1 days \2 hrs \3 mins \4 secs', f2ts)[:-7] + f"\n≈ {(int(f2ts.split(' days, ')[0]))//365} years {int(f2ts.split(' days, ')[0]) % 365} days"
+  if user.premium_since:
+    f6v=f"{unix_timestamp(user.premium_since)}\nFrom now:\n"
+    f6ts = str(datetime.now(timezone.utc) - user.joined_at)
+    if " days, " not in f6ts:
+      f6v += re.sub(r'(\d{1,2}):(\d{2}):(\d{2})', r'\1 hours \2 minutes \3 seconds', f6ts) + f"\n≈ {f6ts.split(':')[0]} hours"
+    else:
+      f6v += re.sub(r'([\d]+) days, (\d{1,2}):(\d{2}):(\d{2})', r'\1 days \2 hrs \3 mins \4 secs', f6ts)[:-7] + f"\n≈ {(int(f6ts.split(' days, ')[0]))//365} years {int(f6ts.split(' days, ')[0]) % 365} days"
+  else:
+    f6v = "No server boosting"
+  allroles = user.roles
+  f3v_raw1 = channel.permissions_for(user).value
+  f3v_raw2 = user.guild_permissions.value
+  f3vd = status_to_str[user.status]
+  f3vcraw = user.activity
+  try:
+    if f3vcraw.type.playing:
+      try:
+        f3vc = f"Playing {f3vcraw.name} since {unix_timestamp(f3vcraw.start)}\n{f3vcraw.details}"
+      except:
+        f3vc = f"Playing {f3vcraw.name}"
+    elif f3vcraw.type.streaming:
+      f3vc = f"Streaming [{f3vcraw.name}({f3vcraw.game})]({f3vcraw.url}) via {f3vcraw.platform}\n{f3vcraw.details}"
+    elif f3vcraw.type.listening:
+      f3vc = f"Listening to {f3vcraw.artist}: {f3vcraw.album}: {f3vcraw.title}\nStarted: {unix_timestamp(f3vcraw.created_at)}\n{f3vcraw.details}"
+    elif f3vcraw.type.watching:
+      try:
+        f3vc = f"Watching [{f3vcraw.name}]({f3vcraw.url}) since {unix_timestamp(f3vcraw.start)}\n{f3vcraw.details}"
+      except:
+        f3vc = f"Watching {f3vcraw.name} since {unix_timestamp(f3vcraw.start)}"
+    elif f3vcraw.type.custom:
+      try:
+        f3vc = f":{f3vcraw.emoji.name}: {f3vcraw.details}"
+      except:
+        f3vc = f":{f3vcraw.emoji.name}:"
+  except:
+    pass
+  f4v = ""
+  if len(allroles) > 1:
+    allroles.reverse()
+    allroles = allroles[:-1]
+    for x in allroles:
+      f4v = f"{f4v}{x.mention} "
+    f4v = f4v[:-1]
+  else:
+    f4v = "No roles"
+  f5v = ""
+  user_public_flags = user.public_flags
+  f5v = f5v + (f"**Staff:** The user is a Discord Employee.\n"                             if user_public_flags.staff else "")
+  f5v = f5v + (f"**Partner:** The user is the owner of a Partnered Server.\n"              if user_public_flags.partner else "")
+  f5v = f5v + (f"**HypeSquad Events:** The user is a HypeSquad Events member.\n"           if user_public_flags.hypesquad else "")
   f5v = f5v + (f"**Early Support:** The user is an Early Supporter.\n"                     if user_public_flags.early_supporter else "")
   f5v = f5v + (f"**Team User:** The user is a Team User.\n"                                if user_public_flags.team_user else "")
   f5v = f5v + (f"**Bug Hunter:** The user is a Bug Hunter.\n"                              if user_public_flags.bug_hunter else "")

@@ -1,6 +1,26 @@
 import regex
 from shared import re, SequenceMatcher, typing
 
+def enum_mentionables(mentionables, max_length: int, delimiter1: str, delimiter2: str, no_text: str):
+  """
+  Enumerates a list of instances with properties `mention` and `name`.
+
+  To enumerate through `roles` with up to 1024 length, separating role mentions with spaces if\
+  possible, otherwise separating names with commas, returning "No roles" if `roles` is empty:
+  ```
+  enum_mentionables(roles, 1024, " ", ", ", "No roles")
+  ```
+  """
+  if not mentionables:
+    return no_text
+  result = delimiter1.join([x.mention for x in mentionables])
+  if len(result) > max_length:
+    result = delimiter2.join([x.name for x in mentionables])
+    if len(result) > max_length:
+      pass
+      # Comma-separate until length too high, then add ellipses
+  return result
+
 def html_to_md(text: str):
   text = re.sub(r'<b>(.+?)</b>', r'**\1**', text)
   text = re.sub(r'<i>(.+?)</i>', r'*\1*', text)

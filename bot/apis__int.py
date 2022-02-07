@@ -385,12 +385,12 @@ def botlizard(number):
   return desc
 
 def botnasa():
-  r = requests.get('https://apodapi.herokuapp.com/api').json()
-  desc = f"**{r['title']}** by {r['copyright']}\n{r['hdurl']}\n\n{r['description']}"
+  r = requests.get("https://api.nasa.gov/planetary/apod?api_key=7wF7KVXkmapwOlTkTt6i6dp9p3ismZLJHeP0OSFp").json()
+  desc = f"**{r['title']}**\nStandard-Definition: {r['url']}\nHigh-Definition: {r['hdurl']}\n\n{r['explanation']}"
   files = []
   if len(desc) > 1024:
     f = open("apod.txt", "w")
-    f.write(f"{r['title']} by {r['copyright']}\n{r['hdurl']}\n\n{r['description']}")
+    f.write(f"{r['title']}\n{r['url']}\n{r['hdurl']}\n\n{r['explanation']}")
     f.close()
     files.append(discord.File("apod.txt"))
   return [trim(desc, 1024), files]
