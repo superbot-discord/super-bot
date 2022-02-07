@@ -681,7 +681,7 @@ class BaseCommand():
         ) or "\u200b"
         self.default_permission = default_permission if default_permission is not None else True
         if guild_permissions is not None:
-            for _id, perm in guild_permissions.items():
+            for _id, perm in list(guild_permissions.items()):
                 if not isinstance(_id, (str, int, discord.User, discord.Member, discord.Role)):
                     raise WrongType("guild_permissions key " + str(_id), _id, ["str", "int", "discord.User", "discord.Member", "discord.Role"])
                 if not isinstance(perm, SlashPermission):

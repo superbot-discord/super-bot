@@ -7,6 +7,7 @@ from shared import (commands, datetime, db, discord, Embed, ems,
 bot_ = commands.Bot(command_prefix= commands.when_mentioned_or("="), intents= discord.Intents.all(),
                     allowed_mentions= discord.AllowedMentions(everyone= False, users= True,
                     roles= False, replied_user= False), case_insensitive= True, strip_after_prefix= True)
+ui.UI(bot_)
 bs = ui.Slash(bot_)
 banned_ids = []
 banned_text = []
@@ -116,13 +117,14 @@ async def botpurge(ctx, *, num: int = 1):
 
 @bs.command(name= "ping", description= "Views the response time and latency of the bot.")
 async def ping_(ctx):
+  await ctx.defer()
   now1 = datetime.now(timezone.utc)
   message = await ctx.respond("Pong!")
   response_time = datetime.now(timezone.utc) - now1
-  mcs = str(int(response_time.microseconds)+int((response_time.total_seconds())%60))
+  mcs = str(int(response_time.microseconds) + int((response_time.total_seconds())%60))
   await message.edit(content=f"Pong! 🏓\n```Message delay: {mcs:<10}microseconds\nBot latency  : {round(bot_.latency*1000000, 2):<10}microseconds```")
 
-@bot_.command(aliases= ["online"])
+@bot_.command(aliases= ["online"]) # Migrated
 async def ping(ctx, *, disposed= None):
   now1 = datetime.now(timezone.utc)
   message = await ctx.send("Pong!")

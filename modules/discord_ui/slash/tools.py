@@ -85,8 +85,6 @@ def resolve(data, _state):
                     channel = discord.StoreChannel(data=channel_data, guild=guild, state=_state)
                 elif discord.enums.ChannelType(channel_data["type"]) is discord.enums.ChannelType.stage_voice:
                     channel = discord.StageChannel(data=channel_data, guild=guild, state=_state)
-                elif discord.enums.ChannelType(channel_data["type"]) in [discord.enums.ChannelType.public_thread, discord.enums.ChannelType.private_thread, discord.enums.ChannelType.news_thread]:
-                    channel = discord.Thread(data=channel_data, guild=guild, state=_state)
                 resolved["channels"][channel_id] = channel
         elif x == "roles":
             resolved["roles"] = {}

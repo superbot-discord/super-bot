@@ -384,7 +384,7 @@ class Listener():
 
         .. code-block::
 
-            from nextcord.ext.commands import CheckFailure
+            from discord.ext.commands import CheckFailure
 
             class MyListener(Listener):
                 ...

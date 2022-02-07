@@ -23,9 +23,9 @@ from .listener import Listener
 from .override import override_dpy as override_it
 from .enums import CommandType, InteractionResponseType, ComponentType
 
-# from .override import override_dpy as override_it
-# from .listener import Listener
-# from .enums import InteractionResponseType, ComponentType
+from .override import override_dpy as override_it
+from .listener import Listener
+from .enums import InteractionResponseType, ComponentType
 
 
 import nextcord as discord

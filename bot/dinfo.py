@@ -509,19 +509,22 @@ async def emojiinfo(ctx, emoji_: typing.Union[discord.Emoji, str]):
 
 @commands.command(aliases=['ems'])
 async def emojis(ctx, *, disposed= None):
+  if not ctx.guild.emojis:
+    await ctx.reply("The server does not have any custom emojis.")
+    return
   desc = ""
   sent_desc = ""
   for x in ctx.guild.emojis:
     temp_desc = f"{x}{' (Animated)' if x.animated else ''}"
-    desc += f":{(x.name+':'):<35} {temp_desc:<60}{x.url}\n"
+    desc += f":{(x.name+':'):<35} {temp_desc:<68}{x.url}\n"
     sent_desc += f"{x} "
   f = open('output.txt', 'w')
   f.write(desc)
   f.close()
   try:
-    await ctx.reply(sent_desc, file=discord.File('output.txt'))
+    await ctx.reply(sent_desc, file= discord.File('output.txt'))
   except:
-    await ctx.reply(file=discord.File('output.txt'))
+    await ctx.reply(file= discord.File('output.txt'))
   try_delete('output.txt')
 
 @commands.command(aliases=['il'])
@@ -1362,6 +1365,9 @@ async def sticker(ctx, message: discord.Message = None):
 
 @commands.command(aliases=['sts']) # Migrated
 async def stickers(ctx, *, disposed= None):
+  if not ctx.guild.stickers:
+    await ctx.reply("The server does not have any custom emojis.")
+    return
   desc = "\n".join([f"{x.emoji} {x.name} (ID: {x.id})\n  {x.description}" for x in ctx.guild.stickers])
   f = open('output.txt', 'w')
   f.write(desc)
@@ -1371,6 +1377,9 @@ async def stickers(ctx, *, disposed= None):
 
 @bs.command(name= "stickers", description= "Views a list of stickers in the server.")
 async def stickers_(ctx):
+  if not ctx.guild.stickers:
+    await ctx.reply("The server does not have any custom emojis.")
+    return
   desc = "\n".join([f"{x.emoji} {x.name} (ID: {x.id})\n  {x.description}" for x in ctx.guild.stickers])
   f = open('output.txt', 'w')
   f.write(desc)
