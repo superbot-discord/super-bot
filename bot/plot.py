@@ -63,7 +63,6 @@ async def ascii(ctx, *, text):
 '''
   f = open("ascii.txt", "w")
   f.write(output)
-  f.flush()
   f.close()
   await ctx.reply(file=discord.File('ascii.txt'))
   try_delete('ascii.txt')
@@ -196,7 +195,6 @@ async def draw(ctx, *, text):
   output = canvas_.render()
   f = open("drawing.txt", "w")
   f.write(output)
-  f.flush()
   f.close()
   if len(output) > 1994:
     await ctx.reply(file=discord.File('drawing.txt'))
@@ -251,7 +249,6 @@ async def fonts(ctx, *, text):
 '''
   f = open("fonts.txt", "w")
   f.write(output)
-  f.flush()
   f.close()
   await ctx.reply(file=discord.File('fonts.txt'))
   try_delete('fonts.txt')

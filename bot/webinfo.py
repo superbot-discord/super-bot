@@ -260,7 +260,6 @@ async def unscramble(ctx, text, length="0"):
       
   f = open("output.txt", "w")
   f.write(text)
-  f.flush()
   f.close()
   await ctx.reply(embed=output, file=discord.File("output.txt"))
   try_delete('output.txt')
@@ -384,7 +383,6 @@ async def youtube(ctx, *, link):
         text=f"{text}{x}  {x.streams.filter(mime_type='video/mp4').filter(progressive='True').filter(type='video').order_by('resolution').first().url}\n"
       f = open("output.txt", "w")
       f.write(text)
-      f.flush()
       f.close()
       await ctx.reply(file=discord.File("output.txt"))
       try_delete('output.txt')
@@ -453,7 +451,6 @@ Video - Minimum size\t\t{format_video(video7)}
 Audio - Minimum size\t\t{format_video(video8)}'''
       f = open('extra_downloads.txt', "w")
       f.write(extra_downloads)
-      f.flush()
       f.close()
       ytmsg = await ctx.reply(embed= embed, file=discord.File('extra_downloads.txt'))
       try_delete('extra_downloads.txt')

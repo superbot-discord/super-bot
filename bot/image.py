@@ -225,7 +225,6 @@ def analyse(scale, colors):
 
   f = open("analysis.txt", "a")
   f.write(desc)
-  f.flush()
   f.close()
   return hexcode
 
@@ -379,7 +378,6 @@ async def render(ctx, width:float=1):
       output = asc.loadFromUrl(att.url, columns=int(att_width*x/100*width), color=False)
       f = open('output.txt', 'w')
       f.write(output)
-      f.flush()
       f.close()
       await ctx.reply(file = discord.File('output.txt'))
       try_delete('output.txt')

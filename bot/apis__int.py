@@ -3,7 +3,7 @@ import html
 from _bot import bs
 from shared import try_delete
 from functions import trim
-from shared import commands, chance, discord, ra, requests, ui
+from shared import commands, chance, discord, ra, requests, text_wrapper, ui
 
 # All migrated in the file except =joke and =states
 """country_option = ui.SlashOption(name= "Country/Region Code", description= "The country code", type= str, required=
@@ -394,7 +394,7 @@ def botnasa():
   file = False
   if len(desc) > 1024:
     f = open("apod.txt", "w")
-    f.write(f"{r['title']}\n{r['url']}\n<{r['hdurl']}>\n\n{r['explanation']}")
+    f.write(f"{r['title']}\n{r['url']}\n{r['hdurl']}\n\n{text_wrapper.fill(r['explanation'])}")
     f.close()
     file = True
   return [trim(desc, 1024), file]

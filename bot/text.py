@@ -3,13 +3,13 @@ import collections
 import hashlib
 
 import bitarray
-import emojis as em
 import huffman
 from spellwise import Typox
 from unicode_charnames import charname, codepoint, search_charnames
 
-from shared import (commands, datetime, discord, Embed, os, ra, re, requests, SequenceMatcher,
-                    timedelta, timezone, try_delete, typing, UNITS)
+from _bot import bs
+from shared import (commands, datetime, discord, Embed, ems, os, ra, re, requests, SequenceMatcher,
+                    timedelta, timezone, try_delete, typing, ui, UNITS)
 from functions import many_replace, xfill
 
 spell_checker = Typox()
@@ -147,7 +147,7 @@ async def emoji(ctx, *, text):
   text = text.replace("8",":eight:")
   text = text.replace("9",":nine:")
   text = text.replace("0",":zero:")
-  text = em.encode(text)
+  text = ems.encode(text)
   await ctx.reply(text)
 
 @commands.command()
@@ -203,16 +203,32 @@ async def insert(ctx,emoji, *, text):
   text=text.replace(" "," "+emoji+" ")
   await ctx.reply(text)
 
-@commands.command()
+@bs.command(name= "length", description= "Analyses the frequency of characters and counts the length of a piece of text.",
+           options=[ui.SlashOption(name= "Text", description= "The text to analyse.", type= str,
+           required= True)])
 async def length(ctx, *, text):
   analysis = collections.Counter(text).items()
+  analysis = sorted(analysis, key= lambda x: x[1], reverse= True)
   desc = f"Freq.\tCharacter\n"+f"\n".join([f"{x[1]}\t{x[0]}" for x in analysis])
   f = open('analysis.txt', 'w')
   f.write(desc)
-  f.flush()
   f.close()
   desc = f"The piece of text contains {len(text)} characters."
-  length_msg = await ctx.reply(desc, file=discord.File('analysis.txt'))
+  msg = await ctx.respond(desc + " Full analysis coming shortly…")
+  await ctx.send(file= discord.File('analysis.txt'))
+  await msg.edit(desc)
+  try_delete('analysis.txt')
+
+@commands.command()
+async def length(ctx, *, text):
+  analysis = collections.Counter(text).items()
+  analysis = sorted(analysis, key= lambda x: x[1], reverse= True)
+  desc = f"Freq.\tCharacter\n"+f"\n".join([f"{x[1]}\t{x[0]}" for x in analysis])
+  f = open('analysis.txt', 'w')
+  f.write(desc)
+  f.close()
+  desc = f"The piece of text contains {len(text)} characters."
+  await ctx.reply(desc, file=discord.File('analysis.txt'))
   try_delete('analysis.txt')
 
 @commands.command()
@@ -469,7 +485,6 @@ async def spellcheck(ctx, text, distance: typing.Optional[int] = 3, *, disposed=
     desc += f"\n\nDISTANCE: {x+1}\n{', '.join([y for y in [z['word'] for z in results if z['distance'] == x]])}"
   f = open("output.txt", "w")
   f.write(desc)
-  f.flush()
   f.close()
   await ctx.reply(file = discord.File("output.txt"))
   try_delete("output.txt")
@@ -597,7 +612,6 @@ async def unicode(ctx, *query):
       pass
   f = open("unicode.txt", 'w')
   f.write(desc)
-  f.flush()
   f.close()
   await ctx.reply(embed= embed, file=discord.File("unicode.txt"))
   try_delete("unicode.txt")

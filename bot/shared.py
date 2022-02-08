@@ -5,6 +5,7 @@ import os
 import random as ra
 import re
 import sys
+import textwrap
 import traceback
 import typing
 from datetime import datetime, timedelta, timezone
@@ -25,8 +26,6 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 
-import sys
-import os
 sys.path.append(os.path.abspath('./modules'))
 import requests
 import nextcord as discord
@@ -68,9 +67,6 @@ unix_timestamp  =lambda dt,flag="F": f"<t:{round(datetime.timestamp(dt))}:{flag}
 time_display    =lambda dt         : dt.strftime("%A, %d %b %Y, %H:%M:%S")
 st_nd_th_format =lambda n          : "st" if str(n).endswith("1") and not str(n).endswith("11") else ("th" if str(n).endswith("2") and not str(n).endswith("12") else "nd")
 perm_display    =lambda integer, x : "<:pt:932171999936135168><:tr:932189462648209468> " if integer & (1 << x) else "<:px:912206780015190038><:tr:932189462648209468> "
-
-forecast_formatter = """
-"""
 
 def format_fps(stream):
   try:
@@ -124,6 +120,7 @@ view_overwrite = discord.PermissionOverwrite()
 view_overwrite.view_channel = True
 clickers = {}
 timestamp_pattern = re.compile(r'<t:-?[\d]{1,13}(:[FfDdTtR])?>')
+text_wrapper = textwrap.TextWrapper(width= 90, fix_sentence_endings= True)
 
 #clicker_button = ui.Button(style=discord.ButtonStyle.primary, row=0, custom_id="clicker", label="Click me!")
 
