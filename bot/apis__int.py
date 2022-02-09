@@ -395,7 +395,8 @@ def botnasa():
   file = False
   if len(desc) > 1024:
     f = open("apod.txt", "w")
-    f.write(f"""{r['title']}\n{r['url']}{f"\n{r['hdurl']}" if r.get('hdurl', None) else ""}\n\n{text_wrapper.fill(r['explanation'])}""")
+    hd_str = f"\n{r['hdurl']}" if r.get('hdurl', None) else ""
+    f.write(f"{r['title']}\n{r['url']}{hd_str}\n\n{text_wrapper.fill(r['explanation'])}")
     f.close()
     file = True
   return [trim(desc, 1024), file]

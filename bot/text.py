@@ -503,7 +503,7 @@ async def spoil(ctx, msg: discord.Message = None, *, text= "Reply to a message, 
     text = msg.content
   await ctx.reply(text.replace("||", ""))
 
-@commands.command(aliases=['sub'])
+@commands.command(aliases=['sub']) # Migrated
 async def subscript(ctx, *, text):
   await ctx.send(many_replace(text, {'0': "₀", '1': "₁", '2': "₂", '3': "₃", '4': "₄", '5': "₅",
                                      '6': "₆", '7': "₇", '8': "₈", '9': "₉", '+': "₊", '-': "₋",
@@ -511,9 +511,27 @@ async def subscript(ctx, *, text):
                                      'x': "ₓ", 'h': "ₕ", 'k': "ₖ", 'l': "ₗ", 'm': "ₘ", 'n': "ₙ",
                                      'p': "ₚ", 's': "ₛ", 't': "ₜ"}))
 
-@commands.command(aliases=['sup', 'super'])
-async def superscript(ctx, *, text):
+@bs.command(name= "subscript", description= "Makes a piece of text subscript. Works on numbers and some other characters only.",
+           options= [ui.SlashOption(name= "Text", type= str, required= True,
+           description= "The text to make subscript.")])
+async def subscript_(ctx, text):
+  await ctx.respond(many_replace(text, {'0': "₀", '1': "₁", '2': "₂", '3': "₃", '4': "₄", '5': "₅",
+                                     '6': "₆", '7': "₇", '8': "₈", '9': "₉", '+': "₊", '-': "₋",
+                                     '=': "₌", '(': "₍", ')': "₎", 'a': "ₐ", 'e': "ₑ", 'o': "ₒ",
+                                     'x': "ₓ", 'h': "ₕ", 'k': "ₖ", 'l': "ₗ", 'm': "ₘ", 'n': "ₙ",
+                                     'p': "ₚ", 's': "ₛ", 't': "ₜ"}))
+
+@commands.command(aliases=['sup', 'super']) # Migrated
+async def superscript(ctx, text):
   await ctx.send(many_replace(text, {'0': "⁰", '1': "¹", '2': "²", '3': "³", '4': "⁴", '5': "⁵",
+                                     '6': "⁶", '7': "⁷", '8': "⁸", '9': "⁹", '+': "⁺", '-': "⁻",
+                                     '=': "⁼", '(': "⁽", ')': "⁾", 'i': "ⁱ", 'n': "ⁿ"}))
+
+@bs.command(name= "superscript", description= "Makes a piece of text superscript. Works on numbers and some other characters only.",
+           options= [ui.SlashOption(name= "Text", type= str, required= True,
+           description= "The text to make superscript.")])
+async def superscript_(ctx, *, text):
+  await ctx.respond(many_replace(text, {'0': "⁰", '1': "¹", '2': "²", '3': "³", '4': "⁴", '5': "⁵",
                                      '6': "⁶", '7': "⁷", '8': "⁸", '9': "⁹", '+': "⁺", '-': "⁻",
                                      '=': "⁼", '(': "⁽", ')': "⁾", 'i': "ⁱ", 'n': "ⁿ"}))
 
