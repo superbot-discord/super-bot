@@ -390,11 +390,12 @@ def botlizard(number):
 
 def botnasa():
   r = requests.get("https://api.nasa.gov/planetary/apod?api_key=7wF7KVXkmapwOlTkTt6i6dp9p3ismZLJHeP0OSFp").json()
-  desc = f"**{r['title']}**\nStandard-Definition: {r['url']}\nHigh-Definition: {r['hdurl']}\n\n{r['explanation']}"
+  hd_str = f"\nHigh-Definition: {r['hdurl']}" if r.get('hdurl', None) else ""
+  desc = f"**{r['title']}**\nStandard-Definition: {r['url']}{hd_str}\n\n{r['explanation']}"
   file = False
   if len(desc) > 1024:
     f = open("apod.txt", "w")
-    f.write(f"{r['title']}\n{r['url']}\n{r['hdurl']}\n\n{text_wrapper.fill(r['explanation'])}")
+    f.write(f"""{r['title']}\n{r['url']}{f"\n{r['hdurl']}" if r.get('hdurl', None) else ""}\n\n{text_wrapper.fill(r['explanation'])}""")
     f.close()
     file = True
   return [trim(desc, 1024), file]
