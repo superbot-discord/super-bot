@@ -66,7 +66,7 @@ chance          =lambda ratio      : ra.randint(1, ratio) == ratio
 unix_timestamp  =lambda dt,flag="F": f"<t:{round(datetime.timestamp(dt))}:{flag}>"
 time_display    =lambda dt         : dt.strftime("%A, %d %b %Y, %H:%M:%S")
 st_nd_th_format =lambda n          : "st" if str(n).endswith("1") and not str(n).endswith("11") else ("th" if str(n).endswith("2") and not str(n).endswith("12") else "nd")
-perm_display    =lambda integer, x : "<:pt:932171999936135168><:tr:932189462648209468> " if integer & (1 << x) else "<:px:912206780015190038><:tr:932189462648209468> "
+perm_display    =lambda integer, x : "<:pt:932171999936135168><:tr:932189462648209468> " if integer & (1 << x) else "<:tr:932189462648209468><:pf:932171999835475989> "
 
 def format_fps(stream):
   try:

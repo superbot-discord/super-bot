@@ -544,7 +544,7 @@ async def emojis_(ctx: ui.SlashInteraction):
   f.close()
   if len(sent_desc) <= 1024:
     await ctx.respond(sent_desc)
-    await ctx.reply(file= discord.File('output.txt'))
+    await ctx.send(file= discord.File('output.txt'))
   else:
     await ctx.respond(file= discord.File('output.txt'))
   try_delete('output.txt')
@@ -915,7 +915,7 @@ async def message_(ctx, message):
     embed.add_field(name=f"Role mentions ({len(f3vraw)})", value=f3v, inline= False)
   if len(f4vraw) != 0:
     embed.add_field(name=f"User mentions ({len(f4vraw)})", value=f4v, inline= False)
-  await ctx.reply(embed= embed)
+  await ctx.respond(embed= embed)
 
 @commands.command(aliases=['ov'])
 async def overwrites(ctx, channel_: typing.Union[discord.TextChannel, discord.VoiceChannel, discord.StageChannel, discord.CategoryChannel] = None):
@@ -954,9 +954,9 @@ async def permissions(ctx, integer="help"):
     embed = perms_guide
   else:
     embed, embed2 = perm_itoe(integer)
-  await ctx.reply(embed= embed)
+  await ctx.reply(embed=embed)
   if 'embed2' in locals():
-    await ctx.send(embed= embed2)
+    await ctx.reply(embed=embed2)
 
 @bs.command(name="permissions_user", description="Views the permissions of a user.",
            options=[ui.SlashOption(name= "User", type= discord.Member, required= False,
