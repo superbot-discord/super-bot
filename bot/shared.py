@@ -232,3 +232,18 @@ sr_itod = lambda integer: f"\n".join([perm_display(integer, x) + y for x,y in sr
 ms_itod = lambda integer: f"\n".join([perm_display(integer, x) + y for x,y in ms_real.items()])
 tc_itod = lambda integer: f"\n".join([perm_display(integer, x) + y for x,y in tc_real.items()])
 vc_itod = lambda integer: f"\n".join([perm_display(integer, x) + y for x,y in vc_real.items()])
+
+# Integer TO Embed Utility
+# Use itop and itod to create two embeds
+def perm_itoe(integer: int):
+  e1 = Embed(title= f"Permission integer {integer}")
+  e1.add_field(name= "Server permissions", value= sr_itop(integer), inline= False)
+  e1.add_field(name= "Membership permissions", value= ms_itop(integer), inline= False)
+  e1.add_field(name= "Text permissions", value= tc_itop(integer), inline= False)
+  e1.add_field(name= "Voice permissions", value= vc_itop(integer), inline= False)
+  e2 = Embed(title= f"Permission integer {integer}")
+  e2.add_field(name= "Server permissions", value= sr_itod(integer), inline= False)
+  e2.add_field(name= "Membership permissions", value= ms_itod(integer), inline= False)
+  e2.add_field(name= "Text permissions", value= tc_itod(integer), inline= False)
+  e2.add_field(name= "Voice permissions", value= vc_itod(integer), inline= False)
+  return [e1, e2]

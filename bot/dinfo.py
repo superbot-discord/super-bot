@@ -1,8 +1,9 @@
 from shared import (asyncio, commands, discord, Embed, ems, np, plt, re, SequenceMatcher,
                     timedelta, typing, ui)
 from shared import (sr_real, ms_real, tc_real, vc_real, bg_itop, custom_permissions, datetime, db,
-                    sr_itop, ms_itop, tc_itop, vc_itop, func, gridspec, sizer, timezone, try_delete,
-                    sr_itod, ms_itod, tc_itod, vc_itod, unix_timestamp, voice_region_format)
+                    sr_itop, ms_itop, tc_itop, vc_itop, func, gridspec, perm_itoe, sizer, timezone,
+                    try_delete, sr_itod, ms_itod, tc_itod, vc_itod, unix_timestamp,
+                    voice_region_format)
 from _bot import bs
 from functions import enum_mentionables, many_replace, trim
 
@@ -507,7 +508,7 @@ async def emojiinfo(ctx, emoji_: typing.Union[discord.Emoji, str]):
       embed.add_field(name="Tags", value=", ".join(cemoji[2]), inline= True)
   await ctx.reply(embed= embed)
 
-@commands.command(aliases=['ems'])
+@commands.command(aliases=['ems']) # Migrated
 async def emojis(ctx, *, disposed= None):
   if not ctx.guild.emojis:
     await ctx.reply("The server does not have any custom emojis.")
@@ -525,6 +526,27 @@ async def emojis(ctx, *, disposed= None):
     await ctx.reply(sent_desc, file= discord.File('output.txt'))
   except:
     await ctx.reply(file= discord.File('output.txt'))
+  try_delete('output.txt')
+
+@bs.command(name= "emojis", description= "Views a list of emojis in the server.")
+async def emojis_(ctx: ui.SlashInteraction):
+  if not ctx.guild.emojis:
+    await ctx.respond("The server does not have any custom emojis.")
+    return
+  desc = ""
+  sent_desc = ""
+  for x in ctx.guild.emojis:
+    temp_desc = f"{x}{' (Animated)' if x.animated else ''}"
+    desc += f":{(x.name+':'):<35} {temp_desc:<68}{x.url}\n"
+    sent_desc += f"{x} "
+  f = open('output.txt', 'w')
+  f.write(desc)
+  f.close()
+  if len(sent_desc) <= 1024:
+    await ctx.respond(sent_desc)
+    await ctx.reply(file= discord.File('output.txt'))
+  else:
+    await ctx.respond(file= discord.File('output.txt'))
   try_delete('output.txt')
 
 @commands.command(aliases=['il'])
@@ -905,8 +927,8 @@ async def overwrites(ctx, channel_: typing.Union[discord.TextChannel, discord.Vo
   embed = Embed(title=f"Channel Overwrites", description=desc[:4096])
   await ctx.reply(embed= embed)
 
-@commands.command(aliases = ['perm', 'perms', 'permission'])
-async def permissions(ctx, integer= "help"):
+@commands.command(aliases = ['perm', 'perms', 'permission']) # Migrated
+async def permissions(ctx, integer="help"):
   try:
     integer = int(integer)
   except ValueError:
@@ -931,48 +953,71 @@ async def permissions(ctx, integer= "help"):
   if integer == "help":
     embed = perms_guide
   else:
-    embed = Embed(title= f"Permission integer {integer}")
-    embed.add_field(name= "Server permissions", value= sr_itop(integer), inline= False)
-    embed.add_field(name= "Membership permissions", value= ms_itop(integer), inline= False)
-    embed.add_field(name= "Text permissions", value= tc_itop(integer), inline= False)
-    embed.add_field(name= "Voice permissions", value= vc_itop(integer), inline= False)
-
-    embed2 = Embed(title= f"Permission integer {integer}")
-    embed2.add_field(name= "Server permissions", value= sr_itod(integer), inline= False)
-    embed2.add_field(name= "Membership permissions", value= ms_itod(integer), inline= False)
-    embed2.add_field(name= "Text permissions", value= tc_itod(integer), inline= False)
-    embed2.add_field(name= "Voice permissions", value= vc_itod(integer), inline= False)
+    embed, embed2 = perm_itoe(integer)
   await ctx.reply(embed= embed)
   if 'embed2' in locals():
-    await ctx.send(embed=embed2)
+    await ctx.send(embed= embed2)
+
+@bs.command(name="permissions_user", description="Views the permissions of a user.",
+           options=[ui.SlashOption(name= "User", type= discord.Member, required= False,
+           description= "The user to show the permissions of. Deafults to you.")])
+async def permissions_user(ctx: ui.SlashInteraction, user=None):
+  user = user if user else ctx.author
+  integer = ctx.channel.permissions_for(user).value
+  embeds = perm_itoe(integer)
+  await ctx.respond(embeds=embeds)
+
+@bs.command(name="permissions_role", description="Views the permissions of a role.",
+           options=[ui.SlashOption(name= "Role", type= discord.Role, required= True,
+           description= "The role to show the permissions of.")])
+async def permissions_user(ctx: ui.SlashInteraction, role):
+  integer = role.permissions.value
+  embeds = perm_itoe(integer)
+  await ctx.respond(embeds=embeds)
+
+@bs.command(name="permissions_integer", description="Converts a permissions integer into user-friendly permissions.",
+           options=[ui.SlashOption(name= "Integer", type= int, required= True, min_value= 0,
+           max_value= 0, description= "The permission integer.")])
+async def permissions_int(ctx: ui.SlashInteraction, integer):
+  embeds = perm_itoe(integer)
+  await ctx.respond(embeds=embeds)
+
+@bs.command(name="permissions_help", description="Views static information about permission integers.")
+async def permissions_help(ctx: ui.SlashInteraction):
+  await ctx.respond(perms_guide)
 
 @commands.command(aliases=['permgen', 'permsgen', 'permgenerate', 'permsgenerate', 'permission_gen', 'permissions_gen' 'permission_generate'])
-async def permission_generate(ctx, *, disposed= None):
+async def permission_generate(ctx, *, disposed=None):
   msg = await ctx.reply("Select the permissions! You can select multiple options.", components= permission_menus, listener= PermsGenL())
   permission_messages[msg] = {"permission_server_selection": [], "permission_membership_selection": [], "permission_text_selection": [], "permission_voice_selection": []}
 
-@commands.command()
+@commands.command() # Migrated
 async def raw(ctx, msg: discord.Message = None):
-  if msg==None:
+  if msg == None:
     potential_reference = ctx.message.reference
     if potential_reference:
-      msg=await ctx.bot.get_channel(potential_reference.channel_id).fetch_message(potential_reference.message_id)
+      msg = await ctx.bot.get_channel(potential_reference.channel_id).fetch_message(potential_reference.message_id)
     else:
       await ctx.reply("Please reply to a message or add a message ID/Link.")
       return
-  embed = Embed(title = "Raw message", url = msg.jump_url, description = "```"+msg.content.replace('```', r'\`\`\`')+"```")
-  await ctx.reply(embed= embed)
+  embed = Embed(title= "Raw message", url= msg.jump_url, description= "```" + msg.content.replace('```', r'\`\`\`') + "```")
+  await ctx.reply(embed=embed)
+
+@bs.message_command(name= "Show raw content")
+async def raw_(ctx, msg):
+  embed = Embed(title="Raw message", url=msg.jump_url, description="```" + msg.content.replace('```', r'\`\`\`') + "```")
+  await ctx.respond(embed=embed)
 
 @commands.command()
 async def rawraw(ctx, msg: discord.Message = None):
-  if msg==None:
+  if msg == None:
     potential_reference = ctx.message.reference
     if potential_reference:
-      msg=await ctx.bot.get_channel(potential_reference.channel_id).fetch_message(potential_reference.message_id)
+      msg = await ctx.bot.get_channel(potential_reference.channel_id).fetch_message(potential_reference.message_id)
     else:
       await ctx.reply("Please reply to a message or add a message ID/Link.")
       return
-  embed = Embed(title = "Raw message", url = msg.jump_url, description = f"```{discord.utils.escape_markdown(msg.content, as_needed=True)}```")
+  embed = Embed(title= "Raw message", url= msg.jump_url, description= f"```{discord.utils.escape_markdown(msg.content, as_needed=True)}```")
   await ctx.reply(embed= embed)
 
 @commands.command(aliases=['rea'])
@@ -1278,7 +1323,7 @@ async def status(ctx, member: discord.Member = None):
   await ctx.reply(embed= embed)
 
 @commands.command(aliases=['stu'])
-async def statuses(ctx, *, disposed= None):
+async def statuses(ctx, *, disposed=None):
   bot_onlines = bot_dnds = bot_idles = bot_offlines = 0
   usr_onlines = usr_dnds = usr_idles = usr_offlines = 0
   for x in ctx.guild.members:
@@ -1641,6 +1686,7 @@ async def user_info(ctx, user: discord.Member = None, channel: discord.TextChann
 
 @bs.user_command(name= "View Information")
 async def user_(ctx, user):
+  print(user)
   channel = ctx.channel
   desc = f"{user.mention} ({'bot' if user.bot else 'human'})"
   fetched_user = await ctx.bot.fetch_user(user.id)

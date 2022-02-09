@@ -219,7 +219,7 @@ async def length(ctx, *, text):
   await msg.edit(desc)
   try_delete('analysis.txt')
 
-@commands.command()
+@commands.command() # Migrated
 async def length(ctx, *, text):
   analysis = collections.Counter(text).items()
   analysis = sorted(analysis, key= lambda x: x[1], reverse= True)
