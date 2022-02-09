@@ -272,7 +272,7 @@ def botembed(text):
     embed.add_field(name=textlist[3*x+12], value=textlist[3*x+13].replace("{{{newline}}}", f"\n"), inline=inline)
   return embed
 
-@commands.command(aliases=['sniper'])
+@commands.command(aliases=['sniper']) # Migrated
 async def snipe(ctx, *, text= None):
   chnl = ctx.channel
   if not text:
@@ -302,7 +302,7 @@ async def snipe(ctx, *, text= None):
     await ctx.reply("""If you want to view sniped messages, please run `=snipe` without any arguments.
     If you intend to enable/disable sniping, you are missing the Manage Channels permission.""")
 
-@commands.command()
+@commands.command() # Migrated
 async def clearsnipe(ctx, *, chnl: discord.TextChannel = None):
   if chnl == None:
     chnl = ctx.channel
@@ -355,13 +355,11 @@ async def snipe_clear(ctx: ui.SlashInteraction, channel: discord.TextChannel = N
   else:
     await ctx.respond("You don't have the required permission: Manage channels.")
 
-async def snipe_log(message):
-  keyname = f"{message.guild.id}{message.channel.id}"
+async def snipe_log(message: discord.Message):
   val = message.content
-  if not val.replace(" ", ""):
-    return
-  footer = f"""By {message.author.name}#{message.author.discriminator} at {time_display(message.created_at)}
-   • Note: the most recently deleted message is stored as the first one."""
+  val = val if val else "*No message content*"
+  footer = f"By {message.author.name}#{message.author.discriminator} at {time_display(message.created_at)} UTC"
+  footer+= f" • The message includes {len(message.embeds)} embeds"
   if not sniper.get(message.channel):
     sniper[message.channel] = []
   sniper[message.channel].insert(0, [val, footer])

@@ -988,7 +988,7 @@ async def permissions_int(ctx: ui.SlashInteraction, integer):
 
 @bs.command(name="permission_help", description="Views static information about permission integers.")
 async def permissions_help(ctx: ui.SlashInteraction):
-  await ctx.respond(perms_guide)
+  await ctx.respond(embed=perms_guide)
 
 @commands.command(aliases=['permgen', 'permsgen', 'permgenerate', 'permsgenerate', 'permission_gen', 'permissions_gen' 'permission_generate'])
 async def permission_generate(ctx, *, disposed=None): # Migrated
