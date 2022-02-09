@@ -996,7 +996,7 @@ async def permission_generate(ctx, *, disposed=None): # Migrated
   permission_messages[msg] = {"permission_server_selection": [], "permission_membership_selection": [], "permission_text_selection": [], "permission_voice_selection": []}
 
 @bs.command(name="permission_generate", description="Converts permissions into a permission integer.")
-async def permission_generate_(ctx, *, disposed=None):
+async def permission_generate_(ctx: ui.SlashInteraction):
   msg = await ctx.respond("Select the permissions and the integer will be updated instantly:", components= permission_menus, listener= PermsGenL())
   permission_messages[msg] = {"permission_server_selection": [], "permission_membership_selection": [], "permission_text_selection": [], "permission_voice_selection": []}
 
