@@ -959,36 +959,45 @@ async def permissions(ctx, integer="help"):
     await ctx.reply(embed=embed2)
 
 @bs.command(name="permissions_user", description="Views the permissions of a user.",
-           options=[ui.SlashOption(name= "User", type= discord.Member, required= False,
-           description= "The user to show the permissions of. Deafults to you.")])
-async def permissions_user(ctx: ui.SlashInteraction, user=None):
+           options=[ui.SlashOption(name="User", type=discord.Member, required=False,
+           description="The user to show the permissions of. Deafults to you."), ui.SlashOption(
+           name="Channel", type=discord.TextChannel, required=False, channel_types=all_channel_types,
+           description="The channel to take overwrites into account. Defaults to none (server-wide).")])
+async def permissions_user(ctx: ui.SlashInteraction, user=None, channel=None):
   user = user if user else ctx.author
-  integer = ctx.channel.permissions_for(user).value
+  integer = channel.permissions_for(user).value if channel else user.guild_permissions_int
   embeds = perm_itoe(integer)
   await ctx.respond(embeds=embeds)
 
 @bs.command(name="permissions_role", description="Views the permissions of a role.",
            options=[ui.SlashOption(name= "Role", type= discord.Role, required= True,
-           description= "The role to show the permissions of.")])
-async def permissions_user(ctx: ui.SlashInteraction, role):
-  integer = role.permissions.value
+           description= "The role to show the permissions of."), ui.SlashOption(name="Channel",
+           type=discord.TextChannel, required=False, channel_types=all_channel_types, description=
+           "The channel to take overwrites into account. Defaults to none (server-wide).")])
+async def permissions_role(ctx: ui.SlashInteraction, role, channel=None):
+  integer = channel.permissions_for(role).value if channel else role.permissions.value
   embeds = perm_itoe(integer)
   await ctx.respond(embeds=embeds)
 
-@bs.command(name="permissions_integer", description="Converts a permissions integer into user-friendly permissions.",
+@bs.command(name="permission_integer", description="Converts a permissions integer into user-friendly permissions.",
            options=[ui.SlashOption(name= "Integer", type= int, required= True, min_value= 0,
            max_value= 0, description= "The permission integer.")])
 async def permissions_int(ctx: ui.SlashInteraction, integer):
   embeds = perm_itoe(integer)
   await ctx.respond(embeds=embeds)
 
-@bs.command(name="permissions_help", description="Views static information about permission integers.")
+@bs.command(name="permission_help", description="Views static information about permission integers.")
 async def permissions_help(ctx: ui.SlashInteraction):
   await ctx.respond(perms_guide)
 
 @commands.command(aliases=['permgen', 'permsgen', 'permgenerate', 'permsgenerate', 'permission_gen', 'permissions_gen' 'permission_generate'])
-async def permission_generate(ctx, *, disposed=None):
+async def permission_generate(ctx, *, disposed=None): # Migrated
   msg = await ctx.reply("Select the permissions! You can select multiple options.", components= permission_menus, listener= PermsGenL())
+  permission_messages[msg] = {"permission_server_selection": [], "permission_membership_selection": [], "permission_text_selection": [], "permission_voice_selection": []}
+
+@bs.command(name="permission_generate", description="Converts permissions into a permission integer.")
+async def permission_generate_(ctx, *, disposed=None):
+  msg = await ctx.respond("Select the permissions and the integer will be updated instantly:", components= permission_menus, listener= PermsGenL())
   permission_messages[msg] = {"permission_server_selection": [], "permission_membership_selection": [], "permission_text_selection": [], "permission_voice_selection": []}
 
 @commands.command() # Migrated
