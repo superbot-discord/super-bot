@@ -65,8 +65,8 @@ def get_message_payload(content=MISSING, tts=False, embed: discord.Embed=MISSING
         elif embed not in [MISSING, None] and embeds in [MISSING, None]:
             embeds = [embed]
         # if embed doesn't exsist and embeds does
-        elif embed in [MISSING, None] and embeds not in [MISSING, None]:
-            embeds = embed
+        # elif embed in [MISSING, None] and embeds not in [MISSING, None]:
+        #     embeds = embed
         # check type things
         elif not all(isinstance(x, discord.Embed) for x in embeds):
             raise WrongType("embeds", embeds, 'list[discord.Embed]')
