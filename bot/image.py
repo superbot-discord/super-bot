@@ -5,7 +5,7 @@ from captcha.image import ImageCaptcha
 from colorgram import extract
 from colorthief import ColorThief
 from pdf2image import convert_from_path
-#from pyzbar import pyzbar
+from pyzbar import pyzbar
 from shared import (commands, discord, Image, ImageDraw, ImageFont, math, os, plt, ra, requests,
                     sys, try_delete, typing)
 from PIL import ImageEnhance, ImageFilter, ImageOps
@@ -342,7 +342,7 @@ async def image_generate(ctx, color, width: int, height: int = None, format: typ
   img.save(f'image.{format}')
   await ctx.reply(file=discord.File(f'image.{format}'))
   try_delete(f'image.{format}')
-"""
+
 @commands.command(aliases=['scan'])
 async def qr(ctx, *, disposed= None):
   for x in ctx.message.attachments:
@@ -367,7 +367,7 @@ async def qr(ctx, *, disposed= None):
           await ctx.reply(y.data.decode("utf-8"), file=discord.File('qrcode.png'))
         except:
           await ctx.reply(y.data.decode("utf-8"))
-    try_delete('input.png', 'qrcode.png')"""
+    try_delete('input.png', 'qrcode.png')
 
 @commands.command()
 async def render(ctx, width:float=1):
@@ -425,7 +425,7 @@ def setup(bot):
   bot.add_command(image_generate)
   bot.add_command(mandelbrot)
   bot.add_command(ocr)
-  #bot.add_command(qr)
+  bot.add_command(qr)
   bot.add_command(render)
   bot.add_command(text)
   bot.add_command(transparent)
