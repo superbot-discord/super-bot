@@ -5,13 +5,13 @@ from captcha.image import ImageCaptcha
 from colorgram import extract
 from colorthief import ColorThief
 from pdf2image import convert_from_path
-from pyzbar import pyzbar
 from shared import (commands, discord, Image, ImageDraw, ImageFont, math, os, plt, ra, requests,
                     sys, try_delete, typing)
 from PIL import ImageEnhance, ImageFilter, ImageOps
 
 sys.path.append(os.path.abspath('./modules'))
 import ascii2 as asc
+from pyzbar import pyzbar
 
 sf_pro_r      = ImageFont.truetype("fonts/awf.ttf", 23)
 cimage = ImageCaptcha()
