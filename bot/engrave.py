@@ -1,13 +1,11 @@
 from shared import commands, Embed, SequenceMatcher
+from urllib.parse import quote as urlescape
 
-@commands.command()
+
+@commands.command() # Migrated, see apis__int.py
 async def engrave(ctx, product = "list", *, text = "Your text goes here."):
   product = product.lower()
-  product = product.replace(" ","").replace("-","").replace("_","").replace(".","").replace(",","")
-  text = text.replace("%","%25").replace(" ","%20").replace("+","%2B").replace("/","%2F").replace(":","%3A")
-  text = text.replace(";","%3B").replace("[","%5B").replace("]","%5D").replace("{","%7B").replace("}","%7D")
-  text = text.replace("=","%3D").replace("|","%7C").replace("#","%23").replace("$","%24").replace("&","%26")
-  text = text.replace("?","%3F").replace("@","%40").replace("^","%5E").replace("`","%60")
+  text = urlescape(text, safe='')
   if product == "airtag" or product == "airtags":
     embed = Embed(title="Engrave on AirTags")
     embed.set_image(url="https://www.apple.com/shop/preview/engrave/PX532AM/A?th=" + text[:4] + "&s=2&f=mixed")
@@ -15,11 +13,11 @@ async def engrave(ctx, product = "list", *, text = "Your text goes here."):
     embed = Embed(title="Engrave on AirPods Pro")
     embed.set_image(url="https://www.apple.com/shop/preview/engrave/PLWK3AM/A?th="+text+"&s=2&tl=&f=mixed")
   elif product == "airpodson" or product == "airpodon":
-    embed = Embed(title="Engrave on AirPods (On)")
-    embed.set_image(url="https://www.apple.com/shop/preview/engrave/PRXJ2AM/A?th="+text+"&s=2&tl=&f=mixed")
-  elif product == "airpods" or product == "airpod" or product == "airpodsoff" or product == "airpodoff":
-    embed = Embed(title="Engrave on AirPods")
+    embed = Embed(title="Engrave on AirPods (2nd Gen)")
     embed.set_image(url="https://www.apple.com/shop/preview/engrave/PV7N2AM/A?th="+text+"&s=2&tl=&f=mixed")
+  elif product == "airpods" or product == "airpod" or product == "airpodsoff" or product == "airpodoff":
+    embed = Embed(title="Engrave on AirPods (3rd Gen)")
+    embed.set_image(url="https://www.apple.com/shop/preview/engrave/PMTC3AM/A?th="+text+"&s=2&tl=&f=mixed")
   elif product == "airpodsmaxgray" or product == "airpodmaxgray" or product == "airpodsmaxgrey" or product == "airpodmaxgrey" or product == "airpodsmaxspacegray" or product == "airpodmaxspacegray" or product == "airpodsmaxspacegrey" or product == "airpodmaxspacegrey" or product == "airpodsmax" or product == "airpodmax":
     embed = Embed(title="Engrave on AirPods Max (Space Gray)")
     embed.set_image(url="https://www.apple.com/shop/preview/v2/engrave/PGYH3AM/A?th="+text+"&s=2&tl=&f=mixed")

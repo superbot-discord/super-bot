@@ -53,6 +53,7 @@ poll_pattern = re.compile(r'([\w]+?)(:\w{1,32}:|[\uD800-\uDBFF])')
 #  sba_channel = bot_.get_channel(909445785509326859)
 #  await sba_channel.send(f"5m")
 
+
 @bot_.command()
 async def poll(ctx, *, text):
   options = []
@@ -79,6 +80,7 @@ async def poll(ctx, *, text):
   polls.append(poll.id)
   poll_options[poll.id] = poll_options_cache
 
+
 # @slash.command(name="poll", description="Starts a reaction-based poll in the channel.", options=[
 #   ui.SlashOption(name= "Option 1 Emoji", type= str, required= True, choices= emoji_options),
 #   ui.SlashOption(name= "Option 1", type= str, required= True),
@@ -88,6 +90,7 @@ async def poll(ctx, *, text):
 # async def poll_(ctx, option_1_emoji, option_1, option_2_emoji, option_2):
 #   pass
 
+
 @bot_.command()
 @commands.is_owner()
 async def nick(ctx, *, new_nick):
@@ -96,6 +99,7 @@ async def nick(ctx, *, new_nick):
     await ctx.reply("Changed nickname.")
   except discord.Forbidden:
     await ctx.reply("Unable to change nickname.")
+
 
 @bot_.command()
 async def botpurge(ctx, *, num: int = 1):
@@ -115,6 +119,7 @@ async def botpurge(ctx, *, num: int = 1):
   else:
     await ctx.send("You don't have the required permission: Manage messages.")
 
+
 @bs.command(name= "ping", description= "Views the response time and latency of the bot.")
 async def ping_(ctx):
   await ctx.defer()
@@ -124,6 +129,7 @@ async def ping_(ctx):
   mcs = str(int(response_time.microseconds) + int((response_time.total_seconds())%60))
   await message.edit(content=f"Pong! 🏓\n```Message delay: {mcs:<10}microseconds\nBot latency  : {round(bot_.latency*1000000, 2):<10}microseconds```")
 
+
 @bot_.command(aliases= ["online"]) # Migrated
 async def ping(ctx, *, disposed= None):
   now1 = datetime.now(timezone.utc)
@@ -132,9 +138,26 @@ async def ping(ctx, *, disposed= None):
   mcs = str(int(response_time.microseconds)+int((response_time.total_seconds())%60))
   await message.edit(content=f"Pong! 🏓\n```Message delay: {mcs:<10}microseconds\nBot latency  : {round(bot_.latency*1000000, 2):<10}microseconds```")
 
+
 @bs.message_command(name= "Spoil spoilers")
 async def spoil_(ctx, message):
   await ctx.respond(message.content.replace("||", ""), hidden= True)
+
+
+# async def ac_a(ctx: ui.AutocompleteInteraction):
+#   print(f"A invoked\n{ctx.data}\n\n")
+#   return [{'name': "CA B", 'value': "B"}, {'name': "CA C", 'value': "C"}]
+
+# async def ac_b(ctx: ui.AutocompleteInteraction):
+#   print(f"B invoked\n{ctx.data}\n\n")
+#   return [{'name': "CB A", 'value': "A"}, {'name': "CB B", 'value': "B"}]
+
+# @bs.command(name="tester_opt", description="Tester tester.", options=[ui.SlashOption(name="A",
+#            type=str, required=True, choice_generator= ac_a, choices= [{'name': "CA A", 'value': "A"},
+#            {'name': "CA B", 'value': "B"}, {'name': "CA C", 'value': "C"}]), ui.SlashOption(name="B", type=str, required=True, choice_generator= ac_b,
+#            choices= [{'name': "CB A", 'value': "A"}, {'name': "CB B", 'value': "B"}, {'name': "CB C", 'value': "C"}])])
+# async def tester(ctx, a, b):
+#   await ctx.respond("Response")
 
 
 @bot_.event
@@ -186,6 +209,7 @@ async def on_command_error(ctx, error):
       print(''.join(traceback.format_exception(type(error), error, error.__traceback__)))
       await ctx.reply(f"Sorry! An error occured. The error was too long but it had been shown to JohannLau#6541. If the error persists, Please kindly inform him about this issue.")
 
+
 # @bot_.event
 # async def on_thread_update(before, after):
 #   if after.id == 887562599191941121 and after.archived:
@@ -197,8 +221,11 @@ async def on_command_error(ctx, error):
 #   if thread.guild.id == 805441351033552916 and not thread.me:
 #     await thread.join()
 
+
 @bot_.event
 async def on_voice_state_update(member, before, after):
+  if member.id == 796686363604680755:
+    return
   try:
     if before.channel.id == 822750915466493982 and after.channel == None:
       supchat = member.guild.get_channel(822753048510070784)
@@ -213,6 +240,7 @@ async def on_voice_state_update(member, before, after):
       await supchat.set_permissions(member, overwrite=view_overwrite)
   except discord.NotFound:
     pass
+
 
 @bot_.event
 async def on_reaction_add(reaction, user):
@@ -235,6 +263,7 @@ async def on_reaction_add(reaction, user):
     cache = Embed(title = cache_embed.title, description = ems.encode(desc))
     await msg.edit(embed= cache)
 
+
 @bot_.event
 async def on_reaction_remove(reaction, user):
   msg = reaction.message
@@ -256,6 +285,7 @@ async def on_reaction_remove(reaction, user):
     cache = Embed(title = cache_embed.title, description = ems.encode(desc))
     await msg.edit(embed= cache)
 
+
 @bot_.event
 async def on_message(message):
   try:
@@ -272,10 +302,6 @@ async def on_message(message):
   except:
     pass
 
-@bot_.event
-async def on_voice_state_update(member, before, after):
-  if member.id == 796686363604680755:
-    pass
 
 @bot_.event
 async def on_ready():

@@ -63,16 +63,14 @@ def test_for(text: str, min_ratio: typing.Union[float, int], *choices: str):
   Checks if a ``str`` is close enough to a list of strings, using `difflib.SequenceMatcher`.
   ```
   test_for("appel", 0.8, "apple", "banana", "cherry") # Checks if "appel" is at least 80% close to\
-  one of the listed fruits, returns True
+  each of the listed fruits, and return a list of possible matches ordered by ratio, larger first
+  # Returns ["apple"] in this case
   ```
   """
   choices = [choices[0]] if len(choices) == 1 else list(choices)
-  raw_tested = {x:SequenceMatcher(None, x, text).ratio() for x in choices}
-  tested = {x:y for x,y in sorted(raw_tested.items(), key=lambda item: item[1], reverse=True)}
-  print(tested)
-  if tested[list(tested)[0]] >= min_ratio:
-    return list(tested)[0]
-
+  choices = {x: SequenceMatcher(None, x, text).ratio() for x in choices}
+  tested = sorted({x: y for x, y in choices.items() if y >= min_ratio}, key=lambda x: x[1], reverse=True)
+  return [x for x, y in tested.items()]
 
 def trim(text: str, width: int):
   """

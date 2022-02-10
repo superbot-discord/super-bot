@@ -1,9 +1,9 @@
 import html
+from urllib.parse import quote as urlescape
 
 from _bot import bs
-from shared import try_delete
 from functions import trim
-from shared import commands, chance, discord, ra, requests, text_wrapper, ui
+from shared import chance, commands, discord, ra, requests, text_wrapper, try_delete, ui
 
 # All migrated in the file except =joke and =states
 """country_option = ui.SlashOption(name= "Country/Region Code", description= "The country code", type= str, required=
@@ -22,6 +22,66 @@ countries = [ # 19 x 12 = 228 items
   "ST","SV","SY","SZ","TD","TF","TG","TH","TJ","TK","TL","TM","TN","TO","TR","TT","TV","TW","TZ",
   "UA","UG","UM","US","UY","UZ","VC","VE","VI","VN","VU","WF","WS","XK","YE","YT","ZA","ZM","ZW"
 ]"""
+
+products = [
+  {'name': "Airtags", 'value': "PX532AM"},
+  {'name': "Apple Pencil", 'value': "PU8F2AM"},
+  {'name': "Airpods Pro", 'value': "PLWK3AM"},
+  {'name': "Airpods (2nd Generation)", 'value': "PV7N2AM"},
+  {'name': "Airpods (3rd Generation)", 'value': "PMTC3AM"},
+  {'name': "Airpods Max", 'value': "AM"},
+  {'name': "iPad", 'value': "ID"},
+  {'name': "iPad Air", 'value': "IA"},
+  {'name': "iPad Mini", 'value': "IM"},
+  {'name': "iPad Pro", 'value': "IP"},
+  {'name': "iPod", 'value': "IO"}
+]
+
+product_colors = {
+  'AM': [1, 2, 3, 6, 7],
+  'ID': [1, 2],
+  'IA': [1, 2, 4, 6, 10],
+  'IM': [1, 7, 8, 11],
+  'IP': [1, 2],
+  'IO': [1, 2, 3, 5, 7, 9]
+}
+
+product_codes = {
+  'AM1': "PGYH3AM", 'AM2': "PGYJ3AM", 'AM3': "PGYL3AM", 'AM6': "PGYN3AM", 'AM7': "PGYM3AM",
+  'ID1': "PK2N3LL", 'ID2': "PK2L3LL",
+  'IA1': "PYFM2LL", 'IA2': "PYFN2LL", 'IA4': "PYFQ2LL", 'IA6': "PYFR2LL", 'IA10':"PYFP2LL",
+  'IM1': "PK7T3LL", 'IM7': "PLWR3LL", 'IM8': "PK7X3LL", 'IM11':"PK7V3LL",
+  'IP1': "PHQR3LL", 'IP2': "PHQT3LL",
+  'IO1': "PVHW2LL", 'IO2': "PVHV2LL", 'IO3': "PVHU2LL", 'IO5': "PVHT2LL", 'IO7': "PVHY2LL",
+  'IO9': "PVHX2LL"
+}
+
+colors = [
+  {'name': "Generic", 'value': 0},
+  {'name': "Space Grey", 'value': 1},
+  {'name': "Silver", 'value': 2},
+  {'name': "Blue", 'value': 3},
+  {'name': "Sky Blue", 'value': 4},
+  {'name': "Gold", 'value': 5},
+  {'name': "Green", 'value': 6},
+  {'name': "Pink", 'value': 7},
+  {'name': "Purple", 'value': 8},
+  {'name': "Red", 'value': 9},
+  {'name': "Rose Gold", 'value': 10},
+  {'name': "Starlight", 'value': 11},
+  {'name': "Please select the product before choosing a color.", 'value': 12}
+]
+
+async def color_gen(ctx: ui.AutocompleteInteraction):
+  product_chosen = filter(lambda x: x['name'] == 'product', ctx['options'])
+  product_chosen = product_chosen[0] if product_chosen else None
+  if not product_chosen:
+    return [colors[12]]
+  elif product_chosen['value'].startswith("P"):
+    return [colors[0]]
+  else:
+    return [colors[x] for x in product_colors[product_chosen['value']]]
+
 
 class TriviaRevealL(ui.listener.Listener):
   def __init__(self, answer_1, answer_2, answer_3, multi):
@@ -250,6 +310,27 @@ async def animal_image(ctx: ui.SlashInteraction, animal: str, number: int = 1):
 async def animal_fact(ctx: ui.SlashInteraction, animal: str, number: int = 1):
   await ctx.respond(eval(f"bot{animal}_fact({number})"))
 
+@bs.command(name="engrave", description="Engraves a piece of text on an Apple product.", options=[
+           ui.SlashOption(name="Product", description= "The product to engrave on.", type=str,
+           required=True, choices=products), ui.SlashOption(name= "Color",
+           description="The color of the product. Choices are based on the product.", type=int,
+           required=True, choices=colors, choice_generator=color_gen), ui.SlashOption(name="Line_1",
+           description="The first line to engrave.", type=str, required=True), ui.SlashOption(name=
+           "Line_2", description="The second line to engrave. Applicable for iPads and iPods only."
+           , type=str, required=False)])
+async def engrave_(ctx: ui.SlashInteraction, product, color, line_1, line_2 = None):
+  line_1 = urlescape(line_1, safe='')
+  if product.startswith("P"):
+    desc = f"https://www.apple.com/shop/preview/engrave/{product}/A?th={line_1}&s=2&f=mixed"
+  else:
+    product = product_codes[f"{product}{color}"]
+    if line_2:
+      line_2 = urlescape(line_2, safe='')
+      desc = f"https://www.apple.com/shop/preview/v2/engrave/{product}/A?th={line_1}&s=2"
+    else:
+      desc = f"https://www.apple.com/shop/preview/v2/engrave/{product}/A?th={line_1}&tl={line_2}&s=2"
+  await ctx.respond(desc)
+
 @bs.command(name= "nasa_apod", description= "Shows NASA's Astronomy Picture Of the Day.")
 async def nasa_apod(ctx: ui.SlashInteraction):
   apod = botnasa()
@@ -261,7 +342,7 @@ async def nasa_apod(ctx: ui.SlashInteraction):
 @bs.command(name= "trivia", description= "Shows up to 3 trivia questions.", options=[
            ui.SlashOption(name= "Number", type= int, required= False, min_value= 1, max_value= 3,
            description= "The no. of questions to show, between 1 and 3 inclusive. Defaults to 1.")])
-async def _trivia(ctx: ui.SlashInteraction, number: int = 1):
+async def trivia_(ctx: ui.SlashInteraction, number: int = 1):
   data = bottrivia(number)
   multi = number > 1
   await ctx.respond(data[0], components= data[2],listener= TriviaRevealL(*data[1], multi))

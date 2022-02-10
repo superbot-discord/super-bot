@@ -318,14 +318,14 @@ def sharpness(percent):
   newimg.save('output.png')
 
 @commands.command()
-async def mandelbrot(ctx, size:int = 1024):
+async def mandelbrot(ctx, size: int = 1024):
   img = Image.effect_mandelbrot((size, size), (-1.5, -2.5, 3.5, 2.5), 95)
   img.save('mandelbrot.png')
   await ctx.reply(file = discord.File('mandelbrot.png'))
   try_delete('mandelbrot.png')
 
 @commands.command()
-async def ocr(ctx, lang="eng", *, disposed= None):
+async def ocr(ctx, lang= "eng", *, disposed= None):
   images = ctx.message.attachments
   for x in images:
     await x.save('input.png')
