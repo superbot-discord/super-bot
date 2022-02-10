@@ -73,7 +73,7 @@ colors = [
 ]
 
 async def color_gen(ctx: ui.AutocompleteInteraction):
-  product_chosen = filter(lambda x: x['name'] == 'product', ctx['options'])
+  product_chosen = filter(lambda x: x['name'] == 'product', ctx.data['options'])
   product_chosen = product_chosen[0] if product_chosen else None
   if not product_chosen:
     return [colors[12]]
