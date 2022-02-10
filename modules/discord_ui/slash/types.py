@@ -1544,6 +1544,7 @@ class CommandCache():
                     new_command = await http.create_global_command(base.to_dict())
                 else:
                     if api_command != base:
+                        print("Creating new command")
                         new_command = await http.edit_global_command(api_command["id"], base.to_dict())
                 # directly set the id of the command so no extra request is needed
                 base._id = new_command["id"] if new_command else api_command["id"]

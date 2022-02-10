@@ -48,7 +48,7 @@ product_colors = {
 
 product_codes = {
   'AM1': "PGYH3AM", 'AM2': "PGYJ3AM", 'AM3': "PGYL3AM", 'AM6': "PGYN3AM", 'AM7': "PGYM3AM",
-  'ID1': "PK2N3LL", 'ID2': "PK2L3LL",
+  'ID1': "PK2K3LL", 'ID2': "PK2L3LL",
   'IA1': "PYFM2LL", 'IA2': "PYFN2LL", 'IA4': "PYFQ2LL", 'IA6': "PYFR2LL", 'IA10':"PYFP2LL",
   'IM1': "PK7T3LL", 'IM7': "PLWR3LL", 'IM8': "PK7X3LL", 'IM11':"PK7V3LL",
   'IP1': "PHQR3LL", 'IP2': "PHQT3LL",
@@ -73,7 +73,7 @@ colors = [
 ]
 
 async def color_gen(ctx: ui.AutocompleteInteraction):
-  product_chosen = filter(lambda x: x['name'] == 'product', ctx.data['options'])
+  product_chosen = list(filter(lambda x: x['name'] == 'product', ctx.data['options']))
   product_chosen = product_chosen[0] if product_chosen else None
   if not product_chosen:
     return [colors[12]]
