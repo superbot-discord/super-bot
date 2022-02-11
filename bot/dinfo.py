@@ -551,7 +551,7 @@ async def emojis_(ctx: ui.SlashInteraction):
 
 @bs.command(name="id_creation", description="Checks the creation time of any Discord ID.",
            options=[ui.SlashOption(name="ID", type=int, required=True, min_value=1,
-           max_value=9999999999999999999, description="The Discord ID to view the creation time of.")])
+           max_value=9007199254740991, description="The Discord ID to view the creation time of.")])
 async def id_creation(ctx, id):
   snowflake = ((id >> 22) + 1420070400000) / 1000
   await ctx.respond(f"The ID was created at {unix_timestamp(round(snowflake))}")
