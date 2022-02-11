@@ -549,6 +549,10 @@ async def emojis_(ctx: ui.SlashInteraction):
     await ctx.respond(file= discord.File('output.txt'))
   try_delete('output.txt')
 
+@bs.command(name="id_creation", description="Checks the creation time of any Discord ID.",
+           options=[ui.SlashOption(name="ID", type=int, required=True, min_value=1,
+           max_value=2, description="The Discord ID to view the creation time of.")])
+
 @commands.command(aliases=['il'])
 async def invitelink(ctx, *, invite_input: discord.Invite):
   invite_has_info = False

@@ -4,7 +4,9 @@ from art import text2art
 from ascii_canvas import canvas, item
 from table2ascii import PresetStyle, table2ascii
 
-from shared import commands, db, discord, func, np, plt, re, specialbool, try_delete
+from _bot import bs
+from shared import commands, db, discord, func, np, plt, re, specialbool, try_delete, ui
+
 cmaphsv = plt.cm.hsv
 
 def koch_snowflake(order):
@@ -426,37 +428,55 @@ async def simpcolor(ctx, *, name):
   plt.axis('off')
   plt.savefig("color.png", transparent=False)
   plt.savefig("color.svg", transparent=False)
+  plt.close('all')
   await ctx.reply(files=[discord.File("color.png"), discord.File("color.svg")])
   try_delete('color.png')
   try_delete('color.svg')
 
 @commands.command(alias=["snowgraph", "snowflake"])
-async def snow(ctx, recursion = 7):  
-  try:
-    if float(recursion) > 11:
-      await ctx.reply("We are sorry, the maximum recursion we can process is 11.")
-    else:
-      x, y = koch_snowflake(recursion)
-      plt.figure(figsize=(8, 8))
-      plt.axis('equal')
-      plt.fill(x, y)
-      ax = plt.subplot(111)
-      ax.get_xaxis().set_visible(False)
-      ax.get_yaxis().set_visible(False)
-      ax.spines['top'].set_visible(False)
-      ax.spines['bottom'].set_visible(False)
-      ax.spines['left'].set_visible(False)
-      ax.spines['right'].set_visible(False)
-      plt.savefig("snow.png", transparent=True)
-      if float(recursion) < 8:
-        plt.savefig("snow.svg", transparent=True)
-        await ctx.reply(file=discord.File("snow.svg"))
-        try_delete('snow.svg')
-      await ctx.reply(file=discord.File("snow.png"))
-      plt.clf()
-      try_delete('snow.png')
-  except:
-    await ctx.reply("Invalid input. Please try again.")
+async def snow(ctx, recursion: int = 7):  
+  if float(recursion) > 11:
+    await ctx.reply("Sorry! The maximum recursion we can process is 11.")
+    return
+  plt.clf()
+  x, y = koch_snowflake(recursion)
+  plt.figure(figsize=(8, 8))
+  plt.axis('equal')
+  plt.fill(x, y)
+  ax = plt.subplot(111)
+  ax.get_xaxis().set_visible(False)
+  ax.get_yaxis().set_visible(False)
+  ax.spines['top'].set_visible(False)
+  ax.spines['bottom'].set_visible(False)
+  ax.spines['left'].set_visible(False)
+  ax.spines['right'].set_visible(False)
+  plt.savefig("snow.png", transparent=True)
+  plt.savefig("snow.svg", transparent=True)
+  await ctx.reply(files=[discord.File("snow.png"), discord.File("snow.svg")])
+  plt.close('all')
+  try_delete('snow.png', 'snow.svg')
+
+@bs.command(name="snowflake", description="Generates a beautiful Koch Snowflake.", options=[
+            ui.SlashOption(name="Recursions", required=True, type=int, min_value=0, max_value=11,
+            description="The number of recursions. Must be between 0 and 11 inclusive.")])
+async def snow(ctx, recursion: int = 7):  
+  plt.clf()
+  x, y = koch_snowflake(recursion)
+  plt.figure(figsize=(8, 8))
+  plt.axis('equal')
+  plt.fill(x, y)
+  ax = plt.subplot(111)
+  ax.get_xaxis().set_visible(False)
+  ax.get_yaxis().set_visible(False)
+  ax.spines['top'].set_visible(False)
+  ax.spines['bottom'].set_visible(False)
+  ax.spines['left'].set_visible(False)
+  ax.spines['right'].set_visible(False)
+  plt.savefig("snow.png", transparent=True)
+  plt.savefig("snow.svg", transparent=True)
+  await ctx.reply(files=[discord.File("snow.png"), discord.File("snow.svg")])
+  plt.close('all')
+  try_delete('snow.png', 'snow.svg')
 
 @commands.command()
 async def table(ctx, *, text):
