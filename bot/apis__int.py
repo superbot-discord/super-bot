@@ -50,7 +50,7 @@ product_codes = {
   'AM1': "PGYH3AM", 'AM2': "PGYJ3AM", 'AM3': "PGYL3AM", 'AM6': "PGYN3AM", 'AM7': "PGYM3AM",
   'ID1': "PK2K3LL", 'ID2': "PK2L3LL",
   'IA1': "PYFM2LL", 'IA2': "PYFN2LL", 'IA4': "PYFQ2LL", 'IA6': "PYFR2LL", 'IA10':"PYFP2LL",
-  'IM1': "PK7T3LL", 'IM7': "PLWR3LL", 'IM8': "PK7X3LL", 'IM11':"PK7V3LL",
+  'IM1': "PK7M3LL", 'IM7': "PLWL3LL", 'IM8': "PK7R3LL", 'IM11':"PK7P3LL",
   'IP1': "PHQR3LL", 'IP2': "PHQT3LL",
   'IO1': "PVHW2LL", 'IO2': "PVHV2LL", 'IO3': "PVHU2LL", 'IO5': "PVHT2LL", 'IO7': "PVHY2LL",
   'IO9': "PVHX2LL"
@@ -320,15 +320,16 @@ async def animal_fact(ctx: ui.SlashInteraction, animal: str, number: int = 1):
            , type=str, required=False)])
 async def engrave_(ctx: ui.SlashInteraction, product, color, line_1, line_2 = None):
   line_1 = urlescape(line_1, safe='')
+  v2_str = "v2/" if product in ['AM', 'IO'] else ""
   if product.startswith("P"):
-    desc = f"https://www.apple.com/shop/preview/engrave/{product}/A?th={line_1}&s=2&f=mixed"
+    desc = f"https://www.apple.com/shop/preview/{v2_str}engrave/{product}/A?th={line_1}&s=2&f=mixed"
   else:
     product = product_codes[f"{product}{color}"]
     if line_2:
       line_2 = urlescape(line_2, safe='')
-      desc = f"https://www.apple.com/shop/preview/v2/engrave/{product}/A?th={line_1}&s=2"
+      desc = f"https://www.apple.com/shop/preview/{v2_str}engrave/{product}/A?th={line_1}&s=2"
     else:
-      desc = f"https://www.apple.com/shop/preview/v2/engrave/{product}/A?th={line_1}&tl={line_2}&s=2"
+      desc = f"https://www.apple.com/shop/preview/{v2_str}engrave/{product}/A?th={line_1}&tl={line_2}&s=2"
   await ctx.respond(desc)
 
 @bs.command(name= "nasa_apod", description= "Shows NASA's Astronomy Picture Of the Day.")

@@ -347,38 +347,38 @@ async def multigraph(ctx, func, range_low:float=-10.0, range_high:float=10.0, eq
 
 @commands.command(aliases=["piechart", "circlechart"])
 async def pie(ctx, numbers, label="", *, title="No_title_required"):
-  #try:
-  numlist = numbers.split(",")
-  numlist = list(map(float, numlist))
-  mycolors = []
-  y = np.array(numlist)
-  for x in range(len(numlist)):
-    mycolors.append(cmaphsv(x/len(numlist)))
-  if label:
-    labels = label.split(",")
-    if len(labels) > len(numlist):
-      labels = labels[:len(numlist)-1]
-    elif len(numlist) > len(labels):
-      numlist = numlist[:len(labels)-1]
-    patches, labels, pct_texts = plt.pie(y, labels=labels, colors=mycolors, autopct=lambda pct: func(pct, y),
-    rotatelabels=True, pctdistance=0.6, textprops = db["font_dicts"]["label"])
-  else:
-    patches, labels, pct_texts = plt.pie(y, colors=mycolors, autopct=lambda pct: func(pct, y),
-    rotatelabels=True, pctdistance=0.6, textprops = db["font_dicts"]["label"])
-  for label, pct_text in zip(labels, pct_texts):
-    pct_text.set_rotation(label.get_rotation())
-    pct_text.update(db["font_dicts"]["light_label"])
-  plt.legend(prop = db["font_dicts"]["legend"])
-  if title != "No_title_required":
-    plt.title(title, fontdict=db["font_dicts"]["title"])
-  plt.savefig("piechart.png", transparent=True)
-  plt.savefig("piechart.svg", transparent=True)
-  plt.clf()
-  await ctx.reply(files=[discord.File("piechart.png"), discord.File("piechart.svg")])
-  try_delete('piechart.png')
-  try_delete('piechart.svg')
-  #except:
-  #  await ctx.reply("Invalid input. Please try again.")
+  try:
+    numlist = numbers.split(",")
+    numlist = list(map(float, numlist))
+    mycolors = []
+    y = np.array(numlist)
+    for x in range(len(numlist)):
+      mycolors.append(cmaphsv(x/len(numlist)))
+    if label:
+      labels = label.split(",")
+      if len(labels) > len(numlist):
+        labels = labels[:len(numlist)-1]
+      elif len(numlist) > len(labels):
+        numlist = numlist[:len(labels)-1]
+      patches, labels, pct_texts = plt.pie(y, labels=labels, colors=mycolors, autopct=lambda pct: func(pct, y),
+      rotatelabels=True, pctdistance=0.6, textprops = db["font_dicts"]["label"])
+    else:
+      patches, labels, pct_texts = plt.pie(y, colors=mycolors, autopct=lambda pct: func(pct, y),
+      rotatelabels=True, pctdistance=0.6, textprops = db["font_dicts"]["label"])
+    for label, pct_text in zip(labels, pct_texts):
+      pct_text.set_rotation(label.get_rotation())
+      pct_text.update(db["font_dicts"]["light_label"])
+    plt.legend(prop = db["font_dicts"]["legend"])
+    if title != "No_title_required":
+      plt.title(title, fontdict=db["font_dicts"]["title"])
+    plt.savefig("piechart.png", transparent=True)
+    plt.savefig("piechart.svg", transparent=True)
+    plt.clf()
+    await ctx.reply(files=[discord.File("piechart.png"), discord.File("piechart.svg")])
+    try_delete('piechart.png')
+    try_delete('piechart.svg')
+  except:
+   await ctx.reply("Invalid input. Please try again.")
 
 @commands.command()
 async def qrmake(ctx, *, text):
@@ -412,25 +412,20 @@ async def qrmake(ctx, *, text):
 @commands.command(aliases=["simpcolour", "simplecolor", "simplecolour"])
 async def simpcolor(ctx, *, name):
   plt.clf()
-  fig, ax = plt.subplots()
-  ax.axes.get_xaxis().set_visible(False)
-  ax.axes.get_yaxis().set_visible(False)
   try:
     cmapv = plt.get_cmap(name)
-    plt.setp(ax.spines.values(), color="w")
-    gradient = np.vstack((np.linspace(0, 1, 256), np.linspace(0, 1, 256)))
-    plt.imshow(gradient, aspect='auto', cmap=cmapv)
-    plt.axis('off')
+    fig, ax = plt.subplots()
+    ax.axes.get_xaxis().set_visible(False)
+    ax.axes.get_yaxis().set_visible(False)
     plt.subplots_adjust(top = 1, right = 1, bottom = 0, left = 0)
-    plt.savefig("color.png", transparent=True)
-    plt.savefig("color.svg", transparent=True)
+    plt.setp(ax.spines.values(), color="w")
+    gradient = np.vstack((np.linspace(0, 1, 1920), np.linspace(0, 1, 1920)))
+    plt.imshow(gradient, aspect='auto', cmap=cmapv)
   except:
-    bcs = plt.gca()
-    plt.setp(ax.spines.values(), color=name)
-    ax.set_facecolor(name)
-    fig.set_facecolor(name)
-    plt.savefig("color.png", transparent=True)
-    plt.savefig("color.svg", transparent=True)
+    fig, ax = plt.subplots(facecolor="#FF0000")
+  plt.axis('off')
+  plt.savefig("color.png", transparent=False)
+  plt.savefig("color.svg", transparent=False)
   await ctx.reply(files=[discord.File("color.png"), discord.File("color.svg")])
   try_delete('color.png')
   try_delete('color.svg')

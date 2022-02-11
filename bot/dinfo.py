@@ -1695,7 +1695,6 @@ async def user_info(ctx, user: discord.Member = None, channel: discord.TextChann
 
 @bs.user_command(name= "View Information")
 async def user_(ctx, user):
-  print(user)
   channel = ctx.channel
   desc = f"{user.mention} ({'bot' if user.bot else 'human'})"
   fetched_user = await ctx.bot.fetch_user(user.id)
