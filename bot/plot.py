@@ -434,7 +434,7 @@ async def simpcolor(ctx, *, name):
   try_delete('color.svg')
 
 @commands.command(alias=["snowgraph", "snowflake"])
-async def snow(ctx, recursion: int = 7):  
+async def snow(ctx, recursion: int = 7):
   if float(recursion) > 11:
     await ctx.reply("Sorry! The maximum recursion we can process is 11.")
     return
@@ -459,9 +459,9 @@ async def snow(ctx, recursion: int = 7):
 @bs.command(name="snowflake", description="Generates a beautiful Koch Snowflake.", options=[
             ui.SlashOption(name="Recursions", required=True, type=int, min_value=0, max_value=11,
             description="The number of recursions. Must be between 0 and 11 inclusive.")])
-async def snow(ctx, recursion: int = 7):  
+async def snow(ctx, recursions: int = 7):
   plt.clf()
-  x, y = koch_snowflake(recursion)
+  x, y = koch_snowflake(recursions)
   plt.figure(figsize=(8, 8))
   plt.axis('equal')
   plt.fill(x, y)
