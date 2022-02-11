@@ -10,6 +10,7 @@ hko_dt_pattern2 =re.compile(r'\d{8}(\d{2})(\d{2})-\d{8}(\d{2})(\d{2})')
 hko_dt_pattern2_=r'\1:\2~\3:\4'
 gmb_weekdays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
 
+
 fake_headers = {'User-Agent' : "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:95.0) Gecko/20100101 Firefox/95.0"}
 mtr_time   = lambda rt: re.sub(r'\d{4}-\d{2}-\d{2} (\d{2}:\d{2}:\d{2})', r'\1', rt)
 aqi_range1 = lambda min, max: min if min == max else f"{min}~{max}"
@@ -24,6 +25,67 @@ kmb_routes = requests.get("https://data.etabus.gov.hk/v1/transport/kmb/route/").
 gmb_routes_HKI = requests.get("https://data.etagmb.gov.hk/route/HKI/").json()['data']['routes']
 gmb_routes_KLN = requests.get("https://data.etagmb.gov.hk/route/KLN/").json()['data']['routes']
 gmb_routes_NT  = requests.get("https://data.etagmb.gov.hk/route/NT/").json()['data']['routes']
+
+mameiha_tt = """
+**星期一至五**
+
+**78X 啟德 往 皇后山**
+```
+17:15            一班
+17:45            一班
+18:15            一班
+```
+
+**78X 皇后山 往 牛頭角、九龍灣及啟德**
+```
+07:15            一班
+07:45            一班
+08:15            一班
+```
+
+**79X 長沙灣 往 皇后山**
+```
+07:30            一班
+10:00            一班
+12:00 ~ 18:00    45
+18:00 ~ 21:00    30
+```
+
+**79X 皇后山 往 奧運、旺角及長沙灣**
+```
+07:00 ~ 09:00    30
+09:00 ~ 14:15    45
+14:15 ~ 17:15    60
+```
+
+**679 皇后山 往 北角、銅鑼灣、灣仔及中環**
+```
+07:05            一班
+```
+
+**979 皇后山 往 金鐘及中環**
+```
+07:15            一班
+```
+------------------------------
+**星期六、日及公眾假期**
+
+**78X、679、979**
+星期六、日及公眾假期不設班次
+
+**79X 長沙灣 往 皇后山**
+```
+09:30 ~ 20:00    30
+```
+
+**79X 皇后山 往 奧運、旺角及長沙灣**
+```
+08:00            一班
+08:45 ~ 19:15    45
+20:00            一班
+```
+"""
+
 
 @commands.command()
 async def hk_aqi(ctx, *, disposed= None):
@@ -432,6 +494,10 @@ async def mameiha(ctx):
   await ctx.send(desc)
 
 @commands.command()
+async def mameiha_timetable(ctx):
+  await ctx.reply(mameiha_tt)
+
+@commands.command()
 async def luenwohui(ctx):
   async with ctx.channel.typing():
     desc = f"**現在時間為 {datetime.now(tz= timezone(timedelta(hours=8))).strftime('%H:%M:%S')}**\n\n**278K往粉嶺站（循環線）**\n"
@@ -526,4 +592,5 @@ def setup(bot):
   bot.add_command(hk_weather)
   bot.add_command(hk_wind)
   bot.add_command(mameiha)
+  bot.add_command(mameiha_timetable)
   bot.add_command(luenwohui)

@@ -1,3 +1,4 @@
+from _bot import bs
 from shared import commands, discord, ra, SequenceMatcher, typing, ui
 
 vclients = {}
@@ -58,9 +59,14 @@ think_buttons = [
   ui.Button(label="Think", custom_id="think", color='primary', emoji="🧠", disabled=True)
 ]
 
+
 @commands.command(aliases=['buttons'])
 async def button(ctx, *, disposed= None):
   await ctx.reply("All buttons will not timeout.", components= sample_buttons(ctx), listener= SampleButtonL())
+
+@bs.command(name="buttons", description="Generates all kinds of buttons. Mainly for development purposes.")
+async def buttons(ctx):
+  await ctx.respond("All buttons will not timeout.", components= sample_buttons(ctx), listener= SampleButtonL())
 
 @commands.command()
 async def join(ctx, vc: discord.VoiceChannel = None, *, disposed= None):
@@ -103,7 +109,7 @@ async def pause(ctx, *, disposed= None):
     await ctx.reply("Resumed the song.")
 
 @commands.command()
-async def play(ctx, volume: typing.Optional[int]=100, *, song="rickroll"):
+async def play(ctx, volume: typing.Optional[int] = 100, *, song="rickroll"):
   vc = vclients.get(ctx.guild, None)
   if not vc:
     vc = await ctx.author.voice.channel.connect()
