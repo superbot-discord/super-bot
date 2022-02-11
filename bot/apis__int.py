@@ -311,7 +311,7 @@ async def animal_fact(ctx: ui.SlashInteraction, animal: str, number: int = 1):
   await ctx.respond(eval(f"bot{animal}_fact({number})"))
 
 @bs.command(name="engrave", description="Engraves a piece of text on an Apple product.", options=[
-           ui.SlashOption(name="Product", description= "The product to engrave on.", type=str,
+           ui.SlashOption(name="Product", description="The product to engrave on.", type=str,
            required=True, choices=products), ui.SlashOption(name= "Color",
            description="The color of the product. Choices are based on the product.", type=int,
            required=True, choices=colors, choice_generator=color_gen), ui.SlashOption(name="Line_1",
@@ -327,9 +327,9 @@ async def engrave_(ctx: ui.SlashInteraction, product, color, line_1, line_2 = No
     product = product_codes[f"{product}{color}"]
     if line_2:
       line_2 = urlescape(line_2, safe='')
-      desc = f"https://www.apple.com/shop/preview/{v2_str}engrave/{product}/A?th={line_1}&s=2"
-    else:
       desc = f"https://www.apple.com/shop/preview/{v2_str}engrave/{product}/A?th={line_1}&tl={line_2}&s=2"
+    else:
+      desc = f"https://www.apple.com/shop/preview/{v2_str}engrave/{product}/A?th={line_1}&s=2"
   await ctx.respond(desc)
 
 @bs.command(name= "nasa_apod", description= "Shows NASA's Astronomy Picture Of the Day.")
