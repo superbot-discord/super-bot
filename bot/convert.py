@@ -3,7 +3,6 @@ from _bot import bs
 from functions import round_better
 from shared import commands, db, Embed, json, requests, typing, ui
 
-getcontext().prec = 15
 f = open('./assets/units.json', 'r')
 udb = json.loads(f.read())
 f.close()
@@ -32,6 +31,7 @@ length_units = typing.Literal[tuple(udb['lengthI'])] # type: ignore
            type=int, required=False, min_value=0, max_value=8)])
 async def convert_(ctx: ui.SlashInteraction, source, unit, precision=2):
   in_m = Decimal(source) * Decimal(units_l[unit])
+  getcontext().prec = precision
   embeds = {x: Embed(title=f"{source} {unit} is equal to:", description=
             "\n".join([f"{round_better(in_m/Decimal(z), precision)} {w}" for w, z in y.items()]))
             for x, y in udb['length'].items()}

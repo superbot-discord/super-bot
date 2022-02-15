@@ -92,4 +92,4 @@ def round_better(num: float, digits: int = 0):
   elif isinstance(num, Decimal):
     if num == round(num):
       return num
-  return float(round(num, digits))
+  return round(num, digits)
