@@ -36,5 +36,36 @@
     "yards"         : 0.9144     ,
     "miles"         : 1609.344   ,
     "nautical miles": 1852
+  },
+  "length" : {
+    "Metric (small)" : {
+      "nanometres"    : 0.000000001,
+      "micrometres"   : 0.000001,
+      "millimetres"   : 0.001,
+      "centimetres"   : 0.01,
+      "decimetres"    : 0.1,
+      "metres"        : 1
+    },
+    "Metric (large)" : {
+      "decametres"    : 10,
+      "hectometres"   : 100,
+      "kilometres"    : 1000,
+      "megametres"    : 1000000,
+      "gigametres"    : 1000000000
+    },
+    "Imperial" : {
+      "inches"        : 0.0254,
+      "feet"          : 0.3048,
+      "yards"         : 0.9144,
+      "miles"         : 1609.344,
+      "nautical miles": 1852
+    },
+    "Astronomical" : {
+      "light seconds"     : 299792458,
+      "light minutes"     : 17987547480,
+      "light years"       : 9460750000000000,
+      "astronomical units": 149597870700,
+      "parsecs"           : 30857000000000000
+    }
   }
 }

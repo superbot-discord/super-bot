@@ -460,6 +460,7 @@ async def snow(ctx, recursion: int = 7):
             ui.SlashOption(name="Recursions", required=True, type=int, min_value=0, max_value=11,
             description="The number of recursions. Must be between 0 and 11 inclusive.")])
 async def snow_(ctx, recursions: int = 7):
+  await ctx.defer()
   plt.clf()
   x, y = koch_snowflake(recursions)
   plt.figure(figsize=(8, 8))
@@ -474,7 +475,7 @@ async def snow_(ctx, recursions: int = 7):
   ax.spines['right'].set_visible(False)
   plt.savefig("snow.png", transparent=True)
   plt.savefig("snow.svg", transparent=True)
-  await ctx.reply(files=[discord.File("snow.png"), discord.File("snow.svg")])
+  await ctx.respond(files=[discord.File("snow.png"), discord.File("snow.svg")])
   plt.close('all')
   try_delete('snow.png', 'snow.svg')
 

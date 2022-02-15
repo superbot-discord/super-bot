@@ -1,5 +1,6 @@
+from numpy import floor
 import regex
-from shared import re, SequenceMatcher, typing
+from shared import math, re, SequenceMatcher, typing
 
 
 def enum_mentionables(mentionables, max_length: int, no_text: str, delimiter1: str = " ", delimiter2: str = ", "):
@@ -72,6 +73,7 @@ def test_for(text: str, min_ratio: typing.Union[float, int], *choices: str):
   tested = sorted({x: y for x, y in choices.items() if y >= min_ratio}, key=lambda x: x[1], reverse=True)
   return [x for x, y in tested.items()]
 
+
 def trim(text: str, width: int):
   """
   Trims a ``str`` if it is longer than ``width``.
@@ -81,3 +83,10 @@ def trim(text: str, width: int):
   ```
   """
   return text if len(text) <= width else text[:width - 1] + "…"
+
+
+def round_better(num: float, digits: int = 0):
+  if num.is_integer():
+    return int(num)
+  else:
+    return round(num, digits)

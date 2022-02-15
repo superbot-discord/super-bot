@@ -11,7 +11,7 @@ async def ascii(ctx, *, text):
   await ctx.reply(answer)
 
 @commands.command()
-async def base(ctx, frombase : int, tobase : int, *, text):
+async def base(ctx, frombase: int, tobase: int, *, text):
   integer = 0
   for character in text:
     if character not in SY2VA:

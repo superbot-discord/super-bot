@@ -32,7 +32,7 @@ def sample_buttons(ctx):
   ui.Button(color='secondary',custom_id="s", label="Secondary (grey)", emoji=ctx.bot.get_emoji(824680026858717234)),
   ui.Button(color='green',    custom_id="g", label="Success (green)"),
   ui.Button(color='red',      custom_id="r", label="Danger (red)"),
-  ui.LinkButton(url="https://example.com",    label="URL (grey)"),
+  ui.LinkButton(url="https://example.com",   label="URL (grey)"),
   ui.Button(color='primary',  disabled=True, label="Primary (blurple)", emoji="🟢", new_line=True),
   ui.Button(color='secondary',disabled=True, label="Secondary (grey)", emoji=ctx.bot.get_emoji(824680026858717234)),
   ui.Button(color='green',    disabled=True, label="Success (green)"),

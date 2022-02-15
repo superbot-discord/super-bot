@@ -1,14 +1,43 @@
-from shared import commands, db, Embed, json, requests, typing
+from _bot import bs
+from functions import round_better
+from shared import commands, db, Embed, json, requests, typing, ui
 
 f = open('./assets/units.json', 'r')
 udb = json.loads(f.read())
 f.close()
 
-exchange_currencies = typing.Literal[tuple(db['currencies'])]
-length_units = typing.Literal[tuple()]
+class ConvertLL(ui.listener.Listener):
+  def __init__(self, embeds):
+    self.embeds = embeds
+
+  @ui.Listener.select(custom_id="convertl")
+  async def convertl(self_, ctx: ui.SelectInteraction):
+    await ctx.respond(embed=self_.embeds[ctx.selected_values[0]], hidden=True)
+
+units_l = {x: y for z in udb['length'].values() for x, y in z.items()}
+unit_l_choices = [{'name': x.title(), 'value': x} for x, y in units_l.items()]
+unit_l_options = [ui.SelectOption(value=x, label=x) for x in udb['length'].keys()]
+unit_select = ui.SelectMenu(placeholder="Scale", custom_id="convertl", options=unit_l_options)
+
+exchange_currencies = typing.Literal[tuple(db['currencies'])] # type: ignore
+length_units = typing.Literal[tuple(udb['lengthI'])] # type: ignore
+
+@bs.command(name="convert_length", description="Converts between length units.", options=[
+           ui.SlashOption(name="Source", description="The numerical part of the source.", type=int,
+           required=True), ui.SlashOption(name= "Unit", description="The unit of the source.",
+           type=str, required=True, choices=unit_l_choices), ui.SlashOption(name="Precision",
+           description="Number of digits after the decimal point, between 0 and 6 inclusive. Defaults to 2.",
+           type=int, required=False, min_value=0, max_value=6)])
+async def convert_(ctx: ui.SlashInteraction, source, unit, precision=2):
+  in_m = source * units_l[unit]
+  embeds = {x: Embed(title=f"{source} {unit} is equal to:", description=
+            "\n".join([f"{round_better(in_m/z, precision)} {w}" for w, z in y.items()]))
+            for x, y in udb['length'].items()}
+  await ctx.respond("Select a scale to convert:", components=[unit_select], listener=
+                    ConvertLL(embeds))
 
 @commands.command()
-async def convert(ctx, num: typing.Optional[int] = 1, unit : str = "m"):
+async def convert(ctx, num: typing.Optional[int] = 1, unit: str = "m"):
   unit = unit.rstrip("es").rstrip("s").replace(" ", "")
   unit = unit.lower() if ("M" not in unit and "G" not in unit and "N" not in unit) else unit
   unit_ = None
@@ -25,10 +54,10 @@ async def convert(ctx, num: typing.Optional[int] = 1, unit : str = "m"):
   for x, y in units.items():
     desc += f"**{x.title()}** {unit_/y}\n"
   embed = Embed(title=f"{num} {unit} is equal to…", description=desc)
-  await ctx.reply(embed= embed)
+  await ctx.reply(embed=embed)
 
 @commands.command()
-async def exchange(ctx, currency:exchange_currencies="USD", amount:int=1, *, disposed= None):
+async def exchange(ctx, currency: exchange_currencies = "USD", amount: int = 1, *, disposed=None):
   r=requests.get(f"https://api.exchangerate.host/latest?base={currency}&amount={amount}").json()['rates']
   desc = ""
   for x, y in r.items():
