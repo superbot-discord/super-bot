@@ -1,6 +1,5 @@
 from decimal import Decimal, getcontext
 from _bot import bs
-from functions import round_better
 from shared import commands, db, Embed, json, requests, typing, ui
 
 f = open('./assets/units.json', 'r')
@@ -20,6 +19,16 @@ unit_l_choices = [{'name': x.title(), 'value': x} for x, y in units_l.items()]
 unit_l_options = [ui.SelectOption(value=x, label=x) for x in udb['length'].keys()]
 unit_select = ui.SelectMenu(placeholder="Scale", custom_id="convertl", options=unit_l_options)
 
+def round_better(num, digits: int = 0):
+  if isinstance(num, float):
+    if num.is_integer():
+      return int(num)
+  elif isinstance(num, Decimal):
+    if num == round(num):
+      return num
+  return round(num, digits)
+
+
 exchange_currencies = typing.Literal[tuple(db['currencies'])] # type: ignore
 length_units = typing.Literal[tuple(udb['lengthI'])] # type: ignore
 
@@ -33,7 +42,7 @@ async def convert_(ctx: ui.SlashInteraction, source, unit, precision=2):
   in_m = Decimal(source) * Decimal(units_l[unit])
   getcontext().prec = precision
   embeds = {x: Embed(title=f"{source} {unit} is equal to:", description=
-            "\n".join([f"{round_better(in_m/Decimal(z), precision)} {w}" for w, z in y.items()]))
+            "\n".join([f"{in_m/Decimal(z)} {w}" for w, z in y.items()]))
             for x, y in udb['length'].items()}
   await ctx.respond("Select a scale to convert:", components=[unit_select], listener=
                     ConvertLL(embeds))

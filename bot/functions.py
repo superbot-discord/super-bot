@@ -1,4 +1,4 @@
-from decimal import Decimal
+from decimal import *
 import regex
 from shared import re, SequenceMatcher, typing
 
@@ -83,13 +83,3 @@ def trim(text: str, width: int):
   ```
   """
   return text if len(text) <= width else text[:width - 1] + "…"
-
-
-def round_better(num: float, digits: int = 0):
-  if isinstance(num, float):
-    if num.is_integer():
-      return int(num)
-  elif isinstance(num, Decimal):
-    if num == round(num):
-      return num
-  return round(num, digits)
