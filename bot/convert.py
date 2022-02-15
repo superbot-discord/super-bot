@@ -1,7 +1,9 @@
+from decimal import Decimal, getcontext
 from _bot import bs
 from functions import round_better
 from shared import commands, db, Embed, json, requests, typing, ui
 
+getcontext().prec = 15
 f = open('./assets/units.json', 'r')
 udb = json.loads(f.read())
 f.close()
@@ -26,12 +28,12 @@ length_units = typing.Literal[tuple(udb['lengthI'])] # type: ignore
            ui.SlashOption(name="Source", description="The numerical part of the source.", type=int,
            required=True), ui.SlashOption(name= "Unit", description="The unit of the source.",
            type=str, required=True, choices=unit_l_choices), ui.SlashOption(name="Precision",
-           description="Number of digits after the decimal point, between 0 and 6 inclusive. Defaults to 2.",
-           type=int, required=False, min_value=0, max_value=6)])
+           description="Number of digits after the decimal point, between 0 and 8 inclusive. Defaults to 2.",
+           type=int, required=False, min_value=0, max_value=8)])
 async def convert_(ctx: ui.SlashInteraction, source, unit, precision=2):
-  in_m = source * units_l[unit]
+  in_m = Decimal(source) * Decimal(units_l[unit])
   embeds = {x: Embed(title=f"{source} {unit} is equal to:", description=
-            "\n".join([f"{round_better(in_m/z, precision)} {w}" for w, z in y.items()]))
+            "\n".join([f"{round_better(in_m/Decimal(z), precision)} {w}" for w, z in y.items()]))
             for x, y in udb['length'].items()}
   await ctx.respond("Select a scale to convert:", components=[unit_select], listener=
                     ConvertLL(embeds))

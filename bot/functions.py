@@ -1,6 +1,6 @@
-from numpy import floor
+from decimal import Decimal
 import regex
-from shared import math, re, SequenceMatcher, typing
+from shared import re, SequenceMatcher, typing
 
 
 def enum_mentionables(mentionables, max_length: int, no_text: str, delimiter1: str = " ", delimiter2: str = ", "):
@@ -86,7 +86,10 @@ def trim(text: str, width: int):
 
 
 def round_better(num: float, digits: int = 0):
-  if num.is_integer():
-    return int(num)
-  else:
-    return round(num, digits)
+  if isinstance(num, float):
+    if num.is_integer():
+      return int(num)
+  elif isinstance(num, Decimal):
+    if num == round(num):
+      return num
+  return round(num, digits)
