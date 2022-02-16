@@ -1428,7 +1428,7 @@ async def sticker(ctx, message: discord.Message = None):
 @commands.command(aliases=['sts']) # Migrated
 async def stickers(ctx, *, disposed= None):
   if not ctx.guild.stickers:
-    await ctx.reply("The server does not have any custom emojis.")
+    await ctx.reply("The server does not have any custom stickers.")
     return
   desc = "\n".join([f"{x.emoji} {x.name} (ID: {x.id})\n  {x.description}" for x in ctx.guild.stickers])
   f = open('output.txt', 'w')
@@ -1440,7 +1440,7 @@ async def stickers(ctx, *, disposed= None):
 @bs.command(name= "stickers", description= "Views a list of stickers in the server.")
 async def stickers_(ctx):
   if not ctx.guild.stickers:
-    await ctx.reply("The server does not have any custom emojis.")
+    await ctx.respond("The server does not have any custom stickers.")
     return
   desc = "\n".join([f"{x.emoji} {x.name} (ID: {x.id})\n  {x.description}" for x in ctx.guild.stickers])
   f = open('output.txt', 'w')
