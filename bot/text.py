@@ -18,6 +18,54 @@ id_pattern = re.compile(r'([A-Z]{5})', re.IGNORECASE)
 allid = []
 number_to_emoji = lambda x: many_replace(x, {'1': ":one: ", '2': ":two: ", '3': ":three: ", '4': ":four: ", '5': ":five: ", '6': ":six: ", '7': ":seven: ", '8': ":eight: ", '9': ":nine: ", '0': ":zero: "})
 
+direction_choices = [
+  {'name': "Encrypt", 'value': "encrypt"},
+  {'name': "Decrypt", 'value': "decrypt"}
+]
+
+qrng_choices = [
+  {'name': "Integer 0~255", 'value': "256"},
+  {'name': "Integer 0~65535", 'value': "65536"},
+  {'name': "ASCII Characters", 'value': "ascii"},
+  {'name': "Unicode Characters", 'value': "unicode"}
+]
+
+encode_base_choices = [
+  {'name': "Base 16", 'value': "16"},
+  {'name': "Base 32", 'value': "32"},
+  {'name': "Base 64", 'value': "64"},
+  {'name': "Base 85", 'value': "85"}
+]
+
+@bs.command(name="ascii_caesar", description="Encrypts or decrypts a piece of text with an extended version of Caesar Cipher.",
+           options=[ui.SlashOption(name="Direction", description="Whether you are encrypting or decrypting.",
+           type=str, required=True, choices=direction_choices), ui.SlashOption(name="Distance",
+           description= "The no. of positions to shift, between 1 and 128 inclusive.",
+           type=int, required=True, min_value=1, max_value=128), ui.SlashOption(name="Text",
+           description="The text to encrypt or decrypt.", type= str, required=True)])
+async def ascii_caesar(ctx: ui.SlashInteraction, direction, distance, text):
+  if not text.isascii():
+    await ctx.respond("The string contains non-ASCII characters!")
+    return
+  if direction == "encrypt":
+    await ctx.respond("".join([chr(ord(x) + distance % 128) for x in text]))
+  else:
+    await ctx.respond("".join([chr(ord(x) - distance % 128) for x in text]))
+
+@commands.command() # Migrated
+async def ascii_caesar_decode(ctx, distance: int, *, text):
+  if not text.isascii():
+    await ctx.reply("The string contains non-ASCII characters!")
+    return
+  await ctx.reply("".join([chr(ord(x) - distance % 128) for x in text]))
+
+@commands.command() # Migrated
+async def ascii_caesar_encode(ctx, distance: int, *, text):
+  if not text.isascii():
+    await ctx.reply("The string contains non-ASCII characters!")
+    return
+  await ctx.reply("".join([chr(ord(x) + distance % 128) for x in text]))
+
 @commands.command(aliases=["lower", "upper", "capital", "capitalise", "capitalize", "lowercase", "lower_case", "uppercase", "upper_case"])
 async def case(ctx, *, text):
   f = open("output.txt", "w")
@@ -51,25 +99,30 @@ async def compress(ctx, *, text):
   await ctx.reply(f"Estimated file size: {os.path.getsize('compressed.txt')} bytes\nKey:\n```\n{compress_key[:-1]}\n```", file = discord.File("compressed.txt"))
   try_delete("compressed.txt")
 
-@commands.command()
-async def decode(ctx, code, *, text):
+@bs.command(name="base_n", description="Encodes or decodes a piece of text with base-16, 32, 64 or 85.",
+           options=[ui.SlashOption(name="Direction", description="Whether you are encoding or decoding.",
+           type=str, required=True, choices=direction_choices), ui.SlashOption(name="Method",
+           description= "The encoding method.", type=str, required=True,
+           choices=encode_base_choices), ui.SlashOption(name="Text",
+           description="The text to encode or decode.", type= str, required=True)])
+async def base_n(ctx: ui.SlashInteraction, direction, method, text):
+  coder = eval(f"base64.b{method}{direction[:2]}code(bytes(text, encoding='utf-8'))")
+  await ctx.respond(coder.decode("utf-8"))
+
+@commands.command() # Migrated
+async def decrypt(ctx, code, *, text):
+  if SequenceMatcher(None, code, 'base85').ratio()>0.6:
+    coder = base64.b85decode(bytes(text, encoding='utf-8'))
   if SequenceMatcher(None, code, 'base64').ratio()>0.6:
     coder = base64.b64decode(bytes(text, encoding='utf-8'))
-    await ctx.reply(coder.decode("utf-8"))
   elif SequenceMatcher(None, code, 'base32').ratio()>0.6:
     coder = base64.b32decode(bytes(text, encoding='utf-8'))
-    await ctx.reply(coder.decode("utf-8"))
   elif SequenceMatcher(None, code, 'base16').ratio()>0.6:
     coder = base64.b16decode(bytes(text, encoding='utf-8'))
-    await ctx.reply(coder.decode("utf-8"))
-  elif SequenceMatcher(None, code, 'caesar').ratio()>0.6 or code.startswith("caesar"):
-    encrypted = ""
-    distance = int(code.replace("caesar", "", 1))
-    for x in text:
-      encrypted += chr(ord(x) - distance % 128)
-    await ctx.reply(encrypted)
   else:
-    await ctx.reply("Encoding not found!")
+    await ctx.reply("Decryption method not found!")
+    return
+  await ctx.reply(coder.decode("utf-8"))
 
 @commands.command()
 async def decompress(ctx, *, key):
@@ -150,56 +203,45 @@ async def emoji(ctx, *, text):
   text = ems.encode(text)
   await ctx.reply(text)
 
-@commands.command()
-async def encode(ctx, code, *, text):
-  if SequenceMatcher(None, code, 'sha512').ratio()>0.6:
-    coder = hashlib.sha512()
-    coder.update(bytes(text, encoding='utf-8'))
-    await ctx.reply(coder.hexdigest())
-  elif SequenceMatcher(None, code, 'sha384').ratio()>0.6:
-    coder = hashlib.sha384()
-    coder.update(bytes(text, encoding='utf-8'))
-    await ctx.reply(coder.hexdigest())
-  elif SequenceMatcher(None, code, 'sha256').ratio()>0.6:
-    coder = hashlib.sha256()
-    coder.update(bytes(text, encoding='utf-8'))
-    await ctx.reply(coder.hexdigest())
-  elif SequenceMatcher(None, code, 'sha224').ratio()>0.6:
-    coder = hashlib.sha224()
-    coder.update(bytes(text, encoding='utf-8'))
-    await ctx.reply(coder.hexdigest())
-  elif SequenceMatcher(None, code, 'sha1').ratio()>0.6:
-    coder = hashlib.sha1()
-    coder.update(bytes(text, encoding='utf-8'))
-    await ctx.reply(coder.hexdigest())
-  elif SequenceMatcher(None, code, 'blake2b').ratio()>0.9:
-    coder = hashlib.blake2b()
-    coder.update(bytes(text, encoding='utf-8'))
-    await ctx.reply(coder.hexdigest())
-  elif SequenceMatcher(None, code, 'blakes2s').ratio()>0.9:
-    coder = hashlib.blake2s()
-    coder.update(bytes(text, encoding='utf-8'))
-    await ctx.reply(coder.hexdigest())
+@commands.command() # Migrated
+async def encrypt(ctx, code, *, text):
+  if SequenceMatcher(None, code, 'base85').ratio()>0.8:
+    coder = base64.b85encode(bytes(text, encoding='utf-8'))
   elif SequenceMatcher(None, code, 'base64').ratio()>0.8:
     coder = base64.b64encode(bytes(text, encoding='utf-8'))
-    await ctx.reply(coder.decode("utf-8"))
   elif SequenceMatcher(None, code, 'base32').ratio()>0.8:
     coder = base64.b32encode(bytes(text, encoding='utf-8'))
-    await ctx.reply(coder.decode("utf-8"))
   elif SequenceMatcher(None, code, 'base16').ratio()>0.8:
     coder = base64.b16encode(bytes(text, encoding='utf-8'))
-    await ctx.reply(coder.decode("utf-8"))
-  elif SequenceMatcher(None, code, 'caesar').ratio()>0.6 or code.startswith("caesar"):
-    encrypted = ""
-    distance = int(code.replace("caesar", "", 1))
-    for x in text:
-      encrypted += chr(ord(x) + distance % 128)
-    await ctx.reply(encrypted)
   else:
-    await ctx.reply("Encoding not found!")
-  
+    await ctx.reply("Encryption method not found!")
+    return
+  await ctx.reply(coder.decode("utf-8"))
+
 @commands.command()
-async def insert(ctx,emoji, *, text):
+async def hash(ctx, code, *, text):
+  if SequenceMatcher(None, code, 'sha512').ratio()>0.6:
+    coder = hashlib.sha512()
+  elif SequenceMatcher(None, code, 'sha384').ratio()>0.6:
+    coder = hashlib.sha384()
+  elif SequenceMatcher(None, code, 'sha256').ratio()>0.6:
+    coder = hashlib.sha256()
+  elif SequenceMatcher(None, code, 'sha224').ratio()>0.6:
+    coder = hashlib.sha224()
+  elif SequenceMatcher(None, code, 'sha1').ratio()>0.6:
+    coder = hashlib.sha1()
+  elif SequenceMatcher(None, code, 'blake2b').ratio()>0.9:
+    coder = hashlib.blake2b()
+  elif SequenceMatcher(None, code, 'blakes2s').ratio()>0.9:
+    coder = hashlib.blake2s()
+  else:
+    await ctx.reply("Hash not found! The available hashes are `sha1` `sha224` `sha256` `sha384` `sha512` `blake2b` `blake2s`")
+    return
+  coder.update(bytes(text, encoding='utf-8'))
+  await ctx.reply(coder.hexdigest())
+
+@commands.command()
+async def insert(ctx, emoji, *, text):
   text=text.replace(" "," "+emoji+" ")
   await ctx.reply(text)
 
@@ -248,7 +290,27 @@ async def pick(ctx, lower: int, upper: int, times: int): # MS
   embed = Embed(title= f"{times} random number(s) between {lower} and {upper}", description= desc)
   await ctx.reply(embed= embed)
 
-@commands.command(aliases= ['qrng'])
+@bs.command(name="quantum_random", description="Generates random number(s) or character(s) using quantum fluctuations.",
+           options=[ui.SlashOption(name="Type", description="The type of output to generate.",
+           type=str, required=True, choices=qrng_choices), ui.SlashOption(name="Number",
+           description="The no. of numbers/characters to generate, between 1 and 1024 inclusive. Defaults to 1.",
+           type=int, required=False, min_value=1, max_value=1024)])
+async def quantum_random_(ctx, type, number: int = 1):
+  api_size = {'256': 8, '65536': 16, 'ascii': 8, 'unicode': 16}[type]
+  r = requests.get(f"https://qrng.anu.edu.au/API/jsonI.php?length={number}&type=uint{api_size}").json()['data']
+  if not type.isdigit():
+    r = [chr(x) for x in r]
+    await ctx.respond(f"Your quantum random {type.upper()} string is ```{''.join(r)}.```")
+    return
+  range_text = f" quantum random number{'' if number == 1 else 's'} between 0 and {int(type) - 1}"
+  r = [str(x) for x in r]
+  if number == 1:
+    await ctx.respond(f"Your{range_text} is **{r[0]}**.")
+    return
+  embed = Embed(title=f"{number}{range_text}", description=", ".join(r))
+  await ctx.respond(embed=embed)
+
+@commands.command(aliases= ['qrng']) # Migrated
 async def quantum_random(ctx, size: typing.Literal['256', '65536', 'alpha', 'ascii', 'unicode', 'ASCII', 'UNICODE'] = '256', times: int = 1):
   if times >= 1024:
     await ctx.reply(f"There are too many numbers/characters to generate! I can only generate 1024 numbers/characters at a time.")
@@ -494,7 +556,7 @@ async def spoiler(ctx, *, text):
   text="||||".join(text)
   await ctx.reply(f"||{text}||")
 
-@commands.command(aliases=['antispoiler', 'antispoilers', 'aspoiler', 'aspoilers', 'spoils'])
+@commands.command(aliases=['antispoiler', 'antispoilers', 'aspoiler', 'aspoilers', 'spoils']) # Migrated
 async def spoil(ctx, msg: discord.Message = None, *, text= "Reply to a message, add a message ID/link or add some text to remove the spoilers!"):
   potential_reference = ctx.message.reference
   if potential_reference and not msg:
@@ -648,13 +710,16 @@ async def unix(ctx, *, text= "now"):
   await ctx.reply(f"`<t:{s}>`      | <t:{s}>\n`<t:{s}:F>` | <t:{s}:F>\n`<t:{s}:f>` | <t:{s}:f>\n`<t:{s}:D>` | <t:{s}:D>\n`<t:{s}:d>` | <t:{s}:d>\n`<t:{s}:T>` | <t:{s}:T>\n`<t:{s}:t>` | <t:{s}:t>\n`<t:{s}:R>` | <t:{s}:R>")
 
 def setup(bot):
+  bot.add_command(ascii_caesar_decode)
+  bot.add_command(ascii_caesar_encode)
   bot.add_command(case)
   bot.add_command(choice)
   bot.add_command(compress)
-  bot.add_command(decode)
+  bot.add_command(decrypt)
   bot.add_command(decompress)
   bot.add_command(emoji)
-  bot.add_command(encode)
+  bot.add_command(encrypt)
+  bot.add_command(hash)
   bot.add_command(insert)
   bot.add_command(length)
   bot.add_command(pick)

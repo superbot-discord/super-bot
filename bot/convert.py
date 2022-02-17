@@ -36,7 +36,7 @@ length_units = typing.Literal[tuple(udb['lengthI'])] # type: ignore
            ui.SlashOption(name="Source", description="The numerical part of the source.", type=int,
            required=True), ui.SlashOption(name= "Unit", description="The unit of the source.",
            type=str, required=True, choices=unit_l_choices), ui.SlashOption(name="Precision",
-           description="Number of significant places, between 1 and 25 inclusive. Defaults to 8.",
+           description="Number of significant digits, between 1 and 25 inclusive. Defaults to 8.",
            type=int, required=False, min_value=1, max_value=25)])
 async def convert_(ctx: ui.SlashInteraction, source, unit, precision=8):
   in_m = Decimal(source) * Decimal(units_l[unit])
