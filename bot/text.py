@@ -239,7 +239,7 @@ async def hash_(ctx, algorithm, *, text, length = 64):
   coder.update(bytes(text, encoding='utf-8'))
   if algorithm.startswith("shake_"):
     await ctx.reply(coder.hexdigest(length))
-  await ctx.reply(coder.hexdigest())
+  await ctx.respond(coder.hexdigest())
 
 @commands.command() # Migrated
 async def hash(ctx, code, *, text):
@@ -265,7 +265,7 @@ async def hash(ctx, code, *, text):
 
 @commands.command()
 async def insert(ctx, emoji, *, text):
-  text=text.replace(" "," "+emoji+" ")
+  text = text.replace(" ", " " + emoji + " ")
   await ctx.reply(text)
 
 @bs.command(name= "length", description= "Analyses the frequency of characters and counts the length of a piece of text.",
@@ -323,7 +323,7 @@ async def quantum_random_(ctx, type, number: int = 1):
   r = requests.get(f"https://qrng.anu.edu.au/API/jsonI.php?length={number}&type=uint{api_size}").json()['data']
   if not type.isdigit():
     r = [chr(x) for x in r]
-    await ctx.respond(f"Your quantum random {type.upper()} string is ```{''.join(r)}.```")
+    await ctx.respond(f"Your quantum random {type.title()} string is:```{''.join(r)}```")
     return
   range_text = f" quantum random number{'' if number == 1 else 's'} between 0 and {int(type) - 1}"
   r = [str(x) for x in r]
@@ -358,11 +358,66 @@ async def quantum_random(ctx, size: typing.Literal['256', '65536', 'alpha', 'asc
 #    One value            Cannot repeat   Unformatted   Integral choice(s)
 # =random{_{m{r}}{s}{t}}
 
-@commands.command(aliases= ['rng'])
+@bs.command(name="random_numbers", description="Generates (pseudo-)random number(s).", options=[
+           ui.SlashOption(name="Minimum", description="The inclusive lower bound of the number(s).",
+           type=int, required=True), ui.SlashOption(name="Maximum",
+           description="The inclusive upper bound of the number(s).", type=int, required=True),
+           ui.SlashOption(name="Number",
+           description="The no. of numbers to generate, between 1 and 100 inclusive. Defaults to 1.",
+           type=int, required=True, min_value=1, max_value=100), ui.SlashOption(name="Repetition",
+           description="Whether numbers can appear more than once. Applicable when number is larger than 1 only. Defaults to yes.",
+           type=bool, required=False), ui.SlashOption(name="Spoilers",
+           description="Whether numbers should be enclosed in spoilers. Defaults to no.", type=bool,
+           required=False)])
+async def random_n(ctx, minimum, maximum, number=1, repetition=True, spoilers=False):
+  if minimum > maximum:
+    minimum, maximum = maximum, minimum
+  sp_str = "||" if spoilers else ""
+  if number == 1:
+    await ctx.respond(f"Your random number is {sp_str}**{ra.randint(minimum, maximum)}**{sp_str}")
+    return
+  if repetition or (maximum - minimum + 1) < number:
+    rand = [ra.randint(minimum, maximum) for x in range(number)]
+  else:
+    rand = list(range(minimum, maximum + 1))
+    ra.shuffle(rand)
+  desc = sp_str + f"{sp_str}, {sp_str}".join(rand) + sp_str
+  embed = Embed(title=f"{number} random numbers {minimum} ~ {maximum}", description=desc)
+  if not repetition and (maximum - minimum + 1) < number:
+    embed.set_footer(text= "Repetition has been turned on since there are not enough choices.")
+  await ctx.respond(embed=embed)
+
+@bs.command(name="random_text", description="Generates (pseudo-)random choices from a list of options.",
+           options=[ui.SlashOption(name="Choices", description="Comma-space separated list of options.",
+           type=str, required=True), ui.SlashOption(name="Number",
+           description="The no. of choices to generate, between 1 and 100 inclusive. Defaults to 1.",
+           type=int, required=True, min_value=1, max_value=100), ui.SlashOption(name="Repetition",
+           description="Whether choices can appear more than once. Applicable when number is larger than 1 only. Defaults to yes.",
+           type=bool, required=False), ui.SlashOption(name="Spoilers",
+           description="Whether choices should be enclosed in spoilers. Defaults to no.", type=bool,
+           required=False)])
+async def random_t(ctx, choices, number=1, repetition=True, spoilers=False):
+  choices = ", ".split(choices)
+  sp_str = "||" if spoilers else ""
+  if number == 1:
+    await ctx.respond(f"Your random choice is {sp_str}**{ra.choice(choices)}**{sp_str}")
+    return
+  if repetition or len(choices) < number:
+    rand = ra.choices(choices, k=number)
+  else:
+    rand = choices
+    ra.shuffle(rand)
+  desc = sp_str + f"{sp_str}, {sp_str}".join(rand) + sp_str
+  embed = Embed(title=f"{number} random choices", description=desc)
+  if not repetition and len(choices) < number:
+    embed.set_footer(text= "Repetition has been turned on since there are not enough choices.")
+  await ctx.respond(embed=embed)
+
+@commands.command(aliases= ['rng']) # Migrated
 async def random(ctx, lower: int, upper: int):
   await ctx.reply(f"Your random number is **{ra.randint(lower,upper)}**")
 
-@commands.command()
+@commands.command() # Migrated
 async def random_m(ctx, times: int, lower: int, upper: int):
   if lower > upper:
     lower, upper = upper, lower
@@ -377,17 +432,15 @@ async def random_m(ctx, times: int, lower: int, upper: int):
   embed = Embed(title= f"{times} random number(s) between {lower} and {upper}", description= desc)
   await ctx.reply(embed= embed)
 
-@commands.command()
+@commands.command() # Migrated
 async def random_mr(ctx, times: int, lower: int, upper: int):
-  desc = ""
   if lower > upper:
     lower, upper = upper, lower
-  for x in range(times):
-    desc += f"{ra.randint(lower,upper)}, "
-  embed = Embed(title= f"{times} random number(s) between {lower} and {upper}", description= desc)
+  desc = ", ".join(ra.randint(lower,upper) for x in range(times))
+  embed = Embed(title= f"{times} random numbers between {lower} and {upper}", description= desc)
   await ctx.reply(embed= embed)
 
-@commands.command()
+@commands.command() # Migrated
 async def random_mrs(ctx, times: int, lower: int, upper: int):
   desc = ""
   if lower > upper:
@@ -398,7 +451,7 @@ async def random_mrs(ctx, times: int, lower: int, upper: int):
   embed = Embed(title=f"{times} random number(s) between {lower} and {upper}", description= desc)
   await ctx.reply(embed= embed)
 
-@commands.command()
+@commands.command() # Migrated
 async def random_mrst(ctx, times: int, *options):
   options = list(options) if isinstance(options, tuple) else [options]
   upper_length = max([len(x) for x in options])
@@ -408,7 +461,7 @@ async def random_mrst(ctx, times: int, *options):
   embed = Embed(title= f"{times} random choice(s)", description= desc)
   await ctx.reply(embed= embed)
 
-@commands.command()
+@commands.command() # Migrated
 async def random_mrt(ctx, times: int, *options):
   options = list(options) if isinstance(options, tuple) else [options]
   desc = ""
@@ -417,7 +470,7 @@ async def random_mrt(ctx, times: int, *options):
   embed = Embed(title= f"{times} random choice(s)", description= desc)
   await ctx.reply(embed= embed)
 
-@commands.command()
+@commands.command() # Migrated
 async def random_ms(ctx, times: int, lower: int, upper: int):
   desc = ""
   if lower > upper:
@@ -434,7 +487,7 @@ async def random_ms(ctx, times: int, lower: int, upper: int):
   embed = Embed(title=f"{times} random number(s) between {lower} and {upper}", description= desc)
   await ctx.reply(embed= embed)
 
-@commands.command()
+@commands.command() # Migrated
 async def random_mst(ctx, times: int, *options):
   options = list(options) if isinstance(options, tuple) else [options]
   upper_length = max([len(x) for x in options])
@@ -449,7 +502,7 @@ async def random_mst(ctx, times: int, *options):
   embed = Embed(title= f"{times} random choice(s)", description= desc)
   await ctx.reply(embed= embed)
 
-@commands.command()
+@commands.command() # Migrated
 async def random_mt(ctx, times: int, *options):
   options = list(options) if isinstance(options, tuple) else [options]
   if times <= (len(options)):
@@ -462,18 +515,18 @@ async def random_mt(ctx, times: int, *options):
   embed = Embed(title= f"{times} random choice(s)", description= desc)
   await ctx.reply(embed= embed)
 
-@commands.command()
+@commands.command() # Migrated
 async def random_s(ctx, lower: int, upper: int):
   if lower > upper:
     lower, upper = upper, lower
   await ctx.reply(f"Your random number is ||`{xfill(ra.randint(lower,upper), len(str(upper)))}`||.")
 
-@commands.command()
+@commands.command() # Migrated
 async def random_st(ctx, *options):
   options = list(options) if isinstance(options, tuple) else [options]
   await ctx.reply(f"Your random choice is ||`{xfill(ra.choice(options), max([len(x) for x in options]))}`||.")
 
-@commands.command()
+@commands.command() # Migrated
 async def random_t(ctx, *options):
   await ctx.reply(f"Your random choice is {ra.choice(options)}")
 

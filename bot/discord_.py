@@ -358,6 +358,8 @@ async def snipe_clear(ctx: ui.SlashInteraction, channel: discord.TextChannel = N
 async def snipe_log(message: discord.Message):
   val = message.content
   val = val if val else "*No message content*"
+  if message.attachments:
+    val += f"\n".join([x.url for x in message.attachments])
   footer = f"By {message.author.name}#{message.author.discriminator} at {time_display(message.created_at)} UTC"
   footer+= f" • The message includes {len(message.embeds)} embeds"
   if not sniper.get(message.channel):
@@ -365,7 +367,7 @@ async def snipe_log(message: discord.Message):
   sniper[message.channel].insert(0, [val, footer])
   sniper[message.channel] = sniper[message.channel][:15]
 
-def setup(bot: commands.Bot):
+def setup(bot):
   bot.add_command(editembed)
   bot.add_command(embed)
   bot.add_command(ett)
