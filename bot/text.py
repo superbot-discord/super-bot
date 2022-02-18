@@ -365,7 +365,7 @@ async def quantum_random(ctx, size: typing.Literal['256', '65536', 'alpha', 'asc
            ui.SlashOption(name="Number",
            description="The no. of numbers to generate, between 1 and 100 inclusive. Defaults to 1.",
            type=int, required=True, min_value=1, max_value=100), ui.SlashOption(name="Repetition",
-           description="Whether numbers can appear more than once. Applicable when number is larger than 1 only. Defaults to yes.",
+           description="Whether numbers can appear more than once. Applicable when number > 1 only. Defaults to yes.",
            type=bool, required=False), ui.SlashOption(name="Spoilers",
            description="Whether numbers should be enclosed in spoilers. Defaults to no.", type=bool,
            required=False)])
@@ -392,7 +392,7 @@ async def random_n(ctx, minimum, maximum, number=1, repetition=True, spoilers=Fa
            type=str, required=True), ui.SlashOption(name="Number",
            description="The no. of choices to generate, between 1 and 100 inclusive. Defaults to 1.",
            type=int, required=True, min_value=1, max_value=100), ui.SlashOption(name="Repetition",
-           description="Whether choices can appear more than once. Applicable when number is larger than 1 only. Defaults to yes.",
+           description="Whether choices can appear more than once. Applicable when number > 1 only. Defaults to yes.",
            type=bool, required=False), ui.SlashOption(name="Spoilers",
            description="Whether choices should be enclosed in spoilers. Defaults to no.", type=bool,
            required=False)])
