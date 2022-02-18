@@ -37,6 +37,22 @@ encode_base_choices = [
   {'name': "Base 85", 'value': "85"}
 ]
 
+hash_choices = [
+  {'name': "Blake 2B", 'value': "blake2b"},
+  {'name': "Blake 2S", 'value': "blake2s"},
+  {'name': "Sha 1", 'value': "sha1"},
+  {'name': "Sha 224", 'value': "sha224"},
+  {'name': "Sha 256", 'value': "sha256"},
+  {'name': "Sha 384", 'value': "sha384"},
+  {'name': "Sha 512", 'value': "sha512"},
+  {'name': "Sha3 224", 'value': "sha3_224"},
+  {'name': "Sha3 256", 'value': "sha3_256"},
+  {'name': "Sha3 384", 'value': "sha3_384"},
+  {'name': "Sha3 512", 'value': "sha3_512"},
+  {'name': "Shake 128", 'value': "shake_128"},
+  {'name': "Shake 256", 'value': "shake_256"}
+]
+
 @bs.command(name="ascii_caesar", description="Encrypts or decrypts a piece of text with an extended version of Caesar Cipher.",
            options=[ui.SlashOption(name="Direction", description="Whether you are encrypting or decrypting.",
            type=str, required=True, choices=direction_choices), ui.SlashOption(name="Distance",
@@ -44,19 +60,13 @@ encode_base_choices = [
            type=int, required=True, min_value=1, max_value=128), ui.SlashOption(name="Text",
            description="The text to encrypt or decrypt.", type= str, required=True)])
 async def ascii_caesar(ctx: ui.SlashInteraction, direction, distance, text):
-  if not text.isascii():
-    await ctx.respond("The string contains non-ASCII characters!")
-    return
   if direction == "encrypt":
-    await ctx.respond("".join([chr(ord(x) + distance % 128) for x in text]))
+    await ctx.respond("".join([chr((ord(x) + distance) % 128) for x in text]))
   else:
-    await ctx.respond("".join([chr(ord(x) - distance % 128) for x in text]))
+    await ctx.respond("".join([chr((ord(x) + 128 - distance) % 128) for x in text]))
 
 @commands.command() # Migrated
 async def ascii_caesar_decode(ctx, distance: int, *, text):
-  if not text.isascii():
-    await ctx.reply("The string contains non-ASCII characters!")
-    return
   await ctx.reply("".join([chr(ord(x) - distance % 128) for x in text]))
 
 @commands.command() # Migrated
@@ -101,12 +111,12 @@ async def compress(ctx, *, text):
 
 @bs.command(name="base_n", description="Encodes or decodes a piece of text with base-16, 32, 64 or 85.",
            options=[ui.SlashOption(name="Direction", description="Whether you are encoding or decoding.",
-           type=str, required=True, choices=direction_choices), ui.SlashOption(name="Method",
-           description= "The encoding method.", type=str, required=True,
+           type=str, required=True, choices=direction_choices), ui.SlashOption(name="Algorithm",
+           description= "The encoding algorithm.", type=str, required=True,
            choices=encode_base_choices), ui.SlashOption(name="Text",
            description="The text to encode or decode.", type= str, required=True)])
-async def base_n(ctx: ui.SlashInteraction, direction, method, text):
-  coder = eval(f"base64.b{method}{direction[:2]}code(bytes(text, encoding='utf-8'))")
+async def base_n(ctx: ui.SlashInteraction, direction, algorithm, text):
+  coder = eval(f"base64.b{algorithm}{direction[:2]}code(bytes(text, encoding='utf-8'))")
   await ctx.respond(coder.decode("utf-8"))
 
 @commands.command() # Migrated
@@ -218,7 +228,20 @@ async def encrypt(ctx, code, *, text):
     return
   await ctx.reply(coder.decode("utf-8"))
 
-@commands.command()
+@bs.command(name="hash", description="Hashes (one-way encrypts) a piece of text.", options=
+           [ui.SlashOption(name="Algorithm", description= "The hashing algorithm.", type=str,
+           required=True, choices= hash_choices), ui.SlashOption(name="Text",
+           description="The text to hash.", type= str, required=True), ui.SlashOption(name="Length",
+           description="The length of the digest (output). Only applicable for Shake-n algorithms. Defaults to 64.",
+           type= int, required=False)])
+async def hash_(ctx, algorithm, *, text, length = 64):
+  coder = eval(f"hashlib.{algorithm}()")
+  coder.update(bytes(text, encoding='utf-8'))
+  if algorithm.startswith("shake_"):
+    await ctx.reply(coder.hexdigest(length))
+  await ctx.reply(coder.hexdigest())
+
+@commands.command() # Migrated
 async def hash(ctx, code, *, text):
   if SequenceMatcher(None, code, 'sha512').ratio()>0.6:
     coder = hashlib.sha512()
