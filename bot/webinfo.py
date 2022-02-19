@@ -111,7 +111,7 @@ async def google_search(ctx: ui.SlashInteraction, query):
     else:
       x_ = ""
       alt_t = ""
-    desc += f"[{html_to_md(x['htmlTitle'])}]({x['link']}){x_}\n{alt_t}"f"{x['htmlSnippet']}\n"
+    desc += f"[{html_to_md(x['htmlTitle'])}]({x['link']}){x_}\n{alt_t}"f"{html_to_md(x['htmlSnippet'])}\n"
   embed = Embed(title=f"Google search results for {query}", description=desc)
   await ctx.respond(embed=embed)
 
