@@ -1,10 +1,13 @@
+from _bot import bs
 import feedparser
 import pytube
 from PyDictionary import PyDictionary
 from pygoogletranslation import Translator
+from bot.shared import try_delete
 
 from functions import *
-from shared import *
+from shared import (BeautifulSoup, commands, db, discord, Embed, format_length, format_video,
+                    requests, sizer, try_delete, ui, unix_timestamp)
 
 dictionary    = PyDictionary()
 translatorvar = Translator()
@@ -95,14 +98,35 @@ async def gender(ctx, *, name):
   else:
     await ctx.reply("No gender was found for the name.")
 
-@commands.command()
+@bs.command(name="google_search", description="Searches for a keyword on Google.",
+           options=[ui.SlashOption(name="Query", description="The query to search for.",
+           type=str, required=True)])
+async def google_search(ctx: ui.SlashInteraction, query):
+  r=requests.get(f"https://customsearch.googleapis.com/customsearch/v1?q={query}&key=AIzaSyD1MZMlUhPVKfBwpuzpB8DRxK_rGRf900c&cx=6231cd28c1acb6c83").json()['items']
+  desc = ""
+  for x in r:
+    if x.get('pagemap', {'document': None}).get('document', None):
+      x_ = " (Family unsafe)" if x['pagemap']['document'][0]['family_unsafe'] else ""
+      alt_t = f"Alternative title: {x['pagemap']['metatags'][0]['og:title']}\n" if x['pagemap']['metatags'][0].get('og:title', None) else ""
+    else:
+      x_ = ""
+      alt_t = ""
+    desc += f"[{html_to_md(x['htmlTitle'])}]({x['link']}){x_}\n{alt_t}"f"{x['htmlSnippet']}\n"
+  embed = Embed(title=f"Google search results for {query}", description=desc)
+  await ctx.respond(embed=embed)
+
+@commands.command() # Migrated
 async def google(ctx, *, query):
   r=requests.get(f"https://customsearch.googleapis.com/customsearch/v1?q={query}&key=AIzaSyD1MZMlUhPVKfBwpuzpB8DRxK_rGRf900c&cx=6231cd28c1acb6c83").json()['items']
   desc = ""
   for x in r:
-    if x['pagemap'].get('document', None):
-      x_ = ' (Family unsafe)' if x['pagemap']['document'][0]['family_unsafe'] else ''
-    desc += f"[{html_to_md(x['htmlTitle'])}]({x['link']}){x_ if x['pagemap'].get('document', None) else ''}\n"+(f"Alternative title: {x['pagemap']['metatags'][0]['og:title']}\n" if x['pagemap']['metatags'][0].get('og:title', None) else '')+f"{html_to_md(x['htmlSnippet'])}\n"
+    if x.get('pagemap', {'document': None}).get('document', None):
+      x_ = " (Family unsafe)" if x['pagemap']['document'][0]['family_unsafe'] else ""
+      alt_t = f"Alternative title: {x['pagemap']['metatags'][0]['og:title']}\n" if x['pagemap']['metatags'][0].get('og:title', None) else ""
+    else:
+      x_ = ""
+      alt_t = ""
+    desc += f"[{html_to_md(x['htmlTitle'])}]({x['link']}){x_}\n{alt_t}"f"{x['htmlSnippet']}\n"
   embed = Embed(title=f"Google search results for {query}", description=desc)
   await ctx.reply(embed= embed)
 
@@ -351,7 +375,8 @@ async def youtube(ctx, *, link):
     embed = Embed(title="Search results", description=desc)
     embed.set_footer(text="Use =youtube [Link] to download videos.")
     await ctx.reply(embed= embed)
-  elif link.startswith("channel "):
+    return
+  if link.startswith("channel "):
     chnl = pytube.Channel(link)
     videos = chnl.videos
     desc = f"**Videos ({len(chnl.videos):,})**:\n"
@@ -375,67 +400,67 @@ async def youtube(ctx, *, link):
     embed.add_field(name="Average rating", value=f"{str(round(totalrating/len(videos)*20, 3))}%", inline= True)
     embed.set_footer(text="Use =youtube [Link] to download videos.")
     await yt_msg.edit(embed=embed)
-  else:
+    return
+  try:
+    playlist = pytube.Playlist(link)
+    text = ""
+    for x in playlist.videos:
+      text=f"{text}{x}  {x.streams.filter(mime_type='video/mp4').filter(progressive='True').filter(type='video').order_by('resolution').first().url}\n"
+    f = open("output.txt", "w")
+    f.write(text)
+    f.close()
+    await ctx.reply(file=discord.File("output.txt"))
+    try_delete('output.txt')
+  except:
     try:
-      playlist = pytube.Playlist(link)
-      text = ""
-      for x in playlist.videos:
-        text=f"{text}{x}  {x.streams.filter(mime_type='video/mp4').filter(progressive='True').filter(type='video').order_by('resolution').first().url}\n"
-      f = open("output.txt", "w")
-      f.write(text)
-      f.close()
-      await ctx.reply(file=discord.File("output.txt"))
-      try_delete('output.txt')
+      youtube = pytube.YouTube(link, allow_oauth_cache=False)
     except:
-      try:
-        youtube = pytube.YouTube(link, allow_oauth_cache=False)
-      except:
-        youtube = pytube.Search(link).results[0]
-      yt_streams = youtube.streams
-      filtered1 = yt_streams.filter(progressive=True,file_extension='mp4').order_by("resolution")
-      video1 = filtered1[len(filtered1)-1]
-      additional_desc = " Warning: Do not use a small data plan for videos this large!" if video1.filesize >= 52428800 else ""
-      desc = f"This video has a size of around {sizer(video1.filesize)}.{additional_desc}"
-      embed = Embed(title="Download (Click here)", url=video1.url, description=f"{desc}\nNote: This message will be edited with more information.")
-      allvideos = yt_streams.filter(type="video")
-      allaudios = yt_streams.filter(only_audio=True)
-      filtered2 = allvideos.order_by("resolution")
-      filtered2b = filtered2.filter(progressive=True)
-      video2 = filtered2[len(filtered2)-1]
-      filtered3 = allaudios.order_by("abr")
-      video3 = filtered3[len(filtered3)-1]
-      video4 = filtered2b[int(len(filtered2b)/2)]
-      video4b = filtered2[int(len(filtered2)/2)]
-      video5 = filtered3[len(filtered3)-1]
-      filtered6 = allvideos.order_by("filesize")
-      video7 = filtered6[0]
-      filtered7 = allaudios.order_by("filesize")
-      video8 = filtered7[0]
-      filtered8 = filtered2b.order_by("filesize")
-      video6 = filtered8[0]
+      youtube = pytube.Search(link).results[0]
+    yt_streams = youtube.streams
+    filtered1 = yt_streams.filter(progressive=True,file_extension='mp4').order_by("resolution")
+    video1 = filtered1[len(filtered1)-1]
+    additional_desc = " Warning: This video may be too much for a small data plan." if video1.filesize >= 52428800 else ""
+    desc = f"This video has a size of around {sizer(video1.filesize)}.{additional_desc}"
+    embed = Embed(title="Download (Click here)", url=video1.url, description=f"{desc}\nThis message will be edited with more information.")
+    allvideos = yt_streams.filter(type="video")
+    allaudios = yt_streams.filter(only_audio=True)
+    filtered2 = allvideos.order_by("resolution")
+    filtered2b = filtered2.filter(progressive=True)
+    video2 = filtered2[len(filtered2)-1]
+    filtered3 = allaudios.order_by("abr")
+    video3 = filtered3[len(filtered3)-1]
+    video4 = filtered2b[int(len(filtered2b)/2)]
+    video4b = filtered2[int(len(filtered2)/2)]
+    video5 = filtered3[len(filtered3)-1]
+    filtered6 = allvideos.order_by("filesize")
+    video7 = filtered6[0]
+    filtered7 = allaudios.order_by("filesize")
+    video8 = filtered7[0]
+    filtered8 = filtered2b.order_by("filesize")
+    video6 = filtered8[0]
 
-      videox1 = None
-      for x in filtered8.__reversed__():
-        if x.filesize < 8000000:
-          videox1 = x
-          break
-      
-      videox2 = None
-      for x in filtered7.__reversed__():
-        if x.filesize < 8000000:
-          videox2 = x
-          break
-      
-      videox3 = None
-      for x in filtered6.__reversed__():
-        if x.filesize < 8000000:
-          videox3 = x
-          break
-      videox1_text = format_video(videox1) if videox1 else "There is no progressive video less than 8MB."
-      videox2_text = format_video(videox2) if videox2 else "There is no audio less than 8MB."
-      videox3_text = format_video(videox3) if videox3 else "There is no video less than 8MB."
+    videox1 = None
+    for x in filtered8.__reversed__():
+      if x.filesize < 8000000:
+        videox1 = x
+        break
+    
+    videox2 = None
+    for x in filtered7.__reversed__():
+      if x.filesize < 8000000:
+        videox2 = x
+        break
+    
+    videox3 = None
+    for x in filtered6.__reversed__():
+      if x.filesize < 8000000:
+        videox3 = x
+        break
+    videox1_text = format_video(videox1) if videox1 else "There is no progressive video less than 8MB."
+    videox2_text = format_video(videox2) if videox2 else "There is no audio less than 8MB."
+    videox3_text = format_video(videox3) if videox3 else "There is no video less than 8MB."
 
-      extra_downloads=f'''Note: the embed title's URL links to 'Vi+Au - Best quality'.\n
+    extra_downloads=f'''Note: the embed title's URL links to 'Vi+Au - Best quality'.\n
 Type and quality\t\tBitrate\t\tRes.\tFPS\tSize\t\tLink\n
 Vi+Au - Best quality\t\t{format_video(video1)}
 Video - Best quality\t\t{format_video(video2)}
@@ -449,31 +474,31 @@ Audio - Less than 8MB\t\t{videox2_text}
 Vi+Au - Minimum size\t\t{format_video(video6)}
 Video - Minimum size\t\t{format_video(video7)}
 Audio - Minimum size\t\t{format_video(video8)}'''
-      f = open('extra_downloads.txt', "w")
-      f.write(extra_downloads)
-      f.close()
-      ytmsg = await ctx.reply(embed= embed, file=discord.File('extra_downloads.txt'))
-      try_delete('extra_downloads.txt')
-      embed = Embed(title="Download (Click here)", url=video1.url, description=desc)
-      embed.add_field(name="Title", value=youtube.title, inline= False)
-      if len(youtube.description[:1023].replace(" ", "")) == 0:
-        embed.add_field(name="Description", value="No description provided", inline= False)
-      else:
-        embed.add_field(name="Description", value=youtube.description[:1023], inline= False)
-      if len(youtube.keywords) == 0:
-        embed.add_field(name="Tags", value="No tags provided", inline= False)
-      else:
-        embed.add_field(name="Tags", value=(", ".join(youtube.keywords))[:1023], inline= False)
-      embed.add_field(name="Views", value=f'{youtube.views:,}', inline= True)
-      embed.add_field(name="Date uploaded", value=unix_timestamp(youtube.publish_date, "D"), inline= True)
-      embed.add_field(name="Length", value=format_length(youtube.length), inline= True)
-      chnl = pytube.Channel(youtube.channel_url)
-      embed.add_field(name="Rating", value=f"{str(round(youtube.rating * 20, 3))}%" if youtube.rating else "No ratings", inline= True)
-      embed.add_field(name="Channel", value=f"[{chnl.channel_name}]({youtube.channel_url}) ({len(chnl.videos)} videos)", inline= True)
-      if youtube.age_restricted:
-        embed.add_field(name="Restricted", value="This video is age-restricted.", inline= True)
-      embed.set_thumbnail(url=youtube.thumbnail_url)
-      await ytmsg.edit(embed=embed)
+    f = open('extra_downloads.txt', "w")
+    f.write(extra_downloads)
+    f.close()
+    ytmsg = await ctx.reply(embed= embed, file=discord.File('extra_downloads.txt'))
+    try_delete('extra_downloads.txt')
+    embed = Embed(title="Download (Click here)", url=video1.url, description=desc)
+    embed.add_field(name="Title", value=youtube.title, inline= False)
+    if len(youtube.description[:1023].replace(" ", "")) == 0:
+      embed.add_field(name="Description", value="No description provided", inline= False)
+    else:
+      embed.add_field(name="Description", value=youtube.description[:1023], inline= False)
+    if len(youtube.keywords) == 0:
+      embed.add_field(name="Tags", value="No tags provided", inline= False)
+    else:
+      embed.add_field(name="Tags", value=(", ".join(youtube.keywords))[:1023], inline= False)
+    embed.add_field(name="Views", value=f'{youtube.views:,}', inline= True)
+    embed.add_field(name="Date uploaded", value=unix_timestamp(youtube.publish_date, "D"), inline= True)
+    embed.add_field(name="Length", value=format_length(youtube.length), inline= True)
+    chnl = pytube.Channel(youtube.channel_url)
+    embed.add_field(name="Rating", value=f"{str(round(youtube.rating * 20, 3))}%" if youtube.rating else "No ratings", inline= True)
+    embed.add_field(name="Channel", value=f"[{chnl.channel_name}]({youtube.channel_url}) ({len(chnl.videos)} videos)", inline= True)
+    if youtube.age_restricted:
+      embed.add_field(name="Restricted", value="This video is age-restricted.", inline= True)
+    embed.set_thumbnail(url=youtube.thumbnail_url)
+    await ytmsg.edit(embed=embed)
 
       # youtube_view = ui.View(timeout=0)
       # youtube_view.add_item(ui.Button(style=discord.ButtonStyle.success, row=0, label="Best quality", disabled=True))

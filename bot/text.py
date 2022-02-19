@@ -63,7 +63,7 @@ async def ascii_caesar(ctx: ui.SlashInteraction, direction, distance, text):
   if direction == "encrypt":
     await ctx.respond("```" + "".join([chr((ord(x) + distance) % 128) for x in text]) + "```")
   else:
-    await ctx.respond("```" + "".join([chr((ord(x) + 128 - distance) % 128) for x in text]) + "```")
+    await ctx.respond("".join([chr((ord(x) + 128 - distance) % 128) for x in text]))
 
 @commands.command() # Migrated
 async def ascii_caesar_decode(ctx, distance: int, *, text):
@@ -105,8 +105,11 @@ async def compress(ctx, *, text):
   f.close()
   compress_key = ""
   for x, y in lengths:
-    compress_key += x.replace("_", "UD")+f"{y}_"
-  await ctx.reply(f"Estimated file size: {os.path.getsize('compressed.txt')} bytes\nKey:\n```\n{compress_key[:-1]}\n```", file = discord.File("compressed.txt"))
+    compress_key += x.replace("_", "UD") + f"{y}_"
+  await ctx.reply(f"Estimated original size (Unicode): {len(text) * 3}\n" +
+                 f"Estimated file size: {os.path.getsize('compressed.txt')} bytes" +
+                 f"(~{round(os.path.getsize('compressed.txt') / len(text) * 300)}%)\n" +
+                 f"Key:\n```\n{compress_key[:-1]}\n```", file=discord.File("compressed.txt"))
   try_delete("compressed.txt")
 
 @bs.command(name="base_n", description="Encodes or decodes a piece of text with base-16, 32, 64 or 85.",
@@ -117,7 +120,8 @@ async def compress(ctx, *, text):
            description="The text to encode or decode.", type= str, required=True)])
 async def base_n(ctx: ui.SlashInteraction, direction, algorithm, text):
   coder = eval(f"base64.b{algorithm}{direction[:2]}code(bytes(text, encoding='utf-8'))")
-  await ctx.respond(coder.decode("utf-8"))
+  code_wrap = "```" if direction == "encrypt" else ""
+  await ctx.respond(code_wrap + coder.decode("utf-8") + code_wrap)
 
 @commands.command() # Migrated
 async def decrypt(ctx, code, *, text):

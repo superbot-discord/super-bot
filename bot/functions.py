@@ -33,6 +33,7 @@ def enum_mentionables(mentionables, max_length: int, no_text: str, delimiter1: s
 
 
 def html_to_md(text: str):
+  text = text.replace("&nbsp;", " ")
   text = re.sub(r'<b>(.+?)</b>', r'**\1**', text)
   text = re.sub(r'<i>(.+?)</i>', r'*\1*', text)
   text = re.sub(r'<i>(.+?)</i>', r'*\1*', text)

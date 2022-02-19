@@ -78,7 +78,7 @@ async def embed(ctx, *, text):
   await ctx.send(embed= embed)
 
 @commands.command()
-async def ett(ctx, msg : discord.Message = None):
+async def ett(ctx, msg: discord.Message = None):
   if msg == None:
     potential_reference = ctx.message.reference
     if potential_reference:
@@ -334,7 +334,7 @@ async def snipe_(ctx: ui.SlashInteraction):
     await ctx.respond("Snipping is disabled. Please ask someone with manage messages permission to re-enable it.")
 
 @bs.command(name="snipe_toggle", description="Enable or disable sniping in this channel.",
-           options=[ui.SlashOption(name= "Toggle", type= bool, description=
+           options=[ui.SlashOption(name="Toggle", type=bool, description=
            "Whether to enable or disable sniping. Toggles the current option by default.")])
 async def snipe_toggle(ctx: ui.SlashInteraction, toggle= None):
   chnl = ctx.channel
@@ -344,9 +344,9 @@ async def snipe_toggle(ctx: ui.SlashInteraction, toggle= None):
   await ctx.respond(f"Sniping is now {'enabled' if toggle else 'disabled'}.")
 
 @bs.command(name="snipe_clear", description="Clears the snipe database for a channel.",
-           options=[ui.SlashOption(name= "Channel", type= discord.TextChannel, description=
+           options=[ui.SlashOption(name="Channel", type=discord.TextChannel, description=
            "The channel to clear the database of. Defaults to the current channel.",
-           channel_types= [discord.ChannelType.text])])
+           channel_types=[discord.ChannelType.text])])
 async def snipe_clear(ctx: ui.SlashInteraction, channel: discord.TextChannel = None):
   channel = ctx.channel if not channel else channel
   if has_perms(ctx.channel, ctx.author, 4):
