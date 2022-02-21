@@ -352,8 +352,8 @@ async def wiki_search(ctx, *, query):
 @bs.command(name="youtube_channel", description="Shows information about a YouTube channel.",
            options=[ui.SlashOption(name= "Channel", description= "The link of the channel to show information of.",
            type=str, required=True)])
-async def youtube_channel(ctx: ui.SlashInteraction, link):
-  chnl = pytube.Channel(link)
+async def youtube_channel(ctx: ui.SlashInteraction, channel):
+  chnl = pytube.Channel(channel)
   videos = chnl.videos
   desc = f"**Videos ({len(chnl.videos):,})**:\n"
   for x, y in zip(videos, range(12)):
