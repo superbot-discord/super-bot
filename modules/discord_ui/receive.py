@@ -13,7 +13,7 @@ from .components import ActionRow, Button, ComponentStore, LinkButton, SelectMen
 import nextcord as discord
 from nextcord import utils
 from nextcord.ext import commands
-from discord.state import ConnectionState
+from nextcord.state import ConnectionState
 
 from typing import Any, List, Union, Dict
 try:

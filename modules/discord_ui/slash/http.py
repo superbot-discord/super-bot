@@ -3,8 +3,8 @@ from .errors import NoCommandFound
 from ..tools import get, setup_logger
 from ..http import BetterRoute, handle_rate_limit, send_files
 
-from discord.http import HTTPClient
-from discord.state import ConnectionState
+from nextcord.http import HTTPClient
+from nextcord.state import ConnectionState
 from nextcord import NotFound, HTTPException, Forbidden
 
 

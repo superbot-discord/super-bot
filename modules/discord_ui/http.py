@@ -2,7 +2,7 @@ from .errors import WrongType
 from .tools import MISSING, components_to_dict, setup_logger
 
 import nextcord as discord
-from discord.http import Route
+from nextcord.http import Route
 
 import json
 import asyncio
