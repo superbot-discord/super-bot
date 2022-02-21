@@ -3,7 +3,6 @@ import feedparser
 import pytube
 from PyDictionary import PyDictionary
 from pygoogletranslation import Translator
-from bot.shared import try_delete
 
 from functions import *
 from shared import (BeautifulSoup, commands, db, discord, Embed, format_length, format_video,

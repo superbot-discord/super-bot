@@ -516,9 +516,9 @@ async def luenwohui(ctx):
 
   await ctx.send(desc)
 
-@bs.command(name= "mameiha", description= "78K, 79K", guild_ids= [880686520678371369],
-            default_permission= False, guild_permissions= {880686520678371369: ui.SlashPermission(
-            allowed= {2: [687474789342117900, 880701121574875146]})}) # 2 represents user
+@bs.command(name="mameiha", description="78K, 79K", guild_ids=[880686520678371369],
+            default_permission=False, guild_permissions={880686520678371369: ui.SlashPermission(
+            allowed={2: [687474789342117900, 880701121574875146]})}) # 2 represents user
 async def ma_mei_ha(ctx: ui.SlashInteraction):
   await ctx.defer()
   print(ctx.permissions)

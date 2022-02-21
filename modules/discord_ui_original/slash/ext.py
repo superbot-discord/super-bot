@@ -1,6 +1,15 @@
 """
-discord_ui.ext.command_decorator
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+discord_ui.ext
+~~~~~~~~~~~~~~~
+
+An extension module to the libary that has some usefull decorators and functions 
+for application-commands.
+
+.. code-block::
+
+    from discord_ui import ext
+
+- - -
 
 Important: Every decorator should be placed before the actual slashcommand decorator, 
 except check auto-response decorators, they have to be placed after the target check decorator.
@@ -10,51 +19,13 @@ not only the slash cog commands, but if you use them for the normal commands, th
 doesn't work
 """
 
-import inspect
 import functools
-from typing import TypeVar, Any, List
+import inspect
 
-from nextcord.ext import commands
+from nextcord.ext.commands import errors
 
 
-__all__ = (
-    'auto_guild',
-    'check_failed',
-    'any_failure_response',
-    'alias',
-    'no_sync',
-    'auto_defer',
-)
-
-f = TypeVar("f")
-
-class _auto_guild_sentinel():
-    def __init__(self):
-        self.guild_ids: List[int] = []
-        """The guild_ids that should be used when decorating a command with this class"""
-    def __call__(self, m):
-        if inspect.isfunction(m):
-            m.__guild_ids__ = self.guild_ids
-        else:
-            m.guild_ids = self.guild_ids
-        return m
-
-auto_guild: _auto_guild_sentinel = _auto_guild_sentinel()
-"""Decorator for setting guild_ids to application-commands.
-This decorator has to be placed before the actual command decorator
-
-Usage
------
-
-.. code-block::
-
-    @ui.slash.command(...)
-    @ext.auto_guild
-    async def my_command(ctx, ...):
-        ...
-"""
-
-def check_failed(content=None, hidden=False, **fields):
+def check_failure_response(content=None, hidden=False, **fields):
     """A decorator for autoresponding to a cog check that failed.
     
     The decorator has to be placed after the check deceorator
@@ -93,16 +64,16 @@ def check_failed(content=None, hidden=False, **fields):
     .. code-block::
 
         # first check
-        @ext.check_failed("command is guild only", hidden=True)
+        @ext.check_failure_response("command is guild only", hidden=True)
         @commands.guild_only()
         # second check
-        @ext.check_failed("command can only used in nsfw channels", hidden=True)
+        @ext.check_failure_response("command can only used in nsfw channels", hidden=True)
         @commands.is_nsfw()
-        @cogs.slash_command(guild_ids=[867699578034716683])
+        @cogs.slash_cog(guild_ids=[867699578034716683])
         async def callback(self, ctx):
             ...
     """
-    def wrapper(cog):
+    def wraper(cog):
         # get last check
         check = cog.checks[-1]
         _invoke = cog.invoke
@@ -112,14 +83,14 @@ def check_failed(content=None, hidden=False, **fields):
                 if not check(ctx):
                     await ctx.send(content, **fields, hidden=hidden)
                     return
-            except commands.CheckFailure:
+            except errors.CheckFailure:
                 await ctx.send(content, **fields, hidden=hidden)
                 raise
             await _invoke(ctx, *args, **kwargs)
 
         cog.invoke = invoke
         return cog
-    return wrapper
+    return wraper
 
 def any_failure_response(content, hidden=False, **fields):
     """Decorator for autoresponding to all checks of a cog command that failed.
@@ -155,7 +126,7 @@ def any_failure_response(content, hidden=False, **fields):
     
     
     """
-    def wrapper(cog):
+    def wraper(cog):
         _invoke = cog.invoke
 
         async def invoke(ctx, *args, **kwargs):
@@ -163,14 +134,40 @@ def any_failure_response(content, hidden=False, **fields):
                 if not await cog.can_run(ctx):
                     await ctx.send(content, hidden=hidden, **fields)
                     return
-            except commands.CheckFailure:
+            except errors.CheckFailure:
                 await ctx.send(content, hidden=hidden, **fields)
                 raise
             await _invoke(ctx, *args, **kwargs)
 
         cog.invoke = invoke
         return cog
-    return wrapper
+    return wraper
+
+def guild_change(guild_id, *, name=None, description=None, default_permission=True):
+    """A decorator for slashcommands that will apply changes to a specific guild
+
+    Note that this decorator should mainly be used for guild commands, because if used with
+    a global command, both commands will show up, the changed one and the global one.
+    
+    Parameters
+    ----------
+    guild_id: :class:`int` | :class:`str`
+        The guild_id where the changes should be applied to
+    name: :class:`str`, optional
+        The new name; default None
+    description: :class:`str`, optional
+        The new description; default None
+    default_permission: :class:`bool` | :class:`discord.Permissions`, optional
+        Permissions that a user needs to have in order to execute the command, default ``True``.
+            If a bool was passed, it will indicate whether all users can use the command (``True``) or not (``False``)
+    
+    """
+    def wraper(callback):
+        if not hasattr(callback, "__guild_changes__"):
+            callback.__guild_changes__ = {}
+        callback.__guild_changes__[str(guild_id)] = (name, description, default_permission)
+        return callback
+    return wraper
 
 def alias(aliases):
     """Decorator for slashcommand aliases that will add the same command but with different names.
@@ -188,13 +185,13 @@ def alias(aliases):
         @ui.slash.alias(["catz", "cute_things"])
     
     """
-    def wrapper(command):
-        if not hasattr(command, "__aliases__") or command.__aliases__ is None:
+    def wraper(command):
+        if not hasattr(command, "__aliases__"):
             command.__aliases__ = []
         # Allow multiple alias decorators
         command.__aliases__.extend(aliases if not isinstance(aliases, str) else [aliases])
         return command
-    return wrapper
+    return wraper
 
 def no_sync():
     """Decorator that will prevent an application-command to be synced with the api.
@@ -213,10 +210,10 @@ def no_sync():
             ...
 
     """
-    def wrapper(callback):
+    def wraper(callback):
         callback.__sync__ = False
         return callback
-    return wrapper
+    return wraper
 
 def auto_defer(hidden=False):
     """A decorator for auto deferring a interaction. This decorator has to be placed before the main decorator
@@ -244,11 +241,11 @@ def auto_defer(hidden=False):
     def decorator(func):
         func.__auto_defer__ = True
         @functools.wraps(func)
-        async def wrapper(*args, **kwargs):
+        async def wraper(*args, **kwargs):
             # if there is self param use the next one
             ctx = args[1 if list(inspect.signature(func).parameters.keys())[0] == "self" else 0]
             # use defer for "auto_defering"
             await ctx.defer(hidden=hidden)
             return await func(*args, **kwargs)
-        return wrapper
+        return wraper
     return decorator
