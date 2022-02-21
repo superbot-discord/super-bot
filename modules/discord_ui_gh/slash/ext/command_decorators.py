@@ -33,7 +33,7 @@ class _auto_guild_sentinel():
         self.guild_ids: List[int] = []
         """The guild_ids that should be used when decorating a command with this class"""
     def __call__(self, m):
-        if inspect.ismethod(m):
+        if inspect.isfunction(m):
             m.__guild_ids__ = self.guild_ids
         else:
             m.guild_ids = self.guild_ids
@@ -189,7 +189,7 @@ def alias(aliases):
     
     """
     def wrapper(command):
-        if not hasattr(command, "__aliases__"):
+        if not hasattr(command, "__aliases__") or command.__aliases__ is None:
             command.__aliases__ = []
         # Allow multiple alias decorators
         command.__aliases__.extend(aliases if not isinstance(aliases, str) else [aliases])

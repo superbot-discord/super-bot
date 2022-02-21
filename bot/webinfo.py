@@ -51,7 +51,7 @@ async def definition(ctx, *, word):
   await ctx.reply(embed= embed)
 
 @commands.command(aliases=['http', 'https', 'statuscode'])
-async def error(ctx, code="404", *, disposed= None):
+async def error(ctx, code="404", *, disposed=None):
   try:
     if int(code) in (db["httpcat"]+db["httpdog"]):
       await ctx.reply(f'https://http.cat/{code}\nhttps://httpstatusdogs.com/img/{code}.jpg')
@@ -61,14 +61,14 @@ async def error(ctx, code="404", *, disposed= None):
     await ctx.reply("Invalid code!")
 
 @commands.command(aliases=['httpcat', 'httpscat', 'httpcats', 'httpscats'])
-async def errorcat(ctx, code="404", *, disposed= None):
+async def errorcat(ctx, code="404", *, disposed=None):
   if int(code) in db["httpcat"]:
     await ctx.reply(f'https://http.cat/{code}')
   else:
     await ctx.reply("Invalid code!")
 
 @commands.command(aliases=['httpdog', 'httpsdog', 'httpdogs', 'httpsdogs'])
-async def errordog(ctx, code="404", *, disposed= None):
+async def errordog(ctx, code="404", *, disposed=None):
   if int(code) in db["httpdog"]:
     await ctx.reply(f'https://httpstatusdogs.com/img/{code}.jpg')
   else:
@@ -213,7 +213,7 @@ async def rss(ctx, *, url):
   try_delete(f"rss{ctx.message.id}.html")
 
 @commands.command()
-async def translate(ctx, lang = "list", fromlang = "auto", *, text = "Sample text"):
+async def translate(ctx, lang="list", fromlang="auto", *, text="Sample text"):
   if lang == "list" or lang == "all":
     await ctx.reply(embed = Embed(description = f"**List of Language Input (Abbreviations)**\n```{'  '.join(list(srclangdict.keys()))}```\n\n**List of Language Input (Full Names)**\n{', '.join(list(srclangdict.values()))}"))
     await ctx.reply(embed = Embed(description = f"**List of Language Output (Abbreviations)**\n```{' '.join(list(langdict.keys()))}```\n\n**List of Language Output (Full Names)**\n{', '.join(list(langdict.values()))}"))
@@ -349,6 +349,125 @@ async def wiki_search(ctx, *, query):
     embed.add_field(name=f0n, value=f"{y_extract[:1023]}…" if len(y_extract) > 1024 else y_extract, inline= False)
   await ctx.reply(embed= embed)
 
+@bs.command(name="youtube_channel", description="Shows information about a YouTube channel.",
+           options=[ui.SlashOption(name= "Channel", description= "The link of the channel to show information of.",
+           type=str, required=True)])
+async def youtube_channel(ctx: ui.SlashInteraction, link):
+  chnl = pytube.Channel(link)
+  videos = chnl.videos
+  desc = f"**Videos ({len(chnl.videos):,})**:\n"
+  for x, y in zip(videos, range(12)):
+    desc += f"[{x.title}]({x.watch_url})\n{x.views:,} Views | {round(x.rating*20, 3)}% Liked | {format_length(x.length)}\n\n"
+  embed = Embed(title=chnl.channel_name, description=desc, url=chnl.videos_url)
+  embed.set_footer(text="Use =youtube [Link] to download videos. | Analysing additional info…")
+  yt_msg = await ctx.respond(embed=embed)
+  totallen = 0
+  totalrating = 0
+  totalview = 0
+  for x in videos:
+    totallen += x.length
+    totalrating += x.rating
+    totalview += x.views
+  embed.add_field(name="Total views", value=f"{totalview:,}", inline= True)
+  embed.add_field(name="Total length", value=format_length(totallen), inline= True)
+  embed.add_field(name="Total rating", value=f"{str(round(totalrating*20, 3))}%", inline= True)
+  embed.add_field(name="Average views", value=f"{round(totalview/len(videos), 3):,}", inline= True)
+  embed.add_field(name="Average length", value=format_length(round(totallen/len(videos))), inline= True)
+  embed.add_field(name="Average rating", value=f"{str(round(totalrating/len(videos)*20, 3))}%", inline= True)
+  embed.set_footer(text="Use =youtube [Link] to download videos.")
+  await yt_msg.edit(embed=embed)
+
+@bs.command(name="youtube_video", description="Shows information about a YouTube video.", options=[
+           ui.SlashOption(name= "Link", description= "The link of the video to show information of.",
+           type=str, required=True)])
+async def youtube_video(ctx: ui.SlashInteraction, link):
+  try:
+    youtube = pytube.YouTube(link, allow_oauth_cache=False)
+  except:
+    youtube = pytube.Search(link).results[0]
+  yt_streams = youtube.streams
+  filtered1 = yt_streams.filter(progressive=True,file_extension='mp4').order_by("resolution")
+  video1 = filtered1[len(filtered1)-1]
+  additional_desc = " Warning: This video may be too much for a small data plan." if video1.filesize >= 52428800 else ""
+  desc = f"This video has a size of around {sizer(video1.filesize)}.{additional_desc}"
+  embed = Embed(title="Download (Click here)", url=video1.url, description=f"{desc}\nThis message will be edited with more information.")
+  allvideos = yt_streams.filter(type="video")
+  allaudios = yt_streams.filter(only_audio=True)
+  filtered2 = allvideos.order_by("resolution")
+  filtered2b = filtered2.filter(progressive=True)
+  video2 = filtered2[len(filtered2)-1]
+  filtered3 = allaudios.order_by("abr")
+  video3 = filtered3[len(filtered3)-1]
+  video4 = filtered2b[int(len(filtered2b)/2)]
+  video4b = filtered2[int(len(filtered2)/2)]
+  video5 = filtered3[len(filtered3)-1]
+  filtered6 = allvideos.order_by("filesize")
+  video7 = filtered6[0]
+  filtered7 = allaudios.order_by("filesize")
+  video8 = filtered7[0]
+  filtered8 = filtered2b.order_by("filesize")
+  video6 = filtered8[0]
+
+  videox1 = None
+  for x in filtered8.__reversed__():
+    if x.filesize < 8000000:
+      videox1 = x
+      break
+  
+  videox2 = None
+  for x in filtered7.__reversed__():
+    if x.filesize < 8000000:
+      videox2 = x
+      break
+  
+  videox3 = None
+  for x in filtered6.__reversed__():
+    if x.filesize < 8000000:
+      videox3 = x
+      break
+  videox1_text = format_video(videox1) if videox1 else "There is no progressive video less than 8MB."
+  videox2_text = format_video(videox2) if videox2 else "There is no audio less than 8MB."
+  videox3_text = format_video(videox3) if videox3 else "There is no video less than 8MB."
+
+  extra_downloads=f'''Note: the embed title's URL links to 'Vi+Au - Best quality'.\n
+Type and quality\t\tBitrate\t\tRes.\tFPS\tSize\t\tLink\n
+Vi+Au - Best quality\t\t{format_video(video1)}
+Video - Best quality\t\t{format_video(video2)}
+Audio - Best quality\t\t{format_video(video3)}
+Vi+Au - Medium quality\t\t{format_video(video4)}
+Video - Medium quality\t\t{format_video(video4b)}
+Audio - Medium quality\t\t{format_video(video5)}
+Vi+Au - Less than 8MB\t\t{videox1_text}
+Video - Less than 8MB\t\t{videox3_text}
+Audio - Less than 8MB\t\t{videox2_text}
+Vi+Au - Minimum size\t\t{format_video(video6)}
+Video - Minimum size\t\t{format_video(video7)}
+Audio - Minimum size\t\t{format_video(video8)}'''
+  f = open('extra_downloads.txt', "w")
+  f.write(extra_downloads)
+  f.close()
+  try_delete('extra_downloads.txt')
+  embed = Embed(title="Download (Click here)", url=video1.url, description=desc)
+  embed.add_field(name="Title", value=youtube.title, inline= False)
+  if len(youtube.description[:1023].replace(" ", "")) == 0:
+    embed.add_field(name="Description", value="No description provided", inline= False)
+  else:
+    embed.add_field(name="Description", value=youtube.description[:1023], inline= False)
+  if len(youtube.keywords) == 0:
+    embed.add_field(name="Tags", value="No tags provided", inline= False)
+  else:
+    embed.add_field(name="Tags", value=(", ".join(youtube.keywords))[:1023], inline= False)
+  embed.add_field(name="Views", value=f'{youtube.views:,}', inline= True)
+  embed.add_field(name="Date uploaded", value=unix_timestamp(youtube.publish_date, "D"), inline= True)
+  embed.add_field(name="Length", value=format_length(youtube.length), inline= True)
+  chnl = pytube.Channel(youtube.channel_url)
+  embed.add_field(name="Rating", value=f"{str(round(youtube.rating * 20, 3))}%" if youtube.rating else "No ratings", inline= True)
+  embed.add_field(name="Channel", value=f"[{chnl.channel_name}]({youtube.channel_url}) ({len(chnl.videos)} videos)", inline= True)
+  if youtube.age_restricted:
+    embed.add_field(name="Restricted", value="This video is age-restricted.", inline= True)
+  embed.set_thumbnail(url=youtube.thumbnail_url)
+  await ctx.respond(embed=embed, file=discord.File('extra_downloads.txt'))
+
 @commands.command()
 async def youtube(ctx, *, link):
   await ctx.channel.trigger_typing()
@@ -379,11 +498,11 @@ async def youtube(ctx, *, link):
     chnl = pytube.Channel(link)
     videos = chnl.videos
     desc = f"**Videos ({len(chnl.videos):,})**:\n"
-    for x,y in zip(videos, range(12)):
-      desc+=f"[{x.title}]({x.watch_url})\n{x.views:,} Views | {round(x.rating*20, 3)}% Liked | {format_length(x.length)}\n\n"
+    for x, y in zip(videos, range(12)):
+      desc += f"[{x.title}]({x.watch_url})\n{x.views:,} Views | {round(x.rating*20, 3)}% Liked | {format_length(x.length)}\n\n"
     embed = Embed(title=chnl.channel_name, description=desc, url=chnl.videos_url)
     embed.set_footer(text="Use =youtube [Link] to download videos. | Analysing additional info…")
-    yt_msg = await ctx.reply(embed= embed)
+    yt_msg = await ctx.reply(embed=embed)
     totallen = 0
     totalrating = 0
     totalview = 0

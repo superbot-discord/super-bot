@@ -325,7 +325,7 @@ async def mandelbrot(ctx, size: int = 1024):
   try_delete('mandelbrot.png')
 
 @commands.command()
-async def ocr(ctx, lang= "eng", *, disposed= None):
+async def ocr(ctx, lang= "eng", *, disposed=None):
   images = ctx.message.attachments
   for x in images:
     await x.save('input.png')
@@ -344,7 +344,7 @@ async def image_generate(ctx, color, width: int, height: int = None, format: typ
   try_delete(f'image.{format}')
 
 @commands.command(aliases=['scan'])
-async def qr(ctx, *, disposed= None):
+async def qr(ctx, *, disposed=None):
   for x in ctx.message.attachments:
     await x.save("input.png")
     image = Image.open("input.png").convert("RGBA")

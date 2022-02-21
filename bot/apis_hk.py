@@ -88,7 +88,7 @@ mameiha_tt = """
 
 
 @commands.command()
-async def hk_aqi(ctx, *, disposed= None):
+async def hk_aqi(ctx, *, disposed=None):
   await ctx.channel.trigger_typing()
   r1=requests.get("https://ogciopsi.blob.core.windows.net/dataset/aqhi/aqhi.json").json()
   r2=requests.get("https://ogciopsi.blob.core.windows.net/dataset/aqhi/aqhi-forecast.json").json()
@@ -104,7 +104,7 @@ async def hk_aqi(ctx, *, disposed= None):
   await ctx.reply(embed= embed)
 
 @commands.command()
-async def hk_ferry_1(ctx, *, disposed= None):
+async def hk_ferry_1(ctx, *, disposed=None):
   await ctx.channel.trigger_typing()
   r1=requests.get("https://www.hongkongwatertaxi.com.hk/eta/?route=HHCL").json()['data'][0]
   r2=requests.get("https://www.hongkongwatertaxi.com.hk/eta/?route=CLHH").json()['data'][0]
@@ -114,7 +114,7 @@ async def hk_ferry_1(ctx, *, disposed= None):
   await ctx.reply(embed= embed)
 
 @commands.command()
-async def hk_forecast(ctx, *, disposed= None):
+async def hk_forecast(ctx, *, disposed=None):
   await ctx.channel.trigger_typing()
   r1=requests.get("https://data.weather.gov.hk/weatherAPI/opendata/weather.php?dataType=fnd&lang=en").json()
   r2=requests.get("https://data.weather.gov.hk/weatherAPI/opendata/weather.php?dataType=fnd&lang=tc").json()
@@ -203,7 +203,7 @@ async def hk_kmb(ctx, line):
       await ctx.reply(embed= embed)
 
 @commands.command()
-async def hk_lightning(ctx, *, disposed= None):
+async def hk_lightning(ctx, *, disposed=None):
   await ctx.channel.trigger_typing()
   r1=requests.get("https://data.weather.gov.hk/weatherAPI/opendata/opendata.php?dataType=LHL&lang=en&rformat=csv")
   r2=requests.get("https://data.weather.gov.hk/weatherAPI/opendata/opendata.php?dataType=LHL&lang=tc&rformat=csv")
@@ -237,7 +237,7 @@ async def hk_lr(ctx, station: int):
     await ctx.reply("No information could be fetched.")
 
 @commands.command()
-async def hk_moon(ctx, *, disposed= None):
+async def hk_moon(ctx, *, disposed=None):
   await ctx.channel.trigger_typing()
   r=requests.get(f"https://data.weather.gov.hk/weatherAPI/opendata/opendata.php?dataType=MRS&year=2021&rformat=csv")
   sun =r.content.decode("utf-8")[1:-1]
@@ -304,7 +304,7 @@ async def hk_nwfb(ctx, line):
   await ctx.reply(embed= embed)
 
 @commands.command()
-async def hk_sea_pressure(ctx, *, disposed= None):
+async def hk_sea_pressure(ctx, *, disposed=None):
   await ctx.channel.trigger_typing()
   r=requests.get("https://data.weather.gov.hk/weatherAPI/hko_data/regional-weather/latest_1min_pressure.csv")
   r1=requests.get("https://data.weather.gov.hk/weatherAPI/hko_data/regional-weather/latest_1min_pressure_uc.csv")
@@ -320,7 +320,7 @@ async def hk_sea_pressure(ctx, *, disposed= None):
   await ctx.reply(embed= embed)
 
 @commands.command()
-async def hk_sun(ctx, *, disposed= None):
+async def hk_sun(ctx, *, disposed=None):
   await ctx.channel.trigger_typing()
   r=requests.get(f"https://data.weather.gov.hk/weatherAPI/opendata/opendata.php?dataType=SRS&year=2021&rformat=csv")
   sun =r.content.decode("utf-8")[1:-1]
@@ -360,7 +360,7 @@ async def hk_sun(ctx, *, disposed= None):
   await ctx.reply(files=[discord.File("sun.png"), discord.File("sun.svg")])
 
 @commands.command()
-async def hk_tide(ctx, *, disposed= None):
+async def hk_tide(ctx, *, disposed=None):
   await ctx.channel.trigger_typing()
   r=requests.get("https://data.weather.gov.hk/weatherAPI/hko_data/tide/ALL_en.csv")
   tide=r.content.decode("utf-8")[1:]
@@ -372,7 +372,7 @@ async def hk_tide(ctx, *, disposed= None):
   await ctx.reply(embed= embed)
 
 @commands.command()
-async def hk_visibility(ctx, *, disposed= None):
+async def hk_visibility(ctx, *, disposed=None):
   await ctx.channel.trigger_typing()
   r=requests.get("https://data.weather.gov.hk/weatherAPI/opendata/opendata.php?dataType=LTMV&lang=en&rformat=csv")
   visibility=r.content.decode("utf-8")[1:-1]
@@ -384,7 +384,7 @@ async def hk_visibility(ctx, *, disposed= None):
   await ctx.reply(embed= embed)
 
 @commands.command()
-async def hk_weather(ctx, *, disposed= None):
+async def hk_weather(ctx, *, disposed=None):
   await ctx.channel.trigger_typing()
   r1=requests.get("https://data.weather.gov.hk/weatherAPI/opendata/weather.php?dataType=rhrread&lang=en").json()
   r2=requests.get("https://data.weather.gov.hk/weatherAPI/opendata/weather.php?dataType=rhrread&lang=tc").json()
@@ -420,7 +420,7 @@ async def hk_weather(ctx, *, disposed= None):
   await ctx.reply(embed= embed)
 
 @commands.command()
-async def hk_wind(ctx, *, disposed= None):
+async def hk_wind(ctx, *, disposed=None):
   await ctx.channel.trigger_typing()
   r=requests.get("https://data.weather.gov.hk/weatherAPI/hko_data/regional-weather/latest_10min_wind.csv")
   wind=r.content.decode("utf-8")[:-1]

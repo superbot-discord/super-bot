@@ -18,10 +18,8 @@ from nextcord import InvalidArgument
 from nextcord.ext.commands import Bot, BadArgument
 
 import re
-import copy
-import inspect
-import warnings
 import typing as t
+import inspect
 
 __all__ = (
     'SlashOption',
@@ -409,7 +407,7 @@ class SlashOption():
         )
 
     def to_dict(self):
-        return { **self._json, **{"options": self._options.to_dict()} }
+        return self._json | {"options": self._options.to_dict()}
 
 class SlashPermission():
     """Permissions for a slash commannd
@@ -692,7 +690,7 @@ class BaseCommand():
         self.guild_permissions: t.Dict[(t.Union[str, int], SlashPermission)] = guild_permissions
         self.permissions: SlashPermission = SlashPermission()
         """The current permissions for this command."""
-        self.guild_ids: t.List[int] = [int(x) for x in guild_ids or getattr(callback, '__guild_ids__', [])]
+        self.guild_ids: t.List[int] = [int(x) for x in guild_ids or []]
         """A list of guild ids where the command is available"""
     def __repr__(self) -> str:
         return f"<{self.__class__.__name__.split('.')[-1]}({self.to_dict()})>"
@@ -922,13 +920,13 @@ class BaseCommand():
                 for x in self.subcommands
             ]
     def to_dict(self):
-        return {**self._json, **{
+        return self._json | {
             "options": (
                 # if no subcommands are present use normal options
                 self._options.to_dict() 
                     if not self.has_subcommands
                 else [x.to_dict() for x in self._subcommands_to_options()]
-            )}
+            )
         }
 
 class SlashCommand(BaseCommand):
@@ -1115,7 +1113,7 @@ class SlashSubcommand(BaseCommand):
         for guild in [guild_id] if guild_id is not None else self.guild_ids:
             base = self.base or await self.fetch_base(guild)
             base.guild_ids = self.guild_ids
-            self._state = base._state
+            base._state = self._state
 
             if len(self.base_names) > 1:
                 if base.__subcommands__.get(self.base_names[1]) is None:
@@ -1216,9 +1214,7 @@ class _CommandList(t.TypedDict):
     Slash: t.Dict[str, command]
     User: t.Dict[str, command]
     Message: t.Dict[str, command]
-CommandCacheList = t.Dict[
-    t.Union[t.Literal['globals'], str], t.Union[_CommandList, t.Dict[str, command]]
-]
+CommandCacheList = t.Dict[str, _CommandList]
 
 class CommandCache():
     def __init__(self, client, commands: t.List[command] = []) -> None:
@@ -1496,13 +1492,12 @@ class CommandCache():
             return self.__getitem__(key)
         except KeyError:
             return default
-    def append(self, base: C, is_alias=False) -> C:
-        if base.has_aliases and is_alias is False:
+    def append(self, base: C, is_base=False) -> C:
+        if base.has_aliases and is_base is False:
             for a in base.__aliases__:
-                cur = copy.copy(base)
+                cur = base.copy()
                 cur.name = a
-                self.append(cur, is_alias=True)
-        base.name = base.__original_name__
+                self.append(cur, is_base=True)
         self._add(base)
         return base
     def remove(self, base: SlashCommand):
@@ -1531,42 +1526,91 @@ class CommandCache():
             else:
                 del self[k][key_type][name][base.name]
                 return
+    async def sync(self, delete_unused=False):
+        """Updates the api with the commands in the cache
         
-    async def sync(self):
-        """Updates the api with the commands in the cache"""
-
+        delete_unused: :class:`bool`, optional
+            Whether commands that are not included in this cache should be deleted; default False
+        """
         http = self._state.slash_http
         self._raw_cache = {}
         
-        commands = [
-            self._cache['globals'][type][command]
-                for type in self._cache['globals']
-                    for command in self._cache['globals'][type]
-        ]
-        data = await http.bulk_overwrite_global_commands([c.to_dict() for c in commands]) or []
-        for command in commands:
-            for i, c in enumerate(data):
-                if c['name'] == command.name and c['type'] == command.command_type.value:
-                    _command = data.pop(i)
-            command._state = self._state
-            command._id = _command['id']
-            self._raw_cache[command._id] = command
+        for ct in self["globals"]:
+            for base_name in self["globals"][ct]:
+                base = self["globals"][ct][base_name]
+                new_command = None # variable to store the new command data
+                api_command = await self.api.get_global_command(base.name, base._json["type"])
+                if api_command is None:
+                    new_command = await http.create_global_command(base.to_dict())
+                else:
+                    if api_command != base:
+                        print("Creating new command")
+                        new_command = await http.edit_global_command(api_command["id"], base.to_dict())
+                # directly set the id of the command so no extra request is needed
+                base._id = new_command["id"] if new_command else api_command["id"]
+                self._raw_cache[base._id] = base
 
-        for guild in [_ for _ in self._cache if _ != 'globals']:
-            commands = [
-                self._cache[guild][type][command]
-                    for type in self._cache[guild]
-                        for command in self._cache[guild][type]
-            ]
-            data = await http.bulk_overwrite_guild_commands(guild, [c.to_dict() for c in commands]) or []
-            for command in commands:
-                for i, c in enumerate(data):
-                    if c['name'] == command.name and c['type'] == command.command_type.value:
-                        _command = data.pop(i)
-                command._state = self._state
-                command._id = _command['id']
-                self._raw_cache[command._id] = command
+        # self["!globals"] returns a copy of a filtered dict but since we will be only using the 
+        # copy's key and acces the original self dict, there won't be any problems
+        # 
+        # for each guild
+        for guild in self["!globals"]:
+            # acces original dict with filtered keys
+            for ct in self[guild]:
+                for base_name in self[guild][ct]:
+                    base = self[guild][ct][base_name]
+                    new_command = None # variable to store the new command data
+                    api_command = await self.api.get_guild_command(base.name, base.command_type, guild)
+                    if api_command:
+                        # get permissions for the command
+                        api_permissions = await http.get_command_permissions(api_command["id"], guild)
+                    # the guild permissions for the current guild
+                    command_perms = base.guild_permissions.get(int(guild)) or base.guild_permissions.get(str(guild))
+                    global_command = await self.api.get_global_command(base.name, base.command_type)
+                    # If no command in that guild or a global one was found
+                    if api_command is None or global_command is not None:
+                        # Check global commands
+                        # allow both global and guild commands to exist
+                        # region ignore
+                        # If global command exists, it will be deleted
+                        # if global_command is not None:
+                        #     await http.delete_global_command(global_command["id"])
+                        # endregion
+                        new_command = await http.create_guild_command(base.to_dict(), guild, base.permissions.to_dict())
+                    elif api_command != base:
+                        new_command = await http.edit_guild_command(api_command["id"], guild, base.to_dict(), base.permissions.to_dict())
+                    elif api_permissions != command_perms:
+                        await http.update_command_permissions(guild, api_command["id"], command_perms.to_dict())
+                    base._id = new_command["id"] if new_command else api_command["id"]
+                    self._raw_cache[base._id] = base
 
+        if delete_unused is True:
+            for global_command in await self.api.get_global_commands():
+                key_type = str(CommandType(global_command["type"]))
+                # command of a type we didn't register
+                if self["globals"].get(key_type) is None:
+                    await http.delete_global_command(global_command["id"])
+                    continue
+                # command with a name we didn't register
+                if self["globals"][key_type].get(global_command["name"]) is None:
+                    await http.delete_global_command(global_command["id"])
+                    continue
+            for guild in [str(x.id) async for x in self._client.fetch_guilds()]:
+                for guild_command in await self.api.get_guild_commands(guild):
+                    # command in a guild we didn't register
+                    if self.get(guild) is None:
+                        await http.delete_guild_command(guild_command["id"], guild)
+                        continue
+                    key_type = str(CommandType(guild_command["type"]))
+                    # command of a type we didn't register
+                    if self[guild].get(key_type) is None:
+                        await http.delete_guild_command(guild_command["id"], guild)
+                        continue
+                    # command with a name we didn't register
+                    if self[guild][key_type].get(guild_command["name"]) is None:
+                        await http.delete_guild_command(guild_command["id"], guild)
+                        continue
+        
         self._client.dispatch("commands_synced")
         await self._on_sync()
     async def nuke(self, globals=True, guilds=All):

@@ -4,7 +4,7 @@ from shared import commands, Embed, requests
 uke_dict = {'H':"Highest ", 'L':"Lowest ", 'MIN':"min ", 'MAX':"max "}
 
 @commands.command()
-async def uk_aqi(ctx, *, disposed= None):
+async def uk_aqi(ctx, *, disposed=None):
   r=requests.get("https://api.tfl.gov.uk/AirQuality/").json()
   embed = Embed(title="UK Air Quality Indices")
   embed.set_footer(text=r['disclaimerText'])
@@ -14,7 +14,7 @@ async def uk_aqi(ctx, *, disposed= None):
   await ctx.reply(embed= embed)
 
 @commands.command()
-async def uk_extremes(ctx, *, disposed= None):
+async def uk_extremes(ctx, *, disposed=None):
   r=requests.get("http://datapoint.metoffice.gov.uk/public/data/txt/wxobs/ukextremes/json/latest?key=69eba5b0-9c89-4198-b973-b4576f60f0f5").json()['UkExtremes']['Regions']['Region']
   embed = Embed(title="UK Extremes")
   for r_ in r:

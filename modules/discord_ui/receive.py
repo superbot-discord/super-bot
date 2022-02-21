@@ -282,7 +282,7 @@ class Interaction():
 
         route = BetterRoute("POST", f'/webhooks/{self.application_id}/{self.token}')
         if file is not None or files is not None:
-            r = await send_files(route=route, files=files or ([file] if file is None else None), payload=payload, http=self._state.http)
+            r = await send_files(route=route, files=files or ([file] if file is not None else None), payload=payload, http=self._state.http)
         else:
             r = await self._state.http.request(route, json=payload)
 

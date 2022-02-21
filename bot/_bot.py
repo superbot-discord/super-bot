@@ -131,7 +131,7 @@ async def ping_(ctx):
 
 
 @bot_.command(aliases= ["online"]) # Migrated
-async def ping(ctx, *, disposed= None):
+async def ping(ctx, *, disposed=None):
   now1 = datetime.now(timezone.utc)
   message = await ctx.send("Pong!")
   response_time = datetime.now(timezone.utc) - now1

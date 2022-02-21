@@ -123,6 +123,7 @@ def resolve_data(value, typ, data, state):
     elif typ == OptionType.MENTIONABLE:
         return list(resolved.values())[0].get(value)
     elif typ == AdditionalType.MESSAGE:
+        print(resolved["messages"])
         return resolved["messages"].get(value)
     else:
         return value

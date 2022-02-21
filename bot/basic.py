@@ -160,7 +160,7 @@ support_buttons = [
 ]
 
 @commands.command()
-async def hello(ctx, *, disposed= None):
+async def hello(ctx, *, disposed=None):
   embed = Embed(title= "Leaderboard", description= """We upload the leaderboard to YouTube
   every week. You can find the leaderboard [here](https://youtu.be/4spCNEPawyQ).""".replace(f"\n", ""))
   await ctx.reply(embed= embed)
@@ -170,20 +170,20 @@ async def help(ctx, *, cat= None):
   await ctx.reply(embed= help_all)
 
 @commands.command(aliases=["inter_help", "interactive"])
-async def interactive_help(ctx, *, disposed= None):
+async def interactive_help(ctx, *, disposed=None):
   await ctx.reply("Please select a category to continue.", components= [ui.SelectMenu(custom_id="interactive_help",
     options= help_menu_options(ctx), placeholder= "Select")], listener= InteractiveHelpL())
 
 @commands.command()
-async def invite(ctx, *, disposed= None):
+async def invite(ctx, *, disposed=None):
   await ctx.reply(embed= invite_embed)
 
 @commands.command()
-async def prefix(ctx, *, disposed= None):
+async def prefix(ctx, *, disposed=None):
   await ctx.reply("The prefix for SuperBot is `=` (an equal sign).")
 
 @commands.command(aliases=['supportserver', 'supports', 'johann', 'johannlau', 'supporting', 'team', 'dev', 'developer'])
-async def support(ctx, *, disposed= None):
+async def support(ctx, *, disposed=None):
   await ctx.reply(embed= support_embed, components= support_buttons)
 
 def setup(bot):

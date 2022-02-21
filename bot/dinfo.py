@@ -509,7 +509,7 @@ async def emojiinfo(ctx, emoji_: typing.Union[discord.Emoji, str]):
   await ctx.reply(embed= embed)
 
 @commands.command(aliases=['ems']) # Migrated
-async def emojis(ctx, *, disposed= None):
+async def emojis(ctx, *, disposed=None):
   if not ctx.guild.emojis:
     await ctx.reply("The server does not have any custom emojis.")
     return
@@ -1426,7 +1426,7 @@ async def sticker(ctx, message: discord.Message = None):
   await ctx.reply(embed= embed)
 
 @commands.command(aliases=['sts']) # Migrated
-async def stickers(ctx, *, disposed= None):
+async def stickers(ctx, *, disposed=None):
   if not ctx.guild.stickers:
     await ctx.reply("The server does not have any custom stickers.")
     return
@@ -1805,7 +1805,7 @@ async def user_(ctx, user):
   await ctx.respond(embed= embed)
 
 @commands.command()
-async def widget(ctx, *, disposed= None):
+async def widget(ctx, *, disposed=None):
   try:
     widget_ = await ctx.guild.widget()
   except discord.NotFound:

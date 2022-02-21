@@ -1,4 +1,5 @@
-from shared import commands, db, discord, Image, ImageDraw, ImageFont, try_delete, typing
+from _bot import bs
+from shared import commands, db, discord, Image, ImageDraw, ImageFont, try_delete, typing, ui
 #"icyan" : {"fg":"#87B33FFF", "bg":"#131402FF"}
 
 font_led      = ImageFont.truetype("fonts/led.ttf", 50)
@@ -99,6 +100,35 @@ led_font_dict = {
 
 led_colors = typing.Optional[typing.Literal["cyan", "icyan", "crystal", "icrystal", "amber", "iamber", "red", "ired", "green", "igreen", "blue", "iblue", "purple", "ipurple", "yellow", "iyellow",
                                             "teal", "iteal", "black", "white", "tblack", "twhite", "dark", "light", "tdark", "tlight", "wdark", "wlight", "twdark", "twlight"]]
+color_choices = [
+  {'name': "Conventional Crystal", 'value': "crystal"}, {'name': "Conv. Crystal Inverted", 'value': "icrystal"},
+  {'name': "Conventional Amber", 'value': "amber"}, {'name': "Conv. Amber Inverted", 'value': "iamber"},
+  {'name': "Red", 'value': "red"}, {'name': "Red Inverted", 'value': "ired"},
+  {'name': "Yellow", 'value': "yellow"}, {'name': "Yellow Inverted", 'value': "iyellow"},
+  {'name': "Green", 'value': "green"}, {'name': "Green Inverted", 'value': "igreen"},
+  {'name': "Teal", 'value': "teal"}, {'name': "Teal Inverted", 'value': "iteal"},
+  {'name': "Blue", 'value': "blue"}, {'name': "Blue Inverted", 'value': "iblue"},
+  {'name': "Purple", 'value': "purple"}, {'name': "Purple Inverted", 'value': "ipurple"},
+  {'name': "Black", 'value': "black"}, {'name': "Black Transparent", 'value': "tblack"},
+  {'name': "Dark", 'value': "dark"}, {'name': "Dark Transparent", 'value': "tdark"},
+  {'name': "White", 'value': "white"}, {'name': "White Transparent", 'value': "twhite"}
+]
+
+led_sq_choices = [
+  {'name': "Regular", 'value': "regular"},
+  {'name': "Bold", 'value': "bold"},
+  {'name': "Mono", 'value': "mono"},
+  {'name': "Caps (Blocky)", 'value': "caps"},
+  {'name': "Serif", 'value': "serif"}
+]
+led_sq_fonts = {
+  'bold': font_led_bold,
+  'caps': font_led_caps,
+  'mono': font_led_mono,
+  'serif': font_led_serif,
+  'regular': font_led,
+}
+
 led_alignment = typing.Optional[typing.Literal['left', 'center', 'right']]
 led_34_modes = typing.Optional[typing.Literal['1', '1i', '2', '2i', '3', '3i']]
 # S: Getsize sizes   C: Current properties   M: Minus padding   L: Logest text line
@@ -188,6 +218,24 @@ async def lcd(ctx, mode: typing.Optional[typing.Literal['regular', 'calc', 'dens
   draw.multiline_text((0, current_properties["padding"]), text, font=current_font, fill=db["led_colors"][color]["fg"], spacing=current_properties["spacing"], align=alignment)
   image.save('output.png')
   await ctx.reply(file=discord.File('output.png'))
+  try_delete('output.png')
+
+@bs.command(name="led_square", description="Generates a fake LED screen with square dots.", options=[
+           ui.SlashOption(name="Text", description="The text to show on the LED screen.", type=str,
+           required=True), ui.SlashOption(name="Font", description="The font of the text. Defaults to regular.",
+           type=str, required=False, choices=led_sq_choices), ui.SlashOption(name="Color",
+           description="The color of the LED screen. Defaults to red.", type=str, required=False,
+           choices=color_choices)])
+async def led_square(ctx, text, font="regular", color="red"):
+  current_font = led_sq_fonts[font]
+  current_properties = led_font_dict[current_font]
+  sizes = current_font.getsize_multiline(text, spacing=current_properties["spacing"])
+  minus_padding = current_properties["unneeded_padding"] if all_halfheight(text) else 0
+  image = Image.new("RGBA", led_sizer(sizes, current_properties, minus_padding, text.splitlines()[len(text.splitlines())-1]), color=db["led_colors"][color]["bg"])
+  draw = ImageDraw.Draw(image)
+  draw.multiline_text(led_positioner(current_properties, minus_padding), text, font=current_font, fill=db["led_colors"][color]["fg"], spacing=current_properties["spacing"])
+  image.save('output.png')
+  await ctx.respond(file=discord.File('output.png'))
   try_delete('output.png')
 
 @commands.command()

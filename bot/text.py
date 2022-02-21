@@ -619,7 +619,7 @@ async def rtimer(ctx, timetocount, *, Text = None):
     await message.reply(f"Countdown complete!\n"+Text)
 
 @commands.command()
-async def spellcheck(ctx, text, distance: typing.Optional[int] = 3, *, disposed= None):
+async def spellcheck(ctx, text, distance: typing.Optional[int] = 3, *, disposed=None):
   results = spell_checker.get_suggestions(text, max_distance = distance)
   desc = f"QWERTY-spellchecking results for {text}"
   distances = {x["distance"] for x in results}

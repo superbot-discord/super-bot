@@ -61,7 +61,7 @@ think_buttons = [
 
 
 @commands.command(aliases=['buttons'])
-async def button(ctx, *, disposed= None):
+async def button(ctx, *, disposed=None):
   await ctx.reply("All buttons will not timeout.", components= sample_buttons(ctx), listener= SampleButtonL())
 
 @bs.command(name="buttons", description="Generates all kinds of buttons. Mainly for development purposes.")
@@ -69,20 +69,20 @@ async def buttons(ctx):
   await ctx.respond("All buttons will not timeout.", components= sample_buttons(ctx), listener= SampleButtonL())
 
 @commands.command()
-async def join(ctx, vc: discord.VoiceChannel = None, *, disposed= None):
+async def join(ctx, vc: discord.VoiceChannel = None, *, disposed=None):
   if not vc:
     vc = ctx.author.voice.channel
   vclients[ctx.guild] = await vc.connect()
   await ctx.reply("Joined the channel.")
 
 @commands.command()
-async def leave(ctx, *, disposed= None):
+async def leave(ctx, *, disposed=None):
   await ctx.guild.voice_client.disconnect()
   del vclients[ctx.guild]
   await ctx.reply("Left the channel.")
 
 @commands.command()
-async def loop(ctx, *, disposed= None):
+async def loop(ctx, *, disposed=None):
   if vclients.get(ctx.guild, None).loop:
     vclients.get(ctx.guild, None).loop = False
     await ctx.reply('Disabled loop.')
@@ -92,7 +92,7 @@ async def loop(ctx, *, disposed= None):
 
 @commands.command()
 @commands.cooldown(2, 10, commands.BucketType.user)
-async def patience(ctx, *, disposed= None):
+async def patience(ctx, *, disposed=None):
   await ctx.reply("Success!")
 
 @patience.error
@@ -100,7 +100,7 @@ async def patience_error(ctx, error):
   await ctx.reply("This command is on cooldown! You can only use it twice per 10 seconds.")
 
 @commands.command(aliases=['continue', 'resume', 'paused'])
-async def pause(ctx, *, disposed= None):
+async def pause(ctx, *, disposed=None):
   if vclients.get(ctx.guild, None).is_playing():
     vclients.get(ctx.guild, None).pause()
     await ctx.reply("Paused the song.")
@@ -126,11 +126,11 @@ async def play(ctx, volume: typing.Optional[int] = 100, *, song="rickroll"):
   await ctx.reply("Playing the song.")
 
 @commands.command(aliases=['selectmenu', 'menu', 'option', 'options'])
-async def select(ctx, *, disposed= None):
+async def select(ctx, *, disposed=None):
   await ctx.reply("All menus will not timeout.", components= sample_menus, listener=SampleSelectL())
 
 @commands.command(aliases=['think'])
-async def think_forever(ctx, *, disposed= None):
+async def think_forever(ctx, *, disposed=None):
   await ctx.reply("It is easy to make me think forever. Just click on the button!", components=[think_buttons[0]], listener= ThinkForeverL())
 
 def setup(bot):

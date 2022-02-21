@@ -9,7 +9,7 @@ banned_text = []
 
 @commands.command()
 @commands.is_owner()
-async def purgeserver(ctx, text, condition= "True", *, disposed= None):
+async def purgeserver(ctx, text, condition= "True", *, disposed=None):
   text = text.lower()
   if text.startswith("role"):
     all_objects = ctx.guild.roles
