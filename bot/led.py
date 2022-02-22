@@ -306,6 +306,31 @@ async def led_scattered(ctx, text, font="regular", color="red", alignment="cente
   try_delete('output.png')
 
 
+@bs.command(name="led_segment_7", description="Generates a fake 7-segment LED screen.",
+           options=[ui.SlashOption(name="Text", description="The text to show on the LED screen.",
+           type=str, required=True), ui.SlashOption(name="Font", description="The font of the text.",
+           type=str, required=True, choices=segment_font_choices), ui.SlashOption(name="Thickness",
+           description="The thickness of the text. Defaults to medium.", type=str, required=False,
+           choices=segment_thickness_choices), ui.SlashOption(name="Italics",
+           description="Whether to enable italics or not. Defaults to regular.", type=str,
+           required=False, choices=segment_italics_choices), ui.SlashOption(name="Color",
+           description="The color of the LED screen. Defaults to red.", type=str, required=False,
+           choices=color_choices), ui.SlashOption(name="Alignment",
+           description="The alignment of the text. Defaults to center. Only applicable if you use \\n to add a new line.",
+           type=str, required=False, choices=alignment_choices)])
+async def led_segment_7(ctx, text, font, thickness="2", italics="", color="red", alignment="center"):
+  current_font = eval(f"font_lcd{int(font)-1}_{thickness}{italics}")
+  current_properties = led_font_dict[current_font]
+  sizes = current_font.getsize_multiline(text, spacing=current_properties["spacing"])
+  minus_padding = 3
+  image = Image.new("RGBA", led34_sizer(sizes, current_properties, minus_padding, text.splitlines()[len(text.splitlines())-1]), color=db["led_colors"][color]["bg"])
+  draw = ImageDraw.Draw(image)
+  draw.multiline_text(led34_positioner(current_properties, minus_padding), text, font=current_font, fill=db["led_colors"][color]["fg"], spacing=current_properties["spacing"], align=alignment)
+  image.save('output.png')
+  await ctx.respond(file=discord.File('output.png'))
+  try_delete('output.png')
+
+
 @bs.command(name="led_segment_14", description="Generates a fake 14-segment LED screen.",
            options=[ui.SlashOption(name="Text", description="The text to show on the LED screen.",
            type=str, required=True), ui.SlashOption(name="Font", description="The font of the text.",
@@ -428,7 +453,7 @@ async def led2_server(ctx, mode: typing.Optional[typing.Literal['regular', 'bold
   try_delete('output.png')
 
 
-@commands.command()
+@commands.command() # Migrated, segment-14
 async def led3(ctx, mode: led_34_modes = '2', color: led_colors = 'red', alignment: led_alignment = 'left', *, text):
   if mode == '1':
     current_font = font_led3_1
@@ -479,7 +504,7 @@ async def led3_server(ctx, mode: led_34_modes = '1', color: led_colors = 'red', 
   try_delete('output.png')
 
 
-@commands.command()
+@commands.command() # Migrated, segment-14
 async def led4(ctx, mode: led_34_modes = '2', color: led_colors = 'red', alignment: led_alignment = 'left', *, text):
   if mode == '1':
     current_font = font_led4_1
