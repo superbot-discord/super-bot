@@ -88,7 +88,18 @@ async def forecast(ctx, *, location):
   files = [discord.File(f'forecasts_{ctx.message.id}.html'), discord.File('forecasts_css.css')])
   try_delete(f'forecasts_{ctx.message.id}.html')
 
-@commands.command()
+@bs.command(name="gender", description="Estimates the gender of a name.", options=[ui.SlashOption(
+           name="Name", description="The name to estimate the gender of.", type=str, required=True)
+           ])
+async def gender(ctx, *, name):
+  r=requests.get(f"https://api.genderize.io/?name={name}")
+  gender_json = r.json()
+  if gender_json["gender"]:
+    await ctx.respond(f"{name} is {int(gender_json['probability']*100)}% a {gender_json['gender']}.")
+  else:
+    await ctx.respond("No gender was found for the name.")
+
+@commands.command() # Migrated
 async def gender(ctx, *, name):
   r=requests.get(f"https://api.genderize.io/?name={name}")
   gender_json = r.json()
@@ -173,7 +184,26 @@ async def minecraft(ctx, *, item="tnt"):
   except:
     await ctx.reply("No Wiki page with that name found.")
 
-@commands.command(aliaes=["redir", "redirs", "redirects", "red"])
+@bs.command(name="redirect", description="Traces the redirect(s) of a URL.", options=[
+           ui.SlashOption(name="URL", description="The URL to trace the redirect(s) of.", type=str,
+           required=True)])
+async def redirect(ctx, *, url):
+  try:
+    r = requests.get(url, allow_redirects=True)
+    urllist = r.history
+    if len(urllist) == 2:
+      await ctx.reply(f"URL redirected to: {urllist[1].url} with status code {urllist[1].status_code}")
+    elif len(urllist) == 1:
+      await ctx.reply(f"URL moved to: {r.url} with status code {urllist[0].status_code}")
+    elif len(urllist) == 0:
+      await ctx.reply("No redirects or moves found for that URL.")
+    else:
+      urlend = len(urllist)-2
+      await ctx.reply("Initial URL: "+urllist[0]+f"\n"+f"\n".join([f"{i.status_code}: {i.url}" for i in urllist[1:urlend]])+"Final URL: "+urllist[len(urllist)-1])
+  except:
+    await ctx.reply("Invalid URL. Please try again.")
+
+@commands.command(aliaes=["redir", "redirs", "redirects", "red"]) # Migrated
 async def redirect(ctx, *, url):
   await ctx.channel.trigger_typing()
   try:
@@ -468,7 +498,7 @@ Audio - Minimum size\t\t{format_video(video8)}'''
   embed.set_thumbnail(url=youtube.thumbnail_url)
   await ctx.respond(embed=embed, file=discord.File('extra_downloads.txt'))
 
-@commands.command()
+@commands.command() # Migrated except search
 async def youtube(ctx, *, link):
   await ctx.channel.trigger_typing()
   if link.startswith("search "):

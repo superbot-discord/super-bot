@@ -117,6 +117,8 @@ class OptionType(BaseIntEnum):
     """Includes users and roles"""
     Float      =   Number   =          FLOAT                =  NUMBER = 10
     """Any double between -2^53 and 2^53"""
+    Attachment              =          ATTACHMENT           =           11
+    """Any double between -2^53 and 2^53"""
 
     @classmethod
     def any_to_type(cls, whatever) -> OptionType:
@@ -140,6 +142,8 @@ class OptionType(BaseIntEnum):
                 return cls.Mentionable
             if whatever is float:
                 return cls.Float
+            if whatever in [discord.File, discord.Attachment]:
+                return cls.Attachment
         if isinstance(whatever, str):
             whatever = whatever.lower()
             if whatever in ["str", "string", "text", "char[]"]:

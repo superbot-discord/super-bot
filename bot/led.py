@@ -122,11 +122,28 @@ led_sq_choices = [
   {'name': "Serif", 'value': "serif"}
 ]
 led_sq_fonts = {
+  'regular': font_led,
   'bold': font_led_bold,
   'caps': font_led_caps,
   'mono': font_led_mono,
-  'serif': font_led_serif,
-  'regular': font_led,
+  'serif': font_led_serif
+}
+
+led_sc_choices = [
+  {'name': "Regular", 'value': "regular"},
+  {'name': "Bold", 'value': "bold"},
+  {'name': "Serif", 'value': "serif"},
+  {'name': "Modern", 'value': "modern"},
+  {'name': "Caps", 'value': "caps"},
+  {'name': "Caps (Blocky)", 'value': "fat"}
+]
+led_sc_fonts = {
+  'regular': font_led2,
+  'bold': font_led2_bold,
+  'serif': font_led2_serif,
+  'modern': font_led2_modern,
+  'caps': font_led2_caps,
+  'fat': font_led2_fat
 }
 
 led_alignment = typing.Optional[typing.Literal['left', 'center', 'right']]
@@ -238,7 +255,26 @@ async def led_square(ctx, text, font="regular", color="red"):
   await ctx.respond(file=discord.File('output.png'))
   try_delete('output.png')
 
-@commands.command()
+@bs.command(name="led_scattered", description="Generates a fake LED screen with scattered square dots.",
+           options=[ui.SlashOption(name="Text", description="The text to show on the LED screen.",
+           type=str, required=True), ui.SlashOption(name="Font",
+           description="The font of the text. Defaults to regular.", type=str, required=False,
+           choices=led_sc_choices), ui.SlashOption(name="Color",
+           description="The color of the LED screen. Defaults to red.", type=str, required=False,
+           choices=color_choices)])
+async def led_scattered(ctx, text, font="regular", color="red"):
+  current_font = led_sq_fonts[font]
+  current_properties = led_font_dict[current_font]
+  sizes = current_font.getsize_multiline(text, spacing=current_properties["spacing"])
+  minus_padding = current_properties["unneeded_padding"] if all_halfheight(text) else 0
+  image = Image.new("RGBA", led_sizer(sizes, current_properties, minus_padding, text.splitlines()[len(text.splitlines())-1]), color=db["led_colors"][color]["bg"])
+  draw = ImageDraw.Draw(image)
+  draw.multiline_text(led_positioner(current_properties, minus_padding), text, font=current_font, fill=db["led_colors"][color]["fg"], spacing=current_properties["spacing"])
+  image.save('output.png')
+  await ctx.reply(file=discord.File('output.png'))
+  try_delete('output.png')
+
+@commands.command() # Migrated, square
 async def led(ctx, mode: typing.Optional[typing.Literal['regular', 'bold', 'caps', 'mono', 'serif']] = 'regular', color: led_colors = 'red', alignment: led_alignment = 'left', *, text):
   if mode == 'bold':
     current_font = font_led_bold
@@ -283,7 +319,7 @@ async def led_server(ctx, mode: typing.Optional[typing.Literal['regular', 'bold'
   await ctx.reply(file=discord.File('output.png'))
   try_delete('output.png')
 
-@commands.command()
+@commands.command() # Migrated, scattered
 async def led2(ctx, mode: typing.Optional[typing.Literal['regular', 'bold', 'caps', 'fat', 'modern', 'serif']] = 'regular', color: led_colors = 'red', alignment: led_alignment = 'left', *, text):
   if mode == 'bold':
     current_font = font_led2_bold

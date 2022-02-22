@@ -120,7 +120,7 @@ async def botpurge(ctx, *, num: int = 1):
     await ctx.send("You don't have the required permission: Manage messages.")
 
 
-@bs.command(name= "ping", description= "Views the response time and latency of the bot.")
+@bs.command(name="ping", description="Views the response time and latency of the bot.")
 async def ping_(ctx):
   await ctx.defer()
   now1 = datetime.now(timezone.utc)
@@ -129,6 +129,13 @@ async def ping_(ctx):
   mcs = str(int(response_time.microseconds) + int((response_time.total_seconds())%60))
   await message.edit(content=f"Pong! 🏓\n```Message delay: {mcs:<10}microseconds\nBot latency  : {round(bot_.latency*1000000, 2):<10}microseconds```")
 
+
+@bs.command(name="dev_test", description="Development tests.", options=[
+           ui.SlashOption(name="Attachment", description="The attachment.", type=discord.Attachment,
+           required=True)])
+async def dev_test(ctx, attachment):
+  print(attachment)
+  await ctx.respond("response")
 
 @bot_.command(aliases= ["online"]) # Migrated
 async def ping(ctx, *, disposed=None):
