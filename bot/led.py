@@ -294,7 +294,7 @@ async def led_square(ctx, text, font="regular", color="red", alignment="center")
            type=str, required=False, choices=alignment_choices)])
 async def led_scattered(ctx, text, font="regular", color="red", alignment="center"):
   text = text.replace("\\n", "\n")
-  current_font = led_sq_fonts[font]
+  current_font = led_sc_fonts[font]
   current_properties = led_font_dict[current_font]
   sizes = current_font.getsize_multiline(text, spacing=current_properties["spacing"])
   minus_padding = current_properties["unneeded_padding"] if all_halfheight(text) else 0
