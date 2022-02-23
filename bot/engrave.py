@@ -179,7 +179,7 @@ async def engrave(ctx, product = "list", *, text = "Your text goes here."):
     embed.add_field(name="iPod Touch", value="`ipod` `ipodgray` `ipodsilver` `ipodgold` `ipodred` `ipodpink` `ipodblue`", inline= False)
   else:
     embed = Embed(title="Invalid product", description="")
-  await ctx.reply(embed= embed)
+  await ctx.reply(embed=embed)
 
 def setup(bot):
   bot.add_command(engrave)

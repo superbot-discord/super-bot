@@ -212,7 +212,7 @@ async def population(ctx, country="current"):
         if "retrieving data" not in item:
           break
       embed.add_field(name="Net Growth", value=item, inline= True)
-    await ctx.reply(embed= embed)
+    await ctx.reply(embed=embed)
   except selenium.common.exceptions.TimeoutException:
     await ctx.reply("Invalid country. Please try again.")
 

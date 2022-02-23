@@ -74,7 +74,7 @@ async def exchange(ctx, currency: exchange_currencies = "USD", amount: int = 1, 
   for x, y in r.items():
     desc += f"**{x}**: {y}\n"
   embed = Embed(title=f"{amount} {currency} is equal to…", description=desc)
-  await ctx.reply(embed= embed)
+  await ctx.reply(embed=embed)
 
 def setup(bot):
   bot.add_command(convert)

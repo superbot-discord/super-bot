@@ -48,7 +48,7 @@ async def definition(ctx, *, word):
     embed.add_field(name="Antonyms", value=", ".join(antonyms))
   except:
     pass
-  await ctx.reply(embed= embed)
+  await ctx.reply(embed=embed)
 
 @commands.command(aliases=['http', 'https', 'statuscode'])
 async def error(ctx, code="404", *, disposed=None):
@@ -138,7 +138,7 @@ async def google(ctx, *, query):
       alt_t = ""
     desc += f"[{html_to_md(x['htmlTitle'])}]({x['link']}){x_}\n{alt_t}"f"{x['htmlSnippet']}\n"
   embed = Embed(title=f"Google search results for {query}", description=desc)
-  await ctx.reply(embed= embed)
+  await ctx.reply(embed=embed)
 
 @commands.command()
 async def minecraft(ctx, *, item="tnt"):
@@ -180,7 +180,7 @@ async def minecraft(ctx, *, item="tnt"):
     """
     image = soup.findAll("img")[2]['data-src']
     embed.set_image(url = image)
-    await ctx.reply(embed= embed)
+    await ctx.reply(embed=embed)
   except:
     await ctx.reply("No Wiki page with that name found.")
 
@@ -346,7 +346,7 @@ async def weather(ctx, *, location):
 {r3['components']['no2']} μg/m3 NO₂ (Nitrogen Dioxide)\n{r3['components']['o3']} μg/m3 O₃ (Ozone)\n{r3['components']['so2']} μg/m3 SO₂ (Sulphur Dioxide)\n{r3['components']['pm2_5']} μg/m3 PM₂.₅ (Fine Particles patter)
 {r3['components']['pm10']} μg/m3 PM₁₀ (Coarse Particulate Matter)\n{r3['components']['nh3']} μg/m3 NH₃ (Ammonia)""", inline= False)
   embed.set_thumbnail(url=f"http://openweathermap.org/img/wn/{r1['weather'][0]['icon']}@2x.png")
-  await ctx.reply(embed= embed)
+  await ctx.reply(embed=embed)
 
 @commands.command()
 async def wiki(ctx, *, query):
@@ -377,7 +377,7 @@ async def wiki_search(ctx, *, query):
       break
     z+=len(f0n+y_extract)
     embed.add_field(name=f0n, value=f"{y_extract[:1023]}…" if len(y_extract) > 1024 else y_extract, inline= False)
-  await ctx.reply(embed= embed)
+  await ctx.reply(embed=embed)
 
 @bs.command(name="youtube_channel", description="Shows information about a YouTube channel.",
            options=[ui.SlashOption(name= "Channel", description= "The link of the channel to show information of.",
@@ -522,7 +522,7 @@ async def youtube(ctx, *, link):
       desc+=f"**[{x.title}]({x.watch_url})**\n{format_length(x.length)} | {x.views:,} Views | By [{pytube.Channel(x.channel_url).channel_name}]({x.channel_url})\n"
     embed = Embed(title="Search results", description=desc)
     embed.set_footer(text="Use =youtube [Link] to download videos.")
-    await ctx.reply(embed= embed)
+    await ctx.reply(embed=embed)
     return
   if link.startswith("channel "):
     chnl = pytube.Channel(link)

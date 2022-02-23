@@ -279,7 +279,7 @@ async def snipe(ctx, *, text= None):
     if sniping.get(chnl, True):
       if not sniper.get(chnl, None):
         embed = Embed(title= "Empty", description= "Nothing to snipe from this channel.")
-        await ctx.reply(embed= embed)
+        await ctx.reply(embed=embed)
         return
       else:
         embed = Embed(title= f"Snipped message (1/{len(sniper[chnl])})", description= sniper[chnl][0][0])

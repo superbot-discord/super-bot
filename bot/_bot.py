@@ -178,6 +178,7 @@ async def on_command_error(ctx, error):
     command = max(matches.items(), key=lambda item: item[1])[0]
     if SequenceMatcher(None, command, used_command).ratio() <= 0.7:
       await ctx.reply(f"Your might have made a (serious) typo and your command has been ignored.", delete_after=4)
+      return
     try:
       arguments = message.content.split(" ", 1)[1]
     except IndexError:

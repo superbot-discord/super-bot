@@ -89,7 +89,7 @@ async def choice(ctx, *options): # T
   rand = ra.choice(options)
   desc = f"Your random option is {rand}"
   embed = Embed(title= "Random choice", description= desc)
-  await ctx.reply(embed= embed)
+  await ctx.reply(embed=embed)
 
 @commands.command()
 async def compress(ctx, *, text):
@@ -315,7 +315,7 @@ async def pick(ctx, lower: int, upper: int, times: int): # MS
     for x in range(times):
       desc += f"||`{str(ra.randint(lower,upper)).zfill(upper_length)}`||  "
   embed = Embed(title= f"{times} random number(s) between {lower} and {upper}", description= desc)
-  await ctx.reply(embed= embed)
+  await ctx.reply(embed=embed)
 
 @bs.command(name="quantum_random", description="Generates random number(s) or character(s) using quantum fluctuations.",
            options=[ui.SlashOption(name="Type", description="The type of output to generate.",
@@ -355,7 +355,7 @@ async def quantum_random(ctx, size: typing.Literal['256', '65536', 'alpha', 'asc
     return
   desc = ", ".join(r)
   embed = Embed(title= f"{times} quantum random {range_text}", description= desc)
-  await ctx.reply(embed= embed)
+  await ctx.reply(embed=embed)
 
 # NON-QUANTUM RANDOM
 # M: Multiple values   R: Can repeat   S: Spoilers   T: Text choices
@@ -434,7 +434,7 @@ async def random_m(ctx, times: int, lower: int, upper: int):
   else:
     desc = ", ".join(ra.sample(range(lower, upper + 1), times))
   embed = Embed(title= f"{times} random number(s) between {lower} and {upper}", description= desc)
-  await ctx.reply(embed= embed)
+  await ctx.reply(embed=embed)
 
 @commands.command() # Migrated
 async def random_mr(ctx, times: int, lower: int, upper: int):
@@ -442,7 +442,7 @@ async def random_mr(ctx, times: int, lower: int, upper: int):
     lower, upper = upper, lower
   desc = ", ".join(ra.randint(lower,upper) for x in range(times))
   embed = Embed(title= f"{times} random numbers between {lower} and {upper}", description= desc)
-  await ctx.reply(embed= embed)
+  await ctx.reply(embed=embed)
 
 @commands.command() # Migrated
 async def random_mrs(ctx, times: int, lower: int, upper: int):
@@ -453,7 +453,7 @@ async def random_mrs(ctx, times: int, lower: int, upper: int):
   for x in range(times):
     desc += f"||`{xfill(ra.randint(lower,upper), upper_length)}`||  "
   embed = Embed(title=f"{times} random number(s) between {lower} and {upper}", description= desc)
-  await ctx.reply(embed= embed)
+  await ctx.reply(embed=embed)
 
 @commands.command() # Migrated
 async def random_mrst(ctx, times: int, *options):
@@ -463,7 +463,7 @@ async def random_mrst(ctx, times: int, *options):
   for x in range(times):
     desc += f"||`{xfill(ra.choice(upper_length), upper_length)}`||  "
   embed = Embed(title= f"{times} random choice(s)", description= desc)
-  await ctx.reply(embed= embed)
+  await ctx.reply(embed=embed)
 
 @commands.command() # Migrated
 async def random_mrt(ctx, times: int, *options):
@@ -472,7 +472,7 @@ async def random_mrt(ctx, times: int, *options):
   for x in range(times):
     desc += f"{ra.choice(options)}, "
   embed = Embed(title= f"{times} random choice(s)", description= desc)
-  await ctx.reply(embed= embed)
+  await ctx.reply(embed=embed)
 
 @commands.command() # Migrated
 async def random_ms(ctx, times: int, lower: int, upper: int):
@@ -489,7 +489,7 @@ async def random_ms(ctx, times: int, lower: int, upper: int):
     for x in range(times):
       desc += f"||`{xfill(ra.randint(lower,upper), upper_length)}`||  "
   embed = Embed(title=f"{times} random number(s) between {lower} and {upper}", description= desc)
-  await ctx.reply(embed= embed)
+  await ctx.reply(embed=embed)
 
 @commands.command() # Migrated
 async def random_mst(ctx, times: int, *options):
@@ -504,7 +504,7 @@ async def random_mst(ctx, times: int, *options):
     for x in range(times):
       desc += f"||`{xfill(ra.choice(upper_length), upper_length)}`||  "
   embed = Embed(title= f"{times} random choice(s)", description= desc)
-  await ctx.reply(embed= embed)
+  await ctx.reply(embed=embed)
 
 @commands.command() # Migrated
 async def random_mt(ctx, times: int, *options):
@@ -517,7 +517,7 @@ async def random_mt(ctx, times: int, *options):
   else:
     desc = ", ".join(ra.sample(options, times))
   embed = Embed(title= f"{times} random choice(s)", description= desc)
-  await ctx.reply(embed= embed)
+  await ctx.reply(embed=embed)
 
 @commands.command() # Migrated
 async def random_s(ctx, lower: int, upper: int):
@@ -544,7 +544,7 @@ async def raffle(ctx, lower: int, upper: int, amount: int): # MRS
     rand = ra.randint(lower,upper)
     desc += f"||`{str(rand).zfill(upper_length)}`||  "
   embed = Embed(title= f"{amount} random number(s) between {lower} and {upper}", description= desc)
-  await ctx.reply(embed= embed)
+  await ctx.reply(embed=embed)
 
 @commands.command()
 async def rawspoiler(ctx, *, text):

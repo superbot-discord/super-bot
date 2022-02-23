@@ -70,7 +70,7 @@ async def element(ctx, *, query):
       embed.set_image(url=element_['spectral_img'])
   else:
     embed = Embed(title=f"Search results", description=f"\n".join([f"[**{x['number']}** {x['symbol']}: {x['name']}]({x['source']})" for x in pdb_]))
-  await ctx.reply(embed= embed)
+  await ctx.reply(embed=embed)
 
 @commands.command()
 async def regex(ctx, regularexp, *, text):
@@ -86,7 +86,7 @@ async def regex(ctx, regularexp, *, text):
   embed = Embed(title = ti, description = newtext.replace("****",""))
   embed.set_author(name=f"Match Results for {regularexp}")
   embed.set_footer(text="Match Results are highlighted in bold")
-  await ctx.reply(embed= embed)
+  await ctx.reply(embed=embed)
 
 @commands.command()
 async def regsub(ctx, regular1, regular2, *, text):
@@ -100,7 +100,7 @@ async def regsub(ctx, regular1, regular2, *, text):
     ti = f"There were {matches} occurrences."
   embed = Embed(title = ti, description = f"`{newtext}`")
   embed.set_author(name=f"Substitution Result for {regular1}")
-  await ctx.reply(embed= embed)
+  await ctx.reply(embed=embed)
 
 @commands.command()
 async def stats(ctx, *numbers: int):
@@ -126,7 +126,7 @@ async def time(ctx, *, timezoneinput="0"):
   elif timezoneinput=="all":
     desc = f"**[ISO 3166 Country Codes](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2#Officially_assigned_code_elements)**:\n```AD AE AF AG AI AL AM AO AQ AR AS AT AU AW AX AZ BA BB BD BE BF BG BH BI BJ BL BM BN BO BQ BR BS BT BV BW BY BZ CA CC CD CF CG CH CI CK CL CM CN CO CR CU CV CW CX CY CZ DE DJ DK DM DO DZ EC EE EG EH ER ES ET FI FJ FK FM FO FR GA GB GD GE GF GG GH GI GL GM GN GP GQ GR GS GT GU GW GY HK HM HN HR HT HU ID IE IL IM IN IO IQ IR IS IT JE JM JO JP KE KG KH KI KM KN KP KR KW KY KZ LA LB LC LI LK LR LS LT LU LV LY MA MC MD ME MF MG MH MK ML MM MN MO MP MQ MR MS MT MU MV MW MX MY MZ NA NC NE NF NG NI NL NO NP NR NU NZ OM PA PE PF PG PH PK PL PM PN PR PS PT PW PY QA RE RO RS RU RW SA SB SC SD SE SG SH SI SJ SK SL SM SN SO SR SS ST SV SX SY SZ TC TD TF TG TH TJ TK TLa TM TN TO TR TT TV TW TZ UA UG UM US UY UZ VA VC VE VG VI VN VU WF WS YE YT ZA ZM ZW```\nIn addition, **[TZ Database Names](http://worldtimeapi.org/api/timezone.txt)** and **UTC Timezone Numbers** (between -15 and 15, divisible by 0.25) are supported."
     embed = Embed(title="All timezone formats supported", description=desc)
-    await ctx.reply(embed= embed)
+    await ctx.reply(embed=embed)
   elif len(timezoneinput)==2 and timezoneinput.isalpha():
     try:
       tz = pytz.timezone(pytz.country_timezones[timezoneinput][0])

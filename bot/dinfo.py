@@ -183,7 +183,7 @@ async def attachment(ctx, message: discord.Message = None, index: int = 1):
   embed.add_field(name="Size", value=f1v, inline= True)
   embed.add_field(name="MIME Type", value=f2v, inline= True)
   embed.add_field(name="Alternative URL (Does not always work!)", value=f3v, inline= False)
-  await ctx.reply(embed= embed)
+  await ctx.reply(embed=embed)
 
 @commands.command(aliases=['av'])
 async def avatar(ctx,user: discord.Member = None):
@@ -218,7 +218,7 @@ async def avatar(ctx,user: discord.Member = None):
         desc += f"[{size}]({temp}) "
       embed.add_field(name=f"Server {x.upper()}s", value=desc)
   embed.set_image(url=user.display_avatar.url)
-  await ctx.reply(embed= embed)
+  await ctx.reply(embed=embed)
 
 @commands.command(aliases = ['badge', 'flag', 'flags'])
 async def badges(ctx, integer = "help"):
@@ -233,7 +233,7 @@ async def badges(ctx, integer = "help"):
       embed = Embed(title = f"Badges integer {integer}", description=bg_itop(int(integer)))
     except:
       embed = badges_guide
-  await ctx.reply(embed= embed)
+  await ctx.reply(embed=embed)
 
 @commands.command(aliases=['bn'])
 async def banner(ctx, user: typing.Union[discord.User, discord.Member] = None):
@@ -272,7 +272,7 @@ async def banner(ctx, user: typing.Union[discord.User, discord.Member] = None):
         temp = base_url.replace("?size=1024", f"?size={size}")
         desc += f"[{size}]({temp}) "
       embed.add_field(name=f"{x.upper()}s", value=desc)
-  await ctx.reply(embed= embed)
+  await ctx.reply(embed=embed)
 
 @commands.command(aliases=['ca']) # Migrated
 async def category(ctx, category: discord.CategoryChannel = None):
@@ -506,7 +506,7 @@ async def emojiinfo(ctx, emoji_: typing.Union[discord.Emoji, str]):
       embed.add_field(name="Unicode Version", value=cemoji[4], inline= True)
     if len(cemoji[2]) > 0:
       embed.add_field(name="Tags", value=", ".join(cemoji[2]), inline= True)
-  await ctx.reply(embed= embed)
+  await ctx.reply(embed=embed)
 
 @commands.command(aliases=['ems']) # Migrated
 async def emojis(ctx, *, disposed=None):
@@ -638,7 +638,7 @@ async def invitelink(ctx, *, invite_input: discord.Invite):
     embed.add_field(name="Expires", value=f7v, inline= True)
     embed.add_field(name="Valid Duration", value=f5v, inline= True)
   embed.add_field(name="Expired?", value=f6v, inline= True)
-  await ctx.reply(embed= embed)
+  await ctx.reply(embed=embed)
 
 @commands.command(aliases=['lu'])
 async def leftuser(ctx, *, userinput):
@@ -664,7 +664,7 @@ async def leftuser(ctx, *, userinput):
   embed.add_field(name="Name", value=f0v, inline= False)
   embed.add_field(name="Time since user registered", value=f1va, inline= True)
   embed.add_field(name="Registered", value=f1v, inline= True)
-  await ctx.reply(embed= embed)
+  await ctx.reply(embed=embed)
 
 @commands.command(aliases=['msg', 'ms']) # Migrated
 async def message(ctx, message: discord.Message = None):
@@ -797,7 +797,7 @@ async def message(ctx, message: discord.Message = None):
     embed.add_field(name=f"Role mentions ({len(f3vraw)})", value=f3v, inline= False)
   if len(f4vraw) != 0:
     embed.add_field(name=f"User mentions ({len(f4vraw)})", value=f4v, inline= False)
-  await ctx.reply(embed= embed)
+  await ctx.reply(embed=embed)
 
 @bs.message_command(name= "View Message Information")
 async def message_(ctx, message):
@@ -933,7 +933,7 @@ async def overwrites(ctx, channel_: typing.Union[discord.TextChannel, discord.Vo
   for x, y in channel_.overwrites.items().__reversed__():
     desc += f"**{x.mention}**\n  Allowed: {y.pair()[0].value}\n  Denied: {y.pair()[1].value}\n"
   embed = Embed(title=f"Channel Overwrites", description=desc[:4096])
-  await ctx.reply(embed= embed)
+  await ctx.reply(embed=embed)
 
 @commands.command(aliases = ['perm', 'perms', 'permission']) # Migrated
 async def permissions(ctx, integer="help"):
@@ -1035,7 +1035,7 @@ async def rawraw(ctx, msg: discord.Message = None):
       await ctx.reply("Please reply to a message or add a message ID/Link.")
       return
   embed = Embed(title= "Raw message", url= msg.jump_url, description= f"```{discord.utils.escape_markdown(msg.content, as_needed=True)}```")
-  await ctx.reply(embed= embed)
+  await ctx.reply(embed=embed)
 
 @commands.command(aliases=['rea'])
 async def reactions(ctx, *, msg: discord.Message = None):
@@ -1104,7 +1104,7 @@ async def role(ctx,role: discord.Role = None):
     embed.add_field(name="Bot", value="This is the Discord Booster role.", inline= False)
   embed.add_field(name="Members ("+str(len(memberlist))+")", value=f0v[:5950-len(embed)], inline= False)
   #embed.add_field(name="Channel Permissions", value=f3vb, inline= False)
-  await ctx.reply(embed= embed)
+  await ctx.reply(embed=embed)
 
 @commands.command(aliases=['guild', 'se'])
 async def server(ctx, *, text="regular"):
@@ -1293,7 +1293,7 @@ async def server(ctx, *, text="regular"):
     except:
       pass
   try:
-    await ctx.reply(embed= embed)
+    await ctx.reply(embed=embed)
   except:
     f1va = ""
     for x in f1valist:
@@ -1302,7 +1302,7 @@ async def server(ctx, *, text="regular"):
       f1va += f"{x.name}, "
     f1va = f"{f1va[:-2]}…"
     embed.set_field_at(3, name=f"Roles ({len(guild.roles)})", value=f1va, inline= False)
-    await ctx.reply(embed= embed)
+    await ctx.reply(embed=embed)
 
 @commands.command(aliases=['sta'])
 async def status(ctx, member: discord.Member = None):
@@ -1337,7 +1337,7 @@ async def status(ctx, member: discord.Member = None):
       field=f"{x.artist}: {x.title}\nStarted: "
       embed.add_field(name=f"Spotify: {x.album}", value=field, inline= False)
       embed.set_thumbnail(url=x.album_cover_url)
-  await ctx.reply(embed= embed)
+  await ctx.reply(embed=embed)
 
 @commands.command(aliases=['stu'])
 async def statuses(ctx, *, disposed=None):
@@ -1423,7 +1423,7 @@ async def sticker(ctx, message: discord.Message = None):
   embed.add_field(name="Type", value=("PNG" if _sticker.type==discord.StickerFormatType.png else ("APNG" if _sticker.type==discord.StickerFormatType.apng else "Lottie")), inline= True)
   embed.add_field(name=f"Pack ({_sticker.sort_value}/{len(sticker_pack.stickers)})", value=f"**ID:** {sticker_pack.id}\n**Cover: **{sticker_pack.cover_sticker.name}\n**{sticker_pack.name}**\nDescription: {sticker_pack.description}", inline= False)
   #embed.set(_sticker.url)
-  await ctx.reply(embed= embed)
+  await ctx.reply(embed=embed)
 
 @commands.command(aliases=['sts']) # Migrated
 async def stickers(ctx, *, disposed=None):
@@ -1467,7 +1467,7 @@ async def template(ctx, *, tempinput):
   embed.add_field(name="Uses", value=f1v, inline= True)
   embed.add_field(name="Synced", value=f2v, inline= True)
   embed.add_field(name="Original Server", value=f3v, inline= True)
-  await ctx.reply(embed= embed)
+  await ctx.reply(embed=embed)
 
 @commands.command(aliases=['member', 'mem', 'us']) # Migrated
 async def user(ctx, user: discord.Member = None, channel: discord.TextChannel = None):
@@ -1589,7 +1589,7 @@ async def user(ctx, user: discord.Member = None, channel: discord.TextChannel = 
   embed.add_field(name= "Permission integer", value= str(f3v_raw2), inline= True)
   embed.add_field(name= "Boosting since", value= f6v, inline= False)
   embed.add_field(name= f"Badges (Integer: {user_public_flags.value})", value= f5v, inline= False)
-  await ctx.reply(embed= embed)
+  await ctx.reply(embed=embed)
 
 @bs.command(name= "user_info", description= "Shows information about a user.", options=[
            ui.SlashOption(name= "User", type= discord.Member, required= False,
@@ -1820,7 +1820,7 @@ async def widget(ctx, *, disposed=None):
   embed.add_field(name="Channels", value=f0v, inline= False)
   embed.add_field(name="Members listed", value=f1v[:1024], inline= False)
   embed.url = widget_.json_url
-  await ctx.reply(embed= embed)
+  await ctx.reply(embed=embed)
 
 def setup(bot):
   bot.add_command(attachment)

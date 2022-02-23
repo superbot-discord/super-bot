@@ -101,17 +101,38 @@ async def hk_aqi(ctx, *, disposed=None):
   Roadside: {aqi_range2(r2[3]['health_risk_min'], r2[3]['health_risk_max'])}""")
   for a in r3:
     embed.add_field(name=a['station'], value=f"{a['aqhi']} ({a['health_risk']})")
-  await ctx.reply(embed= embed)
+  await ctx.reply(embed=embed)
 
 @commands.command()
 async def hk_ferry_1(ctx, *, disposed=None):
   await ctx.channel.trigger_typing()
   r1=requests.get("https://www.hongkongwatertaxi.com.hk/eta/?route=HHCL").json()['data'][0]
   r2=requests.get("https://www.hongkongwatertaxi.com.hk/eta/?route=CLHH").json()['data'][0]
-  embed = Embed(title="Fortune Ferry Information")
+  embed = Embed(title="Fortune Ferry: Hong Hom - Central")
   for r in [r1, r2]:
-    embed.add_field(name=r['route_en'].replace("-", "→").replace("Hung Hom", "Hung Hom 紅磡").replace("Central", "Central 中環"), value=f"Next departure at {r['depart_time']}{(' (Vessel Code: '+r['vesselcode']+')') if r.get('vesselcode', None) else ''}")
-  await ctx.reply(embed= embed)
+    embed.add_field(name=r['route_en'].replace("-", "→").replace("Hung Hom", "Hung Hom 紅磡").replace("Central", "Central 中環"),
+    value=f"{'Next departure at ' + r['depart_time'] if r['depart_time'] else 'No departures in the near future'}{(' (Vessel Code: '+r['vesselcode']+')') if r.get('vesselcode', None) else ''}")
+  await ctx.reply(embed=embed)
+
+@commands.command()
+async def hk_ferry_2(ctx, *, disposed=None):
+  await ctx.channel.trigger_typing()
+  r1=requests.get("https://www.sunferry.com.hk/eta/?route=HHNP").json()['data'][0]
+  r2=requests.get("https://www.sunferry.com.hk/eta/?route=NPHH").json()['data'][0]
+  embed = Embed(title="Sun Ferry: Hong Hom - North Point")
+  for r in [r1, r2]:
+    embed.add_field(name=r['route_en'].replace("-", "→").replace("Hung Hom", "Hung Hom 紅磡").replace("North Point", "North Point 北角"), value=f"Next departure at {r['depart_time']}")
+  await ctx.reply(embed=embed)
+
+@commands.command()
+async def hk_ferry_3(ctx, *, disposed=None):
+  await ctx.channel.trigger_typing()
+  r1=requests.get("https://www.sunferry.com.hk/eta/?route=KCNP").json()['data'][0]
+  r2=requests.get("https://www.sunferry.com.hk/eta/?route=NPKC").json()['data'][0]
+  embed = Embed(title="Sun Ferry: Kowloon City - North Point")
+  for r in [r1, r2]:
+    embed.add_field(name=r['route_en'].replace("-", "→").replace("Kowloon City", "Kowloon City 九龍城").replace("North Point", "North Point 北角"), value=f"Next departure at {r['depart_time']}")
+  await ctx.reply(embed=embed)
 
 @commands.command()
 async def hk_forecast(ctx, *, disposed=None):
@@ -126,7 +147,7 @@ async def hk_forecast(ctx, *, disposed=None):
   for r in r1['soilTemp']:
     f0v += f"Soil temperature at {r['place']} ({r['depth']['value']}m deep): {r['value']}°C\n"
   embed.add_field(name="Extra Information", value=f0v)
-  await ctx.reply(embed= embed)
+  await ctx.reply(embed=embed)
   await ctx.channel.trigger_typing()
   plt.rcdefaults()
   fig, (ax, ax2) = plt.subplots(2, 1)
@@ -176,7 +197,7 @@ async def hk_gmb(ctx, region, line):
         if r4:
           desc += f"\nCar(s) at {', '.join([datetime.fromisoformat(x['timestamp']).strftime('%H:%M:%S') for x in r4])}"
       embed = Embed(title=f"{r2_['orig_en']} {r2_['orig_tc']} → {r2_['dest_en']} {r2_['dest_tc']}", description=desc)
-      await ctx.reply(embed= embed)
+      await ctx.reply(embed=embed)
 
 @commands.command()
 async def hk_kmb(ctx, line):
@@ -200,7 +221,7 @@ async def hk_kmb(ctx, line):
           rt2_etas = [datetime.fromisoformat(x['eta']).strftime('%H:%M:%S') if x['eta'] else "unavailable" for x in rt2]
           desc += f"\nBus(es) at {', '.join(rt2_etas)}"
       embed = Embed(title= f"{r1_['route']} {r1_['orig_en']} {r1_['orig_tc']} → {r1_['dest_en']} {r1_['dest_tc']}", description= desc)
-      await ctx.reply(embed= embed)
+      await ctx.reply(embed=embed)
 
 @commands.command()
 async def hk_lightning(ctx, *, disposed=None):
@@ -216,7 +237,7 @@ async def hk_lightning(ctx, *, disposed=None):
   embed = Embed(title="HKO Lightning Information", description=f"Information within {re.sub(hko_dt_pattern2, hko_dt_pattern2_, lightnings[0]['DateTime'])} HKT (Update frequency: 1 hour)")
   for l, l2 in zip(lightnings, lightnings_):
     embed.add_field(name=f"{l['Region'].replace('Hong Kong Island', 'HKI')}: {l['Type']}\n{l2['區域']}: {l2['類別']}", value=f"Lightnings: {l['lightning count']}", inline= True)
-  await ctx.reply(embed= embed)
+  await ctx.reply(embed=embed)
 
 @commands.command()
 async def hk_lr(ctx, station: int):
@@ -232,7 +253,7 @@ async def hk_lr(ctx, station: int):
         desc += f"""<:t1:932189099723460608>{'<:tr:932189462648209468>'if t['train_length']==1 else'<:t2:932189099752841246>'}**{t['route_no']}** to {t['dest_en']} ({t['dest_ch']}) {db['mtr']['lr_status'][t['arrival_departure']]} {f"in {t['time_en']}" if t['time_en'][0].isdigit() else f"({t['time_en']})"}\n"""
       embed.add_field(name=f"Platform {p['platform_id']}", value=desc, inline= False)
   if len(embed.fields):
-    await ctx.reply(embed= embed)
+    await ctx.reply(embed=embed)
   else:
     await ctx.reply("No information could be fetched.")
 
@@ -249,7 +270,7 @@ async def hk_moon(ctx, *, disposed=None):
   The same also happened in the data supplied for 2018~2023. Please do not contact the developers for information on that.""".replace(f"\n", ""))
   for m in moons:
     embed.add_field(name=m['YYYY-MM-DD'], value=f"Rise-Set: {m['RISE']} ~ {m['SET']}\nTransitional Period: {m['TRAN.']}")
-  await ctx.reply(embed= embed)
+  await ctx.reply(embed=embed)
 
 @commands.command()
 async def hk_mtr(ctx, station, line):
@@ -265,7 +286,7 @@ async def hk_mtr(ctx, station, line):
     embed.add_field(name="Up", value=f"\n".join([f"To {x['dest']} from platform {x['plat']} in {x['ttnt']} minutes ({mtr_time(x['time'])})" for x in r['UP']]))
   if r.get('DOWN', None):
     embed.add_field(name="Down", value=f"\n".join([f"To {x['dest']} from platform {x['plat']} in {x['ttnt']} minutes ({mtr_time(x['time'])})" for x in r['DOWN']]))
-  await ctx.reply(embed= embed)
+  await ctx.reply(embed=embed)
 
 @commands.command()
 async def hk_nwfb(ctx, line):
@@ -286,7 +307,7 @@ async def hk_nwfb(ctx, line):
       rt2_eta=datetime.fromisoformat(rt2[0]['eta'])
       desc += f" (Bus at {rt2_eta.strftime('%H:%M:%S')})"
   embed = Embed(title=f"{r1['route']} {r1['dest_en']} {r1['dest_tc']} → {r1['orig_en']} {r1['orig_tc']}", description=desc)
-  await ctx.reply(embed= embed)
+  await ctx.reply(embed=embed)
   await ctx.channel.trigger_typing()
   r1=requests.get(f"https://rt.data.gov.hk/v1/transport/citybus-nwfb/route/nwfb/{line}/").json()['data']
   r2=requests.get(f"https://rt.data.gov.hk/v1/transport/citybus-nwfb/route-stop/nwfb/{line}/outbound").json()['data']
@@ -301,7 +322,7 @@ async def hk_nwfb(ctx, line):
       rt2_eta=datetime.fromisoformat(rt2[0]['eta'])
       desc += f" (Bus at {rt2_eta.strftime('%H:%M:%S')})"
   embed = Embed(title=f"{r1['route']} {r1['orig_en']} {r1['orig_tc']} → {r1['dest_en']} {r1['dest_tc']}", description=desc)
-  await ctx.reply(embed= embed)
+  await ctx.reply(embed=embed)
 
 @commands.command()
 async def hk_sea_pressure(ctx, *, disposed=None):
@@ -317,7 +338,7 @@ async def hk_sea_pressure(ctx, *, disposed=None):
   embed = Embed(title="HKO Sea Pressure Information", description=f"Information updated at {re.sub(hko_dt_pattern, hko_dt_pattern_, pressures[0]['Date time'])} HKT (Update frequency: 10 minutes)")
   for p, p_ in zip(pressures, pressures_):
     embed.add_field(name=f"{p['Automatic Weather Station']} {p_['自動氣象站'].replace(' ', '')}", value=f"{p['Mean Sea Level Pressure(hPa)']} hPa", inline= True)
-  await ctx.reply(embed= embed)
+  await ctx.reply(embed=embed)
 
 @commands.command()
 async def hk_sun(ctx, *, disposed=None):
@@ -330,7 +351,7 @@ async def hk_sun(ctx, *, disposed=None):
   embed = Embed(title="HKO Sun Information")
   for s in suns:
     embed.add_field(name=s['YYYY-MM-DD'], value=f"Rise-Set: {s['RISE']} ~ {s['SET']}\nTransitional Period: {s['TRAN.']}")
-  await ctx.reply(embed= embed)
+  await ctx.reply(embed=embed)
   plt.rcdefaults()
   fig, (ax1, ax2, ax3) = plt.subplots(3, 1, sharex=True)
   dates = [datetime.strptime(x['YYYY-MM-DD'], "%Y-%m-%d") for x in suns]
@@ -360,6 +381,19 @@ async def hk_sun(ctx, *, disposed=None):
   await ctx.reply(files=[discord.File("sun.png"), discord.File("sun.svg")])
 
 @commands.command()
+async def hk_temperature(ctx, *, disposed=None):
+  await ctx.channel.trigger_typing()
+  r1=requests.get("https://data.weather.gov.hk/weatherAPI/hko_data/regional-weather/latest_1min_temperature.csv") # English
+  r2=requests.get("https://data.weather.gov.hk/weatherAPI/hko_data/regional-weather/latest_1min_temperature_uc.csv") # Tra Chinese
+  en_temp = r1.content.decode("utf-8")[:-1]
+  en = csv.DictReader(en_temp.splitlines())
+  tc_temp = r2.content.decode("utf-8")[:-1]
+  tc = csv.DictReader(tc_temp.splitlines())
+  desc = "\n".join([f"{x['Air Temperature(degree Celsius)']}°C - {x['Automatic Weather Station']} {y['自動氣象站']}" for x, y in zip(en, tc)])
+  embed = Embed(title="HKO Latest Temperature", description=desc)
+  await ctx.reply(embed=embed)
+
+@commands.command()
 async def hk_tide(ctx, *, disposed=None):
   await ctx.channel.trigger_typing()
   r=requests.get("https://data.weather.gov.hk/weatherAPI/hko_data/tide/ALL_en.csv")
@@ -369,7 +403,7 @@ async def hk_tide(ctx, *, disposed=None):
   embed = Embed(title="HKO Tide Information", description=f"Information updated at {tides[0]['Time']} HKT (Update frequency: 5 minutes)")
   for t in tides:
     embed.add_field(name=t['Tide Station'], value=f"{t['Height(m)']} m", inline= True)
-  await ctx.reply(embed= embed)
+  await ctx.reply(embed=embed)
 
 @commands.command()
 async def hk_visibility(ctx, *, disposed=None):
@@ -381,7 +415,7 @@ async def hk_visibility(ctx, *, disposed=None):
   embed = Embed(title="HKO Visibility Information", description=f"Information updated at {re.sub(hko_dt_pattern, hko_dt_pattern_, visibilities[0]['Date time'])} HKT (Update frequency: 10 minutes)")
   for v in visibilities:
     embed.add_field(name=v['Automatic Weather Station'], value=v['10 minute mean visibility'].replace("km", " km"), inline= True)
-  await ctx.reply(embed= embed)
+  await ctx.reply(embed=embed)
 
 @commands.command()
 async def hk_weather(ctx, *, disposed=None):
@@ -392,10 +426,9 @@ async def hk_weather(ctx, *, disposed=None):
   r4=requests.get("https://data.weather.gov.hk/weatherAPI/opendata/weather.php?dataType=flw&lang=tc").json()
   r5=requests.get("https://data.weather.gov.hk/weatherAPI/hko_data/regional-weather/latest_15min_uvindex.csv")
   desc = f"{r3['generalSituation']} {r4['generalSituation']}\n{r3['forecastPeriod']}: {r3['forecastDesc']}\n{r4['forecastPeriod']}: {r4['forecastDesc']}\n{r3['outlook']} {r4['outlook']}"
-  uvi_raw=r5.content.decode("utf-8")[:-1]
+  uvi_raw = r5.content.decode("utf-8")[:-1]
   reader = csv.DictReader(uvi_raw.splitlines())
-  uvi = [x for x in reader]
-  for u in uvi:
+  for u in reader:
     desc += f"\nUV Index at {re.sub(hko_dt_pattern, hko_dt_pattern_, u['Date time'])}: {u['past 15-minute mean UV Index']} (Update frequency: 15 minutes)"
   for x in ['mintempFrom00To09', 'rainfallFrom00To12']:
     if r1[x]:
@@ -417,7 +450,7 @@ async def hk_weather(ctx, *, disposed=None):
     f0v += f"UV Index: {r1['uvindex']['data'][0]['value']} ({r1['uvindex']['data'][0]['desc']}) at {r1['uvindex']['data'][0]['place']}"
   embed.add_field(name="Extra Information", value=f0v)
   embed.set_image(url=f"https://www.hko.gov.hk/images/HKOWxIconOutline/pic{r1['icon'][0]}.png")
-  await ctx.reply(embed= embed)
+  await ctx.reply(embed=embed)
 
 @commands.command()
 async def hk_wind(ctx, *, disposed=None):
@@ -432,7 +465,7 @@ async def hk_wind(ctx, *, disposed=None):
     value=f"""{w['10-Minute Mean Wind Direction(Compass points)']}{(' at '+w['10-Minute Mean Speed(km/hour)']+' km/h') if w['10-Minute Mean Speed(km/hour)']!="N/A" else ''}
     {('Maximum Gust: '+w['10-Minute Maximum Gust(km/hour)']+' km/h') if w['10-Minute Maximum Gust(km/hour)']!='N/A' else ''}""", inline= True)
   embed.set_footer(text="Speed and Gust Information might be empty for some weather stations. Directions and Speed are mean values in the past 10 minutes.")
-  await ctx.reply(embed= embed)
+  await ctx.reply(embed=embed)
 
 tc_eta = lambda x: datetime.fromisoformat(x['eta']).strftime('%H:%M:%S') + ("（未開出）"if x['rmk_en'] == "Scheduled Bus" else "")
 mtc_eta = lambda x: datetime.fromisoformat(x['timestamp']).strftime('%H:%M:%S') + ("（未開出）"if x['remarks_en'] == "Scheduled" else "")
@@ -577,6 +610,8 @@ async def ma_mei_ha(ctx: ui.SlashInteraction):
 def setup(bot):
   bot.add_command(hk_aqi)
   bot.add_command(hk_ferry_1)
+  bot.add_command(hk_ferry_2)
+  bot.add_command(hk_ferry_3)
   bot.add_command(hk_forecast)
   bot.add_command(hk_gmb)
   bot.add_command(hk_kmb)
@@ -587,6 +622,7 @@ def setup(bot):
   bot.add_command(hk_nwfb)
   bot.add_command(hk_sea_pressure)
   bot.add_command(hk_sun)
+  bot.add_command(hk_temperature)
   bot.add_command(hk_tide)
   bot.add_command(hk_visibility)
   bot.add_command(hk_weather)

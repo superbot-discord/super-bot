@@ -163,7 +163,7 @@ support_buttons = [
 async def hello(ctx, *, disposed=None):
   embed = Embed(title= "Leaderboard", description= """We upload the leaderboard to YouTube
   every week. You can find the leaderboard [here](https://youtu.be/4spCNEPawyQ).""".replace(f"\n", ""))
-  await ctx.reply(embed= embed)
+  await ctx.reply(embed=embed)
 
 @commands.command(aliases=["commands"])
 async def help(ctx, *, cat= None):
