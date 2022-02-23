@@ -239,7 +239,7 @@ async def rss(ctx, *, url):
   f = open(f"rss{ctx.message.id}.html", "w")
   f.write(desc+"</body>")
   f.close()
-  await ctx.reply(embed= embed, files=[discord.File(f"rss{ctx.message.id}.html"), discord.File("./assets/rss_css.css")])
+  await ctx.reply(embed=embed, files=[discord.File(f"rss{ctx.message.id}.html"), discord.File("./assets/rss_css.css")])
   try_delete(f"rss{ctx.message.id}.html")
 
 @commands.command()
@@ -361,7 +361,7 @@ async def wiki(ctx, *, query):
   f=open(f"Wiki_{ctx.message.id}", 'x')
   f.write(f"{html_head}{r1['text']}</head>")
   f.close()
-  await ctx.reply(embed= embed, files=[discord.File(f"Wiki_{ctx.message.id}"), discord.File("wiki_css.css")])
+  await ctx.reply(embed=embed, files=[discord.File(f"Wiki_{ctx.message.id}"), discord.File("wiki_css.css")])
   try_delete(f"Wiki_{ctx.message.id}")
 
 @commands.command()
@@ -625,7 +625,7 @@ Audio - Minimum size\t\t{format_video(video8)}'''
     f = open('extra_downloads.txt', "w")
     f.write(extra_downloads)
     f.close()
-    ytmsg = await ctx.reply(embed= embed, file=discord.File('extra_downloads.txt'))
+    ytmsg = await ctx.reply(embed=embed, file=discord.File('extra_downloads.txt'))
     try_delete('extra_downloads.txt')
     embed = Embed(title="Download (Click here)", url=video1.url, description=desc)
     embed.add_field(name="Title", value=youtube.title, inline= False)

@@ -287,7 +287,7 @@ async def snipe(ctx, *, text= None):
       if chance(1000):
         msg = await ctx.reply("Did someone just ghostping you?", embed= embed, components= snipe_buttons, listener= SnipeL(ctx.author.id))
       else:
-        msg = await ctx.reply(embed= embed, components= snipe_buttons, listener= SnipeL(ctx.author.id))
+        msg = await ctx.reply(embed=embed, components= snipe_buttons, listener= SnipeL(ctx.author.id))
       sniperdict[msg] = [1, len(sniper[chnl])]
     else:
       await ctx.reply("Snipping is disabled. Please ask someone with manage messages permission to re-enable it.")

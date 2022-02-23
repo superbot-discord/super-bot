@@ -31,7 +31,7 @@ async def ban(ctx, user: discord.User, delete: int = 0, *, reason="No reason pro
       await user.send(embed=embed1)
     except:
       pass
-    await ctx.reply(embed= embed2)
+    await ctx.reply(embed=embed2)
   else:
     await ctx.reply("You don't have the required permission: Ban members.")
 
@@ -74,7 +74,7 @@ async def kick(ctx, user: discord.Member, *, reason="No reason provided"):
       await user.send(embed=embed1)
     except:
       pass
-    await ctx.reply(embed= embed2)
+    await ctx.reply(embed=embed2)
   else:
     await ctx.reply("You don't have the required permission: Kick members.")
 
@@ -370,7 +370,7 @@ async def unban(ctx, user: discord.User, *, reason="No reason provided"):
       await user.send(embed=embed1)
     except:
       pass
-    await ctx.reply(embed= embed2)
+    await ctx.reply(embed=embed2)
   else:
     await ctx.reply("You don't have the required permission: Ban members.")
 

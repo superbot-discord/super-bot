@@ -1,11 +1,14 @@
 import pytz
 import statistics
-from shared import (BeautifulSoup, commands, datetime, discord, Embed, Image, json, re, requests,
-                    timedelta, try_delete)
+from _bot import bs
+from functions import enum_list
+from shared import (BeautifulSoup, commands, datetime, discord, Embed, Image, ImageDraw, ImageFont,
+                    json, re, requests, timedelta, try_delete, ui)
 
 set(pytz.all_timezones_set)
 hexstring_pattern = re.compile(r'#?([0-9A-F]{2})([0-9A-F]{2})([0-9A-F]{2})', re.IGNORECASE)
 rgbtoper = lambda input: f"{round(input/0.0255)/100}%"
+whitney = ImageFont.truetype("fonts/whitney.otf", 35)
 
 f = open('./assets/database_periodic.json', 'r')
 pdb = json.loads(f.read())['elements']
@@ -43,8 +46,49 @@ async def color(ctx, *, name):
   embed.set_thumbnail(url="attachment://color.png")
   img = Image.new('RGB', (64, 64), (r, g, b))
   img.save('color.png')
-  await ctx.reply(embed= embed, file=discord.File('color.png'))
+  await ctx.reply(embed=embed, file=discord.File('color.png'))
   try_delete('color.png')
+
+@bs.command(name="element", description="Views information about a chemical element.", options=[
+           ui.SlashOption(name="Query", description="The number, symbol or part of name of the element.",
+           type=str, required=True)])
+async def element_(ctx, query):
+  query = query.lower()
+  if len(query) > 2:
+    pdb_ = list(filter(lambda x: query in x['name'].lower() or query == str(x['number']) or query in x['symbol'].lower(), pdb))
+  else:
+    pdb_ = list(filter(lambda x: query == str(x['number']) or query == x['symbol'].lower(), pdb))
+  if not len(pdb_):
+    await ctx.respond("No elements could be found!")
+    return
+  if len(pdb_) == 1:
+    element_ = pdb_[0]
+    desc = f"{element_['category'].title()}\nGroup {element_['xpos']}, Period {element_['ypos']}\n{element_['summary']}"
+    embed = Embed(title=f"{element_['name']} ({element_['number']} {element_['symbol']})", description=desc, url=element_['source'])
+    embed.add_field(name="Atomic Mass", value= f"{element_['atomic_mass']} Dalton")
+    embed.add_field(name="Melting Point", value=f"{element_['melt']} Kelvin")
+    embed.add_field(name="Boiling Point", value=f"{element_['boil']} Kelvin")
+    embed.add_field(name="Shells (inner first)", value=", ".join([str(x) for x in element_['shells']]))
+    embed.add_field(name="STP Density", value=f"{element_['density']} g/L")
+    embed.add_field(name="STP Phase", value=f"{element_['phase']}")
+    cpk = element_['cpk-hex']
+    img = Image.new('RGB', (64, 64), "#" + cpk)
+    sum_ = sum([int(cpk[i:i+2], 16) for i in range(0, len(cpk), 2)])
+    text_color = "#ffffff" if sum_ < 384 else "000000"
+    draw = ImageDraw.Draw(img)
+    draw.text((32, 32), element_['symbol'], font=whitney, fill=text_color, align='center', anchor="mm")
+    img.save('element.png')
+    embed.set_thumbnail(url="attachment://element.png")
+    for x, y in {"Appearance": 'appearance', "Discovered by": 'discovered_by', "Named after": 'named_by'}.items():
+      if element_[y]:
+        embed.add_field(name=x, value=element_[y])
+    if element_['spectral_img']:
+      embed.set_image(url=element_['spectral_img'])
+    await ctx.respond(embed=embed, file=discord.File('element.png'))
+    try_delete('element.png')
+    return
+  embed = Embed(title=f"Search results", description=enum_list([f"[**{x['number']}** {x['symbol']}: {x['name']}]({x['source']})" for x in pdb_], 4096, "\n"))
+  await ctx.respond(embed=embed)
 
 @commands.command()
 async def element(ctx, *, query):
@@ -58,18 +102,32 @@ async def element(ctx, *, query):
     return
   if len(pdb_) == 1:
     element_ = pdb_[0]
-    embed = Embed(title=f"{element_['name']} ({element_['symbol']})", description=element_['summary'], url=element_['source'])
-    embed.add_field(name= "Atomic Mass", value= f"{element_['atomic_mass']} Dalton")
-    embed.add_field(name= "Melting Point", value= f"{element_['melt']} Kelvin")
-    embed.add_field(name= "Boiling Point", value= f"{element_['boil']} Kelvin")
-    embed.add_field(name= "Density", value= f"{element_['density']} Kelvin")
+    desc = f"{element_['category'].title()}\nGroup {element_['xpos']}, Period {element_['ypos']}\n{element_['summary']}"
+    embed = Embed(title=f"{element_['name']} ({element_['number']} {element_['symbol']})", description=desc, url=element_['source'])
+    embed.add_field(name="Atomic Mass", value= f"{element_['atomic_mass']} Dalton")
+    embed.add_field(name="Melting Point", value=f"{element_['melt']} Kelvin")
+    embed.add_field(name="Boiling Point", value=f"{element_['boil']} Kelvin")
+    embed.add_field(name="Shells (inner first)", value=", ".join([str(x) for x in element_['shells']]))
+    embed.add_field(name="STP Density", value=f"{element_['density']} g/L")
+    embed.add_field(name="STP Phase", value=f"{element_['phase']}")
+    cpk = element_['cpk-hex']
+    img = Image.new('RGB', (64, 64), "#" + cpk)
+    sum_ = sum([int(cpk[i:i+2], 16) for i in range(0, len(cpk), 2)])
+    text_color = "#ffffff" if sum_ < 384 else "000000"
+    draw = ImageDraw.Draw(img)
+    draw.text((32, 32), element_['symbol'], font=whitney, fill=text_color, align='center', anchor="mm")
+    img.save('element.png')
+    embed.set_thumbnail(url="attachment://element.png")
     for x, y in {"Appearance": 'appearance', "Discovered by": 'discovered_by', "Named after": 'named_by'}.items():
       if element_[y]:
         embed.add_field(name=x, value=element_[y])
     if element_['spectral_img']:
       embed.set_image(url=element_['spectral_img'])
+    await ctx.reply(embed=embed, file=discord.File('element.png'))
+    try_delete('element.png')
+    return
   else:
-    embed = Embed(title=f"Search results", description=f"\n".join([f"[**{x['number']}** {x['symbol']}: {x['name']}]({x['source']})" for x in pdb_]))
+    embed = Embed(title=f"Search results", description=enum_list([f"[**{x['number']}** {x['symbol']}: {x['name']}]({x['source']})" for x in pdb_], 4096, "\n"))
   await ctx.reply(embed=embed)
 
 @commands.command()

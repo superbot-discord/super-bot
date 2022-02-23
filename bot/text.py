@@ -773,7 +773,7 @@ async def unicode(ctx, *query):
   f = open("unicode.txt", 'w')
   f.write(desc)
   f.close()
-  await ctx.reply(embed= embed, file=discord.File("unicode.txt"))
+  await ctx.reply(embed=embed, file=discord.File("unicode.txt"))
   try_delete("unicode.txt")
 
 @commands.command(aliases=["timestamp", "posix"])

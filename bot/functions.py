@@ -3,9 +3,30 @@ import regex
 from shared import re, SequenceMatcher, typing
 
 
-def enum_mentionables(mentionables, max_length: int, no_text: str, delimiter1: str = " ", delimiter2: str = ", "):
+def enum_list(list_: list, max_length: int, delimiter: str = " "):
   """
-  Enumerates a list of instances with properties `mention` and `name`.
+  Enumerates a list of strings up to a length.
+
+  To newline-join the fruits until 15 length:
+  ```
+  enum_list(["Apple", "Banana", "Orange"], 15, "\n")
+  ```
+  Returns "Apple\nBanana" since adding Orange will exceed the length limit
+  """
+  result = delimiter.join(list_)
+  if len(result) > max_length:
+    result = ""
+    for x in list_:
+      if len(result + x.name) + 1 > max_length:
+        break
+      result += x.name + delimiter
+    result = result[:-len(delimiter)] + "…"
+  return result
+
+
+def enum_mentionables(mentionables: list, max_length: int, no_text: str, delimiter1: str = " ", delimiter2: str = ", "):
+  """
+  Enumerates a list of instances with properties `mention` and `name` up to a length.
 
   To enumerate through `roles` with up to 1024 length, separating role mentions with spaces if\
   possible, otherwise separating names with commas, returning "No roles" if `roles` is empty:
@@ -28,7 +49,7 @@ def enum_mentionables(mentionables, max_length: int, no_text: str, delimiter1: s
         if len(result + x.name) + 1 > max_length:
           break
         result += x.name + delimiter2
-      result = result[:-2] + "…"
+      result = result[:-len(delimiter2)] + "…"
   return result
 
 
