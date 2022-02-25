@@ -789,6 +789,10 @@ async def unix(ctx, *, text= "now"):
   s = round(datetime.timestamp(dt2))
   await ctx.reply(f"`<t:{s}>`      | <t:{s}>\n`<t:{s}:F>` | <t:{s}:F>\n`<t:{s}:f>` | <t:{s}:f>\n`<t:{s}:D>` | <t:{s}:D>\n`<t:{s}:d>` | <t:{s}:d>\n`<t:{s}:T>` | <t:{s}:T>\n`<t:{s}:t>` | <t:{s}:t>\n`<t:{s}:R>` | <t:{s}:R>")
 
+# @bs.command(name= "wrap", description= "Wraps a piece of text such that each line is at most n characters long.",
+#            options= [ui.SlashOption(name= "Text", type= str, required= True,
+#            description= "The text to make superscript.")])
+
 def setup(bot):
   bot.add_command(ascii_caesar_decode)
   bot.add_command(ascii_caesar_encode)

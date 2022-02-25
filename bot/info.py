@@ -71,12 +71,12 @@ async def element_(ctx, query):
     embed.add_field(name="Shells (inner first)", value=", ".join([str(x) for x in element_['shells']]))
     embed.add_field(name="STP Density", value=f"{element_['density']} g/L")
     embed.add_field(name="STP Phase", value=f"{element_['phase']}")
-    cpk = element_['cpk-hex']
-    img = Image.new('RGB', (64, 64), "#" + cpk)
+    cpk = element_['cpk-hex'] if element_['cpk-hex'] else "ffffff"
+    img = Image.new('RGB', (128, 128), "#" + cpk)
     sum_ = sum([int(cpk[i:i+2], 16) for i in range(0, len(cpk), 2)])
-    text_color = "#ffffff" if sum_ < 384 else "000000"
+    text_color = "#ffffff" if sum_ < 400 else "000000"
     draw = ImageDraw.Draw(img)
-    draw.text((32, 32), element_['symbol'], font=whitney, fill=text_color, align='center', anchor="mm")
+    draw.text((64, 64), element_['symbol'], font=whitney, fill=text_color, align='center', anchor="mm")
     img.save('element.png')
     embed.set_thumbnail(url="attachment://element.png")
     for x, y in {"Appearance": 'appearance', "Discovered by": 'discovered_by', "Named after": 'named_by'}.items():
@@ -130,9 +130,12 @@ async def element(ctx, *, query):
     embed = Embed(title=f"Search results", description=enum_list([f"[**{x['number']}** {x['symbol']}: {x['name']}]({x['source']})" for x in pdb_], 4096, "\n"))
   await ctx.reply(embed=embed)
 
-@commands.command()
-async def regex(ctx, regularexp, *, text):
-  theregex = f"(?P<LargestCapturingGroup>{regularexp})"
+@bs.command(name="regex", description="Runs a regex search on a piece of text.", options=[
+           ui.SlashOption(name="Regular Expression", description="The regex to search for.",
+           type=str, required=True), ui.SlashOption(name="Text", description="The text to search in.",
+           type=str, required=True)])
+async def regex_(ctx, regular_expression, *, text):
+  theregex = f"(?P<LargestCapturingGroup>{regular_expression})"
   newtext = re.sub(theregex, "**\g<LargestCapturingGroup>**", text)
   matches = len(re.findall(theregex, text))
   if matches == 1:
@@ -142,7 +145,7 @@ async def regex(ctx, regularexp, *, text):
   elif matches >= 2:
     ti = f"There were {matches} occurrences."
   embed = Embed(title = ti, description = newtext.replace("****",""))
-  embed.set_author(name=f"Match Results for {regularexp}")
+  embed.set_author(name=f"Match Results for {regular_expression}")
   embed.set_footer(text="Match Results are highlighted in bold")
   await ctx.reply(embed=embed)
 
@@ -201,7 +204,6 @@ async def time(ctx, *, timezoneinput="0"):
 def setup(bot):
   bot.add_command(color)
   bot.add_command(element)
-  bot.add_command(regex)
   bot.add_command(regsub)
   bot.add_command(stats)
   bot.add_command(time)

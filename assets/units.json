@@ -67,5 +67,15 @@
       "astronomical units": 149597870700,
       "parsecs"           : 30857000000000000
     }
+  },
+  "temperature" : {
+    "°celsius": ["in_c", "source"],
+    "°fahrenheit": ["in_c*9/5+32", "(source-32)*5/9"],
+    "°kelvin": ["in_c+Decimal(273.15)", "source-Decimal(273.15)"],
+    "rankine": ["in_c*9/5+Decimal(491.67)", "(source-Decimal(491.67))*5/9"],
+    "delisle": ["(100-in_c)*3/2", "100-source*2/3"],
+    "newton": ["in_c*33/100", "source*100/33"],
+    "réaumur": ["in_c*4/5", "source*5/4"],
+    "rømer": ["in_c*21/40+Decimal(7.5)", "(source-Decimal(7.5))*40/21"]
   }
 }

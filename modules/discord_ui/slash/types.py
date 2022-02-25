@@ -49,7 +49,7 @@ class InteractionPayload(t.TypedDict):
     application_id: str
 
 def format_name(value):
-    return str(value).lower().replace(" ", "-")
+    return str(value).lower().replace(" ", "_")
 
 
 class SlashOptionCollection():

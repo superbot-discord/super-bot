@@ -15,9 +15,10 @@ class ConvertLL(ui.listener.Listener):
     await ctx.respond(embed=self_.embeds[ctx.selected_values[0]], hidden=True)
 
 units_l = {x: y for z in udb['length'].values() for x, y in z.items()}
-unit_l_choices = [{'name': x.title(), 'value': x} for x, y in units_l.items()]
+unit_l_choices = [{'name': x.title(), 'value': x} for x in units_l.keys()]
 unit_l_options = [ui.SelectOption(value=x, label=x) for x in udb['length'].keys()]
-unit_select = ui.SelectMenu(placeholder="Scale", custom_id="convertl", options=unit_l_options)
+unit_l_select = ui.SelectMenu(placeholder="Scale", custom_id="convertl", options=unit_l_options)
+unit_t_choices = [{'name': x.title(), 'value': x} for x in udb['temperature'].keys()]
 
 def round_better(num, digits: int = 0):
   if isinstance(num, float):
@@ -34,18 +35,34 @@ length_units = typing.Literal[tuple(udb['lengthI'])] # type: ignore
 
 @bs.command(name="convert_length", description="Converts between length units.", options=[
            ui.SlashOption(name="Source", description="The numerical part of the source.", type=int,
-           required=True), ui.SlashOption(name= "Unit", description="The unit of the source.",
+           required=True), ui.SlashOption(name="Unit", description="The unit of the source.",
            type=str, required=True, choices=unit_l_choices), ui.SlashOption(name="Precision",
-           description="Number of significant digits, between 1 and 25 inclusive. Defaults to 8.",
+           description="Number of significant digits, between 1 and 25 inclusive. Defaults to 10.",
            type=int, required=False, min_value=1, max_value=25)])
-async def convert_(ctx: ui.SlashInteraction, source, unit, precision=8):
-  in_m = Decimal(source) * Decimal(units_l[unit])
+async def convert_length(ctx: ui.SlashInteraction, source, unit, precision=10):
   getcontext().prec = precision
+  in_m = Decimal(source) * Decimal(units_l[unit])
   embeds = {x: Embed(title=f"{source} {unit} is equal to:", description=
             "\n".join([f"{in_m/Decimal(z)} {w}" for w, z in y.items()]))
             for x, y in udb['length'].items()}
-  await ctx.respond("Select a scale to convert:", components=[unit_select], listener=
+  await ctx.respond("Select a scale to convert:", components=[unit_l_select], listener=
                     ConvertLL(embeds))
+
+@bs.command(name="convert_temperature", description="Converts between tempearature units.", options=[
+           ui.SlashOption(name="Source", description="The numerical part of the source.", type=int,
+           required=True), ui.SlashOption(name="Unit", description="The unit of the source.",
+           type=str, required=True, choices=unit_t_choices), ui.SlashOption(name="Precision",
+           description="Number of significant digits, between 1 and 25 inclusive. Defaults to 10.",
+           type=int, required=False, min_value=1, max_value=25)])
+async def convert_temperature(ctx: ui.SlashInteraction, source, unit, precision=10):
+  source = Decimal(source)
+  getcontext().prec = precision
+  in_c = eval(udb['temperature'][unit][1])
+  gbls = globals()
+  lcls = locals()
+  embed = Embed(title=f"{source} {unit.title()} is equal to:", description=
+          "\n".join([f'{eval(y, gbls, lcls)} {x.title()}' for x, (y, z) in udb['temperature'].items()]))
+  await ctx.respond(embed=embed)
 
 @commands.command()
 async def convert(ctx, num: typing.Optional[int] = 1, unit: str = "m"):
