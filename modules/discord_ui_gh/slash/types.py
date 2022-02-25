@@ -51,7 +51,7 @@ class InteractionPayload(t.TypedDict):
     application_id: str
 
 def format_name(value):
-    return str(value).lower().replace(" ", "-")
+    return str(value).lower().replace(" ", "_")
 
 
 class SlashOptionCollection():
@@ -1548,8 +1548,8 @@ class CommandCache():
             for i, c in enumerate(data):
                 if c['name'] == command.name and c['type'] == command.command_type.value:
                     _command = data.pop(i)
+                    command._id = _command['id']
             command._state = self._state
-            command._id = _command['id']
             self._raw_cache[command._id] = command
 
         for guild in [_ for _ in self._cache if _ != 'globals']:

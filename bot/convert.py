@@ -6,18 +6,28 @@ f = open('./assets/units.json', 'r')
 udb = json.loads(f.read())
 f.close()
 
-class ConvertLL(ui.listener.Listener):
+class ConvertL(ui.listener.Listener):
   def __init__(self, embeds):
     self.embeds = embeds
 
   @ui.Listener.select(custom_id="convertl")
   async def convertl(self_, ctx: ui.SelectInteraction):
     await ctx.respond(embed=self_.embeds[ctx.selected_values[0]], hidden=True)
+  
+  @ui.Listener.select(custom_id="convertm")
+  async def convertm(self_, ctx: ui.SelectInteraction):
+    await ctx.respond(embed=self_.embeds[ctx.selected_values[0]], hidden=True)
 
 units_l = {x: y for z in udb['length'].values() for x, y in z.items()}
 unit_l_choices = [{'name': x.title(), 'value': x} for x in units_l.keys()]
 unit_l_options = [ui.SelectOption(value=x, label=x) for x in udb['length'].keys()]
 unit_l_select = ui.SelectMenu(placeholder="Scale", custom_id="convertl", options=unit_l_options)
+
+units_m = {x: y for z in udb['mass'].values() for x, y in z.items()}
+unit_m_choices = [{'name': x.title(), 'value': x} for x in units_m.keys()]
+unit_m_options = [ui.SelectOption(value=x, label=x) for x in udb['mass'].keys()]
+unit_m_select = ui.SelectMenu(placeholder="Scale", custom_id="convertm", options=unit_m_options)
+
 unit_t_choices = [{'name': x.title(), 'value': x} for x in udb['temperature'].keys()]
 
 def round_better(num, digits: int = 0):
@@ -33,6 +43,7 @@ def round_better(num, digits: int = 0):
 exchange_currencies = typing.Literal[tuple(db['currencies'])] # type: ignore
 length_units = typing.Literal[tuple(udb['lengthI'])] # type: ignore
 
+
 @bs.command(name="convert_length", description="Converts between length units.", options=[
            ui.SlashOption(name="Source", description="The numerical part of the source.", type=int,
            required=True), ui.SlashOption(name="Unit", description="The unit of the source.",
@@ -46,7 +57,24 @@ async def convert_length(ctx: ui.SlashInteraction, source, unit, precision=10):
             "\n".join([f"{in_m/Decimal(z)} {w}" for w, z in y.items()]))
             for x, y in udb['length'].items()}
   await ctx.respond("Select a scale to convert:", components=[unit_l_select], listener=
-                    ConvertLL(embeds))
+                    ConvertL(embeds))
+
+
+@bs.command(name="convert_mass", description="Converts between mass units.", options=[
+           ui.SlashOption(name="Source", description="The numerical part of the source.", type=int,
+           required=True), ui.SlashOption(name="Unit", description="The unit of the source.",
+           type=str, required=True, choices=unit_m_choices), ui.SlashOption(name="Precision",
+           description="Number of significant digits, between 1 and 25 inclusive. Defaults to 10.",
+           type=int, required=False, min_value=1, max_value=25)])
+async def convert_mass(ctx: ui.SlashInteraction, source, unit, precision=10):
+  getcontext().prec = precision
+  in_g = Decimal(source) * Decimal(units_m[unit])
+  embeds = {x: Embed(title=f"{source} {unit} is equal to:", description=
+            "\n".join([f"{in_g/Decimal(z)} {w}" for w, z in y.items()]))
+            for x, y in udb['mass'].items()}
+  await ctx.respond("Select a scale to convert:", components=[unit_m_select], listener=
+                    ConvertL(embeds))
+
 
 @bs.command(name="convert_temperature", description="Converts between tempearature units.", options=[
            ui.SlashOption(name="Source", description="The numerical part of the source.", type=int,
@@ -63,6 +91,7 @@ async def convert_temperature(ctx: ui.SlashInteraction, source, unit, precision=
   embed = Embed(title=f"{source} {unit.title()} is equal to:", description=
           "\n".join([f'{eval(y, gbls, lcls)} {x.title()}' for x, (y, z) in udb['temperature'].items()]))
   await ctx.respond(embed=embed)
+
 
 @commands.command()
 async def convert(ctx, num: typing.Optional[int] = 1, unit: str = "m"):
@@ -84,6 +113,7 @@ async def convert(ctx, num: typing.Optional[int] = 1, unit: str = "m"):
   embed = Embed(title=f"{num} {unit} is equal to…", description=desc)
   await ctx.reply(embed=embed)
 
+
 @commands.command()
 async def exchange(ctx, currency: exchange_currencies = "USD", amount: int = 1, *, disposed=None):
   r=requests.get(f"https://api.exchangerate.host/latest?base={currency}&amount={amount}").json()['rates']
@@ -92,6 +122,7 @@ async def exchange(ctx, currency: exchange_currencies = "USD", amount: int = 1, 
     desc += f"**{x}**: {y}\n"
   embed = Embed(title=f"{amount} {currency} is equal to…", description=desc)
   await ctx.reply(embed=embed)
+
 
 def setup(bot):
   bot.add_command(convert)

@@ -68,6 +68,24 @@
       "parsecs"           : 30857000000000000
     }
   },
+  "mass" : {
+    "Metric" : {
+      "metric tonnes/megagrams": 1000000,
+      "kilograms": 1000,
+      "grams": 1,
+      "milligrams": 0.001,
+      "micrograms": 0.000001
+    },
+    "Imperial" : {
+      "imperial tons": 1016046.9088,
+      "hundredweights": 50802.34544,
+      "quarters": 12700.58636,
+      "stones": 6350.29318,
+      "pounnds": 453.59237,
+      "ounces": 28.3495,
+      "drachm": 1.7718451953125
+    }
+  },
   "temperature" : {
     "°celsius": ["in_c", "source"],
     "°fahrenheit": ["in_c*9/5+32", "(source-32)*5/9"],
