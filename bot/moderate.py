@@ -2,6 +2,7 @@ from shared import (asyncio, commands, custom_permissions, datetime, db, discord
                     has_perms, re, SequenceMatcher, specialbool, timedelta, timestamp_pattern,
                     timezone, try_delete, try_delete_message, typing, UNITS, unix_timestamp)
 
+
 class SearchFlags(commands.FlagConverter):
   channels         : typing.Tuple[discord.TextChannel,...] = []
   search           : typing.Tuple[str,...]                 = []
@@ -16,6 +17,7 @@ class SearchFlags(commands.FlagConverter):
   timestamp        : specialbool                           = None
   embeds           : specialbool                           = None
   files            : specialbool                           = None
+
 
 @commands.command()
 async def ban(ctx, user: discord.User, delete: int = 0, *, reason="No reason provided"):
@@ -34,6 +36,7 @@ async def ban(ctx, user: discord.User, delete: int = 0, *, reason="No reason pro
     await ctx.reply(embed=embed2)
   else:
     await ctx.reply("You don't have the required permission: Ban members.")
+
 
 @commands.command()
 async def getrole(ctx, roles: commands.Greedy[discord.Role], member: discord.Member = None):
@@ -60,6 +63,7 @@ async def getrole(ctx, roles: commands.Greedy[discord.Role], member: discord.Mem
   else:
     await ctx.reply("You don't have the required permission: Manage roles.")
 
+
 @commands.command()
 async def kick(ctx, user: discord.Member, *, reason="No reason provided"):
   if has_perms(ctx.channel, ctx.author, 1):
@@ -78,6 +82,7 @@ async def kick(ctx, user: discord.Member, *, reason="No reason provided"):
   else:
     await ctx.reply("You don't have the required permission: Kick members.")
 
+
 @commands.command()
 async def makeinvite(ctx, timetocount = "0", uses: int = 0):
   if has_perms(ctx.channel, ctx.author, 0):
@@ -90,6 +95,7 @@ async def makeinvite(ctx, timetocount = "0", uses: int = 0):
   else:
     await ctx.reply("You don't have the required permission: Generate Invites.")
 
+
 @commands.command(aliases=['makerole'])
 async def makeroles(ctx, times: int = 1, *, name="Sample role $number"):
   if has_perms(ctx.channel, ctx.author, 28):
@@ -99,6 +105,7 @@ async def makeroles(ctx, times: int = 1, *, name="Sample role $number"):
     await ctx.reply("Successfully created role(s).")
   else:
     await ctx.reply("You don't have the required permission: Manage Roles.")
+
 
 @commands.command(aliases=['makethread'])
 async def makethreads(ctx, times: int = 1, archive: typing.Literal['1', '2', '3', '4'] = '2', *, name="Sample thread $number"):
@@ -110,6 +117,7 @@ async def makethreads(ctx, times: int = 1, archive: typing.Literal['1', '2', '3'
   else:
     await ctx.reply("You don't have the required permission: Manage Threads.")
 
+
 @commands.command()
 async def purge(ctx, num: int):
   try_delete_message(ctx.message)
@@ -120,6 +128,7 @@ async def purge(ctx, num: int):
     await msg.edit(f"Purged {len(deleted)} messages from:\n{authors}", delete_after = 5)
   else:
     await ctx.reply("You don't have the required permission: Manage messages.")
+
 
 @commands.command()
 async def purgepy(ctx, num: int, pyscript):
@@ -133,6 +142,7 @@ async def purgepy(ctx, num: int, pyscript):
   else:
     await ctx.reply("You don't have the required permission: Manage messages.")
 
+
 @commands.command()
 async def purgepygex(ctx, num: int, regex, *, pyscript):
   try_delete_message(ctx.message)
@@ -144,6 +154,7 @@ async def purgepygex(ctx, num: int, regex, *, pyscript):
     await msg.edit(f"Purged {len(deleted)} messages from:\n{authors}", delete_after = 5)
   else:
     await ctx.reply("You don't have the required permission: Manage messages.")
+
 
 @commands.command()
 async def purgereactions(ctx, num: int, emoji: discord.Emoji = None):
@@ -158,6 +169,7 @@ async def purgereactions(ctx, num: int, emoji: discord.Emoji = None):
   else:
     await ctx.reply("You don't have the required permission: Manage messages.")
 
+
 @commands.command()
 async def purgeregex(ctx, num: int, *, regex):
   try_delete_message(ctx.message)
@@ -170,6 +182,7 @@ async def purgeregex(ctx, num: int, *, regex):
   else:
     await ctx.reply("You don't have the required permission: Manage messages.")
 
+
 @commands.command()
 async def purgerole(ctx, num: int, role: discord.Role):
   try_delete_message(ctx.message)
@@ -181,6 +194,7 @@ async def purgerole(ctx, num: int, role: discord.Role):
   else:
     await ctx.reply("You don't have the required permission: Manage messages.")
 
+
 @commands.command()
 async def purgeuser(ctx, num: int, *userinput: discord.User):
   try_delete_message(ctx.message)
@@ -191,6 +205,7 @@ async def purgeuser(ctx, num: int, *userinput: discord.User):
     await msg.edit(f"Purged {len(deleted)} messages from:\n{authors}", delete_after = 5)
   else:
     await ctx.reply("You don't have the required permission: Manage messages.")
+
 
 @commands.command()
 async def react(ctx, emoji: discord.Emoji, message=None):
@@ -204,6 +219,7 @@ async def react(ctx, emoji: discord.Emoji, message=None):
   await message.add_reaction(emoji)
   await asyncio.sleep(5)
   await message.remove_reaction(emoji, ctx.guild.get_member(796686363604680755))
+
 
 @commands.command()
 async def search(ctx, *, flags: SearchFlags):
@@ -279,6 +295,7 @@ async def search(ctx, *, flags: SearchFlags):
   await ctx.reply(file=discord.File('search.txt'))
   try_delete('search.txt')
 
+
 @commands.command(aliases=['setperms', 'setpermission', 'setpermissions', 'rolepermission', 'rolespermission', 'rolepermissions', 'rolespermissions'])
 async def setperm(ctx, permission_input: typing.Union[int, str], *roles: discord.Role):
   if has_perms(ctx.channel, ctx.author, 28):
@@ -296,6 +313,7 @@ async def setperm(ctx, permission_input: typing.Union[int, str], *roles: discord
     await ctx.reply("Successfully set permissions.")
   else:
     await ctx.reply("You don't have the required permission: Manage Roles.")
+
 
 @commands.command()
 async def slowmode(ctx, sec=None, *channels: typing.Union[discord.TextChannel,str]):
@@ -332,12 +350,14 @@ async def slowmode(ctx, sec=None, *channels: typing.Union[discord.TextChannel,st
   else:
     await ctx.reply(f"The current slowmode is {ctx.channel.slowmode_delay} second(s).")
 
+
 @commands.command()
 async def tts(ctx, *, desc):
   if has_perms(ctx.channel, ctx.author, 12):
     await ctx.reply(desc, tts= True)
   else:
     await ctx.reply("You don't have the required permission: Send TTS messages.")
+
 
 @commands.command()
 async def timeout(ctx, member: discord.Member, duration="0s", *, reason="No reason provided"):
@@ -355,6 +375,7 @@ async def timeout(ctx, member: discord.Member, duration="0s", *, reason="No reas
     await ctx.send(embed = embed)
   else:
     await ctx.reply("You don't have the required permission: Moderate members.")
+
 
 @commands.command()
 async def unban(ctx, user: discord.User, *, reason="No reason provided"):
@@ -374,6 +395,7 @@ async def unban(ctx, user: discord.User, *, reason="No reason provided"):
   else:
     await ctx.reply("You don't have the required permission: Ban members.")
 
+
 @commands.command()
 async def untimeout(ctx, member: discord.Member, *, reason="No reason provided"):
   if has_perms(ctx.channel, ctx.author, 40):
@@ -384,6 +406,7 @@ async def untimeout(ctx, member: discord.Member, *, reason="No reason provided")
     await ctx.send("Un-Timeout success")
   else:
     await ctx.reply("You don't have the required permission: Moderate members.")
+
 
 def setup(bot):
   bot.add_command(ban)

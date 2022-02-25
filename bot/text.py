@@ -9,7 +9,7 @@ from unicode_charnames import charname, codepoint, search_charnames
 
 from _bot import bs
 from shared import (commands, datetime, discord, Embed, ems, os, ra, re, requests, SequenceMatcher,
-                    timedelta, timezone, try_delete, typing, ui, UNITS)
+                    textwrap, timedelta, timezone, try_delete, typing, ui, UNITS)
 from functions import many_replace, xfill
 
 spell_checker = Typox()
@@ -53,6 +53,7 @@ hash_choices = [
   {'name': "Shake 256", 'value': "shake_256"}
 ]
 
+
 @bs.command(name="ascii_caesar", description="Encrypts or decrypts a piece of text with an extended version of Caesar Cipher.",
            options=[ui.SlashOption(name="Direction", description="Whether you are encrypting or decrypting.",
            type=str, required=True, choices=direction_choices), ui.SlashOption(name="Distance",
@@ -65,9 +66,11 @@ async def ascii_caesar(ctx: ui.SlashInteraction, direction, distance, text):
   else:
     await ctx.respond("".join([chr((ord(x) + 128 - distance) % 128) for x in text]))
 
+
 @commands.command() # Migrated
 async def ascii_caesar_decode(ctx, distance: int, *, text):
   await ctx.reply("".join([chr(ord(x) - distance % 128) for x in text]))
+
 
 @commands.command() # Migrated
 async def ascii_caesar_encode(ctx, distance: int, *, text):
@@ -76,7 +79,10 @@ async def ascii_caesar_encode(ctx, distance: int, *, text):
     return
   await ctx.reply("".join([chr(ord(x) + distance % 128) for x in text]))
 
-@commands.command(aliases=["lower", "upper", "capital", "capitalise", "capitalize", "lowercase", "lower_case", "uppercase", "upper_case"])
+
+@bs.command(name="case", description="Alters the capitalization of a piece of text.",
+           options=[ui.SlashOption(name="Text", description="The text to change the capitalization of.",
+           type=str, required=True)])
 async def case(ctx, *, text):
   f = open("output.txt", "w")
   f.write(f"UPPERCASE\n{text.upper()}\n\nLOWERCASE\n{text.lower()}\n\nTITLE CASE\n{text.title()}")
@@ -84,12 +90,23 @@ async def case(ctx, *, text):
   await ctx.reply(file=discord.File('output.txt'))
   try_delete('output.txt')
 
+
+@commands.command(aliases=["lower", "upper", "capital", "capitalise", "capitalize", "lowercase", "lower_case", "uppercase", "upper_case"]) # Migrated
+async def case(ctx, *, text):
+  f = open("output.txt", "w")
+  f.write(f"UPPERCASE\n{text.upper()}\n\nLOWERCASE\n{text.lower()}\n\nTITLE CASE\n{text.title()}")
+  f.close()
+  await ctx.reply(file=discord.File('output.txt'))
+  try_delete('output.txt')
+
+
 @commands.command()
 async def choice(ctx, *options): # T
   rand = ra.choice(options)
   desc = f"Your random option is {rand}"
   embed = Embed(title= "Random choice", description= desc)
   await ctx.reply(embed=embed)
+
 
 @commands.command()
 async def compress(ctx, *, text):
@@ -112,16 +129,18 @@ async def compress(ctx, *, text):
                  f"Key:\n```\n{compress_key[:-1]}\n```", file=discord.File("compressed.txt"))
   try_delete("compressed.txt")
 
+
 @bs.command(name="base_n", description="Encodes or decodes a piece of text with base-16, 32, 64 or 85.",
            options=[ui.SlashOption(name="Direction", description="Whether you are encoding or decoding.",
            type=str, required=True, choices=direction_choices), ui.SlashOption(name="Algorithm",
-           description= "The encoding algorithm.", type=str, required=True,
+           description="The encoding algorithm.", type=str, required=True,
            choices=encode_base_choices), ui.SlashOption(name="Text",
-           description="The text to encode or decode.", type= str, required=True)])
+           description="The text to encode or decode.", type=str, required=True)])
 async def base_n(ctx: ui.SlashInteraction, direction, algorithm, text):
   coder = eval(f"base64.b{algorithm}{direction[:2]}code(bytes(text, encoding='utf-8'))")
   code_wrap = "```" if direction == "encrypt" else ""
   await ctx.respond(code_wrap + coder.decode("utf-8") + code_wrap)
+
 
 @commands.command() # Migrated
 async def decrypt(ctx, code, *, text):
@@ -137,6 +156,7 @@ async def decrypt(ctx, code, *, text):
     await ctx.reply("Decryption method not found!")
     return
   await ctx.reply(coder.decode("utf-8"))
+
 
 @commands.command()
 async def decompress(ctx, *, key):
@@ -159,6 +179,7 @@ async def decompress(ctx, *, key):
   x.frombytes(decompress_bytes)
   desc = ''.join(x.decode(huffman_encoder))
   await ctx.reply(f"```\n{desc}\n```")
+
 
 @commands.command()
 async def emoji(ctx, *, text):
@@ -217,6 +238,7 @@ async def emoji(ctx, *, text):
   text = ems.encode(text)
   await ctx.reply(text)
 
+
 @commands.command() # Migrated
 async def encrypt(ctx, code, *, text):
   if SequenceMatcher(None, code, 'base85').ratio()>0.8:
@@ -232,18 +254,20 @@ async def encrypt(ctx, code, *, text):
     return
   await ctx.reply(coder.decode("utf-8"))
 
+
 @bs.command(name="hash", description="Hashes (one-way encrypts) a piece of text.", options=
            [ui.SlashOption(name="Algorithm", description= "The hashing algorithm.", type=str,
-           required=True, choices= hash_choices), ui.SlashOption(name="Text",
+           required=True, choices=hash_choices), ui.SlashOption(name="Text",
            description="The text to hash.", type= str, required=True), ui.SlashOption(name="Length",
            description="The length of the digest (output). Only applicable for Shake-n algorithms. Defaults to 64.",
-           type= int, required=False)])
+           type=int, required=False)])
 async def hash_(ctx, algorithm, *, text, length = 64):
   coder = eval(f"hashlib.{algorithm}()")
   coder.update(bytes(text, encoding='utf-8'))
   if algorithm.startswith("shake_"):
     await ctx.reply(coder.hexdigest(length))
   await ctx.respond(coder.hexdigest())
+
 
 @commands.command() # Migrated
 async def hash(ctx, code, *, text):
@@ -267,14 +291,16 @@ async def hash(ctx, code, *, text):
   coder.update(bytes(text, encoding='utf-8'))
   await ctx.reply(coder.hexdigest())
 
+
 @commands.command()
 async def insert(ctx, emoji, *, text):
   text = text.replace(" ", " " + emoji + " ")
   await ctx.reply(text)
 
-@bs.command(name= "length", description= "Analyses the frequency of characters and counts the length of a piece of text.",
-           options=[ui.SlashOption(name= "Text", description= "The text to analyse.", type= str,
-           required= True)])
+
+@bs.command(name="length", description="Analyses the frequency of characters and counts the length of a piece of text.",
+           options=[ui.SlashOption(name="Text", description="The text to analyse.", type=str,
+           required=True)])
 async def length(ctx, *, text):
   analysis = collections.Counter(text).items()
   analysis = sorted(analysis, key= lambda x: x[1], reverse= True)
@@ -288,6 +314,7 @@ async def length(ctx, *, text):
   await msg.edit(desc)
   try_delete('analysis.txt')
 
+
 @commands.command() # Migrated
 async def length(ctx, *, text):
   analysis = collections.Counter(text).items()
@@ -300,7 +327,8 @@ async def length(ctx, *, text):
   await ctx.reply(desc, file=discord.File('analysis.txt'))
   try_delete('analysis.txt')
 
-@commands.command()
+
+@commands.command() # Migrated
 async def pick(ctx, lower: int, upper: int, times: int): # MS
   desc = ""
   if lower > upper:
@@ -316,6 +344,7 @@ async def pick(ctx, lower: int, upper: int, times: int): # MS
       desc += f"||`{str(ra.randint(lower,upper)).zfill(upper_length)}`||  "
   embed = Embed(title= f"{times} random number(s) between {lower} and {upper}", description= desc)
   await ctx.reply(embed=embed)
+
 
 @bs.command(name="quantum_random", description="Generates random number(s) or character(s) using quantum fluctuations.",
            options=[ui.SlashOption(name="Type", description="The type of output to generate.",
@@ -337,6 +366,7 @@ async def quantum_random_(ctx, type, number: int = 1):
   embed = Embed(title=f"{number}{range_text}", description=", ".join(r))
   await ctx.respond(embed=embed)
 
+
 @commands.command(aliases= ['qrng']) # Migrated
 async def quantum_random(ctx, size: typing.Literal['256', '65536', 'alpha', 'ascii', 'unicode', 'ASCII', 'UNICODE'] = '256', times: int = 1):
   if times >= 1024:
@@ -357,10 +387,12 @@ async def quantum_random(ctx, size: typing.Literal['256', '65536', 'alpha', 'asc
   embed = Embed(title= f"{times} quantum random {range_text}", description= desc)
   await ctx.reply(embed=embed)
 
+
 # NON-QUANTUM RANDOM
 # M: Multiple values   R: Can repeat   S: Spoilers   T: Text choices
 #    One value            Cannot repeat   Unformatted   Integral choice(s)
 # =random{_{m{r}}{s}{t}}
+
 
 @bs.command(name="random_numbers", description="Generates (pseudo-)random number(s).", options=[
            ui.SlashOption(name="Minimum", description="The inclusive lower bound of the number(s).",
@@ -391,6 +423,7 @@ async def random_n(ctx, minimum, maximum, number=1, repetition=True, spoilers=Fa
     embed.set_footer(text= "Repetition has been turned on since there are not enough choices.")
   await ctx.respond(embed=embed)
 
+
 @bs.command(name="random_text", description="Generates (pseudo-)random choices from a list of options.",
            options=[ui.SlashOption(name="Choices", description="Comma-space separated list of options.",
            type=str, required=True), ui.SlashOption(name="Number",
@@ -417,9 +450,11 @@ async def random_t(ctx, choices, number=1, repetition=True, spoilers=False):
     embed.set_footer(text= "Repetition has been turned on since there are not enough choices.")
   await ctx.respond(embed=embed)
 
+
 @commands.command(aliases= ['rng']) # Migrated
 async def random(ctx, lower: int, upper: int):
   await ctx.reply(f"Your random number is **{ra.randint(lower,upper)}**")
+
 
 @commands.command() # Migrated
 async def random_m(ctx, times: int, lower: int, upper: int):
@@ -436,6 +471,7 @@ async def random_m(ctx, times: int, lower: int, upper: int):
   embed = Embed(title= f"{times} random number(s) between {lower} and {upper}", description= desc)
   await ctx.reply(embed=embed)
 
+
 @commands.command() # Migrated
 async def random_mr(ctx, times: int, lower: int, upper: int):
   if lower > upper:
@@ -443,6 +479,7 @@ async def random_mr(ctx, times: int, lower: int, upper: int):
   desc = ", ".join(ra.randint(lower,upper) for x in range(times))
   embed = Embed(title= f"{times} random numbers between {lower} and {upper}", description= desc)
   await ctx.reply(embed=embed)
+
 
 @commands.command() # Migrated
 async def random_mrs(ctx, times: int, lower: int, upper: int):
@@ -455,6 +492,7 @@ async def random_mrs(ctx, times: int, lower: int, upper: int):
   embed = Embed(title=f"{times} random number(s) between {lower} and {upper}", description= desc)
   await ctx.reply(embed=embed)
 
+
 @commands.command() # Migrated
 async def random_mrst(ctx, times: int, *options):
   options = list(options) if isinstance(options, tuple) else [options]
@@ -465,6 +503,7 @@ async def random_mrst(ctx, times: int, *options):
   embed = Embed(title= f"{times} random choice(s)", description= desc)
   await ctx.reply(embed=embed)
 
+
 @commands.command() # Migrated
 async def random_mrt(ctx, times: int, *options):
   options = list(options) if isinstance(options, tuple) else [options]
@@ -473,6 +512,7 @@ async def random_mrt(ctx, times: int, *options):
     desc += f"{ra.choice(options)}, "
   embed = Embed(title= f"{times} random choice(s)", description= desc)
   await ctx.reply(embed=embed)
+
 
 @commands.command() # Migrated
 async def random_ms(ctx, times: int, lower: int, upper: int):
@@ -491,6 +531,7 @@ async def random_ms(ctx, times: int, lower: int, upper: int):
   embed = Embed(title=f"{times} random number(s) between {lower} and {upper}", description= desc)
   await ctx.reply(embed=embed)
 
+
 @commands.command() # Migrated
 async def random_mst(ctx, times: int, *options):
   options = list(options) if isinstance(options, tuple) else [options]
@@ -506,6 +547,7 @@ async def random_mst(ctx, times: int, *options):
   embed = Embed(title= f"{times} random choice(s)", description= desc)
   await ctx.reply(embed=embed)
 
+
 @commands.command() # Migrated
 async def random_mt(ctx, times: int, *options):
   options = list(options) if isinstance(options, tuple) else [options]
@@ -519,20 +561,24 @@ async def random_mt(ctx, times: int, *options):
   embed = Embed(title= f"{times} random choice(s)", description= desc)
   await ctx.reply(embed=embed)
 
+
 @commands.command() # Migrated
 async def random_s(ctx, lower: int, upper: int):
   if lower > upper:
     lower, upper = upper, lower
   await ctx.reply(f"Your random number is ||`{xfill(ra.randint(lower,upper), len(str(upper)))}`||.")
 
+
 @commands.command() # Migrated
 async def random_st(ctx, *options):
   options = list(options) if isinstance(options, tuple) else [options]
   await ctx.reply(f"Your random choice is ||`{xfill(ra.choice(options), max([len(x) for x in options]))}`||.")
 
+
 @commands.command() # Migrated
 async def random_t(ctx, *options):
   await ctx.reply(f"Your random choice is {ra.choice(options)}")
+
 
 @commands.command()
 async def raffle(ctx, lower: int, upper: int, amount: int): # MRS
@@ -546,17 +592,21 @@ async def raffle(ctx, lower: int, upper: int, amount: int): # MRS
   embed = Embed(title= f"{amount} random number(s) between {lower} and {upper}", description= desc)
   await ctx.reply(embed=embed)
 
+
 @commands.command()
 async def rawspoiler(ctx, *, text):
   await ctx.reply(r"\|\|" + r"\|\|\|\|".join(text) + r"\|\|")
+
 
 @commands.command()
 async def rawrawspoiler(ctx, *, text):
   await ctx.reply(r"\\|\\|" + r"\\|\\|\\|\\|".join(text) + r"\\|\\|")
 
+
 @commands.command()
 async def reverse(ctx, *, text):
   await ctx.reply(text[::-1])
+
 
 @commands.command()
 async def rtimer(ctx, timetocount, *, Text = None):
@@ -618,6 +668,7 @@ async def rtimer(ctx, timetocount, *, Text = None):
   else:
     await message.reply(f"Countdown complete!\n"+Text)
 
+
 @commands.command()
 async def spellcheck(ctx, text, distance: typing.Optional[int] = 3, *, disposed=None):
   results = spell_checker.get_suggestions(text, max_distance = distance)
@@ -631,10 +682,12 @@ async def spellcheck(ctx, text, distance: typing.Optional[int] = 3, *, disposed=
   await ctx.reply(file = discord.File("output.txt"))
   try_delete("output.txt")
 
+
 @commands.command()
 async def spoiler(ctx, *, text):
   text="||||".join(text)
   await ctx.reply(f"||{text}||")
+
 
 @commands.command(aliases=['antispoiler', 'antispoilers', 'aspoiler', 'aspoilers', 'spoils']) # Migrated
 async def spoil(ctx, msg: discord.Message = None, *, text= "Reply to a message, add a message ID/link or add some text to remove the spoilers!"):
@@ -645,6 +698,7 @@ async def spoil(ctx, msg: discord.Message = None, *, text= "Reply to a message, 
     text = msg.content
   await ctx.reply(text.replace("||", ""))
 
+
 @commands.command(aliases=['sub']) # Migrated
 async def subscript(ctx, *, text):
   await ctx.send(many_replace(text, {'0': "₀", '1': "₁", '2': "₂", '3': "₃", '4': "₄", '5': "₅",
@@ -653,9 +707,10 @@ async def subscript(ctx, *, text):
                                      'x': "ₓ", 'h': "ₕ", 'k': "ₖ", 'l': "ₗ", 'm': "ₘ", 'n': "ₙ",
                                      'p': "ₚ", 's': "ₛ", 't': "ₜ"}))
 
-@bs.command(name= "subscript", description= "Makes a piece of text subscript. Works on numbers and some other characters only.",
-           options= [ui.SlashOption(name= "Text", type= str, required= True,
-           description= "The text to make subscript.")])
+
+@bs.command(name="subscript", description="Makes a piece of text subscript. Works on numbers and some other characters only.",
+           options=[ui.SlashOption(name="Text", type=str, required=True,
+           description="The text to make subscript.")])
 async def subscript_(ctx, text):
   await ctx.respond(many_replace(text, {'0': "₀", '1': "₁", '2': "₂", '3': "₃", '4': "₄", '5': "₅",
                                      '6': "₆", '7': "₇", '8': "₈", '9': "₉", '+': "₊", '-': "₋",
@@ -663,19 +718,22 @@ async def subscript_(ctx, text):
                                      'x': "ₓ", 'h': "ₕ", 'k': "ₖ", 'l': "ₗ", 'm': "ₘ", 'n': "ₙ",
                                      'p': "ₚ", 's': "ₛ", 't': "ₜ"}))
 
+
 @commands.command(aliases=['sup', 'super']) # Migrated
 async def superscript(ctx, text):
   await ctx.send(many_replace(text, {'0': "⁰", '1': "¹", '2': "²", '3': "³", '4': "⁴", '5': "⁵",
                                      '6': "⁶", '7': "⁷", '8': "⁸", '9': "⁹", '+': "⁺", '-': "⁻",
                                      '=': "⁼", '(': "⁽", ')': "⁾", 'i': "ⁱ", 'n': "ⁿ"}))
 
-@bs.command(name= "superscript", description= "Makes a piece of text superscript. Works on numbers and some other characters only.",
-           options= [ui.SlashOption(name= "Text", type= str, required= True,
-           description= "The text to make superscript.")])
+
+@bs.command(name="superscript", description="Makes a piece of text superscript. Works on numbers and some other characters only.",
+           options=[ui.SlashOption(name="Text", type=str, required=True,
+           description="The text to make superscript.")])
 async def superscript_(ctx, *, text):
   await ctx.respond(many_replace(text, {'0': "⁰", '1': "¹", '2': "²", '3': "³", '4': "⁴", '5': "⁵",
                                      '6': "⁶", '7': "⁷", '8': "⁸", '9': "⁹", '+': "⁺", '-': "⁻",
                                      '=': "⁼", '(': "⁽", ')': "⁾", 'i': "ⁱ", 'n': "ⁿ"}))
+
 
 @commands.command()
 async def terminate(ctx, *, idc):
@@ -688,6 +746,7 @@ async def terminate(ctx, *, idc):
       await ctx.reply("Please provide a valid timer code. A timer code could be found at the beginning of a running timer.")
   else:
     await ctx.reply("Please provide an 5-alphabet ID code. Example: `ABCDE`")
+
 
 @commands.command()
 async def ttimer(ctx, timetocount, *, Text= None):
@@ -744,6 +803,7 @@ async def ttimer(ctx, timetocount, *, Text= None):
   else:
     await message.reply(f"Countdown complete!\n"+Text)
 
+
 @commands.command()
 async def unicode(ctx, *query):
   embed = Embed(title = f"Search results for: {' '.join(query)}")
@@ -776,8 +836,9 @@ async def unicode(ctx, *query):
   await ctx.reply(embed=embed, file=discord.File("unicode.txt"))
   try_delete("unicode.txt")
 
+
 @commands.command(aliases=["timestamp", "posix"])
-async def unix(ctx, *, text= "now"):
+async def unix(ctx, *, text="now"):
   now = datetime.now(tz=timezone.utc)
   dateParts = {
     m[-1]: int(m[:-1]) for m in re.findall(r'([\d]{1,4}[yMdhms])', text)
@@ -789,9 +850,13 @@ async def unix(ctx, *, text= "now"):
   s = round(datetime.timestamp(dt2))
   await ctx.reply(f"`<t:{s}>`      | <t:{s}>\n`<t:{s}:F>` | <t:{s}:F>\n`<t:{s}:f>` | <t:{s}:f>\n`<t:{s}:D>` | <t:{s}:D>\n`<t:{s}:d>` | <t:{s}:d>\n`<t:{s}:T>` | <t:{s}:T>\n`<t:{s}:t>` | <t:{s}:t>\n`<t:{s}:R>` | <t:{s}:R>")
 
-# @bs.command(name= "wrap", description= "Wraps a piece of text such that each line is at most n characters long.",
-#            options= [ui.SlashOption(name= "Text", type= str, required= True,
-#            description= "The text to make superscript.")])
+@bs.command(name="wrap", description="Add lines to a piece of text such that each line is at most n characters long.",
+           options=[ui.SlashOption(name="Text", type=str, required=True,
+           description="The text to wrap."), ui.SlashOption(name="Width", type=int, required=True,
+           description="The maximum length of each line in characters.")])
+async def wrap(ctx: ui.SlashInteraction, text, width):
+  await ctx.respond(textwrap.fill(text, width=width))
+
 
 def setup(bot):
   bot.add_command(ascii_caesar_decode)

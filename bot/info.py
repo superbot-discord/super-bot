@@ -1,3 +1,4 @@
+import calendar
 import pytz
 import statistics
 from _bot import bs
@@ -5,14 +6,41 @@ from functions import enum_list
 from shared import (BeautifulSoup, commands, datetime, discord, Embed, Image, ImageDraw, ImageFont,
                     json, re, requests, timedelta, try_delete, ui)
 
+
 set(pytz.all_timezones_set)
 hexstring_pattern = re.compile(r'#?([0-9A-F]{2})([0-9A-F]{2})([0-9A-F]{2})', re.IGNORECASE)
 rgbtoper = lambda input: f"{round(input/0.0255)/100}%"
 whitney = ImageFont.truetype("fonts/whitney.otf", 35)
+cal = calendar.TextCalendar()
+cal.firstweekday = 3
+months_choices = [{'name': x, 'value': y} for x, y in zip(calendar.month_name, range(12))][1:]
+weekdays_choices = [
+  {'name': "Saturday", 'value': 5},
+  {'name': "Sunday", 'value': 6},
+  {'name': "Monday", 'value': 0}
+]
+cur_year = datetime.now().year
+
 
 f = open('./assets/database_periodic.json', 'r')
 pdb = json.loads(f.read())['elements']
 f.close()
+
+@bs.command(name="calendar", description="Views a monthly or yearly calendar.", options=[
+           ui.SlashOption(name="Year", description="The year of the calendar. Defaults to the current year.",
+           type=int, required=False), ui.SlashOption(name="Month",
+           description="The month of the calendar. Defaults to all months.", type=int,
+           required=False, choices=months_choices), ui.SlashOption(name="First Day",
+           description="The first day of a week. Defaults to Sunday.", type=int, required=False,
+           choices=weekdays_choices)])
+async def calendar(ctx: ui.SlashInteraction, year=cur_year, month=None, first_day=6):
+  cal.firstweekday = first_day
+  if month:
+    desc = cal.formatmonth(year, month, 2, 1)
+  else:
+    desc = cal.formatyear(year, 2, 1, 3)
+  await ctx.respond(f"```{desc}```")
+
 
 @commands.command(aliases=["colour"])
 async def color(ctx, *, name):
@@ -49,10 +77,11 @@ async def color(ctx, *, name):
   await ctx.reply(embed=embed, file=discord.File('color.png'))
   try_delete('color.png')
 
+
 @bs.command(name="element", description="Views information about a chemical element.", options=[
            ui.SlashOption(name="Query", description="The number, symbol or part of name of the element.",
            type=str, required=True)])
-async def element_(ctx, query):
+async def element_(ctx: ui.SlashInteraction, query):
   query = query.lower()
   if len(query) > 2:
     pdb_ = list(filter(lambda x: query in x['name'].lower() or query == str(x['number']) or query in x['symbol'].lower(), pdb))
@@ -90,7 +119,8 @@ async def element_(ctx, query):
   embed = Embed(title=f"Search results", description=enum_list([f"[**{x['number']}** {x['symbol']}: {x['name']}]({x['source']})" for x in pdb_], 4096, "\n"))
   await ctx.respond(embed=embed)
 
-@commands.command()
+
+@commands.command() # Migrated
 async def element(ctx, *, query):
   query = query.lower()
   if len(query) > 2:
@@ -130,6 +160,7 @@ async def element(ctx, *, query):
     embed = Embed(title=f"Search results", description=enum_list([f"[**{x['number']}** {x['symbol']}: {x['name']}]({x['source']})" for x in pdb_], 4096, "\n"))
   await ctx.reply(embed=embed)
 
+
 @bs.command(name="regex", description="Runs a regex search on a piece of text.", options=[
            ui.SlashOption(name="Regular Expression", description="The regex to search for.",
            type=str, required=True), ui.SlashOption(name="Text", description="The text to search in.",
@@ -149,6 +180,7 @@ async def regex_(ctx, regular_expression, *, text):
   embed.set_footer(text="Match Results are highlighted in bold")
   await ctx.reply(embed=embed)
 
+
 @commands.command()
 async def regsub(ctx, regular1, regular2, *, text):
   newtext = re.sub(regular1, regular2, text)
@@ -163,6 +195,7 @@ async def regsub(ctx, regular1, regular2, *, text):
   embed.set_author(name=f"Substitution Result for {regular1}")
   await ctx.reply(embed=embed)
 
+
 @commands.command()
 async def stats(ctx, *numbers: int):
   numbers = list(numbers) if len(numbers) > 1 else [numbers]
@@ -174,6 +207,7 @@ async def stats(ctx, *numbers: int):
   f.close()
   await ctx.send(file=discord.File('statistics.txt'))
   try_delete('statistics.txt')
+
 
 @commands.command()
 async def time(ctx, *, timezoneinput="0"):
@@ -200,6 +234,7 @@ async def time(ctx, *, timezoneinput="0"):
       await ctx.reply(f"Time in {timezoneinput} is {datetime.now(tz=tz).strftime('%d %B %Y (%A), %H:%M:%S')}")
     except:
       await ctx.reply("Timezone not found. Please use `=time all` for a list of all timezones.")
+
 
 def setup(bot):
   bot.add_command(color)

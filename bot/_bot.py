@@ -197,6 +197,8 @@ async def on_command_error(ctx, error):
     error_ = error.original
     if isinstance(error_, FileNotFoundError):
       await ctx.reply("Unfortunately, the file could not be generated.")
+    elif isinstance(error_, commands.MissingPermissions):
+      await ctx.reply("The bot does not have the required permission(s).")
     else:
       try:
         await ctx.send(f"Sorry! An error occured:\n```{''.join(traceback.format_exception(type(error), error, error.__traceback__))}```\n If the error persists, please kindly inform JohannLau#6541 about this issue.")
