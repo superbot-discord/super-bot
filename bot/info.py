@@ -74,7 +74,7 @@ async def element_(ctx, query):
     cpk = element_['cpk-hex'] if element_['cpk-hex'] else "ffffff"
     img = Image.new('RGB', (128, 128), "#" + cpk)
     sum_ = sum([int(cpk[i:i+2], 16) for i in range(0, len(cpk), 2)])
-    text_color = "#ffffff" if sum_ < 400 else "000000"
+    text_color = "#ffffff" if sum_ < 400 else "#000000"
     draw = ImageDraw.Draw(img)
     draw.text((64, 64), element_['symbol'], font=whitney, fill=text_color, align='center', anchor="mm")
     img.save('element.png')
@@ -113,7 +113,7 @@ async def element(ctx, *, query):
     cpk = element_['cpk-hex']
     img = Image.new('RGB', (64, 64), "#" + cpk)
     sum_ = sum([int(cpk[i:i+2], 16) for i in range(0, len(cpk), 2)])
-    text_color = "#ffffff" if sum_ < 384 else "000000"
+    text_color = "#ffffff" if sum_ < 384 else "#000000"
     draw = ImageDraw.Draw(img)
     draw.text((32, 32), element_['symbol'], font=whitney, fill=text_color, align='center', anchor="mm")
     img.save('element.png')
