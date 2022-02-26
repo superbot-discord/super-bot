@@ -19,6 +19,10 @@ weekdays_choices = [
   {'name': "Sunday", 'value': 6},
   {'name': "Monday", 'value': 0}
 ]
+mobile_choices = [
+  {'name': "Default", 'value': 3},
+  {'name': "Mobile-friendly", 'value': 1}
+]
 cur_year = datetime.now().year
 
 
@@ -32,13 +36,15 @@ f.close()
            description="The month of the calendar. Defaults to all months.", type=int,
            required=False, choices=months_choices), ui.SlashOption(name="First Day",
            description="The first day of a week. Defaults to Sunday.", type=int, required=False,
-           choices=weekdays_choices)])
-async def calendar(ctx: ui.SlashInteraction, year=cur_year, month=None, first_day=6):
+           choices=weekdays_choices), ui.SlashOption(name="Mode",
+           description="The mode to use. Decides the number of months shown per row.", type=int,
+           required=False, choices=mobile_choices)])
+async def calendar(ctx: ui.SlashInteraction, year=cur_year, month=None, first_day=6, mode=3):
   cal.firstweekday = first_day
   if month:
     desc = cal.formatmonth(year, month, 2, 1)
   else:
-    desc = cal.formatyear(year, 2, 1, 3)
+    desc = cal.formatyear(year, 2, 1, mode)
   await ctx.respond(f"```{desc}```")
 
 

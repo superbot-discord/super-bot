@@ -61,7 +61,7 @@ led_font_dict = {
   font_led_caps :  {"spacing" : 10, "padding" : -10, "height_plus" : -10, "required_height_plus" : -10, "unneeded_width" : 7 , "unneeded_padding" : 0},
   font_led_mono :  {"spacing" : 10, "padding" : -12, "height_plus" : -13, "required_height_plus" : -13, "unneeded_width" : 7 , "unneeded_padding" : 14},
   font_led_serif:  {"spacing" : 25, "padding" : 9  , "height_plus" : 22 , "required_height_plus" : 8  , "unneeded_width" : 6 , "unneeded_padding" : 12},
-  font_led_chi  :  {"spacing" : 20, "padding" : -1 , "height_plus" : 3  , "required_height_plus" : 3  , "unneeded_width" : 8 , "unneeded_padding" : 15},
+  font_led_chi  :  {"spacing" : 20, "padding" : -1 , "height_plus" : 3  , "required_height_plus" : 3  , "unneeded_width" : 6 , "unneeded_padding" : 15},
 
   font_led2       :{"spacing" : 10, "padding" : -5 , "height_plus" : 5  , "required_height_plus" : -5 , "unneeded_width" : 5 , "unneeded_padding" : 10},
   font_led2_bold  :{"spacing" : 50, "padding" : 20 , "height_plus" : 40 , "required_height_plus" : 20 , "unneeded_width" : 8 , "unneeded_padding" : 20},
