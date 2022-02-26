@@ -87,7 +87,7 @@ async def case(ctx, *, text):
   f = open("output.txt", "w")
   f.write(f"UPPERCASE\n{text.upper()}\n\nLOWERCASE\n{text.lower()}\n\nTITLE CASE\n{text.title()}")
   f.close()
-  await ctx.reply(file=discord.File('output.txt'))
+  await ctx.respond(file=discord.File('output.txt'))
   try_delete('output.txt')
 
 

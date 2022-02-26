@@ -4,6 +4,7 @@ from shared import commands, db, discord, Image, ImageDraw, ImageFont, try_delet
 
 font_led      = ImageFont.truetype("fonts/led.ttf", 50)
 font_led_bold = ImageFont.truetype("fonts/led_bold.ttf", 50)
+font_led_chi  = ImageFont.truetype("fonts/led_chinese.otf", 50)
 font_led_caps = ImageFont.truetype("fonts/led_caps.ttf", 50)
 font_led_mono = ImageFont.truetype("fonts/led_mono.ttf", 50)
 font_led_serif= ImageFont.truetype("fonts/led_serif.ttf", 50)
@@ -52,11 +53,15 @@ whitney       = ImageFont.truetype("fonts/whitney.otf", 34)
 
 
 led_font_dict = {
+  # Spacing: between lines   Padding: above first line   Height_plus: added height with tall characters like gjpqy
+  # Required height plus: added height without tall characters   Unneeded width: width removed from right
+  # Unneeded padding: height removed from top
   font_led      :  {"spacing" : 20, "padding" : 3  , "height_plus" : 15 , "required_height_plus" : 3  , "unneeded_width" : 8 , "unneeded_padding" : 12},
   font_led_bold :  {"spacing" : 20, "padding" : 3  , "height_plus" : 15 , "required_height_plus" : 3  , "unneeded_width" : 6 , "unneeded_padding" : 12},
   font_led_caps :  {"spacing" : 10, "padding" : -10, "height_plus" : -10, "required_height_plus" : -10, "unneeded_width" : 7 , "unneeded_padding" : 0},
   font_led_mono :  {"spacing" : 10, "padding" : -12, "height_plus" : -13, "required_height_plus" : -13, "unneeded_width" : 7 , "unneeded_padding" : 14},
   font_led_serif:  {"spacing" : 25, "padding" : 9  , "height_plus" : 22 , "required_height_plus" : 8  , "unneeded_width" : 6 , "unneeded_padding" : 12},
+  font_led_chi  :  {"spacing" : 20, "padding" : -1 , "height_plus" : 3  , "required_height_plus" : 3  , "unneeded_width" : 8 , "unneeded_padding" : 15},
 
   font_led2       :{"spacing" : 10, "padding" : -5 , "height_plus" : 5  , "required_height_plus" : -5 , "unneeded_width" : 5 , "unneeded_padding" : 10},
   font_led2_bold  :{"spacing" : 50, "padding" : 20 , "height_plus" : 40 , "required_height_plus" : 20 , "unneeded_width" : 8 , "unneeded_padding" : 20},
@@ -124,14 +129,16 @@ led_sq_choices = [
   {'name': "Bold", 'value': "bold"},
   {'name': "Mono", 'value': "mono"},
   {'name': "Caps (Blocky)", 'value': "caps"},
-  {'name': "Serif", 'value': "serif"}
+  {'name': "Serif", 'value': "serif"},
+  {'name': "Chinese", 'value': "chi"}
 ]
 led_sq_fonts = {
   'regular': font_led,
   'bold': font_led_bold,
   'caps': font_led_caps,
   'mono': font_led_mono,
-  'serif': font_led_serif
+  'serif': font_led_serif,
+  'chi': font_led_chi
 }
 
 led_sc_choices = [
