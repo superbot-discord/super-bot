@@ -13,9 +13,10 @@ sys.path.append(os.path.abspath('./modules'))
 import ascii2 as asc
 from pyzbar import pyzbar
 
-sf_pro_r      = ImageFont.truetype("fonts/awf.ttf", 23)
+sf_pro_r = ImageFont.truetype("fonts/awf.ttf", 23)
 cimage = ImageCaptcha()
 aw = [[(230, 153), "#3F91F0FF"], [(296, 170), "#69D880FF"], [(342, 220), "#DE9F41FF"], [(362, 283), "#9886E1FF"], [(342, 345), "#C8EC66FF"], [(296, 394), "#D56569FF"], [(231, 412), "#56AFE1FF"], [(165, 395), "#F2E872FF"], [(118, 347), "#E295C2FF"]]
+
 
 @commands.command()
 async def apple_watch(ctx, *, text = "NEVERGONNAGIVEYUUP"):
@@ -29,6 +30,7 @@ async def apple_watch(ctx, *, text = "NEVERGONNAGIVEYUUP"):
   await ctx.reply(file = discord.File(aw_fn))
   try_delete(aw_fn)
 
+
 @commands.command()
 async def captcha(ctx, *, text = None):
   if text == None:
@@ -37,6 +39,7 @@ async def captcha(ctx, *, text = None):
   cimage.write(text, 'captcha.png')
   await ctx.reply(f"Captcha for {text}", file = discord.File('captcha.png'))
   try_delete('captcha.png')
+
 
 @commands.command()
 async def image(ctx, *, mode):
@@ -152,6 +155,7 @@ async def image(ctx, *, mode):
     try_delete('output.png')
   try_delete('input.png')
 
+
 def addhue(degs):
   im = Image.open('input.png')
   pixels = im.load()
@@ -169,6 +173,7 @@ def addhue(degs):
         d=(c1,c2,c3)
       pixels[i,j] = d
   im.save('output.png')
+
 
 def analyse(scale, colors):
   if scale > 5000:
@@ -228,6 +233,7 @@ def analyse(scale, colors):
   f.close()
   return hexcode
 
+
 def blur(distance):
   image = Image.open('input.png')
   newimg = image.filter(ImageFilter.BoxBlur(distance))
@@ -235,20 +241,24 @@ def blur(distance):
   newimg = image.filter(ImageFilter.GaussianBlur(distance))
   newimg.save('output2.png')
 
+
 def brightness(percent):
   image = Image.open('input.png')
   newimg = ImageEnhance.Brightness(image).enhance(percent/100)
   newimg.save('output.png')
+
 
 def contour():
   image = Image.open('input.png')
   newimg = image.filter(ImageFilter.CONTOUR)
   newimg.save('output.png')
 
+
 def contrast(percent):
   image = Image.open('input.png')
   newimg = ImageEnhance.Contrast(image).enhance(percent/100)
   newimg.save('output.png')
+
 
 def edge():
   image = Image.open('input.png')
@@ -257,10 +267,12 @@ def edge():
   newimg = image.filter(ImageFilter.EDGE_ENHANCE_MORE)
   newimg.save('output2.png')
 
+
 def greyscale(percent):
   image = Image.open('input.png')
   newimg = ImageEnhance.Color(image).enhance(percent/100)
   newimg.save('output.png')
+
 
 def hist():
   image = Image.open("input.png")
@@ -271,6 +283,7 @@ def hist():
   plt.title("Image histogram")
   plt.savefig("output.png", transparent=True)
   plt.clf()
+
 
 def invert():
   image = Image.open('input.png')
@@ -285,10 +298,12 @@ def invert():
     newimg = ImageOps.invert(image)
     newimg.save('output.png')
 
+
 def recolor(black_color, white_color):
   image = Image.open('input.png').convert('L')
   newimg = ImageOps.colorize(image, black_color, white_color)
   newimg.save('output.png')
+
 
 def resize(x, y):
   image = Image.open('input.png')
@@ -305,6 +320,7 @@ def resize(x, y):
   newimg = image.resize((x,y), Image.LANCZOS)
   newimg.save('output6.png')
 
+
 def rotate(degrees):
   image = Image.open('input.png')
   newimg = image.rotate(angle=degrees)
@@ -312,10 +328,12 @@ def rotate(degrees):
   newimg = image.rotate(angle=degrees, expand=True)
   newimg.save('output2.png')
 
+
 def sharpness(percent):
   image = Image.open('input.png')
   newimg = ImageEnhance.Sharpness(image).enhance(percent/100)
   newimg.save('output.png')
+
 
 @commands.command()
 async def mandelbrot(ctx, size: int = 1024):
@@ -323,6 +341,7 @@ async def mandelbrot(ctx, size: int = 1024):
   img.save('mandelbrot.png')
   await ctx.reply(file = discord.File('mandelbrot.png'))
   try_delete('mandelbrot.png')
+
 
 @commands.command()
 async def ocr(ctx, lang= "eng", *, disposed=None):
@@ -335,6 +354,7 @@ async def ocr(ctx, lang= "eng", *, disposed=None):
       desc="There was no text."
     await ctx.reply(desc)
 
+
 @commands.command(aliases=['image_gen'])
 async def image_generate(ctx, color, width: int, height: int = None, format: typing.Literal["bmp", "gif", "jpg", "png", "tiff"] = "png", mode: typing.Literal["1", "L", "P", "RGB", "RGBA", "CMYK", "YCbCr", "LAB", "HSV", "I", "F"] = "RGBA"):
   height = height if height else width
@@ -342,6 +362,7 @@ async def image_generate(ctx, color, width: int, height: int = None, format: typ
   img.save(f'image.{format}')
   await ctx.reply(file=discord.File(f'image.{format}'))
   try_delete(f'image.{format}')
+
 
 @commands.command(aliases=['scan'])
 async def qr(ctx, *, disposed=None):
@@ -369,6 +390,7 @@ async def qr(ctx, *, disposed=None):
           await ctx.reply(y.data.decode("utf-8"))
     try_delete('input.png', 'qrcode.png')
 
+
 @commands.command()
 async def render(ctx, width:float=1):
   att = ctx.message.attachments[0]
@@ -384,6 +406,7 @@ async def render(ctx, width:float=1):
       break
     except:
       pass
+
 
 @commands.command()
 async def text(ctx, *, text = None):
@@ -407,6 +430,7 @@ async def text(ctx, *, text = None):
       desc="There was no text."
     await ctx.reply(desc)
 
+
 @commands.command()
 async def transparent(ctx, alpha = 128):
   await ctx.message.attachments[0].save("Not_Transparent.png")
@@ -417,6 +441,7 @@ async def transparent(ctx, alpha = 128):
   img.save('Transparent.png')
   await ctx.reply(file = discord.File('Transparent.png'))
   try_delete('Transparent.png')
+
 
 def setup(bot):
   bot.add_command(apple_watch)

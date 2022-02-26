@@ -10,9 +10,9 @@ from shared import (BeautifulSoup, commands, datetime, discord, Embed, Image, Im
 set(pytz.all_timezones_set)
 hexstring_pattern = re.compile(r'#?([0-9A-F]{2})([0-9A-F]{2})([0-9A-F]{2})', re.IGNORECASE)
 rgbtoper = lambda input: f"{round(input/0.0255)/100}%"
-whitney = ImageFont.truetype("fonts/whitney.otf", 35)
+whitney = ImageFont.truetype("fonts/whitney.otf", 55)
 cal = calendar.TextCalendar()
-cal.firstweekday = 3
+cal.firstweekday = 6
 months_choices = [{'name': x, 'value': y} for x, y in zip(calendar.month_name, range(12))][1:]
 weekdays_choices = [
   {'name': "Saturday", 'value': 5},
@@ -44,7 +44,7 @@ async def calendar(ctx: ui.SlashInteraction, year=cur_year, month=None, first_da
   if month:
     desc = cal.formatmonth(year, month, 2, 1)
   else:
-    desc = cal.formatyear(year, 2, 1, mode)
+    desc = cal.formatyear(year, 2, 1, 3, mode)
   await ctx.respond(f"```{desc}```")
 
 
