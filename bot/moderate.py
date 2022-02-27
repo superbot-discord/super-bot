@@ -366,7 +366,7 @@ async def tts(ctx, *, desc):
            description="The duration of the timeout in wdhms units, e.g. 1m20s=80s. Use 0 to remove timeout.",
            type=str, required=True), ui.SlashOption(name="Reason", description="The reason to manipulate the timeout.",
            type=str, required=False)])
-async def timeout_(ctx: ui.SlashInteraction, user, duration, reason):
+async def timeout_(ctx: ui.SlashInteraction, user, duration, reason=None):
   if has_perms(ctx.channel, ctx.author, 40):
     sec = int(timedelta(**{
       UNITS.get(m.group('unit').lower(), 'seconds'): int(m.group('val'))
