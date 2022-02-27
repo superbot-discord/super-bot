@@ -1,6 +1,7 @@
+from _bot import bs
 from shared import (asyncio, commands, custom_permissions, datetime, db, discord, Embed,
                     has_perms, re, SequenceMatcher, specialbool, timedelta, timestamp_pattern,
-                    timezone, try_delete, try_delete_message, typing, UNITS, unix_timestamp)
+                    timezone, try_delete, try_delete_message, typing, ui, UNITS, unix_timestamp)
 
 
 class SearchFlags(commands.FlagConverter):
@@ -359,7 +360,30 @@ async def tts(ctx, *, desc):
     await ctx.reply("You don't have the required permission: Send TTS messages.")
 
 
-@commands.command()
+@bs.command(name="timeout", description="Adds or removes a timeout to/from a user.", options=[
+           ui.SlashOption(name="User", description="The user to manipulate the timeout of.",
+           type=discord.Member, required=True), ui.SlashOption(name="Duration",
+           description="The duration of the timeout in wdhms units, e.g. 1m20s=80s. Use 0 to remove timeout.",
+           type=str, required=True), ui.SlashOption(name="Reason", description="The reason to manipulate the timeout.",
+           type=str, required=False)])
+async def timeout_(ctx: ui.SlashInteraction, user, duration, reason):
+  if has_perms(ctx.channel, ctx.author, 40):
+    sec = int(timedelta(**{
+      UNITS.get(m.group('unit').lower(), 'seconds'): int(m.group('val'))
+      for m in re.finditer(r'(?P<val>\d+)(?P<unit>[smhdw]?)', duration, flags=re.I)
+    }).total_seconds())
+    end = datetime.now(timezone.utc) + timedelta(seconds = sec)
+    if reason:
+      await user.edit(timeout = end, reason= f"{reason} (requested by {ctx.author.name}#{ctx.author.discriminator})")
+    else:
+      await user.edit(timeout = end)
+    embed = Embed(title=f"{user.name} was timed out.", description=f"Until: {unix_timestamp(end)}\nReason: {reason}\nBy: {ctx.author.mention}")
+    await ctx.send(embed = embed)
+  else:
+    await ctx.reply("You don't have the required permission: Moderate members.")
+
+
+@commands.command() # Migrated
 async def timeout(ctx, member: discord.Member, duration="0s", *, reason="No reason provided"):
   if has_perms(ctx.channel, ctx.author, 40):
     sec = int(timedelta(**{
@@ -396,7 +420,7 @@ async def unban(ctx, user: discord.User, *, reason="No reason provided"):
     await ctx.reply("You don't have the required permission: Ban members.")
 
 
-@commands.command()
+@commands.command() # Migrated
 async def untimeout(ctx, member: discord.Member, *, reason="No reason provided"):
   if has_perms(ctx.channel, ctx.author, 40):
     if reason:

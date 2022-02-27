@@ -197,7 +197,7 @@ async def on_command_error(ctx, error):
     error_ = error.original
     if isinstance(error_, FileNotFoundError):
       await ctx.reply("Unfortunately, the file could not be generated.")
-    elif isinstance(error_, commands.MissingPermissions):
+    elif isinstance(error_, commands.MissingPermissions) or isinstance(error_, discord.Forbidden):
       await ctx.reply("The bot does not have the required permission(s).")
     else:
       try:
