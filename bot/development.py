@@ -28,15 +28,15 @@ class ThinkForeverL(ui.listener.Listener):
 
 def sample_buttons(ctx):
   return [
-  ui.Button(color='primary',  custom_id="p", label="Primary (blurple)", emoji="🟢"),
-  ui.Button(color='secondary',custom_id="s", label="Secondary (grey)", emoji=ctx.bot.get_emoji(824680026858717234)),
-  ui.Button(color='green',    custom_id="g", label="Success (green)"),
-  ui.Button(color='red',      custom_id="r", label="Danger (red)"),
-  ui.LinkButton(url="https://example.com",   label="URL (grey)"),
-  ui.Button(color='primary',  disabled=True, label="Primary (blurple)", emoji="🟢", new_line=True),
-  ui.Button(color='secondary',disabled=True, label="Secondary (grey)", emoji=ctx.bot.get_emoji(824680026858717234)),
-  ui.Button(color='green',    disabled=True, label="Success (green)"),
-  ui.Button(color='red',      disabled=True, label="Danger (red)"),
+  ui.Button(color='primary', custom_id="p", label="Primary (blurple)", emoji="🟢"),
+  ui.Button(color='secondary', custom_id="s", label="Secondary (grey)", emoji=ctx.bot.get_emoji(824680026858717234)),
+  ui.Button(color='green',  custom_id="g", label="Success (green)"),
+  ui.Button(color='red', custom_id="r", label="Danger (red)"),
+  ui.LinkButton(url="https://example.com", label="URL (grey)"),
+  ui.Button(color='primary', disabled=True, label="Primary (blurple)", emoji="🟢", new_line=True),
+  ui.Button(color='secondary', disabled=True, label="Secondary (grey)", emoji=ctx.bot.get_emoji(824680026858717234)),
+  ui.Button(color='green', disabled=True, label="Success (green)"),
+  ui.Button(color='red', disabled=True, label="Danger (red)"),
   ui.LinkButton(url="https://example.com", disabled=True, label="URL (grey)")]
 
 sample_options = [
