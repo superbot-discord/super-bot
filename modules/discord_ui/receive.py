@@ -190,10 +190,11 @@ class Interaction():
         )
         
         if self._deferred_hidden is hidden:
-            if self._deferred_hidden is False and hidden is True:
-                logging.warning("Your response should be hidden, but the interaction was deferred public. This results in a public response.")
-            if self._deferred_hidden is True and hidden is False:
-                logging.warning("Your response should be public, but the interaction was deferred hidden. This results in a hidden response.")
+            pass
+        if self._deferred_hidden is False and hidden is True:
+            logging.warning("Your response should be hidden, but the interaction was deferred public. This results in a public response.")
+        if self._deferred_hidden is True and hidden is False:
+            logging.warning("Your response should be public, but the interaction was deferred hidden. This results in a hidden response.")
         hide_message = self._deferred_hidden or not self.deferred and hidden is True
 
 
