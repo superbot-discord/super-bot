@@ -124,15 +124,17 @@ calc_buttons_sci_ = [
 ]
 
 calc_parenthesis = [
-  "(", "math.sin(", "math.cos(", "math.tan(", "math.factorial", "math.log(",
-  "math.log10(", "math.sqrt(", "math.perm(", "math.comb("]
+  "(", "math.sin(", "math.cos(", "math.tan(", "math.factorial(", "math.log(", "math.log10(",
+  "math.sqrt(", "math.perm(", "math.comb("]
 
 def sig_handler(signum, frame):
   raise Exception("Time exceeded")
 signal.signal(signal.SIGALRM, sig_handler)
 
 class CalcL(ui.listener.Listener):
-  def __init__(self):
+  def __init__(self, user_id):
+    self.target_users = [user_id]
+
     self.exp = []
     self.disp = []
     self.scientific = False # F: Normal   T: Scientific
@@ -315,6 +317,8 @@ class CalcL(ui.listener.Listener):
 
   @ui.Listener.button(custom_id="(")
   async def e5(self, ctx: ui.ButtonInteraction):
+    if self.exp[-1] in ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]:
+      await self.concat(ctx, "*", "×")
     await self.concat(ctx, "(")
 
   @ui.Listener.button(custom_id=")")
@@ -345,6 +349,10 @@ class CalcL(ui.listener.Listener):
   @ui.Listener.button(custom_id="τ")
   async def c3(self, ctx: ui.ButtonInteraction):
     await self.concat(ctx, "math.tau", "τ")
+  
+  @ui.Listener.wrong_user()
+  async def wrong_user(self, ctx):
+    await ctx.respond("Please use `/calculator` on your own.", hidden=True)
 
 
 f = open('./assets/database_periodic.json', 'r')
@@ -354,7 +362,7 @@ f.close()
 
 @bs.command(name="calculator", description="Opens a calculator with conventional and scientific functions.")
 async def calculator(ctx: ui.SlashInteraction):
-  await ctx.respond(components=calc_buttons_1, listener=CalcL())
+  await ctx.respond(components=calc_buttons_1, listener=CalcL(ctx.author.id))
 
 
 @bs.command(name="calendar", description="Views a monthly or yearly calendar.", options=[

@@ -62,11 +62,11 @@ think_buttons = [
 
 @commands.command(aliases=['buttons'])
 async def button(ctx, *, disposed=None):
-  await ctx.reply("All buttons will not timeout.", components= sample_buttons(ctx), listener= SampleButtonL())
+  await ctx.reply("All buttons will not timeout.", components=sample_buttons(ctx), listener=SampleButtonL())
 
 @bs.command(name="buttons", description="Generates all kinds of buttons. Mainly for development purposes.")
 async def buttons(ctx):
-  await ctx.respond("All buttons will not timeout.", components= sample_buttons(ctx), listener= SampleButtonL())
+  await ctx.respond("All buttons will not timeout.", components=sample_buttons(ctx), listener=SampleButtonL())
 
 @commands.command()
 async def join(ctx, vc: discord.VoiceChannel = None, *, disposed=None):

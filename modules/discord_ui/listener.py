@@ -276,7 +276,7 @@ class Listener():
         A list of users or user ids from which the interactions has to be be received. 
         Every interaction by other users will be ignored
     """
-    def __init__(self, timeout=180.0, target_users=None) -> None:
+    def __init__(self, timeout=None, target_users=None) -> None:
         self._target_users = []
         self.timeout: float = timeout
         """Timeout after how many seconds the listener should timeout and be deleted"""
@@ -291,7 +291,7 @@ class Listener():
 
     def __init_subclass__(cls) -> None:
         cls.__listeners__ = []
-        cls.timeout = 180.0
+        cls.timeout = None
         cls._target_users = None
         cls.supress_no_listener_found = False
         cls._on_error = {x[1].__exception_cls__: x[1] for x in getmembers(cls, predicate=lambda x: getattr(x, "__on_error__", False))}

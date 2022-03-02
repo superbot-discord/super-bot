@@ -52,12 +52,12 @@ class SnipeL(ui.listener.Listener):
         pinmsg = await ctx.channel.fetch_message(ctx.channel.last_message_id)
         await pinmsg.delete()
     else:
-      await ctx.respond("Unable to Pin/Unpin messages without the Manage Server permission.", hidden= True)
+      await ctx.respond("Unable to Pin/Unpin messages without the Manage Server permission.", hidden=True)
       return
   
   @ui.Listener.wrong_user()
   async def wrong_user(self, ctx):
-    await ctx.respond("Please use `/snipe` on your own in order to browse snipped messages.", hidden= True)
+    await ctx.respond("Please use `/snipe` on your own in order to browse snipped messages.", hidden=True)
 
 
 @commands.command()
@@ -72,10 +72,12 @@ async def editembed(ctx, message : discord.Message = None, *,text):
   embed = botembed(text)
   await message.edit(embed= embed)
 
+
 @commands.command()
 async def embed(ctx, *, text):
   embed = botembed(text)
   await ctx.send(embed= embed)
+
 
 @commands.command()
 async def ett(ctx, msg: discord.Message = None):
@@ -88,6 +90,7 @@ async def ett(ctx, msg: discord.Message = None):
       return
   text = botett(msg)
   await ctx.reply("```"+text+"```")
+
 
 @commands.command()
 async def pretend(ctx, member: discord.Member, *, message):
@@ -103,6 +106,7 @@ async def pretend(ctx, member: discord.Member, *, message):
     wh = await ctx.channel.create_webhook(name= "Pretender")
   await wh.send(message, username= member.name, avatar_url= member.display_avatar.url)
 
+
 @commands.command()
 async def pretendembed(ctx, member: discord.Member, *, text):
   embed = botembed(text)
@@ -117,6 +121,7 @@ async def pretendembed(ctx, member: discord.Member, *, text):
   else:
     wh = await ctx.channel.create_webhook(name= "Pretender")
   await wh.send(embed= embed, username= member.name, avatar_url= member.display_avatar.url)
+
 
 @commands.command(aliases=["fastembed", "qe"])
 async def quickembed(ctx, *, text):
@@ -139,6 +144,7 @@ async def quickembed(ctx, *, text):
   except:
     pass
   await ctx.send(embed=embed)
+
 
 @commands.command(aliases=['simpembed', 'simplembed', 'sembed'])
 async def simpleembed(ctx, *, text):
@@ -165,6 +171,7 @@ async def simpleembed(ctx, *, text):
     inline = inline.startswith("y") or inline.startswith("1") or inline.startswith("e") or inline.startswith("on")
     embed.add_field(name=textlist[3*x+5], value=textlist[3*x+6].replace("{{{newline}}}", f"\n"), inline=inline)
   await ctx.send(embed=embed)
+
 
 def botett(msg):
   #for x in msg.embeds:
@@ -219,6 +226,7 @@ def botett(msg):
       desc = f"{desc}{x['inline']}\n{x['name']}\n"+x['value'].replace(f'\n', '{{{newline}}}')+f"\n"
   return desc
 
+
 def botembed(text):
   textlist=text.splitlines()
   embed = Embed()
@@ -272,6 +280,7 @@ def botembed(text):
     embed.add_field(name=textlist[3*x+12], value=textlist[3*x+13].replace("{{{newline}}}", f"\n"), inline=inline)
   return embed
 
+
 @commands.command(aliases=['sniper']) # Migrated
 async def snipe(ctx, *, text= None):
   chnl = ctx.channel
@@ -301,6 +310,7 @@ async def snipe(ctx, *, text= None):
   else:
     await ctx.reply("""If you want to view sniped messages, please run `=snipe` without any arguments.
     If you intend to enable/disable sniping, you are missing the Manage Channels permission.""")
+
 
 @commands.command() # Migrated
 async def clearsnipe(ctx, *, chnl: discord.TextChannel = None):
@@ -333,6 +343,7 @@ async def snipe_(ctx: ui.SlashInteraction):
   else:
     await ctx.respond("Snipping is disabled. Please ask someone with manage messages permission to re-enable it.")
 
+
 @bs.command(name="snipe_toggle", description="Enable or disable sniping in this channel.",
            options=[ui.SlashOption(name="Toggle", type=bool, description=
            "Whether to enable or disable sniping. Toggles the current option by default.")])
@@ -342,6 +353,7 @@ async def snipe_toggle(ctx: ui.SlashInteraction, toggle= None):
     toggle = not sniping[chnl]
   sniping[chnl] = toggle
   await ctx.respond(f"Sniping is now {'enabled' if toggle else 'disabled'}.")
+
 
 @bs.command(name="snipe_clear", description="Clears the snipe database for a channel.",
            options=[ui.SlashOption(name="Channel", type=discord.TextChannel, description=
@@ -355,6 +367,7 @@ async def snipe_clear(ctx: ui.SlashInteraction, channel: discord.TextChannel = N
   else:
     await ctx.respond("You don't have the required permission: Manage channels.")
 
+
 async def snipe_log(message: discord.Message):
   val = message.content
   val = val if val else "*No message content*"
@@ -366,6 +379,7 @@ async def snipe_log(message: discord.Message):
     sniper[message.channel] = []
   sniper[message.channel].insert(0, [val, footer])
   sniper[message.channel] = sniper[message.channel][:15]
+
 
 def setup(bot):
   bot.add_command(editembed)
