@@ -1,13 +1,14 @@
 import calendar
 import pytz
+import signal
 import statistics
 from _bot import bs
+import collections
 from functions import enum_list
 from shared import (BeautifulSoup, commands, datetime, discord, Embed, Image, ImageDraw, ImageFont,
-                    json, re, requests, timedelta, try_delete, ui)
+                    json, math, re, requests, timedelta, try_delete, ui)
 
 
-set(pytz.all_timezones_set)
 hexstring_pattern = re.compile(r'#?([0-9A-F]{2})([0-9A-F]{2})([0-9A-F]{2})', re.IGNORECASE)
 rgbtoper = lambda input: f"{round(input/0.0255)/100}%"
 whitney = ImageFont.truetype("fonts/whitney.otf", 55)
@@ -26,9 +27,335 @@ mobile_choices = [
 cur_year = datetime.now().year
 
 
+calc_buttons_1 = [
+  ui.Button(color='red', custom_id="c", label="AC"),
+  ui.Button(color='red', custom_id="d", label="del"),
+  ui.Button(color='green', custom_id="(", label="("),
+  ui.Button(color='green', custom_id=")", label=")"),
+  ui.Button(color='green', custom_id="*", label="×"),
+
+  ui.Button(color='grey', custom_id="p", label="Sci", new_line=True),
+  ui.Button(color='blurple', custom_id="7", label="7"),
+  ui.Button(color='blurple', custom_id="8", label="8"),
+  ui.Button(color='blurple', custom_id="9", label="9"),
+  ui.Button(color='green', custom_id="/", label="/"),
+
+  ui.Button(color='green', custom_id="r", label="√(", new_line=True),
+  ui.Button(color='blurple', custom_id="4", label="4"),
+  ui.Button(color='blurple', custom_id="5", label="5"),
+  ui.Button(color='blurple', custom_id="6", label="6"),
+  ui.Button(color='green', custom_id="-", label="-"),
+
+  ui.Button(color='green', custom_id="x", label="^(", new_line=True),
+  ui.Button(color='blurple', custom_id="1", label="1"),
+  ui.Button(color='blurple', custom_id="2", label="2"),
+  ui.Button(color='blurple', custom_id="3", label="3"),
+  ui.Button(color='green', custom_id="+", label="+"),
+
+  ui.Button(color='grey', custom_id="E", label="e", new_line=True),
+  ui.Button(color='grey', custom_id="P", label="π"),
+  ui.Button(color='blurple', custom_id="0", label="0"),
+  ui.Button(color='blurple', custom_id=".", label="."),
+  ui.Button(color='green', custom_id="=", label="="),
+]
+
+calc_buttons_sci = [
+  ui.Button(color='red', custom_id="c", label="AC"),
+  ui.Button(color='red', custom_id="d", label="del"),
+  ui.Button(color='green', custom_id="(", label="("),
+  ui.Button(color='green', custom_id=")", label=")"),
+  ui.Button(color='green', custom_id="*", label="×"),
+
+  ui.Button(color='grey', custom_id="p", label="Back", new_line=True),
+  ui.Button(color='green', custom_id="si", label="sin"),
+  ui.Button(color='green', custom_id="co", label="cos"),
+  ui.Button(color='green', custom_id="ta", label="tan"),
+  ui.Button(color='green', custom_id="/", label="/"),
+
+  ui.Button(color='green', custom_id="r", label="√(", new_line=True),
+  ui.Button(color='green', custom_id="%", label="mod"),
+  ui.Button(color='green', custom_id="npr", label="nPr"),
+  ui.Button(color='green', custom_id="ncr", label="nCr"),
+  ui.Button(color='green', custom_id="-", label="-"),
+
+  ui.Button(color='green', custom_id="x", label="^(", new_line=True),
+  ui.Button(color='green', custom_id="!", label="!"),
+  ui.Button(color='green', custom_id="l", label="ln"),
+  ui.Button(color='green', custom_id="L", label="log"),
+  ui.Button(color='green', custom_id="+", label="+"),
+
+  ui.Button(color='grey', custom_id="E", label="e", new_line=True),
+  ui.Button(color='grey', custom_id="P", label="π"),
+  ui.Button(color='grey', custom_id="T", label="τ"),
+  ui.Button(color='green', custom_id=",", label=","),
+  ui.Button(color='green', custom_id="=", label="="),
+]
+
+calc_buttons_sci_ = [
+  ui.Button(color='red', custom_id="c", label="AC"),
+  ui.Button(color='red', custom_id="d", label="del"),
+  ui.Button(color='green', custom_id="(", label="("),
+  ui.Button(color='green', custom_id=")", label=")"),
+  ui.Button(color='green', custom_id="*", label="×"),
+
+  ui.Button(color='grey', custom_id="p", label="Back", new_line=True),
+  ui.Button(color='green', custom_id="si", label="sin"),
+  ui.Button(color='green', custom_id="co", label="cos"),
+  ui.Button(color='green', custom_id="ta", label="tan"),
+  ui.Button(color='green', custom_id="/", label="/"),
+
+  ui.Button(color='green', custom_id="r", label="√(", new_line=True),
+  ui.Button(color='green', custom_id="%", label="mod"),
+  ui.Button(color='green', custom_id="npr", label="nPr"),
+  ui.Button(color='green', custom_id="ncr", label="nCr"),
+  ui.Button(color='green', custom_id="-", label="-"),
+
+  ui.Button(color='green', custom_id="x", label="^(", new_line=True),
+  ui.Button(color='green', custom_id="!", label="!"),
+  ui.Button(color='green', custom_id="l", label="ln"),
+  ui.Button(color='green', custom_id="L", label="log"),
+  ui.Button(color='green', custom_id="+", label="+"),
+
+  ui.Button(color='grey', custom_id="E", label="e", new_line=True),
+  ui.Button(color='grey', custom_id="P", label="π"),
+  ui.Button(color='grey', custom_id="T", label="τ"),
+  ui.Button(color='green', custom_id=",", label=",", disabled=True),
+  ui.Button(color='green', custom_id="=", label="="),
+]
+
+calc_parenthesis = [
+  "(", "math.sin(", "math.cos(", "math.tan(", "math.factorial", "math.log(",
+  "math.log10(", "math.sqrt(", "math.perm(", "math.comb("]
+
+def sig_handler(signum, frame):
+  raise Exception("Time exceeded")
+signal.signal(signal.SIGALRM, sig_handler)
+
+class CalcL(ui.listener.Listener):
+  def __init__(self):
+    self.exp = []
+    self.disp = []
+    self.scientific = False # F: Normal   T: Scientific
+    self.comma = False
+    self.wait_comma = False
+    self.just_evaled = False
+    self.result = "Use = to calculate"
+  
+  async def update(self, ctx: ui.ButtonInteraction):
+    try:
+      await ctx.respond(ninja_mode=True)
+    except discord.errors.HTTPException:
+      pass
+    if self.scientific:
+      if self.wait_comma and not self.comma:
+        self.comma = True
+        await ctx.message.edit(f"```\n{''.join(self.disp)}\n{self.result}```", components=calc_buttons_sci)
+        return
+      elif not self.wait_comma and self.comma:
+        self.comma = False
+        await ctx.message.edit(f"```\n{''.join(self.disp)}\n{self.result}```", components=calc_buttons_sci_)
+        return
+    await ctx.message.edit(f"```\n{''.join(self.disp)}\n{self.result}```")
+  
+  async def concat(self, ctx: ui.ButtonInteraction, e, d=None):
+    if len(self.exp) >= 200:
+      await ctx.respond("Maximum expression length reached!", hidden=True)
+      return
+    if self.just_evaled:
+        self.exp = [e]
+        self.disp = [d if d else e]
+        self.just_evaled = False
+    else:
+      self.exp.append(e)
+      self.disp.append(d if d else e)
+    await self.update(ctx)
+
+  @ui.Listener.button(custom_id="c")
+  async def s1(self, ctx: ui.ButtonInteraction):
+    self.exp = []
+    self.disp = []
+    self.result = "Use = to calculate"
+    await self.update(ctx)
+
+  @ui.Listener.button(custom_id="d")
+  async def s2(self, ctx: ui.ButtonInteraction):
+    self.exp = self.exp[:-1]
+    self.disp = self.disp[:-1]
+    await self.update(ctx)
+
+  @ui.Listener.button(custom_id="=")
+  async def s3(self, ctx: ui.ButtonInteraction):
+    await ctx.respond(ninja_mode=True)
+    self.calc = lambda e: eval("".join(e))
+    cl = 0
+    op = 0
+    for x in self.exp:
+      if x in calc_parenthesis:
+        op += 1
+      elif x == ")":
+        cl += 1
+    if op > cl:
+      self.exp.extend([")"] * (op - cl))
+    signal.alarm(3)
+    try:
+      self.result = self.calc(self.exp)
+    except SyntaxError:
+      self.result = "Error"
+    except Exception:
+      self.result = "Timed out"
+    finally:
+      signal.alarm(0)
+    if self.result not in ["Error", "Timed out"]:
+      self.just_evaled = True
+    await self.update(ctx)
+
+  @ui.Listener.button(custom_id="p")
+  async def s4(self, ctx: ui.ButtonInteraction):
+    await ctx.respond(ninja_mode=True)
+    self.scientific = not self.scientific
+    await ctx.message.edit(components=(calc_buttons_sci if self.comma else calc_buttons_sci_) if self.scientific else calc_buttons_1)
+
+  @ui.Listener.button(custom_id="si")
+  async def f1(self, ctx: ui.ButtonInteraction):
+    await self.concat(ctx, "math.sin(", "sin(")
+
+  @ui.Listener.button(custom_id="co")
+  async def f2(self, ctx: ui.ButtonInteraction):
+    await self.concat(ctx, "math.cos(", "cos(")
+
+  @ui.Listener.button(custom_id="ta")
+  async def f3(self, ctx: ui.ButtonInteraction):
+    await self.concat(ctx, "math.tan(", "tan(")
+
+  @ui.Listener.button(custom_id="npr")
+  async def f4(self, ctx: ui.ButtonInteraction):
+    self.wait_comma = True
+    await self.concat(ctx, "math.perm(", "npr(")
+  
+  @ui.Listener.button(custom_id="ncr")
+  async def f5(self, ctx: ui.ButtonInteraction):
+    self.wait_comma = True
+    await self.concat(ctx, "math.comb(", "ncr(")
+  
+  @ui.Listener.button(custom_id="!")
+  async def f6(self, ctx: ui.ButtonInteraction):
+    await self.concat(ctx, "math.factorial(", "factorial(")
+
+  @ui.Listener.button(custom_id="l")
+  async def f7(self, ctx: ui.ButtonInteraction):
+    await self.concat(ctx, "math.log(", "ln(")
+
+  @ui.Listener.button(custom_id="L")
+  async def f8(self, ctx: ui.ButtonInteraction):
+    await self.concat(ctx, "math.log10(", "log(")
+
+  @ui.Listener.button(custom_id="0")
+  async def n0(self, ctx: ui.ButtonInteraction):
+    await self.concat(ctx, "0")
+
+  @ui.Listener.button(custom_id="1")
+  async def n1(self, ctx: ui.ButtonInteraction):
+    await self.concat(ctx, "1")
+
+  @ui.Listener.button(custom_id="2")
+  async def n2(self, ctx: ui.ButtonInteraction):
+    await self.concat(ctx, "2")
+
+  @ui.Listener.button(custom_id="3")
+  async def n3(self, ctx: ui.ButtonInteraction):
+    await self.concat(ctx, "3")
+
+  @ui.Listener.button(custom_id="4")
+  async def n4(self, ctx: ui.ButtonInteraction):
+    await self.concat(ctx, "4")
+
+  @ui.Listener.button(custom_id="5")
+  async def n5(self, ctx: ui.ButtonInteraction):
+    await self.concat(ctx, "5")
+
+  @ui.Listener.button(custom_id="6")
+  async def n6(self, ctx: ui.ButtonInteraction):
+    await self.concat(ctx, "6")
+
+  @ui.Listener.button(custom_id="7")
+  async def n7(self, ctx: ui.ButtonInteraction):
+    await self.concat(ctx, "7")
+
+  @ui.Listener.button(custom_id="8")
+  async def n8(self, ctx: ui.ButtonInteraction):
+    await self.concat(ctx, "8")
+
+  @ui.Listener.button(custom_id="9")
+  async def n9(self, ctx: ui.ButtonInteraction):
+    await self.concat(ctx, "9")
+
+  @ui.Listener.button(custom_id=".")
+  async def n10(self, ctx: ui.ButtonInteraction):
+    await self.concat(ctx, ".")
+
+  @ui.Listener.button(custom_id="+")
+  async def e0(self, ctx: ui.ButtonInteraction):
+    await self.concat(ctx, "+")
+
+  @ui.Listener.button(custom_id="-")
+  async def e1(self, ctx: ui.ButtonInteraction):
+    await self.concat(ctx, "-")
+
+  @ui.Listener.button(custom_id="*")
+  async def e2(self, ctx: ui.ButtonInteraction):
+    await self.concat(ctx, "*", "×")
+
+  @ui.Listener.button(custom_id="/")
+  async def e3(self, ctx: ui.ButtonInteraction):
+    await self.concat(ctx, "/", "÷")
+
+  @ui.Listener.button(custom_id="%")
+  async def e4(self, ctx: ui.ButtonInteraction):
+    await self.concat(ctx, "%")
+
+  @ui.Listener.button(custom_id="(")
+  async def e5(self, ctx: ui.ButtonInteraction):
+    await self.concat(ctx, "(")
+
+  @ui.Listener.button(custom_id=")")
+  async def e6(self, ctx: ui.ButtonInteraction):
+    await self.concat(ctx, ")")
+
+  @ui.Listener.button(custom_id=",")
+  async def e7(self, ctx: ui.ButtonInteraction):
+    self.wait_comma = False
+    await self.concat(ctx, ",")
+
+  @ui.Listener.button(custom_id="r")
+  async def e8(self, ctx: ui.ButtonInteraction):
+    await self.concat(ctx, "math.sqrt(", "√(")
+
+  @ui.Listener.button(custom_id="x")
+  async def e9(self, ctx: ui.ButtonInteraction):
+    await self.concat(ctx, "**(", "^(")
+
+  @ui.Listener.button(custom_id="E")
+  async def c1(self, ctx: ui.ButtonInteraction):
+    await self.concat(ctx, "math.e", "e")
+
+  @ui.Listener.button(custom_id="P")
+  async def c2(self, ctx: ui.ButtonInteraction):
+    await self.concat(ctx, "math.pi", "π")
+
+  @ui.Listener.button(custom_id="τ")
+  async def c3(self, ctx: ui.ButtonInteraction):
+    await self.concat(ctx, "math.tau", "τ")
+
+
 f = open('./assets/database_periodic.json', 'r')
 pdb = json.loads(f.read())['elements']
 f.close()
+
+
+@bs.command(name="calculator", description="Opens a calculator with conventional and scientific functions.")
+async def calculator(ctx: ui.SlashInteraction):
+  await ctx.respond(components=calc_buttons_1, listener=CalcL())
+
 
 @bs.command(name="calendar", description="Views a monthly or yearly calendar.", options=[
            ui.SlashOption(name="Year", description="The year of the calendar. Defaults to the current year.",

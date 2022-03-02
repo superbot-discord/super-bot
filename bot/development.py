@@ -10,11 +10,11 @@ class SampleButtonL(ui.listener.Listener):
 
 
 class SampleSelectL(ui.listener.Listener):
-  @ui.Listener.select(custom_id= "single-selection")
+  @ui.Listener.select(custom_id="single-selection")
   async def sample_single_select(self_, ctx: ui.SelectInteraction):
     await ctx.respond(f"You selected {ctx.selected_options[0].label} in the single-selection menu.", hidden= True)
 
-  @ui.Listener.select(custom_id= "multi-selection")
+  @ui.Listener.select(custom_id="multi-selection")
   async def sample_multi_select(self_, ctx: ui.SelectInteraction):
     await ctx.respond(f"You selected {', '.join([x.label for x in ctx.selected_options])} in the multi-selection menu.", hidden= True)
 

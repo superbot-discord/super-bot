@@ -1,7 +1,10 @@
+# Whole file migrate to info.py
+
 from shared import commands, db
 
 SY2VA = db["decoder"]
 ASCII = db["encoder"]
+
 
 @commands.command()
 async def ascii(ctx, *, text):
@@ -9,6 +12,7 @@ async def ascii(ctx, *, text):
   for character in text:
     answer = answer + ASCII[character]
   await ctx.reply(answer)
+
 
 @commands.command()
 async def base(ctx, frombase: int, tobase: int, *, text):
@@ -30,6 +34,7 @@ async def base(ctx, frombase: int, tobase: int, *, text):
     array.append(VA2SY[value])
   answer = ''.join(reversed(array))
   await ctx.reply(answer)
+
 
 def setup(bot):
   #bot.add_command(ascii)
