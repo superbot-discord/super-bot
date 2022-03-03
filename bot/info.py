@@ -3,7 +3,6 @@ import pytz
 import signal
 import statistics
 from _bot import bs
-import collections
 from functions import enum_list
 from shared import (BeautifulSoup, commands, datetime, discord, Embed, Image, ImageDraw, ImageFont,
                     json, math, re, requests, timedelta, try_delete, ui)
@@ -134,7 +133,6 @@ signal.signal(signal.SIGALRM, sig_handler)
 class CalcL(ui.listener.Listener):
   def __init__(self, user_id):
     self.target_users = [user_id]
-
     self.exp = []
     self.disp = []
     self.scientific = False # F: Normal   T: Scientific
@@ -203,6 +201,10 @@ class CalcL(ui.listener.Listener):
       self.result = self.calc(self.exp)
     except SyntaxError:
       self.result = "Error"
+    except ZeroDivisionError:
+      self.result = "Can't divide by zero"
+    except ValueError:
+      self.result = "Incorrect argument"
     except Exception:
       self.result = "Timed out"
     finally:

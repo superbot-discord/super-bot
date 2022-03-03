@@ -528,7 +528,7 @@ async def emojis(ctx, *, disposed=None):
     await ctx.reply(file= discord.File('output.txt'))
   try_delete('output.txt')
 
-@bs.command(name= "emojis", description= "Views a list of emojis in the server.")
+@bs.command(name="emojis", description="Views a list of emojis in the server.")
 async def emojis_(ctx: ui.SlashInteraction):
   if not ctx.guild.emojis:
     await ctx.respond("The server does not have any custom emojis.")
