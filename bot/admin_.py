@@ -1,8 +1,8 @@
 from shared import commands, db, discord, ui
 from _bot import bs
 
-bot_admin_guilds = []#[805441351033552916]
-bot_admin_slash = {x: ui.SlashPermission(allowed= {2: db['botadmins']}) for x in bot_admin_guilds}
+bot_admin_guilds = []#805441351033552916]
+bot_admin_slash = {x: ui.SlashPermission(allowed={2: db['botadmins']}) for x in bot_admin_guilds}
 #bot_admin_slash = {x: ui.SlashPermission(allowed= {x: ui.SlashPermission.User for x in db['botadmins']}) for x in bot_admin_guilds}
 banned_ids = []
 banned_text = []
@@ -28,11 +28,11 @@ async def purgeserver(ctx, text, condition= "True", *, disposed=None):
       await x.delete()
   await msg.edit(msg.content.replace("started.", "completed!"))
 
-@bs.command(name="bot_ban", description= "Bans a user from using the bot.", options=[ui.SlashOption
-           (name= "User", type= discord.User, description="The user to ban from using the bot.",
-           required= True), ui.SlashOption(name= "Reason", type= str, description=
-           "The reason to ban the user for.", required= False)], default_permission= False,
-           guild_ids= bot_admin_guilds, guild_permissions= bot_admin_slash)
+@bs.command(name="bot_ban", description="Bans a user from using the bot.", options=[ui.SlashOption
+           (name="User", type=discord.User, description="The user to ban from using the bot.",
+           required=True), ui.SlashOption(name="Reason", type=str, description=
+           "The reason to ban the user for.", required= False)], default_permission=False,
+           guild_ids=bot_admin_guilds, guild_permissions=bot_admin_slash)
 async def bot_ban(ctx, user: discord.User, *, reason: str = "No reason was provided"):
   banned_ids.append(user.id)
   banned_text.append(reason)

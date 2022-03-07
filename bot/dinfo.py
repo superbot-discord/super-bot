@@ -301,10 +301,10 @@ async def channel(ctx, channel: typing.Union[discord.TextChannel, discord.VoiceC
   await task
   await ctx.reply(embed=task.result())
 
-@bs.command(name= "channel_info", description= "Shows information about a category, channel or thread.",
-           options=[ui.SlashOption(name= "Channel", type= discord.TextChannel, required= True,
-           description= "The category, channel or thread to show information about.",
-           channel_types= all_channel_types)])
+@bs.command(name="channel_info", description="Shows information about a category, channel or thread.",
+           options=[ui.SlashOption(name="Channel", type=discord.TextChannel, required=True,
+           description="The category, channel or thread to show information about.",
+           channel_types=all_channel_types)])
 async def channel_(ctx, channel = None):
   if not channel:
     channel = ctx.channel
@@ -1784,12 +1784,12 @@ async def user_(ctx, user):
   f5v = f5v + (f"**HypeSquad:** The user is in the HypeSquad Balance House.\n"             if user_public_flags.hypesquad_balance else "")
   f5v = "No badges" if f5v == "" else f5v
   f7vraw = user.timeout
-  f7v = f"Until {unix_timestamp(f7vraw)}" if f7vraw else "None"
+  f7v = f"Until {unix_timestamp(f7vraw, '*')} (expires {unix_timestamp(f7vraw, 'R')})" if f7vraw else "None"
 
   embed.add_field(name= "Name", value= f0v, inline= False)
   embed.add_field(name= "Registered", value= f1v, inline= True)
   embed.add_field(name= "Joined", value= f2v, inline= True)
-  embed.add_field(name= "Timeout", value= f7v, inline= True)
+  embed.add_field(name= "Timeout", value= f7v, inline= False)
   embed.add_field(name= "Roles", value= f4v, inline= False)
   embed.add_field(name= "Server Permissions", value= sr_itop(f3v_raw2), inline= False)
   embed.add_field(name= "Text Channel Permissions", value= tc_itop(f3v_raw1), inline= False)

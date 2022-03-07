@@ -124,7 +124,7 @@ calc_buttons_sci_ = [
 
 calc_parenthesis = [
   "(", "math.sin(", "math.cos(", "math.tan(", "math.factorial(", "math.log(", "math.log10(",
-  "math.sqrt(", "math.perm(", "math.comb("]
+  "math.sqrt(", "**(", "math.perm(", "math.comb("]
 
 def sig_handler(signum, frame):
   raise Exception("Time exceeded")
@@ -181,6 +181,7 @@ class CalcL(ui.listener.Listener):
   async def s2(self, ctx: ui.ButtonInteraction):
     self.exp = self.exp[:-1]
     self.disp = self.disp[:-1]
+    self.just_evaled = False
     await self.update(ctx)
 
   @ui.Listener.button(custom_id="=")

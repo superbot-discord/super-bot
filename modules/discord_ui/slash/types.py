@@ -490,6 +490,7 @@ class SlashPermission():
                         "type": SlashPermission.USER if isinstance(t, (discord.User, discord.Member)) else SlashPermission.ROLE,
                         "permission": True
                     })
+            print(self._json)
         if forbidden is not None:
             if isinstance(forbidden, dict):
                 for _id, _type in forbidden.items():

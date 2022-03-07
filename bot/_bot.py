@@ -20,6 +20,7 @@ bot_.load_extension("apis_uk")
 bot_.load_extension("basic")
 bot_.load_extension("calc")
 bot_.load_extension("convert")
+bot_.load_extension("custom") # Enable when Murvon asks
 bot_.load_extension("development")
 bot_.load_extension("dinfo")
 bot_.load_extension("discord_")
