@@ -97,7 +97,7 @@ async def makeinvite(ctx, timetocount = "0", uses: int = 0):
     await ctx.reply("You don't have the required permission: Generate Invites.")
 
 
-@commands.command(aliases=['makerole'])
+@commands.command(aliases=['makerole']) # Migrated
 async def makeroles(ctx, times: int = 1, *, name="Sample role $num"):
   if has_perms(ctx.channel, ctx.author, 28):
     current_server = ctx.guild
@@ -113,6 +113,14 @@ async def makeroles(ctx, times: int = 1, *, name="Sample role $num"):
            description="The name of the roles. Use '$num' as a placeholder. Defaults to 'Sample role $num'.",
            type=str, required=False), ui.SlashOption(name="Permission",
            description="The permission integer to give to all roles.", type=int, required=False)])
+async def makeroles(ctx: ui.SlashInteraction, number = 1, name="Sample role $num", permission = 0):
+  if has_perms(ctx.channel, ctx.author, 28):
+    current_server = ctx.guild
+    for x in range(1, number + 1):
+      await current_server.create_role(name=name.replace("$num", str(x)), permissions=discord.Permissions(permission))
+    await ctx.respond("Successfully created role(s).")
+  else:
+    await ctx.respond("You don't have the required permission: Manage Roles.")
 
 
 @commands.command(aliases=['makethread'])
