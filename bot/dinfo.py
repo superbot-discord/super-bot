@@ -149,10 +149,10 @@ for x, y in vc_real.items():
   voice_permission_options.append(ui.SelectOption(label=y, value=x))
 
 permission_menus = [
-  ui.SelectMenu(placeholder="Server",       min_values=0, max_values=9,custom_id="permission_server_selection",    options=server_permission_options),
-  ui.SelectMenu(placeholder="Membership",   min_values=0, max_values=5,custom_id="permission_membership_selection",options=membership_permission_options),
-  ui.SelectMenu(placeholder="Text channel", min_values=0,max_values=14,custom_id="permission_text_selection",      options=text_permission_options),
-  ui.SelectMenu(placeholder="Voice channel",min_values=0, max_values=9,custom_id="permission_voice_selection",     options=voice_permission_options)
+  ui.SelectMenu(placeholder="Server",       min_values=0,max_values=10,custom_id="permission_server_selection",    options=server_permission_options),
+  ui.SelectMenu(placeholder="Membership",   min_values=0, max_values=6,custom_id="permission_membership_selection",options=membership_permission_options),
+  ui.SelectMenu(placeholder="Text channel", min_values=0,max_values=15,custom_id="permission_text_selection",      options=text_permission_options),
+  ui.SelectMenu(placeholder="Voice channel",min_values=0,max_values=10,custom_id="permission_voice_selection",     options=voice_permission_options)
 ]
 
 
@@ -184,6 +184,7 @@ async def attachment(ctx, message: discord.Message = None, index: int = 1):
   embed.add_field(name="MIME Type", value=f2v, inline= True)
   embed.add_field(name="Alternative URL (Does not always work!)", value=f3v, inline= False)
   await ctx.reply(embed=embed)
+
 
 @commands.command(aliases=['av'])
 async def avatar(ctx,user: discord.Member = None):
@@ -220,6 +221,7 @@ async def avatar(ctx,user: discord.Member = None):
   embed.set_image(url=user.display_avatar.url)
   await ctx.reply(embed=embed)
 
+
 @commands.command(aliases = ['badge', 'flag', 'flags'])
 async def badges(ctx, integer = "help"):
   if integer == "help":
@@ -234,6 +236,7 @@ async def badges(ctx, integer = "help"):
     except:
       embed = badges_guide
   await ctx.reply(embed=embed)
+
 
 @commands.command(aliases=['bn'])
 async def banner(ctx, user: typing.Union[discord.User, discord.Member] = None):
@@ -274,6 +277,7 @@ async def banner(ctx, user: typing.Union[discord.User, discord.Member] = None):
       embed.add_field(name=f"{x.upper()}s", value=desc)
   await ctx.reply(embed=embed)
 
+
 @commands.command(aliases=['ca']) # Migrated
 async def category(ctx, category: discord.CategoryChannel = None):
   if not category:
@@ -285,6 +289,7 @@ async def category(ctx, category: discord.CategoryChannel = None):
   task = asyncio.create_task(botcategory(category))
   await task
   await ctx.reply(embed= task.result())
+
 
 @commands.command(aliases=['ch']) # Migrated
 async def channel(ctx, channel: typing.Union[discord.TextChannel, discord.VoiceChannel, discord.StageChannel, discord.Thread] = None):
@@ -300,6 +305,7 @@ async def channel(ctx, channel: typing.Union[discord.TextChannel, discord.VoiceC
     task = asyncio.create_task(botthread(channel))
   await task
   await ctx.reply(embed=task.result())
+
 
 @bs.command(name="channel_info", description="Shows information about a category, channel or thread.",
            options=[ui.SlashOption(name="Channel", type=discord.TextChannel, required=True,
@@ -320,6 +326,7 @@ async def channel_(ctx, channel = None):
     task = asyncio.create_task(botthread(channel))
   await task
   await ctx.respond(embed= task.result())
+
 
 async def botcategory(category):
   ti = f"Category Information: {category.name}"
@@ -342,6 +349,7 @@ async def botcategory(category):
   if len(f2valist)!=0:
     embed.add_field(name=f"Stage Channels ({len(f2valist)})", value=f2v, inline= True)
   return embed
+
 
 async def bottchannel(channel):
   ti=f"Channel Information: {channel.name}"
@@ -387,6 +395,7 @@ async def bottchannel(channel):
     embed.add_field(name="News", value="This is a news channel.", inline= True)
   return embed
 
+
 async def botvchannel(channel):
   ti=f"Voice Channel Information: {channel.name}"
   desc=f"{channel.mention} created at {unix_timestamp(channel.created_at)}"
@@ -420,6 +429,7 @@ async def botvchannel(channel):
   if len(f5vlist)!=0:
     embed.add_field(name="Current Members", value=f5v, inline= True)
   return embed
+
 
 async def botstagec(channel):
   ti=f"Stage Channel Information: {channel.name}"
@@ -456,6 +466,7 @@ async def botstagec(channel):
   if f7vx:
     f7v = f"Topic: {f7vx.topic}\nDiscovery: {'disabled' if f7vx.discoverable_disabled else 'enabled'}\nPrivacy level: {'server members only' if f7vx.privacy_level == discord.StagePrivacyLevel.closed else 'everyone on Discord'}"
 
+
 async def botthread(channel: discord.Thread):
   ti=f"Thread Information: {channel.name}"
   desc=f"{channel.mention} Created by {channel.owner.mention}\nArchives at {unix_timestamp(channel.archive_timestamp)}"
@@ -481,6 +492,7 @@ async def botthread(channel: discord.Thread):
   if channel.is_private():
     embed.add_field(name= "Private", value= "This is a private thread.", inline= True)
   return embed
+
 
 @commands.command(aliases=['emi'])
 async def emojiinfo(ctx, emoji_: typing.Union[discord.Emoji, str]):
@@ -508,6 +520,7 @@ async def emojiinfo(ctx, emoji_: typing.Union[discord.Emoji, str]):
       embed.add_field(name="Tags", value=", ".join(cemoji[2]), inline= True)
   await ctx.reply(embed=embed)
 
+
 @commands.command(aliases=['ems']) # Migrated
 async def emojis(ctx, *, disposed=None):
   if not ctx.guild.emojis:
@@ -527,6 +540,7 @@ async def emojis(ctx, *, disposed=None):
   except:
     await ctx.reply(file= discord.File('output.txt'))
   try_delete('output.txt')
+
 
 @bs.command(name="emojis", description="Views a list of emojis in the server.")
 async def emojis_(ctx: ui.SlashInteraction):
@@ -549,6 +563,7 @@ async def emojis_(ctx: ui.SlashInteraction):
     await ctx.respond(file= discord.File('output.txt'))
   try_delete('output.txt')
 
+
 @bs.command(name="id_creation", description="Checks the creation time of any Discord ID.",
            options=[ui.SlashOption(name="ID", type=int, required=True, min_value=1,
            max_value=9007199254740991, description="The Discord ID to view the creation time of.")])
@@ -556,6 +571,7 @@ async def id_creation(ctx, id):
   snowflake = ((id >> 22) + 1420070400000) / 1000
   await ctx.respond(f"The ID was created at {unix_timestamp(round(snowflake))}")
   return
+
 
 @commands.command(aliases=['il'])
 async def invitelink(ctx, *, invite_input: discord.Invite):
@@ -640,6 +656,7 @@ async def invitelink(ctx, *, invite_input: discord.Invite):
   embed.add_field(name="Expired?", value=f6v, inline= True)
   await ctx.reply(embed=embed)
 
+
 @commands.command(aliases=['lu'])
 async def leftuser(ctx, *, userinput):
   lfuser = await ctx.bot.fetch_user(int(userinput))
@@ -665,6 +682,7 @@ async def leftuser(ctx, *, userinput):
   embed.add_field(name="Time since user registered", value=f1va, inline= True)
   embed.add_field(name="Registered", value=f1v, inline= True)
   await ctx.reply(embed=embed)
+
 
 @commands.command(aliases=['msg', 'ms']) # Migrated
 async def message(ctx, message: discord.Message = None):
@@ -799,6 +817,7 @@ async def message(ctx, message: discord.Message = None):
     embed.add_field(name=f"User mentions ({len(f4vraw)})", value=f4v, inline= False)
   await ctx.reply(embed=embed)
 
+
 @bs.message_command(name= "View Message Information")
 async def message_(ctx, message):
   desc = f"Sent by {message.author.mention} at {unix_timestamp(message.created_at)}"
@@ -925,6 +944,7 @@ async def message_(ctx, message):
     embed.add_field(name=f"User mentions ({len(f4vraw)})", value=f4v, inline= False)
   await ctx.respond(embed= embed)
 
+
 @commands.command(aliases=['ov'])
 async def overwrites(ctx, channel_: typing.Union[discord.TextChannel, discord.VoiceChannel, discord.StageChannel, discord.CategoryChannel] = None):
   if not channel_:
@@ -934,6 +954,7 @@ async def overwrites(ctx, channel_: typing.Union[discord.TextChannel, discord.Vo
     desc += f"**{x.mention}**\n  Allowed: {y.pair()[0].value}\n  Denied: {y.pair()[1].value}\n"
   embed = Embed(title=f"Channel Overwrites", description=desc[:4096])
   await ctx.reply(embed=embed)
+
 
 @commands.command(aliases = ['perm', 'perms', 'permission']) # Migrated
 async def permissions(ctx, integer="help"):
@@ -966,6 +987,7 @@ async def permissions(ctx, integer="help"):
   if 'embed2' in locals():
     await ctx.reply(embed=embed2)
 
+
 @bs.command(name="permissions_user", description="Views the permissions of a user.",
            options=[ui.SlashOption(name="User", type=discord.Member, required=False,
            description="The user to show the permissions of. Deafults to you."), ui.SlashOption(
@@ -977,6 +999,7 @@ async def permissions_user(ctx: ui.SlashInteraction, user=None, channel=None):
   embeds = perm_itoe(integer)
   await ctx.respond(embeds=embeds)
 
+
 @bs.command(name="permissions_role", description="Views the permissions of a role.",
            options=[ui.SlashOption(name= "Role", type= discord.Role, required= True,
            description= "The role to show the permissions of."), ui.SlashOption(name="Channel",
@@ -987,6 +1010,7 @@ async def permissions_role(ctx: ui.SlashInteraction, role, channel=None):
   embeds = perm_itoe(integer)
   await ctx.respond(embeds=embeds)
 
+
 @bs.command(name="permission_integer", description="Converts a permissions integer into user-friendly permissions.",
            options=[ui.SlashOption(name= "Integer", type= int, required= True, min_value= 0,
            max_value= 0, description= "The permission integer.")])
@@ -994,19 +1018,23 @@ async def permissions_int(ctx: ui.SlashInteraction, integer):
   embeds = perm_itoe(integer)
   await ctx.respond(embeds=embeds)
 
+
 @bs.command(name="permission_help", description="Views static information about permission integers.")
 async def permissions_help(ctx: ui.SlashInteraction):
   await ctx.respond(embed=perms_guide)
+
 
 @commands.command(aliases=['permgen', 'permsgen', 'permgenerate', 'permsgenerate', 'permission_gen', 'permissions_gen' 'permission_generate'])
 async def permission_generate(ctx, *, disposed=None): # Migrated
   msg = await ctx.reply("Select the permissions! You can select multiple options.", components= permission_menus, listener= PermsGenL())
   permission_messages[msg] = {"permission_server_selection": [], "permission_membership_selection": [], "permission_text_selection": [], "permission_voice_selection": []}
 
+
 @bs.command(name="permission_generate", description="Converts permissions into a permission integer.")
 async def permission_generate_(ctx: ui.SlashInteraction):
-  msg = await ctx.respond("Select the permissions and the integer will be updated instantly:", components= permission_menus, listener= PermsGenL())
+  msg = await ctx.respond("Select the permissions and the integer will be updated instantly:", components=permission_menus, listener=PermsGenL())
   permission_messages[msg] = {"permission_server_selection": [], "permission_membership_selection": [], "permission_text_selection": [], "permission_voice_selection": []}
+
 
 @commands.command() # Migrated
 async def raw(ctx, msg: discord.Message = None):
@@ -1020,10 +1048,12 @@ async def raw(ctx, msg: discord.Message = None):
   embed = Embed(title= "Raw message", url= msg.jump_url, description= "```" + msg.content.replace('```', r'\`\`\`') + "```")
   await ctx.reply(embed=embed)
 
+
 @bs.message_command(name= "Show raw content")
 async def raw_(ctx, msg):
   embed = Embed(title="Raw message", url=msg.jump_url, description="```" + msg.content.replace('```', r'\`\`\`') + "```")
   await ctx.respond(embed=embed)
+
 
 @commands.command()
 async def rawraw(ctx, msg: discord.Message = None):
@@ -1036,6 +1066,7 @@ async def rawraw(ctx, msg: discord.Message = None):
       return
   embed = Embed(title= "Raw message", url= msg.jump_url, description= f"```{discord.utils.escape_markdown(msg.content, as_needed=True)}```")
   await ctx.reply(embed=embed)
+
 
 @commands.command(aliases=['rea'])
 async def reactions(ctx, *, msg: discord.Message = None):
@@ -1072,6 +1103,7 @@ async def reactions(ctx, *, msg: discord.Message = None):
   await ctx.reply(files = [discord.File('reactions.png'), discord.File('reactions.svg')])
   plt.clf()
 
+
 @commands.command(aliases=['ro'])
 async def role(ctx,role: discord.Role = None):
   if role==None:
@@ -1105,6 +1137,7 @@ async def role(ctx,role: discord.Role = None):
   embed.add_field(name="Members ("+str(len(memberlist))+")", value=f0v[:5950-len(embed)], inline= False)
   #embed.add_field(name="Channel Permissions", value=f3vb, inline= False)
   await ctx.reply(embed=embed)
+
 
 @commands.command(aliases=['guild', 'se'])
 async def server(ctx, *, text="regular"):
@@ -1304,6 +1337,7 @@ async def server(ctx, *, text="regular"):
     embed.set_field_at(3, name=f"Roles ({len(guild.roles)})", value=f1va, inline= False)
     await ctx.reply(embed=embed)
 
+
 @commands.command(aliases=['sta'])
 async def status(ctx, member: discord.Member = None):
   if member == None:
@@ -1338,6 +1372,7 @@ async def status(ctx, member: discord.Member = None):
       embed.add_field(name=f"Spotify: {x.album}", value=field, inline= False)
       embed.set_thumbnail(url=x.album_cover_url)
   await ctx.reply(embed=embed)
+
 
 @commands.command(aliases=['stu'])
 async def statuses(ctx, *, disposed=None):
@@ -1401,6 +1436,7 @@ async def statuses(ctx, *, disposed=None):
   plt.clf()
   try_delete('statuses.png', 'statuses.svg')
 
+
 @commands.command(aliases=['stick', 'st'])
 async def sticker(ctx, message: discord.Message = None):
   if message==None:
@@ -1425,6 +1461,7 @@ async def sticker(ctx, message: discord.Message = None):
   #embed.set(_sticker.url)
   await ctx.reply(embed=embed)
 
+
 @commands.command(aliases=['sts']) # Migrated
 async def stickers(ctx, *, disposed=None):
   if not ctx.guild.stickers:
@@ -1437,6 +1474,7 @@ async def stickers(ctx, *, disposed=None):
   await ctx.reply(file= discord.File('output.txt'))
   try_delete('output.txt')
 
+
 @bs.command(name= "stickers", description= "Views a list of stickers in the server.")
 async def stickers_(ctx):
   if not ctx.guild.stickers:
@@ -1448,6 +1486,7 @@ async def stickers_(ctx):
   f.close()
   await ctx.respond(file= discord.File('output.txt'))
   try_delete('output.txt')
+
 
 @commands.command(aliases=['tm'])
 async def template(ctx, *, tempinput):
@@ -1468,6 +1507,7 @@ async def template(ctx, *, tempinput):
   embed.add_field(name="Synced", value=f2v, inline= True)
   embed.add_field(name="Original Server", value=f3v, inline= True)
   await ctx.reply(embed=embed)
+
 
 @commands.command(aliases=['member', 'mem', 'us']) # Migrated
 async def user(ctx, user: discord.Member = None, channel: discord.TextChannel = None):
@@ -1591,6 +1631,7 @@ async def user(ctx, user: discord.Member = None, channel: discord.TextChannel = 
   embed.add_field(name= f"Badges (Integer: {user_public_flags.value})", value= f5v, inline= False)
   await ctx.reply(embed=embed)
 
+
 @bs.command(name= "user_info", description= "Shows information about a user.", options=[
            ui.SlashOption(name= "User", type= discord.Member, required= False,
            description= "The user to show information about. Deafults to you."), ui.SlashOption(
@@ -1701,6 +1742,7 @@ async def user_info(ctx, user: discord.Member = None, channel: discord.TextChann
   embed.add_field(name= f"Badges (Integer: {user_public_flags.value})", value= f5v, inline= False)
   await ctx.respond(embed= embed)
 
+
 @bs.user_command(name= "View Information")
 async def user_(ctx, user):
   channel = ctx.channel
@@ -1804,6 +1846,7 @@ async def user_(ctx, user):
   embed.add_field(name= f"Badges (Integer: {user_public_flags.value})", value= f5v, inline= False)
   await ctx.respond(embed= embed)
 
+
 @commands.command()
 async def widget(ctx, *, disposed=None):
   try:
@@ -1821,6 +1864,7 @@ async def widget(ctx, *, disposed=None):
   embed.add_field(name="Members listed", value=f1v[:1024], inline= False)
   embed.url = widget_.json_url
   await ctx.reply(embed=embed)
+
 
 def setup(bot):
   bot.add_command(attachment)

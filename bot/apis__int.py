@@ -102,12 +102,14 @@ class TriviaRevealL(ui.listener.Listener):
   async def show_a3(self_, ctx: ui.ButtonInteraction):
     await ctx.respond(f"The answer for Q3 is: {self_.a3}", hidden= True)
 
+
 @commands.command(aliases=["birb"])
 async def bird(ctx, number=1):
   if number<10:
     await ctx.reply(botbird(number))
   else:
     await ctx.reply("There are too many pictures to show! I can only display up to 9 pictures.")
+
 
 @commands.command(aliases=["birb_fact"])
 async def bird_fact(ctx, number=1):
@@ -116,12 +118,14 @@ async def bird_fact(ctx, number=1):
   else:
     await ctx.reply("There are too many results to show! I can only display up to 9 facts.")
 
+
 @commands.command(aliases=["rabbit", "rabbits", "bunnies"])
 async def bunny(ctx, number=1):
   if number<10:
     await ctx.reply(botbunny(number))
   else:
     await ctx.reply("There are too many pictures to show! I can only display up to 9 pictures.")
+
 
 @commands.command()
 async def cat(ctx, number=1):
@@ -130,12 +134,14 @@ async def cat(ctx, number=1):
   else:
     await ctx.reply("There are too many pictures to show! I can only display up to 9 pictures.")
 
+
 @commands.command()
 async def cat_fact(ctx, number=1):
   if number<10:
     await ctx.reply(botcat_fact(number))
   else:
     await ctx.reply("There are too many results to show! I can only display up to 9 facts.")
+
 
 @commands.command(aliases=["food"])
 async def dish(ctx, number=1):
@@ -144,12 +150,14 @@ async def dish(ctx, number=1):
   else:
     await ctx.reply("There are too many pictures to show! I can only display up to 9 pictures.")
 
+
 @commands.command()
 async def dog(ctx, number=1):
   if number<10:
     await ctx.reply(botdog(number))
   else:
     await ctx.reply("There are too many pictures to show! I can only display up to 9 pictures.")
+
 
 @commands.command()
 async def dog_fact(ctx, number=1):
@@ -158,6 +166,7 @@ async def dog_fact(ctx, number=1):
   else:
     await ctx.reply("There are too many results to show! I can only display up to 9 facts.")
 
+
 @commands.command()
 async def duck(ctx, number=1):
   if number<10:
@@ -165,12 +174,14 @@ async def duck(ctx, number=1):
   else:
     await ctx.reply("There are too many pictures to show! I can only display up to 9 pictures.")
 
+
 @commands.command()
 async def fox(ctx, number=1):
-  if number<10:
+  if number < 10:
     await ctx.reply(botfox(number))
   else:
     await ctx.reply("There are too many pictures to show! I can only display up to 9 pictures.")
+
 
 @commands.command()
 async def fox_fact(ctx, number=1):
@@ -179,12 +190,14 @@ async def fox_fact(ctx, number=1):
   else:
     await ctx.reply("There are too many results to show! I can only display up to 9 facts.")
 
+
 @commands.command()
 async def joke(ctx, number=1):
   if number<10:
     await ctx.reply(botjoke(number))
   else:
     await ctx.reply("There are too many jokes to show! I can only display up to 9 jokes.")
+
 
 @commands.command()
 async def kangaroo(ctx, number=1):
@@ -193,12 +206,14 @@ async def kangaroo(ctx, number=1):
   else:
     await ctx.reply("There are too many pictures to show! I can only display up to 9 pictures.")
 
+
 @commands.command()
 async def kangaroo_fact(ctx, number=1):
   if number<10:
     await ctx.reply(botkangaroo_fact(number))
   else:
     await ctx.reply("There are too many results to show! I can only display up to 9 facts.")
+
 
 @commands.command()
 async def koala(ctx, number=1):
@@ -207,6 +222,7 @@ async def koala(ctx, number=1):
   else:
     await ctx.reply("There are too many pictures to show! I can only display up to 9 pictures.")
 
+
 @commands.command()
 async def koala_fact(ctx, number=1):
   if number<10:
@@ -214,12 +230,14 @@ async def koala_fact(ctx, number=1):
   else:
     await ctx.reply("There are too many results to show! I can only display up to 9 facts.")
 
+
 @commands.command()
 async def lizard(ctx, number=1):
   if number<10:
     await ctx.reply(botlizard(number))
   else:
     await ctx.reply("There are too many pictures to show! I can only display up to 9 pictures.")
+
 
 @commands.command(aliases=["apod"])
 async def nasa(ctx):
@@ -229,12 +247,14 @@ async def nasa(ctx):
     await ctx.send(file= discord.File("apod.txt"))
   try_delete("apod.txt")
 
+
 @commands.command()
 async def panda(ctx, number=1):
   if number<10:
     await ctx.reply(botpanda(number))
   else:
     await ctx.reply("There are too many pictures to show! I can only display up to 9 pictures.")
+
 
 @commands.command()
 async def panda_fact(ctx, number=1):
@@ -243,12 +263,14 @@ async def panda_fact(ctx, number=1):
   else:
     await ctx.reply("There are too many results to show! I can only display up to 9 facts.")
 
+
 @commands.command()
 async def quote(ctx, number=1):
   if number<6:
     await ctx.reply(botquote(number))
   else:
     await ctx.reply("There are too many quotes to show! I can only display up to 5 quotes.")
+
 
 @commands.command()
 async def raccoon(ctx, number=1):
@@ -257,12 +279,14 @@ async def raccoon(ctx, number=1):
   else:
     await ctx.reply("There are too many pictures to show! I can only display up to 9 pictures.")
 
+
 @commands.command()
 async def raccoon_fact(ctx, number=1):
   if number<10:
     await ctx.reply(botraccoon_fact(number))
   else:
     await ctx.reply("There are too many results to show! I can only display up to 9 facts.")
+
 
 @commands.command()
 async def shiba(ctx, number=1):
@@ -275,6 +299,7 @@ async def shiba(ctx, number=1):
 async def states(ctx, country="US"):
   await ctx.reply(botstates(country.upper()))
 
+
 @commands.command(aliases=["quiz", "questions"])
 async def trivia(ctx, number=1):
   if number < 4:
@@ -284,6 +309,7 @@ async def trivia(ctx, number=1):
   else:
     await ctx.reply("There are too many questions to show! I can only display up to 3 questions.")
 
+
 animal_choices = [{'name': "Bird", 'value': "bird"}, {'name': "Bunny", 'value': "bunny"},
                   {'name': "Cat", 'value': "cat"}, {'name': "Dog", 'value': "dog"},
                   {'name': "Duck", 'value': "duck"}, {'name': "Fox", 'value': "fox"},
@@ -291,8 +317,10 @@ animal_choices = [{'name': "Bird", 'value': "bird"}, {'name': "Bunny", 'value': 
                   {'name': "Lizard", 'value': "lizard"}, {'name': "Panda", 'value': "panda"},
                   {'name': "Raccoon", 'value': "raccoon"}, {'name': "Shiba Inu", 'value': "shiba"},
 ]
+
 animal_fact_choices = list(filter(lambda x: x['value'] not in ['bunny', 'duck', 'lizard', 'shiba'],
                                   animal_choices))
+
 
 @bs.command(name="animal_image", description="Shows up to 9 images of an animal.", options=[
            ui.SlashOption(name="Animal", description="The animal to show image(s) of.", type=str,
@@ -302,6 +330,7 @@ animal_fact_choices = list(filter(lambda x: x['value'] not in ['bunny', 'duck', 
 async def animal_image(ctx: ui.SlashInteraction, animal: str, number: int = 1):
   await ctx.respond(eval(f"bot{animal}({number})"))
 
+
 @bs.command(name="animal_fact", description="Shows up to 9 fun facts about an animal.", options=[
            ui.SlashOption(name="Animal", description= "The animal to show fact(s) about.",
            type=str, required=True, choices=animal_fact_choices), ui.SlashOption(name="Number",
@@ -309,6 +338,7 @@ async def animal_image(ctx: ui.SlashInteraction, animal: str, number: int = 1):
            type=int, required=False, min_value=1, max_value=9)])
 async def animal_fact(ctx: ui.SlashInteraction, animal: str, number: int = 1):
   await ctx.respond(eval(f"bot{animal}_fact({number})"))
+
 
 @bs.command(name="engrave", description="Engraves a piece of text on an Apple product.", options=[
            ui.SlashOption(name="Product", description="The product to engrave on.", type=str,
@@ -332,6 +362,7 @@ async def engrave_(ctx: ui.SlashInteraction, product, color, line_1, line_2 = No
       desc = f"https://www.apple.com/shop/preview/{v2_str}engrave/{product}/A?th={line_1}&s=2"
   await ctx.respond(desc)
 
+
 @bs.command(name= "nasa_apod", description= "Shows NASA's Astronomy Picture Of the Day.")
 async def nasa_apod(ctx: ui.SlashInteraction):
   apod = botnasa()
@@ -339,6 +370,7 @@ async def nasa_apod(ctx: ui.SlashInteraction):
   if apod[1]:
     await ctx.send(file= discord.File("apod.txt"))
   try_delete("apod.txt")
+
 
 @bs.command(name="trivia", description="Shows up to 3 trivia questions.", options=[
            ui.SlashOption(name="Number", type=int, required=False, min_value=1, max_value=3,
@@ -348,12 +380,14 @@ async def trivia_(ctx: ui.SlashInteraction, number: int = 1):
   multi = number > 1
   await ctx.respond(data[0], components= data[2],listener= TriviaRevealL(*data[1], multi))
 
+
 def botbird(number):
   desc = ""
   for x in range(number):
     r = requests.get('https://some-random-api.ml/img/birb').json()['link']
     desc += f"{r}\n"
   return desc
+
 
 def botbird_fact(number):
   desc = ""
@@ -362,12 +396,14 @@ def botbird_fact(number):
     desc += f"{r}\n"
   return desc
 
+
 def botbunny(number):
   desc = ""
   for x in range(number):
     r = requests.get('https://api.bunnies.io/v2/loop/random/?media=gif').json()['media']['gif']
     desc += f"{r}\n"
   return desc
+
 
 def botcat(number):
   desc = ""
@@ -376,12 +412,14 @@ def botcat(number):
     desc += f"{r}\n"
   return desc
 
+
 def botcat_fact(number):
   desc = ""
   for x in range(number):
     r=requests.get("https://some-random-api.ml/facts/cat").json()['fact']
     desc += f"{r}\n"
   return desc
+
 
 def botdish(number):
   desc = ""
@@ -390,12 +428,14 @@ def botdish(number):
     desc += f"{r}\n"
   return desc
 
+
 def botdog(number):
   desc = ""
   for x in range(number):
     r=requests.get("https://dog.ceo/api/breeds/image/random").json()['message'] if chance(2) else requests.get("https://some-random-api.ml/img/dog").json()['link']
     desc += f"{r}\n"
   return desc
+
 
 def botdog_fact(number):
   desc = ""
@@ -404,12 +444,14 @@ def botdog_fact(number):
     desc += f"{r}\n"
   return desc
 
+
 def botduck(number):
   desc = ""
   for x in range(number):
     r = requests.get('https://random-d.uk/api/v1/random').json()['url']
     desc += f"{r}\n"
   return desc
+
 
 def botfox(number):
   desc = ""
@@ -418,12 +460,14 @@ def botfox(number):
     desc += f"{r}\n"
   return desc
 
+
 def botfox_fact(number):
   desc = ""
   for x in range(number):
     r=requests.get("https://some-random-api.ml/facts/fox").json()['fact']
     desc += f"{r}\n"
   return desc
+
 
 def botjoke(number):
   desc = ""
@@ -435,12 +479,14 @@ def botjoke(number):
       desc += f"{r['joke']}\n"
   return desc
 
+
 def botkangaroo(number):
   desc = ""
   for x in range(number):
     r = requests.get('https://some-random-api.ml/animal/kangaroo').json()['image']
     desc += f"{r}\n"
   return desc
+
 
 def botkangaroo_fact(number):
   desc = ""
@@ -449,12 +495,14 @@ def botkangaroo_fact(number):
     desc += f"{r}\n"
   return desc
 
+
 def botkoala(number):
   desc = ""
   for x in range(number):
     r=requests.get("https://some-random-api.ml/img/koala").json()['link']
     desc += f"{r}\n"
   return desc
+
 
 def botkoala_fact(number):
   desc = ""
@@ -463,12 +511,14 @@ def botkoala_fact(number):
     desc += f"{r}\n"
   return desc
 
+
 def botlizard(number):
   desc = ""
   for x in range(number):
     r = requests.get('https://nekos.life/api/v2/img/lizard').json()['url']
     desc += f"{r}\n"
   return desc
+
 
 def botnasa():
   r = requests.get("https://api.nasa.gov/planetary/apod?api_key=7wF7KVXkmapwOlTkTt6i6dp9p3ismZLJHeP0OSFp").json()
@@ -483,12 +533,14 @@ def botnasa():
     file = True
   return [trim(desc, 1024), file]
 
+
 def botpanda(number):
   desc = ""
   for x in range(number):
     r=requests.get(f"https://some-random-api.ml/img/{'' if chance(2) else 'red_'}panda").json()['link']
     desc += f"{r}\n"
   return desc
+
 
 def botpanda_fact(number):
   desc = ""
@@ -497,9 +549,11 @@ def botpanda_fact(number):
     desc += f"{r}\n"
   return desc
 
+
 def botparagraph(number):
   r = requests.get(f'http://metaphorpsum.com/paragraphs/1/{number}').content
   return r
+
 
 def botquote(number):
   desc = ""
@@ -508,12 +562,14 @@ def botquote(number):
     desc += f"> {r['quoteText']}\n—By {r['quoteAuthor']}\n\n"
   return desc
 
+
 def botraccoon(number):
   desc = ""
   for x in range(number):
     r = requests.get('https://some-random-api.ml/animal/raccoon').json()['image']
     desc += f"{r}\n"
   return desc
+
 
 def botraccoon_fact(number):
   desc = ""
@@ -522,6 +578,7 @@ def botraccoon_fact(number):
     desc += f"{r}\n"
   return desc
 
+
 def botshiba(number):
   desc = ""
   for x in range(number):
@@ -529,10 +586,12 @@ def botshiba(number):
     desc += f"{r}\n"
   return desc
 
+
 def botstates(country):
   r=requests.get(f"https://rawcdn.githack.com/kamikazechaser/administrative-divisions-db/master/api/{country}.json").json()
   desc = ", ".join(r)
   return desc
+
 
 def bottrivia(number):
   desc = ""
@@ -556,6 +615,7 @@ def bottrivia(number):
                 custom_id= f"reveal{x+1}") for x in range(3) if len(answers) > x]
   answers = [answers[x] if len(answers) > x else None for x in range(3)] # pad answers to length 3
   return [desc, answers, components]
+
 
 def setup(bot):
   bot.add_command(bird)

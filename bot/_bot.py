@@ -132,13 +132,6 @@ async def ping_(ctx):
   await message.edit(content=f"Pong! 🏓\n```Message delay: {mcs:<10}microseconds\nBot latency  : {round(bot_.latency*1000000, 2):<10}microseconds```")
 
 
-@bs.command(name="dev_test", description="Development tests.", options=[
-           ui.SlashOption(name="Attachment", description="The attachment.", type=discord.Attachment,
-           required=True)])
-async def dev_test(ctx, attachment):
-  print(attachment)
-  await ctx.respond("response")
-
 @bot_.command(aliases= ["online"]) # Migrated
 async def ping(ctx, *, disposed=None):
   now1 = datetime.now(timezone.utc)

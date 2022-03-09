@@ -20,7 +20,7 @@ class SearchFlags(commands.FlagConverter):
   files            : specialbool                           = None
 
 
-@commands.command()
+@commands.command() # Will be removed
 async def ban(ctx, user: discord.User, delete: int = 0, *, reason="No reason provided"):
   if has_perms(ctx.channel, ctx.author, 2):
     try:
@@ -65,7 +65,7 @@ async def getrole(ctx, roles: commands.Greedy[discord.Role], member: discord.Mem
     await ctx.reply("You don't have the required permission: Manage roles.")
 
 
-@commands.command()
+@commands.command() # Will be removed
 async def kick(ctx, user: discord.Member, *, reason="No reason provided"):
   if has_perms(ctx.channel, ctx.author, 1):
     try:
@@ -98,14 +98,21 @@ async def makeinvite(ctx, timetocount = "0", uses: int = 0):
 
 
 @commands.command(aliases=['makerole'])
-async def makeroles(ctx, times: int = 1, *, name="Sample role $number"):
+async def makeroles(ctx, times: int = 1, *, name="Sample role $num"):
   if has_perms(ctx.channel, ctx.author, 28):
     current_server = ctx.guild
-    for x in range(1,times+1):
-      await current_server.create_role(name=name.replace("$number", str(x)))
+    for x in range(1, times + 1):
+      await current_server.create_role(name=name.replace("$num", str(x)))
     await ctx.reply("Successfully created role(s).")
   else:
     await ctx.reply("You don't have the required permission: Manage Roles.")
+
+@bs.command(name="make_roles", description="Creates up to 15 roles quickly. Warning: you may revert this only by manually removing the roles.", options=[
+           ui.SlashOption(name="Number", description="The number of roles to generate.", type=int,
+           required=True, min_value=1, max_value=15), ui.SlashOption(name="Name",
+           description="The name of the roles. Use '$num' as a placeholder. Defaults to 'Sample role $num'.",
+           type=str, required=False), ui.SlashOption(name="Permission",
+           description="The permission integer to give to all roles.", type=int, required=False)])
 
 
 @commands.command(aliases=['makethread'])
