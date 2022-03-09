@@ -291,8 +291,15 @@ async def on_reaction_remove(reaction, user):
     await msg.edit(embed= cache)
 
 
+swear = ["fuck", "shit", "on9"]
+
 @bot_.event
 async def on_message(message):
+  if message.guild.id == 867962875422081024:
+    msg = message.content.lower().replace("$", "s").replace("|<", "k").replace("<", "c").replace("!", "i")
+    for x in swear:
+      if x in msg:
+        await message.channel.send("Please do not use bad words!")
   try:
     if message.guild.id == 852899227004305458 and message.author.id != 796686363604680755 and message.channel.id in [856053769149874196, 864757953121878026, 864754633910255646]:
       await message.add_reaction("<:UpArrowSquare:864762633194569728>")
