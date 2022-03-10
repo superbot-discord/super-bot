@@ -113,7 +113,7 @@ async def makeroles(ctx, times: int = 1, *, name="Sample role $num"):
            description="The name of the roles. Use '$num' as a placeholder. Defaults to 'Sample role $num'.",
            type=str, required=False), ui.SlashOption(name="Permission",
            description="The permission integer to give to all roles.", type=int, required=False)])
-async def makeroles(ctx: ui.SlashInteraction, number = 1, name="Sample role $num", permission = 0):
+async def makeroles_(ctx: ui.SlashInteraction, number=1, name="Sample role $num", permission=0):
   if has_perms(ctx.channel, ctx.author, 28):
     current_server = ctx.guild
     for x in range(1, number + 1):
