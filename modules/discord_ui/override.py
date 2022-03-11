@@ -74,7 +74,7 @@ def override_dpy():
         
         return self._adapter.execute_webhook(payload=payload, wait=wait, files=files)
 
-    module.webhook.Webhook.send = send_webhook
+    #module.webhook.Webhook.send = send_webhook
     #endregion
 
     # override for dpy forks

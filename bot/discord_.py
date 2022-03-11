@@ -104,7 +104,7 @@ async def pretend(ctx, member: discord.Member, *, message):
     wh = whl[0]
   else:
     wh = await ctx.channel.create_webhook(name= "Pretender")
-  await wh.send(message, username= member.name, avatar_url= member.display_avatar.url)
+  await wh.send(message, username=member.name, avatar_url=member.display_avatar.url)
 
 
 @commands.command()
