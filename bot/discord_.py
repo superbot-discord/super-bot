@@ -1,5 +1,5 @@
 from _bot import bs
-from shared import chance, commands, discord, Embed, has_perms, specialbool, time_display, ui
+from shared import chance, commands, discord, Embed, has_perms, specialbool, time_display, typing, ui
 # specialbool no longer needed once =snipe context command is removed
 
 sniper = {} # List of deleted messages
@@ -93,18 +93,18 @@ async def ett(ctx, msg: discord.Message = None):
 
 
 @commands.command()
-async def pretend(ctx, member: discord.Member, *, message):
+async def pretend(ctx: commands.Context, member: typing.Union[discord.Member, str], *, message):
   try:
     await ctx.message.delete()
   except:
     pass
   webhooks = await ctx.channel.webhooks()
   whl = list(filter(lambda x: x.name == "Pretender", webhooks))
-  if whl:
-    wh = whl[0]
+  wh = whl[0] if whl else (await ctx.channel.create_webhook(name="Pretender"))
+  if isinstance(member, str):
+    await wh.send(message, username=member)
   else:
-    wh = await ctx.channel.create_webhook(name= "Pretender")
-  await wh.send(message, username=member.name, avatar_url=member.display_avatar.url)
+    await wh.send(message, username=member.display_name, avatar_url=member.display_avatar.url)
 
 
 @commands.command()
