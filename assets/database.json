@@ -22,6 +22,7 @@
   "led_colors" : {
     "cyan" : {"fg":"#3C3E2CFF", "bg":"#A8C64EFF"}, "icyan" : {"fg":"#A8C64EFF", "bg":"#101400FF"},
    "crystal":{"fg":"#3C3E2CFF", "bg":"#A8C64EFF"},"icrystal":{"fg":"#A8C64EFF", "bg":"#101400FF"},
+   "orange": {"fg":"#E97A29FF", "bg":"#271C10FF"}, "iorange":{"fg":"#271C10FF", "bg":"#E97A29FF"},
     "amber": {"fg":"#412C3CFF", "bg":"#A19953FF"}, "iamber": {"fg":"#A19953FF", "bg":"#412C3CFF"},
     "red"  : {"fg":"#D83030FF", "bg":"#300000FF"}, "ired"  : {"fg":"#500000FF", "bg":"#D81010FF"},
     "green": {"fg":"#30D830FF", "bg":"#003000FF"}, "igreen": {"fg":"#003000FF", "bg":"#30D830FF"},
