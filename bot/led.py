@@ -119,6 +119,22 @@ color_choices = [
   {'name': "Dark", 'value': "dark"}, {'name': "Dark Transparent", 'value': "tdark"},
   {'name': "White", 'value': "white"}, {'name': "White Transparent", 'value': "twhite"}
 ]
+mtr_color_choices = [
+  {'name': "East Rail Line", 'value': "EAL"},
+  {'name': "West Rail Line", 'value': "WRL"},
+  {'name': "Tuen Ma Line", 'value': "TML"},
+  {'name': "Kwun Tong Line", 'value': "KTL"},
+  {'name': "Tsuen Wan Life", 'value': "TWL"},
+  {'name': "Island Line", 'value': "ISL"},
+  {'name': "South Island Line", 'value': "SIL"},
+  {'name': "Tseung Kwan O Line", 'value': "TKL"},
+  {'name': "Airport Express", 'value': "AEL"},
+  {'name': "Tung Chung Line", 'value': "TCL"},
+  {'name': "Disneyland Resort Line", 'value': "DRL"},
+  {'name': "Light Rail", 'value': "LRT"},
+  {'name': "Orange", 'value': "001"},
+  {'name': "White", 'value': "002"},
+]
 alignment_choices = [
   {'name': "Left", 'value': "left"},
   {'name': "Center", 'value': "center"},
@@ -269,6 +285,33 @@ async def lcd(ctx, mode: typing.Optional[typing.Literal['regular', 'calc', 'dens
   try_delete('output.png')
 
 
+@bs.command(name="led_mtr", description="製作假LED版，只限Scratch in Discord。", options=[
+           ui.SlashOption(name="Text", description="The text to show on the LED screen. Use \\n for new lines.", type=str,
+           required=True), ui.SlashOption(name="Color",
+           description="The color of the LED screen. Defaults to white.", type=str, required=False,
+           choices=mtr_color_choices), ui.SlashOption(name="Black background",
+           description="Whether to use a black background or not. Defaults to False.",
+           type=bool, required=False), ui.SlashOption(name="Background Color",
+           description="Optionally overwrites the background color. Use a 6-digit hexadecimal code.",
+           type=str, required=False), ui.SlashOption(name="Text Color",
+           description="Optionally overwrites the text color. Use a 6-digit hexadecimal code.",
+           type=str, required=False)])
+async def led_mtr(ctx, text, color="002", black_background=False, alignment="center", background_color=None, text_color=None):
+  background_color = ("#" + (background_color.replace("#", "") if background_color else ("000000" if black_background else db["led_mtr_colors"][color]["bg"])) +
+    ("00" if not background_color and color in ["tblack", "tdark", "tlight", "twhite"] else "FF"))
+  text_color = "#" + (text_color.replace("#", "") if text_color else db["led_mtr_colors"][color]["fg"]) + "FF"
+  text = text.replace(r"\n", "\n")
+  current_font = led_sq_fonts["chi"]
+  current_properties = led_font_dict[current_font]
+  sizes = current_font.getsize_multiline(text, spacing=current_properties["spacing"])
+  minus_padding = current_properties["unneeded_padding"] if all_halfheight(text) else 0
+  image = Image.new("RGBA", led_sizer(sizes, current_properties, minus_padding, text.splitlines()[len(text.splitlines())-1]), color=background_color)
+  draw = ImageDraw.Draw(image)
+  draw.multiline_text(led_positioner(current_properties, minus_padding), text, font=current_font, fill=text_color, spacing=current_properties["spacing"], align=alignment)
+  image.save('output.png')
+  await ctx.respond(file=discord.File('output.png'))
+  try_delete('output.png')
+
 @bs.command(name="led_square", description="Generates a fake LED screen with square dots.", options=[
            ui.SlashOption(name="Text", description="The text to show on the LED screen. Use \\n for new lines.", type=str,
            required=True), ui.SlashOption(name="Font", description="The font of the text. Defaults to regular.",
@@ -307,8 +350,15 @@ async def led_square(ctx, text, font="regular", color="red", alignment="center",
            description="The color of the LED screen. Defaults to red.", type=str, required=False,
            choices=color_choices), ui.SlashOption(name="Alignment",
            description="The alignment of the text. Defaults to center. Only applicable if you use \\n to add a new line.",
-           type=str, required=False, choices=alignment_choices)])
+           type=str, required=False, choices=alignment_choices), ui.SlashOption(name="Background Color",
+           description="Optionally overwrites the background color. Use a 6-digit hexadecimal code.",
+           type=str, required=False), ui.SlashOption(name="Text Color",
+           description="Optionally overwrites the text color. Use a 6-digit hexadecimal code.",
+           type=str, required=False)])
 async def led_scattered(ctx, text, font="regular", color="red", alignment="center"):
+  background_color = ("#" + (background_color.replace("#", "") if background_color else db["led_colors"][color]["bg"]) +
+    ("00" if not background_color and color in ["tblack", "tdark", "tlight", "twhite"] else "FF"))
+  text_color = "#" + (text_color.replace("#", "") if text_color else db["led_colors"][color]["fg"]) + "FF"
   text = text.replace("\\n", "\n")
   current_font = led_sc_fonts[font]
   current_properties = led_font_dict[current_font]
@@ -333,8 +383,15 @@ async def led_scattered(ctx, text, font="regular", color="red", alignment="cente
            description="The color of the LED screen. Defaults to red.", type=str, required=False,
            choices=color_choices), ui.SlashOption(name="Alignment",
            description="The alignment of the text. Defaults to center. Only applicable if you use \\n to add a new line.",
-           type=str, required=False, choices=alignment_choices)])
+           type=str, required=False, choices=alignment_choices), ui.SlashOption(name="Background Color",
+           description="Optionally overwrites the background color. Use a 6-digit hexadecimal code.",
+           type=str, required=False), ui.SlashOption(name="Text Color",
+           description="Optionally overwrites the text color. Use a 6-digit hexadecimal code.",
+           type=str, required=False)])
 async def led_segment_7(ctx, text, font, thickness="2", italics="", color="red", alignment="center"):
+  background_color = ("#" + (background_color.replace("#", "") if background_color else db["led_colors"][color]["bg"]) +
+    ("00" if not background_color and color in ["tblack", "tdark", "tlight", "twhite"] else "FF"))
+  text_color = "#" + (text_color.replace("#", "") if text_color else db["led_colors"][color]["fg"]) + "FF"
   current_font = eval(f"font_lcd{int(font)-1}_{thickness}{italics}")
   current_properties = led_font_dict[current_font]
   sizes = current_font.getsize_multiline(text, spacing=current_properties["spacing"])
@@ -358,8 +415,15 @@ async def led_segment_7(ctx, text, font, thickness="2", italics="", color="red",
            description="The color of the LED screen. Defaults to red.", type=str, required=False,
            choices=color_choices), ui.SlashOption(name="Alignment",
            description="The alignment of the text. Defaults to center. Only applicable if you use \\n to add a new line.",
-           type=str, required=False, choices=alignment_choices)])
+           type=str, required=False, choices=alignment_choices), ui.SlashOption(name="Background Color",
+           description="Optionally overwrites the background color. Use a 6-digit hexadecimal code.",
+           type=str, required=False), ui.SlashOption(name="Text Color",
+           description="Optionally overwrites the text color. Use a 6-digit hexadecimal code.",
+           type=str, required=False)])
 async def led_segment_14(ctx, text, font, thickness="2", italics="", color="red", alignment="center"):
+  background_color = ("#" + (background_color.replace("#", "") if background_color else db["led_colors"][color]["bg"]) +
+    ("00" if not background_color and color in ["tblack", "tdark", "tlight", "twhite"] else "FF"))
+  text_color = "#" + (text_color.replace("#", "") if text_color else db["led_colors"][color]["fg"]) + "FF"
   current_font = eval(f"font_led{font}_{thickness}{italics}")
   current_properties = led_font_dict[current_font]
   sizes = current_font.getsize_multiline(text, spacing=current_properties["spacing"])

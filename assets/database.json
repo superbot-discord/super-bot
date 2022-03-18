@@ -36,6 +36,22 @@
     "tdark": {"fg":"FFFFFF", "bg":"37393E"}, "tlight": {"fg":"2E3337", "bg":"FFFFFF"},
     "wdark": {"fg":"E9EDEF", "bg":"000000"}, "wlight": {"fg":"0F181D", "bg":"BDE3E6"}
   },
+  "led_mtr_colors" : {
+    "EAL": {"fg": "0089D0", "bg": "002970"},
+    "WRL": {"fg": "C93B96", "bg": "690036"},
+    "TML": {"fg": "A44C0E", "bg": "440000"},
+    "KTL": {"fg": "00AB4E", "bg": "004B00"},
+    "TWL": {"fg": "ED1D24", "bg": "8D0000"},
+    "ISL": {"fg": "007DC5", "bg": "001D65"},
+    "SIL": {"fg": "C1CD23", "bg": "616D00"},
+    "TKL": {"fg": "7D499D", "bg": "1D003D"},
+    "AEL": {"fg": "00888A", "bg": "00282A"},
+    "TCL": {"fg": "F7943E", "bg": "973400"},
+    "DRL": {"fg": "F173AC", "bg": "91134C"},
+    "LRT": {"fg": "D3A809", "bg": "734800"},
+    "001": {"fg": "D3A809", "bg": "734800"},
+    "002": {"fg": "FFFFFF", "bg": "111111"}
+  },
   "air_quality" : {"1":"Good", "2":"Fair", "3":"Moderate", "4":"Poor", "5":"Very poor"},
   "compass_points" : {"North":"↑", "Northeast":"↗︎", "East":"→", "Southeast":"↘︎", "South":"↓", "Southwest":"↙︎", "West":"←", "Northwest":"↖︎", "Variable":"", "Calm":"", "N/A":""},
   "mtr" : {

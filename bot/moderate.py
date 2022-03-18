@@ -342,14 +342,14 @@ async def slowmode_(ctx, cooldown, channel: discord.TextChannel = None):
     UNITS.get(m.group('unit').lower(), 'seconds'): int(m.group('val'))
     for m in re.finditer(r'(?P<val>\d+)(?P<unit>[smhdw]?)', cooldown, flags=re.I)
   }).total_seconds())
+  if not channel:
+    channel = ctx.channel
   if cooldown < 0 or cooldown > 21600:
     await ctx.respond("Invalid input! Please enter a duration below or equal to 21600 seconds (6 hours).")
     return
   if not has_perms(channel, ctx.author, 4):
     await ctx.respond("You don't have the required permission: Manage channels.")
     return
-  if not channel:
-    channel = ctx.channel
   orsec = channel.slowmode_delay
   await channel.edit(slowmode_delay=cooldown)
   await ctx.respond(f"Successfully set slowmode from {orsec} to {cooldown} second(s) for {channel.mention}.")
