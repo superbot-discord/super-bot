@@ -337,12 +337,12 @@ async def setperm(ctx, permission_input: typing.Union[int, str], *roles: discord
            type=str, required=True), ui.SlashOption(name="Channel", type=discord.TextChannel,
            required=False, channel_types=[discord.ChannelType.text],
            description="The channel to set the slowmode of. Defaults to the current channel.")])
-async def slowmode_(ctx, sec, channel: discord.TextChannel = None):
-  sec = int(timedelta(**{
+async def slowmode_(ctx, cooldown, channel: discord.TextChannel = None):
+  cooldown = int(timedelta(**{
     UNITS.get(m.group('unit').lower(), 'seconds'): int(m.group('val'))
-    for m in re.finditer(r'(?P<val>\d+)(?P<unit>[smhdw]?)', sec, flags=re.I)
+    for m in re.finditer(r'(?P<val>\d+)(?P<unit>[smhdw]?)', cooldown, flags=re.I)
   }).total_seconds())
-  if sec < 0 or sec > 21600:
+  if cooldown < 0 or cooldown > 21600:
     await ctx.respond("Invalid input! Please enter a duration below or equal to 21600 seconds (6 hours).")
     return
   if not has_perms(channel, ctx.author, 4):
@@ -351,8 +351,8 @@ async def slowmode_(ctx, sec, channel: discord.TextChannel = None):
   if not channel:
     channel = ctx.channel
   orsec = channel.slowmode_delay
-  await channel.edit(slowmode_delay=sec)
-  await ctx.respond(f"Successfully set slowmode from {orsec} to {sec} second(s) for {channel.mention}.")
+  await channel.edit(slowmode_delay=cooldown)
+  await ctx.respond(f"Successfully set slowmode from {orsec} to {cooldown} second(s) for {channel.mention}.")
 
 @commands.command()
 async def slowmode(ctx, sec=None, *channels: typing.Union[discord.TextChannel,str]):
