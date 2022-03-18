@@ -1,6 +1,6 @@
 #from nextcord.ext import tasks
 from shared import (commands, datetime, db, discord, Embed, ems,
-                    has_perms, json, os, re, SequenceMatcher, timezone, traceback, ui,
+                    has_perms, json, os, re, SequenceMatcher, timedelta, timezone, traceback, ui,
                     view_overwrite)
 
 
@@ -291,15 +291,17 @@ async def on_reaction_remove(reaction, user):
     await msg.edit(embed= cache)
 
 
-swear = ["fuck", "shit", "on9"]
+swear = ["fuck", "shit", "on9", "bitch", "屌"]
 
 @bot_.event
-async def on_message(message):
-  if message.guild.id == 867962875422081024:
+async def on_message(message: discord.Message):
+  if message.guild.id == 953961139136528445:
     msg = message.content.lower().replace("$", "s").replace("|<", "k").replace("<", "c").replace("!", "i")
     for x in swear:
       if x in msg:
         await message.channel.send("Please do not use bad words!")
+        if 953974385994248233 not in [x.id for x in message.author.roles]:
+          await message.author.edit(timeout=timedelta(minutes=5))
         return
   try:
     if message.guild.id == 852899227004305458 and message.author.id != 796686363604680755 and message.channel.id in [856053769149874196, 864757953121878026, 864754633910255646]:

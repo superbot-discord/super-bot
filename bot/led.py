@@ -270,22 +270,30 @@ async def lcd(ctx, mode: typing.Optional[typing.Literal['regular', 'calc', 'dens
 
 
 @bs.command(name="led_square", description="Generates a fake LED screen with square dots.", options=[
-           ui.SlashOption(name="Text", description="The text to show on the LED screen.", type=str,
+           ui.SlashOption(name="Text", description="The text to show on the LED screen. Use \\n for new lines.", type=str,
            required=True), ui.SlashOption(name="Font", description="The font of the text. Defaults to regular.",
            type=str, required=False, choices=led_sq_choices), ui.SlashOption(name="Color",
            description="The color of the LED screen. Defaults to red.", type=str, required=False,
            choices=color_choices), ui.SlashOption(name="Alignment",
            description="The alignment of the text. Defaults to center. Only applicable if you use \\n to add a new line.",
-           type=str, required=False, choices=alignment_choices)])
-async def led_square(ctx, text, font="regular", color="red", alignment="center"):
-  text = text.replace("\\n", "\n")
+           type=str, required=False, choices=alignment_choices), ui.SlashOption(name="Background Color",
+           description="Optionally overwrites the background color. Use a 6-digit hexadecimal code.",
+           type=str, required=False), ui.SlashOption(name="Text Color",
+           description="Optionally overwrites the text color. Use a 6-digit hexadecimal code.",
+           type=str, required=False)])
+async def led_square(ctx, text, font="regular", color="red", alignment="center",
+                     background_color=None, text_color=None):
+  background_color = ("#" + (background_color.replace("#", "") if background_color else db["led_colors"][color]["bg"]) +
+    ("00" if not background_color and color in ["tblack", "tdark", "tlight", "twhite"] else "FF"))
+  text_color = "#" + (text_color.replace("#", "") if text_color else db["led_colors"][color]["fg"]) + "FF"
+  text = text.replace(r"\n", "\n")
   current_font = led_sq_fonts[font]
   current_properties = led_font_dict[current_font]
   sizes = current_font.getsize_multiline(text, spacing=current_properties["spacing"])
   minus_padding = current_properties["unneeded_padding"] if all_halfheight(text) else 0
-  image = Image.new("RGBA", led_sizer(sizes, current_properties, minus_padding, text.splitlines()[len(text.splitlines())-1]), color=db["led_colors"][color]["bg"])
+  image = Image.new("RGBA", led_sizer(sizes, current_properties, minus_padding, text.splitlines()[len(text.splitlines())-1]), color=background_color)
   draw = ImageDraw.Draw(image)
-  draw.multiline_text(led_positioner(current_properties, minus_padding), text, font=current_font, fill=db["led_colors"][color]["fg"], spacing=current_properties["spacing"], align=alignment)
+  draw.multiline_text(led_positioner(current_properties, minus_padding), text, font=current_font, fill=text_color, spacing=current_properties["spacing"], align=alignment)
   image.save('output.png')
   await ctx.respond(file=discord.File('output.png'))
   try_delete('output.png')

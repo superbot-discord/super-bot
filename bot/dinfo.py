@@ -1,18 +1,15 @@
 from shared import (asyncio, commands, discord, Embed, ems, np, plt, re, SequenceMatcher,
                     timedelta, typing, ui)
 from shared import (sr_real, ms_real, tc_real, vc_real, bg_itop, custom_permissions, datetime, db,
-                    sr_itop, ms_itop, tc_itop, vc_itop, func, gridspec, perm_itoe, sizer, timezone,
-                    try_delete, sr_itod, ms_itod, tc_itod, vc_itod, unix_timestamp,
-                    voice_region_format)
+                    sr_itop, tc_itop, vc_itop, func, gridspec, perm_itoe, sizer, timezone,
+                    try_delete, unix_timestamp, voice_region_format, ALL_CHNL_TYPES)
 from _bot import bs
 from functions import enum_mentionables, many_replace, trim
 
 permission_messages = {}
 cmaphsv = plt.cm.hsv
 
-all_channel_types = [discord.ChannelType.category, discord.ChannelType.text,
-  discord.ChannelType.voice, discord.ChannelType.stage_voice, discord.ChannelType.public_thread,
-  discord.ChannelType.private_thread]
+
 status_to_str = {discord.Status.online: "Online", discord.Status.idle: "Idle", discord.Status.dnd:
                  "Do not Disturb", discord.Status.offline: "Offline"}
 
@@ -310,7 +307,7 @@ async def channel(ctx, channel: typing.Union[discord.TextChannel, discord.VoiceC
 @bs.command(name="channel_info", description="Shows information about a category, channel or thread.",
            options=[ui.SlashOption(name="Channel", type=discord.TextChannel, required=True,
            description="The category, channel or thread to show information about.",
-           channel_types=all_channel_types)])
+           channel_types=ALL_CHNL_TYPES)])
 async def channel_(ctx, channel = None):
   if not channel:
     channel = ctx.channel
@@ -991,7 +988,7 @@ async def permissions(ctx, integer="help"):
 @bs.command(name="permissions_user", description="Views the permissions of a user.",
            options=[ui.SlashOption(name="User", type=discord.Member, required=False,
            description="The user to show the permissions of. Deafults to you."), ui.SlashOption(
-           name="Channel", type=discord.TextChannel, required=False, channel_types=all_channel_types,
+           name="Channel", type=discord.TextChannel, required=False, channel_types=ALL_CHNL_TYPES,
            description="The channel to take overwrites into account. Defaults to none (server-wide).")])
 async def permissions_user(ctx: ui.SlashInteraction, user=None, channel=None):
   user = user if user else ctx.author
@@ -1003,7 +1000,7 @@ async def permissions_user(ctx: ui.SlashInteraction, user=None, channel=None):
 @bs.command(name="permissions_role", description="Views the permissions of a role.",
            options=[ui.SlashOption(name= "Role", type= discord.Role, required= True,
            description= "The role to show the permissions of."), ui.SlashOption(name="Channel",
-           type=discord.TextChannel, required=False, channel_types=all_channel_types, description=
+           type=discord.TextChannel, required=False, channel_types=ALL_CHNL_TYPES, description=
            "The channel to take overwrites into account. Defaults to none (server-wide).")])
 async def permissions_role(ctx: ui.SlashInteraction, role, channel=None):
   integer = channel.permissions_for(role).value if channel else role.permissions.value
@@ -1632,11 +1629,11 @@ async def user(ctx, user: discord.Member = None, channel: discord.TextChannel = 
   await ctx.reply(embed=embed)
 
 
-@bs.command(name= "user_info", description= "Shows information about a user.", options=[
-           ui.SlashOption(name= "User", type= discord.Member, required= False,
-           description= "The user to show information about. Deafults to you."), ui.SlashOption(
-           name= "Channel", type= discord.TextChannel, required= False, channel_types= all_channel_types,
-           description= "SuperBot calculates the user's permissions based on this channel. Deafults to the current channel.")])
+@bs.command(name="user_info", description= "Shows information about a user.", options=[
+           ui.SlashOption(name="User", type=discord.Member, required=False,
+           description="The user to show information about. Deafults to you."), ui.SlashOption(
+           name="Channel", type=discord.TextChannel, required=False, channel_types=ALL_CHNL_TYPES,
+           description="SuperBot calculates the user's permissions based on this channel. Deafults to the current channel.")])
 async def user_info(ctx, user: discord.Member = None, channel: discord.TextChannel = None):
   if user == None:
     user = ctx.author

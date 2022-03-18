@@ -332,7 +332,7 @@ async def snipe_(ctx: ui.SlashInteraction):
       await ctx.respond(embed=embed)
       return
     else:
-      embed = Embed(title= f"Snipped message (1/{len(sniper[chnl])})", description= sniper[chnl][0][0])
+      embed = Embed(title= f"Sniped message (1/{len(sniper[chnl])})", description= sniper[chnl][0][0])
       embed.set_footer(text= sniper[chnl][0][1])
     if chance(1000):
       msg = await ctx.respond("Did someone just ghostping you?", embed= embed, components=
@@ -347,7 +347,7 @@ async def snipe_(ctx: ui.SlashInteraction):
 @bs.command(name="snipe_toggle", description="Enable or disable sniping in this channel.",
            options=[ui.SlashOption(name="Toggle", type=bool, description=
            "Whether to enable or disable sniping. Toggles the current option by default.")])
-async def snipe_toggle(ctx: ui.SlashInteraction, toggle= None):
+async def snipe_toggle(ctx: ui.SlashInteraction, toggle=None):
   chnl = ctx.channel
   if toggle == None:
     toggle = not sniping[chnl]
@@ -372,9 +372,10 @@ async def snipe_log(message: discord.Message):
   val = message.content
   val = val if val else "*No message content*"
   if message.attachments:
-    val += f"\n".join([x.url for x in message.attachments])
+    val += "\n\n" + "\n".join([x.url for x in message.attachments])
   footer = f"By {message.author.name}#{message.author.discriminator} at {time_display(message.created_at)} UTC"
-  footer+= f" • The message includes {len(message.embeds)} embeds"
+  if message.embeds:
+    footer+= f" • The message includes {len(message.embeds)} embeds"
   if not sniper.get(message.channel):
     sniper[message.channel] = []
   sniper[message.channel].insert(0, [val, footer])

@@ -68,6 +68,10 @@ time_display    =lambda dt         : dt.strftime("%A, %d %b %Y, %H:%M:%S")
 st_nd_th_format =lambda n          : "st" if str(n).endswith("1") and not str(n).endswith("11") else ("th" if str(n).endswith("2") and not str(n).endswith("12") else "nd")
 perm_display    =lambda integer, x : "<:pt:932171999936135168><:tr:932189462648209468> " if integer & (1 << x) else "<:tr:932189462648209468><:pf:932171999835475989> "
 
+ALL_CHNL_TYPES = [discord.ChannelType.category, discord.ChannelType.text,
+  discord.ChannelType.voice, discord.ChannelType.stage_voice, discord.ChannelType.public_thread,
+  discord.ChannelType.private_thread]
+
 def format_fps(stream):
   try:
     return stream.fps

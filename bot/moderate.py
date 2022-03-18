@@ -1,6 +1,6 @@
 from _bot import bs
-from shared import (asyncio, commands, custom_permissions, datetime, db, discord, Embed,
-                    has_perms, re, SequenceMatcher, specialbool, timedelta, timestamp_pattern,
+from shared import (ALL_CHNL_TYPES, asyncio, commands, custom_permissions, datetime, db, discord,
+                    Embed, has_perms, re, SequenceMatcher, specialbool, timedelta, timestamp_pattern,
                     timezone, try_delete, try_delete_message, typing, ui, UNITS, unix_timestamp)
 
 
@@ -106,6 +106,7 @@ async def makeroles(ctx, times: int = 1, *, name="Sample role $num"):
     await ctx.reply("Successfully created role(s).")
   else:
     await ctx.reply("You don't have the required permission: Manage Roles.")
+
 
 @bs.command(name="make_roles", description="Creates up to 15 roles quickly. Warning: you may revert this only by manually removing the roles.", options=[
            ui.SlashOption(name="Number", description="The number of roles to generate.", type=int,
@@ -331,6 +332,28 @@ async def setperm(ctx, permission_input: typing.Union[int, str], *roles: discord
     await ctx.reply("You don't have the required permission: Manage Roles.")
 
 
+@bs.command(name="slowmode", description="Sets the slowmode for a channel.", options=[
+           ui.SlashOption(name="Cooldown", description="The cooldown in hms units between 0 and 21600 (6h) inclusive, e.g. 1m20s=80s. Use 0 to turn off.",
+           type=str, required=True), ui.SlashOption(name="Channel", type=discord.TextChannel,
+           required=False, channel_types=[discord.TextChannel],
+           description="The channel to set the slowmode of. Defaults to the current channel.")])
+async def slowmode_(ctx, sec, channel: discord.TextChannel = None):
+  sec = int(timedelta(**{
+    UNITS.get(m.group('unit').lower(), 'seconds'): int(m.group('val'))
+    for m in re.finditer(r'(?P<val>\d+)(?P<unit>[smhdw]?)', sec, flags=re.I)
+  }).total_seconds())
+  if sec < 0 or sec > 21600:
+    await ctx.respond("Invalid input! Please enter a duration below or equal to 21600 seconds (6 hours).")
+    return
+  if not has_perms(channel, ctx.author, 4):
+    await ctx.respond("You don't have the required permission: Manage channels.")
+    return
+  if not channel:
+    channel = ctx.channel
+  orsec = channel.slowmode_delay
+  await channel.edit(slowmode_delay=sec)
+  await ctx.respond(f"Successfully set slowmode from {orsec} to {sec} second(s) for {channel.mention}.")
+
 @commands.command()
 async def slowmode(ctx, sec=None, *channels: typing.Union[discord.TextChannel,str]):
   if sec:
@@ -338,8 +361,6 @@ async def slowmode(ctx, sec=None, *channels: typing.Union[discord.TextChannel,st
       UNITS.get(m.group('unit').lower(), 'seconds'): int(m.group('val'))
       for m in re.finditer(r'(?P<val>\d+)(?P<unit>[smhdw]?)', sec, flags=re.I)
     }).total_seconds())
-    if sec.isdigit() == False:
-      sec = 0
     if sec < 0 or sec > 21600 or sec%1 != 0:
       await ctx.reply("Invalid input! Please enter a duration below or equal to 21600 seconds (6 hours).")
       return
