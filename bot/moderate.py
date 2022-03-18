@@ -335,7 +335,7 @@ async def setperm(ctx, permission_input: typing.Union[int, str], *roles: discord
 @bs.command(name="slowmode", description="Sets the slowmode for a channel.", options=[
            ui.SlashOption(name="Cooldown", description="The cooldown in hms units between 0 and 21600 (6h) inclusive, e.g. 1m20s=80s. Use 0 to turn off.",
            type=str, required=True), ui.SlashOption(name="Channel", type=discord.TextChannel,
-           required=False, channel_types=[discord.TextChannel],
+           required=False, channel_types=[discord.ChannelType.text],
            description="The channel to set the slowmode of. Defaults to the current channel.")])
 async def slowmode_(ctx, sec, channel: discord.TextChannel = None):
   sec = int(timedelta(**{
