@@ -355,7 +355,7 @@ async def led_square(ctx, text, font="regular", color="red", alignment="center",
            type=str, required=False), ui.SlashOption(name="Text Color",
            description="Optionally overwrites the text color. Use a 6-digit hexadecimal code.",
            type=str, required=False)])
-async def led_scattered(ctx, text, font="regular", color="red", alignment="center"):
+async def led_scattered(ctx, text, font="regular", color="red", alignment="center", background_color=None, text_color=None):
   background_color = ("#" + (background_color.replace("#", "") if background_color else db["led_colors"][color]["bg"]) +
     ("00" if not background_color and color in ["tblack", "tdark", "tlight", "twhite"] else "FF"))
   text_color = "#" + (text_color.replace("#", "") if text_color else db["led_colors"][color]["fg"]) + "FF"
