@@ -135,6 +135,15 @@ mtr_color_choices = [
   {'name': "Orange", 'value': "001"},
   {'name': "White", 'value': "002"},
 ]
+mtr_icon_pos_choices = [
+  {'name': "Top", 'value': "t"},
+  {'name': "Bottom", 'value': "b"},
+  {'name': "None", 'value': "n"},
+]
+mtr_icon_choices = [
+  {'name': "KCR", 'value': "KCRi"},
+  {'name': "MTR", 'value': "MTRi"},
+]
 alignment_choices = [
   {'name': "Left", 'value': "left"},
   {'name': "Center", 'value': "center"},
@@ -286,17 +295,27 @@ async def lcd(ctx, mode: typing.Optional[typing.Literal['regular', 'calc', 'dens
 
 
 @bs.command(name="led_mtr", description="製作假LED版，只限Scratch in Discord。", options=[
-           ui.SlashOption(name="Text", description="The text to show on the LED screen. Use \\n for new lines.", type=str,
-           required=True), ui.SlashOption(name="Color",
-           description="The color of the LED screen. Defaults to white.", type=str, required=False,
-           choices=mtr_color_choices), ui.SlashOption(name="Black background",
+           ui.SlashOption(name="Text", description="The text to show on the LED screen. Use \\n for new lines.",
+           type=str, required=True),
+           ui.SlashOption(name="Color", description="The color of the LED screen. Defaults to white.",
+           type=str, required=False, choices=mtr_color_choices),
+           ui.SlashOption(name="Black background",
            description="Whether to use a black background or not. Defaults to False.",
-           type=bool, required=False), ui.SlashOption(name="Background Color",
+           type=bool, required=False),
+           ui.SlashOption(name="Background Color",
            description="Optionally overwrites the background color. Use a 6-digit hexadecimal code.",
-           type=str, required=False), ui.SlashOption(name="Text Color",
+           type=str, required=False),
+           ui.SlashOption(name="Text Color",
            description="Optionally overwrites the text color. Use a 6-digit hexadecimal code.",
-           type=str, required=False)])
-async def led_mtr(ctx, text, color="002", black_background=False, alignment="center", background_color=None, text_color=None):
+           type=str, required=False),
+           ui.SlashOption(name="Icon Position", description="The position of an optional icon.",
+           type=str, required=False, choices=mtr_icon_pos_choices),
+           ui.SlashOption(name="Icon", description="The icon.", type=str, required=False,
+           choices=mtr_icon_choices),
+           ], default_permission=True, guild_ids=[867962875422081024],
+           guild_permissions={867962875422081024: ui.SlashPermission()})
+async def led_mtr(ctx, text, color="002", black_background=False, alignment="center", background_color=None, text_color=None, icon_position="n", icon=None):
+  await ctx.defer()
   background_color = ("#" + (background_color.replace("#", "") if background_color else ("000000" if black_background else db["led_mtr_colors"][color]["bg"])) +
     ("00" if not background_color and color in ["tblack", "tdark", "tlight", "twhite"] else "FF"))
   text_color = "#" + (text_color.replace("#", "") if text_color else db["led_mtr_colors"][color]["fg"]) + "FF"
@@ -305,9 +324,28 @@ async def led_mtr(ctx, text, color="002", black_background=False, alignment="cen
   current_properties = led_font_dict[current_font]
   sizes = current_font.getsize_multiline(text, spacing=current_properties["spacing"])
   minus_padding = current_properties["unneeded_padding"] if all_halfheight(text) else 0
-  image = Image.new("RGBA", led_sizer(sizes, current_properties, minus_padding, text.splitlines()[len(text.splitlines())-1]), color=background_color)
+  img_dimensions = led_sizer(sizes, current_properties, minus_padding, text.splitlines()[len(text.splitlines())-1])
+
+  if icon_position == "n" or not icon:
+    icon_position = None
+  if icon_position:
+    img_dimensions[1] += 50
+  image = Image.new("RGBA", img_dimensions, color=background_color)
+  # image = image.resize(img_dimensions, resample=Image.NEAREST)
+
+  text_pos = led_positioner(current_properties, minus_padding)
+  if icon_position == "t":
+    text_pos[1] += 50
   draw = ImageDraw.Draw(image)
-  draw.multiline_text(led_positioner(current_properties, minus_padding), text, font=current_font, fill=text_color, spacing=current_properties["spacing"], align=alignment)
+  draw.multiline_text(text_pos, text, font=current_font, fill=text_color, spacing=current_properties["spacing"], align=alignment)
+  if icon_position:
+    icon_img = Image.open(f"assets/{icon}.png")
+    # icon_xpos can be thought as:  img_dimensions[0] // 2 - (icon_img.width // 2)
+    # i.e. Middle point of LED board, then subtract half of icon image
+    icon_xpos = int((img_dimensions[0] - icon_img.width) // 2)
+    icon_ypos = 0 if icon_position == "t" else (img_dimensions[1] - 50)
+    image.paste(icon_img, box=(icon_xpos, icon_ypos))
+
   image.save('output.png')
   await ctx.respond(file=discord.File('output.png'))
   try_delete('output.png')

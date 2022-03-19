@@ -57,8 +57,8 @@ async def bot_unban(ctx, user: discord.User):
 @bs.command(name="bot_admin", description="Temporarily adds a user as a bot admin.",
                   options= [ui.SlashOption(name= "User", type= discord.User, description=
                   "The user to add to the list of bot admins.", required= True)],
-                  default_permission= False, guild_ids= bot_admin_guilds,
-                  guild_permissions= bot_admin_slash)
+                  default_permission=False, guild_ids=bot_admin_guilds,
+                  guild_permissions=bot_admin_slash)
 async def botadmin(ctx, user: discord.User):
   db['botadmins'].append(user.id)
   await ctx.respond("Added user as bot admin.")
