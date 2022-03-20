@@ -122,18 +122,32 @@ color_choices = [
   {'name': "White", 'value': "white"}, {'name': "White Transparent", 'value': "twhite"}
 ]
 mtr_color_choices = [
+  # Kwun Tong and Tsuen Wan Line colors adjusted
+  # East Kowloon, 610, 615P, 761P colors inverted
   {'name': "East Rail Line", 'value': "EAL"},
   {'name': "West Rail Line", 'value': "WRL"},
   {'name': "Tuen Ma Line", 'value': "TML"},
-  {'name': "Kwun Tong Line", 'value': "KTL"},
-  {'name': "Tsuen Wan Life", 'value': "TWL"},
+  {'name': "Kwun Tong Line, 507", 'value': "KTL"},
+  {'name': "Tsuen Wan Life, 505", 'value': "TWL"},
   {'name': "Island Line", 'value': "ISL"},
-  {'name': "South Island Line", 'value': "SIL"},
+  {'name': "South Island Line, 705", 'value': "SIL"},
   {'name': "Tseung Kwan O Line", 'value': "TKL"},
   {'name': "Airport Express", 'value': "AEL"},
-  {'name': "Tung Chung Line", 'value': "TCL"},
+  {'name': "Tung Chung Line, 751", 'value': "TCL"},
   {'name': "Disneyland Resort Line", 'value': "DRL"},
   {'name': "Light Rail", 'value': "LRT"},
+  {'name': "High Speed Rail", 'value': "HSR"},
+  {'name': "Northern Link", 'value': "NOL"},
+  {'name': "East Kowloon Line", 'value': "EKL"},
+  {'name': "South Island Line (West), 706", 'value': "SILW"},
+  {'name': "610", 'value': "610"},
+  {'name': "614", 'value': "614"},
+  {'name': "614P", 'value': "614P"},
+  {'name': "615", 'value': "615"},
+  {'name': "615P", 'value': "615P"},
+  {'name': "705", 'value': "705"},
+  {'name': "706", 'value': "706"},
+  {'name': "761P", 'value': "761P"},
   {'name': "Orange", 'value': "001"},
   {'name': "White", 'value': "002"},
 ]
@@ -203,7 +217,7 @@ segment_italics_choices = [
 led_alignment = typing.Optional[typing.Literal['left', 'center', 'right']]
 led_34_modes = typing.Optional[typing.Literal['1', '1i', '2', '2i', '3', '3i']]
 # S: Getsize sizes   C: Current properties   M: Minus padding   L: Logest text line
-led_sizer      = lambda s, c, m, l: (s[0]-c["unneeded_width"], s[1]-m+(c["height_plus"] if any(check in l for check in "gjpqy,;") else c["required_height_plus"]))
+led_sizer      = lambda s, c, m, l: [s[0]-c["unneeded_width"], s[1]-m+(c["height_plus"] if any(check in l for check in "gjpqy,;") else c["required_height_plus"])]
 led34_sizer    = lambda s, c, m, l: (s[0]-c["unneeded_width"], s[1]-m+c["height_plus"])
 led_positioner = lambda    c, m   : (0, c["padding"] - m)
 led34_positioner=lambda    c, m   : (-4, c["padding"] - m)
@@ -304,6 +318,9 @@ async def lcd(ctx, mode: typing.Optional[typing.Literal['regular', 'calc', 'dens
            ui.SlashOption(name="Black background",
            description="Whether to use a black background or not. Defaults to False.",
            type=bool, required=False),
+           ui.SlashOption(name="White text",
+           description="Whether to use a white text color or not. Defaults to False.",
+           type=bool, required=False),
            ui.SlashOption(name="Background Color",
            description="Optionally overwrites the background color. Use a 6-digit hexadecimal code.",
            type=str, required=False),
@@ -315,11 +332,11 @@ async def lcd(ctx, mode: typing.Optional[typing.Literal['regular', 'calc', 'dens
            ui.SlashOption(name="Icon", description="The icon.", type=str, required=False,
            choices=mtr_icon_choices),
            ])
-async def mtr_led(ctx, text, color="002", black_background=False, alignment="center", background_color=None, text_color=None, icon_position="n", icon=None):
+async def mtr_led(ctx, text, color="002", black_background=False, white_text=False, alignment="center", background_color=None, text_color=None, icon_position="n", icon=None):
   await ctx.defer()
   background_color = ("#" + (background_color.replace("#", "") if background_color else ("000000" if black_background else db["led_mtr_colors"][color]["bg"])) +
     ("00" if not background_color and color in ["tblack", "tdark", "tlight", "twhite"] else "FF"))
-  text_color = "#" + (text_color.replace("#", "") if text_color else db["led_mtr_colors"][color]["fg"]) + "FF"
+  text_color = "#" + (text_color.replace("#", "") if text_color else ("FFFFFF" if white_text else db["led_mtr_colors"][color]["fg"])) + "FF"
   text = text.replace(r"\n", "\n")
   current_font = led_sq_fonts["chi"]
   current_properties = led_font_dict[current_font]
@@ -458,11 +475,11 @@ async def led_segment_7(ctx, text, font, thickness="2", italics="", color="red",
            type=str, required=False, choices=color_choices)])
 async def led_bar_(ctx, total, lit, thickness=5, color="red"):
   # width = width if width else round(total/66.0555)
-  image = Image.new("RGBA", (total*20, thickness*20), color=db["led_colors"][color]["bg"])
+  image = Image.new("RGBA", (total*20, thickness*20), color=("#" + db["led_colors"][color]["bg"] + "FF"))
   draw = ImageDraw.Draw(image)
   for x in range(lit):
     for y in range(thickness):
-      draw.rectangle([x*20, y*20+1, x*20+17, y*20+18], fill=db["led_colors"][color]["fg"])
+      draw.rectangle([x*20, y*20+1, x*20+17, y*20+18], fill=("#" + db["led_colors"][color]["fg"] + "FF"))
   image.save('output.png')
   await ctx.respond(file=discord.File('output.png'))
   try_delete('output.png')

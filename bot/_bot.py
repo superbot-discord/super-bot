@@ -295,6 +295,8 @@ swear = ["fuck", "shit", "on9", "bitch", "屌"]
 
 @bot_.event
 async def on_message(message: discord.Message):
+  if message.author.id == 752335217339007067:
+    return
   if message.guild.id == 953961139136528445:
     msg = message.content.lower().replace("$", "s").replace("|<", "k").replace("<", "c").replace("!", "i")
     for x in swear:
