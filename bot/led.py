@@ -2,6 +2,8 @@ from _bot import bs
 from shared import commands, db, discord, Image, ImageDraw, ImageFont, try_delete, typing, ui
 #"icyan" : {"fg":"#87B33FFF", "bg":"#131402FF"}
 
+
+# All migrated in the file except =led_bar
 font_led      = ImageFont.truetype("fonts/led.ttf", 50)
 font_led_bold = ImageFont.truetype("fonts/led_bold.ttf", 50)
 font_led_chi  = ImageFont.truetype("fonts/led_chinese.otf", 50)
@@ -294,7 +296,7 @@ async def lcd(ctx, mode: typing.Optional[typing.Literal['regular', 'calc', 'dens
   try_delete('output.png')
 
 
-@bs.command(name="led_mtr", description="製作假LED版，只限Scratch in Discord。", options=[
+@bs.command(name="mtr_led", description="製作假LED版，只限Scratch in Discord。", options=[
            ui.SlashOption(name="Text", description="The text to show on the LED screen. Use \\n for new lines.",
            type=str, required=True),
            ui.SlashOption(name="Color", description="The color of the LED screen. Defaults to white.",
@@ -312,9 +314,8 @@ async def lcd(ctx, mode: typing.Optional[typing.Literal['regular', 'calc', 'dens
            type=str, required=False, choices=mtr_icon_pos_choices),
            ui.SlashOption(name="Icon", description="The icon.", type=str, required=False,
            choices=mtr_icon_choices),
-           ], default_permission=True, guild_ids=[867962875422081024],
-           guild_permissions={867962875422081024: ui.SlashPermission()})
-async def led_mtr(ctx, text, color="002", black_background=False, alignment="center", background_color=None, text_color=None, icon_position="n", icon=None):
+           ])
+async def mtr_led(ctx, text, color="002", black_background=False, alignment="center", background_color=None, text_color=None, icon_position="n", icon=None):
   await ctx.defer()
   background_color = ("#" + (background_color.replace("#", "") if background_color else ("000000" if black_background else db["led_mtr_colors"][color]["bg"])) +
     ("00" if not background_color and color in ["tblack", "tdark", "tlight", "twhite"] else "FF"))
@@ -350,6 +351,7 @@ async def led_mtr(ctx, text, color="002", black_background=False, alignment="cen
   await ctx.respond(file=discord.File('output.png'))
   try_delete('output.png')
 
+
 @bs.command(name="led_square", description="Generates a fake LED screen with square dots.", options=[
            ui.SlashOption(name="Text", description="The text to show on the LED screen. Use \\n for new lines.", type=str,
            required=True), ui.SlashOption(name="Font", description="The font of the text. Defaults to regular.",
@@ -382,15 +384,18 @@ async def led_square(ctx, text, font="regular", color="red", alignment="center",
 
 @bs.command(name="led_scattered", description="Generates a fake LED screen with scattered square dots.",
            options=[ui.SlashOption(name="Text", description="The text to show on the LED screen.",
-           type=str, required=True), ui.SlashOption(name="Font",
-           description="The font of the text. Defaults to regular.", type=str, required=False,
-           choices=led_sc_choices), ui.SlashOption(name="Color",
-           description="The color of the LED screen. Defaults to red.", type=str, required=False,
-           choices=color_choices), ui.SlashOption(name="Alignment",
+           type=str, required=True),
+           ui.SlashOption(name="Font", description="The font of the text. Defaults to regular.",
+           type=str, required=False, choices=led_sc_choices),
+           ui.SlashOption(name="Color", description="The color of the LED screen. Defaults to red.",
+           type=str, required=False, choices=color_choices),
+           ui.SlashOption(name="Alignment",
            description="The alignment of the text. Defaults to center. Only applicable if you use \\n to add a new line.",
-           type=str, required=False, choices=alignment_choices), ui.SlashOption(name="Background Color",
+           type=str, required=False, choices=alignment_choices),
+           ui.SlashOption(name="Background Color",
            description="Optionally overwrites the background color. Use a 6-digit hexadecimal code.",
-           type=str, required=False), ui.SlashOption(name="Text Color",
+           type=str, required=False),
+           ui.SlashOption(name="Text Color",
            description="Optionally overwrites the text color. Use a 6-digit hexadecimal code.",
            type=str, required=False)])
 async def led_scattered(ctx, text, font="regular", color="red", alignment="center", background_color=None, text_color=None):
@@ -437,6 +442,27 @@ async def led_segment_7(ctx, text, font, thickness="2", italics="", color="red",
   image = Image.new("RGBA", led34_sizer(sizes, current_properties, minus_padding, text.splitlines()[len(text.splitlines())-1]), color=db["led_colors"][color]["bg"])
   draw = ImageDraw.Draw(image)
   draw.multiline_text(led34_positioner(current_properties, minus_padding), text, font=current_font, fill=db["led_colors"][color]["fg"], spacing=current_properties["spacing"], align=alignment)
+  image.save('output.png')
+  await ctx.respond(file=discord.File('output.png'))
+  try_delete('output.png')
+
+
+@bs.command(name="led_bar", description="Generates a fake LED progress bar.", options=[
+           ui.SlashOption(name="Total", description="The total amount of LED squares, between 1 and 500.",
+           type=int, required=True, min_value=1, max_value=500),
+           ui.SlashOption(name="Lit", description="The amount of lit LED squares, between 1 and 500.",
+           type=int, required=True, min_value=1, max_value=500),
+           ui.SlashOption(name="Thickness", description="The thickness of the LED bar, between 1 and 10. Defaults to 5.",
+           type=int, required=False, min_value=1, max_value=10),
+           ui.SlashOption(name="Color", description="The color of the LED bar. Defaults to red.",
+           type=str, required=False, choices=color_choices)])
+async def led_bar_(ctx, total, lit, thickness=5, color="red"):
+  # width = width if width else round(total/66.0555)
+  image = Image.new("RGBA", (total*20, thickness*20), color=db["led_colors"][color]["bg"])
+  draw = ImageDraw.Draw(image)
+  for x in range(lit):
+    for y in range(thickness):
+      draw.rectangle([x*20, y*20+1, x*20+17, y*20+18], fill=db["led_colors"][color]["fg"])
   image.save('output.png')
   await ctx.respond(file=discord.File('output.png'))
   try_delete('output.png')
@@ -496,7 +522,7 @@ async def led(ctx, mode: typing.Optional[typing.Literal['regular', 'bold', 'caps
   try_delete('output.png')
 
 
-@commands.command()
+@commands.command() # Will be deleted
 async def led_server(ctx, mode: typing.Optional[typing.Literal['regular', 'bold', 'caps', 'mono', 'serif']] = 'regular', color: led_colors = 'red', alignment: led_alignment = 'left'):
   if mode == 'bold':
     current_font = font_led_bold
@@ -545,7 +571,7 @@ async def led2(ctx, mode: typing.Optional[typing.Literal['regular', 'bold', 'cap
   try_delete('output.png')
 
 
-@commands.command()
+@commands.command() # Will be deleted
 async def led2_server(ctx, mode: typing.Optional[typing.Literal['regular', 'bold', 'caps', 'fat', 'modern', 'serif']] = 'regular', color: led_colors = 'red', alignment: led_alignment = 'left'):
   if mode == 'bold':
     current_font = font_led2_bold
@@ -596,7 +622,7 @@ async def led3(ctx, mode: led_34_modes = '2', color: led_colors = 'red', alignme
   try_delete('output.png')
 
 
-@commands.command()
+@commands.command() # Will be deleted
 async def led3_server(ctx, mode: led_34_modes = '1', color: led_colors = 'red', alignment: led_alignment = 'left'):
   if mode == '1':
     current_font = font_led3_1
@@ -647,7 +673,7 @@ async def led4(ctx, mode: led_34_modes = '2', color: led_colors = 'red', alignme
   try_delete('output.png')
 
 
-@commands.command()
+@commands.command() # Will be deleted
 async def led4_server(ctx, mode: led_34_modes = '1', color: led_colors = 'red', alignment: led_alignment = 'left'):
   if mode == '1':
     current_font = font_led4_1
@@ -673,9 +699,9 @@ async def led4_server(ctx, mode: led_34_modes = '1', color: led_colors = 'red', 
   try_delete('output.png')
 
 
-@commands.command()
+@commands.command() # Migrated
 async def led_bar(ctx, total : int, step : int, color: led_colors = 'red', width : int = 5):
-  #width = width if width else round(total/66.0555)
+  width = width if width else round(total/66.0555)
   image = Image.new("RGBA", (total*20, width*20), color=db["led_colors"][color]["bg"])
   draw = ImageDraw.Draw(image)
   for x in range(step):

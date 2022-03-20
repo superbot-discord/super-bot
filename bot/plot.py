@@ -30,6 +30,7 @@ def koch_snowflake(order):
   x, y = points.real, points.imag
   return x, y
 
+
 @commands.command()
 async def ascii(ctx, *, text):
   output = f'''{text2art(text,"cybermedium")}
@@ -69,6 +70,7 @@ async def ascii(ctx, *, text):
   await ctx.reply(file=discord.File('ascii.txt'))
   try_delete('ascii.txt')
 
+
 @commands.command()
 async def barh(ctx, numbers, label, *, title="No_title_required"):
   try:
@@ -100,6 +102,7 @@ async def barh(ctx, numbers, label, *, title="No_title_required"):
   except:
     await ctx.reply("Invalid input. Please try again.")
 
+
 @commands.command(aliases=["bar", "barchart"])
 async def barv(ctx, numbers, label, *, title="No_title_required"):
   try:
@@ -130,6 +133,7 @@ async def barv(ctx, numbers, label, *, title="No_title_required"):
   except:
     await ctx.reply("Invalid input. Please try again.")
 
+
 @commands.command(aliases=["brokenl", "brokel", "breakl", "brokenline"])
 async def bline(ctx, numbers, *, title="No_title_required"):
   try:
@@ -151,6 +155,7 @@ async def bline(ctx, numbers, *, title="No_title_required"):
     try_delete('brokenline.svg')
   except:
     await ctx.reply("Invalid input. Please try again.")
+
 
 @commands.command(aliases=["brokenl2", "brokel2", "breakl2", "brokenline2"])
 async def bline2(ctx, numbers, xnumbers, *, title="No_title_required"):
@@ -175,6 +180,7 @@ async def bline2(ctx, numbers, xnumbers, *, title="No_title_required"):
     try_delete('brokenline.svg')
   except:
     await ctx.reply("Invalid input. Please try again.")
+
 
 @commands.command()
 async def draw(ctx, *, text):
@@ -203,6 +209,7 @@ async def draw(ctx, *, text):
   else:
     await ctx.reply(f"```{output}```", file=discord.File('drawing.txt'))
   try_delete('drawing.txt')
+
 
 @commands.command()
 async def fonts(ctx, *, text):
@@ -255,6 +262,7 @@ async def fonts(ctx, *, text):
   await ctx.reply(file=discord.File('fonts.txt'))
   try_delete('fonts.txt')
 
+
 @commands.command(aliases=["mathplot", "mathgraph"])
 async def graph(ctx, func, range_low:float=-10.0, range_high:float=10.0, equalize:specialbool=False, *, title="No_title_required"):
   try:
@@ -278,6 +286,7 @@ async def graph(ctx, func, range_low:float=-10.0, range_high:float=10.0, equaliz
   except:
     await ctx.reply("Invalid input. Please try again.")
 
+
 @commands.command(aliases=["histogram", "histograms"])
 async def hist(ctx, numbers, *, title="No_title_required"):
   try:
@@ -298,6 +307,7 @@ async def hist(ctx, numbers, *, title="No_title_required"):
     try_delete('histogram.svg')
   except:
     await ctx.reply("Invalid input. Please try again.")
+
 
 @commands.command(aliases=["multibrokenl", "multibrokel", "multibreakl", "multibrokenline"])
 async def multibline(ctx, numbers, labels, *, title="No_title_required"):
@@ -325,6 +335,7 @@ async def multibline(ctx, numbers, labels, *, title="No_title_required"):
   except:
     await ctx.reply("Invalid input. Please try again.")
 
+
 @commands.command(aliases=["multimathplot", "multimathgraph"])
 async def multigraph(ctx, func, range_low:float=-10.0, range_high:float=10.0, equalize:specialbool=False, *, title="No_title_required"):
   try:
@@ -346,6 +357,7 @@ async def multigraph(ctx, func, range_low:float=-10.0, range_high:float=10.0, eq
     try_delete('graph.svg')
   except:
     await ctx.reply("Invalid input. Please try again.")
+
 
 @commands.command(aliases=["piechart", "circlechart"])
 async def pie(ctx, numbers, label="", *, title="No_title_required"):
@@ -382,6 +394,7 @@ async def pie(ctx, numbers, label="", *, title="No_title_required"):
   except:
    await ctx.reply("Invalid input. Please try again.")
 
+
 @commands.command()
 async def qrmake(ctx, *, text):
   textlist = text.split("\n")
@@ -411,6 +424,7 @@ async def qrmake(ctx, *, text):
   await ctx.reply(file=discord.File("QRCode.png"))
   try_delete('QRCode.png')
 
+
 @commands.command(aliases=["simpcolour", "simplecolor", "simplecolour"])
 async def simpcolor(ctx, *, name):
   plt.clf()
@@ -432,6 +446,7 @@ async def simpcolor(ctx, *, name):
   await ctx.reply(files=[discord.File("color.png"), discord.File("color.svg")])
   try_delete('color.png')
   try_delete('color.svg')
+
 
 @commands.command(alias=["snowgraph", "snowflake"])
 async def snow(ctx, recursion: int = 7):
@@ -456,6 +471,7 @@ async def snow(ctx, recursion: int = 7):
   plt.close('all')
   try_delete('snow.png', 'snow.svg')
 
+
 @bs.command(name="snowflake", description="Generates a beautiful Koch Snowflake.", options=[
             ui.SlashOption(name="Recursions", required=True, type=int, min_value=0, max_value=11,
             description="The number of recursions. Must be between 0 and 11 inclusive.")])
@@ -478,6 +494,7 @@ async def snow_(ctx, recursions: int = 7):
   await ctx.respond(files=[discord.File("snow.png"), discord.File("snow.svg")])
   plt.close('all')
   try_delete('snow.png', 'snow.svg')
+
 
 @commands.command()
 async def table(ctx, *, text):
@@ -524,6 +541,7 @@ async def table(ctx, *, text):
   await ctx.reply(f"```{output}```", file=discord.File('table.txt'))
   try_delete('table.txt')
 
+
 @commands.command()
 async def table_plain(ctx, *, text):
   contents = text.split(f"\n")
@@ -556,6 +574,7 @@ async def table_plain(ctx, *, text):
   f.close()
   await ctx.reply(f"```{output}```", file=discord.File('table.txt'))
   try_delete('table.txt')
+
 
 def setup(bot):
   bot.add_command(ascii)
