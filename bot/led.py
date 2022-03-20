@@ -135,7 +135,6 @@ mtr_color_choices = [
   {'name': "Airport Express", 'value': "AEL"},
   {'name': "Tung Chung Line, 751", 'value': "TCL"},
   {'name': "Disneyland Resort Line", 'value': "DRL"},
-  {'name': "Light Rail", 'value': "LRT"},
   {'name': "High Speed Rail", 'value': "HSR"},
   {'name': "Northern Link", 'value': "NOL"},
   {'name': "East Kowloon Line", 'value': "EKL"},
