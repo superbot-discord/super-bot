@@ -139,7 +139,7 @@ mtr_color_choices = [
   {'name': "High Speed Rail", 'value': "HSR"},
   {'name': "Northern Link", 'value': "NOL"},
   {'name': "East Kowloon Line", 'value': "EKL"},
-  {'name': "South Island Line (West), 706", 'value': "SILW"},
+  {'name': "South Island Line W, 706", 'value': "SILW"},
   {'name': "610", 'value': "610"},
   {'name': "614", 'value': "614"},
   {'name': "614P", 'value': "614P"},
