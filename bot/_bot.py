@@ -324,7 +324,7 @@ async def on_message(message: discord.Message):
 async def on_member_update(before: discord.Member, after: discord.Member):
   if 956100727758000138 in [x.id for x in after.roles]:
     if after.nick.replace(" ", "") != "無限電視 小丑🤡":
-      after.nick = "無限電視 小丑🤡"
+      await after.edit(nick="無限電視 小丑🤡")
 
 
 @bot_.event
