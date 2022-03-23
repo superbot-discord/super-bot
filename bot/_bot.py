@@ -293,7 +293,7 @@ async def on_reaction_remove(reaction, user):
 
 swear = ["fuck", "shit", "on9", "bitch", "屌"]
 
-@bot_.event
+@bot_.event # Swear word detector for SiD; Autopublisher; Command handler
 async def on_message(message: discord.Message):
   if message.author.id == 752335217339007067:
     return
@@ -318,6 +318,13 @@ async def on_message(message: discord.Message):
       await message.channel.send("You are banned from the bot. Reason: "+banned_text[banned_ids.index(message.author.id)])
   except:
     pass
+
+
+@bot_.event
+async def on_member_update(before: discord.Member, after: discord.Member):
+  if 956100727758000138 in [x.id for x in after.roles]:
+    if after.nick.replace(" ", "") != "無限電視 小丑🤡":
+      after.nick = "無限電視 小丑🤡"
 
 
 @bot_.event

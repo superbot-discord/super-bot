@@ -361,7 +361,7 @@ async def mtr_led(ctx, text, color="002", black_background=False, white_text=Fal
     # i.e. Middle point of LED board, then subtract half of icon image
     icon_xpos = int((img_dimensions[0] - icon_img.width) // 2)
     icon_ypos = 0 if icon_position == "t" else (img_dimensions[1] - 50)
-    image.paste(icon_img, box=(icon_xpos, icon_ypos))
+    image.paste(icon_img, box=(icon_xpos, icon_ypos), mask=icon_img)
 
   image.save('output.png')
   await ctx.respond(file=discord.File('output.png'))
