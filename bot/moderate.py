@@ -97,6 +97,25 @@ async def makeinvite(ctx, timetocount = "0", uses: int = 0):
     await ctx.reply("You don't have the required permission: Generate Invites.")
 
 
+@bs.command(name="make_invite", description="Generates an invite to the server.", options=[
+           ui.SlashOption(name="Duration",
+           description="The max. duration of the invite. Use wdhms units, e.g. 1d3h=27h. Max. 1 week, defaults to eternity.",
+           type=str, required=True),
+           ui.SlashOption(name="Maximum uses",
+           description="The maximum number of users who can use the invite. Maximum to 100, defaults to infinity.",
+           type=int, required=False, min_value=0, max_value=100)])
+async def make_invite(ctx, duration = "0", maximum_uses: int = 0):
+  if has_perms(ctx.channel, ctx.author, 0):
+    seconds = int(timedelta(**{
+      UNITS.get(m.group('unit').lower(), 'seconds'): int(m.group('val'))
+      for m in re.finditer(r'(?P<val>\d+)(?P<unit>[smhdw]?)', duration, flags=re.I)
+    }).total_seconds())
+    theinvite = await ctx.channel.create_invite(max_age = seconds, max_uses = maximum_uses)
+    await ctx.respond(f"An invite was generated with {seconds} seconds of valid duration and {maximum_uses} maximum users: {theinvite.url}\nNote: a zero indicates infinity.")
+  else:
+    await ctx.respond("You don't have the required permission: Generate Invites.")
+
+
 @commands.command(aliases=['makerole']) # Migrated
 async def makeroles(ctx, times: int = 1, *, name="Sample role $num"):
   if has_perms(ctx.channel, ctx.author, 28):
@@ -224,7 +243,7 @@ async def purgeuser(ctx, num: int, *userinput: discord.User):
     await ctx.reply("You don't have the required permission: Manage messages.")
 
 
-@commands.command()
+@commands.command() # Will be removed
 async def react(ctx, emoji: discord.Emoji, message=None):
   if message == None:
     potential_reference = ctx.message.reference
@@ -388,7 +407,7 @@ async def slowmode(ctx, sec=None, *channels: typing.Union[discord.TextChannel,st
     await ctx.reply(f"The current slowmode is {ctx.channel.slowmode_delay} second(s).")
 
 
-@commands.command()
+@commands.command() # Will be removed
 async def tts(ctx, *, desc):
   if has_perms(ctx.channel, ctx.author, 12):
     await ctx.reply(desc, tts= True)
