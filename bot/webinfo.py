@@ -50,6 +50,7 @@ async def definition(ctx, *, word):
     pass
   await ctx.reply(embed=embed)
 
+
 @commands.command(aliases=['http', 'https', 'statuscode'])
 async def error(ctx, code="404", *, disposed=None):
   try:
@@ -60,6 +61,7 @@ async def error(ctx, code="404", *, disposed=None):
   except:
     await ctx.reply("Invalid code!")
 
+
 @commands.command(aliases=['httpcat', 'httpscat', 'httpcats', 'httpscats'])
 async def errorcat(ctx, code="404", *, disposed=None):
   if int(code) in db["httpcat"]:
@@ -67,12 +69,14 @@ async def errorcat(ctx, code="404", *, disposed=None):
   else:
     await ctx.reply("Invalid code!")
 
+
 @commands.command(aliases=['httpdog', 'httpsdog', 'httpdogs', 'httpsdogs'])
 async def errordog(ctx, code="404", *, disposed=None):
   if int(code) in db["httpdog"]:
     await ctx.reply(f'https://httpstatusdogs.com/img/{code}.jpg')
   else:
     await ctx.reply("Invalid code!")
+
 
 @commands.command()
 async def forecast(ctx, *, location):
@@ -88,6 +92,7 @@ async def forecast(ctx, *, location):
   files = [discord.File(f'forecasts_{ctx.message.id}.html'), discord.File('forecasts_css.css')])
   try_delete(f'forecasts_{ctx.message.id}.html')
 
+
 @bs.command(name="gender", description="Estimates the gender of a name.", options=[ui.SlashOption(
            name="Name", description="The name to estimate the gender of.", type=str, required=True)
            ])
@@ -99,6 +104,7 @@ async def gender(ctx, *, name):
   else:
     await ctx.respond("No gender was found for the name.")
 
+
 @commands.command() # Migrated
 async def gender(ctx, *, name):
   r=requests.get(f"https://api.genderize.io/?name={name}")
@@ -107,6 +113,7 @@ async def gender(ctx, *, name):
     await ctx.reply(f"{name} is {int(gender_json['probability']*100)}% a {gender_json['gender']}.")
   else:
     await ctx.reply("No gender was found for the name.")
+
 
 @bs.command(name="google_search", description="Searches for a keyword on Google.",
            options=[ui.SlashOption(name="Query", description="The query to search for.",
@@ -125,6 +132,7 @@ async def google_search(ctx: ui.SlashInteraction, query):
   embed = Embed(title=f"Google search results for {query}", description=desc)
   await ctx.respond(embed=embed)
 
+
 @commands.command() # Migrated
 async def google(ctx, *, query):
   r=requests.get(f"https://customsearch.googleapis.com/customsearch/v1?q={query}&key=AIzaSyD1MZMlUhPVKfBwpuzpB8DRxK_rGRf900c&cx=6231cd28c1acb6c83").json()['items']
@@ -140,7 +148,8 @@ async def google(ctx, *, query):
   embed = Embed(title=f"Google search results for {query}", description=desc)
   await ctx.reply(embed=embed)
 
-@commands.command()
+
+@commands.command() # Will be removed
 async def minecraft(ctx, *, item="tnt"):
   await ctx.channel.trigger_typing()
   r=requests.get('https://minecraft.fandom.com/wiki/'+item)
@@ -184,6 +193,7 @@ async def minecraft(ctx, *, item="tnt"):
   except:
     await ctx.reply("No Wiki page with that name found.")
 
+
 @bs.command(name="redirect", description="Traces the redirect(s) of a URL.", options=[
            ui.SlashOption(name="URL", description="The URL to trace the redirect(s) of.", type=str,
            required=True)])
@@ -203,6 +213,7 @@ async def redirect(ctx, *, url):
   except:
     await ctx.reply("Invalid URL. Please try again.")
 
+
 @commands.command(aliaes=["redir", "redirs", "redirects", "red"]) # Migrated
 async def redirect(ctx, *, url):
   await ctx.channel.trigger_typing()
@@ -220,6 +231,7 @@ async def redirect(ctx, *, url):
       await ctx.reply("Initial URL: "+urllist[0]+f"\n"+f"\n".join([f"{i.status_code}: {i.url}" for i in urllist[1:urlend]])+"Final URL: "+urllist[len(urllist)-1])
   except:
     await ctx.reply("Invalid URL. Please try again.")
+
 
 @commands.command()
 async def rss(ctx, *, url):
@@ -242,6 +254,7 @@ async def rss(ctx, *, url):
   await ctx.reply(embed=embed, files=[discord.File(f"rss{ctx.message.id}.html"), discord.File("./assets/rss_css.css")])
   try_delete(f"rss{ctx.message.id}.html")
 
+
 @commands.command()
 async def translate(ctx, lang="list", fromlang="auto", *, text="Sample text"):
   if lang == "list" or lang == "all":
@@ -263,6 +276,7 @@ async def translate(ctx, lang="list", fromlang="auto", *, text="Sample text"):
       await ctx.reply(f"**Translation from {srclangdict[fromlang]} to {langdict[lang]}:**\n{translation.text.replace('u003c', '<').replace('u003e', '>').replace('u0026', '&')}")
     except:
       await ctx.reply("Language not found! Please use `=translate list` to get a list of languages.")
+
 
 @commands.command()
 async def unscramble(ctx, text, length="0"):
@@ -317,6 +331,7 @@ async def unscramble(ctx, text, length="0"):
   await ctx.reply(embed=output, file=discord.File("output.txt"))
   try_delete('output.txt')
 
+
 @commands.command()
 async def weather(ctx, *, location):
   r1=requests.get(f"http://api.openweathermap.org/data/2.5/weather?q={location}&appid=a920f6ea8a76b95a520a52e904965b14&units=metric").json()
@@ -348,6 +363,7 @@ async def weather(ctx, *, location):
   embed.set_thumbnail(url=f"http://openweathermap.org/img/wn/{r1['weather'][0]['icon']}@2x.png")
   await ctx.reply(embed=embed)
 
+
 @commands.command()
 async def wiki(ctx, *, query):
   await ctx.channel.trigger_typing()
@@ -364,6 +380,7 @@ async def wiki(ctx, *, query):
   await ctx.reply(embed=embed, files=[discord.File(f"Wiki_{ctx.message.id}"), discord.File("wiki_css.css")])
   try_delete(f"Wiki_{ctx.message.id}")
 
+
 @commands.command()
 async def wiki_search(ctx, *, query):
   await ctx.channel.trigger_typing()
@@ -379,8 +396,9 @@ async def wiki_search(ctx, *, query):
     embed.add_field(name=f0n, value=f"{y_extract[:1023]}…" if len(y_extract) > 1024 else y_extract, inline= False)
   await ctx.reply(embed=embed)
 
+
 @bs.command(name="youtube_channel", description="Shows information about a YouTube channel.",
-           options=[ui.SlashOption(name= "Channel", description= "The link of the channel to show information of.",
+           options=[ui.SlashOption(name="Channel", description="The link of the channel to show information of.",
            type=str, required=True)])
 async def youtube_channel(ctx: ui.SlashInteraction, channel):
   chnl = pytube.Channel(channel)
@@ -404,11 +422,12 @@ async def youtube_channel(ctx: ui.SlashInteraction, channel):
   embed.add_field(name="Average views", value=f"{round(totalview/len(videos), 3):,}", inline= True)
   embed.add_field(name="Average length", value=format_length(round(totallen/len(videos))), inline= True)
   embed.add_field(name="Average rating", value=f"{str(round(totalrating/len(videos)*20, 3))}%", inline= True)
-  embed.set_footer(text="Use =youtube [Link] to download videos.")
+  embed.set_footer(text="Use /youtube_video to download videos.")
   await yt_msg.edit(embed=embed)
 
+
 @bs.command(name="youtube_video", description="Shows information about a YouTube video.", options=[
-           ui.SlashOption(name= "Link", description= "The link of the video to show information of.",
+           ui.SlashOption(name="Link", description="The link of the video to show information of.",
            type=str, required=True)])
 async def youtube_video(ctx: ui.SlashInteraction, link):
   try:
@@ -498,7 +517,33 @@ Audio - Minimum size\t\t{format_video(video8)}'''
   embed.set_thumbnail(url=youtube.thumbnail_url)
   await ctx.respond(embed=embed, file=discord.File('extra_downloads.txt'))
 
-@commands.command() # Migrated except search
+
+@bs.command(name="youtube_search", description="Searches for YouTube videos.", options=[
+           ui.SlashOption(name="Query", description="The query to search with.", type=str,
+           required=True),
+           ui.SlashOption(name="Page", description="The page of results to get. Between 1 and 5, defaults to 1.",
+           type=int, required=False, min_value=1, max_value=5)])
+async def youtube_search(ctx: ui.SlashInteraction, query, page=1):
+  searching = pytube.Search(query)
+  try:
+    for x in range(page+1):
+      searching.get_next_results()
+  except:
+    pass
+  try:
+    videos = searching.results[20*(page-1):20*page]
+  except:
+    videos = searching.results[0:20]
+  desc = ""
+  for x in videos:
+    desc+=f"**[{x.title}]({x.watch_url})**\n{format_length(x.length)} | {x.views:,} Views | By [{pytube.Channel(x.channel_url).channel_name}]({x.channel_url})\n"
+  embed = Embed(title="Search results", description=desc)
+  embed.set_footer(text="Use /youtube_video to download videos.")
+  await ctx.reply(embed=embed)
+  return
+
+
+@commands.command() # Migrated
 async def youtube(ctx, *, link):
   await ctx.channel.trigger_typing()
   if link.startswith("search "):
@@ -648,24 +693,24 @@ Audio - Minimum size\t\t{format_video(video8)}'''
     embed.set_thumbnail(url=youtube.thumbnail_url)
     await ytmsg.edit(embed=embed)
 
-      # youtube_view = ui.View(timeout=0)
-      # youtube_view.add_item(ui.Button(style=discord.ButtonStyle.success, row=0, label="Best quality", disabled=True))
-      # youtube_view.add_item(ui.Button(style=discord.ButtonStyle.url, row=0, label="Video+Audio", url=video1.url))
-      # youtube_view.add_item(ui.Button(style=discord.ButtonStyle.url, row=0, label="Video only", url=video2.url))
-      # youtube_view.add_item(ui.Button(style=discord.ButtonStyle.url, row=0, label="Audio only", url=video3.url))
-      # youtube_view.add_item(ui.Button(style=discord.ButtonStyle.primary, row=1, label="Medium quality", disabled=True))
-      # youtube_view.add_item(ui.Button(style=discord.ButtonStyle.url, row=1, label="Video+Audio", url=video4.url))
-      # youtube_view.add_item(ui.Button(style=discord.ButtonStyle.url, row=1, label="Video only", url=video4b.url))
-      # youtube_view.add_item(ui.Button(style=discord.ButtonStyle.url, row=1, label="Audio only", url=video5.url))
-      # youtube_view.add_item(ui.Button(style=discord.ButtonStyle.secondary, row=2, label="Less than 8MB", disabled=True))
-      # youtube_view.add_item(ui.Button(style=discord.ButtonStyle.url, row=2, label="Video+Audio", url=videox1.url) if videox1 else ui.Button(style=discord.ButtonStyle.url, row=2, label="Video+Audio", url="https://example.com", disabled=True))
-      # youtube_view.add_item(ui.Button(style=discord.ButtonStyle.url, row=2, label="Video only", url=videox3.url)  if videox1 else ui.Button(style=discord.ButtonStyle.url, row=2, label="Video only", url="https://example.com", disabled=True))
-      # youtube_view.add_item(ui.Button(style=discord.ButtonStyle.url, row=2, label="Audio only", url=videox2.url)  if videox1 else ui.Button(style=discord.ButtonStyle.url, row=2, label="Audio only", url="https://example.com", disabled=True))
-      # youtube_view.add_item(ui.Button(style=discord.ButtonStyle.danger, row=3, label="Medium quality", disabled=True))
-      # youtube_view.add_item(ui.Button(style=discord.ButtonStyle.url, row=3, label="Video+Audio", url=video6.url))
-      # youtube_view.add_item(ui.Button(style=discord.ButtonStyle.url, row=3, label="Video only", url=video7.url))
-      # youtube_view.add_item(ui.Button(style=discord.ButtonStyle.url, row=3, label="Audio only", url=video8.url))
-      # await ctx.reply(view=youtube_view)
+# youtube_view = ui.View(timeout=0)
+# youtube_view.add_item(ui.Button(style=discord.ButtonStyle.success, row=0, label="Best quality", disabled=True))
+# youtube_view.add_item(ui.Button(style=discord.ButtonStyle.url, row=0, label="Video+Audio", url=video1.url))
+# youtube_view.add_item(ui.Button(style=discord.ButtonStyle.url, row=0, label="Video only", url=video2.url))
+# youtube_view.add_item(ui.Button(style=discord.ButtonStyle.url, row=0, label="Audio only", url=video3.url))
+# youtube_view.add_item(ui.Button(style=discord.ButtonStyle.primary, row=1, label="Medium quality", disabled=True))
+# youtube_view.add_item(ui.Button(style=discord.ButtonStyle.url, row=1, label="Video+Audio", url=video4.url))
+# youtube_view.add_item(ui.Button(style=discord.ButtonStyle.url, row=1, label="Video only", url=video4b.url))
+# youtube_view.add_item(ui.Button(style=discord.ButtonStyle.url, row=1, label="Audio only", url=video5.url))
+# youtube_view.add_item(ui.Button(style=discord.ButtonStyle.secondary, row=2, label="Less than 8MB", disabled=True))
+# youtube_view.add_item(ui.Button(style=discord.ButtonStyle.url, row=2, label="Video+Audio", url=videox1.url) if videox1 else ui.Button(style=discord.ButtonStyle.url, row=2, label="Video+Audio", url="https://example.com", disabled=True))
+# youtube_view.add_item(ui.Button(style=discord.ButtonStyle.url, row=2, label="Video only", url=videox3.url)  if videox1 else ui.Button(style=discord.ButtonStyle.url, row=2, label="Video only", url="https://example.com", disabled=True))
+# youtube_view.add_item(ui.Button(style=discord.ButtonStyle.url, row=2, label="Audio only", url=videox2.url)  if videox1 else ui.Button(style=discord.ButtonStyle.url, row=2, label="Audio only", url="https://example.com", disabled=True))
+# youtube_view.add_item(ui.Button(style=discord.ButtonStyle.danger, row=3, label="Medium quality", disabled=True))
+# youtube_view.add_item(ui.Button(style=discord.ButtonStyle.url, row=3, label="Video+Audio", url=video6.url))
+# youtube_view.add_item(ui.Button(style=discord.ButtonStyle.url, row=3, label="Video only", url=video7.url))
+# youtube_view.add_item(ui.Button(style=discord.ButtonStyle.url, row=3, label="Audio only", url=video8.url))
+# await ctx.reply(view=youtube_view)
 
 def setup(bot):
   bot.add_command(definition)

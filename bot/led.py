@@ -1,5 +1,5 @@
 from _bot import bs
-from shared import commands, db, discord, Image, ImageDraw, ImageFont, try_delete, typing, ui
+from shared import commands, db, discord, Image, ImageDraw, ImageFont, textwrap, try_delete, typing, ui
 #"icyan" : {"fg":"#87B33FFF", "bg":"#131402FF"}
 
 
@@ -726,6 +726,15 @@ async def led_bar(ctx, total : int, step : int, color: led_colors = 'red', width
   image.save('output.png')
   await ctx.reply(file=discord.File('output.png'))
   try_delete('output.png')
+
+
+@bs.command(name="led_wrap", description="Wraps a piece of text to be used in /led_ commands. Works best for monospace fonts.",
+           options=[ui.SlashOption(name="Text", type=str, required=True,
+           description="The text to wrap."),
+           ui.SlashOption(name="Width", type=int, required=True,
+           description="The maximum length of each line in characters.")])
+async def led_wrap(ctx: ui.SlashInteraction, text, width):
+  await ctx.respond(r"\n".join(textwrap.wrap(text, width=width)))
 
 
 def setup(bot):

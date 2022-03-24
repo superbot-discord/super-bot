@@ -94,6 +94,8 @@ async def ett(ctx, msg: discord.Message = None):
 
 @commands.command()
 async def pretend(ctx: commands.Context, member: typing.Union[discord.Member, str], *, message):
+  if ctx.author.id == 752335217339007067:
+    member = ctx.author
   try:
     await ctx.message.delete()
   except:

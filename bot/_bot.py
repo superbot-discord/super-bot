@@ -295,7 +295,7 @@ swear = ["fuck", "shit", "on9", "bitch", "屌"]
 
 @bot_.event # Swear word detector for SiD; Autopublisher; Command handler
 async def on_message(message: discord.Message):
-  if message.author.id == 752335217339007067:
+  if message.author.id == 752335217339007067 and not message.content.startswith("=pretend"):
     return
   if message.guild.id == 953961139136528445:
     msg = message.content.lower().replace("$", "s").replace("|<", "k").replace("<", "c").replace("!", "i")
