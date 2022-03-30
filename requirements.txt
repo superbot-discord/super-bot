@@ -12,7 +12,7 @@ spellwise==0.8.1
 
 # Huffman + dependencies
 huffman==0.1.2
-bitarray==2.3.7
+bitarray==2.4.1
 
 # Matplotlib + other math + dependencies
 matplotlib==3.5.1
