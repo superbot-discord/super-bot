@@ -332,8 +332,8 @@ async def on_ready():
   global owner
   activity = discord.Activity(
     type=discord.ActivityType.playing,
-    name=f"with =help in {len(bot_.guilds)} servers", timestamps = db["status_timestamps"])
-  await bot_.change_presence(status= discord.Status.idle, activity= activity)
+    name=f"with =help in {len(bot_.guilds)} servers", timestamps=db["status_timestamps"])
+  await bot_.change_presence(status=discord.Status.invisible, activity=activity)
   print(f"Bot is ready!")
 
 
