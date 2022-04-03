@@ -298,13 +298,14 @@ async def on_message(message: discord.Message):
   if message.author.id == 752335217339007067 and not message.content.startswith("=pretend"):
     return
   if message.guild.id == 953961139136528445:
-    msg = message.content.lower().replace("$", "s").replace("|<", "k").replace("<", "c").replace("!", "i")
-    for x in swear:
-      if x in msg:
-        await message.channel.send("Please do not use bad words!")
-        if 953974385994248233 not in [x.id for x in message.author.roles]:
+    role_ids = [x.id for x in message.author.roles]
+    if 953974385994248233 not in role_ids and 953974385994248233 not in role_ids:
+      msg = message.content.lower().replace("$", "s").replace("|<", "k").replace("<", "c").replace("!", "i")
+      for x in swear:
+        if x in msg:
+          await message.channel.send("Please do not use bad words!")
           await message.author.edit(timeout=timedelta(minutes=5))
-        return
+          return
   try:
     if message.guild.id == 852899227004305458 and message.author.id != 796686363604680755 and message.channel.id in [856053769149874196, 864757953121878026, 864754633910255646]:
       await message.add_reaction("<:UpArrowSquare:864762633194569728>")
@@ -333,7 +334,7 @@ async def on_ready():
   activity = discord.Activity(
     type=discord.ActivityType.playing,
     name=f"with =help in {len(bot_.guilds)} servers", timestamps=db["status_timestamps"])
-  await bot_.change_presence(status=discord.Status.invisible, activity=activity)
+  await bot_.change_presence(status=discord.Status.idle, activity=activity)
   print(f"Bot is ready!")
 
 
