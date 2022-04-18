@@ -12,7 +12,7 @@ spellwise==0.8.1
 
 # Huffman + dependencies
 huffman==0.1.2
-bitarray==2.3.7
+bitarray==2.4.1
 
 # Matplotlib + other math + dependencies
 matplotlib==3.5.1
@@ -51,4 +51,4 @@ captcha==0.3
 unicode-charnames==14.0.0
 regex==2022.1.18
 emojis==0.6.0
-pytz==2021.3
+pytz==2022.1
