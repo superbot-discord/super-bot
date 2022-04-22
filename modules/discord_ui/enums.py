@@ -118,7 +118,6 @@ class OptionType(BaseIntEnum):
     Float      =   Number   =          FLOAT                =  NUMBER = 10
     """Any double between -2^53 and 2^53"""
     Attachment              =          ATTACHMENT           =           11
-    """Any double between -2^53 and 2^53"""
 
     @classmethod
     def any_to_type(cls, whatever) -> OptionType:

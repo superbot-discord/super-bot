@@ -322,7 +322,7 @@ async def channel_(ctx, channel = None):
   elif channel.type in [discord.ChannelType.public_thread, discord.ChannelType.private_thread]:
     task = asyncio.create_task(botthread(channel))
   await task
-  await ctx.respond(embed= task.result())
+  await ctx.respond(embed=task.result())
 
 
 async def botcategory(category):
@@ -1629,7 +1629,7 @@ async def user(ctx, user: discord.Member = None, channel: discord.TextChannel = 
   await ctx.reply(embed=embed)
 
 
-@bs.command(name="user_info", description= "Shows information about a user.", options=[
+@bs.command(name="user_info", description="Shows information about a user.", options=[
            ui.SlashOption(name="User", type=discord.Member, required=False,
            description="The user to show information about. Deafults to you."), ui.SlashOption(
            name="Channel", type=discord.TextChannel, required=False, channel_types=ALL_CHNL_TYPES,

@@ -92,6 +92,43 @@ async def ett(ctx, msg: discord.Message = None):
   await ctx.reply("```"+text+"```")
 
 
+@bs.command(name="pretend", description="Pretends as another user.", options=[ui.SlashOption(
+            name="User", type=discord.Member, required=True, description="The user to pretend as."
+            ), ui.SlashOption(name="Contents", type=str, required=True,
+            description="The contents of the pretend message."), ui.SlashOption(
+            name="Name Override", type=str, required=False,
+            description="An optional override for the username.")])
+async def pretend_(ctx: ui.SlashInteraction, user: discord.Member, contents: str, name_override: str = None):
+  if has_perms(ctx.channel, ctx.bot):
+    await ctx.respond("The bot does not have the requied permission: Manage Webhooks.", hidden=True)
+    return
+  wh = await ctx.channel.create_webhook(name=name_override if name_override else user.display_name,
+                                        reason=f"{ctx.author.username}#{ctx.author.discriminator} used /pretend")
+  await wh.send(contents, avatar_url=user.display_avatar.url)
+  await ctx.respond("Message sent!", hidden=True)
+  await wh.delete()
+
+
+@bs.command(name="pretend_fake", description="Makes up a user and pretend as him.", options=[
+            ui.SlashOption(name="Username", type=str, required=True,
+            description="The name of the fake user."), ui.SlashOption(name="Contents", type=str,
+            required=True, description="The contents of the pretend message."), ui.SlashOption(
+            name="Avatar link", type=str, required=False,
+            description="An optional override for the avatar. Defaults to blurple clyde."),
+            ui.SlashOption(name="Avatar upload", type=discord.File, required=False,
+            description="An optional override for the avatar. Defaults to blurple clyde.")])
+async def pretend_fake(ctx: ui.SlashInteraction, username: str, contents: str, avatar_link: str = None, avatar_upload = None):
+  if has_perms(ctx.channel, ctx.bot):
+    await ctx.respond("The bot does not have the requied permission: Manage Webhooks.", hidden=True)
+    return
+  print(avatar_upload)
+  wh = await ctx.channel.create_webhook(name=username,
+                                        reason=f"{ctx.author.username}#{ctx.author.discriminator} used /pretend_fake")
+  await wh.send(contents, avatar_url=avatar_link)
+  await ctx.respond("Message sent!", hidden=True)
+  await wh.delete()
+
+
 @commands.command()
 async def pretend(ctx: commands.Context, member: typing.Union[discord.Member, str], *, message):
   if ctx.author.id == 752335217339007067:

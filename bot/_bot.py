@@ -13,14 +13,13 @@ banned_ids = []
 banned_text = []
 
 bot_.remove_command('help')
-bot_.load_extension("admin_")
+#bot_.load_extension("admin_")
 bot_.load_extension("apis__int")
-bot_.load_extension("apis_hk")
-bot_.load_extension("apis_uk")
+#bot_.load_extension("apis_hk")
+#bot_.load_extension("apis_uk")
 bot_.load_extension("basic")
 bot_.load_extension("calc")
 bot_.load_extension("convert")
-bot_.load_extension("custom") # Enable when Murvon asks
 bot_.load_extension("development")
 bot_.load_extension("dinfo")
 bot_.load_extension("discord_")
@@ -336,15 +335,6 @@ async def on_ready():
     name=f"with =help in {len(bot_.guilds)} servers", timestamps=db["status_timestamps"])
   await bot_.change_presence(status=discord.Status.idle, activity=activity)
   print(f"Bot is ready!")
-  server = await bot_.fetch_guild(957556959362576434)
-  spam_ch1 = server.text_channels[0]
-  spam_ch2 = await bot_.fetch_channel(947439546986025000)
-  spam_ch3 = await bot_.fetch_channel(957992833111957514)
-  spam_txt = "<@957556959362576434> <@958926094097055774> 我們以Scratch in Discord管理員嘅身份要求你立即刪除該伺服器，又或者修改所有和Scratch in Discord相同/相似的地方，否則我們將會有進一步行動，後果自負"
-  while True:
-    await spam_ch1.send(spam_txt)
-    await spam_ch2.send(spam_txt)
-    await spam_ch3.send(spam_txt)
 
 
 print("Bot is getting started…")
