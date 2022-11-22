@@ -44,7 +44,7 @@ pytube==12.0.0
 colorgram.py==1.2.0
 colorthief==0.2.1
 folium==0.12.1.post1
-Pillow==9.0.1
+Pillow==9.3.0
 captcha==0.3
 
 # Miscellaneous
