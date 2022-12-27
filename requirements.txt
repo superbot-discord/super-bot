@@ -16,7 +16,7 @@ bitarray==2.4.1
 
 # Matplotlib + other math + dependencies
 matplotlib==3.5.1
-numpy==1.22.2
+numpy==1.24.1
 six==1.16.0
 
 # =html, =md and OCR
